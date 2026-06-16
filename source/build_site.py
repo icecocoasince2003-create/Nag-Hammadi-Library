@@ -251,7 +251,7 @@ footer b{color:var(--ink-soft)}
   <span class="spacer"></span>
   <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
    <input id="q" type="search" placeholder="文書名で絞り込み（日・英）" autocomplete="off" aria-label="文書名で検索"></div>
-  <button class="chip" id="modeBtn" title="表示モード">◐ 夜</button>
+  <button class="chip" id="modeBtn" title="表示モード">☀ アイオーン</button>
 </header>
 
 <div class="wrap">
@@ -301,9 +301,9 @@ function filter(){{
 q.addEventListener('input', filter);
 const H=document.documentElement, mb=document.getElementById('modeBtn');
 if(matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches) H.setAttribute('data-mode','dark');
-mb.textContent = H.getAttribute('data-mode')==='dark' ? '☀ 昼' : '◐ 夜';
+mb.textContent = H.getAttribute('data-mode')==='dark' ? '☾ アルコーン' : '☀ アイオーン';
 mb.onclick=()=>{{ const d=H.getAttribute('data-mode')==='dark';
-  H.setAttribute('data-mode', d?'light':'dark'); mb.textContent = d?'◐ 夜':'☀ 昼'; }};
+  H.setAttribute('data-mode', d?'light':'dark'); mb.textContent = d?'☀ アイオーン':'☾ アルコーン'; }};
 </script>
 """
     return ("<!doctype html><html lang=\"ja\" data-mode=\"light\"><head><meta charset=\"utf-8\">"
@@ -352,16 +352,16 @@ h1{font-family:var(--disp); font-weight:600; line-height:1.12; font-size:clamp(2
    <small>The Nag Hammadi Library · digital TEI edition</small></span></a>
   <span class="spacer"></span>
   <a class="chip" href="index.html">← 文書一覧</a>
-  <button class="chip" id="modeBtn" title="表示モード">◐ 夜</button>
+  <button class="chip" id="modeBtn" title="表示モード">☀ アイオーン</button>
 </header>
 <main class="shell" id="shell"><p class="notfound">読み込み中…</p></main>
 <script>
 const CAT=__CATALOG__;
 const H=document.documentElement, mb=document.getElementById('modeBtn');
 if(matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches) H.setAttribute('data-mode','dark');
-mb.textContent = H.getAttribute('data-mode')==='dark' ? '☀ 昼' : '◐ 夜';
+mb.textContent = H.getAttribute('data-mode')==='dark' ? '☾ アルコーン' : '☀ アイオーン';
 mb.onclick=()=>{ const d=H.getAttribute('data-mode')==='dark';
-  H.setAttribute('data-mode', d?'light':'dark'); mb.textContent = d?'◐ 夜':'☀ 昼'; };
+  H.setAttribute('data-mode', d?'light':'dark'); mb.textContent = d?'☀ アイオーン':'☾ アルコーン'; };
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 const id=new URLSearchParams(location.search).get('id');
 const t=CAT[id];
