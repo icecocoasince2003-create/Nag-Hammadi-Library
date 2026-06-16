@@ -246,5 +246,3 @@ index.html(目次:全53文書)
 - Anne Pasquier, *Eugnoste (NH III,3 et V,1)*, Bibliothèque copte de Nag Hammadi (texte ＋ volume de commentaire), Presses de l'Université Laval / Peeters.
 - 小林稔訳「エウグノストス」(邦訳, §1–§43).
 - Louis Painchaud, "The Literary Contacts between the Writing without Title *On the Origin of the World* (CG II,5 and XIII,2) and *Eugnostos the Blessed* (CG III,3 and V,1)," *JBL* 114/1 (1995) 81–101.
-
-
