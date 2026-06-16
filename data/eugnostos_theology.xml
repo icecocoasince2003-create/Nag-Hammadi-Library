@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="ja">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title xml:lang="en">Eugnostos — theological annotations</title>
+        <title xml:lang="ja">エウグノストス 注釈(神学的解釈)</title>
+        <respStmt><resp>notes by</resp><name>Eugnostos Digital Corpus project</name></respStmt>
+      </titleStmt>
+      <publicationStmt>
+        <authority>Eugnostos Digital Corpus</authority>
+        <availability><licence target="https://creativecommons.org/licenses/by/4.0/">CC-BY 4.0</licence></availability>
+        <date when="2026-06-16">2026-06-16</date>
+      </publicationStmt>
+      <sourceDesc><p xml:lang="ja">注釈データ(神学的解釈)。各 note は @target で本文 <ref target="eugnostos_tei.xml">eugnostos_tei.xml</ref> の &lt;s&gt;(xml:id="III-…")へ、@ana で下の主題分類へリンクします。</p></sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <classDecl>
+        <taxonomy xml:id="theology-taxonomy">
+          <desc xml:lang="ja">神学的主題の分類。本文 &lt;s&gt; の @ana と各注の @ana から参照されます。</desc>
+          <category xml:id="th-frame"><catDesc xml:lang="ja">書簡という枠組み</catDesc><catDesc xml:lang="en">Epistolary frame</catDesc><catDesc xml:lang="fr">Cadre épistolaire</catDesc></category>
+          <category xml:id="th-apophatic"><catDesc xml:lang="ja">否定神学(語りえぬ父)</catDesc><catDesc xml:lang="en">Apophatic theology</catDesc><catDesc xml:lang="fr">Théologie apophatique</catDesc></category>
+          <category xml:id="th-propator"><catDesc xml:lang="ja">先在の父(プロパトール)</catDesc><catDesc xml:lang="en">The Forefather</catDesc><catDesc xml:lang="fr">Le Propatôr (Père préexistant)</catDesc></category>
+          <category xml:id="th-autogenes"><catDesc xml:lang="ja">自生者(アウトゲネース)</catDesc><catDesc xml:lang="en">The Self-Begotten</catDesc><catDesc xml:lang="fr">L'Autogène (auto-engendré)</catDesc></category>
+          <category xml:id="th-anthropos"><catDesc xml:lang="ja">不死の人間</catDesc><catDesc xml:lang="en">The Immortal Man</catDesc><catDesc xml:lang="fr">L'Homme immortel</catDesc></category>
+          <category xml:id="th-son"><catDesc xml:lang="ja">人の子=救済者</catDesc><catDesc xml:lang="en">The Son of Man / Saviour</catDesc><catDesc xml:lang="fr">Le Fils de l'Homme / Sauveur</catDesc></category>
+          <category xml:id="th-sophia"><catDesc xml:lang="ja">ソフィアと対(シュジュギア)</catDesc><catDesc xml:lang="en">Sophia &amp; syzygy</catDesc><catDesc xml:lang="fr">Sophia et la syzygie</catDesc></category>
+          <category xml:id="th-androgyny"><catDesc xml:lang="ja">両性具有</catDesc><catDesc xml:lang="en">Androgyny</catDesc><catDesc xml:lang="fr">Androgynie</catDesc></category>
+          <category xml:id="th-aeons"><catDesc xml:lang="ja">アイオーン論(12・72・360)</catDesc><catDesc xml:lang="en">The aeons (12/72/360)</catDesc><catDesc xml:lang="fr">Les éons (12/72/360)</catDesc></category>
+          <category xml:id="th-ekklesia"><catDesc xml:lang="ja">天上の教会</catDesc><catDesc xml:lang="en">The heavenly Church</catDesc><catDesc xml:lang="fr">L'Église céleste</catDesc></category>
+          <category xml:id="th-cosmology"><catDesc xml:lang="ja">型と対型・宇宙構造</catDesc><catDesc xml:lang="en">Types &amp; cosmic structure</catDesc><catDesc xml:lang="fr">Types et structure cosmique</catDesc></category>
+          <category xml:id="th-sjc"><catDesc xml:lang="ja">『イエス・キリストの知恵』との関係</catDesc><catDesc xml:lang="en">Relation to the Sophia of Jesus Christ</catDesc><catDesc xml:lang="fr">Rapport avec la Sagesse de Jésus-Christ</catDesc></category>
+          <category xml:id="th-witness"><catDesc xml:lang="ja">写本III,3とV,1の異同</catDesc><catDesc xml:lang="en">Witnesses III,3 and V,1</catDesc><catDesc xml:lang="fr">Les témoins III,3 et V,1</catDesc></category>
+          <category xml:id="th-origworld"><catDesc xml:lang="ja">『世界の起源について』との関係</catDesc><catDesc xml:lang="en">Relation to On the Origin of the World</catDesc><catDesc xml:lang="fr">Rapport avec l'Écrit sans titre</catDesc></category>
+          <category xml:id="th-dispositio"><catDesc xml:lang="ja">修辞的構成(四部構成)</catDesc><catDesc xml:lang="en">Rhetorical dispositio</catDesc><catDesc xml:lang="fr">Dispositio rhétorique</catDesc></category>
+        </taxonomy>
+      </classDecl>
+    </encodingDesc>
+    <revisionDesc><change when="2026-06-16" n="0.1">Initial seed build.</change></revisionDesc>
+  </teiHeader>
+  <standOff>
+    <listAnnotation type="theology" xml:id="theology">
+      <desc xml:lang="ja">神学的解釈レイヤ。@target で本文セグメントへ、@ana で主題分類へ結ばれます。</desc>
+      <note xml:id="note-incipit" type="theology" ana="#th-frame #th-sjc" target="eugnostos_tei.xml#III-INCIPIT eugnostos_tei.xml#III-7505191">
+        <label xml:lang="ja">祝福されたエウグノストスの挨拶</label>
+        <p xml:lang="ja">本文は「祝福されたエウグノストス、彼に属する者たちへ」という差出人と宛先の挨拶で始まり、末尾も同じ標題で閉じる、書簡(エピストレー)の体裁をとる。ただし内容は救済者の啓示ではなく、語り手エウグノストスによる宇宙生成論の講話である。後代にこの講話はキリスト教化され、復活のイエスが弟子に語る対話篇『イエス・キリストの知恵』(NHC III,4 / BG 8502,3)へと書き換えられた。エウグノストスは一般に、グノーシス的でも明示的にキリスト教的でもない思弁的宇宙論の最古層を伝えると評価される。</p>
+        <p xml:lang="en">The tractate opens and closes with the same epistolary heading, framing a cosmogonic discourse by Eugnostos. It was later Christianised into the dialogue 'The Sophia of Jesus Christ', where the risen Jesus delivers much of the same material to his disciples.</p>
+        <p xml:lang="fr">Le traité s'ouvre et se referme sur le même titre épistolaire, encadrant un discours cosmogonique d'Eugnostos. Il fut plus tard christianisé sous la forme du dialogue « la Sagesse de Jésus-Christ » (NHC III,4 / BG 8502,3), où le Christ ressuscité reprend une grande part de cette matière devant ses disciples.</p>
+      </note>
+      <note xml:id="note-philosophers" type="theology" ana="#th-frame #th-apophatic" target="eugnostos_tei.xml#III-7505191 eugnostos_tei.xml#III-7505192 eugnostos_tei.xml#III-7505193 eugnostos_tei.xml#III-7505194 eugnostos_tei.xml#III-7505195">
+        <label xml:lang="ja">哲学者たちの三説への批判</label>
+        <p xml:lang="ja">序論は、世界の成り立ちをめぐる「哲学者たち」の見解を三つに整理して退ける——(1)世界は自らを治める(自律/運命)、(2)摂理(プロノイア)による、(3)定め(運命)による、という諸説である。エウグノストスはいずれも真理に達しないとし、真理は「不死の人間」から来る啓示によってのみ知られると説く。ここにヘレニズム期の宇宙統治論(ストア派的運命・中期プラトン主義的摂理)への批判的応答が見てとれる。</p>
+        <p xml:lang="en">The prologue rejects three current opinions on the world's governance (self-rule/fate, providence, predestination), arguing none attains truth; true knowledge comes only by revelation from the Immortal Man — a critical response to Hellenistic debates on cosmic governance.</p>
+        <p xml:lang="fr">Le prologue récuse trois opinions courantes sur le gouvernement du monde — l'autonomie (le destin), la providence et la prédestination — en affirmant qu'aucune n'atteint la vérité ; la vraie connaissance ne vient que par révélation, depuis l'Homme immortel. On y lit une réponse critique aux débats hellénistiques sur le gouvernement du cosmos.</p>
+      </note>
+      <note xml:id="note-unknowable" type="theology" ana="#th-apophatic" target="eugnostos_tei.xml#III-7505196 eugnostos_tei.xml#III-7505197 eugnostos_tei.xml#III-7505198 eugnostos_tei.xml#III-7505201 eugnostos_tei.xml#III-7505202">
+        <label xml:lang="ja">語りえぬ第一原理</label>
+        <p xml:lang="ja">第一原理は徹底して否定的に語られる——始原を持たず(ⲁⲅⲉⲛⲛⲏⲧⲟⲥ 非産出)、終わりを持たず、名を持たず(ⲙⲛⲧⲁϥ ⲣⲁⲛ)、人間の形を持たず、語りえず(ⲁⲧϣⲁϫⲉ ⲉⲣⲟϥ)、不死・不朽・至福である。これは中期プラトン主義および後の新プラトン主義と共有される否定神学(via negativa)であり、後段で展開される豊かな流出論と鋭い対照をなす。「彼を名づけうる者はなく…彼は自らを自らにおいて思惟する」。</p>
+        <p xml:lang="en">The First Principle is described only by negation: unbegotten, endless, nameless, without human form, ineffable, immortal and blessed. This apophatic theology, shared with Middle/Neoplatonism, stands in sharp contrast to the rich emanation that follows.</p>
+        <p xml:lang="fr">Le Premier Principe n'est dit que par négation : inengendré, sans fin, sans nom, sans forme humaine, ineffable, immortel et bienheureux. Cette théologie apophatique (via negativa), partagée avec le moyen- et le néo-platonisme, contraste vivement avec la riche émanation qui suit.</p>
+      </note>
+      <note xml:id="note-propator" type="theology" ana="#th-propator #th-apophatic" target="eugnostos_tei.xml#III-7505220 eugnostos_tei.xml#III-7505221 eugnostos_tei.xml#III-7505222 eugnostos_tei.xml#III-7505223">
+        <label xml:lang="ja">「父」ではなく「先在の父」</label>
+        <p xml:lang="ja">語り手は、万有の主を厳密には「父(エイオート)」と呼ぶべきでなく「先在の父(プロパトール)」と呼ぶべきだと述べる。なぜなら「父」とは可視的に現れたものの始原だからである。先在の父は鏡(ⲉⲓⲁⲗ)に映すように自らを観想し、その似姿として「自存の父(アウトパトール)」=「自生者(アウトゲネトール)」を現出させる。自己観想からの自己産出という主題は、ヌース(知性)の自己認識をめぐる中期プラトン主義の議論を背景に持つ。</p>
+        <p xml:lang="en">The Lord of the All is properly the 'Forefather' (Propator), not 'Father', since 'Father' is the origin of what becomes visible. Contemplating himself as in a mirror, he manifests the Self-Father (Autopator) = Self-Begetter (Autogenetor): self-generation from self-contemplation.</p>
+        <p xml:lang="fr">Le Seigneur du Tout doit être proprement appelé « Propatôr » (Père préexistant) et non « Père », car le Père est l'origine de ce qui devient visible. Se contemplant lui-même comme dans un miroir, il manifeste le Père de lui-même (Autopatôr) = l'Auto-engendreur (Autogénétôr) : auto-génération à partir de l'auto-contemplation.</p>
+      </note>
+      <note xml:id="note-anthropos" type="theology" ana="#th-anthropos #th-androgyny #th-sophia" target="eugnostos_tei.xml#III-7505234 eugnostos_tei.xml#III-7505235 eugnostos_tei.xml#III-7505236 eugnostos_tei.xml#III-7505237 eugnostos_tei.xml#III-7505238">
+        <label xml:lang="ja">不死の両性具有の人間——ヌースとソフィア</label>
+        <p xml:lang="ja">「語りえぬ光」から、両性具有(ⲛϩⲟⲟⲩⲧⲥϩⲓⲙⲉ)の「不死の人間」が現れる。その男性名は「生まれたる完全なヌース(知性)」、女性名は「全知の産出する母ソフィア」と呼ばれる。彼女はその対(シュジュゴス)に等しい。原理を男女の対(シュジュギア)として描くこの枠組みは、ヴァレンティノス派のアイオーン対論とも共鳴しつつ、ここでは創造以前の充溢(プレーローマ的)構造として提示される。</p>
+        <p xml:lang="en">From the ineffable light appears the androgynous Immortal Man: his male name is 'Begotten, perfect Mind (Nous)', his female name 'All-wise begettress Sophia', equal to her consort (syzygos). Principles are paired as male–female syzygies.</p>
+        <p xml:lang="fr">De la lumière ineffable surgit l'Homme immortel androgyne : son nom masculin est « Engendré, Intellect (Noûs) parfait », son nom féminin « Sophia, mère génératrice toute-sage », égale à son conjoint (syzygos). Les principes sont disposés en couples mâle-femelle (syzygies).</p>
+      </note>
+      <note xml:id="note-firstman" type="theology" ana="#th-anthropos #th-aeons" target="eugnostos_tei.xml#III-7505241 eugnostos_tei.xml#III-7505242 eugnostos_tei.xml#III-7505243 eugnostos_tei.xml#III-7505244 eugnostos_tei.xml#III-7505245 eugnostos_tei.xml#III-7505246">
+        <label xml:lang="ja">第一の人間=ピスティス、神々と王国の始まり</label>
+        <p xml:lang="ja">自存の父=人間は自らを現し、その偉大さに応じて一つの大いなるアイオーンと大いなる権能(エクスーシア)を産み、万物の創造に君臨して、無数の神々・大天使・天使を奉仕のために創造する。ここに神性(ⲙⲛⲧⲛⲟⲩⲧⲉ)と王権(ⲙⲛⲧⲣⲣⲟ)が始まり、彼は「神々の神」「王の王」と名づけられる。第一の人間は「来たるべきものの信仰(ピスティス)」とも呼ばれる。</p>
+        <p xml:lang="en">The Self-Father/Man reveals himself, begets a great aeon and authority, and creates innumerable gods, archangels and angels for service; divinity and kingship begin, and he is named 'God of gods, King of kings'. The First Man is also called the 'Faith (Pistis) of what is to come'.</p>
+        <p xml:lang="fr">L'Autopatôr/Homme se manifeste, engendre un grand éon et une grande autorité (exousia), et crée d'innombrables dieux, archanges et anges pour le service ; la divinité et la royauté commencent, et il est nommé « Dieu des dieux, Roi des rois ». Le Premier Homme est aussi appelé la « Foi (Pistis) » de ce qui doit venir.</p>
+      </note>
+      <note xml:id="note-son" type="theology" ana="#th-son #th-sophia #th-androgyny" target="eugnostos_tei.xml#III-7505247 eugnostos_tei.xml#III-7505248 eugnostos_tei.xml#III-7505264 eugnostos_tei.xml#III-7505265">
+        <label xml:lang="ja">人の子=救済者、第二の人間</label>
+        <p xml:lang="ja">第一の人間はその対であるソフィアと一致し、両性具有の「人の子」を現す。その男性名は「最初の産出者(プロートゲネトール)、人の子」、また「救済者(ソーテール)、万物を生む者」、女性名は「全産出の母ソフィア」と呼ばれる。すなわち救済者は、宇宙史の外から到来する人物ではなく、不死の人間の自己展開のうちに位置づけられた存在である。</p>
+        <p xml:lang="en">Agreeing with his consort Sophia, the First Man manifests the androgynous 'Son of Man'. His male name is 'First-begetter, Son of Man' and 'Saviour, begetter of all things'; his female name 'All-begettress Sophia'. The Saviour is thus internal to the unfolding of the Immortal Man.</p>
+        <p xml:lang="fr">S'accordant avec sa conjointe Sophia, le Premier Homme manifeste le « Fils de l'Homme » androgyne. Son nom masculin est « Premier-engendreur, Fils de l'Homme » et « Sauveur, engendreur de toutes choses » ; son nom féminin « Sophia génératrice de tout ». Le Sauveur est ainsi intérieur au déploiement de l'Homme immortel.</p>
+      </note>
+      <note xml:id="note-sophias" type="theology" ana="#th-sophia #th-aeons #th-androgyny" target="eugnostos_tei.xml#III-7505266 eugnostos_tei.xml#III-7505267 eugnostos_tei.xml#III-7505268 eugnostos_tei.xml#III-7505269 eugnostos_tei.xml#III-7505270 eugnostos_tei.xml#III-7505271 eugnostos_tei.xml#III-7505272 eugnostos_tei.xml#III-7505273 eugnostos_tei.xml#III-7505274 eugnostos_tei.xml#III-7505275 eugnostos_tei.xml#III-7505276 eugnostos_tei.xml#III-7505277">
+        <label xml:lang="ja">男性アイオーンと女性ソフィアの名</label>
+        <p xml:lang="ja">六つの両性具有の霊的存在が名を与えられる。男性側は非産出者・自生者・産出者・最初の産出者・全産出者・原初産出者、女性側はそれぞれ対応するソフィア(全知のソフィア、母なるソフィア、産出するソフィア、最初に産出するソフィア、愛のソフィア=アガペー、信仰のソフィア=ピスティス)である。男女の名の体系的対応は、見えざる充溢の秩序が調和(シュンフォーニア)として組織されていることを示す。</p>
+        <p xml:lang="en">Six androgynous spiritual beings are named: on the male side Unbegotten, Self-begotten, Begetter, First-begetter, All-begetter, Arch-begetter; on the female side the corresponding Sophias (All-wise, Mother, Begettress, First-begettress, Love/Agape, Faith/Pistis). The systematic male–female pairing organises the invisible Pleroma as harmony.</p>
+        <p xml:lang="fr">Six êtres spirituels androgynes reçoivent un nom. Côté masculin : Inengendré, Auto-engendré, Engendreur, Premier-engendreur, Engendreur-de-tout, Arché-engendreur ; côté féminin, les Sophias correspondantes (toute-sage, mère, génératrice, première-génératrice, Amour/Agapè, Foi/Pistis). L'appariement systématique mâle-femelle organise le Plérôme invisible comme une harmonie (symphônia).</p>
+      </note>
+      <note xml:id="note-church" type="theology" ana="#th-ekklesia #th-anthropos" target="eugnostos_tei.xml#III-7505259 eugnostos_tei.xml#III-7505260 eugnostos_tei.xml#III-7505261">
+        <label xml:lang="ja">聖なる者たちの教会、光のアダム</label>
+        <p xml:lang="ja">無数の天使の群れは「聖なる者たちの教会(エクレーシア)」「影なき光」と呼ばれる。彼らが互いに挨拶(抱擁)すると、その挨拶は最初の産出者に似た天使となる。父祖たちは「光のアダム(ⲁⲇⲁⲙ ⲡⲁ ⲡⲟⲩⲟⲉⲓⲛ)」と呼ばれる。「教会」概念がキリスト教的制度ではなく天上的・前宇宙的実在として用いられている点に注意。</p>
+        <p xml:lang="en">The host of angels is called the 'Church (ekklesia) of the holy ones', the 'shadowless lights'; their mutual greeting becomes an angel resembling the First-begetter, and the fathers are called 'Adam of the light'. 'Church' here is a heavenly, pre-cosmic reality, not a Christian institution.</p>
+        <p xml:lang="fr">L'armée des anges est appelée « l'Église (ekklēsia) des saints », les « lumières sans ombre » ; leur salutation mutuelle devient un ange semblable au Premier-engendreur, et les pères sont nommés « Adam de la lumière ». L'« Église » est ici une réalité céleste et pré-cosmique, non une institution chrétienne.</p>
+      </note>
+      <note xml:id="note-numbers" type="theology" ana="#th-aeons #th-cosmology" target="eugnostos_tei.xml#III-7505283 eugnostos_tei.xml#III-7505284 eugnostos_tei.xml#III-7505285 eugnostos_tei.xml#III-7505289 eugnostos_tei.xml#III-7505290 eugnostos_tei.xml#III-7505295 eugnostos_tei.xml#III-7505296">
+        <label xml:lang="ja">12・72・360の数論的構造</label>
+        <p xml:lang="ja">産出の連鎖は数として組織される——十二の力、七十二の力(72)、三百六十(360)の力・蒼穹(ステレオーマ)へと展開する。これらは天文学的単位(年・十二か月・三百六十日)と対応づけられ、地上の暦が天上の秩序の「型」であることを示す。中期プラトン主義の数論的宇宙論と、ユダヤ・ヘレニズム的暦数思弁の融合が見てとれる。</p>
+        <p xml:lang="en">The chain of begetting is organised numerically — twelve powers, seventy-two, then three hundred sixty powers and firmaments — correlated with astronomical units (year, twelve months, 360 days), so that the earthly calendar is a 'type' of the heavenly order.</p>
+        <p xml:lang="fr">La chaîne des engendrements s'organise numériquement — douze puissances, soixante-douze, puis trois cent soixante puissances et firmaments — mises en rapport avec les unités astronomiques (l'année, les douze mois, les 360 jours), de sorte que le calendrier terrestre est un « type » de l'ordre céleste.</p>
+      </note>
+      <note xml:id="note-types" type="theology" ana="#th-cosmology #th-son" target="eugnostos_tei.xml#III-7505286 eugnostos_tei.xml#III-7505287 eugnostos_tei.xml#III-7505288 eugnostos_tei.xml#III-7505297 eugnostos_tei.xml#III-7505298">
+        <label xml:lang="ja">型と対型——アイオーン・時・年</label>
+        <p xml:lang="ja">アイオーンは不死の人間の型として、時(クロノス)は最初の産出者の型として、年は救済者の型として、十二か月は十二の力の型として生じる、と説かれる。すなわち時間と天体は、見えざるアイオーン的実在の可視的な写し(型/対型)である。第一のアイオーンは不死の人間、第二のアイオーンは人の子=最初の産出者=救済者と同定される。</p>
+        <p xml:lang="en">The aeon arises as a type of the Immortal Man, time (chronos) as a type of the First-begetter, the year as a type of the Saviour, the twelve months as a type of the twelve powers: time and the heavens are visible copies (types/antitypes) of invisible aeonic realities.</p>
+        <p xml:lang="fr">L'éon surgit comme type de l'Homme immortel, le temps (chronos) comme type du Premier-engendreur, l'année comme type du Sauveur, les douze mois comme type des douze puissances : le temps et les astres sont des copies visibles (types/antitypes) de réalités éoniques invisibles.</p>
+      </note>
+      <note xml:id="note-eighth" type="theology" ana="#th-ekklesia #th-androgyny #th-cosmology" target="eugnostos_tei.xml#III-7505299 eugnostos_tei.xml#III-7505302 eugnostos_tei.xml#III-7505303 eugnostos_tei.xml#III-7505304 eugnostos_tei.xml#III-7505305 eugnostos_tei.xml#III-7505306 eugnostos_tei.xml#III-7505307">
+        <label xml:lang="ja">第八のアイオーンと「上なる教会」</label>
+        <p xml:lang="ja">下方において救済者が現れ、アイオーン・力・王国を顕わにして万人に権能を与える。地上の教会は「語りえぬ群衆」に由来する「上なる教会」にちなんで名づけられ、これが「第八(オグドアス)」と呼ばれる両性具有の領域として立てられる。「女から生命が生じるように」教会が女性的に語られる箇所は、産出・生命の女性原理という本文の主題を反復する。</p>
+        <p xml:lang="en">Below, the Saviour appears, manifests aeons, powers and kingdoms and gives authority to all. The earthly church is named after the 'Church above', constituted as the androgynous 'Eighth' (Ogdoad); its feminine naming echoes the text's theme of the feminine principle of life and begetting.</p>
+        <p xml:lang="fr">En bas, le Sauveur paraît, manifeste éons, puissances et royaumes, et donne autorité à tous. L'Église terrestre est nommée d'après l'« Église d'en haut », constituée comme le « Huitième » (Ogdoade) androgyne ; sa désignation féminine fait écho au thème du principe féminin de la vie et de l'engendrement.</p>
+      </note>
+      <note xml:id="note-descent" type="theology" ana="#th-cosmology #th-apophatic" target="eugnostos_tei.xml#III-7505324 eugnostos_tei.xml#III-7505325 eugnostos_tei.xml#III-7505326">
+        <label xml:lang="ja">カオスへ向かう自然の展開と境界</label>
+        <p xml:lang="ja">終盤では、自然(フュシス)の全体が不死の者から非産出者を経てカオスの開示に至るまで、闇の中に光が輝くようにして展開する、と要約される。本文は世界(コスモス)創造の一歩手前で筆を止め、語りえぬ歓喜と安息のうちに見えざるアイオーン群を描いて閉じる。これは、可視的世界の生成を扱う後続の宇宙創造論(デミウルゴス論)への入口に位置する。</p>
+        <p xml:lang="en">Toward the end, the whole of nature is summarised as unfolding from the Immortal One, through the Unbegotten, down to the disclosure of chaos — light shining in darkness. The text stops just short of the creation of the visible cosmos, closing amid ineffable joy and rest.</p>
+        <p xml:lang="fr">Vers la fin, toute la nature est résumée comme se déployant depuis l'Immortel, par l'Inengendré, jusqu'à la manifestation du chaos — lumière brillant dans les ténèbres. Le texte s'arrête juste avant la création du cosmos visible, se refermant dans une joie et un repos ineffables.</p>
+      </note>
+      <note xml:id="note-close" type="theology" ana="#th-frame #th-sjc" target="eugnostos_tei.xml#III-7505327 eugnostos_tei.xml#III-7505328 eugnostos_tei.xml#III-7505329 eugnostos_tei.xml#III-7505330">
+        <label xml:lang="ja">結びの約束——啓示者の到来</label>
+        <p xml:lang="ja">結びでエウグノストスは「これらすべてを私はあなたに先に語った。あなたが担いうる仕方で語ったのだ」と述べ、「教えられざる者(ⲡⲓⲁⲧϯⲥⲃⲱ)があなたのうちに現れるまで」と続けて、来たるべき完全な啓示者を指し示す。この「啓示者」への含みは、まさに『イエス・キリストの知恵』においてイエスが果たす役割であり、両文書の文学的関係を本文内部から裏づける。</p>
+        <p xml:lang="en">In closing, Eugnostos says he has told 'all these things' in the measure the hearer can bear, 'until the one who need not be taught appears within you' — pointing to a coming perfect revealer. This anticipation is precisely the role Jesus fills in the Sophia of Jesus Christ.</p>
+        <p xml:lang="fr">En conclusion, Eugnostos dit avoir tout dit « à la mesure » de ce que l'auditeur peut porter, « jusqu'à ce que paraisse en vous celui qui n'a pas besoin d'être enseigné » — annonçant un révélateur parfait à venir. Cette anticipation est précisément le rôle que tient Jésus dans la Sagesse de Jésus-Christ.</p>
+      </note>
+      <note xml:id="note-witnesses" type="theology" ana="#th-witness" target="eugnostos_tei.xml#III-INCIPIT">
+        <label xml:lang="ja">二つの写本(III,3 と V,1)について</label>
+        <p xml:lang="ja">エウグノストスは NHC III,3(70,1–90,11)と NHC V,1(1,1–17,17)の二写本に伝わる。両者はギリシア語原典からの独立した二つのコプト語訳と考えられ、相互に少なからぬ異同を示す。III版が古い訳とされ、英訳の底本に用いられることが多く、欠損は V版で補われる。本コーパスは III,3 を全文符号化し、V,1 を対応(@corresp)づけられた並行証本の枠として設けている(本文は校訂版 Parrott, NHS 27, Brill 1991 に拠って補充されるべきもの)。</p>
+        <p xml:lang="en">Eugnostos survives in two manuscripts, NHC III,3 (70,1–90,11) and NHC V,1 (1,1–17,17), generally taken as two independent Coptic translations of a Greek original with notable differences. III is usually the base text, V supplying its lacunae. This corpus encodes III,3 in full and provides V,1 as an aligned witness scaffold to be supplied from the critical edition (Parrott, NHS 27, Brill 1991).</p>
+        <p xml:lang="fr">Eugnostos est conservé en deux manuscrits, NHC III,3 (70,1–90,11) et NHC V,1 (1,1–17,17), tenus pour deux traductions coptes indépendantes d'un original grec, avec d'importantes divergences. III sert d'ordinaire de base, V comblant ses lacunes. Le présent corpus encode III,3 intégralement et fournit V,1 comme témoin parallèle, à compléter d'après l'édition critique (Pasquier, BCNH ; Parrott, NHS 27).</p>
+      </note>
+      <note xml:id="note-dispositio" type="theology" ana="#th-dispositio #th-frame" target="eugnostos_tei.xml#III-INCIPIT eugnostos_tei.xml#III-7505191 eugnostos_tei.xml#III-7505327">
+        <label xml:lang="ja">修辞的な四部構成(序論・叙述・論証・結語)</label>
+        <p xml:lang="ja">L. パンショー(JBL 1995)は、本書がヘレニズム修辞学の構成(ディスポシティオ)に従って四部に分かれると論じる——序論(エクソルディウム, III 70,1–71,13)、叙述(ナラティオ, 71,13–74,12)、論証(プロバティオ/アポデイクシス, 74,12–89,15)、結語(ペロラティオ, 89,15–90,11)。論証部の終わりと結語は「見えざるものの証し(ピスティス)が見えるもののうちに見いだされた」という同型の句で枠取りされ、全体が書簡の枠に収められている。本コーパスはセグメント単位で符号化しているため、この四部はおおまかな読みの指標として参照されたい。</p>
+        <p xml:lang="en">L. Painchaud (JBL 1995) argues that the tractate follows a four-part Hellenistic rhetorical 'dispositio': exordium (III 70,1–71,13), narration (71,13–74,12), proof (74,12–89,15) and peroration (89,15–90,11). The end of the proof and the peroration are framed by the same formula, 'how the proof (pistis) of the invisible was found in the visible', the whole being enclosed in an epistolary frame.</p>
+        <p xml:lang="fr">L. Painchaud (JBL 1995) soutient que le traité suit une dispositio rhétorique hellénistique en quatre parties : exorde (III 70,1–71,13), narration (71,13–74,12), preuve (74,12–89,15) et péroraison (89,15–90,11). La fin de la preuve et la péroraison sont encadrées par la même formule — « comment la preuve (pistis) de l'invisible fut trouvée dans le visible » —, le tout étant enclos dans un cadre épistolaire.</p>
+      </note>
+      <note xml:id="note-origworld" type="theology" ana="#th-origworld #th-cosmology #th-ekklesia" target="eugnostos_tei.xml#III-7505327 eugnostos_tei.xml#III-7505328 eugnostos_tei.xml#III-7505298 eugnostos_tei.xml#III-7505259">
+        <label xml:lang="ja">『世界の起源について』(無題文書)との相補関係</label>
+        <p xml:lang="ja">パンショー(JBL 1995)は、本書と『世界の起源について』(NHC II,5/XIII,2)が、語彙・定型句・構成のうえで密接に対応すると指摘する——「不死の人間」「光のアダム」「アゲンネートス(非産出)」「アルキゲネトール」「第八(オグドアス)の上なる救済者」「第八の教会」「世界の経綸(ディオイケーシス)」などは両書にほぼ限って現れる。エウグノストスが上方(プレーローマ)を、『世界の起源について』が下方(混沌・物質界)を描き、両者は鏡像的・相補的に対応する。パンショーは、両書が同一の構想のもとに書かれた相補的二部作であり、エウグノストスが先行する可能性が高いと論じる。本書がカオスの開示の手前で筆を止めるのは、この相補性と符合する。</p>
+        <p xml:lang="en">Painchaud (JBL 1995) shows that Eugnostos and On the Origin of the World (NHC II,5 / XIII,2) share a dense, sometimes unique vocabulary and parallel patterns (the 'Immortal Man', 'Adam of Light', 'Unbegotten', 'Archigenetor', a Saviour 'above the eighth', a Church 'in the eighth', the 'governance/dioikēsis of the world'). Eugnostos describes the upper world, Orig. World the lower; the two appear as complementary halves of one design, with Eugnostos probably the earlier — which fits the fact that Eugnostos stops just short of the disclosure of chaos.</p>
+        <p xml:lang="fr">Painchaud (JBL 1995) montre qu'Eugnostos et l'Écrit sans titre (Sur l'origine du monde, NHC II,5 / XIII,2) partagent un vocabulaire dense et parfois unique ainsi que des structures parallèles (l'« Homme immortel », l'« Adam de lumière », l'« Inengendré », l'« Archigénétôr », un Sauveur « au-dessus du Huitième », une Église « dans le Huitième », la « dioikēsis du monde »). Eugnostos décrit le monde d'en haut, l'Écrit sans titre le monde d'en bas ; les deux apparaissent comme les volets complémentaires d'un même projet, Eugnostos étant probablement antérieur — ce qui s'accorde avec le fait qu'il s'arrête juste avant la manifestation du chaos.</p>
+      </note>
+    </listAnnotation>
+  </standOff>
+</TEI>

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Nag Hammadi corpus">
+  <!-- placeholder site icon — replace with your own image/icon.svg -->
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="38%" r="75%">
+      <stop offset="0%" stop-color="#262248"/>
+      <stop offset="100%" stop-color="#15132c"/>
+    </radialGradient>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#bg)"/>
+  <!-- emanation rings -->
+  <circle cx="32" cy="32" r="20" fill="none" stroke="#d6ad55" stroke-width="1" opacity="0.35"/>
+  <circle cx="32" cy="32" r="14" fill="none" stroke="#d6ad55" stroke-width="1.2" opacity="0.55"/>
+  <circle cx="32" cy="32" r="8"  fill="none" stroke="#7d97df" stroke-width="1.4" opacity="0.9"/>
+  <!-- radiating spokes -->
+  <g stroke="#d6ad55" stroke-width="1" opacity="0.5" stroke-linecap="round">
+    <line x1="32" y1="6"  x2="32" y2="12"/>
+    <line x1="32" y1="52" x2="32" y2="58"/>
+    <line x1="6"  y1="32" x2="12" y2="32"/>
+    <line x1="52" y1="32" x2="58" y2="32"/>
+    <line x1="14" y1="14" x2="18.5" y2="18.5"/>
+    <line x1="49.5" y1="49.5" x2="46" y2="46"/>
+    <line x1="50" y1="14" x2="45.5" y2="18.5"/>
+    <line x1="14.5" y1="49.5" x2="18" y2="46"/>
+  </g>
+  <!-- central source point -->
+  <circle cx="32" cy="32" r="3.4" fill="#f0d489"/>
+  <!-- Coptic E (Eugnostos) -->
+  <text x="32" y="32" text-anchor="middle" dominant-baseline="central"
+        font-family="'Noto Sans Coptic','Segoe UI',serif" font-size="9" fill="#15132c" font-weight="700">ⲉ</text>
+</svg>

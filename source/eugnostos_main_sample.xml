@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="cop">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title ref="urn:cts:copticLit:nag.eugnostos" xml:lang="en">Eugnostos the Blessed</title>
+        <title xml:lang="ja">祝福されたエウグノストス</title>
+        <title type="sub" xml:lang="en">A two-witness TEI edition with stand-off lexicon and annotations (NHC III,3 and V,1)</title>
+        <author>Anonymous (Gnostic; Greek original, 1st–2nd c. CE)</author>
+        <respStmt><resp>TEI encoding, lexicon, translation and theological notes</resp><name>Eugnostos Digital Corpus project</name></respStmt>
+        <respStmt><resp>source text (tokenised Sahidic Coptic, Codex III,3)</resp><name>supplied corpus (Marcion segment ids)</name></respStmt>
+      </titleStmt>
+      <editionStmt><edition n="0.1">Seed edition — lexicon, translations and notes are a curated first pass for scholarly review.</edition></editionStmt>
+      <publicationStmt>
+        <authority>Eugnostos Digital Corpus</authority>
+        <availability><licence target="https://creativecommons.org/licenses/by/4.0/">CC-BY 4.0</licence></availability>
+        <date when="2026-06-16">2026-06-16</date>
+      </publicationStmt>
+      <sourceDesc>
+        <msDesc>
+          <msIdentifier><settlement>Cairo</settlement><repository>Coptic Museum</repository><idno>NHC III</idno><msName>Nag Hammadi Codex III</msName></msIdentifier>
+          <history><origin><origDate notBefore="0300" notAfter="0400">4th c. CE</origDate><origPlace>Egypt</origPlace></origin></history>
+          <msContents><msItem n="3"><locus from="70" to="90">pp. 70,1–90,11</locus><textLang mainLang="cop" otherLangs="grc">Sahidic Coptic (with Greek loanwords)</textLang><title>Eugnostos the Blessed</title></msItem></msContents>
+        </msDesc>
+        <msDesc>
+          <msIdentifier><repository>Nag Hammadi Codex V</repository><idno>NHC V</idno><msName>Nag Hammadi Codex V</msName></msIdentifier>
+          <msContents><msItem n="1"><locus from="1" to="17">pp. 1,1–17,17 (largely lacunose)</locus><textLang mainLang="cop" otherLangs="grc">Sahidic Coptic</textLang><title>Eugnostos the Blessed</title></msItem></msContents>
+        </msDesc>
+        <listBibl>
+          <bibl>Douglas M. Parrott (ed.), <title>Nag Hammadi Codices III,3–4 and V,1 … Eugnostos and the Sophia of Jesus Christ</title> (Nag Hammadi Studies 27), Brill 1991.</bibl>
+          <bibl>M. Scopello &amp; M. Meyer, "Eugnostos the Blessed," in <title>The Nag Hammadi Scriptures</title>, HarperOne 2007.</bibl>
+          <bibl>Anne Pasquier, <title>Eugnoste (NH III,3 et V,1)</title> (Bibliothèque copte de Nag Hammadi, section « Textes » 26 ; et le volume de commentaire), Québec/Louvain : Presses de l'Université Laval / Peeters.</bibl>
+          <bibl>小林稔訳「エウグノストス」(『ナグ・ハマディ文書』所収の邦訳, §1–§43).</bibl>
+          <bibl>Louis Painchaud, "The Literary Contacts between the Writing without Title On the Origin of the World (CG II,5 and XIII,2) and Eugnostos the Blessed (CG III,3 and V,1)," <title>JBL</title> 114/1 (1995) 81–101.</bibl>
+        </listBibl>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc><p xml:lang="ja">ナグ・ハマディ写本『祝福されたエウグノストス』を、形態素ごとに意味を参照でき、写本III,3とV,1を対照でき、神学的解釈を併読できる形で公開するためのTEI符号化。データは3ファイルに分離しています。</p></projectDesc>
+      <editorialDecl>
+        <p xml:lang="ja">本ファイルは&lt;b&gt;本文&lt;/b&gt;です。各 &lt;w&gt; は @type(品詞)・@lemma(レンマ)を持ち、語義は&lt;b&gt;別ファイルのコプト語辞書&lt;/b&gt;(eugnostos_lexicon.xml)を @lemma で参照します。ギリシア借用語は @xml:lang="grc"。セグメント &lt;s&gt; の対訳は独自属性 @transJa / @transEn に格納。神学的解釈(注釈)は&lt;b&gt;別ファイル&lt;/b&gt;(eugnostos_theology.xml)にあり、@target で本文 &lt;s&gt; を指します。</p>
+        <p xml:lang="en">This is the &lt;b&gt;text&lt;/b&gt; file. Glosses live in the companion dictionary &lt;ref target="eugnostos_lexicon.xml"&gt;eugnostos_lexicon.xml&lt;/ref&gt; (joined by @lemma); theological annotations live in &lt;ref target="eugnostos_theology.xml"&gt;eugnostos_theology.xml&lt;/ref&gt; (linked by @target).</p>
+      </editorialDecl>
+      <classDecl>
+        <taxonomy xml:id="theology-taxonomy">
+          <desc xml:lang="ja">神学的主題の分類。&lt;s&gt; の @ana から参照されます(注釈ファイルにも同じ分類を収録)。</desc>
+          <category xml:id="th-frame"><catDesc xml:lang="ja">書簡という枠組み</catDesc><catDesc xml:lang="en">Epistolary frame</catDesc><catDesc xml:lang="fr">Cadre épistolaire</catDesc></category>
+          <category xml:id="th-apophatic"><catDesc xml:lang="ja">否定神学(語りえぬ父)</catDesc><catDesc xml:lang="en">Apophatic theology</catDesc><catDesc xml:lang="fr">Théologie apophatique</catDesc></category>
+          <category xml:id="th-propator"><catDesc xml:lang="ja">先在の父(プロパトール)</catDesc><catDesc xml:lang="en">The Forefather</catDesc><catDesc xml:lang="fr">Le Propatôr (Père préexistant)</catDesc></category>
+          <category xml:id="th-autogenes"><catDesc xml:lang="ja">自生者(アウトゲネース)</catDesc><catDesc xml:lang="en">The Self-Begotten</catDesc><catDesc xml:lang="fr">L'Autogène (auto-engendré)</catDesc></category>
+          <category xml:id="th-anthropos"><catDesc xml:lang="ja">不死の人間</catDesc><catDesc xml:lang="en">The Immortal Man</catDesc><catDesc xml:lang="fr">L'Homme immortel</catDesc></category>
+          <category xml:id="th-son"><catDesc xml:lang="ja">人の子=救済者</catDesc><catDesc xml:lang="en">The Son of Man / Saviour</catDesc><catDesc xml:lang="fr">Le Fils de l'Homme / Sauveur</catDesc></category>
+          <category xml:id="th-sophia"><catDesc xml:lang="ja">ソフィアと対(シュジュギア)</catDesc><catDesc xml:lang="en">Sophia &amp; syzygy</catDesc><catDesc xml:lang="fr">Sophia et la syzygie</catDesc></category>
+          <category xml:id="th-androgyny"><catDesc xml:lang="ja">両性具有</catDesc><catDesc xml:lang="en">Androgyny</catDesc><catDesc xml:lang="fr">Androgynie</catDesc></category>
+          <category xml:id="th-aeons"><catDesc xml:lang="ja">アイオーン論(12・72・360)</catDesc><catDesc xml:lang="en">The aeons (12/72/360)</catDesc><catDesc xml:lang="fr">Les éons (12/72/360)</catDesc></category>
+          <category xml:id="th-ekklesia"><catDesc xml:lang="ja">天上の教会</catDesc><catDesc xml:lang="en">The heavenly Church</catDesc><catDesc xml:lang="fr">L'Église céleste</catDesc></category>
+          <category xml:id="th-cosmology"><catDesc xml:lang="ja">型と対型・宇宙構造</catDesc><catDesc xml:lang="en">Types &amp; cosmic structure</catDesc><catDesc xml:lang="fr">Types et structure cosmique</catDesc></category>
+          <category xml:id="th-sjc"><catDesc xml:lang="ja">『イエス・キリストの知恵』との関係</catDesc><catDesc xml:lang="en">Relation to the Sophia of Jesus Christ</catDesc><catDesc xml:lang="fr">Rapport avec la Sagesse de Jésus-Christ</catDesc></category>
+          <category xml:id="th-witness"><catDesc xml:lang="ja">写本III,3とV,1の異同</catDesc><catDesc xml:lang="en">Witnesses III,3 and V,1</catDesc><catDesc xml:lang="fr">Les témoins III,3 et V,1</catDesc></category>
+          <category xml:id="th-origworld"><catDesc xml:lang="ja">『世界の起源について』との関係</catDesc><catDesc xml:lang="en">Relation to On the Origin of the World</catDesc><catDesc xml:lang="fr">Rapport avec l'Écrit sans titre</catDesc></category>
+          <category xml:id="th-dispositio"><catDesc xml:lang="ja">修辞的構成(四部構成)</catDesc><catDesc xml:lang="en">Rhetorical dispositio</catDesc><catDesc xml:lang="fr">Dispositio rhétorique</catDesc></category>
+        </taxonomy>
+      </classDecl>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="cop">Sahidic Coptic</language>
+        <language ident="grc">Greek (loanwords)</language>
+        <language ident="ja">Japanese (translations, notes)</language>
+        <language ident="en">English (translations, notes)</language>
+        <language ident="fr">French (translations, notes)</language>
+      </langUsage>
+      <textClass><keywords scheme="#theology-taxonomy"><term>Gnosticism</term><term>cosmogony</term><term>Sethian</term><term>apophatic theology</term></keywords></textClass>
+    </profileDesc>
+    <revisionDesc><change when="2026-06-16" n="0.1">Initial seed build from tokenised Codex III,3 source; lexicon and annotations split into companion files.</change></revisionDesc>
+  </teiHeader>
+  <text>
+    <group>
+      <text type="witness" xml:id="wit-III" n="NHC III,3" xml:lang="cop">
+        <body>
+          <div type="tractate" n="Eugnostos" subtype="codexIII">
+            <head xml:lang="en">Eugnostos the Blessed — Nag Hammadi Codex III,3 (pp. 70–90)</head>
+            <s xml:id="III-INCIPIT" n="1" source="marcion:INCIPIT" transJa="祝福されたエウグノストス、彼に属する者たちへ。これらのことを喜べ——" transEn="Eugnostos the blessed, to those who are his: rejoice in this —" transFr="Eugnostos le bienheureux, à ceux qui sont siens : réjouissez-vous de ceci —" ana="#th-dispositio #th-frame #th-sjc #th-witness" corresp="#wit-V" subtype="incipit">
+              <w type="PREP" lemma="ⲉ">ⲉ</w><w type="NPROP" lemma="ⲩⲅⲛⲱⲥⲧⲟⲥ" xml:lang="grc">ⲩⲅⲛⲱⲥⲧⲟⲥ</w><w type="ART" lemma="ⲡ">ⲡ</w><w type="ADJ" lemma="ⲙⲁⲕⲁⲣⲓⲟⲥ" xml:lang="grc">ⲙⲁⲕⲁⲣⲓⲟⲥ</w><w type="PREP" lemma="ⲛ">ⲛ</w><w type="PRET" lemma="ⲛⲉ">ⲛⲉ</w>
+              <w type="COP" lemma="ⲧⲉ">ⲧⲉ</w><w type="PREP" lemma="ⲛ">ⲛ</w><w type="ART" lemma="ⲟⲩ">ⲟⲩ</w><w type="PPER" lemma="ϥ">ϥ</w><w type="PRET" lemma="ⲛⲉ">ⲛⲉ</w><w type="CONJ" lemma="ϫⲉ">ϫⲉ</w>
+              <w type="V" lemma="ⲣⲁϣⲉ">ⲣⲁϣⲉ</w><w type="PREP" lemma="ϩⲛ">ϩⲛ</w><w type="PRET" lemma="ⲛⲉ">ⲛⲉ</w><w type="V" lemma="ⲉⲓ">ⲉⲓ</w>
+            </s>
+            <s xml:id="III-7505191" n="2" source="marcion:7505191" transJa="世界の創設以来今に至るまで生まれたすべての人間が、神を求めて「神とは誰か、いかなる方か」と問いながらも見いだせずにいることを、あなたがたが知るために。世界の経綸より優れた知者たちでさえ満足しなかった。世界の統治について哲学者たちは三通りに語るが、彼らは互いに一致しない。ある者は、世界は自らによって治められると言う。" transEn="…that you may know that, from the foundation of the world until now, every human born has sought God, asking who and what he is, yet has not found him. Even the wise, beyond the governance of the world, were not satisfied. For the philosophers speak of the world&#x27;s governance in three ways and do not agree among themselves: some say the world is governed by itself;" transFr="… afin que vous sachiez que, depuis la fondation du monde jusqu&#x27;à maintenant, tout homme né a cherché Dieu, demandant qui et ce qu&#x27;il est, sans le trouver. Même les sages, au-delà du gouvernement du monde, ne furent pas satisfaits ; car les philosophes parlent du gouvernement du monde de trois manières et ne s&#x27;accordent pas entre eux : les uns disent que le monde se gouverne lui-même ;" ana="#th-apophatic #th-dispositio #th-frame #th-sjc">
+              <w type="PREP" lemma="ⲉ">ⲉ</w><w type="V" lemma="ⲧⲣⲉⲧⲛ">ⲧⲣⲉⲧⲛ</w><w type="V" lemma="ⲉⲓⲙⲉ">ⲉⲓⲙⲉ</w><w type="CONJ" lemma="ϫⲉ">ϫⲉ</w><w type="N" lemma="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</w><w type="ADJ" lemma="ⲛⲓⲙ">ⲛⲓⲙ</w>
+              <w type="REL" lemma="ⲛⲧ">ⲛⲧ</w><w type="PRET" lemma="ⲁ">ⲁ</w><w type="PPER" lemma="ⲩ">ⲩ</w><w type="V" lemma="ϫⲡⲟ">ϫⲡⲟ</w><w type="ART" lemma="ⲟⲩ">ⲟⲩ</w><w type="CONJ" lemma="ϫⲛ">ϫⲛ</w>
+              <w type="PREP" lemma="ⲛ">ⲛ</w><w type="ART" lemma="ⲧ">ⲧ</w><w type="N" lemma="ⲕⲁⲧⲁⲃⲟⲗⲏ" xml:lang="grc">ⲕⲁⲧⲁⲃⲟⲗⲏ</w><w type="PREP" lemma="ⲙ">ⲙ</w><w type="ART" lemma="ⲡ">ⲡ</w><w type="N" lemma="ⲕⲟⲥⲙⲟⲥ" xml:lang="grc">ⲕⲟⲥⲙⲟⲥ</w>
+              <w type="V" lemma="ϣⲁ">ϣⲁ</w><w type="ADV" lemma="ⲧⲉⲛⲟⲩ">ⲧⲉⲛⲟⲩ</w><w type="NUM" lemma="ⲥⲉ">ⲥⲉ</w><w type="VSTAT" lemma="ⲟ">ⲟ</w><w type="X" lemma="ⲛϣϩⲓϭ">ⲛϣϩⲓϭ</w><w type="PREP" lemma="ⲉ">ⲉ</w>
+              <w type="PPER" lemma="ⲩ">ⲩ</w><w type="V" lemma="ϣⲓⲛⲉ">ϣⲓⲛⲉ</w><w type="PREP" lemma="ⲛ">ⲛ</w><w type="N" lemma="ⲥⲁ">ⲥⲁ</w><w type="ART" lemma="ⲡ">ⲡ</w><w type="V" lemma="ⲛⲟⲩ">ⲛⲟⲩ</w>
+              <w type="COP" lemma="ⲧⲉ">ⲧⲉ</w><w type="CONJ" lemma="ϫⲉ">ϫⲉ</w><w type="ADJ" lemma="ⲛⲓⲙ">ⲛⲓⲙ</w><w type="COP" lemma="ⲡⲉ">ⲡⲉ</w><w type="CONJ" lemma="ⲏ" xml:lang="grc">ⲏ</w><w type="V" lemma="ⲟⲩⲉϣ">ⲟⲩⲉϣ</w>
+              <w type="PREP" lemma="ⲛ">ⲛ</w><w type="N" lemma="ϩⲉ">ϩⲉ</w><w type="COP" lemma="ⲡⲉ">ⲡⲉ</w><w type="NEG" lemma="ⲙⲡ">ⲙⲡ</w><w type="ART" lemma="ⲟⲩ">ⲟⲩ</w><w type="N" lemma="ϩⲉ">ϩⲉ</w>
+              <w type="PREP" lemma="ⲉⲣⲟ">ⲉⲣⲟ</w><w type="PPER" lemma="ϥ">ϥ</w><w type="PREP" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲥⲁⲃⲉⲉⲩⲉ">ⲥⲁⲃⲉⲉⲩⲉ</w><w type="PREP" lemma="ⲉ">ⲉ</w><w type="ART" lemma="ⲧ">ⲧ</w>
+              <w type="PREP" lemma="ⲛ">ⲛ</w><w type="N" lemma="ϩⲏⲧ">ϩⲏⲧ</w><w type="ART" lemma="ⲟⲩ">ⲟⲩ</w><w type="PREP" lemma="ⲛ">ⲛ</w><w type="N" lemma="ϩⲟⲩⲟ">ϩⲟⲩⲟ</w><w type="ADV" lemma="ⲉⲃⲟⲗ">ⲉⲃⲟⲗ</w>
+              <w type="PREP" lemma="ϩⲛ">ϩⲛ</w><w type="X" lemma="ⲧⲇⲓⲟⲓⲕⲏ">ⲧⲇⲓⲟⲓⲕⲏ</w><w type="V" lemma="ⲥⲓ">ⲥⲓ</w><w type="PPER" lemma="ⲥ">ⲥ</w><w type="PREP" lemma="ⲙ">ⲙ</w><w type="ART" lemma="ⲡ">ⲡ</w>
+              <w type="N" lemma="ⲕⲟⲥⲙⲟⲥ" xml:lang="grc">ⲕⲟⲥⲙⲟⲥ</w><w type="PRET" lemma="ⲁ">ⲁ</w><w type="PPER" lemma="ⲩ">ⲩ</w><w type="V" lemma="ϯ">ϯ</w><w type="PPOS" lemma="ⲧⲁ">ⲧⲁ</w><w type="PREP" lemma="ⲛⲧⲛ">ⲛⲧⲛ</w>
+              <w type="X" lemma="ⲉⲧⲙⲏⲉ">ⲉⲧⲙⲏⲉ</w><w type="CONJ" lemma="ⲁⲩⲱ">ⲁⲩⲱ</w><w type="X" lemma="ⲙⲡⲉⲡⲧⲁⲛⲧⲛ">ⲙⲡⲉⲡⲧⲁⲛⲧⲛ</w><w type="PPOS" lemma="ⲧⲁ">ⲧⲁ</w><w type="N" lemma="ϩⲉ">ϩⲉ</w><w type="X" lemma="ⲧⲙⲏⲉ">ⲧⲙⲏⲉ</w>
+              <w type="ART" lemma="ⲧ">ⲧ</w><w type="N" lemma="ⲇⲓⲟⲓⲕⲏⲥⲓⲥ" xml:lang="grc">ⲇⲓⲟⲓⲕⲏⲥⲓⲥ</w><w type="PREP" lemma="ⲛ">ⲛ</w><w type="PTC" lemma="ⲅⲁⲣ" xml:lang="grc">ⲅⲁⲣ</w><w type="V" lemma="ϣⲁ">ϣⲁ</w><w type="PPER" lemma="ⲩ">ⲩ</w>
+              <w type="V" lemma="ϣⲁϫⲉ">ϣⲁϫⲉ</w><w type="PREP" lemma="ⲉⲣⲟ">ⲉⲣⲟ</w><w type="PPER" lemma="ⲥ">ⲥ</w><w type="PREP" lemma="ⲛ">ⲛ</w><w type="NUM" lemma="ϣⲟⲙⲧⲉ">ϣⲟⲙⲧⲉ</w><w type="PREP" lemma="ⲛ">ⲛ</w>
+              <w type="X" lemma="ϭⲓⲛ">ϭⲓⲛ</w><w type="V" lemma="ϣⲁϫⲉ">ϣⲁϫⲉ</w><w type="ADV" lemma="ⲉⲃⲟⲗ">ⲉⲃⲟⲗ</w><w type="PREP" lemma="ϩⲓⲧⲟⲟⲧ">ϩⲓⲧⲟⲟⲧ</w><w type="ART" lemma="ⲟⲩ">ⲟⲩ</w><w type="PREP" lemma="ⲛ">ⲛ</w>
+              <w type="PRET" lemma="ⲛⲉ">ⲛⲉ</w><w type="N" lemma="ⲫⲓⲗⲟⲥⲟⲫⲟⲥ" xml:lang="grc">ⲫⲓⲗⲟⲥⲟⲫⲟⲥ</w><w type="ADJ" lemma="ⲧⲏⲣ">ⲧⲏⲣ</w><w type="ART" lemma="ⲟⲩ">ⲟⲩ</w><w type="PREP" lemma="ⲉⲧⲃⲉ">ⲉⲧⲃⲉ</w><w type="PDEM" lemma="ⲡⲁⲓ">ⲡⲁⲓ</w>
+              <w type="PREP" lemma="ⲛ">ⲛ</w><w type="NUM" lemma="ⲥⲉ">ⲥⲉ</w><w type="V" lemma="ⲥⲩⲙⲫⲱⲛⲉⲓ" xml:lang="grc">ⲥⲩⲙⲫⲱⲛⲉⲓ</w><w type="NEG" lemma="ⲁⲛ">ⲁⲛ</w><w type="N" lemma="ϩⲟ">ϩⲟ</w><w type="V" lemma="ⲉⲓ">ⲉⲓ</w>
+              <w type="PRET" lemma="ⲛⲉ">ⲛⲉ</w><w type="PREP" lemma="ⲛ">ⲛ</w><w type="PTC" lemma="ⲅⲁⲣ" xml:lang="grc">ⲅⲁⲣ</w><w type="PREP" lemma="ⲛϩⲏⲧ">ⲛϩⲏⲧ</w><w type="ART" lemma="ⲟⲩ">ⲟⲩ</w><w type="NUM" lemma="ⲥⲉ">ⲥⲉ</w>
+              <w type="V" lemma="ϫⲱ">ϫⲱ</w><w type="PREP" lemma="ⲙⲙⲟ">ⲙⲙⲟ</w><w type="PPER" lemma="ⲥ">ⲥ</w><w type="PREP" lemma="ⲉ">ⲉ</w><w type="ART" lemma="ⲡ">ⲡ</w><w type="N" lemma="ⲕⲟⲥⲙⲟⲥ" xml:lang="grc">ⲕⲟⲥⲙⲟⲥ</w>
+              <w type="CONJ" lemma="ϫⲉ">ϫⲉ</w><w type="X" lemma="ⲛⲧⲁⲩⲁⲅⲉ">ⲛⲧⲁⲩⲁⲅⲉ</w><w type="PREP" lemma="ⲙⲙⲟ">ⲙⲙⲟ</w><w type="PPER" lemma="ϥ">ϥ</w><w type="PREP" lemma="ϩⲓⲧⲟⲟⲧ">ϩⲓⲧⲟⲟⲧ</w><w type="PPER" lemma="ϥ">ϥ</w>
+              <w type="ADV" lemma="ⲙⲙⲓⲛ">ⲙⲙⲓⲛ</w><w type="X" lemma="ⲙⲙⲟϥ">ⲙⲙⲟϥ</w>
+            </s>
+            <s xml:id="III-7505192" n="3" source="marcion:7505192" transJa="ある者たちは、それは摂理(プロノイア)であると言う。" transEn="others, that it is providence;" transFr="d&#x27;autres, que c&#x27;est la providence ;" ana="#th-apophatic #th-frame">
+              <w type="ART" lemma="ϩⲉⲛ">ϩⲉⲛ</w><w type="N" lemma="ⲕⲟⲟⲩⲉ">ⲕⲟⲟⲩⲉ</w><w type="CONJ" lemma="ϫⲉ">ϫⲉ</w><w type="ART" lemma="ⲟⲩ">ⲟⲩ</w><w type="N" lemma="ⲡⲣⲟⲛⲟⲓⲁ" xml:lang="grc">ⲡⲣⲟⲛⲟⲓⲁ</w><w type="COP" lemma="ⲧⲉ">ⲧⲉ</w>
+            </s>
+            <s xml:id="III-7505193" n="4" source="marcion:7505193" transJa="また別の者たちは、それは定め(運命)であると言う。だがこれらのいずれでもない。先に述べた三つの声のうち、真理に近いものは一つもない。" transEn="and others, that it is fate. But it is none of these; of the three voices just mentioned, not one is near the truth." transFr="d&#x27;autres encore, que c&#x27;est le destin. Mais ce n&#x27;est rien de tout cela ; des trois voix que je viens de mentionner, aucune n&#x27;approche de la vérité." ana="#th-apophatic #th-frame">
+              <w type="ART" lemma="ϩⲉⲛ">ϩⲉⲛ</w><w type="N" lemma="ⲕⲟⲟⲩⲉ">ⲕⲟⲟⲩⲉ</w><w type="CONJ" lemma="ϫⲉ">ϫⲉ</w><w type="X" lemma="ⲟⲩⲡ">ⲟⲩⲡ</w><w type="REL" lemma="ⲉⲧ">ⲉⲧ</w><w type="VSTAT" lemma="ⲏⲡ">ⲏⲡ</w>
+              <w type="CONJ" lemma="ⲉϣⲱⲡⲉ">ⲉϣⲱⲡⲉ</w><w type="COP" lemma="ⲡⲉ">ⲡⲉ</w><w type="CONJ" lemma="ⲁⲩⲱ">ⲁⲩⲱ</w><w type="N" lemma="ⲟⲩⲟⲛ">ⲟⲩⲟⲛ</w><w type="PREP" lemma="ⲛ">ⲛ</w><w type="PDEM" lemma="ⲛⲁⲓ">ⲛⲁⲓ</w>
+              <w type="NEG" lemma="ⲁⲛ">ⲁⲛ</w><w type="PRET" lemma="ⲛⲉ">ⲛⲉ</w><w type="ART" lemma="ⲧ">ⲧ</w><w type="NUM" lemma="ϣⲟⲙⲧⲉ">ϣⲟⲙⲧⲉ</w><w type="PTC" lemma="ϭⲉ">ϭⲉ</w><w type="PREP" lemma="ⲛ">ⲛ</w>
+              <w type="N" lemma="ⲥⲙⲏ">ⲥⲙⲏ</w><w type="REL" lemma="ⲛⲧⲁⲉⲓⲣ">ⲛⲧⲁⲉⲓⲣ</w><w type="ADV" lemma="ϣⲣⲡ">ϣⲣⲡ</w><w type="PREP" lemma="ⲛ">ⲛ</w><w type="V" lemma="ϫⲟⲟ">ϫⲟⲟ</w><w type="PPER" lemma="ⲩ">ⲩ</w>
+              <w type="NEG" lemma="ⲙⲛ">ⲙⲛ</w><w type="NUM" lemma="ⲟⲩⲉⲓ">ⲟⲩⲉⲓ</w><w type="PREP" lemma="ⲙⲙⲟ">ⲙⲙⲟ</w><w type="ART" lemma="ⲟⲩ">ⲟⲩ</w><w type="VSTAT" lemma="ⲏⲡ">ⲏⲡ</w><w type="REL" lemma="ⲉⲧ">ⲉⲧ</w>
+              <w type="X" lemma="ⲙⲏⲉ">ⲙⲏⲉ</w>
+            </s>
+            <s xml:id="III-7505194" n="5" source="marcion:7505194" transJa="自ら出たものは、空しい生にすぎない。摂理には知恵がなく、運命は識別を欠く。" transEn="For what comes from itself is an empty life; providence has no wisdom, and fate is without discernment." transFr="Car ce qui vient de soi-même n&#x27;est qu&#x27;une vie vide ; la providence est sans sagesse, et le destin sans discernement." ana="#th-apophatic #th-frame">
+              <w type="ART" lemma="ⲡ">ⲡ</w><w type="X" lemma="ⲉⲧⲉⲃⲟⲗ">ⲉⲧⲉⲃⲟⲗ</w><w type="PTC" lemma="ⲅⲁⲣ" xml:lang="grc">ⲅⲁⲣ</w><w type="PREP" lemma="ϩⲓ">ϩⲓ</w><w type="V" lemma="ⲧⲟ">ⲧⲟ</w><w type="X" lemma="ⲟⲧ">ⲟⲧ</w>
+              <w type="PPER" lemma="ϥ">ϥ</w><w type="ADV" lemma="ⲙⲙⲓⲛ">ⲙⲙⲓⲛ</w><w type="PREP" lemma="ⲙⲙⲟ">ⲙⲙⲟ</w><w type="PPER" lemma="ϥ">ϥ</w><w type="ART" lemma="ⲟⲩ">ⲟⲩ</w><w type="N" lemma="ⲃⲓⲟⲥ" xml:lang="grc">ⲃⲓⲟⲥ</w>
+              <w type="PPER" lemma="ⲉϥ">ⲉϥ</w><w type="X" lemma="ϣⲟⲩⲉⲓⲧ">ϣⲟⲩⲉⲓⲧ</w><w type="COP" lemma="ⲡⲉ">ⲡⲉ</w><w type="V" lemma="ϣⲁ">ϣⲁ</w><w type="PPER" lemma="ϥ">ϥ</w><w type="V" lemma="ⲁⲁ">ⲁⲁ</w>
+              <w type="PPER" lemma="ϥ">ϥ</w><w type="COP" lemma="ⲧⲉ">ⲧⲉ</w><w type="ART" lemma="ⲡ">ⲡ</w><w type="N" lemma="ⲣⲟ">ⲣⲟ</w><w type="X" lemma="ⲛⲟⲓⲁ" xml:lang="grc">ⲛⲟⲓⲁ</w><w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
+              <w type="NUM" lemma="ⲙⲛⲧ">ⲙⲛⲧ</w><w type="N" lemma="ⲥⲟϭ">ⲥⲟϭ</w><w type="COP" lemma="ⲧⲉ">ⲧⲉ</w><w type="ART" lemma="ⲧ">ⲧ</w><w type="REL" lemma="ⲉⲧ">ⲉⲧ</w><w type="X" lemma="ϩⲁⲛⲧ">ϩⲁⲛⲧ</w>
+              <w type="NUM" lemma="ⲟⲩⲉⲓ">ⲟⲩⲉⲓ</w><w type="PREP" lemma="ⲉ">ⲉ</w><w type="X" lemma="ⲙⲉⲥⲉⲥⲑⲁⲛ">ⲙⲉⲥⲉⲥⲑⲁⲛ</w><w type="REL" lemma="ⲉⲧⲉ">ⲉⲧⲉ</w>
+            </s>
+            <s xml:id="III-7505195" n="6" source="marcion:7505195" transJa="だが、これら三つの声の外へと進み出て、別の声によって真理の神を見いだしうる者は、彼について語るすべての者と一致するであろう。彼は不死なる方であり、死すべき人間のただ中にあって存在し、語りえぬ方として在す。" transEn="But whoever can move beyond these three voices and, by another voice, find the God of truth will agree with all who speak of him: he is immortal, present in the midst of mortal men, the One who is, the ineffable." transFr="Mais quiconque peut s&#x27;affranchir de ces trois voix et, par une autre voix, trouver le Dieu de vérité s&#x27;accordera avec tous ceux qui parlent de lui : il est immortel, présent au milieu des hommes mortels, Celui qui est, l&#x27;ineffable." ana="#th-apophatic #th-frame">
+              <w type="ART" lemma="ⲡ">ⲡ</w><w type="REL" lemma="ⲉⲧⲉ">ⲉⲧⲉ</w><w type="EXIST" lemma="ⲟⲩⲛ">ⲟⲩⲛ</w><w type="V" lemma="ϣ">ϣ</w><w type="N" lemma="ϭⲟⲙ">ϭⲟⲙ</w><w type="PTC" lemma="ϭⲉ">ϭⲉ</w>
+              <w type="PREP" lemma="ⲙⲙⲟ">ⲙⲙⲟ</w><w type="PPER" lemma="ϥ">ϥ</w><w type="PREP" lemma="ⲉ">ⲉ</w><w type="V" lemma="ⲉⲓ">ⲉⲓ</w><w type="ADV" lemma="ⲉϩⲟⲩⲛ">ⲉϩⲟⲩⲛ</w><w type="NEG" lemma="ⲙⲡ">ⲙⲡ</w>
+              <w type="N" lemma="ⲃⲟⲗ">ⲃⲟⲗ</w><w type="X" lemma="ⲛⲧⲉⲉⲓ">ⲛⲧⲉⲉⲓ</w><w type="NUM" lemma="ϣⲟⲙⲧⲉ">ϣⲟⲙⲧⲉ</w><w type="PREP" lemma="ⲛ">ⲛ</w><w type="N" lemma="ⲥⲙⲏ">ⲥⲙⲏ</w><w type="PREP" lemma="ⲛ">ⲛ</w>
+              <w type="PPOS" lemma="ⲧⲁ">ⲧⲁ</w><w type="PREP" lemma="ⲉ">ⲉ</w><w type="PPER" lemma="ⲓ">ⲓ</w><w type="ADV" lemma="ϣⲣⲡ">ϣⲣⲡ</w><w type="PREP" lemma="ⲛ">ⲛ</w><w type="V" lemma="ϫⲟⲟ">ϫⲟⲟ</w>
+              <w type="PPER" lemma="ⲩ">ⲩ</w><w type="PREP" lemma="ⲛ">ⲛ</w><w type="PPER" lemma="ϥ">ϥ</w><w type="V" lemma="ⲉⲓ">ⲉⲓ</w><w type="ADV" lemma="ⲉϩⲟⲩⲛ">ⲉϩⲟⲩⲛ</w><w type="PREP" lemma="ϩⲓ">ϩⲓ</w>
+              <w type="PPER" lemma="ⲧⲛ">ⲧⲛ</w><w type="ADJ" lemma="ⲕⲉ">ⲕⲉ</w><w type="N" lemma="ⲥⲙⲏ">ⲥⲙⲏ</w><w type="PREP" lemma="ⲛ">ⲛ</w><w type="PPER" lemma="ϥ">ϥ</w><w type="V" lemma="ⲟⲩⲱⲛϩ">ⲟⲩⲱⲛϩ</w>
+              <w type="ADV" lemma="ⲉⲃⲟⲗ">ⲉⲃⲟⲗ</w><w type="NEG" lemma="ⲙⲡ">ⲙⲡ</w><w type="N" lemma="ⲛⲟⲩⲧⲉ">ⲛⲟⲩⲧⲉ</w><w type="PREP" lemma="ⲛ">ⲛ</w><w type="ART" lemma="ⲧ">ⲧ</w><w type="N" lemma="ⲁⲗⲏⲑⲉⲓⲁ" xml:lang="grc">ⲁⲗⲏⲑⲉⲓⲁ</w>
+              <w type="X" lemma="ⲛϥⲥⲩⲙⲫⲱ">ⲛϥⲥⲩⲙⲫⲱ</w><w type="ART" lemma="ⲛⲓ">ⲛⲓ</w><w type="PREP" lemma="ⲛ">ⲛ</w><w type="N" lemma="ⲟⲩⲟⲛ">ⲟⲩⲟⲛ</w><w type="ADJ" lemma="ⲛⲓⲙ">ⲛⲓⲙ</w><w type="PREP" lemma="ⲉ">ⲉ</w>
+              <w type="X" lemma="ⲧⲃⲏⲧ">ⲧⲃⲏⲧ</w><w type="PPER" lemma="ϥ">ϥ</w><w type="PDEM" lemma="ⲡⲁⲓ">ⲡⲁⲓ</w><w type="ART" lemma="ⲟⲩ">ⲟⲩ</w><w type="ADJ" lemma="ⲁⲑⲁⲛⲁⲧⲟⲥ" xml:lang="grc">ⲁⲑⲁⲛⲁⲧⲟⲥ</w><w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
+              <w type="PREP" lemma="ⲉ">ⲉ</w><w type="PPER" lemma="ϥ">ϥ</w><w type="VSTAT" lemma="ϣⲟⲟⲡ">ϣⲟⲟⲡ</w><w type="PREP" lemma="ϩⲛ">ϩⲛ</w><w type="ART" lemma="ⲧ">ⲧ</w><w type="PTC" lemma="ⲙⲏ">ⲙⲏ</w>
+              <w type="COP" lemma="ⲧⲉ">ⲧⲉ</w><w type="PREP" lemma="ⲛ">ⲛ</w><w type="PREP" lemma="ⲛ">ⲛ</w><w type="N" lemma="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</w><w type="PREP" lemma="ⲉ">ⲉ</w><w type="V" lemma="ϣⲁ">ϣⲁ</w>
+              <w type="PPER" lemma="ⲩ">ⲩ</w><w type="N" lemma="ⲙⲟⲩ">ⲙⲟⲩ</w><w type="N" lemma="ⲡⲉⲧ">ⲡⲉⲧ</w><w type="VSTAT" lemma="ϣⲟⲟⲡ">ϣⲟⲟⲡ</w><w type="ART" lemma="ⲟⲩ">ⲟⲩ</w><w type="ADJ" lemma="ⲁⲧϣⲁϫⲉ">ⲁⲧϣⲁϫⲉ</w>
+              <w type="PREP" lemma="ⲉⲣⲟ">ⲉⲣⲟ</w><w type="PPER" lemma="ϥ">ϥ</w><w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
+            </s>
+            <s xml:id="III-7505196" n="7" source="marcion:7505196" transJa="いかなる支配も、いかなる権能も、いかなる従属も、いかなる本性も、世界の創設以来、彼を知ったことはない——彼ご自身を除いては。" transEn="No rule, no authority, no subjection, no nature has known him from the foundation of the world — none but he himself." transFr="Aucune domination, aucune autorité, aucune sujétion, aucune nature ne l&#x27;a connu depuis la fondation du monde — nul sinon lui-même." ana="#th-apophatic">
+              <w type="PREP" lemma="ⲙ">ⲙ</w><w type="COP" lemma="ⲡⲉ">ⲡⲉ</w><w type="N" lemma="ⲁⲣⲭⲏ" xml:lang="grc">ⲁⲣⲭⲏ</w><w type="V" lemma="ⲥⲟⲩⲱⲛ">ⲥⲟⲩⲱⲛ</w><w type="PPER" lemma="ϥ">ϥ</w><w type="NEG" lemma="ⲙⲡⲉ">ⲙⲡⲉ</w>
+              <w type="X" lemma="ⲉⲯⲟⲩ">ⲉⲯⲟⲩ</w><w type="PPER" lemma="ⲥ">ⲥ</w><w type="V" lemma="ⲓⲁ">ⲓⲁ</w><w type="NEG" lemma="ⲙⲡⲉ">ⲙⲡⲉ</w><w type="N" lemma="ϩⲩⲡⲟⲧⲁⲅⲏ" xml:lang="grc">ϩⲩⲡⲟⲧⲁⲅⲏ</w><w type="PREP" lemma="ⲙ">ⲙ</w>
+              <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w><w type="N" lemma="ⲫⲩⲥⲓⲥ" xml:lang="grc">ⲫⲩⲥⲓⲥ</w><w type="ADJ" lemma="ⲛⲓⲙ">ⲛⲓⲙ</w><w type="CONJ" lemma="ϫⲛ">ϫⲛ</w><w type="PREP" lemma="ⲛ">ⲛ</w><w type="ART" lemma="ⲧ">ⲧ</w>
+              <w type="N" lemma="ⲕⲁⲧⲁⲃⲟⲗⲏ" xml:lang="grc">ⲕⲁⲧⲁⲃⲟⲗⲏ</w><w type="PREP" lemma="ⲙ">ⲙ</w><w type="ART" lemma="ⲡ">ⲡ</w><w type="N" lemma="ⲕⲟⲥⲙⲟⲥ" xml:lang="grc">ⲕⲟⲥⲙⲟⲥ</w><w type="CONJ" lemma="ⲉⲓⲙⲏⲧⲓ" xml:lang="grc">ⲉⲓⲙⲏⲧⲓ</w><w type="PPER" lemma="ⲛⲧⲟϥ">ⲛⲧⲟϥ</w>
+              <w type="X" lemma="ⲟⲩⲁⲁϥ">ⲟⲩⲁⲁϥ</w>
+            </s>
+            <s xml:id="III-7505197" n="8" source="marcion:7505197" transJa="かの方は不死であり、永遠であって、生まれることがない。生まれるものはすべて滅びるからである。彼は非産出であって、始原を持たない。始原を持つものはすべて終わりを持つからである。" transEn="For that One is immortal and eternal, having no birth, since whatever is born perishes; unbegotten, having no beginning, since whatever has a beginning has an end." transFr="Car Celui-là est immortel et éternel, sans naissance, car tout ce qui naît périt ; inengendré, sans commencement, car tout ce qui a un commencement a une fin." ana="#th-apophatic">
+              <w type="ART" lemma="ⲡ">ⲡ</w><w type="REL" lemma="ⲉⲧ">ⲉⲧ</w><w type="ADV" lemma="ⲙⲙⲁⲩ">ⲙⲙⲁⲩ</w><w type="PTC" lemma="ⲅⲁⲣ" xml:lang="grc">ⲅⲁⲣ</w><w type="ART" lemma="ⲟⲩ">ⲟⲩ</w><w type="ADJ" lemma="ⲁⲑⲁⲛⲁⲧⲟⲥ" xml:lang="grc">ⲁⲑⲁⲛⲁⲧⲟⲥ</w>
+              <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w><w type="ART" lemma="ⲟⲩ">ⲟⲩ</w><w type="V" lemma="ϣⲁ">ϣⲁ</w><w type="PRET" lemma="ⲁ">ⲁ</w><w type="PREP" lemma="ⲛ">ⲛ</w><w type="CONJ" lemma="ⲏ" xml:lang="grc">ⲏ</w>
+              <w type="N" lemma="ϩⲉ">ϩⲉ</w><w type="COP" lemma="ⲡⲉ">ⲡⲉ</w><w type="PREP" lemma="ⲉ">ⲉ</w><w type="NUM" lemma="ⲙⲛⲧ">ⲙⲛⲧ</w><w type="PREP" lemma="ⲉ">ⲉ</w><w type="PPER" lemma="ϥ">ϥ</w>
+              <w type="V" lemma="ϫⲡⲟ">ϫⲡⲟ</w><w type="N" lemma="ⲟⲩⲟⲛ">ⲟⲩⲟⲛ</w><w type="PTC" lemma="ⲅⲁⲣ" xml:lang="grc">ⲅⲁⲣ</w><w type="ADJ" lemma="ⲛⲓⲙ">ⲛⲓⲙ</w><w type="REL" lemma="ⲉⲧⲉ">ⲉⲧⲉ</w><w type="EXIST" lemma="ⲟⲩⲛⲧⲁ">ⲟⲩⲛⲧⲁ</w>
+              <w type="PPER" lemma="ϥ">ϥ</w><w type="V" lemma="ϫⲡⲟ">ϫⲡⲟ</w><w type="PPER" lemma="ϥ">ϥ</w><w type="AUX" lemma="ⲛⲁ">ⲛⲁ</w><w type="V" lemma="ⲧⲁⲕⲟ">ⲧⲁⲕⲟ</w><w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
+              <w type="ADJ" lemma="ⲁⲅⲉⲛⲛⲏⲧⲟⲥ" xml:lang="grc">ⲁⲅⲉⲛⲛⲏⲧⲟⲥ</w><w type="COP" lemma="ⲡⲉ">ⲡⲉ</w><w type="PREP" lemma="ⲉ">ⲉ</w><w type="NUM" lemma="ⲙⲛⲧ">ⲙⲛⲧ</w><w type="PPER" lemma="ϥ">ϥ</w><w type="N" lemma="ⲁⲣⲭⲏ" xml:lang="grc">ⲁⲣⲭⲏ</w>
+              <w type="NUM" lemma="ⲟⲩⲁ">ⲟⲩⲁ</w><w type="PREP" lemma="ⲛ">ⲛ</w><w type="PTC" lemma="ⲅⲁⲣ" xml:lang="grc">ⲅⲁⲣ</w><w type="ADJ" lemma="ⲛⲓⲙ">ⲛⲓⲙ</w><w type="REL" lemma="ⲉⲧⲉ">ⲉⲧⲉ</w><w type="EXIST" lemma="ⲟⲩⲛⲧⲁ">ⲟⲩⲛⲧⲁ</w>
+              <w type="PPER" lemma="ϥ">ϥ</w><w type="N" lemma="ⲁⲣⲭⲏ" xml:lang="grc">ⲁⲣⲭⲏ</w><w type="EXIST" lemma="ⲟⲩⲛⲧⲁ">ⲟⲩⲛⲧⲁ</w><w type="PPER" lemma="ϥ">ϥ</w><w type="N" lemma="ϩⲁⲏ">ϩⲁⲏ</w>
+            </s>
+            <s xml:id="III-7505198" n="9" source="marcion:7505198" transJa="何ものも彼を支配せず、彼は名を持たない。名を持つものは、他者の被造物だからである。彼には名づけえず、人間の形を持たない。人間の形を持つものは他者の被造物だからである。" transEn="Nothing rules over him, and he has no name, for whoever has a name is another&#x27;s creature; he is unnameable and has no human form, for whoever has human form is another&#x27;s creature." transFr="Rien ne le domine, et il n&#x27;a pas de nom, car quiconque porte un nom est la créature d&#x27;un autre ; il est innommable et sans forme humaine, car quiconque a forme humaine est la créature d&#x27;un autre." ana="#th-apophatic">
+              <w type="NEG" lemma="ⲙⲙⲛ">ⲙⲙⲛ</w><w type="N" lemma="ⲗⲁⲁⲩ">ⲗⲁⲁⲩ</w><w type="V" lemma="ⲁⲣⲭⲓ" xml:lang="grc">ⲁⲣⲭⲓ</w><w type="PREP" lemma="ⲉ">ⲉ</w><w type="V" lemma="ϫⲱ">ϫⲱ</w><w type="PPER" lemma="ϥ">ϥ</w>
+              <w type="EXIST" lemma="ⲙⲙⲛⲧⲁ">ⲙⲙⲛⲧⲁ</w><w type="PPER" lemma="ϥ">ϥ</w><w type="N" lemma="ⲣⲁⲛ">ⲣⲁⲛ</w><w type="ART" lemma="ⲡ">ⲡ</w><w type="PREP" lemma="ⲉ">ⲉ</w><w type="COP" lemma="ⲧⲉ">ⲧⲉ</w>
+              <w type="EXIST" lemma="ⲟⲩⲛ">ⲟⲩⲛ</w><w type="ART" lemma="ⲧ">ⲧ</w><w type="PPER" lemma="ϥ">ϥ</w><w type="N" lemma="ⲣⲁⲛ">ⲣⲁⲛ</w><w type="PTC" lemma="ⲅⲁⲣ" xml:lang="grc">ⲅⲁⲣ</w><w type="ART" lemma="ⲡ">ⲡ</w>
+              <w type="V" lemma="ⲥⲱⲛⲧ">ⲥⲱⲛⲧ</w><w type="PREP" lemma="ⲛ">ⲛ</w><w type="ADJ" lemma="ⲕⲉ">ⲕⲉ</w><w type="NUM" lemma="ⲟⲩⲁ">ⲟⲩⲁ</w><w type="COP" lemma="ⲡⲉ">ⲡⲉ</w><w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
+              <w type="X" lemma="ⲁⲧϯ">ⲁⲧϯ</w><w type="N" lemma="ⲣⲁⲛ">ⲣⲁⲛ</w><w type="PREP" lemma="ⲉⲣⲟ">ⲉⲣⲟ</w><w type="PPER" lemma="ϥ">ϥ</w><w type="COP" lemma="ⲡⲉ">ⲡⲉ</w><w type="NEG" lemma="ⲙⲛ">ⲙⲛ</w>
+              <w type="N" lemma="ⲧⲁϥ">ⲧⲁϥ</w><w type="N" lemma="ⲙⲟⲣⲫⲏ" xml:lang="grc">ⲙⲟⲣⲫⲏ</w><w type="PREP" lemma="ⲛ">ⲛ</w><w type="N" lemma="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</w><w type="ART" lemma="ⲡ">ⲡ</w><w type="PREP" lemma="ⲉ">ⲉ</w>
+              <w type="COP" lemma="ⲧⲉ">ⲧⲉ</w><w type="N" lemma="ⲟⲩⲛⲧ">ⲟⲩⲛⲧ</w><w type="PPER" lemma="ϥ">ϥ</w><w type="N" lemma="ⲙⲟⲣⲫⲏ" xml:lang="grc">ⲙⲟⲣⲫⲏ</w><w type="PTC" lemma="ⲅⲁⲣ" xml:lang="grc">ⲅⲁⲣ</w><w type="PREP" lemma="ⲛ">ⲛ</w>
+              <w type="N" lemma="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</w><w type="ART" lemma="ⲡ">ⲡ</w><w type="V" lemma="ⲥⲱⲛⲧ">ⲥⲱⲛⲧ</w><w type="PREP" lemma="ⲛ">ⲛ</w><w type="ADJ" lemma="ⲕⲉ">ⲕⲉ</w><w type="NUM" lemma="ⲟⲩⲁ">ⲟⲩⲁ</w>
+              <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w><w type="EXIST" lemma="ⲟⲩⲛⲧⲁ">ⲟⲩⲛⲧⲁ</w><w type="PPER" lemma="ϥ">ϥ</w>
+            </s>
+            <s xml:id="III-7505199" n="10" source="marcion:7505199">
+              <w type="X" lemma="ⲛⲛⲟⲩϩⲓ">ⲛⲛⲟⲩϩⲓ</w><w type="PTC" lemma="ⲇⲉ" xml:lang="grc">ⲇⲉ</w><w type="PRET" lemma="ⲁ">ⲁ</w><w type="ADV" lemma="ⲙⲙⲓⲛ">ⲙⲙⲓⲛ</w><w type="PREP" lemma="ⲙⲙⲟ">ⲙⲙⲟ</w><w type="PPER" lemma="ϥ">ϥ</w>
+              <w type="PREP" lemma="ⲛ">ⲛ</w><w type="ART" lemma="ⲑ">ⲑ</w><w type="PREP" lemma="ⲉ">ⲉ</w><w type="NEG" lemma="ⲁⲛ">ⲁⲛ</w><w type="PREP" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲧϩⲓⲇⲉⲁ">ⲧϩⲓⲇⲉⲁ</w>
+              <w type="REL" lemma="ⲛⲧ">ⲛⲧ</w><w type="PRET" lemma="ⲁ">ⲁ</w><w type="PREP" lemma="ⲛ">ⲛ</w><w type="X" lemma="ϫⲓⲧ">ϫⲓⲧ</w><w type="PPER" lemma="ⲥ">ⲥ</w><w type="CONJ" lemma="ⲏ" xml:lang="grc">ⲏ</w>
+              <w type="PREP" lemma="ⲛ">ⲛ</w><w type="PPOS" lemma="ⲧⲁ">ⲧⲁ</w><w type="PREP" lemma="ⲛ">ⲛ</w><w type="V" lemma="ⲛⲁⲩ">ⲛⲁⲩ</w><w type="PREP" lemma="ⲉⲣⲟ">ⲉⲣⲟ</w><w type="PPER" lemma="ⲥ">ⲥ</w>
+              <w type="CONJ" lemma="ⲁⲗⲗⲁ" xml:lang="grc">ⲁⲗⲗⲁ</w><w type="X" lemma="ⲟⲩϩⲓⲇⲉⲁ">ⲟⲩϩⲓⲇⲉⲁ</w><w type="X" lemma="ⲛϣⲙⲙⲱ">ⲛϣⲙⲙⲱ</w><w type="COP" lemma="ⲧⲉ">ⲧⲉ</w><w type="PREP" lemma="ⲉ">ⲉ</w><w type="X" lemma="ⲥⲟⲩⲁⲧⲃ">ⲥⲟⲩⲁⲧⲃ</w>
+              <w type="PREP" lemma="ⲛ">ⲛ</w><w type="N" lemma="ϩⲟⲩⲟ">ϩⲟⲩⲟ</w><w type="PREP" lemma="ⲉ">ⲉ</w><w type="N" lemma="ⲛⲕⲁ">ⲛⲕⲁ</w><w type="ADJ" lemma="ⲛⲓⲙ">ⲛⲓⲙ</w><w type="PREP" lemma="ⲉ">ⲉ</w>
+              <w type="X" lemma="ⲥⲥⲁⲧⲡ">ⲥⲥⲁⲧⲡ</w><w type="PREP" lemma="ⲉ">ⲉ</w><w type="N" lemma="ⲛⲓⲡⲧⲏⲣϥ">ⲛⲓⲡⲧⲏⲣϥ</w>
+            </s>
+            <s xml:id="III-7505200" n="11" source="marcion:7505200">
+              <w type="X" lemma="ⲉⲥⲛⲁⲩ">ⲉⲥⲛⲁⲩ</w><w type="PREP" lemma="ϩⲓ">ϩⲓ</w><w type="N" lemma="ⲥⲁ">ⲥⲁ</w><w type="ADJ" lemma="ⲛⲓⲙ">ⲛⲓⲙ</w><w type="PREP" lemma="ⲉ">ⲉ</w><w type="PPER" lemma="ⲥ">ⲥ</w>
+              <w type="V" lemma="ⲉⲓⲱⲣϩ">ⲉⲓⲱⲣϩ</w><w type="PREP" lemma="ⲙⲙⲟ">ⲙⲙⲟ</w><w type="PPER" lemma="ⲥ">ⲥ</w><w type="PTC" lemma="ⲟⲩⲁⲁ">ⲟⲩⲁⲁ</w><w type="PPER" lemma="ⲥ">ⲥ</w><w type="PREP" lemma="ϩⲓ">ϩⲓ</w>
+              <w type="V" lemma="ⲧⲟⲟⲧ">ⲧⲟⲟⲧ</w><w type="PPER" lemma="ⲥ">ⲥ</w><w type="ADV" lemma="ⲙⲙⲓⲛ">ⲙⲙⲓⲛ</w><w type="PREP" lemma="ⲙⲙⲟ">ⲙⲙⲟ</w><w type="PPER" lemma="ⲥ">ⲥ</w><w type="X" lemma="ⲟⲩⲁⲧⲁⲣⲏϫ">ⲟⲩⲁⲧⲁⲣⲏϫ</w>
+              <w type="PPER" lemma="ϥ">ϥ</w><w type="COP" lemma="ⲡⲉ">ⲡⲉ</w><w type="PFX" lemma="ⲟⲩⲁⲧ">ⲟⲩⲁⲧ</w><w type="V" lemma="ⲧⲁϩⲟ">ⲧⲁϩⲟ</w><w type="PPER" lemma="ϥ">ϥ</w><w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
+              <w type="NUM" lemma="ⲟⲩⲁ">ⲟⲩⲁ</w><w type="PREP" lemma="ⲉ">ⲉ</w><w type="PPER" lemma="ϥ">ϥ</w><w type="V" lemma="ⲙⲏⲛ">ⲙⲏⲛ</w><w type="ADV" lemma="ⲉⲃⲟⲗ">ⲉⲃⲟⲗ</w><w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
+              <w type="X" lemma="ⲛⲁⲫⲑⲁⲣ">ⲛⲁⲫⲑⲁⲣ</w><w type="X" lemma="ⲧⲟⲥ">ⲧⲟⲥ</w>
+            </s>
+            <s xml:id="III-7505201" n="12" source="marcion:7505201" transJa="唯一の方、彼に等しいものはない。彼は善き方、欠けることなく、過つことなく、永続する方、至福なる方であって、自らをご自身において思惟する方である。" transEn="He is one, with no likeness; he is good, without deficiency, without flaw, abiding, blessed, and known to himself by himself." transFr="Il est l&#x27;Un, sans ressemblance ; il est bon, sans défaut ni manque, permanent, bienheureux, et connu de lui-même par lui-même." ana="#th-apophatic">
+              <w type="NUM" lemma="ⲟⲩⲁ">ⲟⲩⲁ</w><w type="PREP" lemma="ⲉ">ⲉ</w><w type="NEG" lemma="ⲙⲛ">ⲙⲛ</w><w type="N" lemma="ⲧⲁϥ">ⲧⲁϥ</w><w type="PPOS" lemma="ⲡⲉϥ">ⲡⲉϥ</w><w type="N" lemma="ⲉⲓⲛⲉ">ⲉⲓⲛⲉ</w>
+              <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w><w type="ART" lemma="ⲟⲩ">ⲟⲩ</w><w type="ADJ" lemma="ⲁⲅⲁⲑⲟⲥ" xml:lang="grc">ⲁⲅⲁⲑⲟⲥ</w><w type="COP" lemma="ⲡⲉ">ⲡⲉ</w><w type="PREP" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲁⲧϣⲓⲃⲉ">ⲁⲧϣⲓⲃⲉ</w>
+              <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w><w type="PFX" lemma="ⲁⲧ">ⲁⲧ</w><w type="V" lemma="ϣⲱⲱⲧ">ϣⲱⲱⲧ</w><w type="COP" lemma="ⲡⲉ">ⲡⲉ</w><w type="NUM" lemma="ⲟⲩⲁ">ⲟⲩⲁ</w><w type="PREP" lemma="ⲉ">ⲉ</w>
+              <w type="PPER" lemma="ϥ">ϥ</w><w type="V" lemma="ⲙⲏⲛ">ⲙⲏⲛ</w><w type="ADV" lemma="ⲉⲃⲟⲗ">ⲉⲃⲟⲗ</w><w type="COP" lemma="ⲡⲉ">ⲡⲉ</w><w type="ART" lemma="ⲟⲩ">ⲟⲩ</w><w type="ADJ" lemma="ⲙⲁⲕⲁⲣⲓⲟⲥ" xml:lang="grc">ⲙⲁⲕⲁⲣⲓⲟⲥ</w>
+              <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w><w type="X" lemma="ⲟⲩⲁⲧⲛⲟ">ⲟⲩⲁⲧⲛⲟ</w><w type="V" lemma="ⲉⲓ">ⲉⲓ</w><w type="PREP" lemma="ⲙⲙⲟ">ⲙⲙⲟ</w><w type="PPER" lemma="ϥ">ϥ</w><w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
+              <w type="PREP" lemma="ⲉ">ⲉ</w><w type="V" lemma="ϣⲁ">ϣⲁ</w><w type="PPER" lemma="ϥ">ϥ</w><w type="V" lemma="ⲛⲟⲉⲓ" xml:lang="grc">ⲛⲟⲉⲓ</w><w type="PREP" lemma="ⲙ">ⲙ</w><w type="X" lemma="ⲙⲟϥ">ⲙⲟϥ</w>
+              <w type="ADV" lemma="ⲙⲙⲓⲛ">ⲙⲙⲓⲛ</w><w type="X" lemma="ⲙⲙⲟϥ">ⲙⲙⲟϥ</w>
+            </s>
+            <s xml:id="III-7505202" n="13" source="marcion:7505202" transJa="彼は測りえず、追い求めえず、完全であって、欠けるところがない。至福にして不朽なる方、彼は「万有の父」と呼ばれる。" transEn="He is immeasurable, untraceable, perfect and without deficiency; blessed and incorruptible, he is called &#x27;the Father of the All&#x27;." transFr="Il est incommensurable, insaisissable, parfait et sans défaut ; bienheureux et incorruptible, il est appelé « le Père du Tout »." ana="#th-apophatic">
+              <w type="PFX" lemma="ⲟⲩⲁⲧ">ⲟⲩⲁⲧ</w><w type="V" lemma="ϣⲓ">ϣⲓ</w><w type="ART" lemma="ⲧ">ⲧ</w><w type="PPER" lemma="ϥ">ϥ</w><w type="COP" lemma="ⲡⲉ">ⲡⲉ</w><w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
+              <w type="X" lemma="ⲁⲧϫⲓ">ⲁⲧϫⲓ</w><w type="X" lemma="ϭⲉϫⲙ">ϭⲉϫⲙ</w><w type="PREP" lemma="ⲛⲥⲱ">ⲛⲥⲱ</w><w type="PPER" lemma="ϥ">ϥ</w><w type="COP" lemma="ⲡⲉ">ⲡⲉ</w><w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
+              <w type="ADJ" lemma="ⲧⲉⲗⲉⲓⲟⲥ" xml:lang="grc">ⲧⲉⲗⲉⲓⲟⲥ</w><w type="COP" lemma="ⲡⲉ">ⲡⲉ</w><w type="PREP" lemma="ⲉ">ⲉ</w><w type="NUM" lemma="ⲙⲛⲧ">ⲙⲛⲧ</w><w type="PREP" lemma="ⲉ">ⲉ</w><w type="PPER" lemma="ϥ">ϥ</w>
+              <w type="V" lemma="ϣⲱ">ϣⲱ</w><w type="INTERJ" lemma="ⲱ">ⲱ</w><w type="ART" lemma="ⲧ">ⲧ</w><w type="ART" lemma="ⲟⲩ">ⲟⲩ</w><w type="ADJ" lemma="ⲙⲁⲕⲁⲣⲓⲟⲥ" xml:lang="grc">ⲙⲁⲕⲁⲣⲓⲟⲥ</w><w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
+              <w type="X" lemma="ⲛⲁⲫⲑⲁⲣ">ⲛⲁⲫⲑⲁⲣ</w><w type="V" lemma="ⲧⲟ">ⲧⲟ</w><w type="PPER" lemma="ⲥ">ⲥ</w><w type="X" lemma="ϣⲁⲩⲭⲟⲟⲥ" xml:lang="grc">ϣⲁⲩⲭⲟⲟⲥ</w><w type="PREP" lemma="ⲉⲣⲟ">ⲉⲣⲟ</w><w type="PPER" lemma="ϥ">ϥ</w>
+              <w type="CONJ" lemma="ϫⲉ">ϫⲉ</w><w type="ART" lemma="ⲡ">ⲡ</w><w type="X" lemma="ⲓⲱⲧ">ⲓⲱⲧ</w><w type="NEG" lemma="ⲙⲡ">ⲙⲡ</w><w type="ADJ" lemma="ⲧⲏⲣ">ⲧⲏⲣ</w><w type="PPER" lemma="ϥ">ϥ</w>
+            </s>
+            <s xml:id="III-7505203" n="14" source="marcion:7505203">
+              <w type="PREP" lemma="ϩⲁⲑⲏ">ϩⲁⲑⲏ</w><w type="PREP" lemma="ⲉ">ⲉ</w><w type="AUX" lemma="ⲙⲡⲁⲧⲉ">ⲙⲡⲁⲧⲉ</w><w type="N" lemma="ⲗⲁⲁⲩ">ⲗⲁⲁⲩ</w><w type="V" lemma="ⲟⲩⲱⲛϩ">ⲟⲩⲱⲛϩ</w><w type="PREP" lemma="ϩⲛ">ϩⲛ</w>
+              <w type="PREP" lemma="ⲛ">ⲛ</w><w type="REL" lemma="ⲉⲧ">ⲉⲧ</w><w type="VSTAT" lemma="ⲟⲩⲁⲛϩ">ⲟⲩⲁⲛϩ</w><w type="PREP" lemma="ⲉ">ⲉ</w><w type="N" lemma="ⲃⲟⲗ">ⲃⲟⲗ</w>
+            </s>
+          </div>
+        </body>
+      </text>
+      <text type="witness" xml:id="wit-V" n="NHC V,1" xml:lang="cop">
+        <body>
+          <div type="tractate" n="Eugnostos" subtype="codexV">
+            <head xml:lang="en">Eugnostos the Blessed — Nag Hammadi Codex V,1 (pp. 1–17, parallel witness)</head>
+            <note type="editorial" xml:lang="ja">この証本(V,1)は III,3 と対応づけられた並行版の枠組みです。V,1 の本文(コプト語形態素・グロス)は校訂版(Parrott, NHS 27, Brill 1991)に拠って補充してください。各 &lt;s&gt; は III,3 の対応セグメントへ @corresp で結ばれます。</note>
+            <s xml:id="V-INCIPIT" n="1" corresp="#III-INCIPIT" subtype="incipit" transJa="（V,1 冒頭は大きく欠損。標題のみ「エウグノストス」と末尾に残る）" transEn="(The opening of V,1 is largely lacunose; only the title 'Eugnostos' survives at the end.)">
+              <gap reason="lacuna" unit="line" extent="unknown"/>
+            </s>
+          </div>
+        </body>
+      </text>
+    </group>
+  </text>
+</TEI>
