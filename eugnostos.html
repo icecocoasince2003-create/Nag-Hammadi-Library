@@ -122,6 +122,10 @@ main{grid-area:main; overflow-y:auto; padding:34px clamp(18px,4vw,60px) 120px; s
 .wseg .g{display:none; font-family:var(--ui); font-size:.6rem; line-height:1.25; color:var(--lapis); margin-top:1px; max-width:13ch; letter-spacing:.01em}
 html[data-il="on"] .wseg .g{display:block}
 html[data-il="on"] .coptic{line-height:1.35}
+.phygrp{display:inline-block; vertical-align:top; margin:0 .18em .1em 0}
+.phygrp .wseg{margin:0}
+.msep{display:inline-block; vertical-align:top; font-family:var(--copt); font-size:1.46rem; line-height:1.2; color:var(--ink-faint); pointer-events:none; user-select:none}
+html[data-il="on"] .msep{line-height:1.35}
 .wseg.grc .g{color:var(--rose)}
 .wseg.x{color:var(--ink-faint)}
 .wseg.amb{text-decoration:underline dotted var(--gold-soft); text-decoration-thickness:1.5px; text-underline-offset:3px}
@@ -5355,6 +5359,12 @@ let THEME_LABELS={}, NOTES=[], SEGS_III=[], SEGS_V=[], curWit="III", curTheme=nu
 function getId(el){return el.getAttributeNS(XML_NS,"id")||el.getAttribute("xml:id")||"";}
 function getLang(el){return el.getAttributeNS(XML_NS,"lang")||el.getAttribute("xml:lang")||"";}
 function T(el,tag){return Array.from(el.getElementsByTagNameNS(TEI_NS,tag));}
+function phyGroups(wEls){ const groups=[]; let curPhy=null,cur=null;
+  wEls.forEach((w,idx)=>{ const p=w.parentNode; const phy=(p&&p.localName==="phy")?p:null;
+    if(phy&&phy===curPhy){ cur.push(idx); } else { cur=[idx]; groups.push(cur); curPhy=phy; } });
+  return groups; }
+function groupForms(s){ const gs=s.groups||s.words.map((_,i)=>[i]);
+  return gs.map(g=>g.map(i=>escapeHTML(s.words[i].form)).join("-")).join(" "); }
 
 /* ---------- load (three files: text / lexicon / theology) ---------- */
 async function tryFetch(url){
@@ -5457,7 +5467,7 @@ function parse(){
     const t=Array.from(T(DOC_MAIN,"text")).find(x=>getId(x)===id);
     if(!t) return [];
     return T(t,"s").map(s=>{
-      const ws=T(s,"w").map(w=>{
+      const wEls=T(s,"w"); const ws=wEls.map(w=>{
         const lemma=w.getAttribute("lemma")||w.textContent;
         const senses=LEXMAP.get(lemma)||[];
         // a token may pin a specific homograph via @ana="#lex-…-n"
@@ -5474,7 +5484,7 @@ function parse(){
         transJa:s.getAttribute("transJa")||"", transEn:s.getAttribute("transEn")||"",
         transFr:s.getAttribute("transFr")||"",
         corresp:(s.getAttribute("corresp")||"").split("#").pop(),
-        gap:T(s,"gap").length>0, words:ws};
+        gap:T(s,"gap").length>0, words:ws, groups:phyGroups(wEls)};
     });
   };
   SEGS_III=wit("wit-III"); SEGS_V=wit("wit-V");
@@ -5553,7 +5563,9 @@ function wordHTML(w,i){
   return `<span class="${cls}" tabindex="0" role="button" data-i="${i}">${escapeHTML(w.form)}<span class="g">${escapeHTML(g)}</span></span>`;
 }
 function segHTML(s){
-  const words=s.words.map(wordHTML).join("");
+  const groups=s.groups||s.words.map((_,i)=>[i]);
+  const words=groups.map(g=> g.length===1 ? wordHTML(s.words[g[0]],g[0])
+    : `<span class="phygrp">`+g.map(i=>wordHTML(s.words[i],i)).join('<span class="msep">-</span>')+`</span>`).join("");
   let tr = pickTrans(s);
   const trCls = tr ? "trans" : "trans pending";
   if(!tr) tr = pendingText();
@@ -5586,10 +5598,10 @@ function renderSyn(box){
   let html=`<div class="colhead">III,3</div><div class="colhead">V,1</div>`;
   SEGS_III.forEach(s=>{
     const tr=pickTrans(s);
-    const cop=s.words.map(w=>escapeHTML(w.form)).join(" ");
+    const cop=groupForms(s);
     const v=SEGS_V.find(x=>x.corresp===s.id || x.id==="V-"+s.id.replace(/^III-/,""));
     let vcell;
-    if(v && v.words.length){ vcell=`<div class="coptic">${v.words.map(w=>escapeHTML(w.form)).join(" ")}</div>`; }
+    if(v && v.words.length){ vcell=`<div class="coptic">${groupForms(v)}</div>`; }
     else if(v && (v.gap||pickTrans(v))){ vcell=`<div class="vgap">${escapeHTML(pickTrans(v)||"（欠損）")}</div>`; }
     else { vcell=`<div class="vgap">V,1 — 校訂版(Pasquier / Parrott)より補充予定</div>`; }
     html+=`<div class="cell" data-id="${s.id}"><div class="no" style="position:static;color:var(--gold)">${s.n}</div>
