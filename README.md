@@ -262,3 +262,10 @@ index.html(目次:全53文書)
 - **ギリシア語層を追加**: `transGrc` に Plato, *Republic* 588b–589b（OCT/Burnet, パブリックドメイン）を一次整列で付与（象徴的な21/55セグメント）。**校訂版での検証・残りの整列はこれから**。
 - `republic.html` は **2カラム対訳**: 左にコプト語本文（形態素クリックで品詞・語義・辞書リンク）＋日英訳、**右にギリシア語**。ヘッダの「ギリシア語」ボタンで右ウィンドウの表示/非表示、「訳: 日/英」「語釈を重ねる」「アイオーン/アルコーン」対応。
 - **著作権**: コプト語＝PD、日本語＝本プロジェクト、英語＝Brashler 1990（著作権あり・作業用参照、公開時は独自訳推奨）、ギリシア語＝PD。
+
+
+## Republic: 辞書リンクを lexicon に分離（改訂）
+
+- `<w>` の辞書リンク `ref="https://coptic-dictionary.org/…"` を本文 TEI から除去し、補助ファイル **`data/republic_lexicon.xml`**（74エントリ）に集約しました。
+- lexicon は **(lemma + 品詞)** をキーに `<entry><form><orth>…</orth></form><gramGrp><pos>…</pos></gramGrp><xr type="dict"><ref target="…"/></xr></entry>` 形式（eugnostos_lexicon と同系統）。同形異義語（例 `ⲛ`=前置詞/冠詞/否定/代名詞）は品詞で別エントリに分かれます。
+- `republic.html` は lexicon を読み込み、形態素ポップオーバーの「Coptic Dictionary →」リンクを **lemma+品詞 → lexicon** で解決します（本文には辞書リンクを持ちません）。語義(gloss)は文脈依存のため従来どおり `<w gloss>` に残しています。

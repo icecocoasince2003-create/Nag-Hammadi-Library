@@ -9,13 +9,13 @@
 <style>
 :root{--paper:#e7e1d2;--paper-2:#efe9db;--raise:#f4efe3;--ink:#20242f;--ink-soft:#525667;--ink-faint:#7d8090;
 --chrome:#191c27;--chrome-ink:#d9d3c3;--chrome-faint:#8e90a0;--gold:#9a7220;--gold-bright:#c69327;--lapis:#2f6f8f;--rose:#9d5a6c;
---line:rgba(32,36,47,.14);--line-2:rgba(32,36,47,.30);--hi:rgba(198,147,39,.18);--sel:rgba(47,111,143,.14);
+--line:rgba(32,36,47,.14);--line-2:rgba(32,36,47,.30);--sel:rgba(47,111,143,.14);
 --copt:"Noto Sans Coptic","Antinoou","New Athena Unicode",serif;--disp:"Spectral",Georgia,serif;
 --grcf:"Spectral","GFS Didot","Noto Serif",Georgia,serif;--jpser:"Noto Serif JP",serif;
 --ui:"Inter","Noto Sans JP",system-ui,sans-serif;--radius:8px;}
 html[data-mode="dark"]{--paper:#13151d;--paper-2:#171a24;--raise:#1d212d;--ink:#e9e2d0;--ink-soft:#b3ad9d;--ink-faint:#7e8192;
 --chrome:#0c0d14;--chrome-ink:#d9d3c3;--chrome-faint:#7f8294;--gold:#cf9b34;--gold-bright:#e7b94e;--lapis:#73b6d6;--rose:#cf93a6;
---line:rgba(220,212,191,.12);--line-2:rgba(220,212,191,.22);--hi:rgba(231,185,78,.14);--sel:rgba(115,182,214,.16);}
+--line:rgba(220,212,191,.12);--line-2:rgba(220,212,191,.22);--sel:rgba(115,182,214,.16);}
 *{box-sizing:border-box}html,body{margin:0;min-height:100%}
 body{background:var(--paper);color:var(--ink);font-family:var(--ui);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
 [hidden]{display:none!important}a{color:var(--lapis)}
@@ -39,29 +39,28 @@ main{padding:24px 20px 120px}
 .lead{max-width:1180px;margin:0 auto 20px;font-size:.84rem;color:var(--ink-soft);line-height:1.7;
 background:var(--paper-2);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:var(--radius);padding:12px 16px}
 .lead b{color:var(--ink)}
-.parallel{display:grid;grid-template-columns:1fr minmax(240px,.82fr);gap:0 30px;max-width:1180px;margin:0 auto;align-items:start}
-html[data-grc="off"] .parallel{grid-template-columns:minmax(0,860px);justify-content:center}
-html[data-grc="off"] .cell-grc{display:none}
-.colhead{position:sticky;top:54px;background:var(--paper);padding:6px 0;font-family:var(--disp);font-size:.86rem;
-color:var(--gold);border-bottom:1px solid var(--line);z-index:5}
-.cell-cop,.cell-grc{padding:12px 0 15px;border-bottom:1px solid var(--line)}
-.cell-grc{padding-left:24px;border-left:1px solid var(--line)}
-.seg-dim{opacity:.2}
+.layout{display:grid;grid-template-columns:1fr minmax(280px,.8fr);gap:0 34px;max-width:1180px;margin:0 auto;align-items:start}
+html[data-grc="off"] .layout{grid-template-columns:minmax(0,880px);justify-content:center}
+html[data-grc="off"] .grcpanel{display:none}
+.colhead{font-family:var(--disp);font-size:.84rem;color:var(--gold);border-bottom:1px solid var(--line);padding-bottom:6px;margin-bottom:6px}
+.grcpanel{position:sticky;top:64px;align-self:start;border-left:1px solid var(--line);padding-left:26px;max-height:calc(100vh - 84px);overflow:auto}
+.grcpanel .grc{font-family:var(--grcf);font-size:1.16rem;line-height:1.95;color:var(--ink)}
+.grcpanel .src{margin-top:14px;font-size:.68rem;color:var(--ink-faint);line-height:1.6;font-family:var(--ui)}
+.seg{position:relative;padding:12px 0 15px;border-bottom:1px solid var(--line)}
+.seg.dim{opacity:.2}
 .no{font-size:.7rem;color:var(--gold);font-family:var(--ui);margin-bottom:5px;letter-spacing:.04em}
-.coptic{font-family:var(--copt);font-size:1.42rem;line-height:1.95;color:var(--ink)}
-html[data-il="on"] .coptic{line-height:1.4}
-.wseg{display:inline-block;vertical-align:top;margin:0 .2em .1em 0;text-align:center;border-radius:5px;padding:0 .06em;cursor:pointer;position:relative}
+.coptic{font-family:var(--copt);font-size:1.42rem;line-height:1.62;color:var(--ink)}
+.wseg{display:inline-block;vertical-align:top;line-height:1.18;margin:0 .22em .12em 0;text-align:center;border-radius:5px;padding:0 .05em;cursor:pointer;position:relative}
 .wseg:hover,.wseg:focus-visible{background:var(--sel);outline:none}
-.wseg .g{display:none;font-family:var(--ui);font-size:.6rem;line-height:1.25;color:var(--lapis);margin-top:1px;max-width:14ch}
+.wseg .g{display:none;font-family:var(--ui);font-size:.6rem;line-height:1.25;color:var(--lapis);margin-top:2px;max-width:14ch}
 html[data-il="on"] .wseg .g{display:block}
 .wseg.grc .g{color:var(--rose)}.wseg.x{color:var(--ink-faint)}
-.phygrp{display:inline-block;vertical-align:top;margin:0 .2em .1em 0}.phygrp .wseg{margin:0}
-.trans{margin-top:9px;font-family:var(--jpser);font-size:.98rem;line-height:1.8;color:var(--ink-soft);max-width:60ch}
+.phygrp{display:inline-flex;align-items:flex-start;vertical-align:top;margin:0 .22em .12em 0}
+.phygrp .wseg{margin:0;padding:0 .02em}
+.wjoin{align-self:flex-start;line-height:1.18;font-family:var(--copt);color:var(--ink-soft);padding:0 .01em;user-select:none;pointer-events:none}
+.trans{margin-top:9px;font-family:var(--jpser);font-size:.98rem;line-height:1.8;color:var(--ink-soft);max-width:62ch}
 html[data-tl="en"] .trans{font-family:var(--disp)}
 .trans.pending{font-style:italic;color:var(--ink-faint);font-size:.84rem}
-.grc{font-family:var(--grcf);font-size:1.12rem;line-height:1.85;color:var(--ink)}
-.grc.empty{font-style:italic;color:var(--ink-faint);font-size:.85rem;font-family:var(--ui)}
-.pagebreak{grid-column:1/-1}
 .colophon{max-width:1180px;margin:30px auto 0;font-size:.72rem;color:var(--ink-faint);line-height:1.7;border-top:1px solid var(--line);padding-top:14px}
 .colophon b{color:var(--ink-soft)}
 .pop{position:fixed;z-index:60;max-width:300px;background:var(--chrome);color:var(--chrome-ink);border:1px solid var(--line-2);
@@ -77,7 +76,7 @@ pointer-events:none;transition:opacity .14s,transform .14s}
 .pop dd{margin:0;font-size:.84rem;color:#fff}.pop dd a{color:var(--gold-bright)}
 .pop .none{font-size:.78rem;color:var(--chrome-faint);font-style:italic;margin-top:8px}
 .pop .grcnote{margin-top:9px;font-size:.66rem;color:var(--rose)}
-@media(max-width:760px){.parallel{grid-template-columns:1fr!important}.cell-grc{border-left:0;padding-left:0;border-top:1px dashed var(--line)}.colhead.g{display:none}}
+@media(max-width:760px){.layout{grid-template-columns:1fr!important}.grcpanel{position:static;border-left:0;border-top:1px dashed var(--line);padding-left:0;padding-top:14px;margin-top:8px;max-height:none}}
 @media(max-width:560px){.brand .s{display:none}.search input{width:8ch}}
 </style></head>
 <body>
@@ -88,7 +87,7 @@ pointer-events:none;transition:opacity .14s,transform .14s}
   <div class="controls">
     <button class="chip" id="ilBtn" aria-pressed="false">語釈を重ねる</button>
     <button class="chip" id="tlBtn" title="対訳の言語">訳: 日</button>
-    <button class="chip" id="grcBtn" aria-pressed="true" title="ギリシア語対訳">ギリシア語</button>
+    <button class="chip" id="grcBtn" aria-pressed="true" title="ギリシア語原文">ギリシア語</button>
     <button class="chip" id="modeBtn" title="表示モード">☀ アイオーン</button>
     <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
       <input id="q" type="search" placeholder="検索" autocomplete="off" aria-label="検索"></div>
@@ -96,208 +95,1796 @@ pointer-events:none;transition:opacity .14s,transform .14s}
 </header>
 <main>
   <div class="lead"><b>プラトン『国家』588b–589b のコプト語訳（NHC VI,5）。</b>
-   魂を「多頭の獣・獅子・人間」に喩える一節。左にコプト語本文（形態素クリックで品詞・語義・辞書）と日英訳、<b>右にギリシア語原典の対訳</b>を並置します。</div>
-  <div id="reading" class="parallel"></div>
+   魂を「多頭の獣・獅子・人間」に喩える一節。左にコプト語本文（形態素クリックで品詞・語義・辞書）と日英訳、<b>右にギリシア語原文</b>を連続テキストで表示します。</div>
+  <div class="layout">
+    <div class="reading"><div class="colhead">コプト語 · 日本語/英語訳</div><div id="reading"></div></div>
+    <aside class="grcpanel"><div class="colhead">ギリシア語原文 · Plato, Republic</div><div class="grc" id="grcText"></div>
+      <div class="src">Plato, <i>Republic</i> 588b–589b（OCT/Burnet 系, public domain）。一次整列・要校訂。現在 21/55 セグメント分を収録。</div></aside>
+  </div>
   <div class="colophon"><b>底本・出典:</b> コプト語本文 NHC VI,5（パブリックドメイン）。<b>日本語訳</b>は本プロジェクト。
    <b>英語</b>は J. Brashler, <i>The Nag Hammadi Library in English</i>（HarperCollins 1990, 著作権あり・作業用参照）。
-   <b>ギリシア語</b>は Plato, <i>Republic</i>（OCT/Burnet, パブリックドメイン）の一次整列で、<b>校訂版での検証が必要</b>です（現在 21/55 セグメントに付与）。</div>
+   <b>ギリシア語</b>は Plato, <i>Republic</i>（OCT/Burnet, パブリックドメイン）。</div>
 </main>
 <div class="pop" id="pop" role="dialog" aria-label="語の情報"></div>
 <script type="application/xml" id="rep-main"><?xml version="1.0" encoding="UTF-8"?>
 <TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="cop">
   <teiHeader>
     <fileDesc>
-      <titleStmt><title>Plato, Republic 588B–589B (NHC VI,5) — Coptic with JA/EN/Greek parallel</title></titleStmt>
-      <publicationStmt><p>Working file. Coptic = public domain; Japanese = this project (CC BY 4.0);
+      <titleStmt>
+        <title>Plato, Republic 588B–589B (NHC VI,5) — Coptic with JA/EN/Greek parallel</title>
+      </titleStmt>
+      <publicationStmt>
+        <p>Working file. Coptic = public domain; Japanese = this project (CC BY 4.0);
         English = J. Brashler, The Nag Hammadi Library in English (HarperCollins 1990, under copyright — working reference);
-        Greek = Plato, Republic (OCT/Burnet, public domain) — first-pass alignment, to verify.</p></publicationStmt>
+        Greek = Plato, Republic (OCT/Burnet, public domain) — first-pass alignment, to verify.</p>
+      </publicationStmt>
       <sourceDesc>
         <listBibl>
-          <bibl xml:id="src_cop"><author>Plato</author><title level="a">Plato, Republic 588A–589B (NHC VI,5)</title>
-            <editor role="translator">James Brashler</editor><title level="m">The Nag Hammadi Library in English</title>
-            <edition>revised</edition><publisher>HarperCollins</publisher><date>1990</date><idno type="NHC">VI,5</idno></bibl>
-          <bibl xml:id="src_grc"><author>Plato</author><title level="m">Republic (Πολιτεία) IX, 588b–589b</title>
-            <editor role="general">J. Burnet (OCT)</editor><note>public domain</note></bibl>
+          <bibl xml:id="src_cop">
+            <author>Plato</author>
+            <title level="a">Plato, Republic 588A–589B (NHC VI,5)</title>
+            <editor role="translator">James Brashler</editor>
+            <title level="m">The Nag Hammadi Library in English</title>
+            <edition>revised</edition>
+            <publisher>HarperCollins</publisher>
+            <date>1990</date>
+            <idno type="NHC">VI,5</idno>
+          </bibl>
+          <bibl xml:id="src_grc">
+            <author>Plato</author>
+            <title level="m">Republic (Πολιτεία) IX, 588b–589b</title>
+            <editor role="general">J. Burnet (OCT)</editor>
+            <note>public domain</note>
+          </bibl>
         </listBibl>
       </sourceDesc>
     </fileDesc>
-    <profileDesc><langUsage>
-      <language ident="cop">Coptic (Sahidic)</language><language ident="ja">Japanese</language>
-      <language ident="en">English</language><language ident="grc">Ancient Greek</language>
-    </langUsage></profileDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="cop">Coptic (Sahidic)</language>
+        <language ident="ja">Japanese</language>
+        <language ident="en">English</language>
+        <language ident="grc">Ancient Greek</language>
+      </langUsage>
+    </profileDesc>
   </teiHeader>
   <text type="witness" xml:id="wit-rep" n="NHC VI,5" xml:lang="cop">
     <body>
       <div type="tractate" n="Republic" subtype="codexVI">
         <head xml:lang="en">Plato, Republic 588b–589b — Nag Hammadi Codex VI,5</head>
-            <s xml:id="rep-1" n="1" transJa="さて、議論がこの段階に至ったからには、" transEn="Since we have come to this point in a discussion," transGrc="ἐπειδὴ ἐνταῦθα λόγου γεγόναμεν,">
-              <phy><w type="CONJ" lemma="ⲉⲡⲓⲇⲏ" gloss="since" xml:lang="grc" ref="https://coptic-dictionary.org/entry.py?tla=C8985">ⲉⲡⲓⲇⲏ</w></phy><phy><w type="PPERI" lemma="ⲁⲛⲟⲛ" gloss="we" ref="https://coptic-dictionary.org/entry.py?tla=C142">ⲁⲛⲟⲛ</w></phy><phy><w type="APST" lemma="ⲁ" ref="https://coptic-dictionary.org/entry.py?tla=C2">ⲁ-</w><w type="PPER" lemma="ⲁⲛⲟⲛ" gloss="we" ref="https://coptic-dictionary.org/entry.py?tla=C142">ⲛ</w><w type="V" lemma="ϣⲱⲡⲉ" gloss="exist" ref="https://coptic-dictionary.org/entry.py?tla=C5995">ϣⲱⲡⲉ</w></phy><phy><w type="PREP" lemma="ⲛ-" ref="https://coptic-dictionary.org/entry.py?tla=C2349">ⲛ</w><w type="ART" lemma="ⲟⲩ-" ref="https://coptic-dictionary.org/entry.py?tla=C4880">ⲟⲩ</w><w type="N" lemma="ⲗⲟⲅⲟⲥ" gloss="discussion" xml:lang="grc" ref="https://coptic-dictionary.org/entry.py?tla=C9651">ⲗⲟⲅⲟⲥ</w></phy><phy><w type="PREP" lemma="ⲛ" ref="https://coptic-dictionary.org/entry.py?tla=C2349">ⲙ</w><w type="ART" lemma="ⲡ" ref="https://coptic-dictionary.org/entry.py?tla=C2783">ⲡⲓ</w><w type="N" lemma="ⲙⲁ" gloss="part" ref="https://coptic-dictionary.org/entry.py?tla=C1771">ⲙⲁ</w></phy>
-            </s>
-            <s xml:id="rep-2" n="2" transJa="われわれに語られた最初のことを改めて取り上げよう。" transEn="let us again take up the first things that were said to us." transGrc="πάλιν ἀναλάβωμεν τὰ πρῶτα ῥηθέντα.">
-              <phy><w type="AOPT" lemma="ⲙⲁⲣⲉ" ref="https://coptic-dictionary.org/entry.py?tla=C2004">ⲙⲁⲣ</w><w type="PPER" lemma="ⲁⲛⲟⲛ" gloss="we" ref="https://coptic-dictionary.org/entry.py?tla=C142">ⲛ</w><w type="V" lemma="ϫⲓ" gloss="take" ref="https://coptic-dictionary.org/entry.py?tla=C7058">ϫⲓ</w></phy><phy><w type="PTC" lemma="ϭⲉ" ref="https://coptic-dictionary.org/entry.py?tla=C7550">ϭⲉ</w></phy><phy><w type="PREP" lemma="ⲛⲁ" ref="https://coptic-dictionary.org/entry.py?tla=C2350">ⲛⲁ</w><w type="PPER" lemma="ⲛ" gloss="us" ref="https://coptic-dictionary.org/entry.py?tla=C11279">ⲛ</w></phy><phy><w type="PREP" lemma="ⲛ" ref="https://coptic-dictionary.org/entry.py?tla=C2349">ⲛ</w><w type="ART" lemma="ⲛ" ref="https://coptic-dictionary.org/entry.py?tla=C2352">ⲛ</w><w type="N" lemma="ϣⲟⲣⲡ" gloss="first" ref="https://coptic-dictionary.org/entry.py?tla=C6058">ϣⲟⲣⲡ</w></phy><phy><w type="CREL" lemma="ⲉⲛⲧ" gloss="which" ref="https://coptic-dictionary.org/entry.py?tla=C681">ⲉⲛⲧ</w><w type="APST" lemma="ⲁ" ref="https://coptic-dictionary.org/entry.py?tla=C2">ⲁ</w><w type="PPER" lemma="ⲛⲧⲟⲟⲩ" gloss="they" ref="https://coptic-dictionary.org/entry.py?tla=C2566">ⲩ</w></phy><phy><w type="PREP" lemma="ⲛⲁ" ref="https://coptic-dictionary.org/entry.py?tla=C2350">ⲛⲁ</w><w type="PPER" lemma="ⲛ" gloss="us" ref="https://coptic-dictionary.org/entry.py?tla=C11279">ⲛ</w></phy>
-            </s>
-            <s xml:id="rep-3" n="3" transJa="そしてわれわれは彼が次のように言っていることに気づくだろう。" transEn="And we will find that he says," transGrc="">
-              <phy><w type="PTC" lemma="ⲁⲩⲱ" gloss="and" ref="https://coptic-dictionary.org/entry.py?tla=C240">ⲁⲩⲱ</w></phy><phy><w type="PPER" lemma="ⲧⲛ" gloss="we" ref="https://coptic-dictionary.org/entry.py?tla=C4335">ⲧⲛ</w><w type="FUT" lemma="ⲛⲁ" ref="https://coptic-dictionary.org/entry.py?tla=C2381">ⲛⲁ</w><w type="V" lemma="ϭⲓⲛⲉ" gloss="find" ref="https://coptic-dictionary.org/entry.py?tla=C7750">ϭⲓⲛⲉ</w></phy><phy><w type="PREP" lemma="ⲙⲙⲟ" ref="https://coptic-dictionary.org/entry.py?tla=C2349">ⲙⲙⲟ</w><w type="PPER" lemma="ⲥ" gloss="it" ref="https://coptic-dictionary.org/entry.py?tla=C3262">ⲥ</w></phy><phy><w type="CREL" lemma="ⲉ" ref="https://coptic-dictionary.org/entry.py?tla=C616">ⲉ</w><w type="PPER" lemma="ϥ" gloss="he" ref="https://coptic-dictionary.org/entry.py?tla=C11282">ϥ</w><w type="V" lemma="ϫⲱ" gloss="say" ref="https://coptic-dictionary.org/entry.py?tla=C7058">ϫⲱ</w></phy><phy><w type="PREP" lemma="ⲙⲙⲟ" ref="https://coptic-dictionary.org/entry.py?tla=C2349">ⲙⲙⲟ</w><w type="PPER" lemma="ⲥ" gloss="it" ref="https://coptic-dictionary.org/entry.py?tla=C3262">ⲥ</w></phy>
-            </s>
-            <s xml:id="rep-4" n="4" transJa="「まったく不正を受けた者は幸いである。" transEn="'Good is he who has been done injustice completely." transGrc="ὅτι λυσιτελοῖ ἀδικία τῷ τελέως μὲν ἀδίκῳ, δοξαζομένῳ δὲ δικαίῳ.">
-              <phy><w type="CONJ" lemma="ϫⲉ" gloss=":" ref="https://coptic-dictionary.org/entry.py?tla=C7055">ϫⲉ</w></phy><phy><w type="V" lemma="ⲛⲁⲛⲟⲩ" gloss="be good" ref="https://coptic-dictionary.org/entry.py?tla=C2491">ⲛⲁⲛⲟⲩ</w></phy><phy><w type="ART" lemma="ⲡ" ref="https://coptic-dictionary.org/entry.py?tla=C2783">ⲡ</w><w type="PPER" lemma="ⲉⲛⲧ" gloss="it" ref="https://coptic-dictionary.org/entry.py?tla=C2349">ⲉⲛⲧ</w><w type="APST" lemma="ⲁ" ref="https://coptic-dictionary.org/entry.py?tla=C2">ⲁ</w><w type="PPER" lemma="ⲛⲧⲟⲟⲩ" gloss="they" ref="https://coptic-dictionary.org/entry.py?tla=C2566">ⲩ</w><w type="V" lemma="ϫⲓ" gloss="receive" ref="https://coptic-dictionary.org/entry.py?tla=C7058">ϫⲓⲧ</w><w type="PPER" lemma="ϥ" gloss="him" ref="https://coptic-dictionary.org/entry.py?tla=C11282">ϥ</w></phy><phy><w type="PREP" lemma="ⲛ" ref="https://coptic-dictionary.org/entry.py?tla=C2349">ⲛ</w><w type="N" lemma="ϭⲟⲛⲥ" gloss="injustice" ref="https://coptic-dictionary.org/entry.py?tla=C7775">ϭⲟⲛⲥ</w></phy><phy><w type="ADV" lemma="ⲧⲉⲗⲉⲱⲥ" gloss="completely" xml:lang="grc" ref="https://coptic-dictionary.org/entry.py?tla=C10709">ⲧⲉⲗⲉ</w></phy>
-            </s>
-            <s xml:id="rep-5" n="5" transJa="彼は正しく称えられる。」" transEn="He is glorified justly.'" transGrc="">
-              <phy><w type="A" lemma="ϣⲁⲣⲉ" gloss="(habit)" ref="https://coptic-dictionary.org/entry.py?tla=C6025">ϣⲁ</w><w type="PPER" lemma="ϥ" gloss="he" ref="https://coptic-dictionary.org/entry.py?tla=C11282">ϥ</w><w type="V" lemma="ϫⲓ" gloss="take" ref="https://coptic-dictionary.org/entry.py?tla=C7058">ϫⲓ</w></phy><phy><w type="N" lemma="ⲉⲟⲟⲩ" gloss="honour" ref="https://coptic-dictionary.org/entry.py?tla=C749">ⲉⲟⲟⲩ</w></phy><phy><w type="ADV" lemma="ⲇⲓⲕⲁⲓⲱⲥ" gloss="justly" xml:lang="grc" ref="https://coptic-dictionary.org/entry.py?tla=C8785">ⲇⲓⲕⲁⲓⲱⲥ</w></phy>
-            </s>
-            <s xml:id="rep-6" n="6" transJa="これが彼を責めた言い方ではなかったか？" transEn="Is not this how he was reproached?" transGrc="">
-              <phy><w type="PTC" lemma="ⲙⲏ" gloss="not" xml:lang="grc" ref="https://coptic-dictionary.org/entry.py?tla=C9789">ⲙⲏ</w></phy><phy><w type="NEG" lemma="ⲛ" ref="https://coptic-dictionary.org/entry.py?tla=C2351">ⲛ</w><w type="PDEM" lemma="ⲧⲁⲓ" gloss="this" ref="https://coptic-dictionary.org/entry.py?tla=C4150">ⲧⲁⲓ</w></phy><phy><w type="NEG" lemma="ⲁⲛ" ref="https://coptic-dictionary.org/entry.py?tla=C2351">ⲁⲛ</w></phy><phy><w type="COP" lemma="ⲧⲉ" ref="https://coptic-dictionary.org/entry.py?tla=C4007">ⲧⲉ</w></phy><phy><w type="ART" lemma="ⲧ" gloss="the" ref="https://coptic-dictionary.org/entry.py?tla=C4003">ⲑ[ⲧ]</w><w type="N" lemma="ϩⲉ" gloss="manner" ref="https://coptic-dictionary.org/entry.py?tla=C6360">[ϩ]ⲉ</w></phy><phy><w type="CREL" lemma="ⲉⲛⲧ">ⲉⲛⲧ</w><w type="APST" lemma="ⲁ" ref="https://coptic-dictionary.org/entry.py?tla=C2">ⲁ</w><w type="PPER" lemma="ⲛⲧⲟⲟⲩ" gloss="they" ref="https://coptic-dictionary.org/entry.py?tla=C2566">ⲩ</w><w type="V" lemma="ϫⲡⲓⲟ" gloss="blame" ref="https://coptic-dictionary.org/entry.py?tla=C7295">ϫⲡⲓⲟ</w><w type="PPER" lemma="ϥ" gloss="he" ref="https://coptic-dictionary.org/entry.py?tla=C11282">ϥ</w></phy>
-            </s>
-            <s xml:id="rep-7" n="7" transJa="「それはたしかに適切な言い方だ！」" transEn='"This is certainly the fitting way!"' transGrc="">
-              <phy><w type="PDEM" lemma="ⲧⲁⲓ" gloss="this" ref="https://coptic-dictionary.org/entry.py?tla=C4150">ⲧⲉⲓ</w></phy><phy><w type="N" lemma="ⲙⲉⲛⲧⲟⲓⲅⲉ" gloss="certainly" xml:lang="grc">ⲙⲉⲛⲧⲟⲓⲅⲉ</w></phy><phy><w type="COP" lemma="ⲧⲉ" ref="https://coptic-dictionary.org/entry.py?tla=C4007">ⲧⲉ</w></phy><phy><w type="ART" lemma="ⲧ" gloss="the" ref="https://coptic-dictionary.org/entry.py?tla=C4003">ⲑ[ⲧ]</w><w type="N" lemma="ϩⲉ" gloss="manner" ref="https://coptic-dictionary.org/entry.py?tla=C6360">[ϩ]ⲉ</w></phy><phy><w type="PREP" lemma="ⲉ" ref="https://coptic-dictionary.org/entry.py?tla=C615">ⲉ</w></phy><phy><w type="ART" lemma="ⲧⲉ" gloss="the" ref="https://coptic-dictionary.org/entry.py?tla=C4003">ⲧⲉ</w></phy><phy><w type="V" lemma="ϣϣⲉ" gloss="it is fitting" ref="https://coptic-dictionary.org/entry.py?tla=C6178">ϣϣⲉ</w></phy>
-            </s>
-            <s xml:id="rep-8" n="8" transJa="そして私は言った。「では今こそ、" transEn='And I said: "Now then,' transGrc="">
-              <phy><w type="VBD" lemma="ⲡⲉϫⲁ" gloss="say" ref="https://coptic-dictionary.org/entry.py?tla=C3017">ⲡⲉϫⲁ</w><w type="PPER" lemma="ⲓ" gloss="I" ref="https://coptic-dictionary.org/entry.py?tla=C11278">ⲓ</w></phy><phy><w type="PTC" lemma="ⲇⲉ" gloss="-" xml:lang="grc" ref="https://coptic-dictionary.org/entry.py?tla=C8719">ⲇⲉ</w></phy><phy><w type="CONJ" lemma="ϫⲉ" gloss=":" ref="https://coptic-dictionary.org/entry.py?tla=C7055">ϫⲉ</w></phy><phy><w type="COP" lemma="ⲧⲉ" ref="https://coptic-dictionary.org/entry.py?tla=C4007">ⲧⲉ</w></phy><phy><w type="PREP" lemma="ⲛ" ref="https://coptic-dictionary.org/entry.py?tla=C2349">ⲛ</w><w type="PTC" lemma="ⲟⲩⲛ" gloss="then" ref="https://coptic-dictionary.org/entry.py?tla=C9965">ⲟⲩ</w></phy><phy><w type="PTC" lemma="ϭⲉ" ref="https://coptic-dictionary.org/entry.py?tla=C7550">ϭⲉ</w></phy>
-            </s>
-            <s xml:id="rep-9" n="9" transJa="われわれは語ってきた——" transEn="we have spoken" transGrc="">
-              <phy><w type="PPER" lemma="ⲁⲛⲟⲛ" gloss="we" ref="https://coptic-dictionary.org/entry.py?tla=C142">ⲁⲛ</w><w type="V" lemma="ϣⲁϫⲉ" gloss="speak" ref="https://coptic-dictionary.org/entry.py?tla=C6216">ϣⲁϫⲉ</w></phy>
-            </s>
-            <s xml:id="rep-10" n="10" transJa="彼が「不正を行なう者は" transEn="because he said that he who does injustice" transGrc="">
-              <phy><w type="CONJ" lemma="ⲉⲡⲓⲇⲏ" gloss="because" xml:lang="grc" ref="https://coptic-dictionary.org/entry.py?tla=C8985">ⲉⲡⲓⲇⲏ</w></phy><phy><w type="APST" lemma="ⲁ" ref="https://coptic-dictionary.org/entry.py?tla=C2">ⲁ</w><w type="PPER" lemma="ϥ" gloss="he" ref="https://coptic-dictionary.org/entry.py?tla=C11282">ϥ</w><w type="V" lemma="ϫⲱ" gloss="say" ref="https://coptic-dictionary.org/entry.py?tla=C7089">ϫⲟⲟ</w><w type="PPER" lemma="ⲥ" gloss="it" ref="https://coptic-dictionary.org/entry.py?tla=C3262">ⲥ</w></phy><phy><w type="CONJ" lemma="ϫⲉ" gloss=":" ref="https://coptic-dictionary.org/entry.py?tla=C7055">ϫⲉ</w></phy><phy><w type="X" lemma="ⲡⲉϯⲣⲉ" gloss="he who does">ⲡⲉϯⲣⲉ</w></phy><phy><w type="PREP" lemma="ⲛ" ref="https://coptic-dictionary.org/entry.py?tla=C2349">ⲙ</w><w type="ART" lemma="ⲡ" gloss="the" ref="https://coptic-dictionary.org/entry.py?tla=C2783">ⲡ</w><w type="V" lemma="ϫⲓ" gloss="take" ref="https://coptic-dictionary.org/entry.py?tla=C7058">ϫⲓ</w></phy><phy><w type="PREP" lemma="ⲛ" ref="https://coptic-dictionary.org/entry.py?tla=C2349">ⲛ</w><w type="N" lemma="ϭⲟⲛⲥ" gloss="injustice" ref="https://coptic-dictionary.org/entry.py?tla=C7775">ϭⲟⲛⲥ</w></phy>
-            </s>
-            <s xml:id="rep-11" n="11" transJa="そして正義を行なう者は、それぞれに力を持つ」と言ったからである。」" transEn="and he who does justice" transGrc="">
-              <phy><w type="CONJ" lemma="ⲙⲛ" gloss="and" ref="https://coptic-dictionary.org/entry.py?tla=C1902">ⲙⲛ</w></phy><phy><w type="X" lemma="ⲡⲉϯⲣⲉ" gloss="he who does">ⲡⲉϯⲣⲉ</w></phy><phy><w type="PREP" lemma="ⲛ" ref="https://coptic-dictionary.org/entry.py?tla=C2349">ⲙ</w><w type="ART" lemma="ⲡ" gloss="the" ref="https://coptic-dictionary.org/entry.py?tla=C2783">ⲡ</w><w type="N" lemma="ⲇⲓⲕⲁⲓⲟⲛ" gloss="justice" xml:lang="grc" ref="https://coptic-dictionary.org/entry.py?tla=C8781">ⲇⲓⲕⲁⲓ</w></phy>
-            </s>
-            <s xml:id="rep-12" n="12" transJa="" transEn='each has a force."' transGrc="">
-              <phy><w type="ART" lemma="ⲡ" gloss="the" ref="https://coptic-dictionary.org/entry.py?tla=C2783">ⲡ</w><w type="N" lemma="ⲟⲩⲁ" gloss="one" ref="https://coptic-dictionary.org/entry.py?tla=C4895">ⲟⲩⲁ</w></phy><phy><w type="ART" lemma="ⲡ" gloss="the" ref="https://coptic-dictionary.org/entry.py?tla=C2783">ⲡ</w><w type="N" lemma="ⲟⲩⲁ" gloss="one" ref="https://coptic-dictionary.org/entry.py?tla=C4895">ⲟⲩⲁ</w></phy><phy><w type="EXIST" lemma="ⲟⲩⲛⲧⲉ" gloss="have" ref="https://coptic-dictionary.org/entry.py?tla=C5039">ⲟⲩⲛⲧⲁ</w><w type="PPER" lemma="ϥ" gloss="he" ref="https://coptic-dictionary.org/entry.py?tla=C11282">ϥ</w></phy><phy><w type="ART" lemma="ⲟⲩ" gloss="a" ref="https://coptic-dictionary.org/entry.py?tla=C4880">ⲟⲩ</w><w type="N" lemma="ϭⲟⲙ" gloss="force" ref="https://coptic-dictionary.org/entry.py?tla=C7706">ϭⲟⲙ</w></phy>
-            </s>
-            <s xml:id="rep-13" n="13" transJa="" transEn="&quot;How then?&quot; &quot;He said, 'An image that has no likeness is the rationality of the soul,'" transGrc="πλάσαντες οὖν τῆς ψυχῆς εἰκόνα λόγῳ,">
-              <phy><w type="PREP" lemma="ⲛ" ref="https://coptic-dictionary.org/entry.py?tla=2349">ⲛ</w><w type="PINT" lemma="ⲁϣ" gloss="whatever" ref="https://coptic-dictionary.org/entry.py?tla=C251">ⲁϣ</w></phy><phy><w type="PTC" lemma="ϭⲉ" ref="https://coptic-dictionary.org/entry.py?tla=C7550">ϭⲉ</w></phy><phy><w type="ART" lemma="ⲛ" gloss="the" ref="https://coptic-dictionary.org/entry.py?tla=C2352">ⲛ</w><w type="N" lemma="ϩⲉ" gloss="manner" ref="https://coptic-dictionary.org/entry.py?tla=C6360">ϩⲉ</w></phy><phy><w type="VBD" lemma="ⲡⲉϫⲁ" gloss="say" ref="https://coptic-dictionary.org/entry.py?tla=C3017">ⲡⲉ</w><w type="PPER" lemma="ϥ" gloss="he" ref="https://coptic-dictionary.org/entry.py?tla=C11282">ϥ</w></phy><phy><w type="CONJ" lemma="ϫⲉ" gloss=":" ref="https://coptic-dictionary.org/entry.py?tla=C7055">ϫⲉ</w></phy><phy><w type="ART" lemma="ⲟⲩ" gloss="a" ref="https://coptic-dictionary.org/entry.py?tla=C4880">ⲟⲩ</w><w type="N" lemma="ϩⲓⲕⲱⲛ" gloss="image" ref="https://coptic-dictionary.org/entry.py?tla=C11130">ϩⲓⲕⲱⲛ</w></phy><phy><w type="CFOC" lemma="ⲉ" ref="https://coptic-dictionary.org/entry.py?tla=C618">ⲉ</w><w type="PTC" lemma="ⲙⲛⲧⲉ" gloss="not to have" ref="https://coptic-dictionary.org/entry.py?tla=C1891">ⲙⲛⲧⲁ</w><w type="PPER" lemma="ϥ" gloss="he" ref="https://coptic-dictionary.org/entry.py?tla=C11282">ϥ</w></phy><phy><w type="N" lemma="ⲉⲓⲛⲉ" gloss="likeness" ref="https://coptic-dictionary.org/entry.py?tla=C929">ⲉⲓⲛⲉ</w></phy><phy><w type="COP" lemma="ⲡⲉ" ref="https://coptic-dictionary.org/entry.py?tla=C2788">ⲡⲉ</w></phy><phy><w type="ART" lemma="ⲡ" gloss="the" ref="https://coptic-dictionary.org/entry.py?tla=C2783">ⲡ</w><w type="N" lemma="ⲗⲟⲅⲟⲥ" gloss="lational" xml:lang="grc" ref="https://coptic-dictionary.org/entry.py?tla=C9651">ⲗⲟⲅⲟⲥ</w></phy><phy><w type="PREP" lemma="ⲛ" ref="https://coptic-dictionary.org/entry.py?tla=C2349">ⲛ</w><w type="ART" lemma="ⲧ" gloss="the" ref="https://coptic-dictionary.org/entry.py?tla=C4003">ⲧ</w><w type="N" lemma="ⲯⲩⲭⲏ" gloss="soul" xml:lang="grc" ref="https://coptic-dictionary.org/entry.py?tla=C11031">ⲯⲩⲭⲏ</w></phy>
-            </s>
-            <s xml:id="rep-14" n="14" transJa="これらのことを語った者が理解するために。彼は 〔……〕あるいはそうでないか？われわれは〔……〕私にとって。" transEn="so that he who said these things will understand. He [...] or not? We [...] is for me." transGrc="">
-              <phy><w type="CONJ" lemma="ϫⲉⲕⲁⲁⲥ" gloss="so that" ref="https://coptic-dictionary.org/entry.py?tla=C7142">ϫⲉⲕⲁⲁⲥ</w></phy><phy><w type="CFOC" lemma="ⲉ" ref="https://coptic-dictionary.org/entry.py?tla=C618">ⲉ</w><w type="PPER" lemma="ϥ" gloss="he" ref="https://coptic-dictionary.org/entry.py?tla=C11282">ϥ</w><w type="FUT" lemma="ⲛⲁ" ref="https://coptic-dictionary.org/entry.py?tla=C2381">ⲛⲁ-</w><w type="V" lemma="ⲉⲓⲙⲉ" gloss="understand" ref="https://coptic-dictionary.org/entry.py?tla=C897">ⲙⲙⲉ</w></phy><phy><w type="PTC" lemma="ⲛϭⲓ" gloss="namely" ref="https://coptic-dictionary.org/entry.py?tla=C2723">ⲛϭⲓ</w></phy><phy><w type="ART" lemma="ⲡⲉ" gloss="the" ref="https://coptic-dictionary.org/entry.py?tla=C2783">ⲡⲉ</w><w type="PREP" lemma="ⲛ" ref="https://coptic-dictionary.org/entry.py?tla=C2349">ⲛ</w><w type="ART" lemma="ⲧ" gloss="the" ref="https://coptic-dictionary.org/entry.py?tla=C4003">ⲧ</w><w type="APST" lemma="ⲁ" ref="https://coptic-dictionary.org/entry.py?tla=C2">ⲁ</w><w type="PPER" lemma="ϥ" gloss="he" ref="https://coptic-dictionary.org/entry.py?tla=C11282">ϥ</w></phy><phy><w type="CONJ" lemma="ϫⲉ" gloss=":" ref="https://coptic-dictionary.org/entry.py?tla=C7055">ϫⲉ</w></phy><phy><w type="PDEM" lemma="ⲛⲁⲓ" gloss="these" ref="https://coptic-dictionary.org/entry.py?tla=C2445">ⲛⲁⲓ</w></phy><phy><w type="APST" lemma="ⲁ" ref="https://coptic-dictionary.org/entry.py?tla=C2">ⲁ</w><w type="PPER" lemma="ϥ" gloss="he" ref="https://coptic-dictionary.org/entry.py?tla=C11282">ϥ</w></phy><phy></phy><phy><w type="UNKNOWN" lemma="ⲁⲣ" gloss="?">••••ⲁⲣ</w></phy><phy><w type="COP" lemma="ⲡⲉ" ref="https://coptic-dictionary.org/entry.py?tla=C2788">ⲡⲉ</w></phy><phy><w type="ART" lemma="ⲡ" gloss="the" ref="https://coptic-dictionary.org/entry.py?tla=C2783">ⲡ</w><w type="X" lemma="ϯ" gloss="X">ϯ</w></phy><phy><w type="X" lemma="ⲛⲉ" gloss="X">ⲛⲉ</w></phy><phy><w type="CONJ" lemma="ⲏ" gloss="or" xml:lang="grc" ref="https://coptic-dictionary.org/entry.py?tla=C9131">ⲏ</w></phy><phy><w type="PREP" lemma="ⲙⲙⲟ" ref="https://coptic-dictionary.org/entry.py?tla=C2349">ⲙⲙⲟ</w><w type="PPER" lemma="ⲁⲛⲟⲛ" gloss="we" ref="https://coptic-dictionary.org/entry.py?tla=C142">ⲛ</w></phy><phy><w type="X" lemma="ⲁⲛ">ⲁⲛ</w></phy><phy><w type="X" lemma="ϣⲟⲟⲡ">ϣⲟⲟⲡ</w></phy><phy><w type="X" lemma="ⲛⲁⲓ">ⲛⲁⲓ</w></phy>
-            </s>
-            <s xml:id="rep-15" n="15" transJa="しかしすべて〔……〕それらを語った者〔……〕支配者——" transEn="But all [...] who told them [...] ruler," transGrc="">
-              <phy><w type="PTC" lemma="ⲁⲗⲗⲁ" gloss="but" xml:lang="grc">ⲁⲗⲗⲁ</w></phy><phy><w type="X" lemma="ⲙ">ⲙ</w><w type="N" lemma="ⲧⲏⲣ=" gloss="all">ⲧⲏⲣ</w><w type="X" lemma="ⲟⲩ">ⲟⲩ</w></phy><phy><w type="CREL" lemma="ⲉⲛⲧ-" gloss="which" ref="https://coptic-dictionary.org/entry.py?tla=C681">ⲉⲛⲧ</w><w type="APST" lemma="ⲁ" ref="https://coptic-dictionary.org/entry.py?tla=C2">ⲁ</w><w type="X" lemma="ⲩ">ⲩ</w><w type="X" lemma="ϫⲟⲟⲩ">ϫⲟⲟⲩ</w></phy><phy><w type="NPROP" lemma="ⲁⲣⲭⲱⲛ" gloss="ruler" xml:lang="grc">ⲁⲣⲭⲱⲛ</w></phy>
-            </s>
-            <s xml:id="rep-16" n="16" transJa="これらは今や自然の生き物となった—— キメラもケルベロスも、語られたその他すべてのものも。" transEn="these now have become natural creatures - even Chimaera and Cerberus and all the rest that were mentioned." transGrc="οἷαι δὲ μυθολογοῦνται παλαιαὶ γενέσθαι φύσεις, ἥ τε Χιμαίρας καὶ Σκύλλης καὶ Κερβέρου,">
-              <phy><w type="X" lemma="ⲛⲁⲓ">ⲛⲁⲓ</w></phy><phy><w type="X" lemma="ϯ">ϯ</w><w type="X" lemma="ⲛⲟⲩ">ⲛⲟⲩ</w></phy><phy><w type="X" lemma="ⲛⲉⲛ">ⲛⲉⲛ</w></phy><phy><w type="X" lemma="ⲧⲁⲩ">ⲧⲁⲩ</w><w type="V" lemma="ϣⲱⲡⲉ" gloss="exist" ref="https://coptic-dictionary.org/entry.py?tla=C5995">ϣⲱⲡⲉ</w></phy><phy><w type="X" lemma="ⲛ">ⲙ</w><w type="N" lemma="ⲫⲩⲥⲓⲥ" gloss="creatures" xml:lang="grc">ⲫⲩⲥⲓⲥ</w></phy>
-            </s>
-            <s xml:id="rep-17" n="17" transJa="それらはすべて降りてきて、形と像を脱ぎ捨てた。" transEn="They all came down and they cast off forms and images." transGrc="">
-              <phy><w type="PTC" lemma="ⲁⲩⲱ" gloss="and" ref="https://coptic-dictionary.org/entry.py?tla=C240">ⲁⲩⲱ</w></phy><phy><w type="X" lemma="ⲡ">ⲡ</w><w type="X" lemma="ⲭⲓⲙⲁⲣⲣⲁⲓⲥ" xml:lang="grc">ⲭⲓⲙⲁⲣⲣⲁⲓⲥ</w></phy><phy><w type="X" lemma="ⲙⲛ">ⲙⲛ</w></phy><phy><w type="X" lemma="ⲡ">ⲡ</w><w type="X" lemma="ⲕⲉⲣⲃⲟⲩ" xml:lang="grc">ⲕⲉⲣⲃⲟⲩ</w></phy><phy><w type="X" lemma="ⲙⲛ">ⲙⲛ</w></phy><phy><w type="X" lemma="ⲡ">ⲡ</w><w type="X" lemma="ⲕⲉⲥⲉⲉⲡⲉ">ⲕⲉⲥⲉⲉⲡⲉ</w></phy><phy><w type="N" lemma="ⲧⲏⲣ=" gloss="all">ⲧⲏⲣ</w><w type="X" lemma="ϥ">ϥ</w></phy><phy><w type="X" lemma="ⲉ">ⲉ</w><w type="X" lemma="ⲛ">ⲛ</w></phy><phy><w type="X" lemma="ⲧⲁ">ⲧⲁ</w><w type="X" lemma="ⲩ">ⲩ</w><w type="V" lemma="ϣⲁϫⲉ" gloss="speak">ϣⲁϫⲉ</w></phy><phy><w type="X" lemma="ⲉⲣⲟ">ⲉⲣⲟ</w><w type="X" lemma="ⲟⲩ">ⲟⲩ</w></phy>
-            </s>
-            <s xml:id="rep-18" n="18" transJa="そしてそれらはすべて一つの像となった。" transEn="And they all became a single image." transGrc="εἰς μίαν ἰδέαν συνελθεῖν.">
-              <phy><w type="X" lemma="ⲁ">ⲁ</w><w type="X" lemma="ⲩ">ⲩ</w><w type="X" lemma="ⲣ">ⲣ</w><w type="X" lemma="ⲕⲁⲧⲁⲛⲧⲁ" xml:lang="grc">ⲕⲁ</w></phy><phy><w type="N" lemma="ⲧⲏⲣ=" gloss="all">ⲧⲏⲣ</w><w type="X" lemma="ⲟⲩ">ⲟⲩ</w></phy><phy><w type="APST" lemma="ⲁ" ref="https://coptic-dictionary.org/entry.py?tla=C2">ⲁ</w><w type="X" lemma="ⲩ">ⲩ</w><w type="X" lemma="ϯ">ϯ</w></phy><phy><w type="X" lemma="ⲟⲩⲱ">ⲟⲩⲱ</w></phy><phy><w type="X" lemma="ⲉⲃⲟⲗ">ⲉⲃⲟⲗ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ϩⲉⲛ">ϩⲉⲛ</w><w type="X" lemma="ⲙⲟⲣⲫⲏ">ⲙⲟⲣⲫⲏ</w></phy><phy><w type="X" lemma="ⲙⲛ">ⲙⲛ</w></phy><phy><w type="X" lemma="ϩⲉⲛ">ϩⲉⲛ</w><w type="X" lemma="ⲉⲓⲛⲉ">ⲉⲓⲛⲉ</w></phy>
-            </s>
-            <s xml:id="rep-19" n="19" transJa="「今こそ働け！」と言われた。" transEn="It was said, 'Work now!'" transGrc="">
-              <phy><w type="PTC" lemma="ⲁⲩⲱ" gloss="and" ref="https://coptic-dictionary.org/entry.py?tla=C240">ⲁⲩⲱ</w></phy><phy><w type="APST" lemma="ⲁ" ref="https://coptic-dictionary.org/entry.py?tla=C2">ⲁ</w><w type="X" lemma="ⲩ">ⲩ</w><w type="V" lemma="ϣⲱⲡⲉ" gloss="exist" ref="https://coptic-dictionary.org/entry.py?tla=C5995">ϣⲱⲡⲉ</w></phy><phy><w type="N" lemma="ⲧⲏⲣ=" gloss="all">ⲧⲏ</w><w type="X" lemma="ⲟⲩ">ⲟⲩ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲟⲩ">ⲟⲩ</w><w type="X" lemma="ⲉⲓⲛⲉ">ⲉⲓⲛⲉ</w></phy><phy><w type="X" lemma="ⲟⲩⲱⲧ">ⲟⲩⲱⲧ</w></phy>
-            </s>
-            <s xml:id="rep-20" n="20" transJa="たしかにそれは一つの像であり、 多くの頭を持つ複雑な獣の像となったのだ。" transEn="Certainly it is a single image that became the image of a complex beast with many heads." transGrc="πλάττε τοίνυν μίαν μὲν ἰδέαν θηρίου ποικίλου καὶ πολυκεφάλου,">
-              <phy><w type="X" lemma="ⲉ">ⲉ</w><w type="X" lemma="ⲩ">ⲩ</w><w type="X" lemma="ϫⲱ">ϫⲱ</w></phy><phy><w type="PREP" lemma="ⲙⲙⲟ=" ref="https://coptic-dictionary.org/entry.py?tla=C2349">ⲙⲙⲟ=</w><w type="X" lemma="ⲥ">ⲥ</w></phy><phy><w type="CONJ" lemma="ϫⲉ" gloss=":" ref="https://coptic-dictionary.org/entry.py?tla=C7055">ϫⲉ</w></phy><phy><w type="X" lemma="ⲁⲣⲓ">ⲁⲣⲓ</w></phy><phy><w type="X" lemma="ϩⲱⲃ">ϩⲱⲃ</w></phy><phy><w type="X" lemma="ⲧⲉ">ⲧⲉ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲟⲩ">ⲟⲩ</w></phy>
-            </s>
-            <s xml:id="rep-21" n="21" transJa="ある日にはそれは野生の獣の像のようになる。" transEn="Some days indeed it is like the image of a wild beast." transGrc="ἡμέρων δὲ θηρίων ἔχοντος κεφαλὰς κύκλῳ καὶ ἀγρίων,">
-              <phy><w type="X" lemma="ⲟⲩⲉⲓⲛⲉ">ⲟⲩ</w><w type="X" lemma="ⲉⲓⲛⲉ">ⲉⲓⲛⲉ</w></phy><phy><w type="X" lemma="ⲙⲉⲛⲧⲟⲓⲅⲉ">ⲙⲉⲛⲧⲟⲓⲅⲉ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲟⲩⲱⲧ">ⲟⲩⲱⲧ</w></phy><phy><w type="X" lemma="ⲡⲉ">ⲡⲉ</w></phy>
-            </s>
-            <s xml:id="rep-22" n="22" transJa="そのときそれは最初の像を脱ぎ捨てることができる。" transEn="Then it is able to cast off the first image." transGrc="καὶ δυνατοῦ μεταβάλλειν καὶ φύειν ἐξ αὑτοῦ πάντα ταῦτα.">
-              <phy><w type="X" lemma="ⲡⲁⲓ">ⲡⲁⲓ</w></phy><phy><w type="X" lemma="ⲛⲧⲁ">ⲛⲧⲁ</w><w type="X" lemma="ϥ">ϥ</w><w type="V" lemma="ϣⲱⲡⲉ" gloss="exist" ref="https://coptic-dictionary.org/entry.py?tla=C5995">ϣⲱ</w></phy><phy><w type="X" lemma="ⲙ">ⲙ</w><w type="X" lemma="ⲡⲓⲛⲉ">ⲡⲓⲛⲉ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲟⲩ">ⲟⲩ</w><w type="X" lemma="ⲑⲏⲣⲓⲟⲛ">ⲑⲏⲣⲓⲟⲛ</w></phy><phy><w type="X" lemma="ⲉ">ⲉ</w><w type="X" lemma="ϥ">ϥ</w><w type="X" lemma="ϣⲃⲃⲓⲟⲉⲓⲧ">ϣⲃⲃⲓⲟⲉⲓⲧ</w></phy><phy><w type="X" lemma="ϩⲛ">ϩⲛ</w></phy><phy><w type="X" lemma="ⲟⲩ">ⲟⲩ</w><w type="X" lemma="ⲛⲟϭ">ⲛⲟϭ</w></phy><phy><w type="X" lemma="ⲛⲁⲡⲉ">ⲛⲁⲡⲉ</w></phy>
-            </s>
-            <s xml:id="rep-23" n="23" transJa="そしてこれらすべての困難で厄介な形は、 苦労しながらそこから流れ出る—— なぜならこれらは今や傲慢さをもって形作られているからだ。" transEn="And all these hard and difficult forms emanate from it with effort, since these are formed now with arrogance." transGrc="">
-              <phy><w type="X" lemma="ϩⲉⲛ">ϩⲉⲛ</w><w type="X" lemma="ϩⲟⲟⲩ">ϩⲟⲟⲩ</w></phy><phy><w type="X" lemma="ⲙⲉⲛ">ⲙⲉⲛ</w></phy><phy><w type="X" lemma="ⲉ">ⲉ</w><w type="X" lemma="ϥ">ϥ</w><w type="X" lemma="ⲟ">ⲟ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲑ">ⲑ</w><w type="X" lemma="ⲉ">ⲉ</w></phy><phy><w type="X" lemma="ⲙ">ⲙ</w><w type="X" lemma="ⲡⲓⲛⲉ">ⲡⲓⲛⲉ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲟⲩ">ⲟⲩ</w><w type="X" lemma="ⲑⲏⲣⲓⲟⲛ">ⲑⲏⲣⲓⲟⲛ</w></phy><phy><w type="X" lemma="ⲛⲁⲅⲣⲓⲟⲛ">ⲛⲁⲅⲣⲓⲟⲛ</w></phy>
-            </s>
-            <s xml:id="rep-24" n="24" transJa="またそれらに似たその他すべても、 今や言葉によって形作られている。" transEn="And also all the rest that are like them are formed now through the word." transGrc="">
-              <phy><w type="X" lemma="ⲧⲟⲧⲉ">ⲧⲟⲧⲉ</w></phy><phy><w type="X" lemma="ϣⲁ">ϣⲁ</w><w type="X" lemma="ϥ">ϥ</w><w type="X" lemma="ϭⲙϭⲟⲙ">ϭⲙϭⲟⲙ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲛⲟⲩϫⲉ">ⲛⲟⲩϫⲉ</w></phy><phy><w type="X" lemma="ⲉⲃⲟⲗ">ⲉⲃⲟⲗ</w></phy><phy><w type="X" lemma="ⲙ">ⲙ</w><w type="X" lemma="ⲡⲓⲛⲉ">ⲡⲓⲛⲉ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ϣⲟⲣⲡ">ϣⲟⲣⲡ</w></phy>
-            </s>
-            <s xml:id="rep-25" n="25" transJa="なぜなら今それは一つの像だからである。" transEn="For now it is a single image." transGrc="">
-              <phy><w type="X" lemma="ⲛⲧⲉ">ⲛⲧⲉ</w></phy><phy><w type="X" lemma="ⲛⲁⲓ">ⲛⲁⲓ</w></phy><phy><w type="N" lemma="ⲧⲏⲣ=" gloss="all">ⲧⲏⲣ</w><w type="X" lemma="ⲟⲩ">ⲟⲩ</w></phy><phy><w type="X" lemma="ⲛⲓ">ⲛⲓ</w><w type="X" lemma="ⲡⲗⲁⲥⲙⲁ">ⲡⲗⲁⲥⲙⲁ</w></phy><phy><w type="X" lemma="ⲉⲧ">ⲉⲧ</w></phy><phy><w type="X" lemma="ⲛⲁϣⲧ">ⲛⲁϣⲧ</w></phy>
-            </s>
-            <s xml:id="rep-26" n="26" transJa="なぜならライオンの像は一つのものであり、 人間の像は別のものだからである。" transEn="For the image of the lion is the one thing and the image of the man is another." transGrc="μίαν δὴ τοίνυν ἄλλην ἰδέαν λέοντος, μίαν δὲ ἀνθρώπου·">
-              <phy><w type="PTC" lemma="ⲁⲩⲱ" gloss="and" ref="https://coptic-dictionary.org/entry.py?tla=C240">ⲁⲩⲱ</w></phy><phy><w type="X" lemma="ⲉⲧ">ⲉⲧ</w><w type="X" lemma="ⲙⲟⲕϩ">ⲙⲟⲕϩ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲥⲉ">ⲥⲉ</w><w type="X" lemma="ϯ">ϯ</w></phy><phy><w type="X" lemma="ⲟⲩⲱ">ⲟⲩⲱ</w></phy><phy><w type="X" lemma="ⲉⲃⲟⲗ">ⲉⲃⲟⲗ</w></phy><phy><w type="X" lemma="ⲛϩⲏⲧ">ⲛϩⲏⲧ</w><w type="X" lemma="ϥ">ϥ</w></phy><phy><w type="X" lemma="ϩⲛ">ϩⲛ</w></phy><phy><w type="X" lemma="ⲟⲩ">ⲟⲩ</w><w type="X" lemma="ⲉⲣⲅⲟⲛ">ⲉⲣⲅⲟⲛ</w></phy>
-            </s>
-            <s xml:id="rep-27" n="27" transJa="〔……〕一つの〔……〕は〔……〕の〔……〕接合である。" transEn="[...] single [...] is the [...] of [...] join." transGrc="">
-              <phy><w type="CONJ" lemma="ⲉⲡⲓⲇⲏ" xml:lang="grc" ref="https://coptic-dictionary.org/entry.py?tla=C8985">ⲉⲡⲓⲇⲏ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲉⲧ">ⲉⲧ</w><w type="X" lemma="ⲟⲩⲣ">ⲟⲩⲣ</w></phy><phy><w type="X" lemma="ⲡⲗⲁⲥⲥⲉ">ⲡⲗⲁⲥⲥⲉ</w></phy><phy><w type="PREP" lemma="ⲙⲙⲟ=" ref="https://coptic-dictionary.org/entry.py?tla=C2349">ⲙⲙⲟ=</w><w type="X" lemma="ⲟⲩ">ⲟⲩ</w></phy><phy><w type="X" lemma="ϯ">ϯ</w><w type="X" lemma="ⲛⲟⲩ">ⲛⲟⲩ</w></phy><phy><w type="X" lemma="ϩⲛ">ϩⲛ</w></phy><phy><w type="X" lemma="ⲟⲩⲗⲁϩⲗⲉϩ">ⲟⲩⲗⲁϩⲗⲉϩ</w></phy>
-            </s>
-            <s xml:id="rep-28" n="28" transJa="そしてこの〔……〕は最初のものよりずっと複雑である。 そして二番目のものは小さい。" transEn="And this [...] much more complex than the first. And the second is small." transGrc="πολὺ δὲ μέγιστον ἔστω τὸ πρῶτον καὶ δεύτερον τὸ δεύτερον.">
-              <phy><w type="PTC" lemma="ⲁⲩⲱ" gloss="and" ref="https://coptic-dictionary.org/entry.py?tla=C240">ⲁⲩⲱ</w></phy><phy><w type="X" lemma="ⲙⲛ">ⲙⲛ</w></phy><phy><w type="X" lemma="ⲡ">ⲡ</w><w type="X" lemma="ⲕⲉ">ⲕⲉ</w><w type="X" lemma="ⲥⲉⲉⲡⲉ">ⲥⲉⲉⲡⲉ</w></phy><phy><w type="N" lemma="ⲧⲏⲣ=" gloss="all">ⲧⲏⲣ</w><w type="X" lemma="ϥ">ϥ</w></phy><phy><w type="X" lemma="ⲉⲧ">ⲉⲧ</w><w type="X" lemma="ⲧⲛ">ⲧⲛ</w></phy><phy><w type="X" lemma="ⲧⲱⲛ">ⲧⲱⲛ</w></phy><phy><w type="X" lemma="ⲉⲣⲟ">ⲉⲣⲟ</w><w type="X" lemma="ⲟⲩ">ⲟⲩ</w></phy><phy><w type="X" lemma="ⲉ">ⲉ</w><w type="X" lemma="ⲩ">ⲩ</w><w type="X" lemma="ⲣ">ⲣ</w><w type="X" lemma="ⲡⲗⲁⲥⲥⲉ">ⲡⲗⲁⲥⲥⲉ</w></phy><phy><w type="X" lemma="ϯ">ϯ</w><w type="X" lemma="ⲛⲟⲩ">ⲛⲟⲩ</w></phy><phy><w type="X" lemma="ϩⲙ">ϩⲙ</w></phy><phy><w type="X" lemma="ⲡ">ⲡ</w><w type="X" lemma="ϣⲁϫⲉ">ϣⲁϫⲉ</w></phy>
-            </s>
-            <s xml:id="rep-29" n="29" transJa="「形作られた。」" transEn='"It has been formed."' transGrc="">
-              <phy><w type="X" lemma="ⲧⲉⲛⲟⲩ">ⲧⲉⲛⲟⲩ</w></phy><phy><w type="X" lemma="ⲅⲁⲣ">ⲅⲁⲣ</w></phy><phy><w type="X" lemma="ⲟⲩⲉⲓⲛⲉ">ⲟⲩⲉⲓⲛⲉ</w></phy><phy><w type="X" lemma="ⲟⲩⲱⲧ">ⲟⲩⲱⲧ</w></phy><phy><w type="X" lemma="ⲡⲉ">ⲡⲉ</w></phy>
-            </s>
-            <s xml:id="rep-30" n="30" transJa="「では今、それらを互いに結び合わせ 一つにしなさい——それらは三つだが—— 互いに生え合うように。" transEn='"Now then, join them to each other and make them a single one - for they are three - so that they grow together,' transGrc="σύναπτε τοίνυν αὐτὰ εἰς ἓν τρία ὄντα, ὥστε πῃ συμπεφυκέναι ἀλλήλοις.">
-              <phy><w type="X" lemma="ⲟⲩ">ⲟⲩ</w><w type="X" lemma="ⲉⲧ">ⲉⲧ</w></phy><phy><w type="X" lemma="ⲡⲓⲛⲉ">ⲡⲓⲛⲉ</w></phy><phy><w type="X" lemma="ⲅⲁⲣ">ⲅⲁⲣ</w></phy><phy><w type="X" lemma="ⲙⲡ">ⲙⲡ</w><w type="X" lemma="ⲙⲟⲩⲉⲓ">ⲙⲟⲩⲉⲓ</w></phy><phy><w type="PTC" lemma="ⲁⲩⲱ" gloss="and" ref="https://coptic-dictionary.org/entry.py?tla=C240">ⲁⲩⲱ</w></phy><phy><w type="X" lemma="ⲟⲩⲉⲧ">ⲟⲩⲉⲧ</w></phy><phy><w type="X" lemma="ⲡⲓⲛⲉ">ⲡⲓⲛⲉ</w></phy><phy><w type="X" lemma="ⲙ">ⲙ</w><w type="X" lemma="ⲡ">ⲡ</w><w type="X" lemma="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</w></phy><gap reason="lacuna" unit="line" extent="unknown"/><phy><w type="X" lemma="ⲟⲩⲱⲧ">ⲟⲩⲱⲧ</w></phy><phy><w type="X" lemma="ⲡⲉ">ⲡⲉ</w></phy><phy><w type="X" lemma="ⲡ">ⲡ</w></phy><gap reason="lacuna" unit="line" extent="unknown"/><phy><w type="X" lemma="ⲙ">ⲙ</w></phy><gap reason="lacuna" unit="line" extent="unknown"/><phy><w type="X" lemma="ⲧⲱϭⲉ">ⲧⲱϭⲉ</w></phy>
-            </s>
-            <s xml:id="rep-31" n="31" transJa="そしてすべては人間の像の外側に単一の像として在り、" transEn="and all are in a single image outside of the image of the man" transGrc="περίπλασον δὴ αὐτοῖς ἔξωθεν ἑνὸς εἰκόνα, τὴν τοῦ ἀνθρώπου,">
-              <phy><w type="PTC" lemma="ⲁⲩⲱ" gloss="and" ref="https://coptic-dictionary.org/entry.py?tla=C240">ⲁⲩⲱ</w></phy><phy><w type="X" lemma="ⲡⲁⲓ">ⲡⲁⲓ</w></phy><gap reason="lacuna" unit="line" extent="unknown"/><phy><w type="X" lemma="ϣⲃⲃⲓⲁⲉⲓⲧ">ϣⲃⲃⲓⲁⲉⲓⲧ</w></phy><phy><w type="X" lemma="ⲙ">ⲙ</w><w type="X" lemma="ⲡ">ⲡ</w><w type="X" lemma="ϣⲁ">ϣⲁ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ϩⲟⲩⲟ">ϩⲟⲩⲟ</w></phy><phy><w type="X" lemma="ⲉ">ⲉ</w><w type="X" lemma="ⲡ">ⲡ</w><w type="X" lemma="ϣⲟⲣⲡ">ϣⲟⲣⲡ</w></phy>
-            </s>
-            <s xml:id="rep-32" n="32" transJa="内側のものを見ることのできない者と同じように—— しかし彼が見るのは外側のものだけである。" transEn="just like him who is unable to see the things inside him. But what is outside only is what he sees." transGrc="ὥστε τῷ μὴ δυναμένῳ τὰ ἐντὸς ὁρᾶν, ἀλλὰ τὸ ἔξω μόνον ἔλυτρον ὁρῶντι,">
-              <phy><w type="PTC" lemma="ⲁⲩⲱ" gloss="and" ref="https://coptic-dictionary.org/entry.py?tla=C240">ⲁⲩⲱ</w></phy><phy><w type="X" lemma="ⲡ">ⲡ</w><w type="X" lemma="ⲙⲁϩ">ⲙⲁϩ</w><w type="X" lemma="ⲥⲛⲁⲩ">ⲥⲛⲁⲩ</w></phy><phy><w type="X" lemma="ⲡⲉ">ⲡⲉ</w></phy><phy><w type="X" lemma="ⲟⲩϣⲙ">ⲟⲩϣⲙ</w></phy>
-            </s>
-            <s xml:id="rep-33" n="33" transJa="彼の像がどの生き物の中にあるか、 また彼が人間の像に形作られたことが明らかである。" transEn="And it is apparent what creature his image is in and that he was formed in a human image." transGrc="ἓν ζῷον φαίνεσθαι, ἄνθρωπον.">
-              <phy><w type="X" lemma="ⲁ">ⲁ</w><w type="X" lemma="ⲩ">ⲩ</w><w type="X" lemma="ⲣ">ⲣ</w><w type="X" lemma="ⲡⲗⲁⲥⲥⲉ" xml:lang="grc">ⲡⲗⲁⲥⲥⲉ</w></phy><phy><w type="PREP" lemma="ⲙⲙⲟ=" ref="https://coptic-dictionary.org/entry.py?tla=C2349">ⲙⲙⲟ=</w><w type="X" lemma="ϥ">ϥ</w></phy>
-            </s>
-            <s xml:id="rep-34" n="34" transJa="「そして私は、人間にとって不正を行なうことに 利益があると言った者に語りかけた。" transEn='"And I spoke to him who said that there is profit in the doing of injustice for the man.' transGrc="λέγωμεν δὴ τῷ λέγοντι ὡς λυσιτελεῖ τούτῳ τῷ ἀνθρώπῳ ἀδικεῖν,">
-              <phy><w type="X" lemma="ⲧⲉⲛⲟⲩ">ⲧⲉⲛⲟⲩ</w></phy><phy><w type="PTC" lemma="ϭⲉ" ref="https://coptic-dictionary.org/entry.py?tla=C7550">ϭⲉ</w></phy><phy><w type="X" lemma="ⲧⲱϭⲉ">ⲧⲱϭⲉ</w></phy><phy><w type="PREP" lemma="ⲙⲙⲟ=" ref="https://coptic-dictionary.org/entry.py?tla=C2349">ⲙⲙⲟ=</w><w type="X" lemma="ⲟⲩ">ⲟⲩ</w></phy><phy><w type="X" lemma="ⲉ">ⲉ</w><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲉⲩ">ⲉⲩ</w></phy><phy><w type="X" lemma="ⲉⲣⲏ">ⲉⲣⲏ</w><w type="X" lemma="ⲟⲩ">ⲟⲩ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲧ">ⲧ</w><w type="X" lemma="ⲉⲧ">ⲉⲧ</w><w type="X" lemma="ⲛⲁ">ⲛⲁ</w><w type="X" lemma="ⲁⲩ">ⲁⲩ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲟⲩⲁ">ⲟⲩⲁ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲟⲩⲱⲧ">ⲟⲩⲱⲧ</w></phy>
-            </s>
-            <s xml:id="rep-35" n="35" transJa="不正を行なう者は真に利益を得ない——" transEn="He who does injustice truly does not profit" transGrc="δικαιοπραγεῖν δὲ οὐ συμφέρειν.">
-              <phy><w type="X" lemma="ϣⲟⲙⲉⲧ">ϣⲟⲙⲉⲧ</w></phy><phy><w type="X" lemma="ⲅⲁⲣ">ⲅⲁⲣ</w></phy><phy><w type="X" lemma="ⲛⲉ">ⲛⲉ</w></phy>
-            </s>
-            <s xml:id="rep-36" n="36" transJa="また恩恵も受けない。" transEn="nor does he benefit." transGrc="">
-              <phy><w type="X" lemma="ϩⲱⲥ">ϩⲱⲥ</w></phy><phy><w type="X" lemma="ⲧⲉ">ⲧⲉ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲥⲉ">ⲥⲉ</w><w type="X" lemma="ϯ">ϯ</w></phy><phy><w type="X" lemma="ⲟⲩⲱ">ⲟⲩⲱ</w></phy><phy><w type="X" lemma="ⲙⲛ">ⲙⲛ</w></phy><phy><w type="X" lemma="ⲛⲉⲩ">ⲛⲉⲩ</w><w type="X" lemma="ⲉⲣⲏⲩ">ⲉⲣⲏⲩ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲥⲉ">ⲥⲉ</w><w type="V" lemma="ϣⲱⲡⲉ" gloss="exist" ref="https://coptic-dictionary.org/entry.py?tla=C5995">ϣⲱⲡⲉ</w></phy><phy><w type="N" lemma="ⲧⲏⲣ=" gloss="all">ⲧⲏⲣ</w><w type="X" lemma="ⲟⲩ">ⲟⲩ</w></phy><phy><w type="X" lemma="ϩⲛ">ϩⲛ</w></phy><phy><w type="X" lemma="ⲟⲩⲉⲓ">ⲟⲩⲉⲓ</w></phy><phy><w type="X" lemma="ⲛⲉ">ⲛⲉ</w></phy><phy><w type="X" lemma="ⲟⲩⲱⲧ">ⲟⲩⲱⲧ</w></phy><phy><w type="X" lemma="ⲥⲁⲃⲟⲗ">ⲥⲁⲃⲟⲗ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲧ">ⲑ[ⲧ]</w><w type="X" lemma="ϩⲓⲕⲱⲛ">[ϩ]ⲓⲕⲱⲛ</w></phy><phy><w type="X" lemma="ⲙ">ⲙ</w><w type="X" lemma="ⲡ">ⲡ</w><w type="X" lemma="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</w></phy>
-            </s>
-            <s xml:id="rep-37" n="37" transJa="しかし彼にとって利益になるのはこれだ—— 悪しき獣のあらゆる像を踏み倒し、 それらを踏みにじること——" transEn="But what is profitable for him is this: that he cast down every image of the evil beast and trample them" transGrc="">
-              <phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲑⲉ">ⲑⲉ</w></phy><phy><w type="X" lemma="ϩⲱⲱ">ϩⲱⲱ</w><w type="X" lemma="ϥ">ϥ</w></phy><phy><w type="X" lemma="ⲛ">ⲙ</w><w type="X" lemma="ⲡⲉ">ⲡⲉ</w></phy><phy><w type="X" lemma="ⲧⲉ">ⲧⲉ</w></phy><phy><w type="X" lemma="ⲙⲛ">ⲙⲛ</w></phy><phy><w type="X" lemma="ϣ">ϣ</w><w type="X" lemma="ϭⲟⲙ">ϭⲟⲙ</w></phy><phy><w type="PREP" lemma="ⲙⲙⲟ=" ref="https://coptic-dictionary.org/entry.py?tla=C2349">ⲙⲙⲟ=</w><w type="X" lemma="ϥ">ϥ</w></phy><phy><w type="X" lemma="ⲉ">ⲉ</w><w type="X" lemma="ⲧⲣⲉ">ⲧⲣⲉ</w><w type="X" lemma="ϥ">ϥ</w><w type="X" lemma="ⲛⲁⲩ">ⲛⲁⲩ</w></phy><phy><w type="X" lemma="ⲉ">ⲉ</w><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲉⲧ">ⲉⲧ</w><w type="X" lemma="ⲙ">ⲙ</w><w type="X" lemma="ⲡⲉ">ⲡⲉ</w><w type="X" lemma="ϥ">ϥ</w><w type="X" lemma="ϩⲟⲩⲛ">ϩⲟⲩⲛ</w></phy>
-            </s>
-            <s xml:id="rep-38" n="38" transJa="ライオンの像とともに。" transEn="along with the images of the lion." transGrc="">
-              <phy><w type="X" lemma="ⲁⲗⲗⲁ">ⲁⲗⲗⲁ</w></phy><phy><w type="X" lemma="ⲡⲉⲧ">ⲡⲉⲧ</w></phy><phy><w type="X" lemma="ϩⲓⲃⲟⲗ">ϩⲓⲃⲟⲗ</w></phy><phy><w type="X" lemma="ⲙ">ⲙ</w><w type="X" lemma="ⲙⲁⲧⲉ">ⲙⲁⲧⲉ</w></phy><phy><w type="X" lemma="ⲡ">ⲡ</w><w type="X" lemma="ⲉⲧ">ⲉⲧ</w><w type="X" lemma="ϥ">ϥ</w><w type="X" lemma="ⲛⲁⲩ">ⲛⲁⲩ</w></phy><phy><w type="X" lemma="ⲉⲣⲟ">ⲉⲣⲟ</w><w type="X" lemma="ϥ">ϥ</w></phy>
-            </s>
-            <s xml:id="rep-39" n="39" transJa="しかし人間はこの点で弱さの中にある。" transEn="But the man is in weakness in this regard." transGrc="">
-              <phy><w type="PTC" lemma="ⲁⲩⲱ" gloss="and" ref="https://coptic-dictionary.org/entry.py?tla=C240">ⲁⲩⲱ</w></phy><phy><w type="X" lemma="ⲉ">ⲉ</w><w type="X" lemma="ϥ">ϥ</w><w type="X" lemma="ⲣ">ⲣ</w><w type="X" lemma="ⲫⲉⲛⲉⲥⲑⲁⲓ" xml:lang="grc">ⲫⲉⲛⲉⲥⲑⲁⲓ</w></phy><phy><w type="CONJ" lemma="ϫⲉ" gloss=":" ref="https://coptic-dictionary.org/entry.py?tla=C7055">ϫⲉ</w></phy><phy><w type="X" lemma="ⲉⲣⲉ">ⲉⲣⲉ</w><w type="X" lemma="ⲡⲉ">ⲡⲉ</w><w type="X" lemma="ϥ">ϥ</w><w type="X" lemma="ⲉⲓⲛⲉ">ⲉⲓⲛⲉ</w></phy><phy><w type="X" lemma="ϩⲛ">ϩⲛ</w></phy><phy><w type="X" lemma="ⲁϣ">ⲁϣ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲍⲱⲟⲛ">ⲍⲱⲟⲛ</w></phy>
-            </s>
-            <s xml:id="rep-40" n="40" transJa="そして彼のすることはすべて弱い。" transEn="And all the things that he does are weak." transGrc="">
-              <phy><w type="PTC" lemma="ⲁⲩⲱ" gloss="and" ref="https://coptic-dictionary.org/entry.py?tla=C240">ⲁⲩⲱ</w></phy><phy><w type="CONJ" lemma="ϫⲉ" gloss=":" ref="https://coptic-dictionary.org/entry.py?tla=C7055">ϫⲉ</w></phy><phy><w type="X" lemma="ⲛⲧⲁ">ⲛⲧⲁ</w><w type="X" lemma="ⲩ">ⲩ</w><w type="X" lemma="ⲣ">ⲣ</w><w type="X" lemma="ⲡⲗⲁⲥⲥⲉ" xml:lang="grc">ⲡⲗⲁⲥⲥⲉ</w></phy><phy><w type="PREP" lemma="ⲙⲙⲟ=" ref="https://coptic-dictionary.org/entry.py?tla=C2349">ⲙⲙⲟ=</w><w type="X" lemma="ϥ">ϥ</w></phy><phy><w type="X" lemma="ϩⲛ">ϩⲛ</w></phy><phy><w type="X" lemma="ⲟⲩ">ⲟⲩ</w><w type="X" lemma="ⲉⲓⲛⲉ">ⲉⲓⲛⲉ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</w></phy>
-            </s>
-            <s xml:id="rep-41" n="41" transJa="その結果、彼は自らが時を過ごす場所へと引きずられていく。" transEn="As a result he is drawn to the place where he spends time." transGrc="">
-              <phy><w type="X" lemma="ⲡⲉϫⲁ">ⲡⲉϫⲁ</w><w type="X" lemma="ⲉⲓ">ⲉⲓ</w></phy><phy><w type="PTC" lemma="ⲇⲉ" gloss="-" xml:lang="grc">ⲇⲉ</w></phy><phy><w type="X" lemma="ⲙ">ⲙ</w><w type="X" lemma="ⲡⲉ">ⲡⲉ</w><w type="X" lemma="ⲛⲧ">ⲛⲧ</w><w type="APST" lemma="ⲁ" ref="https://coptic-dictionary.org/entry.py?tla=C2">ⲁ</w><w type="X" lemma="ϥ">ϥ</w><w type="X" lemma="ϫⲟⲟ">ϫⲟⲟ</w><w type="X" lemma="ⲥ">ⲥ</w></phy><phy><w type="CONJ" lemma="ϫⲉ" gloss=":" ref="https://coptic-dictionary.org/entry.py?tla=C7055">ϫⲉ</w></phy><phy><w type="X" lemma="ⲥ">ⲥ</w><w type="X" lemma="ⲣ">ⲣ</w></phy><phy><w type="X" lemma="ⲛⲟϥ">ⲛⲟϥ</w><w type="X" lemma="ⲣⲉ">ⲣⲉ</w></phy><phy><w type="X" lemma="ⲙ">ⲙ</w><w type="X" lemma="ⲡ">ⲡ</w><w type="V" lemma="ϫⲓ" gloss="take" ref="https://coptic-dictionary.org/entry.py?tla=C7058">ϫⲓ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ϭⲟⲛⲥ">ϭⲟⲛⲥ</w></phy><phy><w type="X" lemma="ⲙ">ⲙ</w><w type="X" lemma="ⲡ">ⲡ</w><w type="X" lemma="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</w></phy>
-            </s>
-            <s xml:id="rep-42" n="42" transJa="〔……〕。そして彼は〔……〕彼に〔……〕の中で。" transEn="[...]. And he [...] to him in [...]." transGrc="">
-              <phy><w type="X" lemma="ⲡ">ⲡ</w><w type="X" lemma="ⲉⲧ">ⲉⲧ</w><w type="V" lemma="ϫⲓ" gloss="take" ref="https://coptic-dictionary.org/entry.py?tla=C7058">ϫⲓ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ϭⲟⲛⲥ">ϭⲟⲛⲥ</w></phy><phy><w type="X" lemma="ⲛⲧⲟϥ">ⲛⲧⲟϥ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲧ">ⲧ</w><w type="X" lemma="ⲙⲏⲧⲉ">ⲙⲏⲧⲉ</w></phy><phy><w type="X" lemma="ⲥ">ⲥ</w><w type="X" lemma="ⲣ">ⲣ</w></phy><phy><w type="X" lemma="ⲛⲟϥⲣⲉ">ⲛⲟϥⲣⲉ</w></phy><phy><w type="X" lemma="ⲛⲁ">ⲛⲁ</w><w type="X" lemma="ϥ">ϥ</w></phy><phy><w type="X" lemma="ⲁⲛ">ⲁⲛ</w></phy>
-            </s>
-            <s xml:id="rep-43" n="43" transJa="しかし彼は〔……〕敵意〔……〕をもたらす。" transEn="But he brings about [...] enmity [...]." transGrc="">
-              <phy><w type="X" lemma="ⲟⲩⲧⲉ">ⲟⲩⲧⲉ</w></phy><phy><w type="X" lemma="ⲙⲛ">ⲙⲛ</w></phy><phy><w type="X" lemma="ⲧⲁ">ⲧⲁ</w><w type="X" lemma="ϥ">ϥ</w></phy><phy><w type="X" lemma="ⲟⲫⲉⲗⲉⲓⲁ" xml:lang="grc">ⲟⲫⲉⲗⲉⲓⲁ</w></phy><phy><w type="X" lemma="ⲙ">ⲙ</w><w type="X" lemma="ⲙⲁⲩ">ⲙⲁⲩ</w></phy>
-            </s>
-            <s xml:id="rep-44" n="44" transJa="そして争いの中で彼らは互いに食い合う。" transEn="And with strife they devour each other among themselves." transGrc="">
-              <phy><w type="X" lemma="ⲁⲗⲗⲁ">ⲁⲗⲗⲁ</w></phy><phy><w type="X" lemma="ⲡ">ⲡ</w><w type="X" lemma="ⲉⲧ">ⲉⲧ</w><w type="X" lemma="ⲣ">ⲣ</w></phy><phy><w type="X" lemma="ⲛⲟϥⲣⲉ">ⲛⲟϥⲣⲉ</w></phy><phy><w type="X" lemma="ⲛⲁ">ⲛⲁ</w><w type="X" lemma="ϥ">ϥ</w></phy><phy><w type="X" lemma="ⲡⲉ">ⲡⲉ</w></phy><phy><w type="X" lemma="ⲡⲁⲓ">ⲡⲁⲓ</w></phy><phy><w type="X" lemma="ⲉ">ⲉ</w><w type="X" lemma="ⲧⲣⲉ">ⲧⲣⲉ</w><w type="X" lemma="ϥ">ϥ</w></phy><phy><w type="X" lemma="ⲧⲉⲩⲟ">ⲧⲉⲩⲟ</w></phy><phy><w type="X" lemma="ⲉϩⲣⲁⲓ">ⲉϩⲣⲁⲓ</w></phy><phy><w type="X" lemma="ⲛ">ⲙ</w><w type="X" lemma="ⲡⲓⲛⲉ">ⲡⲓⲛⲉ</w></phy><phy><w type="X" lemma="ⲛⲓⲙ">ⲛⲓⲙ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲑⲏⲣⲓⲟⲛ" xml:lang="grc">ⲑⲏ</w></phy><phy><w type="X" lemma="ⲉⲧ">ⲉⲧ</w><w type="X" lemma="ⲑⲟⲟⲩ">ⲑⲟⲟⲩ</w></phy>
-            </s>
-            <s xml:id="rep-45" n="45" transJa="「そうだ、彼は不正を行なうことを讃えるすべての者に これらのことをすべて語ったのだ。」" transEn='Yes, all these things he said to everyone who praises the doing of injustice."' transGrc="">
-              <phy><w type="PTC" lemma="ⲁⲩⲱ" gloss="and" ref="https://coptic-dictionary.org/entry.py?tla=C240">ⲁⲩⲱ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ϥ">ϥ</w><w type="X" lemma="ϩⲟ">ϩⲟ</w></phy><phy><w type="X" lemma="ⲙⲟⲩ">ⲙⲟⲩ</w></phy><phy><w type="X" lemma="ⲙⲛ">ⲙⲛ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲉⲓⲛⲉ">ⲉⲓⲛⲉ</w></phy><phy><w type="X" lemma="ⲛ">ⲙ</w><w type="X" lemma="ⲡ">ⲡ</w></phy><phy><w type="X" lemma="ⲙⲟⲩⲉⲓ">ⲙⲟⲩⲉⲓ</w></phy>
-            </s>
-            <s xml:id="rep-46" n="46" transJa="「では正義を語る者には利益にならないのか？」" transEn='"Then is it not profitable for him who speaks justly?"' transGrc="">
-              <phy><w type="X" lemma="ⲡ">ⲡ</w><w type="X" lemma="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</w></phy><phy><w type="PTC" lemma="ⲇⲉ" gloss="-" xml:lang="grc">ⲇⲉ</w></phy><phy><w type="X" lemma="ϥ">ϥ</w><w type="X" lemma="ϩⲛ">ϩⲛ</w></phy><phy><w type="X" lemma="ⲟⲩ">ⲟⲩ</w><w type="X" lemma="ⲙⲛⲧ">ⲙⲛⲧ</w><w type="X" lemma="ϭⲱⲃ">ϭⲱⲃ</w></phy><phy><w type="X" lemma="ⲛⲧⲉ">ⲛⲧⲉ</w><w type="X" lemma="ⲉⲓⲙⲓⲛⲉ">ⲉⲓⲙⲓⲛⲉ</w></phy>
-            </s>
-            <s xml:id="rep-47" n="47" transJa="「そして彼がこれらのことをなし、これらのことの中で語るならば、 人間の内側でそれらはしっかりと根を張る。" transEn="And if he does these things and speaks in them, within the man they take hold firmly." transGrc="">
-              <phy><w type="PTC" lemma="ⲁⲩⲱ" gloss="and" ref="https://coptic-dictionary.org/entry.py?tla=C240">ⲁⲩⲱ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲉⲧ">ⲉⲧ</w><w type="X" lemma="ϥ">ϥ</w></phy><phy><w type="X" lemma="ⲛⲁ">ⲛⲁ</w><w type="X" lemma="ⲁⲁ">ⲁⲁ</w><w type="X" lemma="ⲩ">ⲩ</w></phy><phy><w type="N" lemma="ⲧⲏⲣ=" gloss="all">ⲧⲏⲣ</w><w type="X" lemma="ⲟⲩ">ⲟⲩ</w></phy><phy><w type="X" lemma="ϩⲉⲛ">ϩⲉⲛ</w><w type="X" lemma="ϭⲱⲃ">ϭⲱⲃ</w></phy><phy><w type="X" lemma="ⲛⲉ">ⲛⲉ</w></phy>
-            </s>
-            <s xml:id="rep-48" n="48" transJa="それゆえとりわけ彼はそれらの世話をしようと努める——" transEn="Therefore especially he strives to take care of them" transGrc="">
-              <phy><w type="X" lemma="ϩⲱⲥⲧⲉ" xml:lang="grc">ϩⲱⲥⲧⲉ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲥⲉ">ⲥⲉ</w><w type="X" lemma="ⲥⲱⲕ">ⲥⲱⲕ</w></phy><phy><w type="PREP" lemma="ⲙⲙⲟ=" ref="https://coptic-dictionary.org/entry.py?tla=C2349">ⲙⲙⲟ=</w><w type="X" lemma="ϥ">ϥ</w></phy><phy><w type="X" lemma="ⲉ">ⲉ</w><w type="X" lemma="ⲡ">ⲡ</w><w type="N" lemma="ⲙⲁ" gloss="place" ref="https://coptic-dictionary.org/entry.py?tla=C1771">ⲙⲁ</w></phy><phy><w type="X" lemma="ⲉⲧ">ⲉⲧ</w><w type="X" lemma="ϥ">ϥ</w><w type="X" lemma="ⲣ">ⲣ</w></phy><phy><w type="X" lemma="ϩⲟⲟⲩ">ϩⲟⲟⲩ</w></phy><phy><w type="X" lemma="ⲉⲣⲟ">ⲉⲣⲟ</w><w type="X" lemma="ⲟⲩ">ⲟⲩ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ϣⲟ">ϣⲟ</w></phy><phy><w type="X" lemma="ⲣ">ⲣ</w><w type="X" lemma="ⲡ">ⲡ</w></phy><phy><w type="PTC" lemma="ⲁⲩⲱ" gloss="and" ref="https://coptic-dictionary.org/entry.py?tla=C240">ⲁⲩⲱ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ϥ">ϥ</w></phy><gap reason="lacuna" unit="line" extent="unknown"/><phy><w type="X" lemma="ⲛⲏⲑⲉⲓⲁ">ⲛⲏⲑⲉⲓⲁ</w></phy><phy><w type="X" lemma="ⲛⲁ">ⲛⲁ</w><w type="X" lemma="ϥ">ϥ</w></phy><phy><w type="X" lemma="ϩⲛ">ϩⲛ</w></phy><phy><w type="X" lemma="ⲟⲩⲉⲡⲓⲥ">ⲟⲩⲉⲡⲓⲥ</w></phy><phy><w type="X" lemma="ⲁⲗⲗⲁ">ⲁⲗⲗⲁ</w></phy><phy><w type="X" lemma="ⲉ">ⲉ</w><w type="X" lemma="ϣⲁ">ϣⲁ</w><w type="X" lemma="ϥ">ϥ</w><w type="X" lemma="ⲉⲓⲣⲉ">ⲉⲓⲣⲉ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲃⲉ">ⲃⲉ</w></phy><phy><w type="X" lemma="ⲛ">ⲙ</w><w type="X" lemma="ⲙⲛⲧ">ⲙⲛⲧ</w><w type="X" lemma="ϫⲁϫⲉ">ϫⲁϫⲉ</w></phy><phy><w type="X" lemma="ϩⲣⲁⲓ">ϩⲣⲁⲓ</w></phy><phy><w type="X" lemma="ⲛϩ">ⲛϩ</w></phy><phy><w type="PTC" lemma="ⲁⲩⲱ" gloss="and" ref="https://coptic-dictionary.org/entry.py?tla=C240">ⲁⲩⲱ</w></phy><phy><w type="X" lemma="ⲙⲛ">ⲙⲛ</w></phy><phy><w type="X" lemma="ⲟⲩ">ⲟⲩ</w><w type="X" lemma="ⲙⲓϣⲉ">ⲙⲓϣⲉ</w></phy><phy><w type="X" lemma="ⲉⲩ">ⲉⲩ</w><w type="X" lemma="ⲟⲩⲱⲙ">ⲟⲩ</w></phy>
-            </s>
-            <s xml:id="rep-49" n="49" transJa="そして農夫が毎日その産物を養うように 彼はそれらを養う。" transEn="and he nourishes them just like the farmer nourishes his produce daily." transGrc="ὥσπερ γεωργὸς τὰ μὲν ἥμερα τρέφων καὶ τιθασεύων,">
-              <phy><w type="X" lemma="ⲙⲛ">ⲙⲛ</w><w type="X" lemma="ⲛⲉ">ⲛⲉ</w><w type="X" lemma="ⲩⲉⲣⲏⲟⲩ">ⲩⲉⲣⲏⲟⲩ</w></phy><phy><w type="X" lemma="ϩⲣⲁⲓ">ϩⲣⲁⲓ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ϩⲏⲧ">ϩⲏⲧ</w><w type="X" lemma="ⲟⲩ">ⲟⲩ</w></phy>
-            </s>
-            <s xml:id="rep-50" n="50" transJa="そして野生の獣はそれが育つのを妨げる。" transEn="And the wild beasts keep it from growing." transGrc="τὰ δὲ ἄγρια ἀποκωλύων φύεσθαι.">
-              <phy><w type="X" lemma="ⲛⲁⲓ">ⲛⲁⲓ</w></phy><phy><w type="X" lemma="ⲅⲁⲣ">ⲅⲁⲣ</w></phy><phy><w type="N" lemma="ⲧⲏⲣ=" gloss="all">ⲧⲏⲣ</w><w type="X" lemma="ⲟⲩ">ⲟⲩ</w></phy><phy><w type="APST" lemma="ⲁ" ref="https://coptic-dictionary.org/entry.py?tla=C2">ⲁ</w><w type="X" lemma="ϥ">ϥ</w><w type="X" lemma="ϫⲟⲟⲩ">ϫⲟⲟⲩ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲟⲩⲟⲛ">ⲟⲩⲟⲛ</w></phy><phy><w type="X" lemma="ⲛⲓⲙ">ⲛⲓⲙ</w></phy><phy><w type="X" lemma="ⲉⲧ">ⲉⲧ</w><w type="X" lemma="ⲣ">ⲣ</w><w type="X" lemma="ⲉⲡⲁⲓⲛⲟⲩ">ⲉⲡⲁⲓⲛⲟⲩ</w></phy><phy><w type="X" lemma="ⲙ">ⲙ</w><w type="X" lemma="ⲡ">ⲡ</w><w type="V" lemma="ϫⲓ" gloss="take" ref="https://coptic-dictionary.org/entry.py?tla=C7058">ϫⲓ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ϭⲟⲛⲥ">ϭⲟⲛⲥ</w></phy>
-            </s>
-            <s xml:id="rep-51" n="51" transJa="「では、正義を語る者には利益にならないのか？」" transEn='"Then is it not profitable for him who speaks justly?"' transGrc="">
-              <phy><w type="X" lemma="ⲟⲩⲕⲟⲩⲛ" xml:lang="grc">ⲟⲩⲕⲟⲩⲛ</w></phy><phy><w type="PTC" lemma="ϭⲉ" ref="https://coptic-dictionary.org/entry.py?tla=C7550">ϭⲉ</w></phy><phy><w type="X" lemma="ⲡ">ⲡ</w><w type="X" lemma="ⲉⲧ">ⲉⲧ</w><w type="V" lemma="ϣⲁϫⲉ" gloss="speak">ϣⲁϫⲉ</w></phy><phy><w type="X" lemma="ϩⲱⲱ">ϩⲱⲱ</w><w type="X" lemma="ϥ">ϥ</w></phy><phy><w type="X" lemma="ϩⲛ">ϩⲛ</w></phy><phy><w type="X" lemma="ⲟⲩ">ⲟⲩ</w><w type="X" lemma="ⲇⲓⲕⲁⲓⲟⲛ" xml:lang="grc">ⲇⲓⲕⲁⲓⲟⲛ</w></phy><phy><w type="X" lemma="ⲥ">ⲥ</w><w type="X" lemma="ⲣ">ⲣ</w></phy><phy><w type="X" lemma="ⲛⲟϥⲣⲉ">ⲛⲟϥⲣⲉ</w></phy><phy><w type="X" lemma="ⲛⲁϥ">ⲛⲁϥ</w></phy>
-            </s>
-            <s xml:id="rep-52" n="52" transJa="そして彼がこれらのことをなし、これらのことの中で語るならば、 人間の内側でそれらはしっかりと根を張る。" transEn="And if he does these things and speaks in them, within the man they take hold firmly." transGrc="">
-              <phy><w type="PTC" lemma="ⲁⲩⲱ" gloss="and" ref="https://coptic-dictionary.org/entry.py?tla=C240">ⲁⲩⲱ</w></phy><phy><w type="X" lemma="ⲉϥϣⲁⲛ">ⲉϥϣⲁⲛ</w></phy><phy><w type="X" lemma="ⲉⲓⲣⲉ">ⲉⲓⲣⲉ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲛⲁⲓ">ⲛⲁⲓ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ϥ">ϥ</w><w type="V" lemma="ϣⲁϫⲉ" gloss="speak">ϣⲁϫⲉ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ϩⲏⲧ">ϩⲏⲧ</w><w type="X" lemma="ⲟⲩ">ⲟⲩ</w></phy><phy><w type="X" lemma="ⲛ">ⲙ</w><w type="X" lemma="ⲫⲟⲩⲛ">ⲫⲟⲩⲛ</w></phy><phy><w type="X" lemma="ⲛ">ⲙ</w><w type="X" lemma="ⲡ">ⲡ</w><w type="X" lemma="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</w></phy><phy><w type="X" lemma="ⲥⲉⲁ">ⲥⲉⲁ</w></phy><phy><w type="X" lemma="ⲙⲁϩⲧⲉ">ⲙⲁϩⲧⲉ</w></phy><phy><w type="X" lemma="ϩⲛ">ϩⲛ</w></phy><phy><w type="X" lemma="ⲟⲩⲧⲁϫⲣⲟ">ⲟⲩⲧⲁϫⲣⲟ</w></phy>
-            </s>
-            <s xml:id="rep-53" n="53" transJa="それゆえとりわけ彼はそれらの世話をしようと努め、 農夫が毎日その産物を養うように 彼はそれらを養う。" transEn="Therefore especially he strives to take care of them and he nourishes them just like the farmer nourishes his produce daily." transGrc="ὥσπερ γεωργὸς τὰ μὲν ἥμερα τρέφων καὶ τιθασεύων,">
-              <phy><w type="X" lemma="ⲉⲧⲃⲉ">ⲉⲧⲃⲉ</w></phy><phy><w type="X" lemma="ⲡⲁⲓ">ⲡⲁⲓ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ϩⲟⲩⲟ">ϩⲟⲩⲟ</w></phy><phy><w type="X" lemma="ϣⲁ">ϣⲁ</w><w type="X" lemma="ϥ">ϥ</w><w type="X" lemma="ϣⲓⲛⲉ">ϣⲓⲛⲉ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲥⲁ">ⲥⲁ</w><w type="X" lemma="ϥⲓ">ϥⲓ</w></phy><phy><w type="X" lemma="ⲡⲉⲩ">ⲡⲉⲩ</w><w type="X" lemma="ⲣⲟⲟⲩϣ">ⲣⲟⲟⲩϣ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ϥ">ϥ</w><w type="X" lemma="ⲥⲁⲛⲟⲩ">ⲥⲁⲛⲟⲩ</w><w type="X" lemma="ϣⲟⲩ">ϣⲟⲩ</w></phy>
-            </s>
-            <s xml:id="rep-54" n="54" transJa="農夫が毎日その産物を養うように。" transEn="like the farmer who nourishes his produce daily." transGrc="">
-              <phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲑⲉ">ⲑⲉ</w></phy><phy><w type="X" lemma="ϩⲱⲱ">ϩⲱⲱ</w><w type="X" lemma="ϥ">ϥ</w></phy><phy><w type="X" lemma="ⲛ">ⲙ</w><w type="X" lemma="ⲡ">ⲡ</w><w type="X" lemma="ⲅⲉⲱⲣⲅⲟⲥ" xml:lang="grc">ⲅⲉ</w></phy><phy><w type="X" lemma="ⲉ">ⲉ</w><w type="X" lemma="ϣⲁ">ϣⲁ</w><w type="X" lemma="ϥ">ϥ</w><w type="X" lemma="ⲥⲁⲁⲛϣ">ⲥⲁⲁⲛϣ</w></phy><phy><w type="X" lemma="ⲛ">ⲙ</w><w type="X" lemma="ⲡⲉϥ">ⲡⲉϥ</w><w type="X" lemma="ⲅⲉⲛⲏⲙⲁ" xml:lang="grc">ⲅⲉⲛⲏⲙⲁ</w></phy><phy><w type="X" lemma="ⲛ">ⲙ</w><w type="X" lemma="ⲙⲏⲛⲉ">ⲙⲏⲛⲉ</w></phy>
-            </s>
-            <s xml:id="rep-55" n="55" transJa="そして野生の獣はそれが育つのを妨げる。" transEn="And the wild beasts keep it from growing." transGrc="τὰ δὲ ἄγρια ἀποκωλύων φύεσθαι.">
-              <phy><w type="PTC" lemma="ⲁⲩⲱ" gloss="and" ref="https://coptic-dictionary.org/entry.py?tla=C240">ⲁⲩⲱ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲧⲉ">ⲧⲉ</w><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲑⲏⲣⲓⲟⲛ" xml:lang="grc">ⲑⲏⲣⲓⲟⲛ</w></phy><phy><w type="X" lemma="ⲛ">ⲛ</w><w type="X" lemma="ⲁⲅⲣⲓⲟⲛ" xml:lang="grc">ⲁⲅⲣⲓⲟⲛ</w></phy><phy><w type="X" lemma="ⲣ">ⲣ</w><w type="X" lemma="ⲕⲱⲗⲩⲉ" xml:lang="grc">ⲕⲱⲗⲩⲉ</w></phy><phy><w type="PREP" lemma="ⲙⲙⲟ=" ref="https://coptic-dictionary.org/entry.py?tla=C2349">ⲙⲙⲟ=</w><w type="X" lemma="ϥ">ϥ</w></phy><phy><w type="X" lemma="ⲉ">ⲉ</w><w type="X" lemma="ⲧⲣⲉ">ⲧⲣⲉ</w><w type="X" lemma="ϥ">ϥ</w><w type="X" lemma="ⲣⲱⲧ">ⲣⲱⲧ</w></phy>
-            </s>
+        <s xml:id="rep-1" n="1" transJa="さて、議論がこの段階に至ったからには、" transEn="Since we have come to this point in a discussion," transGrc="ἐπειδὴ ἐνταῦθα λόγου γεγόναμεν,">
+          <phy>
+            <w type="CONJ" lemma="ⲉⲡⲓⲇⲏ" gloss="since" xml:lang="grc">ⲉⲡⲓⲇⲏ</w>
+          </phy>
+          <phy>
+            <w type="PPERI" lemma="ⲁⲛⲟⲛ" gloss="we">ⲁⲛⲟⲛ</w>
+          </phy>
+          <phy>
+            <w type="APST" lemma="ⲁ">ⲁ</w>
+            <w type="PPER" lemma="ⲁⲛⲟⲛ" gloss="we">ⲛ</w>
+            <w type="V" lemma="ϣⲱⲡⲉ" gloss="exist">ϣⲱⲡⲉ</w>
+          </phy>
+          <phy>
+            <w type="PREP" lemma="ⲛ">ⲛ</w>
+            <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
+            <w type="N" lemma="ⲗⲟⲅⲟⲥ" gloss="discussion" xml:lang="grc">ⲗⲟⲅⲟⲥ</w>
+          </phy>
+          <phy>
+            <w type="PREP" lemma="ⲛ">ⲙ</w>
+            <w type="ART" lemma="ⲡ">ⲡⲓ</w>
+            <w type="N" lemma="ⲙⲁ" gloss="part">ⲙⲁ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-2" n="2" transJa="われわれに語られた最初のことを改めて取り上げよう。" transEn="let us again take up the first things that were said to us." transGrc="πάλιν ἀναλάβωμεν τὰ πρῶτα ῥηθέντα.">
+          <phy>
+            <w type="AOPT" lemma="ⲙⲁⲣⲉ">ⲙⲁⲣ</w>
+            <w type="PPER" lemma="ⲁⲛⲟⲛ" gloss="we">ⲛ</w>
+            <w type="V" lemma="ϫⲓ" gloss="take">ϫⲓ</w>
+          </phy>
+          <phy>
+            <w type="PTC" lemma="ϭⲉ">ϭⲉ</w>
+          </phy>
+          <phy>
+            <w type="PREP" lemma="ⲛⲁ">ⲛⲁ</w>
+            <w type="PPER" lemma="ⲛ" gloss="us">ⲛ</w>
+          </phy>
+          <phy>
+            <w type="PREP" lemma="ⲛ">ⲛ</w>
+            <w type="ART" lemma="ⲛ">ⲛ</w>
+            <w type="N" lemma="ϣⲟⲣⲡ" gloss="first">ϣⲟⲣⲡ</w>
+          </phy>
+          <phy>
+            <w type="CREL" lemma="ⲉⲛⲧ" gloss="which">ⲉⲛⲧ</w>
+            <w type="APST" lemma="ⲁ">ⲁ</w>
+            <w type="PPER" lemma="ⲛⲧⲟⲟⲩ" gloss="they">ⲩ</w>
+          </phy>
+          <phy>
+            <w type="PREP" lemma="ⲛⲁ">ⲛⲁ</w>
+            <w type="PPER" lemma="ⲛ" gloss="us">ⲛ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-3" n="3" transJa="そしてわれわれは彼が次のように言っていることに気づくだろう。" transEn="And we will find that he says," transGrc="">
+          <phy>
+            <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
+          </phy>
+          <phy>
+            <w type="PPER" lemma="ⲧⲛ" gloss="we">ⲧⲛ</w>
+            <w type="FUT" lemma="ⲛⲁ">ⲛⲁ</w>
+            <w type="V" lemma="ϭⲓⲛⲉ" gloss="find">ϭⲓⲛⲉ</w>
+          </phy>
+          <phy>
+            <w type="PREP" lemma="ⲙⲙⲟ">ⲙⲙⲟ</w>
+            <w type="PPER" lemma="ⲥ" gloss="it">ⲥ</w>
+          </phy>
+          <phy>
+            <w type="CREL" lemma="ⲉ">ⲉ</w>
+            <w type="PPER" lemma="ϥ" gloss="he">ϥ</w>
+            <w type="V" lemma="ϫⲱ" gloss="say">ϫⲱ</w>
+          </phy>
+          <phy>
+            <w type="PREP" lemma="ⲙⲙⲟ">ⲙⲙⲟ</w>
+            <w type="PPER" lemma="ⲥ" gloss="it">ⲥ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-4" n="4" transJa="「まったく不正を受けた者は幸いである。" transEn="'Good is he who has been done injustice completely." transGrc="ὅτι λυσιτελοῖ ἀδικία τῷ τελέως μὲν ἀδίκῳ, δοξαζομένῳ δὲ δικαίῳ.">
+          <phy>
+            <w type="CONJ" lemma="ϫⲉ" gloss=":">ϫⲉ</w>
+          </phy>
+          <phy>
+            <w type="V" lemma="ⲛⲁⲛⲟⲩ" gloss="be good">ⲛⲁⲛⲟⲩ</w>
+          </phy>
+          <phy>
+            <w type="ART" lemma="ⲡ">ⲡ</w>
+            <w type="PPER" lemma="ⲉⲛⲧ" gloss="it">ⲉⲛⲧ</w>
+            <w type="APST" lemma="ⲁ">ⲁ</w>
+            <w type="PPER" lemma="ⲛⲧⲟⲟⲩ" gloss="they">ⲩ</w>
+            <w type="V" lemma="ϫⲓ" gloss="receive">ϫⲓⲧ</w>
+            <w type="PPER" lemma="ϥ" gloss="him">ϥ</w>
+          </phy>
+          <phy>
+            <w type="PREP" lemma="ⲛ">ⲛ</w>
+            <w type="N" lemma="ϭⲟⲛⲥ" gloss="injustice">ϭⲟⲛⲥ</w>
+          </phy>
+          <phy>
+            <w type="ADV" lemma="ⲧⲉⲗⲉⲱⲥ" gloss="completely" xml:lang="grc">ⲧⲉⲗⲉ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-5" n="5" transJa="彼は正しく称えられる。」" transEn="He is glorified justly.'" transGrc="">
+          <phy>
+            <w type="A" lemma="ϣⲁⲣⲉ" gloss="(habit)">ϣⲁ</w>
+            <w type="PPER" lemma="ϥ" gloss="he">ϥ</w>
+            <w type="V" lemma="ϫⲓ" gloss="take">ϫⲓ</w>
+          </phy>
+          <phy>
+            <w type="N" lemma="ⲉⲟⲟⲩ" gloss="honour">ⲉⲟⲟⲩ</w>
+          </phy>
+          <phy>
+            <w type="ADV" lemma="ⲇⲓⲕⲁⲓⲱⲥ" gloss="justly" xml:lang="grc">ⲇⲓⲕⲁⲓⲱⲥ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-6" n="6" transJa="これが彼を責めた言い方ではなかったか？" transEn="Is not this how he was reproached?" transGrc="">
+          <phy>
+            <w type="PTC" lemma="ⲙⲏ" gloss="not" xml:lang="grc">ⲙⲏ</w>
+          </phy>
+          <phy>
+            <w type="NEG" lemma="ⲛ">ⲛ</w>
+            <w type="PDEM" lemma="ⲧⲁⲓ" gloss="this">ⲧⲁⲓ</w>
+          </phy>
+          <phy>
+            <w type="NEG" lemma="ⲁⲛ">ⲁⲛ</w>
+          </phy>
+          <phy>
+            <w type="COP" lemma="ⲧⲉ">ⲧⲉ</w>
+          </phy>
+          <phy>
+            <w type="ART" lemma="ⲧ" gloss="the">ⲑ[ⲧ]</w>
+            <w type="N" lemma="ϩⲉ" gloss="manner">[ϩ]ⲉ</w>
+          </phy>
+          <phy>
+            <w type="CREL" lemma="ⲉⲛⲧ">ⲉⲛⲧ</w>
+            <w type="APST" lemma="ⲁ">ⲁ</w>
+            <w type="PPER" lemma="ⲛⲧⲟⲟⲩ" gloss="they">ⲩ</w>
+            <w type="V" lemma="ϫⲡⲓⲟ" gloss="blame">ϫⲡⲓⲟ</w>
+            <w type="PPER" lemma="ϥ" gloss="he">ϥ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-7" n="7" transJa="「それはたしかに適切な言い方だ！」" transEn='"This is certainly the fitting way!"' transGrc="">
+          <phy>
+            <w type="PDEM" lemma="ⲧⲁⲓ" gloss="this">ⲧⲉⲓ</w>
+          </phy>
+          <phy>
+            <w type="N" lemma="ⲙⲉⲛⲧⲟⲓⲅⲉ" gloss="certainly" xml:lang="grc">ⲙⲉⲛⲧⲟⲓⲅⲉ</w>
+          </phy>
+          <phy>
+            <w type="COP" lemma="ⲧⲉ">ⲧⲉ</w>
+          </phy>
+          <phy>
+            <w type="ART" lemma="ⲧ" gloss="the">ⲑ[ⲧ]</w>
+            <w type="N" lemma="ϩⲉ" gloss="manner">[ϩ]ⲉ</w>
+          </phy>
+          <phy>
+            <w type="PREP" lemma="ⲉ">ⲉ</w>
+          </phy>
+          <phy>
+            <w type="ART" lemma="ⲧⲉ" gloss="the">ⲧⲉ</w>
+          </phy>
+          <phy>
+            <w type="V" lemma="ϣϣⲉ" gloss="it is fitting">ϣϣⲉ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-8" n="8" transJa="そして私は言った。「では今こそ、" transEn='And I said: "Now then,' transGrc="">
+          <phy>
+            <w type="VBD" lemma="ⲡⲉϫⲁ" gloss="say">ⲡⲉϫⲁ</w>
+            <w type="PPER" lemma="ⲓ" gloss="I">ⲓ</w>
+          </phy>
+          <phy>
+            <w type="PTC" lemma="ⲇⲉ" gloss="-" xml:lang="grc">ⲇⲉ</w>
+          </phy>
+          <phy>
+            <w type="CONJ" lemma="ϫⲉ" gloss=":">ϫⲉ</w>
+          </phy>
+          <phy>
+            <w type="COP" lemma="ⲧⲉ">ⲧⲉ</w>
+          </phy>
+          <phy>
+            <w type="PREP" lemma="ⲛ">ⲛ</w>
+            <w type="PTC" lemma="ⲟⲩⲛ" gloss="then">ⲟⲩ</w>
+          </phy>
+          <phy>
+            <w type="PTC" lemma="ϭⲉ">ϭⲉ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-9" n="9" transJa="われわれは語ってきた——" transEn="we have spoken" transGrc="">
+          <phy>
+            <w type="PPER" lemma="ⲁⲛⲟⲛ" gloss="we">ⲁⲛ</w>
+            <w type="V" lemma="ϣⲁϫⲉ" gloss="speak">ϣⲁϫⲉ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-10" n="10" transJa="彼が「不正を行なう者は" transEn="because he said that he who does injustice" transGrc="">
+          <phy>
+            <w type="CONJ" lemma="ⲉⲡⲓⲇⲏ" gloss="because" xml:lang="grc">ⲉⲡⲓⲇⲏ</w>
+          </phy>
+          <phy>
+            <w type="APST" lemma="ⲁ">ⲁ</w>
+            <w type="PPER" lemma="ϥ" gloss="he">ϥ</w>
+            <w type="V" lemma="ϫⲱ" gloss="say">ϫⲟⲟ</w>
+            <w type="PPER" lemma="ⲥ" gloss="it">ⲥ</w>
+          </phy>
+          <phy>
+            <w type="CONJ" lemma="ϫⲉ" gloss=":">ϫⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲡⲉϯⲣⲉ" gloss="he who does">ⲡⲉϯⲣⲉ</w>
+          </phy>
+          <phy>
+            <w type="PREP" lemma="ⲛ">ⲙ</w>
+            <w type="ART" lemma="ⲡ" gloss="the">ⲡ</w>
+            <w type="V" lemma="ϫⲓ" gloss="take">ϫⲓ</w>
+          </phy>
+          <phy>
+            <w type="PREP" lemma="ⲛ">ⲛ</w>
+            <w type="N" lemma="ϭⲟⲛⲥ" gloss="injustice">ϭⲟⲛⲥ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-11" n="11" transJa="そして正義を行なう者は、それぞれに力を持つ」と言ったからである。」" transEn="and he who does justice" transGrc="">
+          <phy>
+            <w type="CONJ" lemma="ⲙⲛ" gloss="and">ⲙⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲡⲉϯⲣⲉ" gloss="he who does">ⲡⲉϯⲣⲉ</w>
+          </phy>
+          <phy>
+            <w type="PREP" lemma="ⲛ">ⲙ</w>
+            <w type="ART" lemma="ⲡ" gloss="the">ⲡ</w>
+            <w type="N" lemma="ⲇⲓⲕⲁⲓⲟⲛ" gloss="justice" xml:lang="grc">ⲇⲓⲕⲁⲓ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-12" n="12" transJa="" transEn='each has a force."' transGrc="">
+          <phy>
+            <w type="ART" lemma="ⲡ" gloss="the">ⲡ</w>
+            <w type="N" lemma="ⲟⲩⲁ" gloss="one">ⲟⲩⲁ</w>
+          </phy>
+          <phy>
+            <w type="ART" lemma="ⲡ" gloss="the">ⲡ</w>
+            <w type="N" lemma="ⲟⲩⲁ" gloss="one">ⲟⲩⲁ</w>
+          </phy>
+          <phy>
+            <w type="EXIST" lemma="ⲟⲩⲛⲧⲉ" gloss="have">ⲟⲩⲛⲧⲁ</w>
+            <w type="PPER" lemma="ϥ" gloss="he">ϥ</w>
+          </phy>
+          <phy>
+            <w type="ART" lemma="ⲟⲩ" gloss="a">ⲟⲩ</w>
+            <w type="N" lemma="ϭⲟⲙ" gloss="force">ϭⲟⲙ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-13" n="13" transJa="" transEn="&quot;How then?&quot; &quot;He said, 'An image that has no likeness is the rationality of the soul,'" transGrc="πλάσαντες οὖν τῆς ψυχῆς εἰκόνα λόγῳ,">
+          <phy>
+            <w type="PREP" lemma="ⲛ">ⲛ</w>
+            <w type="PINT" lemma="ⲁϣ" gloss="whatever">ⲁϣ</w>
+          </phy>
+          <phy>
+            <w type="PTC" lemma="ϭⲉ">ϭⲉ</w>
+          </phy>
+          <phy>
+            <w type="ART" lemma="ⲛ" gloss="the">ⲛ</w>
+            <w type="N" lemma="ϩⲉ" gloss="manner">ϩⲉ</w>
+          </phy>
+          <phy>
+            <w type="VBD" lemma="ⲡⲉϫⲁ" gloss="say">ⲡⲉ</w>
+            <w type="PPER" lemma="ϥ" gloss="he">ϥ</w>
+          </phy>
+          <phy>
+            <w type="CONJ" lemma="ϫⲉ" gloss=":">ϫⲉ</w>
+          </phy>
+          <phy>
+            <w type="ART" lemma="ⲟⲩ" gloss="a">ⲟⲩ</w>
+            <w type="N" lemma="ϩⲓⲕⲱⲛ" gloss="image">ϩⲓⲕⲱⲛ</w>
+          </phy>
+          <phy>
+            <w type="CFOC" lemma="ⲉ">ⲉ</w>
+            <w type="PTC" lemma="ⲙⲛⲧⲉ" gloss="not to have">ⲙⲛⲧⲁ</w>
+            <w type="PPER" lemma="ϥ" gloss="he">ϥ</w>
+          </phy>
+          <phy>
+            <w type="N" lemma="ⲉⲓⲛⲉ" gloss="likeness">ⲉⲓⲛⲉ</w>
+          </phy>
+          <phy>
+            <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
+          </phy>
+          <phy>
+            <w type="ART" lemma="ⲡ" gloss="the">ⲡ</w>
+            <w type="N" lemma="ⲗⲟⲅⲟⲥ" gloss="lational" xml:lang="grc">ⲗⲟⲅⲟⲥ</w>
+          </phy>
+          <phy>
+            <w type="PREP" lemma="ⲛ">ⲛ</w>
+            <w type="ART" lemma="ⲧ" gloss="the">ⲧ</w>
+            <w type="N" lemma="ⲯⲩⲭⲏ" gloss="soul" xml:lang="grc">ⲯⲩⲭⲏ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-14" n="14" transJa="これらのことを語った者が理解するために。彼は 〔……〕あるいはそうでないか？われわれは〔……〕私にとって。" transEn="so that he who said these things will understand. He [...] or not? We [...] is for me." transGrc="">
+          <phy>
+            <w type="CONJ" lemma="ϫⲉⲕⲁⲁⲥ" gloss="so that">ϫⲉⲕⲁⲁⲥ</w>
+          </phy>
+          <phy>
+            <w type="CFOC" lemma="ⲉ">ⲉ</w>
+            <w type="PPER" lemma="ϥ" gloss="he">ϥ</w>
+            <w type="FUT" lemma="ⲛⲁ">ⲛⲁ</w>
+            <w type="V" lemma="ⲉⲓⲙⲉ" gloss="understand">ⲙⲙⲉ</w>
+          </phy>
+          <phy>
+            <w type="PTC" lemma="ⲛϭⲓ" gloss="namely">ⲛϭⲓ</w>
+          </phy>
+          <phy>
+            <w type="ART" lemma="ⲡⲉ" gloss="the">ⲡⲉ</w>
+            <w type="PREP" lemma="ⲛ">ⲛ</w>
+            <w type="ART" lemma="ⲧ" gloss="the">ⲧ</w>
+            <w type="APST" lemma="ⲁ">ⲁ</w>
+            <w type="PPER" lemma="ϥ" gloss="he">ϥ</w>
+          </phy>
+          <phy>
+            <w type="CONJ" lemma="ϫⲉ" gloss=":">ϫⲉ</w>
+          </phy>
+          <phy>
+            <w type="PDEM" lemma="ⲛⲁⲓ" gloss="these">ⲛⲁⲓ</w>
+          </phy>
+          <phy>
+            <w type="APST" lemma="ⲁ">ⲁ</w>
+            <w type="PPER" lemma="ϥ" gloss="he">ϥ</w>
+          </phy>
+          <phy></phy>
+          <phy>
+            <w type="UNKNOWN" lemma="ⲁⲣ" gloss="?">••••ⲁⲣ</w>
+          </phy>
+          <phy>
+            <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
+          </phy>
+          <phy>
+            <w type="ART" lemma="ⲡ" gloss="the">ⲡ</w>
+            <w type="X" lemma="ϯ" gloss="X">ϯ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛⲉ" gloss="X">ⲛⲉ</w>
+          </phy>
+          <phy>
+            <w type="CONJ" lemma="ⲏ" gloss="or" xml:lang="grc">ⲏ</w>
+          </phy>
+          <phy>
+            <w type="PREP" lemma="ⲙⲙⲟ">ⲙⲙⲟ</w>
+            <w type="PPER" lemma="ⲁⲛⲟⲛ" gloss="we">ⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲁⲛ">ⲁⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ϣⲟⲟⲡ">ϣⲟⲟⲡ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛⲁⲓ">ⲛⲁⲓ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-15" n="15" transJa="しかしすべて〔……〕それらを語った者〔……〕支配者——" transEn="But all [...] who told them [...] ruler," transGrc="">
+          <phy>
+            <w type="PTC" lemma="ⲁⲗⲗⲁ" gloss="but" xml:lang="grc">ⲁⲗⲗⲁ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲙ">ⲙ</w>
+            <w type="N" lemma="ⲧⲏⲣ" gloss="all">ⲧⲏⲣ</w>
+            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+          </phy>
+          <phy>
+            <w type="CREL" lemma="ⲉⲛⲧ" gloss="which">ⲉⲛⲧ</w>
+            <w type="APST" lemma="ⲁ">ⲁ</w>
+            <w type="X" lemma="ⲩ">ⲩ</w>
+            <w type="X" lemma="ϫⲟⲟⲩ">ϫⲟⲟⲩ</w>
+          </phy>
+          <phy>
+            <w type="NPROP" lemma="ⲁⲣⲭⲱⲛ" gloss="ruler" xml:lang="grc">ⲁⲣⲭⲱⲛ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-16" n="16" transJa="これらは今や自然の生き物となった—— キメラもケルベロスも、語られたその他すべてのものも。" transEn="these now have become natural creatures - even Chimaera and Cerberus and all the rest that were mentioned." transGrc="οἷαι δὲ μυθολογοῦνται παλαιαὶ γενέσθαι φύσεις, ἥ τε Χιμαίρας καὶ Σκύλλης καὶ Κερβέρου,">
+          <phy>
+            <w type="X" lemma="ⲛⲁⲓ">ⲛⲁⲓ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ϯ">ϯ</w>
+            <w type="X" lemma="ⲛⲟⲩ">ⲛⲟⲩ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛⲉⲛ">ⲛⲉⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲧⲁⲩ">ⲧⲁⲩ</w>
+            <w type="V" lemma="ϣⲱⲡⲉ" gloss="exist">ϣⲱⲡⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲙ</w>
+            <w type="N" lemma="ⲫⲩⲥⲓⲥ" gloss="creatures" xml:lang="grc">ⲫⲩⲥⲓⲥ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-17" n="17" transJa="それらはすべて降りてきて、形と像を脱ぎ捨てた。" transEn="They all came down and they cast off forms and images." transGrc="">
+          <phy>
+            <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲡ">ⲡ</w>
+            <w type="X" lemma="ⲭⲓⲙⲁⲣⲣⲁⲓⲥ" xml:lang="grc">ⲭⲓⲙⲁⲣⲣⲁⲓⲥ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲙⲛ">ⲙⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲡ">ⲡ</w>
+            <w type="X" lemma="ⲕⲉⲣⲃⲟⲩ" xml:lang="grc">ⲕⲉⲣⲃⲟⲩ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲙⲛ">ⲙⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲡ">ⲡ</w>
+            <w type="X" lemma="ⲕⲉⲥⲉⲉⲡⲉ">ⲕⲉⲥⲉⲉⲡⲉ</w>
+          </phy>
+          <phy>
+            <w type="N" lemma="ⲧⲏⲣ" gloss="all">ⲧⲏⲣ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲉ">ⲉ</w>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲧⲁ">ⲧⲁ</w>
+            <w type="X" lemma="ⲩ">ⲩ</w>
+            <w type="V" lemma="ϣⲁϫⲉ" gloss="speak">ϣⲁϫⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲉⲣⲟ">ⲉⲣⲟ</w>
+            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-18" n="18" transJa="そしてそれらはすべて一つの像となった。" transEn="And they all became a single image." transGrc="εἰς μίαν ἰδέαν συνελθεῖν.">
+          <phy>
+            <w type="X" lemma="ⲁ">ⲁ</w>
+            <w type="X" lemma="ⲩ">ⲩ</w>
+            <w type="X" lemma="ⲣ">ⲣ</w>
+            <w type="X" lemma="ⲕⲁⲧⲁⲛⲧⲁ" xml:lang="grc">ⲕⲁ</w>
+          </phy>
+          <phy>
+            <w type="N" lemma="ⲧⲏⲣ" gloss="all">ⲧⲏⲣ</w>
+            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+          </phy>
+          <phy>
+            <w type="APST" lemma="ⲁ">ⲁ</w>
+            <w type="X" lemma="ⲩ">ⲩ</w>
+            <w type="X" lemma="ϯ">ϯ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲟⲩⲱ">ⲟⲩⲱ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲉⲃⲟⲗ">ⲉⲃⲟⲗ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ϩⲉⲛ">ϩⲉⲛ</w>
+            <w type="X" lemma="ⲙⲟⲣⲫⲏ">ⲙⲟⲣⲫⲏ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲙⲛ">ⲙⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ϩⲉⲛ">ϩⲉⲛ</w>
+            <w type="X" lemma="ⲉⲓⲛⲉ">ⲉⲓⲛⲉ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-19" n="19" transJa="「今こそ働け！」と言われた。" transEn="It was said, 'Work now!'" transGrc="">
+          <phy>
+            <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
+          </phy>
+          <phy>
+            <w type="APST" lemma="ⲁ">ⲁ</w>
+            <w type="X" lemma="ⲩ">ⲩ</w>
+            <w type="V" lemma="ϣⲱⲡⲉ" gloss="exist">ϣⲱⲡⲉ</w>
+          </phy>
+          <phy>
+            <w type="N" lemma="ⲧⲏⲣ" gloss="all">ⲧⲏ</w>
+            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+            <w type="X" lemma="ⲉⲓⲛⲉ">ⲉⲓⲛⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲟⲩⲱⲧ">ⲟⲩⲱⲧ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-20" n="20" transJa="たしかにそれは一つの像であり、 多くの頭を持つ複雑な獣の像となったのだ。" transEn="Certainly it is a single image that became the image of a complex beast with many heads." transGrc="πλάττε τοίνυν μίαν μὲν ἰδέαν θηρίου ποικίλου καὶ πολυκεφάλου,">
+          <phy>
+            <w type="X" lemma="ⲉ">ⲉ</w>
+            <w type="X" lemma="ⲩ">ⲩ</w>
+            <w type="X" lemma="ϫⲱ">ϫⲱ</w>
+          </phy>
+          <phy>
+            <w type="PREP" lemma="ⲙⲙⲟ">ⲙⲙⲟ</w>
+            <w type="X" lemma="ⲥ">ⲥ</w>
+          </phy>
+          <phy>
+            <w type="CONJ" lemma="ϫⲉ" gloss=":">ϫⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲁⲣⲓ">ⲁⲣⲓ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ϩⲱⲃ">ϩⲱⲃ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲧⲉ">ⲧⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-21" n="21" transJa="ある日にはそれは野生の獣の像のようになる。" transEn="Some days indeed it is like the image of a wild beast." transGrc="ἡμέρων δὲ θηρίων ἔχοντος κεφαλὰς κύκλῳ καὶ ἀγρίων,">
+          <phy>
+            <w type="X" lemma="ⲟⲩⲉⲓⲛⲉ">ⲟⲩ</w>
+            <w type="X" lemma="ⲉⲓⲛⲉ">ⲉⲓⲛⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲙⲉⲛⲧⲟⲓⲅⲉ">ⲙⲉⲛⲧⲟⲓⲅⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ⲟⲩⲱⲧ">ⲟⲩⲱⲧ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲡⲉ">ⲡⲉ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-22" n="22" transJa="そのときそれは最初の像を脱ぎ捨てることができる。" transEn="Then it is able to cast off the first image." transGrc="καὶ δυνατοῦ μεταβάλλειν καὶ φύειν ἐξ αὑτοῦ πάντα ταῦτα.">
+          <phy>
+            <w type="X" lemma="ⲡⲁⲓ">ⲡⲁⲓ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛⲧⲁ">ⲛⲧⲁ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="V" lemma="ϣⲱⲡⲉ" gloss="exist">ϣⲱ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲙ">ⲙ</w>
+            <w type="X" lemma="ⲡⲓⲛⲉ">ⲡⲓⲛⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+            <w type="X" lemma="ⲑⲏⲣⲓⲟⲛ">ⲑⲏⲣⲓⲟⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲉ">ⲉ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="X" lemma="ϣⲃⲃⲓⲟⲉⲓⲧ">ϣⲃⲃⲓⲟⲉⲓⲧ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ϩⲛ">ϩⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+            <w type="X" lemma="ⲛⲟϭ">ⲛⲟϭ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛⲁⲡⲉ">ⲛⲁⲡⲉ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-23" n="23" transJa="そしてこれらすべての困難で厄介な形は、 苦労しながらそこから流れ出る—— なぜならこれらは今や傲慢さをもって形作られているからだ。" transEn="And all these hard and difficult forms emanate from it with effort, since these are formed now with arrogance." transGrc="">
+          <phy>
+            <w type="X" lemma="ϩⲉⲛ">ϩⲉⲛ</w>
+            <w type="X" lemma="ϩⲟⲟⲩ">ϩⲟⲟⲩ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲙⲉⲛ">ⲙⲉⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲉ">ⲉ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="X" lemma="ⲟ">ⲟ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ⲑ">ⲑ</w>
+            <w type="X" lemma="ⲉ">ⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲙ">ⲙ</w>
+            <w type="X" lemma="ⲡⲓⲛⲉ">ⲡⲓⲛⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+            <w type="X" lemma="ⲑⲏⲣⲓⲟⲛ">ⲑⲏⲣⲓⲟⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛⲁⲅⲣⲓⲟⲛ">ⲛⲁⲅⲣⲓⲟⲛ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-24" n="24" transJa="またそれらに似たその他すべても、 今や言葉によって形作られている。" transEn="And also all the rest that are like them are formed now through the word." transGrc="">
+          <phy>
+            <w type="X" lemma="ⲧⲟⲧⲉ">ⲧⲟⲧⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ϣⲁ">ϣⲁ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="X" lemma="ϭⲙϭⲟⲙ">ϭⲙϭⲟⲙ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ⲛⲟⲩϫⲉ">ⲛⲟⲩϫⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲉⲃⲟⲗ">ⲉⲃⲟⲗ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲙ">ⲙ</w>
+            <w type="X" lemma="ⲡⲓⲛⲉ">ⲡⲓⲛⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ϣⲟⲣⲡ">ϣⲟⲣⲡ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-25" n="25" transJa="なぜなら今それは一つの像だからである。" transEn="For now it is a single image." transGrc="">
+          <phy>
+            <w type="X" lemma="ⲛⲧⲉ">ⲛⲧⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛⲁⲓ">ⲛⲁⲓ</w>
+          </phy>
+          <phy>
+            <w type="N" lemma="ⲧⲏⲣ" gloss="all">ⲧⲏⲣ</w>
+            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛⲓ">ⲛⲓ</w>
+            <w type="X" lemma="ⲡⲗⲁⲥⲙⲁ">ⲡⲗⲁⲥⲙⲁ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲉⲧ">ⲉⲧ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛⲁϣⲧ">ⲛⲁϣⲧ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-26" n="26" transJa="なぜならライオンの像は一つのものであり、 人間の像は別のものだからである。" transEn="For the image of the lion is the one thing and the image of the man is another." transGrc="μίαν δὴ τοίνυν ἄλλην ἰδέαν λέοντος, μίαν δὲ ἀνθρώπου·">
+          <phy>
+            <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲉⲧ">ⲉⲧ</w>
+            <w type="X" lemma="ⲙⲟⲕϩ">ⲙⲟⲕϩ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ⲥⲉ">ⲥⲉ</w>
+            <w type="X" lemma="ϯ">ϯ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲟⲩⲱ">ⲟⲩⲱ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲉⲃⲟⲗ">ⲉⲃⲟⲗ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛϩⲏⲧ">ⲛϩⲏⲧ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ϩⲛ">ϩⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+            <w type="X" lemma="ⲉⲣⲅⲟⲛ">ⲉⲣⲅⲟⲛ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-27" n="27" transJa="〔……〕一つの〔……〕は〔……〕の〔……〕接合である。" transEn="[...] single [...] is the [...] of [...] join." transGrc="">
+          <phy>
+            <w type="CONJ" lemma="ⲉⲡⲓⲇⲏ" xml:lang="grc">ⲉⲡⲓⲇⲏ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ⲉⲧ">ⲉⲧ</w>
+            <w type="X" lemma="ⲟⲩⲣ">ⲟⲩⲣ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲡⲗⲁⲥⲥⲉ">ⲡⲗⲁⲥⲥⲉ</w>
+          </phy>
+          <phy>
+            <w type="PREP" lemma="ⲙⲙⲟ">ⲙⲙⲟ</w>
+            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ϯ">ϯ</w>
+            <w type="X" lemma="ⲛⲟⲩ">ⲛⲟⲩ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ϩⲛ">ϩⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲟⲩⲗⲁϩⲗⲉϩ">ⲟⲩⲗⲁϩⲗⲉϩ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-28" n="28" transJa="そしてこの〔……〕は最初のものよりずっと複雑である。 そして二番目のものは小さい。" transEn="And this [...] much more complex than the first. And the second is small." transGrc="πολὺ δὲ μέγιστον ἔστω τὸ πρῶτον καὶ δεύτερον τὸ δεύτερον.">
+          <phy>
+            <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲙⲛ">ⲙⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲡ">ⲡ</w>
+            <w type="X" lemma="ⲕⲉ">ⲕⲉ</w>
+            <w type="X" lemma="ⲥⲉⲉⲡⲉ">ⲥⲉⲉⲡⲉ</w>
+          </phy>
+          <phy>
+            <w type="N" lemma="ⲧⲏⲣ" gloss="all">ⲧⲏⲣ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲉⲧ">ⲉⲧ</w>
+            <w type="X" lemma="ⲧⲛ">ⲧⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲧⲱⲛ">ⲧⲱⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲉⲣⲟ">ⲉⲣⲟ</w>
+            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲉ">ⲉ</w>
+            <w type="X" lemma="ⲩ">ⲩ</w>
+            <w type="X" lemma="ⲣ">ⲣ</w>
+            <w type="X" lemma="ⲡⲗⲁⲥⲥⲉ">ⲡⲗⲁⲥⲥⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ϯ">ϯ</w>
+            <w type="X" lemma="ⲛⲟⲩ">ⲛⲟⲩ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ϩⲙ">ϩⲙ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲡ">ⲡ</w>
+            <w type="X" lemma="ϣⲁϫⲉ">ϣⲁϫⲉ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-29" n="29" transJa="「形作られた。」" transEn='"It has been formed."' transGrc="">
+          <phy>
+            <w type="X" lemma="ⲧⲉⲛⲟⲩ">ⲧⲉⲛⲟⲩ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲅⲁⲣ">ⲅⲁⲣ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲟⲩⲉⲓⲛⲉ">ⲟⲩⲉⲓⲛⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲟⲩⲱⲧ">ⲟⲩⲱⲧ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲡⲉ">ⲡⲉ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-30" n="30" transJa="「では今、それらを互いに結び合わせ 一つにしなさい——それらは三つだが—— 互いに生え合うように。" transEn='"Now then, join them to each other and make them a single one - for they are three - so that they grow together,' transGrc="σύναπτε τοίνυν αὐτὰ εἰς ἓν τρία ὄντα, ὥστε πῃ συμπεφυκέναι ἀλλήλοις.">
+          <phy>
+            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+            <w type="X" lemma="ⲉⲧ">ⲉⲧ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲡⲓⲛⲉ">ⲡⲓⲛⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲅⲁⲣ">ⲅⲁⲣ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲙⲡ">ⲙⲡ</w>
+            <w type="X" lemma="ⲙⲟⲩⲉⲓ">ⲙⲟⲩⲉⲓ</w>
+          </phy>
+          <phy>
+            <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲟⲩⲉⲧ">ⲟⲩⲉⲧ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲡⲓⲛⲉ">ⲡⲓⲛⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲙ">ⲙ</w>
+            <w type="X" lemma="ⲡ">ⲡ</w>
+            <w type="X" lemma="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</w>
+          </phy>
+          <gap reason="lacuna" unit="line" extent="unknown"/>
+          <phy>
+            <w type="X" lemma="ⲟⲩⲱⲧ">ⲟⲩⲱⲧ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲡⲉ">ⲡⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲡ">ⲡ</w>
+          </phy>
+          <gap reason="lacuna" unit="line" extent="unknown"/>
+          <phy>
+            <w type="X" lemma="ⲙ">ⲙ</w>
+          </phy>
+          <gap reason="lacuna" unit="line" extent="unknown"/>
+          <phy>
+            <w type="X" lemma="ⲧⲱϭⲉ">ⲧⲱϭⲉ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-31" n="31" transJa="そしてすべては人間の像の外側に単一の像として在り、" transEn="and all are in a single image outside of the image of the man" transGrc="περίπλασον δὴ αὐτοῖς ἔξωθεν ἑνὸς εἰκόνα, τὴν τοῦ ἀνθρώπου,">
+          <phy>
+            <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲡⲁⲓ">ⲡⲁⲓ</w>
+          </phy>
+          <gap reason="lacuna" unit="line" extent="unknown"/>
+          <phy>
+            <w type="X" lemma="ϣⲃⲃⲓⲁⲉⲓⲧ">ϣⲃⲃⲓⲁⲉⲓⲧ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲙ">ⲙ</w>
+            <w type="X" lemma="ⲡ">ⲡ</w>
+            <w type="X" lemma="ϣⲁ">ϣⲁ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ϩⲟⲩⲟ">ϩⲟⲩⲟ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲉ">ⲉ</w>
+            <w type="X" lemma="ⲡ">ⲡ</w>
+            <w type="X" lemma="ϣⲟⲣⲡ">ϣⲟⲣⲡ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-32" n="32" transJa="内側のものを見ることのできない者と同じように—— しかし彼が見るのは外側のものだけである。" transEn="just like him who is unable to see the things inside him. But what is outside only is what he sees." transGrc="ὥστε τῷ μὴ δυναμένῳ τὰ ἐντὸς ὁρᾶν, ἀλλὰ τὸ ἔξω μόνον ἔλυτρον ὁρῶντι,">
+          <phy>
+            <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲡ">ⲡ</w>
+            <w type="X" lemma="ⲙⲁϩ">ⲙⲁϩ</w>
+            <w type="X" lemma="ⲥⲛⲁⲩ">ⲥⲛⲁⲩ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲡⲉ">ⲡⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲟⲩϣⲙ">ⲟⲩϣⲙ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-33" n="33" transJa="彼の像がどの生き物の中にあるか、 また彼が人間の像に形作られたことが明らかである。" transEn="And it is apparent what creature his image is in and that he was formed in a human image." transGrc="ἓν ζῷον φαίνεσθαι, ἄνθρωπον.">
+          <phy>
+            <w type="X" lemma="ⲁ">ⲁ</w>
+            <w type="X" lemma="ⲩ">ⲩ</w>
+            <w type="X" lemma="ⲣ">ⲣ</w>
+            <w type="X" lemma="ⲡⲗⲁⲥⲥⲉ" xml:lang="grc">ⲡⲗⲁⲥⲥⲉ</w>
+          </phy>
+          <phy>
+            <w type="PREP" lemma="ⲙⲙⲟ">ⲙⲙⲟ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-34" n="34" transJa="「そして私は、人間にとって不正を行なうことに 利益があると言った者に語りかけた。" transEn='"And I spoke to him who said that there is profit in the doing of injustice for the man.' transGrc="λέγωμεν δὴ τῷ λέγοντι ὡς λυσιτελεῖ τούτῳ τῷ ἀνθρώπῳ ἀδικεῖν,">
+          <phy>
+            <w type="X" lemma="ⲧⲉⲛⲟⲩ">ⲧⲉⲛⲟⲩ</w>
+          </phy>
+          <phy>
+            <w type="PTC" lemma="ϭⲉ">ϭⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲧⲱϭⲉ">ⲧⲱϭⲉ</w>
+          </phy>
+          <phy>
+            <w type="PREP" lemma="ⲙⲙⲟ">ⲙⲙⲟ</w>
+            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲉ">ⲉ</w>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ⲉⲩ">ⲉⲩ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲉⲣⲏ">ⲉⲣⲏ</w>
+            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ⲧ">ⲧ</w>
+            <w type="X" lemma="ⲉⲧ">ⲉⲧ</w>
+            <w type="X" lemma="ⲛⲁ">ⲛⲁ</w>
+            <w type="X" lemma="ⲁⲩ">ⲁⲩ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ⲟⲩⲁ">ⲟⲩⲁ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ⲟⲩⲱⲧ">ⲟⲩⲱⲧ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-35" n="35" transJa="不正を行なう者は真に利益を得ない——" transEn="He who does injustice truly does not profit" transGrc="δικαιοπραγεῖν δὲ οὐ συμφέρειν.">
+          <phy>
+            <w type="X" lemma="ϣⲟⲙⲉⲧ">ϣⲟⲙⲉⲧ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲅⲁⲣ">ⲅⲁⲣ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛⲉ">ⲛⲉ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-36" n="36" transJa="また恩恵も受けない。" transEn="nor does he benefit." transGrc="">
+          <phy>
+            <w type="X" lemma="ϩⲱⲥ">ϩⲱⲥ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲧⲉ">ⲧⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ⲥⲉ">ⲥⲉ</w>
+            <w type="X" lemma="ϯ">ϯ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲟⲩⲱ">ⲟⲩⲱ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲙⲛ">ⲙⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛⲉⲩ">ⲛⲉⲩ</w>
+            <w type="X" lemma="ⲉⲣⲏⲩ">ⲉⲣⲏⲩ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ⲥⲉ">ⲥⲉ</w>
+            <w type="V" lemma="ϣⲱⲡⲉ" gloss="exist">ϣⲱⲡⲉ</w>
+          </phy>
+          <phy>
+            <w type="N" lemma="ⲧⲏⲣ" gloss="all">ⲧⲏⲣ</w>
+            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ϩⲛ">ϩⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲟⲩⲉⲓ">ⲟⲩⲉⲓ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛⲉ">ⲛⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲟⲩⲱⲧ">ⲟⲩⲱⲧ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲥⲁⲃⲟⲗ">ⲥⲁⲃⲟⲗ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ⲧ">ⲑ[ⲧ]</w>
+            <w type="X" lemma="ϩⲓⲕⲱⲛ">[ϩ]ⲓⲕⲱⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲙ">ⲙ</w>
+            <w type="X" lemma="ⲡ">ⲡ</w>
+            <w type="X" lemma="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-37" n="37" transJa="しかし彼にとって利益になるのはこれだ—— 悪しき獣のあらゆる像を踏み倒し、 それらを踏みにじること——" transEn="But what is profitable for him is this: that he cast down every image of the evil beast and trample them" transGrc="">
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ⲑⲉ">ⲑⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ϩⲱⲱ">ϩⲱⲱ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲙ</w>
+            <w type="X" lemma="ⲡⲉ">ⲡⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲧⲉ">ⲧⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲙⲛ">ⲙⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ϣ">ϣ</w>
+            <w type="X" lemma="ϭⲟⲙ">ϭⲟⲙ</w>
+          </phy>
+          <phy>
+            <w type="PREP" lemma="ⲙⲙⲟ">ⲙⲙⲟ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲉ">ⲉ</w>
+            <w type="X" lemma="ⲧⲣⲉ">ⲧⲣⲉ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="X" lemma="ⲛⲁⲩ">ⲛⲁⲩ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲉ">ⲉ</w>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ⲉⲧ">ⲉⲧ</w>
+            <w type="X" lemma="ⲙ">ⲙ</w>
+            <w type="X" lemma="ⲡⲉ">ⲡⲉ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="X" lemma="ϩⲟⲩⲛ">ϩⲟⲩⲛ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-38" n="38" transJa="ライオンの像とともに。" transEn="along with the images of the lion." transGrc="">
+          <phy>
+            <w type="X" lemma="ⲁⲗⲗⲁ">ⲁⲗⲗⲁ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲡⲉⲧ">ⲡⲉⲧ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ϩⲓⲃⲟⲗ">ϩⲓⲃⲟⲗ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲙ">ⲙ</w>
+            <w type="X" lemma="ⲙⲁⲧⲉ">ⲙⲁⲧⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲡ">ⲡ</w>
+            <w type="X" lemma="ⲉⲧ">ⲉⲧ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="X" lemma="ⲛⲁⲩ">ⲛⲁⲩ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲉⲣⲟ">ⲉⲣⲟ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-39" n="39" transJa="しかし人間はこの点で弱さの中にある。" transEn="But the man is in weakness in this regard." transGrc="">
+          <phy>
+            <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲉ">ⲉ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="X" lemma="ⲣ">ⲣ</w>
+            <w type="X" lemma="ⲫⲉⲛⲉⲥⲑⲁⲓ" xml:lang="grc">ⲫⲉⲛⲉⲥⲑⲁⲓ</w>
+          </phy>
+          <phy>
+            <w type="CONJ" lemma="ϫⲉ" gloss=":">ϫⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲉⲣⲉ">ⲉⲣⲉ</w>
+            <w type="X" lemma="ⲡⲉ">ⲡⲉ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="X" lemma="ⲉⲓⲛⲉ">ⲉⲓⲛⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ϩⲛ">ϩⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲁϣ">ⲁϣ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ⲍⲱⲟⲛ">ⲍⲱⲟⲛ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-40" n="40" transJa="そして彼のすることはすべて弱い。" transEn="And all the things that he does are weak." transGrc="">
+          <phy>
+            <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
+          </phy>
+          <phy>
+            <w type="CONJ" lemma="ϫⲉ" gloss=":">ϫⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛⲧⲁ">ⲛⲧⲁ</w>
+            <w type="X" lemma="ⲩ">ⲩ</w>
+            <w type="X" lemma="ⲣ">ⲣ</w>
+            <w type="X" lemma="ⲡⲗⲁⲥⲥⲉ" xml:lang="grc">ⲡⲗⲁⲥⲥⲉ</w>
+          </phy>
+          <phy>
+            <w type="PREP" lemma="ⲙⲙⲟ">ⲙⲙⲟ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ϩⲛ">ϩⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+            <w type="X" lemma="ⲉⲓⲛⲉ">ⲉⲓⲛⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-41" n="41" transJa="その結果、彼は自らが時を過ごす場所へと引きずられていく。" transEn="As a result he is drawn to the place where he spends time." transGrc="">
+          <phy>
+            <w type="X" lemma="ⲡⲉϫⲁ">ⲡⲉϫⲁ</w>
+            <w type="X" lemma="ⲉⲓ">ⲉⲓ</w>
+          </phy>
+          <phy>
+            <w type="PTC" lemma="ⲇⲉ" gloss="-" xml:lang="grc">ⲇⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲙ">ⲙ</w>
+            <w type="X" lemma="ⲡⲉ">ⲡⲉ</w>
+            <w type="X" lemma="ⲛⲧ">ⲛⲧ</w>
+            <w type="APST" lemma="ⲁ">ⲁ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="X" lemma="ϫⲟⲟ">ϫⲟⲟ</w>
+            <w type="X" lemma="ⲥ">ⲥ</w>
+          </phy>
+          <phy>
+            <w type="CONJ" lemma="ϫⲉ" gloss=":">ϫⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲥ">ⲥ</w>
+            <w type="X" lemma="ⲣ">ⲣ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛⲟϥ">ⲛⲟϥ</w>
+            <w type="X" lemma="ⲣⲉ">ⲣⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲙ">ⲙ</w>
+            <w type="X" lemma="ⲡ">ⲡ</w>
+            <w type="V" lemma="ϫⲓ" gloss="take">ϫⲓ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ϭⲟⲛⲥ">ϭⲟⲛⲥ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲙ">ⲙ</w>
+            <w type="X" lemma="ⲡ">ⲡ</w>
+            <w type="X" lemma="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-42" n="42" transJa="〔……〕。そして彼は〔……〕彼に〔……〕の中で。" transEn="[...]. And he [...] to him in [...]." transGrc="">
+          <phy>
+            <w type="X" lemma="ⲡ">ⲡ</w>
+            <w type="X" lemma="ⲉⲧ">ⲉⲧ</w>
+            <w type="V" lemma="ϫⲓ" gloss="take">ϫⲓ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ϭⲟⲛⲥ">ϭⲟⲛⲥ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛⲧⲟϥ">ⲛⲧⲟϥ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ⲧ">ⲧ</w>
+            <w type="X" lemma="ⲙⲏⲧⲉ">ⲙⲏⲧⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲥ">ⲥ</w>
+            <w type="X" lemma="ⲣ">ⲣ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛⲟϥⲣⲉ">ⲛⲟϥⲣⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛⲁ">ⲛⲁ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲁⲛ">ⲁⲛ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-43" n="43" transJa="しかし彼は〔……〕敵意〔……〕をもたらす。" transEn="But he brings about [...] enmity [...]." transGrc="">
+          <phy>
+            <w type="X" lemma="ⲟⲩⲧⲉ">ⲟⲩⲧⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲙⲛ">ⲙⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲧⲁ">ⲧⲁ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲟⲫⲉⲗⲉⲓⲁ" xml:lang="grc">ⲟⲫⲉⲗⲉⲓⲁ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲙ">ⲙ</w>
+            <w type="X" lemma="ⲙⲁⲩ">ⲙⲁⲩ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-44" n="44" transJa="そして争いの中で彼らは互いに食い合う。" transEn="And with strife they devour each other among themselves." transGrc="">
+          <phy>
+            <w type="X" lemma="ⲁⲗⲗⲁ">ⲁⲗⲗⲁ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲡ">ⲡ</w>
+            <w type="X" lemma="ⲉⲧ">ⲉⲧ</w>
+            <w type="X" lemma="ⲣ">ⲣ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛⲟϥⲣⲉ">ⲛⲟϥⲣⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛⲁ">ⲛⲁ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲡⲉ">ⲡⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲡⲁⲓ">ⲡⲁⲓ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲉ">ⲉ</w>
+            <w type="X" lemma="ⲧⲣⲉ">ⲧⲣⲉ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲧⲉⲩⲟ">ⲧⲉⲩⲟ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲉϩⲣⲁⲓ">ⲉϩⲣⲁⲓ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲙ</w>
+            <w type="X" lemma="ⲡⲓⲛⲉ">ⲡⲓⲛⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛⲓⲙ">ⲛⲓⲙ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ⲑⲏⲣⲓⲟⲛ" xml:lang="grc">ⲑⲏ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲉⲧ">ⲉⲧ</w>
+            <w type="X" lemma="ⲑⲟⲟⲩ">ⲑⲟⲟⲩ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-45" n="45" transJa="「そうだ、彼は不正を行なうことを讃えるすべての者に これらのことをすべて語ったのだ。」" transEn='Yes, all these things he said to everyone who praises the doing of injustice."' transGrc="">
+          <phy>
+            <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="X" lemma="ϩⲟ">ϩⲟ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲙⲟⲩ">ⲙⲟⲩ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲙⲛ">ⲙⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ⲉⲓⲛⲉ">ⲉⲓⲛⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲙ</w>
+            <w type="X" lemma="ⲡ">ⲡ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲙⲟⲩⲉⲓ">ⲙⲟⲩⲉⲓ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-46" n="46" transJa="「では正義を語る者には利益にならないのか？」" transEn='"Then is it not profitable for him who speaks justly?"' transGrc="">
+          <phy>
+            <w type="X" lemma="ⲡ">ⲡ</w>
+            <w type="X" lemma="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</w>
+          </phy>
+          <phy>
+            <w type="PTC" lemma="ⲇⲉ" gloss="-" xml:lang="grc">ⲇⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="X" lemma="ϩⲛ">ϩⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+            <w type="X" lemma="ⲙⲛⲧ">ⲙⲛⲧ</w>
+            <w type="X" lemma="ϭⲱⲃ">ϭⲱⲃ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛⲧⲉ">ⲛⲧⲉ</w>
+            <w type="X" lemma="ⲉⲓⲙⲓⲛⲉ">ⲉⲓⲙⲓⲛⲉ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-47" n="47" transJa="「そして彼がこれらのことをなし、これらのことの中で語るならば、 人間の内側でそれらはしっかりと根を張る。" transEn="And if he does these things and speaks in them, within the man they take hold firmly." transGrc="">
+          <phy>
+            <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ⲉⲧ">ⲉⲧ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛⲁ">ⲛⲁ</w>
+            <w type="X" lemma="ⲁⲁ">ⲁⲁ</w>
+            <w type="X" lemma="ⲩ">ⲩ</w>
+          </phy>
+          <phy>
+            <w type="N" lemma="ⲧⲏⲣ" gloss="all">ⲧⲏⲣ</w>
+            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ϩⲉⲛ">ϩⲉⲛ</w>
+            <w type="X" lemma="ϭⲱⲃ">ϭⲱⲃ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛⲉ">ⲛⲉ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-48" n="48" transJa="それゆえとりわけ彼はそれらの世話をしようと努める——" transEn="Therefore especially he strives to take care of them" transGrc="">
+          <phy>
+            <w type="X" lemma="ϩⲱⲥⲧⲉ" xml:lang="grc">ϩⲱⲥⲧⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ⲥⲉ">ⲥⲉ</w>
+            <w type="X" lemma="ⲥⲱⲕ">ⲥⲱⲕ</w>
+          </phy>
+          <phy>
+            <w type="PREP" lemma="ⲙⲙⲟ">ⲙⲙⲟ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲉ">ⲉ</w>
+            <w type="X" lemma="ⲡ">ⲡ</w>
+            <w type="N" lemma="ⲙⲁ" gloss="place">ⲙⲁ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲉⲧ">ⲉⲧ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="X" lemma="ⲣ">ⲣ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ϩⲟⲟⲩ">ϩⲟⲟⲩ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲉⲣⲟ">ⲉⲣⲟ</w>
+            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ϣⲟ">ϣⲟ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲣ">ⲣ</w>
+            <w type="X" lemma="ⲡ">ⲡ</w>
+          </phy>
+          <phy>
+            <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+          </phy>
+          <gap reason="lacuna" unit="line" extent="unknown"/>
+          <phy>
+            <w type="X" lemma="ⲛⲏⲑⲉⲓⲁ">ⲛⲏⲑⲉⲓⲁ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛⲁ">ⲛⲁ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ϩⲛ">ϩⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲟⲩⲉⲡⲓⲥ">ⲟⲩⲉⲡⲓⲥ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲁⲗⲗⲁ">ⲁⲗⲗⲁ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲉ">ⲉ</w>
+            <w type="X" lemma="ϣⲁ">ϣⲁ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="X" lemma="ⲉⲓⲣⲉ">ⲉⲓⲣⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ⲃⲉ">ⲃⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲙ</w>
+            <w type="X" lemma="ⲙⲛⲧ">ⲙⲛⲧ</w>
+            <w type="X" lemma="ϫⲁϫⲉ">ϫⲁϫⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ϩⲣⲁⲓ">ϩⲣⲁⲓ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛϩ">ⲛϩ</w>
+          </phy>
+          <phy>
+            <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲙⲛ">ⲙⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+            <w type="X" lemma="ⲙⲓϣⲉ">ⲙⲓϣⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲉⲩ">ⲉⲩ</w>
+            <w type="X" lemma="ⲟⲩⲱⲙ">ⲟⲩ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-49" n="49" transJa="そして農夫が毎日その産物を養うように 彼はそれらを養う。" transEn="and he nourishes them just like the farmer nourishes his produce daily." transGrc="ὥσπερ γεωργὸς τὰ μὲν ἥμερα τρέφων καὶ τιθασεύων,">
+          <phy>
+            <w type="X" lemma="ⲙⲛ">ⲙⲛ</w>
+            <w type="X" lemma="ⲛⲉ">ⲛⲉ</w>
+            <w type="X" lemma="ⲩⲉⲣⲏⲟⲩ">ⲩⲉⲣⲏⲟⲩ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ϩⲣⲁⲓ">ϩⲣⲁⲓ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ϩⲏⲧ">ϩⲏⲧ</w>
+            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-50" n="50" transJa="そして野生の獣はそれが育つのを妨げる。" transEn="And the wild beasts keep it from growing." transGrc="τὰ δὲ ἄγρια ἀποκωλύων φύεσθαι.">
+          <phy>
+            <w type="X" lemma="ⲛⲁⲓ">ⲛⲁⲓ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲅⲁⲣ">ⲅⲁⲣ</w>
+          </phy>
+          <phy>
+            <w type="N" lemma="ⲧⲏⲣ" gloss="all">ⲧⲏⲣ</w>
+            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+          </phy>
+          <phy>
+            <w type="APST" lemma="ⲁ">ⲁ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="X" lemma="ϫⲟⲟⲩ">ϫⲟⲟⲩ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ⲟⲩⲟⲛ">ⲟⲩⲟⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛⲓⲙ">ⲛⲓⲙ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲉⲧ">ⲉⲧ</w>
+            <w type="X" lemma="ⲣ">ⲣ</w>
+            <w type="X" lemma="ⲉⲡⲁⲓⲛⲟⲩ">ⲉⲡⲁⲓⲛⲟⲩ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲙ">ⲙ</w>
+            <w type="X" lemma="ⲡ">ⲡ</w>
+            <w type="V" lemma="ϫⲓ" gloss="take">ϫⲓ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ϭⲟⲛⲥ">ϭⲟⲛⲥ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-51" n="51" transJa="「では、正義を語る者には利益にならないのか？」" transEn='"Then is it not profitable for him who speaks justly?"' transGrc="">
+          <phy>
+            <w type="X" lemma="ⲟⲩⲕⲟⲩⲛ" xml:lang="grc">ⲟⲩⲕⲟⲩⲛ</w>
+          </phy>
+          <phy>
+            <w type="PTC" lemma="ϭⲉ">ϭⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲡ">ⲡ</w>
+            <w type="X" lemma="ⲉⲧ">ⲉⲧ</w>
+            <w type="V" lemma="ϣⲁϫⲉ" gloss="speak">ϣⲁϫⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ϩⲱⲱ">ϩⲱⲱ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ϩⲛ">ϩⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+            <w type="X" lemma="ⲇⲓⲕⲁⲓⲟⲛ" xml:lang="grc">ⲇⲓⲕⲁⲓⲟⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲥ">ⲥ</w>
+            <w type="X" lemma="ⲣ">ⲣ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛⲟϥⲣⲉ">ⲛⲟϥⲣⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛⲁϥ">ⲛⲁϥ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-52" n="52" transJa="そして彼がこれらのことをなし、これらのことの中で語るならば、 人間の内側でそれらはしっかりと根を張る。" transEn="And if he does these things and speaks in them, within the man they take hold firmly." transGrc="">
+          <phy>
+            <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲉϥϣⲁⲛ">ⲉϥϣⲁⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲉⲓⲣⲉ">ⲉⲓⲣⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ⲛⲁⲓ">ⲛⲁⲓ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="V" lemma="ϣⲁϫⲉ" gloss="speak">ϣⲁϫⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ϩⲏⲧ">ϩⲏⲧ</w>
+            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲙ</w>
+            <w type="X" lemma="ⲫⲟⲩⲛ">ⲫⲟⲩⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲙ</w>
+            <w type="X" lemma="ⲡ">ⲡ</w>
+            <w type="X" lemma="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲥⲉⲁ">ⲥⲉⲁ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲙⲁϩⲧⲉ">ⲙⲁϩⲧⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ϩⲛ">ϩⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲟⲩⲧⲁϫⲣⲟ">ⲟⲩⲧⲁϫⲣⲟ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-53" n="53" transJa="それゆえとりわけ彼はそれらの世話をしようと努め、 農夫が毎日その産物を養うように 彼はそれらを養う。" transEn="Therefore especially he strives to take care of them and he nourishes them just like the farmer nourishes his produce daily." transGrc="ὥσπερ γεωργὸς τὰ μὲν ἥμερα τρέφων καὶ τιθασεύων,">
+          <phy>
+            <w type="X" lemma="ⲉⲧⲃⲉ">ⲉⲧⲃⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲡⲁⲓ">ⲡⲁⲓ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ϩⲟⲩⲟ">ϩⲟⲩⲟ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ϣⲁ">ϣⲁ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="X" lemma="ϣⲓⲛⲉ">ϣⲓⲛⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ⲥⲁ">ⲥⲁ</w>
+            <w type="X" lemma="ϥⲓ">ϥⲓ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲡⲉⲩ">ⲡⲉⲩ</w>
+            <w type="X" lemma="ⲣⲟⲟⲩϣ">ⲣⲟⲟⲩϣ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="X" lemma="ⲥⲁⲛⲟⲩ">ⲥⲁⲛⲟⲩ</w>
+            <w type="X" lemma="ϣⲟⲩ">ϣⲟⲩ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-54" n="54" transJa="農夫が毎日その産物を養うように。" transEn="like the farmer who nourishes his produce daily." transGrc="">
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ⲑⲉ">ⲑⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ϩⲱⲱ">ϩⲱⲱ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲙ</w>
+            <w type="X" lemma="ⲡ">ⲡ</w>
+            <w type="X" lemma="ⲅⲉⲱⲣⲅⲟⲥ" xml:lang="grc">ⲅⲉ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲉ">ⲉ</w>
+            <w type="X" lemma="ϣⲁ">ϣⲁ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="X" lemma="ⲥⲁⲁⲛϣ">ⲥⲁⲁⲛϣ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲙ</w>
+            <w type="X" lemma="ⲡⲉϥ">ⲡⲉϥ</w>
+            <w type="X" lemma="ⲅⲉⲛⲏⲙⲁ" xml:lang="grc">ⲅⲉⲛⲏⲙⲁ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲙ</w>
+            <w type="X" lemma="ⲙⲏⲛⲉ">ⲙⲏⲛⲉ</w>
+          </phy>
+        </s>
+        <s xml:id="rep-55" n="55" transJa="そして野生の獣はそれが育つのを妨げる。" transEn="And the wild beasts keep it from growing." transGrc="τὰ δὲ ἄγρια ἀποκωλύων φύεσθαι.">
+          <phy>
+            <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ⲧⲉ">ⲧⲉ</w>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ⲑⲏⲣⲓⲟⲛ" xml:lang="grc">ⲑⲏⲣⲓⲟⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="X" lemma="ⲁⲅⲣⲓⲟⲛ" xml:lang="grc">ⲁⲅⲣⲓⲟⲛ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲣ">ⲣ</w>
+            <w type="X" lemma="ⲕⲱⲗⲩⲉ" xml:lang="grc">ⲕⲱⲗⲩⲉ</w>
+          </phy>
+          <phy>
+            <w type="PREP" lemma="ⲙⲙⲟ=">ⲙⲙⲟ=</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+          </phy>
+          <phy>
+            <w type="X" lemma="ⲉ">ⲉ</w>
+            <w type="X" lemma="ⲧⲣⲉ">ⲧⲣⲉ</w>
+            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="X" lemma="ⲣⲱⲧ">ⲣⲱⲧ</w>
+          </phy>
+        </s>
       </div>
     </body>
   </text>
+</TEI></script>
+<script type="application/xml" id="rep-lex"><?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="cop">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt><title xml:lang="en">Plato Republic (NHC VI,5) — Coptic lexicon / dictionary links</title>
+        <title xml:lang="ja">プラトン『国家』(NHC VI,5) コプト語辞書リンク</title></titleStmt>
+      <publicationStmt><authority>Nag Hammadi Library digital corpus</authority>
+        <availability><licence target="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</licence></availability></publicationStmt>
+      <sourceDesc><p xml:lang="ja">本文ファイル <ref target="republic_tei.xml">republic_tei.xml</ref> の補助辞書。
+        各 &lt;entry&gt; は (lemma + 品詞) をキーに、Coptic Dictionary Online への &lt;ref&gt; を保持します。
+        本文 &lt;w&gt; からは ref を分離し、ビュワーが lemma+pos でここを参照します。</p></sourceDesc>
+    </fileDesc>
+  </teiHeader>
+  <text><body>
+    <div type="lexicon">
+      <head xml:lang="ja">辞書リンク（lemma + 品詞 → Coptic Dictionary）</head>
+      <list type="gloss">
+        <entry xml:id="rl-1"><form type="lemma"><orth>ⲉⲡⲓⲇⲏ</orth></form><gramGrp><pos>CONJ</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C8985"/></xr><gloss xml:lang="en">since</gloss></entry>
+        <entry xml:id="rl-2"><form type="lemma"><orth>ⲁⲛⲟⲛ</orth></form><gramGrp><pos>PPERI</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C142"/></xr><gloss xml:lang="en">we</gloss></entry>
+        <entry xml:id="rl-3"><form type="lemma"><orth>ⲁ</orth></form><gramGrp><pos>APST</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C2"/></xr></entry>
+        <entry xml:id="rl-4"><form type="lemma"><orth>ⲁⲛⲟⲛ</orth></form><gramGrp><pos>PPER</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C142"/></xr><gloss xml:lang="en">we</gloss></entry>
+        <entry xml:id="rl-5"><form type="lemma"><orth>ϣⲱⲡⲉ</orth></form><gramGrp><pos>V</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C5995"/></xr><gloss xml:lang="en">exist</gloss></entry>
+        <entry xml:id="rl-6"><form type="lemma"><orth>ⲛ</orth></form><gramGrp><pos>PREP</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C2349"/></xr></entry>
+        <entry xml:id="rl-7"><form type="lemma"><orth>ⲟⲩ</orth></form><gramGrp><pos>ART</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C4880"/></xr><gloss xml:lang="en">a</gloss></entry>
+        <entry xml:id="rl-8"><form type="lemma"><orth>ⲗⲟⲅⲟⲥ</orth></form><gramGrp><pos>N</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C9651"/></xr><gloss xml:lang="en">discussion</gloss></entry>
+        <entry xml:id="rl-9"><form type="lemma"><orth>ⲡ</orth></form><gramGrp><pos>ART</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C2783"/></xr><gloss xml:lang="en">the</gloss></entry>
+        <entry xml:id="rl-10"><form type="lemma"><orth>ⲙⲁ</orth></form><gramGrp><pos>N</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C1771"/></xr><gloss xml:lang="en">part</gloss></entry>
+        <entry xml:id="rl-11"><form type="lemma"><orth>ⲙⲁⲣⲉ</orth></form><gramGrp><pos>AOPT</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C2004"/></xr></entry>
+        <entry xml:id="rl-12"><form type="lemma"><orth>ϫⲓ</orth></form><gramGrp><pos>V</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C7058"/></xr><gloss xml:lang="en">take</gloss></entry>
+        <entry xml:id="rl-13"><form type="lemma"><orth>ϭⲉ</orth></form><gramGrp><pos>PTC</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C7550"/></xr></entry>
+        <entry xml:id="rl-14"><form type="lemma"><orth>ⲛⲁ</orth></form><gramGrp><pos>PREP</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C2350"/></xr></entry>
+        <entry xml:id="rl-15"><form type="lemma"><orth>ⲛ</orth></form><gramGrp><pos>PPER</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C11279"/></xr><gloss xml:lang="en">us</gloss></entry>
+        <entry xml:id="rl-16"><form type="lemma"><orth>ⲛ</orth></form><gramGrp><pos>ART</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C2352"/></xr><gloss xml:lang="en">the</gloss></entry>
+        <entry xml:id="rl-17"><form type="lemma"><orth>ϣⲟⲣⲡ</orth></form><gramGrp><pos>N</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C6058"/></xr><gloss xml:lang="en">first</gloss></entry>
+        <entry xml:id="rl-18"><form type="lemma"><orth>ⲉⲛⲧ</orth></form><gramGrp><pos>CREL</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C681"/></xr><gloss xml:lang="en">which</gloss></entry>
+        <entry xml:id="rl-19"><form type="lemma"><orth>ⲛⲧⲟⲟⲩ</orth></form><gramGrp><pos>PPER</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C2566"/></xr><gloss xml:lang="en">they</gloss></entry>
+        <entry xml:id="rl-20"><form type="lemma"><orth>ⲁⲩⲱ</orth></form><gramGrp><pos>PTC</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C240"/></xr><gloss xml:lang="en">and</gloss></entry>
+        <entry xml:id="rl-21"><form type="lemma"><orth>ⲧⲛ</orth></form><gramGrp><pos>PPER</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C4335"/></xr><gloss xml:lang="en">we</gloss></entry>
+        <entry xml:id="rl-22"><form type="lemma"><orth>ⲛⲁ</orth></form><gramGrp><pos>FUT</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C2381"/></xr></entry>
+        <entry xml:id="rl-23"><form type="lemma"><orth>ϭⲓⲛⲉ</orth></form><gramGrp><pos>V</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C7750"/></xr><gloss xml:lang="en">find</gloss></entry>
+        <entry xml:id="rl-24"><form type="lemma"><orth>ⲙⲙⲟ</orth></form><gramGrp><pos>PREP</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C2349"/></xr></entry>
+        <entry xml:id="rl-25"><form type="lemma"><orth>ⲥ</orth></form><gramGrp><pos>PPER</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C3262"/></xr><gloss xml:lang="en">it</gloss></entry>
+        <entry xml:id="rl-26"><form type="lemma"><orth>ⲉ</orth></form><gramGrp><pos>CREL</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C616"/></xr></entry>
+        <entry xml:id="rl-27"><form type="lemma"><orth>ϥ</orth></form><gramGrp><pos>PPER</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C11282"/></xr><gloss xml:lang="en">he</gloss></entry>
+        <entry xml:id="rl-28"><form type="lemma"><orth>ϫⲱ</orth></form><gramGrp><pos>V</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C7058"/></xr><gloss xml:lang="en">say</gloss></entry>
+        <entry xml:id="rl-29"><form type="lemma"><orth>ϫⲉ</orth></form><gramGrp><pos>CONJ</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C7055"/></xr><gloss xml:lang="en">:</gloss></entry>
+        <entry xml:id="rl-30"><form type="lemma"><orth>ⲛⲁⲛⲟⲩ</orth></form><gramGrp><pos>V</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C2491"/></xr><gloss xml:lang="en">be good</gloss></entry>
+        <entry xml:id="rl-31"><form type="lemma"><orth>ⲉⲛⲧ</orth></form><gramGrp><pos>PPER</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C2349"/></xr><gloss xml:lang="en">it</gloss></entry>
+        <entry xml:id="rl-32"><form type="lemma"><orth>ϭⲟⲛⲥ</orth></form><gramGrp><pos>N</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C7775"/></xr><gloss xml:lang="en">injustice</gloss></entry>
+        <entry xml:id="rl-33"><form type="lemma"><orth>ⲧⲉⲗⲉⲱⲥ</orth></form><gramGrp><pos>ADV</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C10709"/></xr><gloss xml:lang="en">completely</gloss></entry>
+        <entry xml:id="rl-34"><form type="lemma"><orth>ϣⲁⲣⲉ</orth></form><gramGrp><pos>A</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C6025"/></xr><gloss xml:lang="en">(habit)</gloss></entry>
+        <entry xml:id="rl-35"><form type="lemma"><orth>ⲉⲟⲟⲩ</orth></form><gramGrp><pos>N</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C749"/></xr><gloss xml:lang="en">honour</gloss></entry>
+        <entry xml:id="rl-36"><form type="lemma"><orth>ⲇⲓⲕⲁⲓⲱⲥ</orth></form><gramGrp><pos>ADV</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C8785"/></xr><gloss xml:lang="en">justly</gloss></entry>
+        <entry xml:id="rl-37"><form type="lemma"><orth>ⲙⲏ</orth></form><gramGrp><pos>PTC</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C9789"/></xr><gloss xml:lang="en">not</gloss></entry>
+        <entry xml:id="rl-38"><form type="lemma"><orth>ⲛ</orth></form><gramGrp><pos>NEG</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C2351"/></xr></entry>
+        <entry xml:id="rl-39"><form type="lemma"><orth>ⲧⲁⲓ</orth></form><gramGrp><pos>PDEM</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C4150"/></xr><gloss xml:lang="en">this</gloss></entry>
+        <entry xml:id="rl-40"><form type="lemma"><orth>ⲁⲛ</orth></form><gramGrp><pos>NEG</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C2351"/></xr></entry>
+        <entry xml:id="rl-41"><form type="lemma"><orth>ⲧⲉ</orth></form><gramGrp><pos>COP</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C4007"/></xr></entry>
+        <entry xml:id="rl-42"><form type="lemma"><orth>ⲧ</orth></form><gramGrp><pos>ART</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C4003"/></xr><gloss xml:lang="en">the</gloss></entry>
+        <entry xml:id="rl-43"><form type="lemma"><orth>ϩⲉ</orth></form><gramGrp><pos>N</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C6360"/></xr><gloss xml:lang="en">manner</gloss></entry>
+        <entry xml:id="rl-44"><form type="lemma"><orth>ϫⲡⲓⲟ</orth></form><gramGrp><pos>V</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C7295"/></xr><gloss xml:lang="en">blame</gloss></entry>
+        <entry xml:id="rl-45"><form type="lemma"><orth>ⲉ</orth></form><gramGrp><pos>PREP</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C615"/></xr></entry>
+        <entry xml:id="rl-46"><form type="lemma"><orth>ⲧⲉ</orth></form><gramGrp><pos>ART</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C4003"/></xr><gloss xml:lang="en">the</gloss></entry>
+        <entry xml:id="rl-47"><form type="lemma"><orth>ϣϣⲉ</orth></form><gramGrp><pos>V</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C6178"/></xr><gloss xml:lang="en">it is fitting</gloss></entry>
+        <entry xml:id="rl-48"><form type="lemma"><orth>ⲡⲉϫⲁ</orth></form><gramGrp><pos>VBD</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C3017"/></xr><gloss xml:lang="en">say</gloss></entry>
+        <entry xml:id="rl-49"><form type="lemma"><orth>ⲓ</orth></form><gramGrp><pos>PPER</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C11278"/></xr><gloss xml:lang="en">I</gloss></entry>
+        <entry xml:id="rl-50"><form type="lemma"><orth>ⲇⲉ</orth></form><gramGrp><pos>PTC</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C8719"/></xr><gloss xml:lang="en">-</gloss></entry>
+        <entry xml:id="rl-51"><form type="lemma"><orth>ⲟⲩⲛ</orth></form><gramGrp><pos>PTC</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C9965"/></xr><gloss xml:lang="en">then</gloss></entry>
+        <entry xml:id="rl-52"><form type="lemma"><orth>ϣⲁϫⲉ</orth></form><gramGrp><pos>V</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C6216"/></xr><gloss xml:lang="en">speak</gloss></entry>
+        <entry xml:id="rl-53"><form type="lemma"><orth>ⲙⲛ</orth></form><gramGrp><pos>CONJ</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C1902"/></xr><gloss xml:lang="en">and</gloss></entry>
+        <entry xml:id="rl-54"><form type="lemma"><orth>ⲇⲓⲕⲁⲓⲟⲛ</orth></form><gramGrp><pos>N</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C8781"/></xr><gloss xml:lang="en">justice</gloss></entry>
+        <entry xml:id="rl-55"><form type="lemma"><orth>ⲟⲩⲁ</orth></form><gramGrp><pos>N</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C4895"/></xr><gloss xml:lang="en">one</gloss></entry>
+        <entry xml:id="rl-56"><form type="lemma"><orth>ⲟⲩⲛⲧⲉ</orth></form><gramGrp><pos>EXIST</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C5039"/></xr><gloss xml:lang="en">have</gloss></entry>
+        <entry xml:id="rl-57"><form type="lemma"><orth>ϭⲟⲙ</orth></form><gramGrp><pos>N</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C7706"/></xr><gloss xml:lang="en">force</gloss></entry>
+        <entry xml:id="rl-58"><form type="lemma"><orth>ⲁϣ</orth></form><gramGrp><pos>PINT</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C251"/></xr><gloss xml:lang="en">whatever</gloss></entry>
+        <entry xml:id="rl-59"><form type="lemma"><orth>ϩⲓⲕⲱⲛ</orth></form><gramGrp><pos>N</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C11130"/></xr><gloss xml:lang="en">image</gloss></entry>
+        <entry xml:id="rl-60"><form type="lemma"><orth>ⲉ</orth></form><gramGrp><pos>CFOC</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C618"/></xr></entry>
+        <entry xml:id="rl-61"><form type="lemma"><orth>ⲙⲛⲧⲉ</orth></form><gramGrp><pos>PTC</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C1891"/></xr><gloss xml:lang="en">not to have</gloss></entry>
+        <entry xml:id="rl-62"><form type="lemma"><orth>ⲉⲓⲛⲉ</orth></form><gramGrp><pos>N</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C929"/></xr><gloss xml:lang="en">likeness</gloss></entry>
+        <entry xml:id="rl-63"><form type="lemma"><orth>ⲡⲉ</orth></form><gramGrp><pos>COP</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C2788"/></xr></entry>
+        <entry xml:id="rl-64"><form type="lemma"><orth>ⲯⲩⲭⲏ</orth></form><gramGrp><pos>N</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C11031"/></xr><gloss xml:lang="en">soul</gloss></entry>
+        <entry xml:id="rl-65"><form type="lemma"><orth>ϫⲉⲕⲁⲁⲥ</orth></form><gramGrp><pos>CONJ</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C7142"/></xr><gloss xml:lang="en">so that</gloss></entry>
+        <entry xml:id="rl-66"><form type="lemma"><orth>ⲉⲓⲙⲉ</orth></form><gramGrp><pos>V</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C897"/></xr><gloss xml:lang="en">understand</gloss></entry>
+        <entry xml:id="rl-67"><form type="lemma"><orth>ⲛϭⲓ</orth></form><gramGrp><pos>PTC</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C2723"/></xr><gloss xml:lang="en">namely</gloss></entry>
+        <entry xml:id="rl-68"><form type="lemma"><orth>ⲡⲉ</orth></form><gramGrp><pos>ART</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C2783"/></xr><gloss xml:lang="en">the</gloss></entry>
+        <entry xml:id="rl-69"><form type="lemma"><orth>ⲛⲁⲓ</orth></form><gramGrp><pos>PDEM</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C2445"/></xr><gloss xml:lang="en">these</gloss></entry>
+        <entry xml:id="rl-70"><form type="lemma"><orth>ⲏ</orth></form><gramGrp><pos>CONJ</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C9131"/></xr><gloss xml:lang="en">or</gloss></entry>
+        <entry xml:id="rl-71"><form type="lemma"><orth>ⲙⲙⲟ=</orth></form><gramGrp><pos>PREP</pos></gramGrp><xr type="dict"><ref target="https://coptic-dictionary.org/entry.py?tla=C2349"/></xr></entry>
+      </list>
+    </div>
+  </body></text>
 </TEI>
 </script>
 <script>
@@ -314,15 +1901,20 @@ COP:["繋辞","copula"],PFX:["接頭辞","prefix"],POSS:["所有冠詞","possess
 PINT:["疑問詞","interrogative"],FM:["外来語句","foreign material"],INTERJ:["間投詞","interjection"],UNKNOWN:["不明","unknown"],X:["未注","unglossed"]};
 function gx(el,a){return el.getAttributeNS(NS_X,a)||el.getAttribute("xml:"+a)||"";}
 function esc(s){return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));}
-let SEGS=[];
+let SEGS=[],LEX=new Map();
+function parseLex(xml){const m=new Map();
+  Array.from(xml.getElementsByTagNameNS(NS_T,"entry")).forEach(e=>{
+    const o=e.getElementsByTagNameNS(NS_T,"orth")[0],pe=e.getElementsByTagNameNS(NS_T,"pos")[0],re=e.getElementsByTagNameNS(NS_T,"ref")[0];
+    if(!o||!re)return;const lemma=(o.textContent||"").trim(),pos=pe?(pe.textContent||"").trim():"",url=re.getAttribute("target")||"";
+    if(!url)return;m.set(lemma+"|"+pos,url);if(!m.has(lemma))m.set(lemma,url);});
+  return m;}
 function parse(xml){
-  const ss=Array.from(xml.getElementsByTagNameNS(NS_T,"s"));
-  return ss.map(s=>{
+  return Array.from(xml.getElementsByTagNameNS(NS_T,"s")).map(s=>{
     const wEls=Array.from(s.getElementsByTagNameNS(NS_T,"w"));
     const words=wEls.map(w=>({form:(w.textContent||"").trim(),lemma:w.getAttribute("lemma")||"",
       pos:w.getAttribute("type")||"X",gloss:w.getAttribute("gloss")||"",
       grc:(gx(w,"lang")==="grc"||w.getAttribute("lang")==="grc"),ref:w.getAttribute("ref")||""}));
-    const groups=[]; let curPhy=null,cur=null;
+    const groups=[];let curPhy=null,cur=null;
     wEls.forEach((w,idx)=>{const p=w.parentNode;const phy=(p&&p.localName==="phy")?p:null;
       if(phy&&phy===curPhy){cur.push(idx);}else{cur=[idx];groups.push(cur);curPhy=phy;}});
     return {id:gx(s,"id"),num:s.getAttribute("n")||"",words,groups,
@@ -331,27 +1923,38 @@ function parse(xml){
 }
 function curTL(){return H.getAttribute("data-tl")||"ja";}
 function pickTrans(s){return curTL()==="en"?(s.en||s.ja):(s.ja||s.en);}
-function wordHTML(w,i){const cls="wseg"+(w.grc?" grc":"")+((w.pos==="X"||w.pos==="UNKNOWN"||!w.gloss)?" x":"");
-  return `<span class="${cls}" tabindex="0" role="button" data-i="${i}">${esc(w.form)}<span class="g">${esc(w.gloss||"·")}</span></span>`;}
-function copHTML(s){const groups=(s.groups&&s.groups.length)?s.groups:s.words.map((_,i)=>[i]);
-  return groups.map(g=>g.length===1?wordHTML(s.words[g[0]],g[0])
-    :`<span class="phygrp">`+g.map(i=>wordHTML(s.words[i],i)).join("")+`</span>`).join("");}
+function wordHTML(w,i,disp){const form=(disp!=null?disp:w.form);
+  const cls="wseg"+(w.grc?" grc":"")+((w.pos==="X"||w.pos==="UNKNOWN"||!w.gloss)?" x":"");
+  return `<span class="${cls}" tabindex="0" role="button" data-i="${i}">${esc(form)}<span class="g">${esc(w.gloss||"·")}</span></span>`;}
+function copHTML(s){
+  const groups=(s.groups&&s.groups.length)?s.groups:s.words.map((_,i)=>[i]);
+  return groups.map(g=>{
+    if(g.length===1) return wordHTML(s.words[g[0]],g[0],s.words[g[0]].form);
+    let h='<span class="phygrp">';
+    g.forEach((idx,k)=>{const w=s.words[idx];h+=wordHTML(w,idx,w.form);
+      if(k<g.length-1){const cur=w.form,nxt=s.words[g[k+1]].form;
+        if(!(/[-=]$/.test(cur)||/^[-=]/.test(nxt))) h+='<span class="wjoin">-</span>';}});
+    return h+'</span>';
+  }).join("");
+}
 function render(){
-  const box=$("#reading");let html='<div class="colhead">コプト語 · 日本語/英語訳</div><div class="colhead g">ギリシア語 · Plato</div>';
-  SEGS.forEach(s=>{
-    const tr=pickTrans(s);const trtxt=tr||(curTL()==="en"?"— translation pending —":"—訳は準備中—");
-    html+=`<div class="cell-cop" data-id="${esc(s.id)}"><div class="no">§${s.num}</div>
-      <div class="coptic">${copHTML(s)}</div><div class="${tr?'trans':'trans pending'}">${esc(trtxt)}</div></div>`;
-    html+=`<div class="cell-grc" data-id="${esc(s.id)}">${s.grc?`<div class="grc">${esc(s.grc)}</div>`:`<div class="grc empty">—（ギリシア語未対応）—</div>`}</div>`;
-  });
-  box.innerHTML=html;wireWords();
+  const box=$("#reading");let html="";
+  SEGS.forEach(s=>{const tr=pickTrans(s);const trtxt=tr||(curTL()==="en"?"— translation pending —":"—訳は準備中—");
+    html+=`<div class="seg" data-id="${esc(s.id)}"><div class="no">§${s.num}</div>
+      <div class="coptic">${copHTML(s)}</div><div class="${tr?'trans':'trans pending'}">${esc(trtxt)}</div></div>`;});
+  box.innerHTML=html;
+  // continuous Greek
+  const grc=SEGS.map(s=>s.grc).filter(Boolean).join(" ");
+  $("#grcText").innerHTML=esc(grc)||'<span style="color:var(--ink-faint);font-style:italic">（ギリシア語は未収録です）</span>';
+  wireWords();
 }
 function wireWords(){$$(".wseg").forEach(el=>{el.addEventListener("click",ev=>{ev.stopPropagation();showPop(el);});
   el.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();showPop(el);}});});}
-function showPop(el){const cell=el.closest(".cell-cop");const s=SEGS.find(x=>x.id===cell.dataset.id);if(!s)return;
+function showPop(el){const seg=el.closest(".seg");const s=SEGS.find(x=>x.id===seg.dataset.id);if(!s)return;
   const w=s.words[+el.dataset.i];if(!w)return;const pos=POS[w.pos]||POS.X;let dl="";
   if(w.gloss)dl+=`<dt>EN</dt><dd>${esc(w.gloss)}</dd>`;
-  if(w.ref)dl+=`<dt>辞書</dt><dd><a href="${esc(w.ref)}" target="_blank" rel="noopener">Coptic Dictionary →</a></dd>`;
+  const ref=w.ref||LEX.get(w.lemma+"|"+w.pos)||LEX.get(w.lemma)||"";
+  if(ref)dl+=`<dt>辞書</dt><dd><a href="${esc(ref)}" target="_blank" rel="noopener">Coptic Dictionary →</a></dd>`;
   const pop=$("#pop");pop.innerHTML=`<div class="form">${esc(w.form)}</div>
     ${(w.lemma&&w.lemma!==w.form)?`<div class="lemma">レンマ ${esc(w.lemma)}</div>`:""}
     <span class="pos${w.grc?' grc':''}">${pos[0]} · ${pos[1]}</span>
@@ -369,15 +1972,18 @@ $("#tlBtn").onclick=function(){const en=curTL()==="en";H.setAttribute("data-tl",
 $("#grcBtn").onclick=function(){const on=H.getAttribute("data-grc")==="on";H.setAttribute("data-grc",on?"off":"on");this.setAttribute("aria-pressed",String(!on));};
 $("#modeBtn").onclick=function(){const d=H.getAttribute("data-mode")==="dark";H.setAttribute("data-mode",d?"light":"dark");this.textContent=d?"☀ アイオーン":"☾ アルコーン";};
 $("#q").addEventListener("input",e=>{const q=e.target.value.trim().toLowerCase();
-  $$("[data-id]").forEach(()=>{});
-  SEGS.forEach(s=>{const hay=(s.words.map(w=>w.form+" "+w.gloss+" "+w.lemma).join(" ")+" "+s.ja+" "+s.en+" "+s.grc).toLowerCase();
-    const hit=!q||hay.includes(q);$$(`[data-id="${CSS.escape(s.id)}"]`).forEach(c=>c.classList.toggle("seg-dim",!hit));});});
+  SEGS.forEach(s=>{const hay=(s.words.map(w=>w.form+" "+w.gloss+" "+w.lemma).join(" ")+" "+s.ja+" "+s.en).toLowerCase();
+    const cell=$(`.seg[data-id="${CSS.escape(s.id)}"]`);if(cell)cell.classList.toggle("dim",!!q&&!hay.includes(q));});});
 async function boot(){
   try{if(matchMedia&&matchMedia("(prefers-color-scheme:dark)").matches){H.setAttribute("data-mode","dark");$("#modeBtn").textContent="☾ アルコーン";}}catch(e){}
   let xml=null;
   try{const r=await fetch("data/republic_tei.xml",{cache:"no-store"});if(r.ok){const t=await r.text();
     const d=new DOMParser().parseFromString(t,"application/xml");if(!d.querySelector("parsererror"))xml=d;}}catch(e){}
   if(!xml){xml=new DOMParser().parseFromString($("#rep-main").textContent,"application/xml");}
+  let lx=null;
+  try{const r=await fetch("data/republic_lexicon.xml",{cache:"no-store"});if(r.ok){const tx=await r.text();const d=new DOMParser().parseFromString(tx,"application/xml");if(!d.querySelector("parsererror"))lx=d;}}catch(e){}
+  if(!lx){lx=new DOMParser().parseFromString($("#rep-lex").textContent,"application/xml");}
+  LEX=parseLex(lx);
   SEGS=parse(xml);render();
 }
 boot();
