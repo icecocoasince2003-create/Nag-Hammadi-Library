@@ -18,7 +18,7 @@ OUTDIR = os.path.dirname(_HERE) if os.path.basename(_HERE).lower() in ("source",
 
 # --- catalogue --------------------------------------------------------------
 # (roman, codex_no, [(num, ja, en, status), ...])   status: "avail" | "soon"
-A = "avail"; S = "soon"
+A = "avail"; S = "soon"; R = "rep"
 CODICES = [
  ("I", 1, [
    (1, "使徒パウロの祈り", "The Prayer of the Apostle Paul", S),
@@ -59,7 +59,7 @@ CODICES = [
    (2, "雷・全きヌース(完全なる心)", "The Thunder, Perfect Mind", S),
    (3, "権威ある教え", "Authoritative Teaching", S),
    (4, "われらの大いなる力の概念", "The Concept of Our Great Power", S),
-   (5, "プラトン『国家』588A–589B", "Plato, Republic 588a–589b", S),
+   (5, "プラトン『国家』588A–589B", "Plato, Republic 588a–589b", R),
    (6, "第八と第九についての講話", "The Discourse on the Eighth and Ninth", S),
    (7, "感謝の祈り", "The Prayer of Thanksgiving", S),
    (8, "書記による覚書", "Scribal Note", S),
@@ -105,10 +105,12 @@ def esc(s): return html.escape(str(s), quote=True)
 def tid(roman, num): return f"{roman}-{num}"
 def locus(roman, num): return f"NHC&nbsp;{roman},{num}"
 def href_for(roman, num, status):
-    return "eugnostos.html" if status == A else f"tractate.html?id={tid(roman,num)}"
+    if status == A: return "eugnostos.html"
+    if status == R: return "republic.html"
+    return f"tractate.html?id={tid(roman,num)}"
 
 TOTAL = sum(len(t) for _,_,t in CODICES)
-AVAIL = sum(1 for _,_,t in CODICES for x in t if x[3]==A)
+AVAIL = sum(1 for _,_,t in CODICES for x in t if x[3] in (A,R))
 TODAY = datetime.date.today().isoformat()
 
 # --- shared head / theme ----------------------------------------------------
@@ -176,8 +178,8 @@ header{position:sticky; top:0; z-index:5; background:var(--chrome); color:var(--
 def codex_block(roman, no, tracts):
     rows=[]
     for num, ja, en, status in tracts:
-        cls = "trow" + (" on" if status==A else "")
-        pill = ('<span class="pill on">公開</span>' if status==A
+        cls = "trow" + (" on" if status in (A,R) else "")
+        pill = ('<span class="pill on">公開</span>' if status in (A,R)
                 else '<span class="pill">準備中</span>')
         search = esc((ja+" "+en).lower())
         rows.append(
@@ -319,7 +321,7 @@ def build_tractate():
         for num,ja,en,status in tracts:
             items.append('"%s":{ja:"%s",en:"%s",roman:"%s",num:%d,avail:%s}'
                          % (tid(roman,num), ja.replace('"','\\"'), en.replace('"','\\"'),
-                            roman, num, "true" if status==A else "false"))
+                            roman, num, "true" if status in (A,R) else "false"))
     cat = "{" + ",".join(items) + "}"
     css = THEME + """
 .shell{max-width:780px; margin:0 auto; padding:clamp(28px,6vw,64px) clamp(16px,4vw,40px) 80px}

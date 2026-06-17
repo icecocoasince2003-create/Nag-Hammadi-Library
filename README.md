@@ -246,3 +246,11 @@ index.html(目次:全53文書)
 - Anne Pasquier, *Eugnoste (NH III,3 et V,1)*, Bibliothèque copte de Nag Hammadi (texte ＋ volume de commentaire), Presses de l'Université Laval / Peeters.
 - 小林稔訳「エウグノストス」(邦訳, §1–§43).
 - Louis Painchaud, "The Literary Contacts between the Writing without Title *On the Origin of the World* (CG II,5 and XIII,2) and *Eugnostos the Blessed* (CG III,3 and V,1)," *JBL* 114/1 (1995) 81–101.
+
+
+## プラトン『国家』 NHC VI,5 (republic.html)
+
+- ビュワー: `republic.html`(eugnostos と同じデザイン／操作)。データ: `data/republic_tei.xml`(手編集する作業用TEI)。
+- 構造: `<ab>` 単位、`<seg type="coptic">` 内に `<phr>` で形態素をグループ化し各 `<w>`(`lemma`/`type`/`gloss`/`ref`)を保持、`<seg type="translation" xml:lang="en|ja">` に対訳を直書き。`<phr>` 内の `<w>` は表層形(例 `ⲁ-`, `ⲡⲓ-`, `ⲙⲙⲟ=ⲥ`)をそのまま連結表示。
+- 形態素クリックで品詞・英語語義・Coptic Dictionary へのリンク。行間グロス・日英訳切替・アイオーン/アルコーン対応。
+- **著作権**: コプト語本文(NHC VI,5)はパブリックドメイン。**日本語訳は本プロジェクトによる**。**英語訳は J. Brashler, _The Nag Hammadi Library in English_(rev. ed., HarperCollins 1990)に基づく作業用参照で、著作権があります**。公開サイトで英語訳をそのまま配信するのは権利上の懸念があるため、独自訳への置換を推奨します(日本語と同じく CC BY のオリジナル訳に)。
