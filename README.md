@@ -269,3 +269,11 @@ index.html(目次:全53文書)
 - `<w>` の辞書リンク `ref="https://coptic-dictionary.org/…"` を本文 TEI から除去し、補助ファイル **`data/republic_lexicon.xml`**（74エントリ）に集約しました。
 - lexicon は **(lemma + 品詞)** をキーに `<entry><form><orth>…</orth></form><gramGrp><pos>…</pos></gramGrp><xr type="dict"><ref target="…"/></xr></entry>` 形式（eugnostos_lexicon と同系統）。同形異義語（例 `ⲛ`=前置詞/冠詞/否定/代名詞）は品詞で別エントリに分かれます。
 - `republic.html` は lexicon を読み込み、形態素ポップオーバーの「Coptic Dictionary →」リンクを **lemma+品詞 → lexicon** で解決します（本文には辞書リンクを持ちません）。語義(gloss)は文脈依存のため従来どおり `<w gloss>` に残しています。
+
+
+## Republic: eugnostos と同一エンジンに統一（最新）
+
+- `republic.html` は **`viewer_template.html`（eugnostos.html と同じビュワー・エンジン）から生成**。語彙ポップオーバー（lemma+品詞→品詞・日英語義・辞書リンク、同形異義の自動選択）、行間グロス、訳の言語切替、検索、アイオーン/コーデクス表示——すべて eugnostos と同一の挙動です。
+- **唯一の違いがギリシア語**：eugnostos が右パネルに出していた「神学的解釈」の位置に、republic は **ギリシア語原文（`<s>` の @transGrc を連続表示）** を出します。
+- 単一証本のため、写本タブ（III/V/対照）と流出テーマ柱は不使用（エンジンは保持・非表示）。
+- データは eugnostos と同形式の2ファイル：`data/republic_tei.xml`（witness/s/phy/w + transJa/transEn/transGrc）と `data/republic_lexicon.xml`（lemma+品詞→日英 sense + dict ref、71エントリ）。
