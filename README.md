@@ -254,3 +254,11 @@ index.html(目次:全53文書)
 - 構造: `<ab>` 単位、`<seg type="coptic">` 内に `<phr>` で形態素をグループ化し各 `<w>`(`lemma`/`type`/`gloss`/`ref`)を保持、`<seg type="translation" xml:lang="en|ja">` に対訳を直書き。`<phr>` 内の `<w>` は表層形(例 `ⲁ-`, `ⲡⲓ-`, `ⲙⲙⲟ=ⲥ`)をそのまま連結表示。
 - 形態素クリックで品詞・英語語義・Coptic Dictionary へのリンク。行間グロス・日英訳切替・アイオーン/アルコーン対応。
 - **著作権**: コプト語本文(NHC VI,5)はパブリックドメイン。**日本語訳は本プロジェクトによる**。**英語訳は J. Brashler, _The Nag Hammadi Library in English_(rev. ed., HarperCollins 1990)に基づく作業用参照で、著作権があります**。公開サイトで英語訳をそのまま配信するのは権利上の懸念があるため、独自訳への置換を推奨します(日本語と同じく CC BY のオリジナル訳に)。
+
+
+## プラトン『国家』 NHC VI,5 (republic.html) — 改訂
+
+- `data/republic_tei.xml` を **eugnostos と同形式**に再構成: `<text type="witness" xml:id="wit-rep">` → `<s xml:id="rep-N" n="N" transJa="…" transEn="…" transGrc="…">` → `<phy>`（旧 `<phr>`）→ `<w type/lemma/gloss/xml:lang/ref>`。対訳は `<s>` の属性（transJa/transEn/transGrc）。
+- **ギリシア語層を追加**: `transGrc` に Plato, *Republic* 588b–589b（OCT/Burnet, パブリックドメイン）を一次整列で付与（象徴的な21/55セグメント）。**校訂版での検証・残りの整列はこれから**。
+- `republic.html` は **2カラム対訳**: 左にコプト語本文（形態素クリックで品詞・語義・辞書リンク）＋日英訳、**右にギリシア語**。ヘッダの「ギリシア語」ボタンで右ウィンドウの表示/非表示、「訳: 日/英」「語釈を重ねる」「アイオーン/アルコーン」対応。
+- **著作権**: コプト語＝PD、日本語＝本プロジェクト、英語＝Brashler 1990（著作権あり・作業用参照、公開時は独自訳推奨）、ギリシア語＝PD。
