@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" data-lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -47,7 +47,8 @@ body{
 .panel-grc-head{font-family:var(--disp); color:var(--gold); font-size:.84rem; margin:0 0 10px}
 .grcpanel .grow{margin-bottom:13px; padding-bottom:11px; border-bottom:1px solid var(--line)}
 .grcpanel .grow:last-of-type{border-bottom:0}
-.grcpanel .grcja{font-family:"Noto Serif JP",serif; font-size:.9rem; line-height:1.75; color:var(--ink-soft); margin-top:4px}
+.grcpanel .grcja{font-family:"Noto Serif JP",serif; font-size:.9rem; line-height:1.7; color:var(--ink-soft); margin-top:4px}
+.grcpanel .grcen{font-family:var(--disp); font-style:italic; font-size:.86rem; line-height:1.6; color:var(--ink-faint); margin-top:3px}
 /* ---------------- header ---------------- */
 header{grid-area:head; background:var(--chrome); color:var(--chrome-ink);
   display:flex; align-items:center; gap:18px; padding:10px 20px; border-bottom:1px solid #000; z-index:30;}
@@ -245,27 +246,32 @@ html[data-tl="fr"] .note p.ja{display:none}
 html[data-drag="on"] #drop-hint{display:flex}
 #drop-hint[hidden]{display:none}
 html:not([data-drag="on"]) #drop-hint{display:none}
+/* ---- UI language toggle (JA/EN) ---- */
+.l-en{display:none}
+html[data-lang="en"] .l-ja{display:none}
+html[data-lang="en"] .l-en{display:revert}
 </style>
 </head>
 <body>
 <div class="app">
   <header>
-    <a class="chip homelink" href="index.html" title="文書一覧へ">← 一覧</a>
-    <button class="chip railtoggle" id="railBtn" aria-label="系譜パネル" aria-pressed="false">☰ 系譜</button>
+    <a class="chip homelink" href="index.html" title="Index / 一覧へ"><span class="l-ja">← 一覧</span><span class="l-en">← Index</span></a>
+    <button class="chip railtoggle" id="railBtn" aria-label="系譜パネル" aria-pressed="false"><span class="l-ja">☰ 系譜</span><span class="l-en">☰ Lineage</span></button>
     <div class="brand">
       <img class="brandlogo" src="image/icon.svg" alt="" width="30" height="30" onerror="this.style.display='none'">
       <div class="brandtext">
-        <div class="t"><span class="cop">ⲡⲟⲗⲓⲧⲉⲓⲁ</span> プラトン『国家』</div>
+        <div class="t"><span class="cop">ⲡⲟⲗⲓⲧⲉⲓⲁ</span> <span class="l-ja">プラトン『国家』</span><span class="l-en">Plato, Republic</span></div>
         <div class="s">Plato, Republic 588b–589b · NHC VI,5</div>
       </div>
     </div>
     <div class="controls">
       <div class="seg-ctl">
-        <button class="chip" id="ilBtn" aria-pressed="false">語釈を重ねる</button>
+        <button class="chip" id="ilBtn" aria-pressed="false"><span class="l-ja">語釈を重ねる</span><span class="l-en">Interlinear</span></button>
         <button class="chip" id="glBtn" aria-pressed="false" title="語釈の言語">語釈: 日</button>
         <button class="chip" id="tlBtn" aria-pressed="false" title="対訳・注解の言語">訳: 日</button>
+        <button class="chip" id="langBtn" title="Language / 言語">English</button>
         <button class="chip" id="modeBtn" aria-pressed="false" title="表示モード">◐ アイオーン</button>
-        <button class="chip" id="pickTop" title="TEI XMLを読み込む">XMLを開く</button>
+        <button class="chip" id="pickTop" title="Open TEI XML"><span class="l-ja">XMLを開く</span><span class="l-en">Open XML</span></button>
       </div>
       <div class="search">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
@@ -277,22 +283,22 @@ html:not([data-drag="on"]) #drop-hint{display:none}
   <nav class="rail" aria-label="流出の系譜とテーマ">
     <h2>流出の系譜 · Emanation</h2>
     <div class="spine" id="spine"></div>
-    <h2>枠組みのテーマ</h2>
+    <h2><span class="l-ja">枠組みのテーマ</span><span class="l-en">Themes</span></h2>
     <div class="frame-themes" id="frameThemes"></div>
-    <button class="clearf" id="clearTheme" hidden>テーマ選択を解除</button>
+    <button class="clearf" id="clearTheme" hidden><span class="l-ja">テーマ選択を解除</span><span class="l-en">Clear themes</span></button>
   </nav>
 
   <main id="main" tabindex="-1">
     <div class="doc-head">
       <div class="kick">Nag Hammadi Codex VI,5 · pp. 48–51</div>
       <h1><span class="cop">ⲡⲟⲗⲓⲧⲉⲓⲁ</span><br>プラトン『国家』588b–589b</h1>
-      <p class="meta">プラトン『国家』第9巻 588b–589b のコプト語訳（NHC VI,5）。魂を「多頭の獣・獅子・人間」に喩える有名な一節。各形態素をクリックすると品詞・語義・辞書が、右側にギリシア語原文が表示されます。</p>
+      <p class="meta"><span class="l-ja">プラトン『国家』第9巻 588b–589b のコプト語訳（NHC VI,5）。魂を「多頭の獣・獅子・人間」に喩える有名な一節。各形態素をクリックすると品詞・語義・辞書が、右側にギリシア語原文が表示されます。</span><span class="l-en">A Coptic translation of Plato’s Republic, Book IX 588b–589b (NHC VI,5) — the famous passage likening the soul to a many-headed beast, a lion, and a man. Click any morpheme for its part of speech, sense and dictionary entry; the Greek original appears on the right.</span></p>
     </div>
     <div class="notice" id="notice" hidden>
       <span>⬥ <b>サンプル表示中</b>(冒頭の数節)。全文は3ファイル <code>eugnostos_tei.xml</code> /
       <code>eugnostos_lexicon.xml</code> / <code>eugnostos_theology.xml</code> を本ファイルと同じ場所に置き
       <b>Webサーバ経由</b>で開くと自動表示されます。手動で開くには右のボタン、またはこの枠へ XML を(複数まとめて)ドラッグ＆ドロップ。</span>
-      <button class="chip" id="pick" style="color:var(--lapis);border-color:var(--lapis)">XMLを選択</button>
+      <button class="chip" id="pick" style="color:var(--lapis);border-color:var(--lapis)"><span class="l-ja">XMLを選択</span><span class="l-en">Choose XML</span></button>
       <span id="status"></span>
       <input id="file" type="file" accept=".xml,application/xml,text/xml" multiple hidden>
     </div>
@@ -303,16 +309,16 @@ html:not([data-drag="on"]) #drop-hint{display:none}
 
   <aside aria-label="解釈と検索">
     <div class="aside-tabs" role="tablist">
-      <button role="tab" id="atIntro" data-pane="intro" aria-selected="true">ギリシア語</button>
-      <button role="tab" id="atSearch" data-pane="search" aria-selected="false">検索結果</button>
+      <button role="tab" id="atIntro" data-pane="intro" aria-selected="true"><span class="l-ja">ギリシア語</span><span class="l-en">Greek</span></button>
+      <button role="tab" id="atSearch" data-pane="search" aria-selected="false"><span class="l-ja">検索結果</span><span class="l-en">Search</span></button>
     </div>
     <div class="aside-body">
       <div id="paneIntro">
-        <p class="panel-grc-head">ギリシア語原文 · Plato, Republic 588b–589b</p>
+        <p class="panel-grc-head"><span class="l-ja">ギリシア語原文 · Plato, Republic 588b–589b</span><span class="l-en">Greek text · Plato, Republic 588b–589b</span></p>
         <div id="notes"></div>
       </div>
       <div id="paneSearch" hidden>
-        <div id="results"><p class="empty">上の検索窓に入力してください。</p></div>
+        <div id="results"><p class="empty"><span class="l-ja">上の検索窓に入力してください。</span><span class="l-en">Type a query in the search box above.</span></p></div>
       </div>
     </div>
   </aside>
@@ -366,7 +372,7 @@ html:not([data-drag="on"]) #drop-hint{display:none}
     <body>
       <div type="tractate" n="Republic" subtype="codexVI">
         <head xml:lang="en">Plato, Republic 588b–589b — Nag Hammadi Codex VI,5</head>
-        <s xml:id="rep-1" n="1" transJa="さて、議論がこの段階に至ったからには、" transEn="Since we have come to this point in a discussion," transGrc="ἐπειδὴ ἐνταῦθα λόγου γεγόναμεν," transGrcJa="議論がここまで来たのだから、">
+        <s xml:id="rep-1" n="1" transJa="さて、議論がこの段階に至ったからには、" transEn="Since we have come to this point in a discussion," transGrc="ἐπειδὴ ἐνταῦθα λόγου γεγόναμεν," transGrcJa="議論がここまで来たのだから、" transGrcEn="Since we have come to this point in the argument,">
           <phy>
             <w type="CONJ" lemma="ⲉⲡⲓⲇⲏ" gloss="since" xml:lang="grc">ⲉⲡⲓⲇⲏ</w>
           </phy>
@@ -389,7 +395,7 @@ html:not([data-drag="on"]) #drop-hint{display:none}
             <w type="N" lemma="ⲙⲁ" gloss="part">ⲙⲁ</w>
           </phy>
         </s>
-        <s xml:id="rep-2" n="2" transJa="われわれに語られた最初のことを改めて取り上げよう。" transEn="let us again take up the first things that were said to us." transGrc="πάλιν ἀναλάβωμεν τὰ πρῶτα ῥηθέντα." transGrcJa="最初に語られたことを改めて取り上げよう。">
+        <s xml:id="rep-2" n="2" transJa="われわれに語られた最初のことを改めて取り上げよう。" transEn="let us again take up the first things that were said to us." transGrc="πάλιν ἀναλάβωμεν τὰ πρῶτα ῥηθέντα." transGrcJa="最初に語られたことを改めて取り上げよう。" transGrcEn="let us take up again the things first said.">
           <phy>
             <w type="AOPT" lemma="ⲙⲁⲣⲉ">ⲙⲁⲣ</w>
             <w type="PPER" lemma="ⲁⲛⲟⲛ" gloss="we">ⲛ</w>
@@ -440,7 +446,7 @@ html:not([data-drag="on"]) #drop-hint{display:none}
             <w type="PPER" lemma="ⲥ" gloss="it">ⲥ</w>
           </phy>
         </s>
-        <s xml:id="rep-4" n="4" transJa="「まったく不正を受けた者は幸いである。" transEn="'Good is he who has been done injustice completely." transGrc="ὅτι λυσιτελοῖ ἀδικία τῷ τελέως μὲν ἀδίκῳ, δοξαζομένῳ δὲ δικαίῳ." transGrcJa="完全に不正でありながら正しいと思われている者にこそ、不正は利益になる、という主張だ。">
+        <s xml:id="rep-4" n="4" transJa="「まったく不正を受けた者は幸いである。" transEn="'Good is he who has been done injustice completely." transGrc="ὅτι λυσιτελοῖ ἀδικία τῷ τελέως μὲν ἀδίκῳ, δοξαζομένῳ δὲ δικαίῳ." transGrcJa="完全に不正でありながら正しいと思われている者にこそ、不正は利益になる、という主張だ。" transGrcEn="—that injustice profits the one who is perfectly unjust yet reputed to be just.">
           <phy>
             <w type="CONJ" lemma="ϫⲉ" gloss=":">ϫⲉ</w>
           </phy>
@@ -611,7 +617,7 @@ html:not([data-drag="on"]) #drop-hint{display:none}
             <w type="N" lemma="ϭⲟⲙ" gloss="force">ϭⲟⲙ</w>
           </phy>
         </s>
-        <s xml:id="rep-13" n="13" transJa="" transEn="&quot;How then?&quot; &quot;He said, 'An image that has no likeness is the rationality of the soul,'" transGrc="πλάσαντες οὖν τῆς ψυχῆς εἰκόνα λόγῳ," transGrcJa="では言葉によって魂の像をかたどり、">
+        <s xml:id="rep-13" n="13" transJa="" transEn="&quot;How then?&quot; &quot;He said, 'An image that has no likeness is the rationality of the soul,'" transGrc="πλάσαντες οὖν τῆς ψυχῆς εἰκόνα λόγῳ," transGrcJa="では言葉によって魂の像をかたどり、" transGrcEn="Having molded, then, in words an image of the soul,">
           <phy>
             <w type="PREP" lemma="ⲛ">ⲛ</w>
             <w type="PINT" lemma="ⲁϣ" gloss="whatever">ⲁϣ</w>
@@ -735,7 +741,7 @@ html:not([data-drag="on"]) #drop-hint{display:none}
             <w type="NPROP" lemma="ⲁⲣⲭⲱⲛ" gloss="ruler" xml:lang="grc">ⲁⲣⲭⲱⲛ</w>
           </phy>
         </s>
-        <s xml:id="rep-16" n="16" transJa="これらは今や自然の生き物となった—— キメラもケルベロスも、語られたその他すべてのものも。" transEn="these now have become natural creatures - even Chimaera and Cerberus and all the rest that were mentioned." transGrc="οἷαι δὲ μυθολογοῦνται παλαιαὶ γενέσθαι φύσεις, ἥ τε Χιμαίρας καὶ Σκύλλης καὶ Κερβέρου," transGrcJa="古来語り伝えられてきた、キマイラ・スキュラ・ケルベロスのような混成の本性、">
+        <s xml:id="rep-16" n="16" transJa="これらは今や自然の生き物となった—— キメラもケルベロスも、語られたその他すべてのものも。" transEn="these now have become natural creatures - even Chimaera and Cerberus and all the rest that were mentioned." transGrc="οἷαι δὲ μυθολογοῦνται παλαιαὶ γενέσθαι φύσεις, ἥ τε Χιμαίρας καὶ Σκύλλης καὶ Κερβέρου," transGrcJa="古来語り伝えられてきた、キマイラ・スキュラ・ケルベロスのような混成の本性、" transGrcEn="such ancient natures as are told of in myth—the Chimaera, Scylla, and Cerberus—">
           <phy>
             <w type="X" lemma="ⲛⲁⲓ">ⲛⲁⲓ</w>
           </phy>
@@ -795,7 +801,7 @@ html:not([data-drag="on"]) #drop-hint{display:none}
             <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
           </phy>
         </s>
-        <s xml:id="rep-18" n="18" transJa="そしてそれらはすべて一つの像となった。" transEn="And they all became a single image." transGrc="εἰς μίαν ἰδέαν συνελθεῖν." transGrcJa="それらが一つの形へと合わさるような像を。">
+        <s xml:id="rep-18" n="18" transJa="そしてそれらはすべて一つの像となった。" transEn="And they all became a single image." transGrc="εἰς μίαν ἰδέαν συνελθεῖν." transGrcJa="それらが一つの形へと合わさるような像を。" transGrcEn="to come together into a single form.">
           <phy>
             <w type="X" lemma="ⲁ">ⲁ</w>
             <w type="X" lemma="ⲩ">ⲩ</w>
@@ -852,7 +858,7 @@ html:not([data-drag="on"]) #drop-hint{display:none}
             <w type="X" lemma="ⲟⲩⲱⲧ">ⲟⲩⲱⲧ</w>
           </phy>
         </s>
-        <s xml:id="rep-20" n="20" transJa="たしかにそれは一つの像であり、 多くの頭を持つ複雑な獣の像となったのだ。" transEn="Certainly it is a single image that became the image of a complex beast with many heads." transGrc="πλάττε τοίνυν μίαν μὲν ἰδέαν θηρίου ποικίλου καὶ πολυκεφάλου," transGrcJa="そこでまず、多彩で多頭の獣の形を一つかたどれ。">
+        <s xml:id="rep-20" n="20" transJa="たしかにそれは一つの像であり、 多くの頭を持つ複雑な獣の像となったのだ。" transEn="Certainly it is a single image that became the image of a complex beast with many heads." transGrc="πλάττε τοίνυν μίαν μὲν ἰδέαν θηρίου ποικίλου καὶ πολυκεφάλου," transGrcJa="そこでまず、多彩で多頭の獣の形を一つかたどれ。" transGrcEn="Mold, then, a single form of a manifold, many-headed beast,">
           <phy>
             <w type="X" lemma="ⲉ">ⲉ</w>
             <w type="X" lemma="ⲩ">ⲩ</w>
@@ -879,7 +885,7 @@ html:not([data-drag="on"]) #drop-hint{display:none}
             <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
           </phy>
         </s>
-        <s xml:id="rep-21" n="21" transJa="ある日にはそれは野生の獣の像のようになる。" transEn="Some days indeed it is like the image of a wild beast." transGrc="ἡμέρων δὲ θηρίων ἔχοντος κεφαλὰς κύκλῳ καὶ ἀγρίων," transGrcJa="飼い慣らされた獣と野生の獣の頭を周囲にめぐらせ、">
+        <s xml:id="rep-21" n="21" transJa="ある日にはそれは野生の獣の像のようになる。" transEn="Some days indeed it is like the image of a wild beast." transGrc="ἡμέρων δὲ θηρίων ἔχοντος κεφαλὰς κύκλῳ καὶ ἀγρίων," transGrcJa="飼い慣らされた獣と野生の獣の頭を周囲にめぐらせ、" transGrcEn="having heads of tame and of wild beasts all around,">
           <phy>
             <w type="X" lemma="ⲟⲩⲉⲓⲛⲉ">ⲟⲩ</w>
             <w type="X" lemma="ⲉⲓⲛⲉ">ⲉⲓⲛⲉ</w>
@@ -895,7 +901,7 @@ html:not([data-drag="on"]) #drop-hint{display:none}
             <w type="X" lemma="ⲡⲉ">ⲡⲉ</w>
           </phy>
         </s>
-        <s xml:id="rep-22" n="22" transJa="そのときそれは最初の像を脱ぎ捨てることができる。" transEn="Then it is able to cast off the first image." transGrc="καὶ δυνατοῦ μεταβάλλειν καὶ φύειν ἐξ αὑτοῦ πάντα ταῦτα." transGrcJa="それらすべてを自らのうちから変化させ生み出しうる獣を。">
+        <s xml:id="rep-22" n="22" transJa="そのときそれは最初の像を脱ぎ捨てることができる。" transEn="Then it is able to cast off the first image." transGrc="καὶ δυνατοῦ μεταβάλλειν καὶ φύειν ἐξ αὑτοῦ πάντα ταῦτα." transGrcJa="それらすべてを自らのうちから変化させ生み出しうる獣を。" transGrcEn="and able to change and to grow all of these out of itself.">
           <phy>
             <w type="X" lemma="ⲡⲁⲓ">ⲡⲁⲓ</w>
           </phy>
@@ -1007,7 +1013,7 @@ html:not([data-drag="on"]) #drop-hint{display:none}
             <w type="X" lemma="ⲛⲁϣⲧ">ⲛⲁϣⲧ</w>
           </phy>
         </s>
-        <s xml:id="rep-26" n="26" transJa="なぜならライオンの像は一つのものであり、 人間の像は別のものだからである。" transEn="For the image of the lion is the one thing and the image of the man is another." transGrc="μίαν δὴ τοίνυν ἄλλην ἰδέαν λέοντος, μίαν δὲ ἀνθρώπου·" transGrcJa="次にもう一つ、獅子の形を、そしてもう一つ、人間の形をかたどれ。">
+        <s xml:id="rep-26" n="26" transJa="なぜならライオンの像は一つのものであり、 人間の像は別のものだからである。" transEn="For the image of the lion is the one thing and the image of the man is another." transGrc="μίαν δὴ τοίνυν ἄλλην ἰδέαν λέοντος, μίαν δὲ ἀνθρώπου·" transGrcJa="次にもう一つ、獅子の形を、そしてもう一つ、人間の形をかたどれ。" transGrcEn="Then another single form, of a lion, and one of a man;">
           <phy>
             <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
           </phy>
@@ -1065,7 +1071,7 @@ html:not([data-drag="on"]) #drop-hint{display:none}
             <w type="X" lemma="ⲟⲩⲗⲁϩⲗⲉϩ">ⲟⲩⲗⲁϩⲗⲉϩ</w>
           </phy>
         </s>
-        <s xml:id="rep-28" n="28" transJa="そしてこの〔……〕は最初のものよりずっと複雑である。 そして二番目のものは小さい。" transEn="And this [...] much more complex than the first. And the second is small." transGrc="πολὺ δὲ μέγιστον ἔστω τὸ πρῶτον καὶ δεύτερον τὸ δεύτερον." transGrcJa="第一のものを遥かに最大とし、第二のものを二番目の大きさとせよ。">
+        <s xml:id="rep-28" n="28" transJa="そしてこの〔……〕は最初のものよりずっと複雑である。 そして二番目のものは小さい。" transEn="And this [...] much more complex than the first. And the second is small." transGrc="πολὺ δὲ μέγιστον ἔστω τὸ πρῶτον καὶ δεύτερον τὸ δεύτερον." transGrcJa="第一のものを遥かに最大とし、第二のものを二番目の大きさとせよ。" transGrcEn="but let the first be by far the largest, and the second, second.">
           <phy>
             <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
           </phy>
@@ -1127,7 +1133,7 @@ html:not([data-drag="on"]) #drop-hint{display:none}
             <w type="X" lemma="ⲡⲉ">ⲡⲉ</w>
           </phy>
         </s>
-        <s xml:id="rep-30" n="30" transJa="「では今、それらを互いに結び合わせ 一つにしなさい——それらは三つだが—— 互いに生え合うように。" transEn='"Now then, join them to each other and make them a single one - for they are three - so that they grow together,' transGrc="σύναπτε τοίνυν αὐτὰ εἰς ἓν τρία ὄντα, ὥστε πῃ συμπεφυκέναι ἀλλήλοις." transGrcJa="そこで、三つあるそれらを一つに結び合わせ、互いに癒合させよ。">
+        <s xml:id="rep-30" n="30" transJa="「では今、それらを互いに結び合わせ 一つにしなさい——それらは三つだが—— 互いに生え合うように。" transEn='"Now then, join them to each other and make them a single one - for they are three - so that they grow together,' transGrc="σύναπτε τοίνυν αὐτὰ εἰς ἓν τρία ὄντα, ὥστε πῃ συμπεφυκέναι ἀλλήλοις." transGrcJa="そこで、三つあるそれらを一つに結び合わせ、互いに癒合させよ。" transGrcEn="Now join them—being three—into one, so that they have somehow grown together with one another.">
           <phy>
             <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
             <w type="X" lemma="ⲉⲧ">ⲉⲧ</w>
@@ -1175,7 +1181,7 @@ html:not([data-drag="on"]) #drop-hint{display:none}
             <w type="X" lemma="ⲧⲱϭⲉ">ⲧⲱϭⲉ</w>
           </phy>
         </s>
-        <s xml:id="rep-31" n="31" transJa="そしてすべては人間の像の外側に単一の像として在り、" transEn="and all are in a single image outside of the image of the man" transGrc="περίπλασον δὴ αὐτοῖς ἔξωθεν ἑνὸς εἰκόνα, τὴν τοῦ ἀνθρώπου," transGrcJa="そしてそれらの外側に、人間という一つのものの像を塗り重ねよ。">
+        <s xml:id="rep-31" n="31" transJa="そしてすべては人間の像の外側に単一の像として在り、" transEn="and all are in a single image outside of the image of the man" transGrc="περίπλασον δὴ αὐτοῖς ἔξωθεν ἑνὸς εἰκόνα, τὴν τοῦ ἀνθρώπου," transGrcJa="そしてそれらの外側に、人間という一つのものの像を塗り重ねよ。" transGrcEn="Then mold around them, on the outside, the image of one—that of the man—">
           <phy>
             <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
           </phy>
@@ -1201,7 +1207,7 @@ html:not([data-drag="on"]) #drop-hint{display:none}
             <w type="X" lemma="ϣⲟⲣⲡ">ϣⲟⲣⲡ</w>
           </phy>
         </s>
-        <s xml:id="rep-32" n="32" transJa="内側のものを見ることのできない者と同じように—— しかし彼が見るのは外側のものだけである。" transEn="just like him who is unable to see the things inside him. But what is outside only is what he sees." transGrc="ὥστε τῷ μὴ δυναμένῳ τὰ ἐντὸς ὁρᾶν, ἀλλὰ τὸ ἔξω μόνον ἔλυτρον ὁρῶντι," transGrcJa="内側を見ることのできない者、外側の覆いだけを見る者には、">
+        <s xml:id="rep-32" n="32" transJa="内側のものを見ることのできない者と同じように—— しかし彼が見るのは外側のものだけである。" transEn="just like him who is unable to see the things inside him. But what is outside only is what he sees." transGrc="ὥστε τῷ μὴ δυναμένῳ τὰ ἐντὸς ὁρᾶν, ἀλλὰ τὸ ἔξω μόνον ἔλυτρον ὁρῶντι," transGrcJa="内側を見ることのできない者、外側の覆いだけを見る者には、" transGrcEn="so that, to one unable to see what is within but seeing only the outer shell,">
           <phy>
             <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
           </phy>
@@ -1217,7 +1223,7 @@ html:not([data-drag="on"]) #drop-hint{display:none}
             <w type="X" lemma="ⲟⲩϣⲙ">ⲟⲩϣⲙ</w>
           </phy>
         </s>
-        <s xml:id="rep-33" n="33" transJa="彼の像がどの生き物の中にあるか、 また彼が人間の像に形作られたことが明らかである。" transEn="And it is apparent what creature his image is in and that he was formed in a human image." transGrc="ἓν ζῷον φαίνεσθαι, ἄνθρωπον." transGrcJa="一つの生き物、すなわち人間に見えるように。">
+        <s xml:id="rep-33" n="33" transJa="彼の像がどの生き物の中にあるか、 また彼が人間の像に形作られたことが明らかである。" transEn="And it is apparent what creature his image is in and that he was formed in a human image." transGrc="ἓν ζῷον φαίνεσθαι, ἄνθρωπον." transGrcJa="一つの生き物、すなわち人間に見えるように。" transGrcEn="it appears as a single creature, a man.">
           <phy>
             <w type="X" lemma="ⲁ">ⲁ</w>
             <w type="X" lemma="ⲩ">ⲩ</w>
@@ -1229,7 +1235,7 @@ html:not([data-drag="on"]) #drop-hint{display:none}
             <w type="X" lemma="ϥ">ϥ</w>
           </phy>
         </s>
-        <s xml:id="rep-34" n="34" transJa="「そして私は、人間にとって不正を行なうことに 利益があると言った者に語りかけた。" transEn='"And I spoke to him who said that there is profit in the doing of injustice for the man.' transGrc="λέγωμεν δὴ τῷ λέγοντι ὡς λυσιτελεῖ τούτῳ τῷ ἀνθρώπῳ ἀδικεῖν," transGrcJa="では、この人間にとって不正を行なうことが益になると言う者に向かって言おう、">
+        <s xml:id="rep-34" n="34" transJa="「そして私は、人間にとって不正を行なうことに 利益があると言った者に語りかけた。" transEn='"And I spoke to him who said that there is profit in the doing of injustice for the man.' transGrc="λέγωμεν δὴ τῷ λέγοντι ὡς λυσιτελεῖ τούτῳ τῷ ἀνθρώπῳ ἀδικεῖν," transGrcJa="では、この人間にとって不正を行なうことが益になると言う者に向かって言おう、" transGrcEn="Let us say, then, to him who claims that it profits this man to do injustice,">
           <phy>
             <w type="X" lemma="ⲧⲉⲛⲟⲩ">ⲧⲉⲛⲟⲩ</w>
           </phy>
@@ -1268,7 +1274,7 @@ html:not([data-drag="on"]) #drop-hint{display:none}
             <w type="X" lemma="ⲟⲩⲱⲧ">ⲟⲩⲱⲧ</w>
           </phy>
         </s>
-        <s xml:id="rep-35" n="35" transJa="不正を行なう者は真に利益を得ない——" transEn="He who does injustice truly does not profit" transGrc="δικαιοπραγεῖν δὲ οὐ συμφέρειν." transGrcJa="正義を行なうことは益にならない、と説く者に対して。">
+        <s xml:id="rep-35" n="35" transJa="不正を行なう者は真に利益を得ない——" transEn="He who does injustice truly does not profit" transGrc="δικαιοπραγεῖν δὲ οὐ συμφέρειν." transGrcJa="正義を行なうことは益にならない、と説く者に対して。" transGrcEn="and that to act justly does not benefit him.">
           <phy>
             <w type="X" lemma="ϣⲟⲙⲉⲧ">ϣⲟⲙⲉⲧ</w>
           </phy>
@@ -1780,7 +1786,7 @@ html:not([data-drag="on"]) #drop-hint{display:none}
             <w type="X" lemma="ⲟⲩⲱⲙ">ⲟⲩ</w>
           </phy>
         </s>
-        <s xml:id="rep-49" n="49" transJa="そして農夫が毎日その産物を養うように 彼はそれらを養う。" transEn="and he nourishes them just like the farmer nourishes his produce daily." transGrc="ὥσπερ γεωργὸς τὰ μὲν ἥμερα τρέφων καὶ τιθασεύων," transGrcJa="ちょうど農夫が、飼い慣らされたものを養い馴らし、">
+        <s xml:id="rep-49" n="49" transJa="そして農夫が毎日その産物を養うように 彼はそれらを養う。" transEn="and he nourishes them just like the farmer nourishes his produce daily." transGrc="ὥσπερ γεωργὸς τὰ μὲν ἥμερα τρέφων καὶ τιθασεύων," transGrcJa="ちょうど農夫が、飼い慣らされたものを養い馴らし、" transGrcEn="just as a farmer nurtures and tames the cultivated growths,">
           <phy>
             <w type="X" lemma="ⲙⲛ">ⲙⲛ</w>
             <w type="X" lemma="ⲛⲉ">ⲛⲉ</w>
@@ -1795,7 +1801,7 @@ html:not([data-drag="on"]) #drop-hint{display:none}
             <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
           </phy>
         </s>
-        <s xml:id="rep-50" n="50" transJa="そして野生の獣はそれが育つのを妨げる。" transEn="And the wild beasts keep it from growing." transGrc="τὰ δὲ ἄγρια ἀποκωλύων φύεσθαι." transGrcJa="野生のものが生え育つのを妨げるように。">
+        <s xml:id="rep-50" n="50" transJa="そして野生の獣はそれが育つのを妨げる。" transEn="And the wild beasts keep it from growing." transGrc="τὰ δὲ ἄγρια ἀποκωλύων φύεσθαι." transGrcJa="野生のものが生え育つのを妨げるように。" transGrcEn="but prevents the wild ones from growing.">
           <phy>
             <w type="X" lemma="ⲛⲁⲓ">ⲛⲁⲓ</w>
           </phy>
@@ -1913,7 +1919,7 @@ html:not([data-drag="on"]) #drop-hint{display:none}
             <w type="X" lemma="ⲟⲩⲧⲁϫⲣⲟ">ⲟⲩⲧⲁϫⲣⲟ</w>
           </phy>
         </s>
-        <s xml:id="rep-53" n="53" transJa="それゆえとりわけ彼はそれらの世話をしようと努め、 農夫が毎日その産物を養うように 彼はそれらを養う。" transEn="Therefore especially he strives to take care of them and he nourishes them just like the farmer nourishes his produce daily." transGrc="ὥσπερ γεωργὸς τὰ μὲν ἥμερα τρέφων καὶ τιθασεύων," transGrcJa="ちょうど農夫が、飼い慣らされたものを養い馴らし、">
+        <s xml:id="rep-53" n="53" transJa="それゆえとりわけ彼はそれらの世話をしようと努め、 農夫が毎日その産物を養うように 彼はそれらを養う。" transEn="Therefore especially he strives to take care of them and he nourishes them just like the farmer nourishes his produce daily." transGrc="ὥσπερ γεωργὸς τὰ μὲν ἥμερα τρέφων καὶ τιθασεύων," transGrcJa="ちょうど農夫が、飼い慣らされたものを養い馴らし、" transGrcEn="just as a farmer nurtures and tames the cultivated growths,">
           <phy>
             <w type="X" lemma="ⲉⲧⲃⲉ">ⲉⲧⲃⲉ</w>
           </phy>
@@ -1975,7 +1981,7 @@ html:not([data-drag="on"]) #drop-hint{display:none}
             <w type="X" lemma="ⲙⲏⲛⲉ">ⲙⲏⲛⲉ</w>
           </phy>
         </s>
-        <s xml:id="rep-55" n="55" transJa="そして野生の獣はそれが育つのを妨げる。" transEn="And the wild beasts keep it from growing." transGrc="τὰ δὲ ἄγρια ἀποκωλύων φύεσθαι." transGrcJa="野生のものが生え育つのを妨げるように。">
+        <s xml:id="rep-55" n="55" transJa="そして野生の獣はそれが育つのを妨げる。" transEn="And the wild beasts keep it from growing." transGrc="τὰ δὲ ἄγρια ἀποκωλύων φύεσθαι." transGrcJa="野生のものが生え育つのを妨げるように。" transGrcEn="but prevents the wild ones from growing.">
           <phy>
             <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
           </phy>
@@ -2250,7 +2256,7 @@ function parse(){
       return {id:getId(s), n:s.getAttribute("n")||"", sub:s.getAttribute("subtype")||"",
         themes:(s.getAttribute("ana")||"").split(/\s+/).map(x=>x.split("#").pop()).filter(Boolean),
         transJa:s.getAttribute("transJa")||"", transEn:s.getAttribute("transEn")||"",
-        transFr:s.getAttribute("transFr")||"", transGrc:s.getAttribute("transGrc")||"", transGrcJa:s.getAttribute("transGrcJa")||"",
+        transFr:s.getAttribute("transFr")||"", transGrc:s.getAttribute("transGrc")||"", transGrcJa:s.getAttribute("transGrcJa")||"", transGrcEn:s.getAttribute("transGrcEn")||"",
         corresp:(s.getAttribute("corresp")||"").split("#").pop(),
         gap:T(s,"gap").length>0, words:ws, groups:phyGroups(wEls)};
     });
@@ -2303,7 +2309,7 @@ function buildNotes(){
   const box=$("#notes");
   const rows=SEGS_III.filter(s=>s.transGrc).map(s=>
     `<div class="grow"><div class="grc">${escapeHTML(s.transGrc)}</div>`+
-    (s.transGrcJa?`<div class="grcja">${escapeHTML(s.transGrcJa)}</div>`:"")+`</div>`).join("");
+    (s.transGrcJa?`<div class="grcja">${escapeHTML(s.transGrcJa)}</div>`:"")+(s.transGrcEn?`<div class="grcen">${escapeHTML(s.transGrcEn)}</div>`:"")+`</div>`).join("");
   const n=SEGS_III.filter(s=>s.transGrc).length;
   box.innerHTML = rows
     ? `<div class="grcpanel">${rows}
@@ -2414,12 +2420,12 @@ function showPop(el){
       return `<div class="sense${isDef?' def':''}">
         <div class="srow"><span class="snum">${i+1}</span>
           <span class="pos${sn.grc?' grc':''}">${p[0]}</span>${u}
-          ${isDef?'<span class="defmark">既定</span>':''}</div>
+          ${isDef?'<span class="defmark">'+defLbl()+'</span>':''}</div>
         <div class="sglos">${g.join('<span class="sep">・</span>')}${rl}</div></div>`;
     }).join("");
     inner=`<div class="form">${escapeHTML(w.form)}</div>
-      ${w.lemma&&w.lemma!==w.form?`<div class="lemma">レンマ ${escapeHTML(w.lemma)}</div>`:""}
-      <div class="hommark">⬥ 同形異義 — ${w.senses.length} 語義</div>
+      ${w.lemma&&w.lemma!==w.form?`<div class="lemma">${lemmaLbl()} ${escapeHTML(w.lemma)}</div>`:""}
+      <div class="hommark">⬥ ${homoLbl(w.senses.length)}</div>
       <div class="senses">${rows}</div>`;
   } else {
     let dl="";
@@ -2428,10 +2434,10 @@ function showPop(el){
     if(w.glossFr) dl+=`<dt>FR</dt><dd>${escapeHTML(w.glossFr)}</dd>`;
     if(w.ref) dl+=`<dt>辞書</dt><dd><a href="${escapeHTML(w.ref)}" target="_blank" rel="noopener" style="color:var(--gold-bright)">Coptic Dictionary →</a></dd>`;
     inner=`<div class="form">${escapeHTML(w.form)}</div>
-      ${w.lemma&&w.lemma!==w.form?`<div class="lemma">レンマ ${escapeHTML(w.lemma)}</div>`:""}
+      ${w.lemma&&w.lemma!==w.form?`<div class="lemma">${lemmaLbl()} ${escapeHTML(w.lemma)}</div>`:""}
       <span class="pos${w.grc?' grc':''}">${pos[0]} · ${pos[1]}</span>
-      ${dl?`<dl>${dl}</dl>`:`<div class="none">語義は未登録です（語彙集で拡張可能）。</div>`}
-      ${w.grc?`<div class="grcnote">⬥ ギリシア語からの借用語</div>`:""}`;
+      ${dl?`<dl>${dl}</dl>`:`<div class="none">${noneLbl()}</div>`}
+      ${w.grc?`<div class="grcnote">⬥ ${loanLbl()}</div>`:""}`;
   }
   pop.innerHTML=inner;
   const r=el.getBoundingClientRect();
@@ -2462,22 +2468,22 @@ let qt=null;
 $("#q").addEventListener("input",e=>{ clearTimeout(qt); qt=setTimeout(()=>doSearch(e.target.value.trim()),160); });
 function doSearch(q){
   const pane=$("#paneSearch"), res=$("#results");
-  if(!q){ res.innerHTML=`<p class="empty">上の検索窓に入力してください。</p>`; return; }
+  if(!q){ res.innerHTML=`<p class="empty">${UL()==="en"?"Type a query in the search box above.":"上の検索窓に入力してください。"}</p>`; return; }
   selAside("search");
   const ql=q.toLowerCase();
   const hits=[];
   SEGS_III.forEach(s=>{
     let where=[];
-    if(s.words.some(w=>w.form.includes(q)||w.lemma.includes(q))) where.push("コプト");
-    if(s.words.some(w=>(w.senses||[]).some(x=>(x.en||"").toLowerCase().includes(ql)))) where.push("EN語釈");
-    if(s.words.some(w=>(w.senses||[]).some(x=>(x.ja||"").includes(q)))) where.push("JA語釈");
-    if(s.words.some(w=>(w.senses||[]).some(x=>(x.fr||"").toLowerCase().includes(ql)))) where.push("FR語釈");
-    if((s.transJa||"").includes(q)) where.push("和訳");
-    if((s.transEn||"").toLowerCase().includes(ql)) where.push("英訳");
-    if((s.transFr||"").toLowerCase().includes(ql)) where.push("仏訳");
+    if(s.words.some(w=>w.form.includes(q)||w.lemma.includes(q))) where.push(UL()==="en"?"Coptic":"コプト");
+    if(s.words.some(w=>(w.senses||[]).some(x=>(x.en||"").toLowerCase().includes(ql)))) where.push(UL()==="en"?"EN gloss":"EN語釈");
+    if(s.words.some(w=>(w.senses||[]).some(x=>(x.ja||"").includes(q)))) where.push(UL()==="en"?"JA gloss":"JA語釈");
+    if(s.words.some(w=>(w.senses||[]).some(x=>(x.fr||"").toLowerCase().includes(ql)))) where.push(UL()==="en"?"FR gloss":"FR語釈");
+    if((s.transJa||"").includes(q)) where.push(UL()==="en"?"JA trans.":"和訳");
+    if((s.transEn||"").toLowerCase().includes(ql)) where.push(UL()==="en"?"EN trans.":"英訳");
+    if((s.transFr||"").toLowerCase().includes(ql)) where.push(UL()==="en"?"FR trans.":"仏訳");
     if(where.length) hits.push({s,where});
   });
-  if(!hits.length){ res.innerHTML=`<p class="empty">「${escapeHTML(q)}」に一致する箇所はありません。</p>`; return; }
+  if(!hits.length){ res.innerHTML=`<p class="empty">${UL()==="en"?`No matches for “${escapeHTML(q)}”.`:`「${escapeHTML(q)}」に一致する箇所はありません。`}</p>`; return; }
   res.innerHTML=hits.map(({s,where})=>{
     const cop=s.words.map(w=>{
       const hit=w.form.includes(q)||w.lemma.includes(q);
@@ -2517,19 +2523,55 @@ function toggle(btn,attr,onVal,offVal,onLabel,offLabel){
 }
 $("#ilBtn").onclick=()=>toggle($("#ilBtn"),"data-il","on","off");
 const LANG_CYCLE=["ja","en","fr"];
-function cycleLang(btn,attr,prefix){
+/* ---- UI i18n helpers ---- */
+function UL(){ return H.getAttribute("data-lang")==="en"?"en":"ja"; }
+function lemmaLbl(){ return UL()==="en"?"lemma":"レンマ"; }
+function defLbl(){ return UL()==="en"?"default":"既定"; }
+function homoLbl(n){ return UL()==="en"?("homograph — "+n+" senses"):("同形異義 — "+n+" 語義"); }
+function noneLbl(){ return UL()==="en"?"No sense registered yet (extend in the lexicon).":"語義は未登録です（語彙集で拡張可能）。"; }
+function loanLbl(){ return UL()==="en"?"Greek loanword":"ギリシア語からの借用語"; }
+function langLbl(v){ return (UL()==="en"?{ja:"JA",en:"EN",fr:"FR"}:{ja:"日",en:"英",fr:"仏"})[v]; }
+function relabelLangBtn(btn,attr,key){
+  if(!btn) return;
+  const v=H.getAttribute(attr)||"ja";
+  const pre=(UL()==="en"?{gl:"Gloss",tl:"Trans"}:{gl:"語釈",tl:"訳"})[key];
+  btn.textContent=pre+": "+langLbl(v);
+}
+function relabelMode(){
+  const b=$("#modeBtn"); if(!b) return;
+  const codex=H.getAttribute("data-mode")==="codex";
+  b.textContent = codex ? (UL()==="en"?"◑ Codex":"◑ コーデクス") : (UL()==="en"?"◐ Aeon":"◐ アイオーン");
+}
+function cycleLang(btn,attr,key){
   const cur=H.getAttribute(attr)||"ja";
   const next=LANG_CYCLE[(LANG_CYCLE.indexOf(cur)+1)%LANG_CYCLE.length];
   H.setAttribute(attr,next);
-  const lbl={ja:"日",en:"英",fr:"仏"}[next];
-  btn.textContent=prefix+": "+lbl;
+  relabelLangBtn(btn,attr,key);
   btn.setAttribute("aria-pressed", next==="ja"?"false":"true");
   render();
 }
-$("#glBtn").onclick=()=>cycleLang($("#glBtn"),"data-gl","語釈");
-$("#tlBtn").onclick=()=>cycleLang($("#tlBtn"),"data-tl","訳");
-$("#modeBtn").onclick=()=>toggle($("#modeBtn"),"data-mode","aeon","codex","◑ コーデクス","◐ アイオーン");
-$("#railBtn").onclick=()=>{ const open=H.getAttribute("data-rail")==="open"; H.setAttribute("data-rail",open?"closed":"open"); $("#railBtn").setAttribute("aria-pressed",open?"false":"true"); };
+$("#glBtn").onclick=()=>cycleLang($("#glBtn"),"data-gl","gl");
+$("#tlBtn").onclick=()=>cycleLang($("#tlBtn"),"data-tl","tl");
+$("#modeBtn").onclick=()=>{ toggle($("#modeBtn"),"data-mode","aeon","codex","◑ コーデクス","◐ アイオーン"); relabelMode(); };
+{ const rb=$("#railBtn"); if(rb) rb.onclick=()=>{ const open=H.getAttribute("data-rail")==="open"; H.setAttribute("data-rail",open?"closed":"open"); rb.setAttribute("aria-pressed",open?"false":"true"); }; }
+function applyUILang(){
+  const en=UL()==="en";
+  const lb=$("#langBtn"); if(lb) lb.textContent=en?"日本語":"English";
+  const qi=$("#q"); if(qi){ qi.placeholder=en?"Search Coptic, glosses, translations":"コプト語・語釈・訳を検索"; qi.setAttribute("aria-label",en?"Search":"検索"); }
+  relabelLangBtn($("#glBtn"),"data-gl","gl");
+  relabelLangBtn($("#tlBtn"),"data-tl","tl");
+  relabelMode();
+  H.setAttribute("lang", en?"en":"ja");
+}
+{ const lgb=$("#langBtn"); if(lgb) lgb.onclick=()=>{
+    const en=UL()==="en";
+    H.setAttribute("data-lang", en?"ja":"en");
+    H.setAttribute("data-gl",  en?"ja":"en");
+    H.setAttribute("data-tl",  en?"ja":"en");
+    applyUILang();
+    if(typeof render==="function") render();
+  }; }
+applyUILang();
 
 /* ---------- credit ---------- */
 function buildCredit(sample){

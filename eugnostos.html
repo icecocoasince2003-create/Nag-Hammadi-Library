@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" data-lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -237,32 +237,37 @@ html[data-tl="fr"] .note p.ja{display:none}
 html[data-drag="on"] #drop-hint{display:flex}
 #drop-hint[hidden]{display:none}
 html:not([data-drag="on"]) #drop-hint{display:none}
+/* ---- UI language toggle (JA/EN) ---- */
+.l-en{display:none}
+html[data-lang="en"] .l-ja{display:none}
+html[data-lang="en"] .l-en{display:revert}
 </style>
 </head>
 <body>
 <div class="app">
   <header>
-    <a class="chip homelink" href="index.html" title="文書一覧へ">← 一覧</a>
-    <button class="chip railtoggle" id="railBtn" aria-label="系譜パネル" aria-pressed="false">☰ 系譜</button>
+    <a class="chip homelink" href="index.html" title="Index / 一覧へ"><span class="l-ja">← 一覧</span><span class="l-en">← Index</span></a>
+    <button class="chip railtoggle" id="railBtn" aria-label="系譜パネル" aria-pressed="false"><span class="l-ja">☰ 系譜</span><span class="l-en">☰ Lineage</span></button>
     <div class="brand">
       <img class="brandlogo" src="image/icon.svg" alt="" width="30" height="30" onerror="this.style.display='none'">
       <div class="brandtext">
-        <div class="t"><span class="cop">ⲉⲩⲅⲛⲱⲥⲧⲟⲥ</span> 祝福されたエウグノストス</div>
+        <div class="t"><span class="cop">ⲉⲩⲅⲛⲱⲥⲧⲟⲥ</span> <span class="l-ja">祝福されたエウグノストス</span><span class="l-en">Eugnostos the Blessed</span></div>
         <div class="s">Eugnostos the Blessed · NHC III,3 / V,1</div>
       </div>
     </div>
     <div class="tabs" role="tablist" aria-label="写本">
-      <button class="tab" role="tab" data-wit="III" aria-selected="true">III,3 本文</button>
+      <button class="tab" role="tab" data-wit="III" aria-selected="true"><span class="l-ja">III,3 本文</span><span class="l-en">III,3 text</span></button>
       <button class="tab" role="tab" data-wit="V" aria-selected="false">V,1</button>
-      <button class="tab" role="tab" data-wit="SYN" aria-selected="false">対照</button>
+      <button class="tab" role="tab" data-wit="SYN" aria-selected="false"><span class="l-ja">対照</span><span class="l-en">Synopsis</span></button>
     </div>
     <div class="controls">
       <div class="seg-ctl">
-        <button class="chip" id="ilBtn" aria-pressed="false">語釈を重ねる</button>
+        <button class="chip" id="ilBtn" aria-pressed="false"><span class="l-ja">語釈を重ねる</span><span class="l-en">Interlinear</span></button>
         <button class="chip" id="glBtn" aria-pressed="false" title="語釈の言語">語釈: 日</button>
         <button class="chip" id="tlBtn" aria-pressed="false" title="対訳・注解の言語">訳: 日</button>
+        <button class="chip" id="langBtn" title="Language / 言語">English</button>
         <button class="chip" id="modeBtn" aria-pressed="false" title="表示モード">◐ アイオーン</button>
-        <button class="chip" id="pickTop" title="TEI XMLを読み込む">XMLを開く</button>
+        <button class="chip" id="pickTop" title="Open TEI XML"><span class="l-ja">XMLを開く</span><span class="l-en">Open XML</span></button>
       </div>
       <div class="search">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
@@ -274,22 +279,22 @@ html:not([data-drag="on"]) #drop-hint{display:none}
   <nav class="rail" aria-label="流出の系譜とテーマ">
     <h2>流出の系譜 · Emanation</h2>
     <div class="spine" id="spine"></div>
-    <h2>枠組みのテーマ</h2>
+    <h2><span class="l-ja">枠組みのテーマ</span><span class="l-en">Themes</span></h2>
     <div class="frame-themes" id="frameThemes"></div>
-    <button class="clearf" id="clearTheme" hidden>テーマ選択を解除</button>
+    <button class="clearf" id="clearTheme" hidden><span class="l-ja">テーマ選択を解除</span><span class="l-en">Clear themes</span></button>
   </nav>
 
   <main id="main" tabindex="-1">
     <div class="doc-head">
       <div class="kick">Nag Hammadi Codex III,3 · pp. 70–90</div>
-      <h1><span class="cop">ⲉⲩⲅⲛⲱⲥⲧⲟⲥ ⲡⲙⲁⲕⲁⲣⲓⲟⲥ</span><br>祝福されたエウグノストス</h1>
-      <p class="meta">前1〜2世紀のギリシア語原典に遡るとされる、非キリスト教的な思弁的宇宙生成論。語りえぬ第一原理から、先在の父・自生者・不死の人間・人の子(救済者)・ソフィアと諸アイオーンが流出する次第を、書簡の体裁で説く。各形態素をクリックすると語義が、右側に神学的解釈が表示されます。</p>
+      <h1><span class="cop">ⲉⲩⲅⲛⲱⲥⲧⲟⲥ ⲡⲙⲁⲕⲁⲣⲓⲟⲥ</span><br><span class="l-ja">祝福されたエウグノストス</span><span class="l-en">Eugnostos the Blessed</span></h1>
+      <p class="meta"><span class="l-ja">前1〜2世紀のギリシア語原典に遡るとされる、非キリスト教的な思弁的宇宙生成論。語りえぬ第一原理から、先在の父・自生者・不死の人間・人の子(救済者)・ソフィアと諸アイオーンが流出する次第を、書簡の体裁で説く。各形態素をクリックすると語義が、右側に神学的解釈が表示されます。</span><span class="l-en">A non-Christian speculative cosmogony, held to go back to a Greek original of the 1st–2nd c. BCE. In epistolary form it expounds how, from the ineffable First Principle, there emanate the pre-existent Father, the Self-Begotten, the Immortal Man, the Son of Man (the Saviour), Sophia and the Aeons. Click any morpheme for its sense; the theological interpretation appears on the right.</span></p>
     </div>
     <div class="notice" id="notice" hidden>
       <span>⬥ <b>サンプル表示中</b>(冒頭の数節)。全文は3ファイル <code>eugnostos_tei.xml</code> /
       <code>eugnostos_lexicon.xml</code> / <code>eugnostos_theology.xml</code> を本ファイルと同じ場所に置き
       <b>Webサーバ経由</b>で開くと自動表示されます。手動で開くには右のボタン、またはこの枠へ XML を(複数まとめて)ドラッグ＆ドロップ。</span>
-      <button class="chip" id="pick" style="color:var(--lapis);border-color:var(--lapis)">XMLを選択</button>
+      <button class="chip" id="pick" style="color:var(--lapis);border-color:var(--lapis)"><span class="l-ja">XMLを選択</span><span class="l-en">Choose XML</span></button>
       <span id="status"></span>
       <input id="file" type="file" accept=".xml,application/xml,text/xml" multiple hidden>
     </div>
@@ -300,16 +305,16 @@ html:not([data-drag="on"]) #drop-hint{display:none}
 
   <aside aria-label="解釈と検索">
     <div class="aside-tabs" role="tablist">
-      <button role="tab" id="atIntro" data-pane="intro" aria-selected="true">神学的解釈</button>
-      <button role="tab" id="atSearch" data-pane="search" aria-selected="false">検索結果</button>
+      <button role="tab" id="atIntro" data-pane="intro" aria-selected="true"><span class="l-ja">神学的解釈</span><span class="l-en">Interpretation</span></button>
+      <button role="tab" id="atSearch" data-pane="search" aria-selected="false"><span class="l-ja">検索結果</span><span class="l-en">Search</span></button>
     </div>
     <div class="aside-body">
       <div id="paneIntro">
-        <p class="panel-intro">左の系譜やテーマを選ぶと、関連する注のみが絞り込まれます。各注の「本文へ」で該当箇所へ移動します。</p>
+        <p class="panel-intro"><span class="l-ja">左の系譜やテーマを選ぶと、関連する注のみが絞り込まれます。各注の「本文へ」で該当箇所へ移動します。</span><span class="l-en">Select a lineage or theme on the left to filter the related notes. Use “To text” in each note to jump to the passage.</span></p>
         <div id="notes"></div>
       </div>
       <div id="paneSearch" hidden>
-        <div id="results"><p class="empty">上の検索窓に入力してください。</p></div>
+        <div id="results"><p class="empty"><span class="l-ja">上の検索窓に入力してください。</span><span class="l-en">Type a query in the search box above.</span></p></div>
       </div>
     </div>
   </aside>
@@ -5538,7 +5543,7 @@ function buildNotes(){
     const chips=n.themes.map(t=>`<span>${(THEME_LABELS[t]||{ja:t}).ja}</span>`).join("");
     el.innerHTML=`<div class="themechips">${chips}</div><h3>${n.label}</h3>
       <p class="ja">${n.ja}</p><p class="en">${n.en}</p><p class="fr">${n.fr||""}</p>
-      <button class="jump">本文へ ›</button>`;
+      <button class="jump">${UL()==="en"?"To text ›":"本文へ ›"}</button>`;
     el.querySelector(".jump").onclick=()=>{ if(n.targets[0]) flashSeg(n.targets[0]); };
     box.appendChild(el);
   });
@@ -5643,12 +5648,12 @@ function showPop(el){
       return `<div class="sense${isDef?' def':''}">
         <div class="srow"><span class="snum">${i+1}</span>
           <span class="pos${sn.grc?' grc':''}">${p[0]}</span>${u}
-          ${isDef?'<span class="defmark">既定</span>':''}</div>
+          ${isDef?'<span class="defmark">'+defLbl()+'</span>':''}</div>
         <div class="sglos">${g.join('<span class="sep">・</span>')}</div></div>`;
     }).join("");
     inner=`<div class="form">${escapeHTML(w.form)}</div>
-      ${w.lemma&&w.lemma!==w.form?`<div class="lemma">レンマ ${escapeHTML(w.lemma)}</div>`:""}
-      <div class="hommark">⬥ 同形異義 — ${w.senses.length} 語義</div>
+      ${w.lemma&&w.lemma!==w.form?`<div class="lemma">${lemmaLbl()} ${escapeHTML(w.lemma)}</div>`:""}
+      <div class="hommark">⬥ ${homoLbl(w.senses.length)}</div>
       <div class="senses">${rows}</div>`;
   } else {
     let dl="";
@@ -5656,10 +5661,10 @@ function showPop(el){
     if(w.glossJa) dl+=`<dt>JA</dt><dd class="ja">${escapeHTML(w.glossJa)}</dd>`;
     if(w.glossFr) dl+=`<dt>FR</dt><dd>${escapeHTML(w.glossFr)}</dd>`;
     inner=`<div class="form">${escapeHTML(w.form)}</div>
-      ${w.lemma&&w.lemma!==w.form?`<div class="lemma">レンマ ${escapeHTML(w.lemma)}</div>`:""}
+      ${w.lemma&&w.lemma!==w.form?`<div class="lemma">${lemmaLbl()} ${escapeHTML(w.lemma)}</div>`:""}
       <span class="pos${w.grc?' grc':''}">${pos[0]} · ${pos[1]}</span>
-      ${dl?`<dl>${dl}</dl>`:`<div class="none">語義は未登録です（語彙集で拡張可能）。</div>`}
-      ${w.grc?`<div class="grcnote">⬥ ギリシア語からの借用語</div>`:""}`;
+      ${dl?`<dl>${dl}</dl>`:`<div class="none">${noneLbl()}</div>`}
+      ${w.grc?`<div class="grcnote">⬥ ${loanLbl()}</div>`:""}`;
   }
   pop.innerHTML=inner;
   const r=el.getBoundingClientRect();
@@ -5690,22 +5695,22 @@ let qt=null;
 $("#q").addEventListener("input",e=>{ clearTimeout(qt); qt=setTimeout(()=>doSearch(e.target.value.trim()),160); });
 function doSearch(q){
   const pane=$("#paneSearch"), res=$("#results");
-  if(!q){ res.innerHTML=`<p class="empty">上の検索窓に入力してください。</p>`; return; }
+  if(!q){ res.innerHTML=`<p class="empty">${UL()==="en"?"Type a query in the search box above.":"上の検索窓に入力してください。"}</p>`; return; }
   selAside("search");
   const ql=q.toLowerCase();
   const hits=[];
   SEGS_III.forEach(s=>{
     let where=[];
-    if(s.words.some(w=>w.form.includes(q)||w.lemma.includes(q))) where.push("コプト");
-    if(s.words.some(w=>(w.senses||[]).some(x=>(x.en||"").toLowerCase().includes(ql)))) where.push("EN語釈");
-    if(s.words.some(w=>(w.senses||[]).some(x=>(x.ja||"").includes(q)))) where.push("JA語釈");
-    if(s.words.some(w=>(w.senses||[]).some(x=>(x.fr||"").toLowerCase().includes(ql)))) where.push("FR語釈");
-    if((s.transJa||"").includes(q)) where.push("和訳");
-    if((s.transEn||"").toLowerCase().includes(ql)) where.push("英訳");
-    if((s.transFr||"").toLowerCase().includes(ql)) where.push("仏訳");
+    if(s.words.some(w=>w.form.includes(q)||w.lemma.includes(q))) where.push(UL()==="en"?"Coptic":"コプト");
+    if(s.words.some(w=>(w.senses||[]).some(x=>(x.en||"").toLowerCase().includes(ql)))) where.push(UL()==="en"?"EN gloss":"EN語釈");
+    if(s.words.some(w=>(w.senses||[]).some(x=>(x.ja||"").includes(q)))) where.push(UL()==="en"?"JA gloss":"JA語釈");
+    if(s.words.some(w=>(w.senses||[]).some(x=>(x.fr||"").toLowerCase().includes(ql)))) where.push(UL()==="en"?"FR gloss":"FR語釈");
+    if((s.transJa||"").includes(q)) where.push(UL()==="en"?"JA trans.":"和訳");
+    if((s.transEn||"").toLowerCase().includes(ql)) where.push(UL()==="en"?"EN trans.":"英訳");
+    if((s.transFr||"").toLowerCase().includes(ql)) where.push(UL()==="en"?"FR trans.":"仏訳");
     if(where.length) hits.push({s,where});
   });
-  if(!hits.length){ res.innerHTML=`<p class="empty">「${escapeHTML(q)}」に一致する箇所はありません。</p>`; return; }
+  if(!hits.length){ res.innerHTML=`<p class="empty">${UL()==="en"?`No matches for “${escapeHTML(q)}”.`:`「${escapeHTML(q)}」に一致する箇所はありません。`}</p>`; return; }
   res.innerHTML=hits.map(({s,where})=>{
     const cop=s.words.map(w=>{
       const hit=w.form.includes(q)||w.lemma.includes(q);
@@ -5745,19 +5750,55 @@ function toggle(btn,attr,onVal,offVal,onLabel,offLabel){
 }
 $("#ilBtn").onclick=()=>toggle($("#ilBtn"),"data-il","on","off");
 const LANG_CYCLE=["ja","en","fr"];
-function cycleLang(btn,attr,prefix){
+/* ---- UI i18n helpers ---- */
+function UL(){ return H.getAttribute("data-lang")==="en"?"en":"ja"; }
+function lemmaLbl(){ return UL()==="en"?"lemma":"レンマ"; }
+function defLbl(){ return UL()==="en"?"default":"既定"; }
+function homoLbl(n){ return UL()==="en"?("homograph — "+n+" senses"):("同形異義 — "+n+" 語義"); }
+function noneLbl(){ return UL()==="en"?"No sense registered yet (extend in the lexicon).":"語義は未登録です（語彙集で拡張可能）。"; }
+function loanLbl(){ return UL()==="en"?"Greek loanword":"ギリシア語からの借用語"; }
+function langLbl(v){ return (UL()==="en"?{ja:"JA",en:"EN",fr:"FR"}:{ja:"日",en:"英",fr:"仏"})[v]; }
+function relabelLangBtn(btn,attr,key){
+  if(!btn) return;
+  const v=H.getAttribute(attr)||"ja";
+  const pre=(UL()==="en"?{gl:"Gloss",tl:"Trans"}:{gl:"語釈",tl:"訳"})[key];
+  btn.textContent=pre+": "+langLbl(v);
+}
+function relabelMode(){
+  const b=$("#modeBtn"); if(!b) return;
+  const codex=H.getAttribute("data-mode")==="codex";
+  b.textContent = codex ? (UL()==="en"?"◑ Codex":"◑ コーデクス") : (UL()==="en"?"◐ Aeon":"◐ アイオーン");
+}
+function cycleLang(btn,attr,key){
   const cur=H.getAttribute(attr)||"ja";
   const next=LANG_CYCLE[(LANG_CYCLE.indexOf(cur)+1)%LANG_CYCLE.length];
   H.setAttribute(attr,next);
-  const lbl={ja:"日",en:"英",fr:"仏"}[next];
-  btn.textContent=prefix+": "+lbl;
+  relabelLangBtn(btn,attr,key);
   btn.setAttribute("aria-pressed", next==="ja"?"false":"true");
   render();
 }
-$("#glBtn").onclick=()=>cycleLang($("#glBtn"),"data-gl","語釈");
-$("#tlBtn").onclick=()=>cycleLang($("#tlBtn"),"data-tl","訳");
-$("#modeBtn").onclick=()=>toggle($("#modeBtn"),"data-mode","aeon","codex","◑ コーデクス","◐ アイオーン");
-$("#railBtn").onclick=()=>{ const open=H.getAttribute("data-rail")==="open"; H.setAttribute("data-rail",open?"closed":"open"); $("#railBtn").setAttribute("aria-pressed",open?"false":"true"); };
+$("#glBtn").onclick=()=>cycleLang($("#glBtn"),"data-gl","gl");
+$("#tlBtn").onclick=()=>cycleLang($("#tlBtn"),"data-tl","tl");
+$("#modeBtn").onclick=()=>{ toggle($("#modeBtn"),"data-mode","aeon","codex","◑ コーデクス","◐ アイオーン"); relabelMode(); };
+{ const rb=$("#railBtn"); if(rb) rb.onclick=()=>{ const open=H.getAttribute("data-rail")==="open"; H.setAttribute("data-rail",open?"closed":"open"); rb.setAttribute("aria-pressed",open?"false":"true"); }; }
+function applyUILang(){
+  const en=UL()==="en";
+  const lb=$("#langBtn"); if(lb) lb.textContent=en?"日本語":"English";
+  const qi=$("#q"); if(qi){ qi.placeholder=en?"Search Coptic, glosses, translations":"コプト語・語釈・訳を検索"; qi.setAttribute("aria-label",en?"Search":"検索"); }
+  relabelLangBtn($("#glBtn"),"data-gl","gl");
+  relabelLangBtn($("#tlBtn"),"data-tl","tl");
+  relabelMode();
+  H.setAttribute("lang", en?"en":"ja");
+}
+{ const lgb=$("#langBtn"); if(lgb) lgb.onclick=()=>{
+    const en=UL()==="en";
+    H.setAttribute("data-lang", en?"ja":"en");
+    H.setAttribute("data-gl",  en?"ja":"en");
+    H.setAttribute("data-tl",  en?"ja":"en");
+    applyUILang();
+    if(typeof render==="function") render();
+  }; }
+applyUILang();
 
 /* ---------- credit ---------- */
 function buildCredit(sample){
