@@ -2540,7 +2540,7 @@ function relabelLangBtn(btn,attr,key){
 function relabelMode(){
   const b=$("#modeBtn"); if(!b) return;
   const codex=H.getAttribute("data-mode")==="codex";
-  b.textContent = codex ? (UL()==="en"?"◑ Codex":"◑ コーデクス") : (UL()==="en"?"◐ Aeon":"◐ アイオーン");
+  b.textContent = codex ? (UL()==="en"?"◑ Archon":"◑ アルコーン") : (UL()==="en"?"◐ Aeon":"◐ アイオーン");
 }
 function cycleLang(btn,attr,key){
   const cur=H.getAttribute(attr)||"ja";
@@ -2552,7 +2552,7 @@ function cycleLang(btn,attr,key){
 }
 $("#glBtn").onclick=()=>cycleLang($("#glBtn"),"data-gl","gl");
 $("#tlBtn").onclick=()=>cycleLang($("#tlBtn"),"data-tl","tl");
-$("#modeBtn").onclick=()=>{ toggle($("#modeBtn"),"data-mode","aeon","codex","◑ コーデクス","◐ アイオーン"); relabelMode(); };
+$("#modeBtn").onclick=()=>{ toggle($("#modeBtn"),"data-mode","aeon","codex","◑ アルコーン","◐ アイオーン"); relabelMode(); };
 { const rb=$("#railBtn"); if(rb) rb.onclick=()=>{ const open=H.getAttribute("data-rail")==="open"; H.setAttribute("data-rail",open?"closed":"open"); rb.setAttribute("aria-pressed",open?"false":"true"); }; }
 function applyUILang(){
   const en=UL()==="en";
