@@ -195,7 +195,7 @@
         <body>
           <div type="tractate" n="Eugnostos" subtype="codexIII">
             <head xml:lang="en">Eugnostos the Blessed — Nag Hammadi Codex III,3 (pp. 70–90)</head>
-            <s xml:id="III-INCIPIT" n="1" source="marcion:INCIPIT" transJa="祝福されたエウグノストス、彼に属する者たちへ。これらのことを喜べ——" transEn="Eugnostos the blessed, to those who are his: rejoice in this —" transFr="Eugnostos le bienheureux, à ceux qui sont siens : réjouissez-vous de ceci —" ana="#th-dispositio #th-frame #th-sjc #th-witness" corresp="#wit-V" subtype="incipit">
+            <s xml:id="III-INCIPIT" n="1" transJa="祝福されたエウグノストス、彼に属する者たち、これらの中で喜べ" transEn="Eugnostos the blessed, to those who are his: rejoice in this —" transFr="Eugnostos le bienheureux, à ceux qui sont siens : réjouissez-vous de ceci —" ana="#th-dispositio #th-frame #th-sjc #th-witness" corresp="#wit-V" subtype="incipit">
             <phy>
               <w type="NPROP" lemma="ⲉⲩⲅⲛⲱⲥⲧⲟⲥ" xml:lang="grc">ⲉⲩⲅⲛⲱⲥⲧⲟⲥ</w>
             </phy>
@@ -226,7 +226,7 @@
               <w type="PDEM" lemma="ⲛⲁⲓ">ⲛⲉⲉⲓ</w>
             </phy>
             </s>
-            <s xml:id="III-7505191" n="2" source="marcion:7505191" transJa="世界の創設以来今に至るまで生まれたすべての人間が、神を求めて「神とは誰か、いかなる方か」と問いながらも見いだせずにいることを、あなたがたが知るために。世界の経綸より優れた知者たちでさえ満足しなかった。世界の統治について哲学者たちは三通りに語るが、彼らは互いに一致しない。ある者は、世界は自らによって治められると言う。" transEn="…that you may know that, from the foundation of the world until now, every human born has sought God, asking who and what he is, yet has not found him. Even the wise, beyond the governance of the world, were not satisfied. For the philosophers speak of the world&#x27;s governance in three ways and do not agree among themselves: some say the world is governed by itself;" transFr="… afin que vous sachiez que, depuis la fondation du monde jusqu&#x27;à maintenant, tout homme né a cherché Dieu, demandant qui et ce qu&#x27;il est, sans le trouver. Même les sages, au-delà du gouvernement du monde, ne furent pas satisfaits ; car les philosophes parlent du gouvernement du monde de trois manières et ne s&#x27;accordent pas entre eux : les uns disent que le monde se gouverne lui-même ;" ana="#th-apophatic #th-dispositio #th-frame #th-sjc">
+            <s xml:id="III-7505191" n="2" transJa="あなた方に知らせる：生まれた全ての人間は宇宙の創造が始まってから現在まで塵である。">
             <phy>
               <w type="PREP" lemma="ⲉ">ⲉ</w>
               <w type="ACAUS" lemma="ⲧⲣⲉ">ⲧⲣⲉ</w>
@@ -272,6 +272,8 @@
               <w type="PREP" lemma="ⲛ">ⲛ</w>
               <w type="N" lemma="ϣϩⲓϭ">ϣϩⲓϭ</w>
             </phy>
+            </s>
+            <s xml:id="III-7505192" n="3" transJa="彼らは神を、それが誰であるが、どのようであるかを求めているが、それを見つけられなかった。">
             <phy>
               <w type="CCIRC" lemma="ⲉ">ⲉ</w>
               <w type="PPER" lemma="ⲩ">ⲩ</w>
@@ -313,6 +315,7 @@
               <w type="PREP" lemma="ⲉⲣⲟ">ⲉⲣⲟ</w>
               <w type="PPER" lemma="ϥ">ϥ</w>
             </phy>
+            <s xml:id="III-7505193" n="4" transJa="彼らの中の偉大な賢者は宇宙の秩序から真理を思索し、思索は真理に達しなかった。"></s>
             <phy>
               <w type="PREP" lemma="ⲛ">ⲛ</w>
               <w type="N" lemma="ⲥⲁⲃⲉ">ⲥⲁⲃⲉⲉⲩⲉ</w>
@@ -361,6 +364,8 @@
               <w type="ART" lemma="ⲧ">ⲧ</w>
               <w type="N" lemma="ⲙⲏⲉ">ⲙⲏⲉ</w>
             </phy>
+          </s>
+          <s xml:id="III-7505193" n="5" transJa="なぜなら秩序は全ての哲学者の手によって3つの意見でそれについて話されるためである。"></s>
             <phy>
               <w type="ART" lemma="ⲧ">ⲧ</w>
               <w type="N" lemma="ⲇⲓⲟⲓⲕⲏⲥⲓⲥ" xml:lang="grc">ⲇⲓⲟⲓⲕⲏⲥⲓⲥ</w>
@@ -407,6 +412,8 @@
             <phy>
               <w type="PDEM" lemma="ⲡⲁⲓ">ⲡⲁⲓ</w>
             </phy>
+          </s>
+          <s xml:id="III-7505194" n="6" transJa="いくつか（のために）それらは調和しない。">
             <phy>
               <w type="PREP" lemma="ⲛ">ⲛ</w>
               <w type="NUM" lemma="ⲥⲉ">ⲥⲉ</w>
@@ -418,27 +425,55 @@
             <phy>
               <w type="N" lemma="ϩⲟⲓⲛⲉ">ϩⲟⲉⲓⲛⲉ</w>
             </phy>
-              <w type="PREP" lemma="ⲛ">ⲛ</w>
+          </s>
+          <s xml:id="III-7505195" n="7" transJa="なぜなら、彼らの中の（ある）者たちは、宇宙についてそれが提起したのはそれ自身の手による、と言った。">
+            <phy>
+              <w type="CONJ" lemma="ⲛ">ⲛ</w>
               <w type="PTC" lemma="ⲅⲁⲣ" xml:lang="grc">ⲅⲁⲣ</w>
+            </phy>
+            <phy>
               <w type="PREP" lemma="ⲛϩⲏⲧ">ⲛϩⲏⲧ</w>
               <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
+            </phy>
+            <phy>
               <w type="NUM" lemma="ⲥⲉ">ⲥⲉ</w>
               <w type="V" lemma="ϫⲱ">ϫⲱ</w>
+            </phy>
+            <phy>
               <w type="PREP" lemma="ⲙⲙⲟ">ⲙⲙⲟ</w>
               <w type="PPER" lemma="ⲥ">ⲥ</w>
-              <w type="PREP" lemma="ⲉ">ⲉ</w>
+            </phy>
+            <phy>
+              <w type="CREL" lemma="ⲉ">ⲉ</w>
               <w type="ART" lemma="ⲡ">ⲡ</w>
               <w type="N" lemma="ⲕⲟⲥⲙⲟⲥ" xml:lang="grc">ⲕⲟⲥⲙⲟⲥ</w>
+            </phy>
+            <phy>
               <w type="CONJ" lemma="ϫⲉ">ϫⲉ</w>
-              <w type="X" lemma="ⲛⲧⲁⲩⲁⲅⲉ">ⲛⲧⲁⲩⲁⲅⲉ</w>
+            </phy>
+            <phy>
+              <w type="CFOC" lemma="ⲛⲧ">ⲛⲧ</w>
+              <w type="APST" lemma="ⲁ">ⲁ</w>
+              <w type="PPER" lemma="ⲩ">ⲩ</w>
+              <w type="V" lemma="ⲁⲅⲉ">ⲁⲅⲉ</w>
+            </phy>  
+            <phy>
               <w type="PREP" lemma="ⲙⲙⲟ">ⲙⲙⲟ</w>
               <w type="PPER" lemma="ϥ">ϥ</w>
+            </phy>
+            <phy>
               <w type="PREP" lemma="ϩⲓⲧⲟⲟⲧ">ϩⲓⲧⲟⲟⲧ</w>
               <w type="PPER" lemma="ϥ">ϥ</w>
-              <w type="ADV" lemma="ⲙⲙⲓⲛ">ⲙⲙⲓⲛ</w>
-              <w type="X" lemma="ⲙⲙⲟϥ">ⲙⲙⲟϥ</w>
+            </phy>
+            <phy>
+              <w type="PTC" lemma="ⲙⲙⲓⲛ">ⲙⲙⲓⲛ</w>
+            </phy>
+            <phy>
+              <w type="PREP" lemma="ⲙⲙⲟ">ⲙⲙⲟ</w>
+              <w type="PPER" lemma="ϥ">ϥ</w>
+            </phy>
             </s>
-            <s xml:id="III-7505192" n="3" source="marcion:7505192" transJa="ある者たちは、それは摂理(プロノイア)であると言う。" transEn="others, that it is providence;" transFr="d&#x27;autres, que c&#x27;est la providence ;" ana="#th-apophatic #th-frame">
+            <s xml:id="III-7505192" n="3" transJa="ある者たちは、それは摂理(プロノイア)であると言う。" transEn="others, that it is providence;" transFr="d&#x27;autres, que c&#x27;est la providence ;" ana="#th-apophatic #th-frame">
               <w type="ART" lemma="ϩⲉⲛ">ϩⲉⲛ</w>
               <w type="N" lemma="ⲕⲟⲟⲩⲉ">ⲕⲟⲟⲩⲉ</w>
               <w type="CONJ" lemma="ϫⲉ">ϫⲉ</w>
