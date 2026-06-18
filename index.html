@@ -104,6 +104,15 @@ html[data-lang="en"] .l-ja{display:none}
 html[data-lang="en"] .l-en{display:revert}
 html[data-lang="en"] .trow .tt .ja{display:none}
 html[data-lang="en"] .trow .tt .en{font-family:var(--disp); font-style:normal; font-size:.92rem; font-weight:500; color:var(--ink)}
+/* ---- credit & changelog ---- */
+.cred{font-family:var(--disp); color:var(--gold); font-weight:600; letter-spacing:.01em}
+.changelog{border-top:1px solid var(--line)}
+.changelog .wrap{padding:20px 0 64px}
+.changelog h2{font-family:var(--disp); font-weight:600; font-size:.96rem; letter-spacing:.03em; color:var(--ink-soft); margin:0 0 14px}
+.clog{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:11px}
+.clog li{display:grid; grid-template-columns:7.2em 1fr; gap:14px; align-items:baseline; font-size:.83rem; color:var(--ink-soft); line-height:1.62}
+.clog time{font-family:var(--ui); font-size:.72rem; letter-spacing:.04em; color:var(--gold); white-space:nowrap}
+@media(max-width:520px){ .clog li{grid-template-columns:1fr; gap:2px} }
 </style></head><body>
 <header>
   <a class="brand" href="index.html"><img class="brandlogo" src="image/icon.svg" alt="" width="30" height="30" onerror="this.style.display='none'"><span class="bt"><b><span class="cop">ⲛⲁⲅ ϩⲁⲙⲙⲁⲇⲓ</span><span class="l-ja">ナグ・ハマディ写本コーパス</span><span class="l-en">Nag Hammadi Library</span></b>
@@ -151,7 +160,16 @@ html[data-lang="en"] .trow .tt .en{font-family:var(--disp); font-style:normal; f
 
 <footer><div class="wrap"><span class="l-ja"><b>3</b>&nbsp;文書を公開 / 全&nbsp;<b>53</b>&nbsp;文書(13写本)　·　
   本文はパブリックドメイン、注釈・辞書・対訳は CC&nbsp;BY&nbsp;4.0(原文オリジナルのシード)　·　
-  生成 2026-06-17</span><span class="l-en"><b>3</b>&nbsp;published / <b>53</b>&nbsp;tractates total (13 codices)　·　Coptic text in the public domain; notes, dictionary &amp; translations under CC&nbsp;BY&nbsp;4.0 (original seed)　·　generated 2026-06-17</span></div></footer>
+  編集 <span class="cred">kokoa nabatame</span>　·　生成 2026-06-17</span><span class="l-en"><b>3</b>&nbsp;published / <b>53</b>&nbsp;tractates total (13 codices)　·　Coptic text in the public domain; notes, dictionary &amp; translations under CC&nbsp;BY&nbsp;4.0 (original seed)　·　edited by <span class="cred">kokoa nabatame</span>　·　generated 2026-06-17</span></div></footer>
+
+<section class="changelog"><div class="wrap">
+ <h2><span class="l-ja">更新履歴</span><span class="l-en">Changelog</span></h2>
+ <ol class="clog">
+  <li><time>2026-06-18</time><span><span class="l-ja">プラトン『国家』のギリシア語本文に日本語訳・英語訳を併記。index・エウグノストス・国家の各ビューアに 日本語／English 切替を搭載。表示モードの呼称を「アイオーン／アルコーン」に統一。</span><span class="l-en">Added Japanese and English renderings alongside the Greek text of the Republic; introduced a Japanese / English toggle on the index and the Eugnostos and Republic viewers; unified the display modes as “Aeon / Archon.”</span></span></li>
+  <li><time>2026-06-17</time><span><span class="l-ja">プラトン『国家』(NHC VI,5) のコプト語ビューアを公開（ギリシア語対照つき）。辞書参照を独立した lexicon ファイルへ分離。</span><span class="l-en">Published the Coptic viewer for Plato’s Republic (NHC VI,5) with a Greek parallel; split dictionary references into a separate lexicon file.</span></span></li>
+  <li><time>2026-06</time><span><span class="l-ja">エウグノストス (NHC III,3 / V,1) の三言語ビューアを公開。形態素グロス・コプト語辞書・神学注釈を実装。</span><span class="l-en">Published the trilingual Eugnostos viewer (NHC III,3 / V,1) with morpheme glosses, a Coptic dictionary, and theological notes.</span></span></li>
+ </ol>
+</div></section>
 
 <script>
 const q=document.getElementById('q'), grid=document.getElementById('grid'), empty=document.getElementById('empty');
