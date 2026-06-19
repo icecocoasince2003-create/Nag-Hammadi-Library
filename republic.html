@@ -2167,7 +2167,7 @@ async function load(){
   const main=await fetchFirst(base,
     ["data/republic_tei.xml","republic_tei.xml","republic-tei.xml"], diag);
   const lex =await fetchFirst(base,
-    ["data/republic_lexicon.xml","republic_lexicon.xml","republic-lexicon.xml"], diag);
+    ["data/lexicon.xml","lexicon.xml","data/republic_lexicon.xml","republic_lexicon.xml"], diag);
   const theo=null;
 
   DOC_MAIN = main || embedded("tei-main");
@@ -2330,7 +2330,7 @@ function pickGloss(w){ const l=curGL(); return (l==="fr"?(w.glossFr||w.gloss):l=
 function pickTrans(s){ const l=curTL(); return (l==="fr"?s.transFr:l==="en"?s.transEn:s.transJa)||""; }
 function pendingText(){ const l=curTL(); return l==="fr"?"— traduction à venir —":l==="en"?"translation pending":"—訳は準備中—"; }
 function wordHTML(w,i){
-  const cls="wseg"+(w.grc?" grc":"")+(w.amb?" amb":"")+(w.pos==="X"||(!w.gloss&&!w.glossJa&&!w.glossFr)?" x":"");
+  const cls="wseg"+(w.grc?" grc":"")+(w.amb?" amb":"")+((!w.senses||w.senses.length===0)?" x":"");
   const g = pickGloss(w)||"·";
   return `<span class="${cls}" tabindex="0" role="button" data-i="${i}">${escapeHTML(w.form)}<span class="g">${escapeHTML(g)}</span></span>`;
 }
