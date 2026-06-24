@@ -132,6 +132,52 @@ html[data-mode="aeon"][data-loan="on"] .wseg.grc{background:rgba(207,147,166,.17
 html[data-loan="on"] .wseg.grc::before{content:""; position:absolute; top:1px; right:1px; width:4px; height:4px;
   border-radius:50%; background:var(--rose); pointer-events:none}
 .loann{margin-left:5px; font-size:.72rem; opacity:.85; font-variant-numeric:tabular-nums}
+/* ---- manuscript markers: line (lb) / page (pd) / gap ---- */
+.lbm,.pdm{display:none; user-select:none}
+html[data-line="on"] .lbm{display:inline-block; font-family:var(--ui); font-size:.56rem; line-height:1;
+  color:var(--lapis); vertical-align:.5em; margin:0 2px; padding:0 2px; border-left:1px solid var(--lapis);
+  opacity:.8; font-variant-numeric:tabular-nums}
+html[data-page="on"] .pdm{display:inline-block; font-family:var(--ui); font-size:.6rem; letter-spacing:.04em;
+  color:#fff; background:var(--gold); border-radius:4px; padding:1px 6px; margin:0 5px; vertical-align:.15em;
+  font-variant-numeric:tabular-nums; box-shadow:0 1px 3px rgba(0,0,0,.18)}
+.gapm{font-family:var(--copt); font-style:normal; padding:0 1px; cursor:help; border-radius:3px}
+.gapm.lac{color:var(--rose); background:rgba(157,90,108,.10); box-shadow:inset 0 -1px 0 rgba(157,90,108,.5)}
+.gapm.unc{color:var(--ink-faint); background:rgba(120,120,120,.10); box-shadow:inset 0 -1px 0 rgba(120,120,120,.5)}
+/* ---- statistics modal ---- */
+.modal-back{position:fixed; inset:0; background:rgba(20,22,30,.46); z-index:60; display:none; backdrop-filter:blur(2px)}
+html[data-stats="open"] .modal-back{display:block}
+.modal{position:fixed; z-index:61; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:min(720px,94vw); max-height:88vh; overflow-y:auto; background:var(--paper); border:1px solid var(--line-2);
+  border-radius:14px; box-shadow:0 24px 70px rgba(20,22,30,.4); display:none}
+html[data-stats="open"] .modal{display:block}
+.modal-head{position:sticky; top:0; background:var(--paper); display:flex; align-items:baseline; gap:10px;
+  padding:18px 22px 12px; border-bottom:1px solid var(--line); z-index:2}
+.modal-head h2{font-family:var(--disp); font-size:1.12rem; color:var(--gold); margin:0; flex:1}
+.modal-head .sub{font-family:var(--ui); font-size:.66rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint)}
+.modal-head .x{appearance:none; border:0; background:transparent; cursor:pointer; color:var(--ink-soft); font-size:1.5rem; line-height:1; padding:2px 8px; border-radius:8px}
+.modal-head .x:hover{color:var(--ink)}
+.modal-body{padding:16px 22px 26px}
+.statgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:10px; margin-bottom:20px}
+.statcard{background:var(--paper-2); border:1px solid var(--line); border-radius:10px; padding:11px 13px}
+.statcard .v{font-family:var(--disp); font-size:1.5rem; color:var(--ink); line-height:1.1; font-variant-numeric:tabular-nums}
+.statcard .v small{font-size:.8rem; color:var(--ink-faint)}
+.statcard .k{font-family:var(--ui); font-size:.64rem; letter-spacing:.04em; color:var(--ink-faint); margin-top:3px}
+.statcard.grc .v{color:var(--rose)}
+.stat-sec{margin-top:18px}
+.stat-sec h3{font-family:var(--disp); font-size:.86rem; color:var(--gold); margin:0 0 9px; display:flex; align-items:baseline; gap:8px}
+.stat-sec h3 small{font-family:var(--ui); font-size:.62rem; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.05em}
+.bars{display:flex; flex-direction:column; gap:4px}
+.bar{display:grid; grid-template-columns:160px 1fr 46px; align-items:center; gap:9px; font-size:.78rem}
+.bar .lab{color:var(--ink-soft); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.bar .lab code{font-family:var(--ui); font-size:.66rem; color:var(--ink-faint)}
+.bar .track{height:9px; background:var(--line); border-radius:5px; overflow:hidden}
+.bar .fill{height:100%; background:var(--gold); border-radius:5px}
+.bar.grc .fill{background:var(--rose)}
+.bar .ct{text-align:right; font-variant-numeric:tabular-nums; color:var(--ink-faint)}
+.chiplist{display:flex; flex-wrap:wrap; gap:6px}
+.chiplist .lx{font-family:var(--copt); font-size:.92rem; background:var(--paper-2); border:1px solid var(--line); border-radius:999px; padding:2px 10px; color:var(--ink)}
+.chiplist .lx b{font-family:var(--ui); font-size:.66rem; color:var(--rose); margin-left:5px; font-variant-numeric:tabular-nums}
+.stat-note{font-size:.7rem; color:var(--ink-faint); margin-top:16px; line-height:1.6}
 .wseg.x{color:var(--ink-faint)}
 .wseg.amb{text-decoration:underline dotted var(--gold-soft); text-decoration-thickness:1.5px; text-underline-offset:3px}
 .wseg.amb::after{content:"⁝"; position:absolute; top:-2px; right:-3px; font-size:.5rem; color:var(--gold); line-height:1}
@@ -262,6 +308,9 @@ html[data-lang="en"] .l-en{display:revert}
       <div class="seg-ctl">
         <button class="chip" id="ilBtn" aria-pressed="false"><span class="l-ja">語釈を重ねる</span><span class="l-en">Interlinear</span></button>
         <button class="chip" id="loanBtn" aria-pressed="false" title="ギリシア語借用語をマーキング / Mark Greek loanwords"><span class="l-ja">借用語</span><span class="l-en">Loanwords</span><span id="loanN" class="loann"></span></button>
+        <button class="chip" id="pageBtn" aria-pressed="false" title="写本のページ番号を表示 / Show codex page numbers"><span class="l-ja">ページ</span><span class="l-en">Pages</span></button>
+        <button class="chip" id="lineBtn" aria-pressed="false" title="写本の行番号を表示 / Show manuscript line numbers"><span class="l-ja">行番号</span><span class="l-en">Lines</span></button>
+        <button class="chip" id="statsBtn" title="統計 / Statistics"><span class="l-ja">統計</span><span class="l-en">Stats</span></button>
         <button class="chip" id="glBtn" aria-pressed="false" title="語釈の言語">語釈: 日</button>
         <button class="chip" id="tlBtn" aria-pressed="false" title="対訳・注解の言語">訳: 日</button>
         <button class="chip" id="langBtn" title="Language / 言語">English</button>
@@ -312,6 +361,16 @@ html[data-lang="en"] .l-en{display:revert}
 
 <div class="pop" id="pop" role="dialog" aria-label="形態素の語義"></div>
 
+<div class="modal-back" id="statsBack"></div>
+<div class="modal" id="statsModal" role="dialog" aria-modal="true" aria-label="統計 / Statistics">
+  <div class="modal-head">
+    <h2><span class="l-ja">コーパス統計</span><span class="l-en">Corpus statistics</span></h2>
+    <span class="sub" id="statsWit">NHC III,3</span>
+    <button class="x" id="statsClose" aria-label="閉じる / Close" title="閉じる / Close">×</button>
+  </div>
+  <div class="modal-body" id="statsBody"></div>
+</div>
+
 <script>
 "use strict";
 const TEI_NS="http://www.tei-c.org/ns/1.0", XML_NS="http://www.w3.org/XML/1998/namespace";
@@ -344,6 +403,28 @@ function phyGroups(wEls){ const groups=[]; let curPhy=null,cur=null;
   wEls.forEach((w,idx)=>{ const p=w.parentNode; const phy=(p&&p.localName==="phy")?p:null;
     if(phy&&phy===curPhy){ cur.push(idx); } else { cur=[idx]; groups.push(cur); curPhy=phy; } });
   return groups; }
+/* document-order stream of a segment: words (by flat index), line breaks, page breaks, gaps.
+   Handles markers at 3 levels: direct child of <s>, inside <phy>, and inside a split <w>. */
+function buildFlow(sEl){
+  const flow=[]; let wi=0;
+  const addMark=el=>{ const ln=el.localName;
+    if(ln==="lb") flow.push({k:"lb", n:el.getAttribute("n")||""});
+    else if(ln==="pd"||(ln==="p"&&el.hasAttribute("n"))) flow.push({k:"pd", n:el.getAttribute("n")||""});
+    else if(ln==="gap") flow.push({k:"gap", reason:el.getAttribute("reason")||"", unit:el.getAttribute("unit")||"", extent:el.getAttribute("extent")||""});
+  };
+  (function walk(node){
+    node.childNodes.forEach(c=>{
+      if(c.nodeType!==1) return;
+      const ln=c.localName;
+      if(ln==="phy"){ flow.push({k:"phyo"}); walk(c); flow.push({k:"phyc"}); }
+      else if(ln==="w"){ flow.push({k:"w", i:wi}); wi++;
+        Array.from(c.children).forEach(ch=>addMark(ch)); } // lb/pd that split this word
+      else if(ln==="lb"||ln==="pd"||ln==="p"||ln==="gap"){ addMark(c); }
+      else walk(c);
+    });
+  })(sEl);
+  return flow;
+}
 function groupForms(s){ const gs=s.groups||s.words.map((_,i)=>[i]);
   return gs.map(g=>g.map(i=>escapeHTML(s.words[i].form)).join("-")).join(" "); }
 
@@ -460,7 +541,7 @@ function parse(){
         transJa:s.getAttribute("transJa")||"", transEn:s.getAttribute("transEn")||"",
         transFr:s.getAttribute("transFr")||"",
         corresp:(s.getAttribute("corresp")||"").split("#").pop(),
-        gap:T(s,"gap").length>0, words:ws, groups:phyGroups(wEls)};
+        gap:T(s,"gap").length>0, words:ws, groups:phyGroups(wEls), flow:buildFlow(s)};
     });
   };
   SEGS_III=wit("wit-III"); SEGS_V=wit("wit-V");
@@ -538,10 +619,34 @@ function wordHTML(w,i){
   const g = pickGloss(w)||"·";
   return `<span class="${cls}" tabindex="0" role="button" data-i="${i}">${escapeHTML(w.form)}<span class="g">${escapeHTML(g)}</span></span>`;
 }
+/* lacuna / unclear marker (always visible so the damage is legible) */
+function gapHTML(it){
+  const lac = it.reason==="lacuna";
+  const txt = lac ? "〔…〕" : "⸢…⸣";
+  const tip = lac
+    ? (UL()==="en" ? "lacuna"+(it.unit?` (${it.unit})`:"")+(it.extent?`, extent ${it.extent}`:"") : "欠損"+(it.unit==="line"?"（行単位）":"")+(it.extent==="unknown"?"・範囲不明":""))
+    : (UL()==="en" ? "unclear / illegible" : "判読不能");
+  return `<span class="gapm ${lac?'lac':'unc'}" title="${escapeHTML(tip)}" aria-label="${escapeHTML(tip)}">${txt}</span>`;
+}
+function copticFlowHTML(s){
+  const flow = (s.flow&&s.flow.length) ? s.flow : s.words.map((_,i)=>({k:"w",i}));
+  let cop=""; let inPhy=false, prevW=false, prevForm="";
+  for(const it of flow){
+    if(it.k==="phyo"){ inPhy=true; prevW=false; continue; }
+    if(it.k==="phyc"){ inPhy=false; prevW=false; cop+=" "; continue; }
+    if(it.k==="w"){
+      const w=s.words[it.i]; if(!w) continue;
+      if(inPhy&&prevW&&!(/[-=]$/.test(prevForm)||/^[-=]/.test(w.form))) cop+='<span class="msep">-</span>';
+      cop+=wordHTML(w,it.i); prevForm=w.form; prevW=true; continue;
+    }
+    if(it.k==="lb"){ cop+=`<span class="lbm" data-n="${escapeHTML(it.n)}" title="${UL()==='en'?'line':'行'} ${escapeHTML(it.n)}">${escapeHTML(it.n)}</span>`; continue; }
+    if(it.k==="pd"){ cop+=`<span class="pdm" data-n="${escapeHTML(it.n)}" title="${UL()==='en'?'page':'ページ'} ${escapeHTML(it.n)}">p.${escapeHTML(it.n)}</span>`; continue; }
+    if(it.k==="gap"){ cop+=gapHTML(it); prevW=false; continue; }
+  }
+  return cop;
+}
 function segHTML(s){
-  const groups=s.groups||s.words.map((_,i)=>[i]);
-  const words=groups.map(g=> g.length===1 ? wordHTML(s.words[g[0]],g[0])
-    : `<span class="phygrp">`+g.map(i=>wordHTML(s.words[i],i)).join('<span class="msep">-</span>')+`</span>`).join("");
+  const words=copticFlowHTML(s);
   let tr = pickTrans(s);
   const trCls = tr ? "trans" : "trans pending";
   if(!tr) tr = pendingText();
@@ -722,8 +827,72 @@ function toggle(btn,attr,onVal,offVal,onLabel,offLabel){
 }
 $("#ilBtn").onclick=()=>toggle($("#ilBtn"),"data-il","on","off");
 $("#loanBtn").onclick=()=>toggle($("#loanBtn"),"data-loan","on","off");
+$("#pageBtn").onclick=()=>toggle($("#pageBtn"),"data-page","on","off");
+$("#lineBtn").onclick=()=>toggle($("#lineBtn"),"data-line","on","off");
 function loanCount(){ const segs = curWit==="V"?SEGS_V:SEGS_III; return segs.reduce((a,s)=>a+s.words.filter(w=>w.grc).length,0); }
 function relabelLoan(){ const e=$("#loanN"); if(e){ const n=loanCount(); e.textContent=n?(" "+n):""; } }
+
+/* ---------- statistics (counts of @type, @lemma, loanwords, pages/lines/gaps) ---------- */
+function statsWit(){ return curWit==="V" ? {id:"wit-V", label:"NHC V,1"} : {id:"wit-III", label:"NHC III,3"}; }
+function computeStats(){
+  const w0=statsWit();
+  const t=Array.from(T(DOC_MAIN,"text")).find(x=>getId(x)===w0.id) || DOC_MAIN;
+  const ws=T(t,"w");
+  const typeCount={}, lemmaCount={}; let grcTokens=0; const grcLemma={};
+  ws.forEach(w=>{
+    const ty=(w.getAttribute("type")||"∅"); typeCount[ty]=(typeCount[ty]||0)+1;
+    const le=(w.getAttribute("lemma")||"∅"); lemmaCount[le]=(lemmaCount[le]||0)+1;
+    if(getLang(w)==="grc"){ grcTokens++; grcLemma[le]=(grcLemma[le]||0)+1; }
+  });
+  const gaps=T(t,"gap"); const gapByReason={};
+  gaps.forEach(g=>{ const r=(g.getAttribute("reason")||"∅"); gapByReason[r]=(gapByReason[r]||0)+1; });
+  return { wit:w0, tokens:ws.length, typeCount, lemmaCount,
+    distinctTypes:Object.keys(typeCount).length, distinctLemmas:Object.keys(lemmaCount).length,
+    grcTokens, grcLemmaCount:Object.keys(grcLemma).length, grcLemma,
+    pages:T(t,"pd").concat(T(t,"p").filter(e=>e.hasAttribute("n"))).map(e=>e.getAttribute("n")),
+    lines:T(t,"lb").length, gaps:gaps.length, gapByReason };
+}
+function renderStats(){
+  const st=computeStats(); const enUI=UL()==="en";
+  $("#statsWit").textContent=st.wit.label;
+  const card=(v,sub,k,cls="")=>`<div class="statcard ${cls}"><div class="v">${v}${sub?` <small>${sub}</small>`:""}</div><div class="k">${k}</div></div>`;
+  const cards=
+    card(st.tokens,"",enUI?"tokens (&lt;w&gt;)":"総語数（&lt;w&gt;）")+
+    card(st.distinctLemmas,"",enUI?"distinct lemmas":"異なりレンマ")+
+    card(st.distinctTypes,"",enUI?"distinct types":"品詞タイプ数")+
+    card(st.grcTokens,`/ ${st.grcLemmaCount}`,enUI?"loanword tokens / lemmas":"借用語 語数 / レンマ","grc")+
+    card(st.pages.length,"",enUI?"codex pages":"写本ページ")+
+    card(st.lines,"",enUI?"manuscript lines":"写本行")+
+    card(st.gaps,"",enUI?"gaps":"欠損・不明 箇所");
+  const types=Object.entries(st.typeCount).sort((a,b)=>b[1]-a[1]); const maxT=types.length?types[0][1]:1;
+  const posBars=types.map(([ty,ct])=>{ const lab=(POS[ty]||[ty,""]); const nm=enUI?(lab[1]||ty):(lab[0]||ty);
+    return `<div class="bar"><div class="lab">${escapeHTML(nm)} <code>${escapeHTML(ty)}</code></div>`+
+      `<div class="track"><div class="fill" style="width:${(ct/maxT*100).toFixed(1)}%"></div></div><div class="ct">${ct}</div></div>`;
+  }).join("");
+  const lemmas=Object.entries(st.lemmaCount).filter(([l])=>l!=="∅").sort((a,b)=>b[1]-a[1]).slice(0,24);
+  const maxL=lemmas.length?lemmas[0][1]:1;
+  const lemBars=lemmas.map(([le,ct])=>{ const isG=!!st.grcLemma[le];
+    return `<div class="bar${isG?' grc':''}"><div class="lab"><span style="font-family:var(--copt)">${escapeHTML(le)}</span></div>`+
+      `<div class="track"><div class="fill" style="width:${(ct/maxL*100).toFixed(1)}%"></div></div><div class="ct">${ct}</div></div>`;
+  }).join("");
+  const gl=Object.entries(st.grcLemma).sort((a,b)=>b[1]-a[1]);
+  const glChips=gl.map(([le,ct])=>`<span class="lx">${escapeHTML(le)}<b>${ct}</b></span>`).join("");
+  const gapRows=Object.entries(st.gapByReason).sort((a,b)=>b[1]-a[1]).map(([r,ct])=>`${escapeHTML(r)}: ${ct}`).join(" / ");
+  $("#statsBody").innerHTML=
+    `<div class="statgrid">${cards}</div>`+
+    `<div class="stat-sec"><h3>${enUI?"Part of speech":"品詞 (@type) 分布"} <small>by @type</small></h3><div class="bars">${posBars}</div></div>`+
+    `<div class="stat-sec"><h3>${enUI?"Greek loanwords":"ギリシア語借用語"} <small>xml:lang="grc" · ${st.grcTokens} / ${st.grcLemmaCount}</small></h3><div class="chiplist">${glChips||'<span class="lab">—</span>'}</div></div>`+
+    `<div class="stat-sec"><h3>${enUI?"Most frequent lemmas":"頻出レンマ"} <small>top ${lemmas.length} of ${st.distinctLemmas}</small></h3><div class="bars">${lemBars}</div></div>`+
+    `<p class="stat-note">${enUI
+      ? `Counts are taken directly from <code>${st.wit.id}</code> in the source: every <code>&lt;w&gt;</code> token, its <code>@type</code> and <code>@lemma</code>, and tokens carrying <code>xml:lang="grc"</code>. Gaps — ${gapRows||"none"} — and ${st.pages.length} page / ${st.lines} line markers are also tallied. Switch witness (III / V) to recount.`
+      : `数値は本文 <code>${st.wit.id}</code> から直接集計（各 <code>&lt;w&gt;</code> トークン、その <code>@type</code>・<code>@lemma</code>、<code>xml:lang="grc"</code> を持つトークン）。欠損・不明の内訳は ${gapRows||"なし"}、ページ ${st.pages.length}・行 ${st.lines} のマーカーも計上。写本タブ（III / V）を切り替えると再集計します。`}</p>`;
+}
+function openStats(){ renderStats(); H.setAttribute("data-stats","open"); }
+function closeStats(){ H.removeAttribute("data-stats"); }
+$("#statsBtn").onclick=openStats;
+$("#statsClose").onclick=closeStats;
+$("#statsBack").onclick=closeStats;
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeStats(); });
 const LANG_CYCLE=["ja","en","fr"];
 /* ---- UI i18n helpers ---- */
 function UL(){ return H.getAttribute("data-lang")==="en"?"en":"ja"; }
