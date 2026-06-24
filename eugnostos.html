@@ -126,6 +126,12 @@ html[data-il="on"] .coptic{line-height:1.35}
 .phygrp .wseg{margin:0}
 .msep{display:inline-block; vertical-align:top; font-family:var(--copt); font-size:1.46rem; line-height:inherit; color:var(--ink-faint); pointer-events:none; user-select:none}
 .wseg.grc .g{color:var(--rose)}
+/* ---- Greek-loanword marking (shared: republic.html / eugnostos.html) ---- */
+html[data-loan="on"] .wseg.grc{background:rgba(157,90,108,.14); box-shadow:inset 0 -2px 0 var(--rose); border-radius:4px}
+html[data-mode="aeon"][data-loan="on"] .wseg.grc{background:rgba(207,147,166,.17)}
+html[data-loan="on"] .wseg.grc::before{content:""; position:absolute; top:1px; right:1px; width:4px; height:4px;
+  border-radius:50%; background:var(--rose); pointer-events:none}
+.loann{margin-left:5px; font-size:.72rem; opacity:.85; font-variant-numeric:tabular-nums}
 .wseg.x{color:var(--ink-faint)}
 .wseg.amb{text-decoration:underline dotted var(--gold-soft); text-decoration-thickness:1.5px; text-underline-offset:3px}
 .wseg.amb::after{content:"⁝"; position:absolute; top:-2px; right:-3px; font-size:.5rem; color:var(--gold); line-height:1}
@@ -255,6 +261,7 @@ html[data-lang="en"] .l-en{display:revert}
     <div class="controls">
       <div class="seg-ctl">
         <button class="chip" id="ilBtn" aria-pressed="false"><span class="l-ja">語釈を重ねる</span><span class="l-en">Interlinear</span></button>
+        <button class="chip" id="loanBtn" aria-pressed="false" title="ギリシア語借用語をマーキング / Mark Greek loanwords"><span class="l-ja">借用語</span><span class="l-en">Loanwords</span><span id="loanN" class="loann"></span></button>
         <button class="chip" id="glBtn" aria-pressed="false" title="語釈の言語">語釈: 日</button>
         <button class="chip" id="tlBtn" aria-pressed="false" title="対訳・注解の言語">訳: 日</button>
         <button class="chip" id="langBtn" title="Language / 言語">English</button>
@@ -427,7 +434,7 @@ function parse(){
       if(l==="en") en=q; else if(l==="ja") ja=q; else if(l==="fr") fr=q; });
     let uja="",uen="";
     T(e,"usg").forEach(u=>{ const l=getLang(u); if(l==="ja") uja=u.textContent; else if(l==="en") uen=u.textContent; });
-    const sense={id:getId(e), n:e.getAttribute("n")||"", pos, en, ja, fr, uja, uen, grc:getLang(e)==="grc"};
+    const sense={id:getId(e), n:e.getAttribute("n")||"", pos, en, ja, fr, uja, uen};
     if(!LEXMAP.has(lemma)) LEXMAP.set(lemma,[]);
     LEXMAP.get(lemma).push(sense);
   });
@@ -446,7 +453,7 @@ function parse(){
         return {form:w.textContent, lemma, senses, defId:def.id||"",
           pos:def.pos||w.getAttribute("type")||"X",
           gloss:def.en||"", glossJa:def.ja||"", glossFr:def.fr||"",
-          grc:getLang(w)==="grc"||!!def.grc, amb:senses.length>1};
+          grc:getLang(w)==="grc", amb:senses.length>1};
       });
       return {id:getId(s), n:s.getAttribute("n")||"", sub:s.getAttribute("subtype")||"",
         themes:(s.getAttribute("ana")||"").split(/\s+/).map(x=>x.split("#").pop()).filter(Boolean),
@@ -549,7 +556,7 @@ function segHTML(s){
 }
 function render(){
   const box=$("#reading");
-  if(curWit==="SYN"){ renderSyn(box); return; }
+  if(curWit==="SYN"){ renderSyn(box); relabelLoan(); return; }
   box.className="col";
   const segs = curWit==="III" ? SEGS_III : SEGS_V;
   if(curWit==="V"){
@@ -560,7 +567,7 @@ function render(){
   } else {
     box.innerHTML = segs.map(segHTML).join("");
   }
-  wireWords(); applyTheme();
+  wireWords(); applyTheme(); relabelLoan();
 }
 function renderSyn(box){
   box.className="syn";
@@ -612,7 +619,7 @@ function showPop(el){
       const isDef=sn.id&&sn.id===w.defId;
       return `<div class="sense${isDef?' def':''}">
         <div class="srow"><span class="snum">${i+1}</span>
-          <span class="pos${sn.grc?' grc':''}">${p[0]}</span>${u}
+          <span class="pos${w.grc?' grc':''}">${p[0]}</span>${u}
           ${isDef?'<span class="defmark">'+defLbl()+'</span>':''}</div>
         <div class="sglos">${g.join('<span class="sep">・</span>')}</div></div>`;
     }).join("");
@@ -714,6 +721,9 @@ function toggle(btn,attr,onVal,offVal,onLabel,offLabel){
   if(onLabel){ btn.textContent = on?offLabel:onLabel; }
 }
 $("#ilBtn").onclick=()=>toggle($("#ilBtn"),"data-il","on","off");
+$("#loanBtn").onclick=()=>toggle($("#loanBtn"),"data-loan","on","off");
+function loanCount(){ const segs = curWit==="V"?SEGS_V:SEGS_III; return segs.reduce((a,s)=>a+s.words.filter(w=>w.grc).length,0); }
+function relabelLoan(){ const e=$("#loanN"); if(e){ const n=loanCount(); e.textContent=n?(" "+n):""; } }
 const LANG_CYCLE=["ja","en","fr"];
 /* ---- UI i18n helpers ---- */
 function UL(){ return H.getAttribute("data-lang")==="en"?"en":"ja"; }

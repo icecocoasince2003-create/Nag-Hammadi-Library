@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  republic_greek.xml — ギリシア語パラレル本文
+  Plato, Republic (Politeia) IX 588b-589b / OCT (ed. J. Burnet), public domain.
+
+  ▸ 編集方法
+     各 <s> の @corresp は コプト語本文 republic_tei.xml の <s xml:id="..."> に対応。
+     対応する rep-番号を探し、<grc>(ギリシア語)/<ja>(和訳)/<en>(英訳) を書き換え・追記するだけ。
+     コプト語が独自に展開・逸脱していてギリシア語が無い箇所は、要素を空のままにしておく。
+
+  ▸ @cert（確度フラグ）
+     prov = 暫定整列（要 Burnet/OCT 校訂）。確定したら @cert="high" に変えるか属性を削除。
+
+  ▸ 翻訳の権利: ギリシア語=public domain / 和訳・英訳=本プロジェクト(CC BY 4.0)
+-->
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="grc">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Plato, Republic 588B-589B — Greek parallel, aligned to NHC VI,5</title>
+      </titleStmt>
+      <publicationStmt>
+        <p>Greek = Plato, Republic (OCT/Burnet, public domain). Japanese/English of the Greek = this project (CC BY 4.0). First-pass alignment to the Coptic; segments marked cert="prov" require verification.</p>
+      </publicationStmt>
+      <sourceDesc>
+        <bibl xml:id="src_grc">
+          <author>Plato</author>
+          <title level="m">Republic (Politeia) IX, 588b-589b</title>
+          <editor role="general">J. Burnet (OCT)</editor>
+          <note>public domain</note>
+        </bibl>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="grc">Ancient Greek</language>
+        <language ident="ja">Japanese</language>
+        <language ident="en">English</language>
+      </langUsage>
+    </profileDesc>
+  </teiHeader>
+  <text type="parallel" xml:lang="grc">
+    <body>
+      <div type="greek-parallel" subtype="republic">
+        <s corresp="rep-1">
+          <grc>ἐπειδὴ ἐνταῦθα λόγου γεγόναμεν,</grc>
+          <ja>議論がここまで来たのだから、</ja>
+          <en>Since we have come to this point in the argument,</en>
+        </s>
+        <s corresp="rep-2">
+          <grc>πάλιν ἀναλάβωμεν τὰ πρῶτα ῥηθέντα.</grc>
+          <ja>最初に語られたことを改めて取り上げよう。</ja>
+          <en>let us take up again the things first said.</en>
+        </s>
+        <s corresp="rep-3" cert="prov">
+          <grc>ἦν δέ πού τι λεγόμενον,</grc>
+          <ja>たしか、こう言われていたはずだ——</ja>
+          <en>There was, I believe, something said—</en>
+        </s>
+        <s corresp="rep-4">
+          <grc>ὅτι λυσιτελοῖ ἀδικία τῷ τελέως μὲν ἀδίκῳ, δοξαζομένῳ δὲ δικαίῳ.</grc>
+          <ja>完全に不正でありながら正しいと思われている者にこそ、不正は利益になる、という主張だ。</ja>
+          <en>—that injustice profits the one who is perfectly unjust yet reputed to be just.</en>
+        </s>
+        <s corresp="rep-5">
+          <grc></grc>
+          <ja></ja>
+          <en></en>
+        </s>
+        <s corresp="rep-6" cert="prov">
+          <grc>ἢ οὐχ οὕτως ἐλέχθη;</grc>
+          <ja>——あるいは、そう言われたのではなかったか。</ja>
+          <en>—or was it not put in this way?</en>
+        </s>
+        <s corresp="rep-7" cert="prov">
+          <grc>οὕτω μὲν οὖν.</grc>
+          <ja>「いかにも、そのとおり」。</ja>
+          <en>“Just so, then.”</en>
+        </s>
+        <s corresp="rep-8" cert="prov">
+          <grc>νῦν δή, ἔφην,</grc>
+          <ja>「では今こそ」、と私は言った、</ja>
+          <en>“Now then,” I said,</en>
+        </s>
+        <s corresp="rep-9" cert="prov">
+          <grc>αὐτῷ διαλεγώμεθα, ἐπειδὴ διωμολογησάμεθα,</grc>
+          <ja>彼と論じ合おう、われわれは(すでに)合意したのだから——</ja>
+          <en>let us reason with him, since we have agreed—</en>
+        </s>
+        <s corresp="rep-10" cert="prov">
+          <grc>τό τε ἀδικεῖν</grc>
+          <ja>不正をなすことと、</ja>
+          <en>both the doing of injustice</en>
+        </s>
+        <s corresp="rep-11" cert="prov">
+          <grc>καὶ τὸ δίκαια πράττειν,</grc>
+          <ja>正しいことをなすことが、</ja>
+          <en>and the doing of just things,</en>
+        </s>
+        <s corresp="rep-12" cert="prov">
+          <grc>ἣν ἑκάτερον ἔχει δύναμιν.</grc>
+          <ja>それぞれが持つその力を。</ja>
+          <en>what power each of them has.</en>
+        </s>
+        <s corresp="rep-13">
+          <grc>πλάσαντες οὖν τῆς ψυχῆς εἰκόνα λόγῳ,</grc>
+          <ja>では言葉によって魂の像をかたどり、</ja>
+          <en>Having molded, then, in words an image of the soul,</en>
+        </s>
+        <s corresp="rep-14" cert="prov">
+          <grc>ἵνα εἰδῇ ὁ ἐκεῖνα λέγων οἷον ἔλεγεν.</grc>
+          <ja>かのことを語った者が、自分が何を語っていたかを知るために。</ja>
+          <en>so that he who said those things may see what sort of thing he was saying.</en>
+        </s>
+        <s corresp="rep-15">
+          <grc></grc>
+          <ja></ja>
+          <en></en>
+        </s>
+        <s corresp="rep-16">
+          <grc>οἷαι δὲ μυθολογοῦνται παλαιαὶ γενέσθαι φύσεις, ἥ τε Χιμαίρας καὶ Σκύλλης καὶ Κερβέρου,</grc>
+          <ja>古来語り伝えられてきた、キマイラ・スキュラ・ケルベロスのような混成の本性、</ja>
+          <en>such ancient natures as are told of in myth—the Chimaera, Scylla, and Cerberus—</en>
+        </s>
+        <s corresp="rep-17" cert="prov">
+          <grc>καὶ ἄλλαι τινὲς συχναὶ λέγονται,</grc>
+          <ja>——その他にも多くのものが語り伝えられているが、</ja>
+          <en>and various others, too, are spoken of—</en>
+        </s>
+        <s corresp="rep-18">
+          <grc>εἰς μίαν ἰδέαν συνελθεῖν.</grc>
+          <ja>それらが一つの形へと合わさるような像を。</ja>
+          <en>to come together into a single form.</en>
+        </s>
+        <s corresp="rep-19">
+          <grc></grc>
+          <ja></ja>
+          <en></en>
+        </s>
+        <s corresp="rep-20">
+          <grc>πλάττε τοίνυν μίαν μὲν ἰδέαν θηρίου ποικίλου καὶ πολυκεφάλου,</grc>
+          <ja>そこでまず、多彩で多頭の獣の形を一つかたどれ。</ja>
+          <en>Mold, then, a single form of a manifold, many-headed beast,</en>
+        </s>
+        <s corresp="rep-21">
+          <grc>ἡμέρων δὲ θηρίων ἔχοντος κεφαλὰς κύκλῳ καὶ ἀγρίων,</grc>
+          <ja>飼い慣らされた獣と野生の獣の頭を周囲にめぐらせ、</ja>
+          <en>having heads of tame and of wild beasts all around,</en>
+        </s>
+        <s corresp="rep-22">
+          <grc>καὶ δυνατοῦ μεταβάλλειν καὶ φύειν ἐξ αὑτοῦ πάντα ταῦτα.</grc>
+          <ja>それらすべてを自らのうちから変化させ生み出しうる獣を。</ja>
+          <en>and able to change and to grow all of these out of itself.</en>
+        </s>
+        <s corresp="rep-23">
+          <grc></grc>
+          <ja></ja>
+          <en></en>
+        </s>
+        <s corresp="rep-24">
+          <grc></grc>
+          <ja></ja>
+          <en></en>
+        </s>
+        <s corresp="rep-25">
+          <grc></grc>
+          <ja></ja>
+          <en></en>
+        </s>
+        <s corresp="rep-26">
+          <grc>μίαν δὴ τοίνυν ἄλλην ἰδέαν λέοντος, μίαν δὲ ἀνθρώπου·</grc>
+          <ja>次にもう一つ、獅子の形を、そしてもう一つ、人間の形をかたどれ。</ja>
+          <en>Then another single form, of a lion, and one of a man;</en>
+        </s>
+        <s corresp="rep-27">
+          <grc></grc>
+          <ja></ja>
+          <en></en>
+        </s>
+        <s corresp="rep-28">
+          <grc>πολὺ δὲ μέγιστον ἔστω τὸ πρῶτον καὶ δεύτερον τὸ δεύτερον.</grc>
+          <ja>第一のものを遥かに最大とし、第二のものを二番目の大きさとせよ。</ja>
+          <en>but let the first be by far the largest, and the second, second.</en>
+        </s>
+        <s corresp="rep-29">
+          <grc></grc>
+          <ja></ja>
+          <en></en>
+        </s>
+        <s corresp="rep-30">
+          <grc>σύναπτε τοίνυν αὐτὰ εἰς ἓν τρία ὄντα, ὥστε πῃ συμπεφυκέναι ἀλλήλοις.</grc>
+          <ja>そこで、三つあるそれらを一つに結び合わせ、互いに癒合させよ。</ja>
+          <en>Now join them—being three—into one, so that they have somehow grown together with one another.</en>
+        </s>
+        <s corresp="rep-31">
+          <grc>περίπλασον δὴ αὐτοῖς ἔξωθεν ἑνὸς εἰκόνα, τὴν τοῦ ἀνθρώπου,</grc>
+          <ja>そしてそれらの外側に、人間という一つのものの像を塗り重ねよ。</ja>
+          <en>Then mold around them, on the outside, the image of one—that of the man—</en>
+        </s>
+        <s corresp="rep-32">
+          <grc>ὥστε τῷ μὴ δυναμένῳ τὰ ἐντὸς ὁρᾶν, ἀλλὰ τὸ ἔξω μόνον ἔλυτρον ὁρῶντι,</grc>
+          <ja>内側を見ることのできない者、外側の覆いだけを見る者には、</ja>
+          <en>so that, to one unable to see what is within but seeing only the outer shell,</en>
+        </s>
+        <s corresp="rep-33">
+          <grc>ἓν ζῷον φαίνεσθαι, ἄνθρωπον.</grc>
+          <ja>一つの生き物、すなわち人間に見えるように。</ja>
+          <en>it appears as a single creature, a man.</en>
+        </s>
+        <s corresp="rep-34">
+          <grc>λέγωμεν δὴ τῷ λέγοντι ὡς λυσιτελεῖ τούτῳ τῷ ἀνθρώπῳ ἀδικεῖν,</grc>
+          <ja>では、この人間にとって不正を行なうことが益になると言う者に向かって言おう、</ja>
+          <en>Let us say, then, to him who claims that it profits this man to do injustice,</en>
+        </s>
+        <s corresp="rep-35">
+          <grc>δικαιοπραγεῖν δὲ οὐ συμφέρειν.</grc>
+          <ja>正義を行なうことは益にならない、と説く者に対して。</ja>
+          <en>and that to act justly does not benefit him.</en>
+        </s>
+        <s corresp="rep-36">
+          <grc></grc>
+          <ja></ja>
+          <en></en>
+        </s>
+        <s corresp="rep-37">
+          <grc></grc>
+          <ja></ja>
+          <en></en>
+        </s>
+        <s corresp="rep-38">
+          <grc></grc>
+          <ja></ja>
+          <en></en>
+        </s>
+        <s corresp="rep-39">
+          <grc></grc>
+          <ja></ja>
+          <en></en>
+        </s>
+        <s corresp="rep-40">
+          <grc></grc>
+          <ja></ja>
+          <en></en>
+        </s>
+        <s corresp="rep-41">
+          <grc></grc>
+          <ja></ja>
+          <en></en>
+        </s>
+        <s corresp="rep-42">
+          <grc></grc>
+          <ja></ja>
+          <en></en>
+        </s>
+        <s corresp="rep-43">
+          <grc></grc>
+          <ja></ja>
+          <en></en>
+        </s>
+        <s corresp="rep-44">
+          <grc></grc>
+          <ja></ja>
+          <en></en>
+        </s>
+        <s corresp="rep-45">
+          <grc></grc>
+          <ja></ja>
+          <en></en>
+        </s>
+        <s corresp="rep-46">
+          <grc></grc>
+          <ja></ja>
+          <en></en>
+        </s>
+        <s corresp="rep-47">
+          <grc></grc>
+          <ja></ja>
+          <en></en>
+        </s>
+        <s corresp="rep-48">
+          <grc></grc>
+          <ja></ja>
+          <en></en>
+        </s>
+        <!-- 要修正: rep-49 のギリシア語は rep-53/55（農夫の比喩）の重複。本来の対応箇所を Burnet/OCT で確認し差し替えること。 -->
+        <s corresp="rep-49">
+          <grc>ὥσπερ γεωργὸς τὰ μὲν ἥμερα τρέφων καὶ τιθασεύων,</grc>
+          <ja>ちょうど農夫が、飼い慣らされたものを養い馴らし、</ja>
+          <en>just as a farmer nurtures and tames the cultivated growths,</en>
+        </s>
+        <!-- 要修正: rep-50 のギリシア語は rep-53/55（農夫の比喩）の重複。本来の対応箇所を Burnet/OCT で確認し差し替えること。 -->
+        <s corresp="rep-50">
+          <grc>τὰ δὲ ἄγρια ἀποκωλύων φύεσθαι.</grc>
+          <ja>野生のものが生え育つのを妨げるように。</ja>
+          <en>but prevents the wild ones from growing.</en>
+        </s>
+        <s corresp="rep-51" cert="prov">
+          <grc>τῷ δὲ τὰ δίκαια λέγοντι λυσιτελεῖν,</grc>
+          <ja>一方、正しいことを語る者には益となる(と言おう)、</ja>
+          <en>but for him who speaks justly it is profitable—</en>
+        </s>
+        <s corresp="rep-52" cert="prov">
+          <grc>ταῦτα πράττειν καὶ λέγειν, ὅθεν ὁ ἐντὸς ἄνθρωπος ἔσται ἐγκρατέστατος,</grc>
+          <ja>これらを行ない語ることが——それによって内なる人間が最も力を持つようになる——</ja>
+          <en>to do and say these things, whereby the inner man will be most fully in control,</en>
+        </s>
+        <s corresp="rep-53">
+          <grc>ὥσπερ γεωργὸς τὰ μὲν ἥμερα τρέφων καὶ τιθασεύων,</grc>
+          <ja>ちょうど農夫が、飼い慣らされたものを養い馴らし、</ja>
+          <en>just as a farmer nurtures and tames the cultivated growths,</en>
+        </s>
+        <s corresp="rep-54">
+          <grc></grc>
+          <ja></ja>
+          <en></en>
+        </s>
+        <s corresp="rep-55">
+          <grc>τὰ δὲ ἄγρια ἀποκωλύων φύεσθαι.</grc>
+          <ja>野生のものが生え育つのを妨げるように。</ja>
+          <en>but prevents the wild ones from growing.</en>
+        </s>
+      </div>
+    </body>
+  </text>
+</TEI>
