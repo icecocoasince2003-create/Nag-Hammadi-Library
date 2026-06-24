@@ -117,15 +117,16 @@
           <ja></ja>
           <en></en>
         </s>
-        <s corresp="rep-16">
-          <grc>οἷαι δὲ μυθολογοῦνται παλαιαὶ γενέσθαι φύσεις, ἥ τε Χιμαίρας καὶ Σκύλλης καὶ Κερβέρου,</grc>
-          <ja>古来語り伝えられてきた、キマイラ・スキュラ・ケルベロスのような混成の本性、</ja>
-          <en>such ancient natures as are told of in myth—the Chimaera, Scylla, and Cerberus—</en>
+        <!-- rep-16/17: コプト語本文の区切りに合わせ、Χιμαίρας…Κερβέρου の句を rep-16 から rep-17 へ移して再整列（要 Burnet/OCT 確認）。 -->
+        <s corresp="rep-16" cert="prov">
+          <grc>οἷαι δὲ μυθολογοῦνται παλαιαὶ γενέσθαι φύσεις,</grc>
+          <ja>また、古来生じたと語り伝えられる本性のうち——</ja>
+          <en>and such ancient natures as are storied to have come into being—</en>
         </s>
         <s corresp="rep-17" cert="prov">
-          <grc>καὶ ἄλλαι τινὲς συχναὶ λέγονται,</grc>
-          <ja>——その他にも多くのものが語り伝えられているが、</ja>
-          <en>and various others, too, are spoken of—</en>
+          <grc>ἥ τε Χιμαίρας καὶ Σκύλλης καὶ Κερβέρου, καὶ ἄλλαι τινὲς συχναὶ λέγονται,</grc>
+          <ja>すなわちキマイラ・スキュラ・ケルベロス、そして他にも多くのものが語り伝えられている——</ja>
+          <en>namely the Chimaera, Scylla, and Cerberus, and various others, too, are spoken of—</en>
         </s>
         <s corresp="rep-18">
           <grc>εἰς μίαν ἰδέαν συνελθεῖν.</grc>
