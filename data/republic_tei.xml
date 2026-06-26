@@ -746,7 +746,7 @@
             <w type="V" lemma="ⲙⲟⲩⲕϩ" gloss="afflict">ⲙⲟⲕϩ</w>
           </phy>
           <phy>
-            <w type="CONJ" lemma="ⲛ">ⲛ</w>
+            <w type="ACONJ" lemma="ⲛ">ⲛ</w>
             <w type="PPER" lemma="ⲥⲉ">ⲥⲉ</w>
             <lb n="26"/>
             <w type="V" lemma="ϯ">ϯ</w>
@@ -862,34 +862,38 @@
         </s>
         <s xml:id="rep-30" n="30" transJa="獅子の像と人間の像とは別物だからである。〔……〕唯一の〔……〕は〔……〕の〔……〕結合である。" transEn="For the image of the lion is one thing and the image of the man is another. [ ] single [ ] is the [ ] of [ ] join.">
           <phy>
-            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+            <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
             <lb n="34"/>
-            <w type="X" lemma="ⲉⲧ">ⲉⲧ</w>
+            <w type="CREL" lemma="ⲉⲧ">ⲉⲧ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲡⲓⲛⲉ">ⲡⲓⲛⲉ</w>
+            <w type="ART" lemma="ⲡ">ⲡ</w>
+            <w type="N" lemma="ⲉⲓⲛⲉ">ⲓⲛⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲅⲁⲣ" xml:lang="grc">ⲅⲁⲣ</w>
+            <w type="PTC" lemma="ⲅⲁⲣ" xml:lang="grc">ⲅⲁⲣ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲙⲡ">ⲙⲡ</w>
-            <w type="X" lemma="ⲙⲟⲩⲉⲓ">ⲙⲟⲩⲉⲓ</w>
+            <w type="PREP" lemma="ⲛ">ⲙ</w>
+            <w type="ART" lemma="ⲡ">ⲡ</w>
+            <w type="N" lemma="ⲙⲟⲩⲉⲓ" gloss="lion">ⲙⲟⲩⲉⲓ</w>
           </phy>
           <lb n="35"/>
           <phy>
-            <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
+            <w type="CONJ" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲟⲩⲉⲧ">ⲟⲩⲉⲧ</w>
+            <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
+            <w type="CREL" lemma="ⲉⲧ">ⲉⲧ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲡⲓⲛⲉ">ⲡⲓⲛⲉ</w>
+            <w type="ART" lemma="ⲡ">ⲡ</w>
+            <w type="N" lemma="ⲉⲓⲛⲉ">ⲓⲛⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲙ">ⲙ</w>
-            <w type="X" lemma="ⲡ">ⲡ</w>
-            <w type="X" lemma="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</w>
+            <w type="PREP" lemma="ⲛ">ⲙ</w>
+            <w type="ART" lemma="ⲡ">ⲡ</w>
+            <w type="N" lemma="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</w>
           </phy>
           <pd n="50"/>
           <lb n="1"/>
@@ -897,595 +901,569 @@
           <gap reason="lacuna" unit="line" extent="unknown"/>
           </phy>
           <phy>
-            <w type="X" lemma="ⲟⲩⲱⲧ">ⲟⲩⲱⲧ</w>
+            <w type="N" lemma="ⲟⲩⲱⲧ">ⲟⲩⲱⲧ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲡⲉ">ⲡⲉ</w>
+            <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲡ">ⲡ</w>
+            <w type="ART" lemma="ⲡ">ⲡ</w>
           </phy>
           <gap reason="lacuna" unit="line" extent="unknown"/>
           <phy>
-            <w type="X" lemma="ⲙ">ⲙ</w>
+            <w type="UNKNOWN" lemma="ⲙ">ⲙ</w>
           </phy>
           <lb n="2"/>
           <phy>
           <gap reason="lacuna" unit="line" extent="unknown"/>
           </phy>
           <phy>
-            <w type="X" lemma="ⲧⲱϭⲉ">ⲧⲱϭⲉ</w>
+            <w type="V" lemma="ⲧⲱⲱϭⲉ" gloss="be joined">ⲧⲱϭⲉ</w>
           </phy>
         </s>
         <s xml:id="rep-31" n="31" transJa="そしてこれは〔……〕最初のものよりはるかに入り組んでいる。" transEn="And this [ ] much more complex than the first.">
           <phy>
-            <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
+            <w type="CONJ" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲡⲁⲓ">ⲡⲁⲓ</w>
+            <w type="PDEM" lemma="ⲡⲁⲓ">ⲡⲁⲓ</w>
           </phy>
           <lb n="3"/>
           <phy>
           <gap reason="lacuna" unit="line" extent="unknown"/>
           </phy>
           <phy>
-            <w type="X" lemma="ϣⲃⲃⲓⲁⲉⲓⲧ">ϣⲃⲃⲓⲁⲉⲓⲧ</w>
+            <w type="V" lemma="ϣⲃⲃⲓⲁⲉⲓⲧ">ϣⲃⲃⲓⲁⲉⲓⲧ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲙ">ⲙ</w>
-            <w type="X" lemma="ⲡ">ⲡ</w>
-            <w type="X" lemma="ϣⲁ">ϣⲁ</w>
+            <w type="PREP" lemma="ⲛ">ⲙ</w>
+            <w type="ART" lemma="ⲡ">ⲡ</w>
+            <w type="N" lemma="ϣⲁ" gloss="begin">ϣⲁ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲛ</w>
-            <w type="X" lemma="ϩⲟⲩⲟ">ϩⲟⲩⲟ</w>
+            <w type="PREP" lemma="ⲛ">ⲛ</w>
+            <w type="N" lemma="ϩⲟⲩⲟ">ϩⲟⲩⲟ</w>
           </phy>
           <lb n="4"/>
           <phy>
-            <w type="X" lemma="ⲉ">ⲉ</w>
-            <w type="X" lemma="ⲡ">ⲡ</w>
-            <w type="X" lemma="ϣⲟⲣⲡ">ϣⲟⲣⲡ</w>
+            <w type="PREP" lemma="ⲉ">ⲉ</w>
+            <w type="ART" lemma="ⲡ">ⲡ</w>
+            <w type="N" lemma="ϣⲟⲣⲡ">ϣⲟⲣⲡ</w>
           </phy>
         </s>
         <s xml:id="rep-32" n="32" transJa="「そして第二のものは小さい」。" transEn="And the second is small.'">
           <phy>
-            <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
+            <w type="CONJ" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲡ">ⲡ</w>
-            <w type="X" lemma="ⲙⲁϩ">ⲙⲁϩ</w>
-            <w type="X" lemma="ⲥⲛⲁⲩ">ⲥⲛⲁⲩ</w>
+            <w type="ART" lemma="ⲡ">ⲡ</w>
+            <w type="NUM" lemma="ⲙⲁϩ" gloss="pref. to ordinal numbers">ⲙⲁϩ</w>
+            <w type="NUM" lemma="ⲥⲛⲁⲩ" gloss="two">ⲥⲛⲁⲩ</w>
           </phy>
           <lb n="5"/>
           <phy>
-            <w type="X" lemma="ⲡⲉ">ⲡⲉ</w>
+            <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲟⲩϣⲙ">ⲟⲩϣⲙ</w>
+            <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
+            <w type="N" lemma="ϣⲏⲙ" gloss="small">ϣⲙ</w>
           </phy>
         </s>
         <s xml:id="rep-33" n="33" transJa="「それは形づくられた」。" transEn="'It has been formed.'">
           <phy>
-            <w type="X" lemma="ⲁ">ⲁ</w>
-            <w type="X" lemma="ⲩ">ⲩ</w>
-            <w type="X" lemma="ⲣ">ⲣ</w>
-            <w type="X" lemma="ⲡⲗⲁⲥⲥⲉ" xml:lang="grc">ⲡⲗⲁⲥⲥⲉ</w>
+            <w type="APST" lemma="ⲁ">ⲁ</w>
+            <w type="PPER" lemma="ⲩ">ⲩ</w>
+            <w type="V" lemma="ⲣ">ⲣ</w>
+            <w type="V" lemma="ⲡⲗⲁⲥⲥⲉ" xml:lang="grc">ⲡⲗⲁⲥⲥⲉ</w>
           </phy>
           <phy>
             <w type="PREP" lemma="ⲙⲙⲟ">ⲙⲙⲟ</w>
-            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="PPER" lemma="ϥ">ϥ</w>
           </phy>
         </s>
         <s xml:id="rep-34" n="34" transJa="「さあ、それらを互いに結び合わせ、一つのものとせよ——" transEn="'Now then, join them to each other and make them a single one">
           <lb n="6"/>
           <phy>
-            <w type="X" lemma="ⲧⲉⲛⲟⲩ">ⲧⲉⲛⲟⲩ</w>
+            <w type="ADV" lemma="ⲧⲉⲛⲟⲩ" gloss="now">ⲧⲉⲛⲟⲩ</w>
           </phy>
           <phy>
             <w type="PTC" lemma="ϭⲉ">ϭⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲧⲱϭⲉ">ⲧⲱϭⲉ</w>
+            <w type="V" lemma="ⲧⲱϭⲉ" gloss="be joined">ⲧⲱϭⲉ</w>
           </phy>
           <phy>
             <w type="PREP" lemma="ⲙⲙⲟ">ⲙⲙⲟ</w>
-            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+            <w type="PPER" lemma="ⲟⲩ">ⲟⲩ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲉ">ⲉ</w>
-            <w type="X" lemma="ⲛ">ⲛ</w>
-            <w type="X" lemma="ⲉⲩ">ⲉⲩ</w>
-          </phy>
+            <w type="PREP" lemma="ⲉ">ⲉ</w>
+            <w type="PPOS" lemma="ⲛⲉⲩ">ⲛⲉⲩ</w>
           <lb n="7"/>
-          <phy>
-            <w type="X" lemma="ⲉⲣⲏ">ⲉⲣⲏ</w>
-            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+            <w type="N" lemma="ⲉⲣⲏⲟⲩ" gloss="each other">ⲉⲣⲏⲟⲩ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲛ</w>
-            <w type="X" lemma="ⲧ">ⲧ</w>
-            <w type="X" lemma="ⲉⲧ">ⲉⲧ</w>
-            <w type="X" lemma="ⲛⲁ">ⲛⲁ</w>
-            <w type="X" lemma="ⲁⲩ">ⲁⲩ</w>
+            <w type="ACONJ" lemma="ⲛ">ⲛ</w>
+            <w type="PPER" lemma="ⲧⲉⲧⲛ">ⲧⲉⲧⲛ</w>
+            <w type="V" lemma="ⲉⲓⲣⲉ">ⲁⲁ</w>
+            <w type="PPER" lemma="ⲩ">ⲩ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲛ</w>
-            <w type="X" lemma="ⲟⲩⲁ">ⲟⲩⲁ</w>
+            <w type="PREP" lemma="ⲛ">ⲛ</w>
+            <w type="N" lemma="ⲟⲩⲁ" gloss="one">ⲟⲩⲁ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="PREP" lemma="ⲛ">ⲛ</w>
             <lb n="8"/>
-            <w type="X" lemma="ⲟⲩⲱⲧ">ⲟⲩⲱⲧ</w>
+            <w type="N" lemma="ⲟⲩⲱⲧ">ⲟⲩⲱⲧ</w>
           </phy>
         </s>
         <s xml:id="rep-35" n="35" transJa="——それらは三つあるのだから——" transEn="--for they are three--">
           <phy>
-            <w type="X" lemma="ϣⲟⲙⲉⲧ">ϣⲟⲙⲉⲧ</w>
+            <w type="NUM" lemma="ϣⲟⲙⲛⲧ">ϣⲟⲙⲉⲧ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲅⲁⲣ" xml:lang="grc">ⲅⲁⲣ</w>
+            <w type="PTC" lemma="ⲅⲁⲣ" xml:lang="grc">ⲅⲁⲣ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛⲉ">ⲛⲉ</w>
+            <w type="COP" lemma="ⲛⲉ">ⲛⲉ</w>
           </phy>
         </s>
         <s xml:id="rep-36" n="36" transJa="それらが共に生い育ち、すべてが、人間の像を外側として、一つの像のうちに収まるように。" transEn="so that they grow together and all are in a single image outside of the image of the man">
           <phy>
-            <w type="X" lemma="ϩⲱⲥⲧⲉ" xml:lang="grc">ϩⲱⲥ<lb n="9" break="no"/>ⲧⲉ</w>
+            <w type="CONJ" lemma="ϩⲱⲥⲧⲉ" gloss="so that" xml:lang="grc">ϩⲱⲥ<lb n="9" break="no"/>ⲧⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲛ</w>
-            <w type="X" lemma="ⲥⲉ">ⲥⲉ</w>
-            <w type="X" lemma="ϯ">ϯ</w>
+            <w type="ACONJ" lemma="ⲛ">ⲛ</w>
+            <w type="PPER" lemma="ⲥⲉ">ⲥⲉ</w>
+            <w type="V" lemma="ϯ">ϯ</w>
+            <w type="N" lemma="ⲟⲩⲱ" gloss="bud, blossom">ⲟⲩⲱ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲟⲩⲱ">ⲟⲩⲱ</w>
+            <w type="PREP" lemma="ⲙⲛ">ⲙⲛ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲙⲛ">ⲙⲛ</w>
-          </phy>
-          <phy>
-            <w type="X" lemma="ⲛⲉⲩ">ⲛⲉⲩ</w>
-            <w type="X" lemma="ⲉⲣⲏⲩ">ⲉⲣⲏⲩ</w>
+            <w type="PPOS" lemma="ⲛⲉⲩ">ⲛⲉⲩ</w>
+            <w type="N" lemma="ⲉⲣⲏⲩ">ⲉⲣⲏⲩ</w>
           </phy>
           <lb n="10"/>
           <phy>
-            <w type="X" lemma="ⲛ">ⲛ</w>
-            <w type="X" lemma="ⲥⲉ">ⲥⲉ</w>
+            <w type="ACONJ" lemma="ⲛ">ⲛ</w>
+            <w type="PPER" lemma="ⲥⲉ">ⲥⲉ</w>
             <w type="V" lemma="ϣⲱⲡⲉ" gloss="exist">ϣⲱⲡⲉ</w>
           </phy>
           <phy>
             <w type="N" lemma="ⲧⲏⲣ" gloss="all">ⲧⲏⲣ</w>
-            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+            <w type="PPER" lemma="ⲟⲩ">ⲟⲩ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ϩⲛ">ϩⲛ</w>
+            <w type="PREP" lemma="ϩⲛ">ϩⲛ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲟⲩⲉⲓ">ⲟⲩⲉⲓ</w>
-            <lb n="11"/>
-            <w type="X" lemma="ⲛⲉ">ⲛⲉ</w>
+            <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
+            <w type="N" lemma="ⲉⲓⲛⲉ">ⲉⲓ<lb n="11" breal="no"/>ⲛⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲟⲩⲱⲧ">ⲟⲩⲱⲧ</w>
+            <w type="N" lemma="ⲟⲩⲱⲧ">ⲟⲩⲱⲧ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲥⲁⲃⲟⲗ">ⲥⲁⲃⲟⲗ</w>
+            <w type="ADV" lemma="ⲥⲁⲃⲟⲗ" gloss="outside, without">ⲥⲁⲃⲟⲗ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲛ</w>
-            <w type="X" lemma="ⲧ">ⲑ[ⲧ]</w>
-            <w type="X" lemma="ϩⲓⲕⲱⲛ" xml:lang="grc">[ϩ]ⲓⲕⲱⲛ</w>
+            <w type="PREP" lemma="ⲛ">ⲛ</w>
+            <w type="ART" lemma="ⲧ">ⲑ[ⲧ]</w>
+            <w type="N" lemma="ϩⲓⲕⲱⲛ" xml:lang="grc">[ϩ]ⲓⲕⲱⲛ</w>
           </phy>
           <lb n="12"/>
           <phy>
-            <w type="X" lemma="ⲙ">ⲙ</w>
-            <w type="X" lemma="ⲡ">ⲡ</w>
-            <w type="X" lemma="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</w>
+            <w type="PREP" lemma="ⲛ">ⲙ</w>
+            <w type="ART" lemma="ⲡ">ⲡ</w>
+            <w type="N" lemma="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</w>
           </phy>
         </s>
         <s xml:id="rep-37" n="37" transJa="ちょうど、自らの内なるものを見ることのできぬ者のように。" transEn="just like him who is unable to see the things inside him.">
           <phy>
-            <w type="X" lemma="ⲛ">ⲛ</w>
-            <w type="X" lemma="ⲑⲉ">ⲑⲉ</w>
+            <w type="PREP" lemma="ⲛ">ⲛ</w>
+            <w type="ART" lemma="ⲧ">ⲑ[ⲧ]</w>
+            <w type="N" lemma="ϩⲉ">[ϩ]ⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ϩⲱⲱ">ϩⲱⲱ</w>
-            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="PREP" lemma="ϩⲱⲱ" gloss="self, also">ϩⲱⲱ</w>
+            <w type="PPER" lemma="ϥ">ϥ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲙ</w>
-            <w type="X" lemma="ⲡⲉ">ⲡⲉ</w>
-          </phy>
+            <w type="ANEGPST" lemma="ⲙⲡⲉ">ⲙⲡⲉ</w>
           <lb n="13"/>
-          <phy>
-            <w type="X" lemma="ⲧⲉ">ⲧⲉ</w>
+            <w type="COP" lemma="ⲧⲉ">ⲧⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲙⲛ">ⲙⲛ</w>
+            <w type="CONJ" lemma="ⲙⲛ">ⲙⲛ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ϣ">ϣ</w>
-            <w type="X" lemma="ϭⲟⲙ">ϭⲟⲙ</w>
+            <w type="N" lemma="ϭⲟⲙ" gloss="power">ϣϭⲟⲙ</w>
           </phy>
           <phy>
             <w type="PREP" lemma="ⲙⲙⲟ">ⲙⲙⲟ</w>
-            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="PPER" lemma="ϥ">ϥ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲉ">ⲉ</w>
-            <w type="X" lemma="ⲧⲣⲉ">ⲧⲣⲉ</w>
-            <w type="X" lemma="ϥ">ϥ</w>
-            <w type="X" lemma="ⲛⲁⲩ">ⲛⲁⲩ</w>
+            <w type="PREP" lemma="ⲉ">ⲉ</w>
+            <w type="ACAUS" lemma="ⲧⲣⲉ">ⲧⲣⲉ</w>
+            <w type="PPER" lemma="ϥ">ϥ</w>
+            <w type="V" lemma="ⲛⲁⲩ">ⲛⲁⲩ</w>
           </phy>
           <lb n="14"/>
           <phy>
-            <w type="X" lemma="ⲉ">ⲉ</w>
+            <w type="PREP" lemma="ⲉ">ⲉ</w>
             <w type="X" lemma="ⲛ">ⲛ</w>
-            <w type="X" lemma="ⲉⲧ">ⲉⲧ</w>
-            <w type="X" lemma="ⲙ">ⲙ</w>
-            <w type="X" lemma="ⲡⲉ">ⲡⲉ</w>
-            <w type="X" lemma="ϥ">ϥ</w>
-            <w type="X" lemma="ϩⲟⲩⲛ">ϩⲟⲩⲛ</w>
+            <w type="CREL" lemma="ⲉⲧ">ⲉⲧ</w>
+            <w type="PREP" lemma="ⲛ">ⲙ</w>
+            <w type="PPOS" lemma="ⲡⲉϥ">ⲡⲉϥ</w>
+            <w type="N" lemma="ϩⲟⲩⲛ">ϩⲟⲩⲛ</w>
           </phy>
         </s>
         <s xml:id="rep-38" n="38" transJa="彼が見るのは、ただ外側にあるものだけである。" transEn="But what is outside only is what he sees.">
           <phy>
-            <w type="X" lemma="ⲁⲗⲗⲁ" xml:lang="grc">ⲁⲗⲗⲁ</w>
+            <w type="CONJ" lemma="ⲁⲗⲗⲁ" xml:lang="grc">ⲁⲗⲗⲁ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲡⲉⲧ">ⲡⲉⲧ</w>
+            <w type="ART" lemma="ⲡ">ⲡ</w>
+            <w type="CREL" lemma="ⲉⲧ">ⲉⲧ</w>
             <lb n="15"/>
-            <w type="X" lemma="ϩⲓⲃⲟⲗ">ϩⲓⲃⲟⲗ</w>
+            <w type="N" lemma="ϩⲓⲃⲟⲗ">ϩⲓⲃⲟⲗ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲙ">ⲙ</w>
-            <w type="X" lemma="ⲙⲁⲧⲉ">ⲙⲁⲧⲉ</w>
+            <w type="ADV" lemma="ⲙⲙⲁⲧⲉ" gloss="only">ⲙⲙⲁⲧⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲡ">ⲡ</w>
-            <w type="X" lemma="ⲉⲧ">ⲉⲧ</w>
-            <w type="X" lemma="ϥ">ϥ</w>
-            <w type="X" lemma="ⲛⲁⲩ">ⲛⲁⲩ</w>
+            <w type="ART" lemma="ⲡ">ⲡ</w>
+            <w type="CREL" lemma="ⲉⲧ">ⲉⲧ</w>
+            <w type="PPER" lemma="ϥ">ϥ</w>
+            <w type="V" lemma="ⲛⲁⲩ">ⲛⲁⲩ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲉⲣⲟ">ⲉⲣⲟ</w>
-            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="PREP" lemma="ⲉⲣⲟ">ⲉⲣⲟ</w>
+            <w type="PPER" lemma="ϥ">ϥ</w>
           </phy>
         </s>
         <s xml:id="rep-39" n="39" transJa="そして、彼の像がいかなる生き物の内にあるのかは明らかであり、" transEn="And it is apparent what creature his image is in">
           <lb n="16"/>
           <phy>
-            <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
+            <w type="CONJ" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲉ">ⲉ</w>
-            <w type="X" lemma="ϥ">ϥ</w>
-            <w type="X" lemma="ⲣ">ⲣ</w>
-            <w type="X" lemma="ⲫⲉⲛⲉⲥⲑⲁⲓ" xml:lang="grc">ⲫⲉⲛⲉⲥⲑⲁⲓ</w>
+            <w type="CFOS" lemma="ⲉ">ⲉ</w>
+            <w type="PPER" lemma="ϥ">ϥ</w>
+            <w type="V" lemma="ⲣ">ⲣ</w>
+            <w type="V" lemma="ⲫⲉⲛⲉⲥⲑⲁⲓ" gloss="it is clear" xml:lang="grc">ⲫⲉⲛⲉⲥⲑⲁⲓ</w>
           </phy>
           <phy>
             <w type="CONJ" lemma="ϫⲉ" gloss=":">ϫⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲉⲣⲉ">ⲉⲣⲉ</w>
+            <w type="CFOS" lemma="ⲉⲣⲉ">ⲉⲣⲉ</w>
             <lb n="17"/>
-            <w type="X" lemma="ⲡⲉ">ⲡⲉ</w>
-            <w type="X" lemma="ϥ">ϥ</w>
-            <w type="X" lemma="ⲉⲓⲛⲉ">ⲉⲓⲛⲉ</w>
+            <w type="PPOS" lemma="ⲡⲉϥ">ⲡⲉϥ</w>
+            <w type="PPER" lemma="ϥ">ϥ</w>
+            <w type="N" lemma="ⲉⲓⲛⲉ">ⲉⲓⲛⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ϩⲛ">ϩⲛ</w>
+            <w type="PREP" lemma="ϩⲛ">ϩⲛ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲁϣ">ⲁϣ</w>
+            <w type="PINT" lemma="ⲁϣ">ⲁϣ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲛ</w>
-            <w type="X" lemma="ⲍⲱⲟⲛ" xml:lang="grc">ⲍⲱⲟⲛ</w>
+            <w type="PREP" lemma="ⲛ">ⲛ</w>
+            <w type="N" lemma="ⲍⲱⲟⲛ" gloss="creature" xml:lang="grc">ⲍⲱⲟⲛ</w>
           </phy>
         </s>
         <s xml:id="rep-40" n="40" transJa="また、彼が人間の像として形づくられたことも明らかである。" transEn="and that he was formed in a human image.">
           <phy>
-            <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
+            <w type="CONJ" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
           </phy>
           <lb n="18"/>
           <phy>
             <w type="CONJ" lemma="ϫⲉ" gloss=":">ϫⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛⲧⲁ">ⲛⲧⲁ</w>
-            <w type="X" lemma="ⲩ">ⲩ</w>
-            <w type="X" lemma="ⲣ">ⲣ</w>
-            <w type="X" lemma="ⲡⲗⲁⲥⲥⲉ" xml:lang="grc">ⲡⲗⲁⲥⲥⲉ</w>
+            <w type="CFOS" lemma="ⲉⲛⲧ">ⲛⲧ</w>
+            <w type="APST" lemma="ⲁ">ⲁ</w>
+            <w type="PPER" lemma="ⲩ">ⲩ</w>
+            <w type="V" lemma="ⲣ">ⲣ</w>
+            <w type="V" lemma="ⲡⲗⲁⲥⲥⲉ" xml:lang="grc">ⲡⲗⲁⲥⲥⲉ</w>
           </phy>
           <phy>
             <w type="PREP" lemma="ⲙⲙⲟ">ⲙⲙⲟ</w>
-            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="PPER" lemma="ϥ">ϥ</w>
           </phy>
           <lb n="19"/>
           <phy>
-            <w type="X" lemma="ϩⲛ">ϩⲛ</w>
+            <w type="PREP" lemma="ϩⲛ">ϩⲛ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
-            <w type="X" lemma="ⲉⲓⲛⲉ">ⲉⲓⲛⲉ</w>
+            <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
+            <w type="N" lemma="ⲉⲓⲛⲉ">ⲉⲓⲛⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲛ</w>
-            <w type="X" lemma="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</w>
+            <w type="PREP" lemma="ⲛ">ⲛ</w>
+            <w type="N" lemma="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</w>
           </phy>
         </s>
         <s xml:id="rep-41" n="41" transJa="そして私は、人にとって不正を行なうことに益があると説く者に向かって語った。" transEn="And I spoke to him who said that there is profit in the doing of injustice for the man.">
           <phy>
-            <w type="X" lemma="ⲡⲉϫⲁ">ⲡⲉϫⲁ</w>
-            <w type="X" lemma="ⲉⲓ">ⲉⲓ</w>
+            <w type="V" lemma="ⲡⲉϫⲁ">ⲡⲉϫⲁ</w>
+            <w type="PPER" lemma="ⲉⲓ">ⲉⲓ</w>
           </phy>
           <lb n="20"/>
           <phy>
             <w type="PTC" lemma="ⲇⲉ" gloss="-" xml:lang="grc">ⲇⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲙ">ⲙ</w>
-            <w type="X" lemma="ⲡⲉ">ⲡⲉ</w>
-            <w type="X" lemma="ⲛⲧ">ⲛⲧ</w>
+            <w type="PREP" lemma="ⲛ">ⲙ</w>
+            <w type="ART" lemma="ⲡ">ⲡ</w>
+            <w type="CREL" lemma="ⲉⲛⲧ">ⲉⲛⲧ</w>
             <w type="APST" lemma="ⲁ">ⲁ</w>
-            <w type="X" lemma="ϥ">ϥ</w>
-            <w type="X" lemma="ϫⲟⲟ">ϫⲟⲟ</w>
-            <w type="X" lemma="ⲥ">ⲥ</w>
+            <w type="PPER" lemma="ϥ">ϥ</w>
+            <w type="V" lemma="ϫⲟⲟ">ϫⲟⲟ</w>
+            <w type="PPER" lemma="ⲥ">ⲥ</w>
           </phy>
           <phy>
             <w type="CONJ" lemma="ϫⲉ" gloss=":">ϫⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲥ">ⲥ</w>
-            <w type="X" lemma="ⲣ">ⲣ</w>
+            <w type="PPER" lemma="ⲥ">ⲥ</w>
+            <w type="V" lemma="ⲣ">ⲣ</w>
+            <w type="N" lemma="ⲛⲟϥⲣⲉ">ⲛⲟϥ<lb n="21" break="no"/>ⲣⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛⲟϥⲣⲉ">ⲛⲟϥ<lb n="21" break="no"/>ⲣⲉ</w>
-          </phy>
-          <phy>
-            <w type="X" lemma="ⲙ">ⲙ</w>
-            <w type="X" lemma="ⲡ">ⲡ</w>
+            <w type="PREP" lemma="ⲛ">ⲙ</w>
+            <w type="ART" lemma="ⲡ">ⲡ</w>
             <w type="V" lemma="ϫⲓ" gloss="take">ϫⲓ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲛ</w>
-            <w type="X" lemma="ϭⲟⲛⲥ">ϭⲟⲛⲥ</w>
+            <w type="PREP" lemma="ⲛ">ⲛ</w>
+            <w type="N" lemma="ϭⲟⲛⲥ">ϭⲟⲛⲥ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲙ">ⲙ</w>
-            <w type="X" lemma="ⲡ">ⲡ</w>
-            <w type="X" lemma="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</w>
+            <w type="PREP" lemma="ⲛ">ⲙ</w>
+            <w type="ART" lemma="ⲡ">ⲡ</w>
+            <w type="N" lemma="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</w>
           </phy>
         </s>
         <s xml:id="rep-42" n="42" transJa="不正を行なう者は、まことには益を得ず、" transEn="He who does injustice truly does not profit">
           <lb n="22"/>
           <phy>
-            <w type="X" lemma="ⲡ">ⲡ</w>
-            <w type="X" lemma="ⲉⲧ">ⲉⲧ</w>
+            <w type="ART" lemma="ⲡ">ⲡ</w>
+            <w type="CREL" lemma="ⲉⲧ">ⲉⲧ</w>
             <w type="V" lemma="ϫⲓ" gloss="take">ϫⲓ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲛ</w>
-            <w type="X" lemma="ϭⲟⲛⲥ">ϭⲟⲛⲥ</w>
+            <w type="PREP" lemma="ⲛ">ⲛ</w>
+            <w type="N" lemma="ϭⲟⲛⲥ">ϭⲟⲛⲥ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛⲧⲟϥ">ⲛⲧⲟϥ</w>
+            <w type="PPER" lemma="ⲛⲧⲟϥ">ⲛⲧⲟϥ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲛ</w>
-            <w type="X" lemma="ⲧ">ⲧ</w>
-            <w type="X" lemma="ⲙⲏⲧⲉ">ⲙⲏⲧⲉ</w>
+            <w type="PREP" lemma="ⲛ">ⲛ</w>
+            <w type="ART" lemma="ⲧ">ⲧ</w>
+            <w type="N" lemma="ⲙⲏⲧⲉ">ⲙⲏⲧⲉ</w>
           </phy>
           <lb n="23"/>
           <phy>
-            <w type="X" lemma="ⲥ">ⲥ</w>
-            <w type="X" lemma="ⲣ">ⲣ</w>
+            <w type="PPER" lemma="ⲥ">ⲥ</w>
+            <w type="V" lemma="ⲣ">ⲣ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛⲟϥⲣⲉ">ⲛⲟϥⲣⲉ</w>
+            <w type="N" lemma="ⲛⲟϥⲣⲉ">ⲛⲟϥⲣⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛⲁ">ⲛⲁ</w>
-            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="PREP" lemma="ⲛⲁ">ⲛⲁ</w>
+            <w type="PPER" lemma="ϥ">ϥ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲁⲛ">ⲁⲛ</w>
+            <w type="NEG" lemma="ⲁⲛ">ⲁⲛ</w>
           </phy>
         </s>
         <s xml:id="rep-43" n="43" transJa="利することもない。" transEn="nor does he benefit.">
           <phy>
-            <w type="X" lemma="ⲟⲩⲧⲉ" xml:lang="grc">ⲟⲩⲧⲉ</w>
+            <w type="CONJ" lemma="ⲟⲩⲧⲉ" xml:lang="grc">ⲟⲩⲧⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲙⲛ">ⲙⲛ</w>
-          </phy>
+            <w type="PTC" lemma="ⲙⲛ" gloss="not to be">ⲙⲛ</w>
           <lb n="24"/>
-          <phy>
-            <w type="X" lemma="ⲧⲁ">ⲧⲁ</w>
-            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="PPOS" lemma="ⲧⲁ">ⲧⲁ</w>
+            <w type="PPER" lemma="ϥ">ϥ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲟⲫⲉⲗⲉⲓⲁ" xml:lang="grc">ⲟⲫⲉⲗⲉⲓⲁ</w>
+            <w type="V" lemma="ⲟⲫⲉⲗⲉⲓⲁ" gloss="to profit, benefit" xml:lang="grc">ⲟⲫⲉⲗⲉⲓⲁ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲙ">ⲙ</w>
-            <w type="X" lemma="ⲙⲁⲩ">ⲙⲁⲩ</w>
+            <w type="ADV" lemma="ⲙⲙⲁⲩ">ⲙⲙⲁⲩ</w>
           </phy>
         </s>
         <s xml:id="rep-44" n="44" transJa="彼にとって益となるのはこれである——すなわち、かの悪しき獣のあらゆる像を打ち倒し、" transEn="But what is profitable for him is this: that he cast down every image of the evil beast">
           <phy>
-            <w type="X" lemma="ⲁⲗⲗⲁ" xml:lang="grc">ⲁⲗⲗⲁ</w>
+            <w type="CONJ" lemma="ⲁⲗⲗⲁ" xml:lang="grc">ⲁⲗⲗⲁ</w>
           </phy>
           <lb n="25"/>
           <phy>
-            <w type="X" lemma="ⲡ">ⲡ</w>
-            <w type="X" lemma="ⲉⲧ">ⲉⲧ</w>
-            <w type="X" lemma="ⲣ">ⲣ</w>
+            <w type="ART" lemma="ⲡ">ⲡ</w>
+            <w type="CREL" lemma="ⲉⲧ">ⲉⲧ</w>
+            <w type="V" lemma="ⲣ">ⲣ</w>
+            <w type="N" lemma="ⲛⲟϥⲣⲉ">ⲛⲟϥⲣⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛⲟϥⲣⲉ">ⲛⲟϥⲣⲉ</w>
+            <w type="PREP" lemma="ⲛⲁ">ⲛⲁ</w>
+            <w type="PPER" lemma="ϥ">ϥ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛⲁ">ⲛⲁ</w>
-            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲡⲉ">ⲡⲉ</w>
+            <w type="PDEM" lemma="ⲡⲁⲓ">ⲡⲁⲓ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲡⲁⲓ">ⲡⲁⲓ</w>
-          </phy>
-          <phy>
-            <w type="X" lemma="ⲉ">ⲉ</w>
-            <w type="X" lemma="ⲧⲣⲉ">ⲧⲣⲉ</w>
-            <w type="X" lemma="ϥ">ϥ</w>
-          </phy>
+            <w type="PREP" lemma="ⲉ">ⲉ</w>
+            <w type="ACAUS" lemma="ⲧⲣⲉ">ⲧⲣⲉ</w>
+            <w type="PPER" lemma="ϥ">ϥ</w>
           <lb n="26"/>
-          <phy>
             <w type="X" lemma="ⲧⲉⲩⲟ">ⲧⲉⲩⲟ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲉϩⲣⲁⲓ">ⲉϩⲣⲁⲓ</w>
+            <w type="ADV" lemma="ⲉϩⲣⲁⲓ">ⲉϩⲣⲁⲓ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲙ</w>
-            <w type="X" lemma="ⲡⲓⲛⲉ">ⲡⲓⲛⲉ</w>
+            <w type="PREP" lemma="ⲛ">ⲙ</w>
+            <w type="ART" lemma="ⲡ">ⲡ</w>
+            <w type="N" lemma="ⲉⲓⲛⲉ">ⲓⲛⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛⲓⲙ">ⲛⲓⲙ</w>
+            <w type="PINT" lemma="ⲛⲓⲙ">ⲛⲓⲙ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲛ</w>
-            <w type="X" lemma="ⲑⲏⲣⲓⲟⲛ" xml:lang="grc">ⲑⲏ<lb n="27" break="no"/>ⲣⲓⲟⲛ</w>
+            <w type="PREP" lemma="ⲛ">ⲛ</w>
+            <w type="N" lemma="ⲑⲏⲣⲓⲟⲛ" xml:lang="grc">ⲑⲏ<lb n="27" break="no"/>ⲣⲓⲟⲛ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲉⲧ">ⲉⲧ</w>
-            <w type="X" lemma="ⲑⲟⲟⲩ">ⲑⲟⲟⲩ</w>
+            <w type="CREL" lemma="ⲡⲉⲧⲑⲟⲟⲩ" gloss="what is evil">ⲉⲧⲑⲟⲟⲩ</w>
           </phy>
         </s>
         <s xml:id="rep-45" n="45" transJa="それらを、獅子の像とともに踏みにじることである。" transEn="and trample them along with the images of the lion.">
           <phy>
-            <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
+            <w type="CONJ" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲛ</w>
-            <w type="X" lemma="ϥ">ϥ</w>
-            <w type="X" lemma="ϩⲟ">ϩⲟ</w>
-          </phy>
-          <lb n="28"/>
-          <phy>
-            <w type="X" lemma="ⲙⲟⲩ">ⲙⲟⲩ</w>
+            <w type="PPOS" lemma="ⲛⲉϥ">ⲛϥ</w>
+            <w type="V" lemma="ϩⲱⲙ" gloss="trample">ϩⲟ<lb n="28" break="no"/>ⲙ</w>
+            <w type="PPER" lemma="ⲟⲩ">ⲟⲩ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲙⲛ">ⲙⲛ</w>
+            <w type="PREP" lemma="ⲙⲛ">ⲙⲛ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲛ</w>
-            <w type="X" lemma="ⲉⲓⲛⲉ">ⲉⲓⲛⲉ</w>
+            <w type="ART" lemma="ⲛ">ⲛ</w>
+            <w type="N" lemma="ⲉⲓⲛⲉ">ⲉⲓⲛⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲙ</w>
-            <w type="X" lemma="ⲡ">ⲡ</w>
-          </phy>
-          <phy>
-            <w type="X" lemma="ⲙⲟⲩⲉⲓ">ⲙⲟⲩⲉⲓ</w>
+            <w type="PREP" lemma="ⲛ">ⲙ</w>
+            <w type="ART" lemma="ⲡ">ⲡ</w>
+            <w type="N" lemma="ⲙⲟⲩⲉⲓ">ⲙⲟⲩⲉⲓ</w>
           </phy>
         </s>
         <s xml:id="rep-46" n="46" transJa="しかし内なる人間は、この点において弱さのうちにある。" transEn="But the man is in weakness in this regard.">
           <lb n="29"/>
           <phy>
-            <w type="X" lemma="ⲡ">ⲡ</w>
-            <w type="X" lemma="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</w>
+            <w type="ART" lemma="ⲡ">ⲡ</w>
+            <w type="N" lemma="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</w>
           </phy>
           <phy>
             <w type="PTC" lemma="ⲇⲉ" gloss="-" xml:lang="grc">ⲇⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ϥ">ϥ</w>
-            <w type="X" lemma="ϩⲛ">ϩⲛ</w>
+            <w type="PPER" lemma="ϥ">ϥ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
-            <w type="X" lemma="ⲙⲛⲧ">ⲙⲛⲧ</w>
-            <w type="X" lemma="ϭⲱⲃ">ϭⲱⲃ</w>
+            <w type="PREP" lemma="ϩⲛ">ϩⲛ</w>
+          </phy>
+          <phy>
+            <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
+            <w type="N" lemma="ⲙⲛⲧϭⲱⲃ" gloss="weakness">ⲙⲛⲧϭⲱⲃ</w>
           </phy>
           <lb n="30"/>
           <phy>
-            <w type="X" lemma="ⲛⲧⲉ">ⲛⲧⲉ</w>
-            <w type="X" lemma="ⲉⲓⲙⲓⲛⲉ">ⲉⲓⲙⲓⲛⲉ</w>
+            <w type="PREP" lemma="ⲛ">ⲛ</w>
+            <w type="PDEM" lemma="ⲧⲉⲓ">ⲧⲉⲉⲓ</w>
+            <w type="N" lemma="ⲙⲓⲛⲉ" gloss="sort">ⲙⲓⲛⲉ</w>
           </phy>
         </s>
         <s xml:id="rep-47" n="47" transJa="そして、彼のなすことはすべて弱い。" transEn="And all the things that he does are weak.">
           <phy>
-            <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
+            <w type="CONJ" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲛ</w>
-            <w type="X" lemma="ⲉⲧ">ⲉⲧ</w>
-            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="ART" lemma="ⲛ">ⲛ</w>
+            <w type="CREL" lemma="ⲉⲧ">ⲉⲧ</w>
+            <w type="PPER" lemma="ϥ">ϥ</w>
           </phy>
           <lb n="31"/>
           <phy>
-            <w type="X" lemma="ⲛⲁ">ⲛⲁ</w>
-            <w type="X" lemma="ⲁⲁ">ⲁⲁ</w>
-            <w type="X" lemma="ⲩ">ⲩ</w>
+            <w type="FUT" lemma="ⲛⲁ">ⲛⲁ</w>
+            <w type="V" lemma="ⲉⲓⲣⲉ">ⲁⲁ</w>
+            <w type="PPER" lemma="ⲩ">ⲩ</w>
           </phy>
           <phy>
             <w type="N" lemma="ⲧⲏⲣ" gloss="all">ⲧⲏⲣ</w>
-            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+            <w type="PPER" lemma="ⲟⲩ">ⲟⲩ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ϩⲉⲛ">ϩⲉⲛ</w>
-            <w type="X" lemma="ϭⲱⲃ">ϭⲱⲃ</w>
+            <w type="ART" lemma="ϩⲉⲛ">ϩⲉⲛ</w>
+            <w type="N" lemma="ϭⲱⲃ" gloss="weak">ϭⲱⲃ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛⲉ">ⲛⲉ</w>
+            <w type="COP" lemma="ⲛⲉ">ⲛⲉ</w>
           </phy>
         </s>
         <s xml:id="rep-48" n="48" transJa="その結果、彼はそれらと日々を共にする場所へと引き寄せられる。しかし彼は〔……〕敵意〔……〕を引き起こす。そして争いとともに、彼らは互いを貪り食う——" transEn="As a result he is drawn to the place where he spends the day with them. But he brings about [ ] enmity [ ]. And with strife they devour">
           <lb n="32"/>
           <phy>
-            <w type="X" lemma="ϩⲱⲥⲧⲉ" xml:lang="grc">ϩⲱⲥⲧⲉ</w>
+            <w type="CONJ" lemma="ϩⲱⲥⲧⲉ" xml:lang="grc">ϩⲱⲥⲧⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲛ</w>
-            <w type="X" lemma="ⲥⲉ">ⲥⲉ</w>
-            <w type="X" lemma="ⲥⲱⲕ">ⲥⲱⲕ</w>
+            <w type="ACONJ" lemma="ⲛ">ⲛ</w>
+            <w type="PPER" lemma="ⲥⲉ">ⲥⲉ</w>
+            <w type="V" lemma="ⲥⲱⲕ">ⲥⲱⲕ</w>
           </phy>
           <phy>
             <w type="PREP" lemma="ⲙⲙⲟ">ⲙⲙⲟ</w>
-            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="PPER" lemma="ϥ">ϥ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲉ">ⲉ</w>
+            <w type="PREP" lemma="ⲉ">ⲉ</w>
             <lb n="33"/>
-            <w type="X" lemma="ⲡ">ⲡ</w>
+            <w type="ART" lemma="ⲡ">ⲡ</w>
             <w type="N" lemma="ⲙⲁ" gloss="place">ⲙⲁ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲉⲧ">ⲉⲧ</w>
-            <w type="X" lemma="ϥ">ϥ</w>
-            <w type="X" lemma="ⲣ">ⲣ</w>
+            <w type="CREL" lemma="ⲉⲧ">ⲉⲧ</w>
+            <w type="PPER" lemma="ϥ">ϥ</w>
+            <w type="V" lemma="ⲣ">ⲣ</w>
+            <w type="N" lemma="ϩⲟⲟⲩ">ϩⲟⲟⲩ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ϩⲟⲟⲩ">ϩⲟⲟⲩ</w>
+            <w type="PREP" lemma="ⲉⲣⲟ">ⲉⲣⲟ</w>
+            <w type="PPER" lemma="ⲟⲩ">ⲟⲩ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲉⲣⲟ">ⲉⲣⲟ</w>
-            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+            <w type="PREP" lemma="ⲛ">ⲛ</w>
+            <w type="N" lemma="ϣⲟⲣⲡ">ϣⲟ<pd n="51" break="no"/><lb n="1" break="no"/>ⲣⲡ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲛ</w>
-            <w type="X" lemma="ϣⲟⲣⲡ">ϣⲟ<pd n="51" break="no"/><lb n="1" break="no"/>ⲣⲡ</w>
+            <w type="CONJ" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
           </phy>
           <phy>
-            <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
-          </phy>
-          <phy>
-            <w type="X" lemma="ⲛ">ⲛ</w>
-            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="PPOS" lemma="ⲛⲉϥ">ⲛϥ</w>
           </phy>
           <lb n="2"/>
           <phy>
@@ -1496,28 +1474,29 @@
           </phy>
           <lb n="3"/>
           <phy>
-            <w type="X" lemma="ⲛⲁ">ⲛⲁ</w>
-            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="PREP" lemma="ⲛⲁ">ⲛⲁ</w>
+            <w type="PPER" lemma="ϥ">ϥ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ϩⲛ">ϩⲛ</w>
+            <w type="PREP" lemma="ϩⲛ">ϩⲛ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲟⲩⲉⲡⲓⲥ">ⲟⲩⲉⲡⲓⲥ</w>
+            <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
+            <w type="X" lemma="ⲉⲡⲓⲥ">ⲉⲡⲓⲥ</w>
           </phy>
           <phy><gap reason="unclear"/></phy>
           <lb n="4"/>
           <phy>
-            <w type="X" lemma="ⲁⲗⲗⲁ" xml:lang="grc">ⲁⲗⲗⲁ</w>
+            <w type="CONJ" lemma="ⲁⲗⲗⲁ" xml:lang="grc">ⲁⲗⲗⲁ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲉ">ⲉ</w>
-            <w type="X" lemma="ϣⲁ">ϣⲁ</w>
-            <w type="X" lemma="ϥ">ϥ</w>
-            <w type="X" lemma="ⲉⲓⲣⲉ">ⲉⲓⲣⲉ</w>
+            <w type="CFOC" lemma="ⲉ">ⲉ</w>
+            <w type="AAOR" lemma="ϣⲁ">ϣⲁ</w>
+            <w type="PPER" lemma="ϥ">ϥ</w>
+            <w type="V" lemma="ⲉⲓⲣⲉ">ⲉⲓⲣⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲛ</w>
+            <w type="PREP" lemma="ⲛ">ⲛ</w>
           </phy>
           <phy>
             <gap reason="unclear"/>
@@ -1525,12 +1504,12 @@
             <w type="X" lemma="ⲃⲉ">ⲃⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲙ</w>
-            <w type="X" lemma="ⲙⲛⲧ">ⲙⲛⲧ</w>
-            <w type="X" lemma="ϫⲁϫⲉ">ϫⲁϫⲉ</w>
+            <w type="PREP" lemma="ⲛ">ⲙ</w>
+            <w type="N" lemma="ⲙⲛⲧ" gloss="prefix to nouns or adj. forming abstracts">ⲙⲛⲧ</w>
+            <w type="N" lemma="ϫⲁϫⲉ" gloss="hostile">ϫⲁϫⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ϩⲣⲁⲓ">ϩⲣⲁⲓ</w>
+            <w type="ADV" lemma="ϩⲣⲁⲓ">ϩⲣⲁⲓ</w>
           </phy>
           <phy>
             <w type="X" lemma="ⲛϩ">ⲛϩ</w>
@@ -1538,116 +1517,115 @@
           </phy>
           <lb n="6"/>
           <phy>
-            <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
+            <w type="CONJ" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲙⲛ">ⲙⲛ</w>
+            <w type="PREP" lemma="ⲙⲛ">ⲙⲛ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
-            <w type="X" lemma="ⲙⲓϣⲉ">ⲙⲓϣⲉ</w>
+            <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
+            <w type="N" lemma="ⲙⲓϣⲉ" gloss="fight">ⲙⲓϣⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲉⲩ">ⲉⲩ</w>
-            <w type="X" lemma="ⲟⲩⲱⲙ">ⲟⲩ<lb n="7" break="no"/>ⲱⲙ</w>
+            <w type="CIRC" lemma="ⲉ">ⲉ</w>
+            <w type="PPER" lemma="ⲩ">ⲩ</w>
+            <w type="V" lemma="ⲟⲩⲱⲙ" gloss="eat, bite">ⲟⲩ<lb n="7" break="no"/>ⲱⲙ</w>
           </phy>
         </s>
         <s xml:id="rep-49" n="49" transJa="——おのれら同士で、たがいを。" transEn="each other among themselves.">
           <phy>
-            <w type="X" lemma="ⲙⲛ">ⲙⲛ</w>
-            <w type="X" lemma="ⲛⲉ">ⲛⲉ</w>
-            <w type="X" lemma="ⲩⲉⲣⲏⲟⲩ">ⲩⲉⲣⲏⲟⲩ</w>
+            <w type="PREP" lemma="ⲙⲛ">ⲙⲛ</w>
+            <w type="PPOS" lemma="ⲛⲉⲩ">ⲛⲉⲩ</w>
+            <w type="N" lemma="ⲉⲣⲏⲩ">ⲉⲣⲏⲟⲩ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ϩⲣⲁⲓ">ϩⲣⲁⲓ</w>
+            <w type="ADV" lemma="ϩⲣⲁⲓ">ϩⲣⲁⲓ</w>
           </phy>
           <lb n="8"/>
           <phy>
-            <w type="X" lemma="ⲛ">ⲛ</w>
-            <w type="X" lemma="ϩⲏⲧ">ϩⲏⲧ</w>
-            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+            <w type="PREP" lemma="ⲛϩⲏⲧ">ⲛϩⲏⲧ</w>
+            <w type="PPER" lemma="ⲟⲩ">ⲟⲩ</w>
           </phy>
         </s>
         <s xml:id="rep-50" n="50" transJa="まことに、これらすべてのことを、彼は、不正を行なうことを称賛するすべての者に向かって語ったのである」。" transEn="Yes, all these things he said to everyone who praises the doing of injustice'.">
           <phy>
-            <w type="X" lemma="ⲛⲁⲓ">ⲛⲁⲓ</w>
+            <w type="PDEM" lemma="ⲛⲁⲓ">ⲛⲁⲓ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲅⲁⲣ" xml:lang="grc">ⲅⲁⲣ</w>
+            <w type="CONJ" lemma="ⲅⲁⲣ" xml:lang="grc">ⲅⲁⲣ</w>
           </phy>
           <phy>
             <w type="N" lemma="ⲧⲏⲣ" gloss="all">ⲧⲏⲣ</w>
-            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+            <w type="PPER" lemma="ⲟⲩ">ⲟⲩ</w>
           </phy>
           <lb n="9"/>
           <phy>
             <w type="APST" lemma="ⲁ">ⲁ</w>
-            <w type="X" lemma="ϥ">ϥ</w>
-            <w type="X" lemma="ϫⲟⲟⲩ">ϫⲟⲟⲩ</w>
+            <w type="PPER" lemma="ϥ">ϥ</w>
+            <w type="V" lemma="ϫⲟⲟⲩ">ϫⲟⲟⲩ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲛ</w>
-            <w type="X" lemma="ⲟⲩⲟⲛ">ⲟⲩⲟⲛ</w>
+            <w type="PREP" lemma="ⲛ">ⲛ</w>
+            <w type="N" lemma="ⲟⲩⲟⲛ">ⲟⲩⲟⲛ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛⲓⲙ">ⲛⲓⲙ</w>
+            <w type="PINT" lemma="ⲛⲓⲙ">ⲛⲓⲙ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲉⲧ">ⲉⲧ</w>
-            <w type="X" lemma="ⲣ">ⲣ</w>
+            <w type="ART" lemma="ⲉⲧ">ⲉⲧ</w>
+            <w type="V" lemma="ⲣ">ⲣ</w>
             <lb n="10"/>
-            <w type="X" lemma="ⲉⲡⲁⲓⲛⲟⲩ">ⲉⲡⲁⲓⲛⲟⲩ</w>
+            <w type="V" lemma="ⲉⲡⲁⲓⲛⲟⲩ" gloss="to praise">ⲉⲡⲁⲓⲛⲟⲩ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲙ">ⲙ</w>
-            <w type="X" lemma="ⲡ">ⲡ</w>
+            <w type="PREP" lemma="ⲛ">ⲙ</w>
+            <w type="ART" lemma="ⲡ">ⲡ</w>
             <w type="V" lemma="ϫⲓ" gloss="take">ϫⲓ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲛ</w>
-            <w type="X" lemma="ϭⲟⲛⲥ">ϭⲟⲛⲥ</w>
+            <w type="PREP" lemma="ⲛ">ⲛ</w>
+            <w type="N" lemma="ϭⲟⲛⲥ">ϭⲟⲛⲥ</w>
           </phy>
         </s>
         <s xml:id="rep-51" n="51" transJa="「では、正しく語る者にとっては益とならないのか」。" transEn="'Then is it not profitable for him who speaks justly?'">
           <lb n="11"/>
           <phy>
-            <w type="X" lemma="ⲟⲩⲕⲟⲩⲛ" xml:lang="grc">ⲟⲩⲕⲟⲩⲛ</w>
+            <w type="ADV" lemma="ⲟⲩⲕⲟⲩⲛ" gloss="therefore" xml:lang="grc">ⲟⲩⲕⲟⲩⲛ</w>
           </phy>
           <phy>
             <w type="PTC" lemma="ϭⲉ">ϭⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲡ">ⲡ</w>
-            <w type="X" lemma="ⲉⲧ">ⲉⲧ</w>
+            <w type="ART" lemma="ⲡ">ⲡ</w>
+            <w type="CREL" lemma="ⲉⲧ">ⲉⲧ</w>
             <w type="V" lemma="ϣⲁϫⲉ" gloss="speak">ϣⲁϫⲉ</w>
           </phy>
           <lb n="12"/>
           <phy>
-            <w type="X" lemma="ϩⲱⲱ">ϩⲱⲱ</w>
-            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="PREP" lemma="ϩⲱⲱ">ϩⲱⲱ</w>
+            <w type="PPER" lemma="ϥ">ϥ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ϩⲛ">ϩⲛ</w>
+            <w type="PREP" lemma="ϩⲛ">ϩⲛ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
-            <w type="X" lemma="ⲇⲓⲕⲁⲓⲟⲛ" xml:lang="grc">ⲇⲓⲕⲁⲓⲟⲛ</w>
+            <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
+            <w type="N" lemma="ⲇⲓⲕⲁⲓⲟⲛ" xml:lang="grc">ⲇⲓⲕⲁⲓⲟⲛ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲥ">ⲥ</w>
-            <w type="X" lemma="ⲣ">ⲣ</w>
-          </phy>
+            <w type="PPER" lemma="ⲥ">ⲥ</w>
+            <w type="V" lemma="ⲣ">ⲣ</w>
           <lb n="13"/>
-          <phy>
-            <w type="X" lemma="ⲛⲟϥⲣⲉ">ⲛⲟϥⲣⲉ</w>
+            <w type="N" lemma="ⲛⲟϥⲣⲉ">ⲛⲟϥⲣⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛⲁϥ">ⲛⲁϥ</w>
+            <w type="PREP" lemma="ⲛⲁ">ⲛⲁ</w>
+            <w type="PPER" lemma="ϥ">ϥ</w>
           </phy>
         </s>
         <s xml:id="rep-52" n="52" transJa="「そして、もし彼がこれらを行ない、それらに即して語るなら、内なる人間のうちで、それらは堅く根を張る。" transEn="'And if he does these things and speaks in them, within the man they take hold firmly.">
           <phy>
-            <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
+            <w type="CONJ" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
           </phy>
           <phy>
             <w type="X" lemma="ⲉϥϣⲁⲛ">ⲉϥϣⲁⲛ</w>
@@ -1657,138 +1635,133 @@
             <w type="V" lemma="ⲉⲓⲣⲉ">ⲉⲓⲣⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲛ</w>
-            <w type="X" lemma="ⲛⲁⲓ">ⲛⲁⲓ</w>
+            <w type="PREP" lemma="ⲛ">ⲛ</w>
+            <w type="PDEM" lemma="ⲛⲁⲓ">ⲛⲁⲓ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲛ</w>
-            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="ACONJ" lemma="ⲛ">ⲛ</w>
+            <w type="PPER" lemma="ϥ">ϥ</w>
             <w type="V" lemma="ϣⲁϫⲉ" gloss="speak">ϣⲁϫⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲛ</w>
-            <w type="X" lemma="ϩⲏⲧ">ϩⲏⲧ</w>
-            <w type="X" lemma="ⲟⲩ">ⲟⲩ</w>
+            <w type="PREP" lemma="ⲛϩⲏⲧ">ⲛϩⲏⲧ</w>
+            <w type="PPER" lemma="ⲟⲩ">ⲟⲩ</w>
           </phy>
           <lb n="15"/>
           <phy>
-            <w type="X" lemma="ⲛ">ⲙ</w>
-            <w type="X" lemma="ⲫⲟⲩⲛ">ⲫⲟⲩⲛ</w>
+            <w type="PREP" lemma="ⲛ">ⲙ</w>
+            <w type="ART" lemma="ⲫⲟⲩⲛ">ⲫⲟⲩⲛ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲙ</w>
-            <w type="X" lemma="ⲡ">ⲡ</w>
-            <w type="X" lemma="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</w>
+            <w type="PREP" lemma="ⲛ">ⲙ</w>
+            <w type="ART" lemma="ⲡ">ⲡ</w>
+            <w type="N" lemma="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲥⲉⲁ">ⲥⲉⲁ</w>
-          </phy>
-          <lb n="16"/>
-          <phy>
-            <w type="X" lemma="ⲙⲁϩⲧⲉ">ⲙⲁϩⲧⲉ</w>
+            <w type="PPER" lemma="ⲥⲉ">ⲥⲉ</w>
+            <w type="X" lemma="ⲁⲙⲁϩⲧⲉ" gloss="grasp, embrance, possess">ⲁ<lb n="16" break="no"/>ⲙⲁϩⲧⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ϩⲛ">ϩⲛ</w>
+            <w type="PREP" lemma="ϩⲛ">ϩⲛ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲟⲩⲧⲁϫⲣⲟ">ⲟⲩⲧⲁϫⲣⲟ</w>
+            <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
+            <w type="N" lemma="ⲧⲁϫⲣⲟ" gloss="firmness">ⲧⲁϫⲣⲟ</w>
           </phy>
         </s>
         <s xml:id="rep-53" n="53" transJa="それゆえ彼はとりわけ、それらを世話することに努め、それらを養い育てる、" transEn="Therefore especially he strives to take core of them and he nourishes them,">
           <phy>
-            <w type="X" lemma="ⲉⲧⲃⲉ">ⲉⲧⲃⲉ</w>
+            <w type="PREP" lemma="ⲉⲧⲃⲉ">ⲉⲧⲃⲉ</w>
           </phy>
           <lb n="17"/>
           <phy>
-            <w type="X" lemma="ⲡⲁⲓ">ⲡⲁⲓ</w>
+            <w type="PDEM" lemma="ⲡⲁⲓ">ⲡⲁⲓ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲛ</w>
-            <w type="X" lemma="ϩⲟⲩⲟ">ϩⲟⲩⲟ</w>
+            <w type="ART" lemma="ⲛ">ⲛ</w>
+            <w type="N" lemma="ϩⲟⲩⲟ">ϩⲟⲩⲟ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ϣⲁ">ϣⲁ</w>
-            <w type="X" lemma="ϥ">ϥ</w>
-            <w type="X" lemma="ϣⲓⲛⲉ">ϣⲓⲛⲉ</w>
+            <w type="AAOR" lemma="ϣⲁ">ϣⲁ</w>
+            <w type="PPER" lemma="ϥ">ϥ</w>
+            <w type="V" lemma="ϣⲓⲛⲉ">ϣⲓⲛⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲛ</w>
-            <w type="X" lemma="ⲥⲁ">ⲥⲁ</w>
+            <w type="PREP" lemma="ⲛⲥⲁ">ⲛⲥⲁ</w>
             <lb n="18"/>
-            <w type="X" lemma="ϥⲓ">ϥⲓ</w>
+            <w type="V" lemma="ϥⲓ" gloss="take">ϥⲓ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲡⲉⲩ">ⲡⲉⲩ</w>
-            <w type="X" lemma="ⲣⲟⲟⲩϣ">ⲣⲟⲟⲩϣ</w>
+            <w type="PPOS" lemma="ⲡⲉⲩ">ⲡⲉⲩ</w>
+            <w type="V" lemma="ⲣⲟⲟⲩϣ" gloss="have care for">ⲣⲟⲟⲩϣ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲛ</w>
-            <w type="X" lemma="ϥ">ϥ</w>
-            <w type="X" lemma="ⲥⲁⲛⲟⲩ">ⲥⲁⲛⲟⲩ</w>
+            <w type="ACONJ" lemma="ⲛ">ⲛ</w>
+            <w type="PPER" lemma="ϥ">ϥ</w>
+            <w type="V" lemma="ⲥⲁⲛⲟⲩϣ" gloss="make live">ⲥⲁⲛⲟⲩϣ</w>
             <lb n="19"/>
-            <w type="X" lemma="ϣⲟⲩ">ϣⲟⲩ</w>
+            <w type="PPER" lemma="ⲟⲩ">ⲟⲩ</w>
           </phy>
         </s>
         <s xml:id="rep-54" n="54" transJa="ちょうど農夫が日々その作物を養い育てるように。" transEn="just as the farmer nourishes his produce daily.">
           <phy>
-            <w type="X" lemma="ⲛ">ⲛ</w>
-            <w type="X" lemma="ⲑⲉ">ⲑⲉ</w>
+            <w type="PREP" lemma="ⲛ">ⲛ</w>
+            <w type="ART" lemma="ⲧ">ⲑ[ⲧ]</w>
+            <w type="N" lemma="ϩⲉ">[ϩ]ⲉ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ϩⲱⲱ">ϩⲱⲱ</w>
-            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="PREP" lemma="ϩⲱⲱ">ϩⲱⲱ</w>
+            <w type="PPER" lemma="ϥ">ϥ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲙ</w>
-            <w type="X" lemma="ⲡ">ⲡ</w>
-            <w type="X" lemma="ⲅⲉⲱⲣⲅⲟⲥ" xml:lang="grc">ⲅⲉ<lb n="20" break="no"/>ⲱⲣⲅⲟⲥ</w>
+            <w type="PREP" lemma="ⲛ">ⲙ</w>
+            <w type="ART" lemma="ⲡ">ⲡ</w>
+            <w type="N" lemma="ⲅⲉⲱⲣⲅⲟⲥ" gloss="farmer" xml:lang="grc">ⲅⲉ<lb n="20" break="no"/>ⲱⲣⲅⲟⲥ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲉ">ⲉ</w>
-            <w type="X" lemma="ϣⲁ">ϣⲁ</w>
-            <w type="X" lemma="ϥ">ϥ</w>
-            <w type="X" lemma="ⲥⲁⲁⲛϣ">ⲥⲁⲁⲛϣ</w>
+            <w type="CIRC" lemma="ⲉ">ⲉ</w>
+            <w type="AAOR" lemma="ϣⲁ">ϣⲁ</w>
+            <w type="PPER" lemma="ϥ">ϥ</w>
+            <w type="V" lemma="ⲥⲁⲁⲛϣ">ⲥⲁⲁⲛϣ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲙ</w>
-            <w type="X" lemma="ⲡⲉϥ">ⲡⲉϥ</w>
+            <w type="PREP" lemma="ⲛ">ⲙ</w>
+            <w type="PPOS" lemma="ⲡⲉϥ">ⲡⲉϥ</w>
             <lb n="21"/>
-            <w type="X" lemma="ⲅⲉⲛⲏⲙⲁ" xml:lang="grc">ⲅⲉⲛⲏⲙⲁ</w>
+            <w type="N" lemma="ⲅⲉⲛⲏⲙⲁ" gloss="crop" xml:lang="grc">ⲅⲉⲛⲏⲙⲁ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲙ</w>
-            <w type="X" lemma="ⲙⲏⲛⲉ">ⲙⲏⲛⲉ</w>
+            <w type="PREP" lemma="ⲛ">ⲙ</w>
+            <w type="N" lemma="ⲙⲏⲛⲉ" gloss="daily">ⲙⲏⲛⲉ</w>
           </phy>
         </s>
         <s xml:id="rep-55" n="55" transJa="そして、野生の獣どもがそれの成長を妨げる」。" transEn="And the wild beasts keep it from frowing.'">
           <phy>
-            <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
+            <w type="CONJ" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲛ</w>
-            <lb n="22"/>
-            <w type="X" lemma="ⲧⲉ">ⲧⲉ</w>
-            <w type="X" lemma="ⲛ">ⲛ</w>
-            <w type="X" lemma="ⲑⲏⲣⲓⲟⲛ" xml:lang="grc">ⲑⲏⲣⲓⲟⲛ</w>
+            <w type="ACONJ" lemma="ⲛⲧⲉ">ⲛ<lb n="22" break="no"/>ⲧⲉ</w>
+            <w type="ART" lemma="ⲛ">ⲛ</w>
+            <w type="N" lemma="ⲑⲏⲣⲓⲟⲛ" xml:lang="grc">ⲑⲏⲣⲓⲟⲛ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲛ">ⲛ</w>
-            <w type="X" lemma="ⲁⲅⲣⲓⲟⲛ" xml:lang="grc">ⲁⲅⲣⲓⲟⲛ</w>
+            <w type="PREP" lemma="ⲛ">ⲛ</w>
+            <w type="N" lemma="ⲁⲅⲣⲓⲟⲛ" xml:lang="grc">ⲁⲅⲣⲓⲟⲛ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲣ">ⲣ</w>
+            <w type="V" lemma="ⲣ">ⲣ</w>
             <lb n="23"/>
-            <w type="X" lemma="ⲕⲱⲗⲩⲉ" xml:lang="grc">ⲕⲱⲗⲩⲉ</w>
+            <w type="V" lemma="ⲕⲱⲗⲩⲉ" gloss="do prevent" xml:lang="grc">ⲕⲱⲗⲩⲉ</w>
           </phy>
           <phy>
             <w type="PREP" lemma="ⲙⲙⲟ">ⲙⲙⲟ</w>
-            <w type="X" lemma="ϥ">ϥ</w>
+            <w type="PPER" lemma="ϥ">ϥ</w>
           </phy>
           <phy>
-            <w type="X" lemma="ⲉ">ⲉ</w>
-            <w type="X" lemma="ⲧⲣⲉ">ⲧⲣⲉ</w>
-            <w type="X" lemma="ϥ">ϥ</w>
-            <w type="X" lemma="ⲣⲱⲧ">ⲣⲱⲧ</w>
+            <w type="CREL" lemma="ⲉ">ⲉ</w>
+            <w type="ACAUS" lemma="ⲧⲣⲉ">ⲧⲣⲉ</w>
+            <w type="PPER" lemma="ϥ">ϥ</w>
+            <w type="V" lemma="ⲣⲱⲧ" gloss="grow">ⲣⲱⲧ</w>
           </phy>
         </s>
       </div>
