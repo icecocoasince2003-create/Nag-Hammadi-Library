@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="ja">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title xml:lang="en">Plato, Republic 588a–589b (NHC VI,5) — exegetical annotations</title>
+        <title xml:lang="ja">プラトン『国家』588a–589b(NHC VI,5)コプト語訳 注釈(釈義・学説整理)</title>
+        <respStmt><resp>notes by</resp><name>Nag Hammadi Digital Corpus project</name></respStmt>
+      </titleStmt>
+      <publicationStmt>
+        <authority>Nag Hammadi Digital Corpus</authority>
+        <availability><licence target="https://creativecommons.org/licenses/by/4.0/">CC-BY 4.0</licence></availability>
+        <date when="2026-06-28">2026-06-28</date>
+      </publicationStmt>
+      <sourceDesc>
+        <listBibl>
+          <bibl xml:id="bib-matsagouras">E. G. Matsagouras, <title>Plato Copticus: Republic 588B–589B. Translation and Commentary</title>, MA thesis, Dalhousie University, 1976.（逐語注釈・誤読類型・ギリシア語借用語表・写本間比較。Camp A の基礎文献。）</bibl>
+          <bibl xml:id="bib-ashwin">P. Ashwin-Siejkowski, “Plato in Bad Company? Plato’s <title>Republic</title> (588b–589b) in the Nag Hammadi Collection: A Re-Examination of Its Background,” <title>Gnosis</title> 5 (2020) 172–187 (CC BY 4.0).（クレメンス＝カルポクラテス／エピファネス文脈に置く意図的再解釈説。Camp B。）</bibl>
+          <bibl xml:id="bib-orlandi">T. Orlandi, “La traduzione copta di Platone, Resp. IX, 588b–589b: Problemi critici ed esegetici,” <title>Atti della Accademia Nazionale dei Lincei</title> 374, ser. 8, Rendiconti, 1977, 45–62.（キリスト教的編者による意図的改作＝別エディション説。）</bibl>
+          <bibl xml:id="bib-lanzillotta">L. R. Lanzillotta, “Gospel of Thomas Logion 7 Unravelled,” in <title>Between Text and Text</title>, Göttingen: V&amp;R, 2014, 116–132.（三頭→二頭、三分→二分の改変を意図的再解釈と捉える。ハイパーテクスト性。）</bibl>
+          <bibl xml:id="bib-jackson">H. M. Jackson, <title>The Lion Becomes Man: The Gnostic Leontomorphic Creator and the Platonic Tradition</title>, SBLDS 81, Atlanta: Scholars Press, 1985.（獅子像の異端的人間論への定着、ヒエラカス仮説。）</bibl>
+          <bibl xml:id="bib-brashler">J. Brashler, “Plato, Republic 588b–589b. VI,5: 48,16–51,23,” in <title>The Coptic Gnostic Library</title> (NHS XI), Leiden: Brill, 1979, 325–339.（校訂本・英訳。Schenke を承けて「翻訳として破綻」と評価。）</bibl>
+          <bibl xml:id="bib-painchaud">L. Painchaud &amp; P.-H. Poirier (eds.), <title>Fragment de la République de Platon (NH VI,5)</title>, Québec: PUL, 1983.（ヴァレンティノス派環境を想定する仏語校訂。）</bibl>
+        </listBibl>
+        <p xml:lang="ja">注釈データ(釈義・学説整理)。各 &lt;note&gt; は @target で本文 &lt;ref target="republic_tei.xml"&gt;republic_tei.xml&lt;/ref&gt; の文セグメントへ、@ana で下の主題分類へリンクする。@target の識別子は写本ページ・行(コデックス VI のページ.行、例 rep-49-6 = 49,6)を基準に暫定設定してある。コーパス側の文 xml:id が連番形式(rep-NN 等)であれば、本文ファイル受領後に対応づけ直すこと。本文と並行のギリシア語底本は Burnet OCT(Perseus ではない)。注は ja/en の二言語。学説は確定した本文事実(欠損・付加・字形)と解釈仮説(意図性の有無)とを別の層として扱う方針による。</p>
+        <p xml:lang="en">Exegetical/standOff layer. Each &lt;note&gt; links by @target to a text segment in republic_tei.xml and by @ana to the subject taxonomy below. @target ids are provisionally keyed to codex page.line (NHC VI, e.g. rep-49-6 = 49,6) and should be re-pointed to the corpus’s sentence xml:ids on receipt of the text file. Greek base text is Burnet OCT. Notes keep confirmed textual facts and interpretive hypotheses as distinct layers.</p>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <classDecl>
+        <taxonomy xml:id="commentary-taxonomy">
+          <desc xml:lang="ja">主題分類。本文 &lt;s&gt; の @ana と各注の @ana から参照される。</desc>
+          <category xml:id="th-transtech"><catDesc xml:lang="ja">翻訳技法・誤読</catDesc><catDesc xml:lang="en">Translation technique &amp; misreading</catDesc></category>
+          <category xml:id="th-freerender"><catDesc xml:lang="ja">自由な敷衍・道徳化</catDesc><catDesc xml:lang="en">Free expansion / moralizing</catDesc></category>
+          <category xml:id="th-soul"><catDesc xml:lang="ja">魂の構造と動物像</catDesc><catDesc xml:lang="en">Soul-structure &amp; animal images</catDesc></category>
+          <category xml:id="th-beasts"><catDesc xml:lang="ja">三頭から二頭へ(スキュラの脱落)</catDesc><catDesc xml:lang="en">Three beasts → two (Scylla omitted)</catDesc></category>
+          <category xml:id="th-archon"><catDesc xml:lang="ja">ⲁⲣⲭⲱⲛ の付加</catDesc><catDesc xml:lang="en">The ἄρχων / ⲁⲣⲭⲱⲛ crux</catDesc></category>
+          <category xml:id="th-eikon"><catDesc xml:lang="ja">εἰκών と ⲉⲓⲛⲉ(像・形の語選択)</catDesc><catDesc xml:lang="en">εἰκών &amp; ⲉⲓⲛⲉ (image/form lexical choice)</catDesc></category>
+          <category xml:id="th-loanwords"><catDesc xml:lang="ja">ギリシア語借用語</catDesc><catDesc xml:lang="en">Greek loanwords</catDesc></category>
+          <category xml:id="th-justice"><catDesc xml:lang="ja">正義・倫理</catDesc><catDesc xml:lang="en">Justice &amp; ethics</catDesc></category>
+          <category xml:id="th-farmer"><catDesc xml:lang="ja">農夫の比喩</catDesc><catDesc xml:lang="en">The farmer simile</catDesc></category>
+          <category xml:id="th-campA"><catDesc xml:lang="ja">学説A:翻訳能力欠如説</catDesc><catDesc xml:lang="en">Camp A: incompetent translation</catDesc></category>
+          <category xml:id="th-campB"><catDesc xml:lang="ja">学説B:意図的再解釈説</catDesc><catDesc xml:lang="en">Camp B: intentional reinterpretation</catDesc></category>
+          <category xml:id="th-vorlage"><catDesc xml:lang="ja">異本・別エディション(Vorlage)説</catDesc><catDesc xml:lang="en">Vorlage / alternate edition</catDesc></category>
+          <category xml:id="th-clement"><catDesc xml:lang="ja">クレメンス／カルポクラテス／エピファネス</catDesc><catDesc xml:lang="en">Clement / Carpocrates / Epiphanes</catDesc></category>
+          <category xml:id="th-gnostic"><catDesc xml:lang="ja">グノーシス的・ヴァレンティノス派的読解</catDesc><catDesc xml:lang="en">Gnostic / Valentinian readings</catDesc></category>
+          <category xml:id="th-thomas"><catDesc xml:lang="ja">トマス福音書 Logion 7(獅子)</catDesc><catDesc xml:lang="en">Gospel of Thomas, Logion 7 (the lion)</catDesc></category>
+          <category xml:id="th-codex"><catDesc xml:lang="ja">コデックス VI における位置</catDesc><catDesc xml:lang="en">Place within Codex VI</catDesc></category>
+        </taxonomy>
+      </classDecl>
+    </encodingDesc>
+    <revisionDesc>
+      <change when="2026-06-28" n="0.1">Initial build. 16 interpretive notes grounded in Matsagouras 1976 and Ashwin-Siejkowski 2020, with Orlandi 1977, Lanzillotta 2014, Jackson 1985, Brashler 1979.</change>
+    </revisionDesc>
+  </teiHeader>
+  <standOff>
+    <listAnnotation type="commentary" xml:id="commentary">
+      <desc xml:lang="ja">釈義レイヤ。@target で本文セグメントへ、@ana で主題分類へ結ばれる。</desc>
+
+      <note xml:id="note-incipit" type="commentary" ana="#th-transtech #th-codex" n="48,16–17 (Rep. 588a)" target="republic_tei.xml#rep-1 republic_tei.xml#rep-2">
+        <label xml:lang="ja">冒頭「我々はこの場でロゴスになった」——範囲と最初の躓き</label>
+        <p xml:lang="ja">抜粋はコデックス VI 48,16 から始まり、写本には表題がない(余白は十分にあるのに付されていない)。引用範囲は伝統的に 588b とされてきたが、Jackson(1985)は 588a から始まると論じ、Ashwin-Siejkowski もこれに従う。冒頭の ἐνταῦθα …λόγου γεγόναμεν(「我々は議論のこの段に来た」の意の慣用句)を訳者は直訳して「我々はこの場でロゴスになった」とした。Matsagouras はこれを慣用句の不理解と見るが、同時に、ロゴスを受けて人が「そのようなもの(神のごときもの)になる」というグノーシス的含意を読み込みうる箇所だとも注記する。学説対立がまさに最初の一文から始まる。</p>
+        <p xml:lang="en">The excerpt opens at codex VI 48,16 and bears no title though space was left for one. The traditional incipit 588b is corrected to 588a by Jackson (1985), followed by Ashwin-Siejkowski. The opening idiom ἐνταῦθα … λόγου γεγόναμεν (“we have reached this point in the argument”) is rendered literally as “we have become a logos in this place.” Matsagouras treats this as failure to grasp the idiom, while noting a possible reading whereby, on receiving the logos, one “becomes such.” The interpretive split begins with the first sentence.</p>
+      </note>
+
+      <note xml:id="note-recall" type="commentary" ana="#th-transtech #th-justice #th-campA" n="48,18–24 (Rep. 588b)" target="republic_tei.xml#rep-3 republic_tei.xml#rep-4 republic_tei.xml#rep-5">
+        <label xml:lang="ja">「先に言われたことを思い起こそう」——分詞の関係節化と δοξάζω の取り違え</label>
+        <p xml:lang="ja">ギリシア語の分詞 λεχθέντα(「言われた事ども」)は、分詞をもたないコプト語で関係節 ⲉⲛⲧⲁⲩϫⲟⲟⲩ に変換される。これは言語構造上の必然で、誤りではない。問題は次で、λυσιτελεῖν(「利益になる」)と δοξάζω(「思う/讃える」)の連鎖を訳者が取り違え、δίκαιος の与格を主格に変えた結果、原文にない「不正に苦しむ者の最終的な報い」に近い含意が生じる。Matsagouras は、訳者がプラトンを歪めようとしたのではなく、不正な受苦と最終的な回復というキリスト教的観念に無意識に引きずられた可能性を指摘する。</p>
+        <p xml:lang="en">The Greek participle λεχθέντα is recast as a Coptic relative clause (ⲉⲛⲧⲁⲩϫⲟⲟⲩ) — a structural necessity, not an error, since Coptic lacks participles. The real trouble follows: the translator confuses the λυσιτελεῖν / δοξάζω sequence and turns the dative of δίκαιος into a nominative, yielding overtones (close to “final recompense for unjust suffering”) absent from Plato. Matsagouras suggests the translator did not mean to distort Plato but drifted unconsciously toward Christian notions of unjust suffering and final restoration.</p>
+      </note>
+
+      <note xml:id="note-image" type="commentary" ana="#th-eikon #th-transtech #th-loanwords" n="48,31–49,14 (Rep. 588b–c)" target="republic_tei.xml#rep-13 republic_tei.xml#rep-14 republic_tei.xml#rep-20">
+        <label xml:lang="ja">εἰκόνα πλάσαντες——εἰκών は借用語、ἰδέα だけが ⲉⲓⲛⲉ に訳される</label>
+        <p xml:lang="ja">「魂の像を造形して(εἰκόνα πλάσαντες)」の箇所。εἰκών は訳されずギリシア語借用語(ϩⲓⲕⲱⲛ、ⲟⲩϩⲓⲕⲱⲛ)として置かれ、字形は ει→ι のイオタキスムスを示す。これに対し ἰδέα(形)は一貫して ⲉⲓⲛⲉ と訳され、Matsagouras によれば、これが抜粋中で唯一きちんと訳されたギリシア哲学用語である(他はすべて借用語)。Krause–Labib は εἰκών を Vorbild と訳したが、A. H. Armstrong は εἰκών がそのような意味になりえないと退けた。εἰκών(借用)と ⲉⲓⲛⲉ(=ἰδέα、翻訳)の使い分けは、訳者の語彙選択が一貫している証拠として読める。</p>
+        <p xml:lang="en">At “having moulded an image (εἰκόνα πλάσαντες) of the soul,” εἰκών is left untranslated as a loanword (ϩⲓⲕⲱⲛ / ⲟⲩϩⲓⲕⲱⲛ), spelled with itacistic ι for ει. By contrast ἰδέα (“form”) is consistently rendered ⲉⲓⲛⲉ — for Matsagouras the one Greek philosophical term in the excerpt that is actually translated (the rest are loanwords). Krause–Labib’s “Vorbild” for εἰκών was rejected by A. H. Armstrong. The steady contrast between borrowed εἰκών and translated ⲉⲓⲛⲉ (=ἰδέα) reads as evidence of a consistent lexical choice.</p>
+      </note>
+
+      <note xml:id="note-archon" type="commentary" ana="#th-archon #th-gnostic #th-campA #th-campB" n="49,6 (Rep. 588c)" target="republic_tei.xml#rep-16">
+        <label xml:lang="ja">ⲁⲣⲭⲱⲛ の付加——両陣営が分かれる核心</label>
+        <p xml:lang="ja">本文事実としては、ギリシア語にない ⲁⲣⲭⲱⲛ が 49,6 に現れる(παλαιαί に対応する位置)。両陣営はこの付加自体を認める。解釈は対立する。Matsagouras はこれを「テキストをグノーシス化する意識的な試み」と読む(アルコン=下位天界を支配する敵対的霊)。これに対し Brashler、そして Ashwin-Siejkowski は、ⲁⲣⲭⲱⲛ/ἄρχων の出現は写字生のグノーシス的傾向や本抜粋の「グノーシス的」性格を決定づけないと明言する。直前の 49,3–5 は損傷部で、Matsagouras 自身が欠損を認めている。したがってこれは「両陣営が本文事実として認めるが解釈が割れる付加」であって、決定的証拠(smoking gun)ではない。</p>
+        <p xml:lang="en">As a textual fact, ⲁⲣⲭⲱⲛ — absent from the Greek — appears at 49,6 (where παλαιαί stands). Both camps accept the addition; they read it differently. Matsagouras takes it as “a conscious attempt to Gnosticize the text” (archons = hostile spirits ruling the lower heavens). Brashler, and Ashwin-Siejkowski after him, expressly deny that ⲁⲣⲭⲱⲛ/ἄρχων establishes a gnosticising inclination or a “Gnostic” character for the excerpt. The immediately preceding 49,3–5 is damaged, a lacuna Matsagouras himself notes. So this is an addition both camps grant textually but read oppositely — not a smoking gun.</p>
+      </note>
+
+      <note xml:id="note-beasts" type="commentary" ana="#th-beasts #th-soul #th-campA #th-campB" n="49,7–9 (Rep. 588c)" target="republic_tei.xml#rep-17">
+        <label xml:lang="ja">合成獣——キマイラとケルベロス、スキュラの脱落(三頭→二頭)</label>
+        <p xml:lang="ja">プラトンの合成獣は三つの怪物(キマイラ・スキュラ・ケルベロス)を含むが、コプト語訳ではスキュラが現れず二つになる(Matsagouras「ギリシア語本文にはスキュラもあるが、コプト語訳には見えない」)。Lanzillotta はこれを、魂の三分を二分へ縮約する意図的改変と対応づける。さらに ⲭⲓⲙⲁⲓⲣⲁ・ⲕⲉⲣⲃⲉⲣⲟⲥ はともに(主格であるべき借用語が)属格形で、字形も崩れている。Matsagouras はこれを、訳者が属格の用法を理解していないこと、ないし写字生の不注意による劣化と見る。Camp B(Lanzillotta/Orlandi)は二頭化を編者の意図的操作と捉える。確定事実(スキュラ脱落)と解釈(過誤か意図か)を分けるべき箇所。</p>
+        <p xml:lang="en">Plato’s composite beast has three monsters (Chimaera, Scylla, Cerberus); the Coptic has only two — Scylla is absent (Matsagouras: “in the Greek Σκύλλα is also mentioned, but it is not in the Coptic”). Lanzillotta ties this to a deliberate reduction of the tripartite soul to two parts. The loanwords ⲭⲓⲙⲁⲓⲣⲁ and ⲕⲉⲣⲃⲉⲣⲟⲥ stand in (faulty) genitive forms; Matsagouras reads this as the translator’s failure with the genitive or as scribal degradation. Camp B (Lanzillotta/Orlandi) reads the reduction as editorial intent. Keep the fact (Scylla dropped) distinct from the interpretation (error vs intention).</p>
+      </note>
+
+      <note xml:id="note-morphe" type="commentary" ana="#th-loanwords #th-eikon #th-transtech" n="49,10 (Rep. 588c)" target="republic_tei.xml#rep-18">
+        <label xml:lang="ja">μορφή の付加——ⲉⲓⲛⲉ(=ἰδέα)との語彙重複</label>
+        <p xml:lang="ja">49,10 の μορφή(借用語 ⲙⲟⲣⲫⲏ)はギリシア語本文にない付加で、Matsagouras はこれが ἰδέα(=ⲉⲓⲛⲉ)と同義だと指摘する。ⲉⲓⲛⲉ(訳語)と ⲙⲟⲣⲫⲏ(借用)が同じ「形」概念をめぐって併存する点は、語彙選択を観察する上で重要な境界例。借用語の数え方(本プロジェクトの XML では 35、Matsagouras は 22)に関わる扱いの差も、μορφή のような付加語をどう数えるかに左右される。</p>
+        <p xml:lang="en">At 49,10 μορφή (loanword ⲙⲟⲣⲫⲏ) is an addition not in the Greek; Matsagouras notes it is synonymous with ἰδέα (=ⲉⲓⲛⲉ). The co-existence of translated ⲉⲓⲛⲉ and borrowed ⲙⲟⲣⲫⲏ for the same notion of “form” is a useful boundary case for lexical analysis. It also bears on loanword counting (35 in the project XML vs Matsagouras’s 22), which turns partly on how added words like μορφή are tallied.</p>
+      </note>
+
+      <note xml:id="note-poikilos" type="commentary" ana="#th-transtech #th-gnostic #th-campA" n="49,18–20 (Rep. 588c)" target="republic_tei.xml#rep-22 republic_tei.xml#rep-23">
+        <label xml:lang="ja">ποικίλος「多彩」の取り違えと ἡμέρων の誤読</label>
+        <p xml:lang="ja">ποικίλος は『国家』では「多彩な(多くの色の)」を意味するが、訳者はこれを「変わりやすい」と取った、と Matsagouras は見る。続く ἡμέρων(「飼い慣らされた」)も、アクセントのない写本で誤読されている。Matsagouras は、クレメンスがヨセフの「多彩な衣」を欲望の象徴と解した一節(『ストロマテイス』『パイダゴゴス』)を引き、ποικίλος をめぐるアレゴリーの伝統を示唆する。アクセント・分かち書きの欠如が一連の誤読を生んだという、Camp A の誤読類型の典型例。</p>
+        <p xml:lang="en">In the Republic ποικίλος means “many-coloured,” but the translator, per Matsagouras, took it as “changeful.” The following ἡμέρων (“tamed”) is likewise misread in an unaccented manuscript. Matsagouras adduces Clement’s reading of Joseph’s “many-coloured coat” as a symbol of desire (Stromateis, Paedagogus), pointing to an allegorical tradition around ποικίλος. A textbook case of Camp A’s typology: missing accents and word-division breeding a chain of misreadings.</p>
+      </note>
+
+      <note xml:id="note-tote-ergon" type="commentary" ana="#th-transtech #th-freerender #th-campA #th-campB" n="49,22–27 (Rep. 588c–d)" target="republic_tei.xml#rep-24 republic_tei.xml#rep-25 republic_tei.xml#rep-26 republic_tei.xml#rep-27">
+        <label xml:lang="ja">最難関 τότε…ἔργον——語順の崩壊と付加</label>
+        <p xml:lang="ja">49,22–27 は抜粋中もっとも問題の多い箇所で、Matsagouras は「対応するギリシア語をほとんど訳しえていない」とし、語の対応づけに二つの読み筋を提示する(語順保存案と語順非保存案)。δυνατοῦ μεταβάλλειν καὶ φύειν ἐξ αὑτοῦ πάντα ταῦτα(「これらすべてを自らから変化させ生み出しうる」)に相当する部分に、原文にない要素が混入する。Camp A はこれを syntactic な不理解と付加の累積と見る。Camp B(Orlandi/Lanzillotta)は、こうした逸脱を「下手な訳」ではなく目的をもった再構成と読む。農夫の比喩(後出)が比較的忠実に訳されるのと対照的で、翻訳技法のムラを示す。</p>
+        <p xml:lang="en">49,22–27 is the hardest stretch; Matsagouras judges it can scarcely be called a rendering of the corresponding Greek and offers two alignment schemes (word-order kept vs not). Material absent from the Greek intrudes into what answers to δυνατοῦ μεταβάλλειν καὶ φύειν ἐξ αὑτοῦ πάντα ταῦτα. Camp A sees cumulative syntactic misunderstanding plus addition; Camp B (Orlandi/Lanzillotta) reads such divergence as purposeful reconstruction rather than mere bad translation. The contrast with the fairly faithful farmer simile (below) shows uneven technique.</p>
+      </note>
+
+      <note xml:id="note-plant" type="commentary" ana="#th-freerender #th-gnostic #th-thomas #th-campA" n="50,2 (Rep. 588d)" target="republic_tei.xml#rep-31">
+        <label xml:lang="ja">付加「人間の形とは別、植物の形とは別」——バシレイデス的反響</label>
+        <p xml:lang="ja">50,2 には、ギリシア語本文にない一句がある——「人間の形とは別であり、…植物(?)の形とは別である」。Matsagouras は、これがクレメンスの伝えるバシレイデス派の魂論(魂が植物や動物の性質を帯びるという説)を想起させると指摘し、また獅子=情念を強く語る『マニ教詩篇』253(「私の内なる獅子を絞め殺し魂から追い出した」)を引く。本文事実としての付加が、二世紀の魂論・情念論の文脈に響くことを示す例。Camp A はなお「ギリシア語に根拠なし」の付加と整理する。</p>
+        <p xml:lang="en">At 50,2 stands a clause with no Greek warrant — “different is the form of a man, and different the form … of a plant(?).” Matsagouras hears in it Clement’s report of Basilidian psychology (the soul bearing properties of plants and animals) and cites Manichaean Psalm 253 (“this lion within me … I have strangled and cast out of my soul”), where the lion is the passions. The added clause, a textual fact, resonates with second-century soul- and passion-discourse. Camp A still files it as an addition without Greek basis.</p>
+      </note>
+
+      <note xml:id="note-farmer" type="commentary" ana="#th-farmer #th-soul #th-justice #th-transtech" n="51,11–23 (Rep. 589a–b)" target="republic_tei.xml#rep-51 republic_tei.xml#rep-52 republic_tei.xml#rep-53 republic_tei.xml#rep-54 republic_tei.xml#rep-55">
+        <label xml:lang="ja">農夫の比喩——比較的忠実な訳と「飼い慣らす/飢えさせる」</label>
+        <p xml:lang="ja">魂の内なる「人間」が農夫(ⲙ̄ⲡⲅⲱⲣⲅⲟⲥ)のように振る舞い、穏やかなものを養い、野の獣(ⲛ̄ⲧⲉⲛ̄ⲑⲏⲣⲓⲟⲛ ⲛ̄ⲁⲅⲣⲓⲟⲛ)を飢えさせる、という比喩。ここは前出の自由な敷衍と対照的に、比較的忠実に訳されている。Ashwin-Siejkowski/Lanzillotta は、農夫(理性的部分)と野獣(情念)の対立を、本抜粋の倫理的・禁欲的主題の核心と見る。Matsagouras は語彙面で βρέμμα が γέννημα に、συμφέρει が ⲙⲛⲓϣⲟϥ 様の表現に置換されるなど、ギリシア語をギリシア語で訳す現象を記録する。同じ写本内で忠実な部分と崩れた部分が共存する点が、翻訳技法のムラを物語る。</p>
+        <p xml:lang="en">The inner “man” acts like a farmer (ⲙ̄ⲡⲅⲱⲣⲅⲟⲥ), feeding the gentle and starving the wild beasts (ⲛ̄ⲧⲉⲛ̄ⲑⲏⲣⲓⲟⲛ ⲛ̄ⲁⲅⲣⲓⲟⲛ). Unlike the free expansion above, this is rendered fairly faithfully. Ashwin-Siejkowski/Lanzillotta see the farmer (reason) vs beasts (passions) opposition as the ethical-ascetic core of the excerpt. Matsagouras records lexical curiosities (βρέμμα rendered by γέννημα; συμφέρει by a ⲙⲛⲓϣⲟϥ-type phrase) — Greek translated by Greek. Faithful and broken stretches in one manuscript bespeak uneven technique.</p>
+      </note>
+
+      <note xml:id="note-thomas" type="commentary" ana="#th-thomas #th-soul #th-campB" n="抜粋全体 / esp. the lion" target="republic_tei.xml#rep-17 republic_tei.xml#rep-52">
+        <label xml:lang="ja">獅子像とトマス福音書 Logion 7——情念としての獣</label>
+        <p xml:lang="ja">プラトンの合成獣の「獅子」部分は、二世紀以降の異端的人間論で独自の生命を得た。トマス福音書 Logion 7(「人が食べる獅子は幸い、その獅子は人になる…」)は、Lanzillotta によれば、まさにこの魂の三力(情念)の比喩を背景にもつ。Jackson の研究『獅子は人になる』(1985)は、獅子=造物主/下位の魂を主題化し、本抜粋の翻訳時には「この寓話は異端的人間論に取り込まれ周知となっていたため、序文を要さなかった」と論じる。Ashwin-Siejkowski はこの線で、抜粋を「情念を認識し飼い慣らす」霊的成長の教材として読む。</p>
+        <p xml:lang="en">The “lion” of Plato’s composite beast took on a life of its own in heterodox anthropology. Gospel of Thomas Logion 7 (“blessed is the lion the man eats, and the lion becomes man …”) has, per Lanzillotta, exactly this metaphor of the soul’s powers (passions) behind it. Jackson’s The Lion Becomes Man (1985) thematizes the lion as creator/lower soul and argues that by the time of translation “the parable had acquired such notoriety from its integration into heterodox anthropology that no introduction was necessary.” Ashwin-Siejkowski reads the excerpt along these lines as didactic material for recognizing and taming the passions.</p>
+      </note>
+
+      <note xml:id="note-campA" type="commentary" ana="#th-campA #th-transtech" n="抜粋全体 (48,16–51,23)" target="republic_tei.xml#rep-1">
+        <label xml:lang="ja">学説A:翻訳能力の欠如(Schenke・Brashler・Matsagouras)</label>
+        <p xml:lang="ja">第一の陣営は、コプト語訳を能力不足の所産と見る。Schenke はこれを劣悪な訳とし、Brashler は「破綻している(fails disastrously)」と評し、抜粋を「グノーシス的ともヘルメス的とも特徴づけるのは危うい」とする。Matsagouras はこの評価を最も体系的に支える。彼の誤読類型はおおむね四種——(1)アクセント・分かち書きの欠如による誤読、(2)語の意味の取り違え、(3)文・構文の不理解、(4)意図的改変——で、訳者は職業的(プラトン)哲学者ではなく、後期ヘレニズム期に流通した不正確な写本に依拠したと論じる。ⲁⲣⲭⲱⲛ や植物の付加は、この枠では「意図的改変」の少数事例に分類される。</p>
+        <p xml:lang="en">The first camp reads the Coptic as the product of insufficient competence. Schenke calls it a poor translation; Brashler says it “fails disastrously” and that to label the tractate Gnostic or Hermetic is “hazardous.” Matsagouras gives the fullest support: his typology has roughly four kinds — (1) misreadings from missing accents/word-division, (2) lexical misunderstanding, (3) syntactic misunderstanding, (4) intentional alteration — and holds that the translator was no professional (Platonic) philosopher, working from inaccurate late-Hellenistic papyri. Within this frame ⲁⲣⲭⲱⲛ and the “plant” addition are filed as the few “intentional” cases.</p>
+      </note>
+
+      <note xml:id="note-campB" type="commentary" ana="#th-campB #th-vorlage #th-justice #th-clement" n="抜粋全体 (48,16–51,23)" target="republic_tei.xml#rep-1">
+        <label xml:lang="ja">学説B:意図的再解釈(Orlandi・Lanzillotta・Ashwin-Siejkowski)</label>
+        <p xml:lang="ja">第二の陣営は、逸脱を「下手な訳」ではなく目的をもった再解釈と読む。Orlandi(1977)は、コプト語本文をキリスト教的・グノーシス化する編者(redattore)による意図的改作、ないしプラトン本文の「別のヴァージョン/エディション」の反映と見る。Lanzillotta(2014)は、三頭→二頭・三分→二分の改変を意図的再解釈=ハイパーテクスト性の現れと捉える。Ashwin-Siejkowski(2020)は「グノーシス」「グノーシス化」のラベル(Williams 1996)を退け、抜粋を二世紀のキリスト教的プラトン主義の倫理的言説として位置づける。三者とも、本文の逸脱は能力の欠如ではなく選択の所産だと主張する点で一致する。</p>
+        <p xml:lang="en">The second camp reads the divergences as purposeful reinterpretation, not bad translation. Orlandi (1977) sees the Coptic as a deliberate adaptation by a Christianising/gnosticising editor (redattore), or as reflecting another “version/edition” of Plato’s text. Lanzillotta (2014) takes the reduction (three beasts → two, tripartite → bipartite soul) as intentional reinterpretation — hypertextuality. Ashwin-Siejkowski (2020) rejects the labels “Gnostic”/“gnosticising” (Williams 1996) and places the excerpt within second-century Christian-Platonist ethical discourse. All three agree the divergences are a product of choice, not incapacity.</p>
+      </note>
+
+      <note xml:id="note-clement" type="commentary" ana="#th-clement #th-justice #th-campB" n="抜粋全体 / Strom. 3" target="republic_tei.xml#rep-4">
+        <label xml:lang="ja">クレメンスの証言——カルポクラテス／エピファネスと『正義について』</label>
+        <p xml:lang="ja">Ashwin-Siejkowski の独自提案の中心。クレメンス(『ストロマテイス』第3巻)は、敵対者を禁欲派と放縦派に二分し、後者にカルポクラテスとその子エピファネスを置く。エピファネスは父からプラトン主義を学び、失われた著作『正義について(Περὶ δικαιοσύνης)』で、社会的平等・共有(κοινωνία)・あらゆる区分からの解放を説いたとされる(クレメンスは彼が『国家』457d の妻女共有を誤解したと批判)。Ashwin-Siejkowski は、コプト語抜粋の起源を、こうした二世紀のキリスト教的プラトン主義の倫理(情念論・人間論)をキリスト教倫理に取り込む営みに遡らせる。ただし彼自身、これは検証不能な仮説だと留保する。</p>
+        <p xml:lang="en">The center of Ashwin-Siejkowski’s own proposal. Clement (Stromateis 3) divides adversaries into ascetics and libertines, placing Carpocrates and his son Epiphanes among the latter. Epiphanes, taught Platonism by his father, allegedly preached in his lost On Righteousness (Περὶ δικαιοσύνης) social equality, fellowship (κοινωνία), and liberation from all divisions (Clement charges he misread Republic 457d on women in common). Ashwin-Siejkowski traces the excerpt’s origin to this second-century effort to assimilate Platonic ethics (passions, anthropology) into Christian ethics — while conceding it is an unverifiable hypothesis.</p>
+      </note>
+
+      <note xml:id="note-vorlage" type="commentary" ana="#th-vorlage #th-transtech #th-campA #th-campB" n="方法上の留保" target="republic_tei.xml#rep-1">
+        <label xml:lang="ja">第三の可能性と方法上の留保——能力・意図・Vorlage は決定不能</label>
+        <p xml:lang="ja">第三の説明は、逸脱の一部が訳者の過誤でも意図的改変でもなく、異なるギリシア語底本(Vorlage)・別エディションに由来する、という可能性である(Orlandi の「別のヴァージョン」がこれに近い)。重要なのは、現存データだけからは「翻訳能力の欠如」「意図的再解釈」「Vorlage の相違」の三つを決定的に切り分けられないことである。確定できる本文事実(スキュラの脱落、ⲁⲣⲭⲱⲛ・μορφή・植物句の付加、εἰκών/ⲉⲓⲛⲉ の使い分け、ⲡⲗⲁⲥⲥⲉ の -σσ- 形)と、その意図性をめぐる解釈仮説とは、別の論証層として扱う必要がある。本注釈はこの区別を一貫して保つ。</p>
+        <p xml:lang="en">A third explanation is that some divergences stem neither from translator error nor from deliberate reworking but from a different Greek Vorlage / edition (close to Orlandi’s “another version”). Crucially, the available data alone cannot decisively separate the three — incompetence, intentional reinterpretation, and Vorlage difference. Confirmed textual facts (Scylla dropped; additions of ⲁⲣⲭⲱⲛ, μορφή, the “plant” clause; the εἰκών/ⲉⲓⲛⲉ distinction; the -σσ- form ⲡⲗⲁⲥⲥⲉ) must be argued on a different layer from hypotheses about their intentionality. These notes hold that distinction throughout.</p>
+      </note>
+
+      <note xml:id="note-codex" type="commentary" ana="#th-codex #th-campB" n="抜粋全体 / Codex VI" target="republic_tei.xml#rep-1">
+        <label xml:lang="ja">コデックス VI における位置——偶然ではない隣人たち</label>
+        <p xml:lang="ja">コデックス VI 内で、抜粋(VI,5)に明確な「グノーシス的」「ヘルメス的」共通主題はなく(Brashler「特徴づけは危うい」)、各論考は個別に扱うべきだと Parrott も言う。Jackson は抜粋をコデックス内のヘルメス文書群と結びつけ、エジプト人禁欲者ヒエラカス(275年頃生、コプト語とギリシア語に通じた聖書釈義家)を訳者候補に挙げる。Ashwin-Siejkowski は、抜粋がコデックス内の他の教導的・神話的文書と同じく、倫理的訓練と新たな自己理解による霊的成長を促す点で「偶然そこにあるのではない」と結論する。コプト修道制の周縁に位置づけられる共同体の教材、という読みである。</p>
+        <p xml:lang="en">Within Codex VI the excerpt (VI,5) shares no clear “Gnostic” or “Hermetic” common theme (Brashler: characterization is “hazardous”), and Parrott too says each tractate must be treated separately. Jackson links it to the codex’s Hermetic neighbors and proposes the Egyptian ascetic Hieracas (b. ca. 275; versed in Coptic and Greek, an exegete) as a candidate translator. Ashwin-Siejkowski concludes the excerpt is “not there by coincidence”: like the codex’s other didactic and mythological texts it urges spiritual growth through ethical discipline and new self-understanding — material for a community on the margins of Coptic monasticism.</p>
+      </note>
+
+    </listAnnotation>
+  </standOff>
+</TEI>

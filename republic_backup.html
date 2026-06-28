@@ -38,8 +38,10 @@ body{
   font-family:var(--ui); font-size:16px; line-height:1.55;
   -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
 }
-.app{display:grid; grid-template-columns:var(--railw,336px) minmax(0,1fr); grid-template-rows:auto 1fr;
-  grid-template-areas:"head head" "rail main"; height:100vh;}
+.app{display:grid; grid-template-columns:minmax(0,1fr); grid-template-rows:auto 1fr;
+  grid-template-areas:"head" "main"; height:100vh;}
+.rail{display:none!important}
+.railtoggle{display:none!important}
 /* ---------------- parallel corpus (Coptic | Greek) ---------------- */
 .corpus-head{position:sticky; top:0; z-index:6; display:grid; grid-template-columns:1fr 1fr;
   gap:0 clamp(16px,3vw,40px); max-width:1180px; margin:0 auto 2px; background:var(--paper);
@@ -327,55 +329,13 @@ html:not([data-drag="on"]) #drop-hint{display:none}
 .l-en{display:none}
 html[data-lang="en"] .l-ja{display:none}
 html[data-lang="en"] .l-en{display:revert}
-
-/* ================= commentary rail (left) ================= */
-.rail.cmt{grid-area:rail; background:var(--paper-2); color:var(--ink); border-right:1px solid var(--line-2);
-  overflow-y:auto; padding:16px 15px 90px; display:block;}
-.rail.cmt .rail-h{display:flex; align-items:center; justify-content:space-between; gap:8px;
-  position:sticky; top:0; z-index:3; margin:0 0 10px; padding:4px 0 9px; background:var(--paper-2);
-  border-bottom:1px solid var(--line)}
-.rail.cmt h2{font-family:var(--ui); font-size:.64rem; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); margin:0; font-weight:600}
-.railx{appearance:none; border:0; background:transparent; cursor:pointer; color:var(--ink-soft); font-size:1.3rem; line-height:1; padding:0 2px; display:none}
-.railx:hover{color:var(--ink)}
-.rail.cmt .rail-intro{font-size:.71rem; color:var(--ink-faint); line-height:1.55; margin:0 0 12px}
-.rail.cmt .frame-themes{display:flex; flex-wrap:wrap; gap:5px; margin-bottom:4px}
-.rail.cmt .tchip{appearance:none; font-family:var(--ui); font-size:.64rem; letter-spacing:.01em; padding:4px 9px;
-  border-radius:999px; border:1px solid var(--line-2); background:var(--raise); color:var(--ink-soft); cursor:pointer; transition:background .15s,color .15s}
-.rail.cmt .tchip:hover{border-color:var(--gold)}
-.rail.cmt .tchip[aria-pressed="true"]{background:var(--gold); border-color:var(--gold); color:var(--paper); font-weight:600}
-.rail.cmt .clearf{margin:6px 0 12px; font-size:.7rem; color:var(--ink-faint); background:none; border:0; cursor:pointer; text-decoration:underline; padding:0}
-.rail.cmt .notes{display:flex; flex-direction:column; gap:9px}
-.rail.cmt .note{background:var(--raise); border:1px solid var(--line); border-radius:9px; padding:11px 12px}
-.rail.cmt .note.hidden{display:none}
-.rail.cmt .note .themechips{display:flex; flex-wrap:wrap; gap:4px; margin-bottom:6px}
-.rail.cmt .note .themechips span{font-size:.57rem; letter-spacing:.01em; padding:2px 7px; border-radius:999px;
-  background:var(--paper); color:var(--ink-faint); border:1px solid var(--line)}
-.rail.cmt .note h3{font-family:var(--jpser); font-size:.9rem; font-weight:600; margin:0 0 3px; color:var(--ink); line-height:1.42}
-.rail.cmt .note .locus{font-family:var(--disp); font-size:.64rem; color:var(--gold); margin:0 0 6px}
-.rail.cmt .note p{font-size:.775rem; line-height:1.62; color:var(--ink-soft); margin:0 0 7px}
-.rail.cmt .note p.en{display:none; color:var(--ink-faint)}
-html[data-tl="en"] .rail.cmt .note p.en{display:block}
-html[data-tl="en"] .rail.cmt .note p.ja{display:none}
-.rail.cmt .note .jump{appearance:none; font-family:var(--ui); border:1px solid var(--lapis); color:var(--lapis);
-  background:transparent; font-size:.68rem; padding:4px 11px; border-radius:7px; cursor:pointer}
-.rail.cmt .note .jump:hover{background:var(--lapis); color:var(--paper)}
-.rail.cmt .note.nomatch{opacity:.4}
-/* rail as a left drawer on narrower viewports */
-@media (max-width:1100px){
-  .app{grid-template-columns:minmax(0,1fr); grid-template-areas:"head" "main";}
-  .rail.cmt{position:fixed; inset:0 auto 0 0; width:min(370px,90vw); transform:translateX(-101%);
-    transition:transform .26s ease; z-index:45; box-shadow:0 0 0 100vmax rgba(15,17,24,0);}
-  html[data-rail="open"] .rail.cmt{transform:none; box-shadow:0 18px 50px rgba(15,17,24,.4)}
-  .railtoggle{display:inline-flex!important}
-  .railx{display:block}
-}
 </style>
 </head>
 <body>
 <div class="app">
   <header>
     <a class="chip homelink" href="index.html" title="Index / 一覧へ"><span class="l-ja">← 一覧</span><span class="l-en">← Index</span></a>
-    <button class="chip railtoggle" id="railBtn" aria-label="釈義パネル" aria-pressed="false"><span class="l-ja">☰ 釈義</span><span class="l-en">☰ Notes</span></button>
+    <button class="chip railtoggle" id="railBtn" aria-label="系譜パネル" aria-pressed="false"><span class="l-ja">☰ 系譜</span><span class="l-en">☰ Lineage</span></button>
     <div class="brand">
       <img class="brandlogo" src="image/icon.svg" alt="" width="30" height="30" onerror="this.style.display='none'">
       <div class="brandtext">
@@ -403,15 +363,12 @@ html[data-tl="en"] .rail.cmt .note p.ja{display:none}
     </div>
   </header>
 
-  <nav class="rail cmt" id="cmtRail" aria-label="釈義・注解 / Exegesis & notes">
-    <div class="rail-h">
-      <h2><span class="l-ja">釈義・注解</span><span class="l-en">Exegesis &amp; notes</span></h2>
-      <button class="railx" id="railClose" aria-label="閉じる / Close" title="閉じる / Close">×</button>
-    </div>
-    <p class="rail-intro"><span class="l-ja">先行研究（Matsagouras 1976／Ashwin-Siejkowski 2020 ほか）に基づく注。テーマを選ぶと該当箇所が強調され、注も絞り込まれます。各注の〈本文へ〉で当該セグメントへ移動します。</span><span class="l-en">Notes grounded in prior scholarship (Matsagouras 1976; Ashwin-Siejkowski 2020 and others). Pick a theme to highlight the relevant passages and filter the notes; “To text” jumps to the segment.</span></p>
+  <nav class="rail" aria-label="流出の系譜とテーマ">
+    <h2>流出の系譜 · Emanation</h2>
+    <div class="spine" id="spine"></div>
+    <h2><span class="l-ja">枠組みのテーマ</span><span class="l-en">Themes</span></h2>
     <div class="frame-themes" id="frameThemes"></div>
     <button class="clearf" id="clearTheme" hidden><span class="l-ja">テーマ選択を解除</span><span class="l-en">Clear themes</span></button>
-    <div class="notes" id="notes"><p class="rail-intro" id="notesEmpty"><span class="l-ja">注解ファイル <code>republic_commentary.xml</code> を読み込むと、ここに注が表示されます。</span><span class="l-en">Load <code>republic_commentary.xml</code> to see the notes here.</span></p></div>
   </nav>
 
   <main id="main" tabindex="-1">
@@ -543,15 +500,13 @@ async function load(){
     ["data/lexicon.xml","lexicon.xml","data/republic_lexicon.xml","republic_lexicon.xml"], diag);
   const greek=await fetchFirst(base,
     ["data/republic_greek.xml","republic_greek.xml","data/republic_grc.xml","republic_grc.xml"], diag);
-  const theo=await fetchFirst(base,
-    ["data/republic_commentary.xml","republic_commentary.xml","data/republic_theology.xml","republic_theology.xml"], diag);
 
   if(!main || !lex){ showLoadError(base, diag); return; }
-  DOC_MAIN=main; DOC_LEX=lex; DOC_GREEK=greek; DOC_THEO=theo;
+  DOC_MAIN=main; DOC_LEX=lex; DOC_GREEK=greek; DOC_THEO=null;
   buildAll();
 }
 function buildAll(){
-  parse(); render(); buildRail(); buildNotes(); buildCredit();
+  parse(); render(); buildCredit();
 }
 function showLoadError(base, diag){
   const url=base+"data/republic_tei.xml";
@@ -579,14 +534,14 @@ function parse(){
   // theme taxonomy + theology notes come from the annotation file
   THEME_LABELS={};
   if(!readCats(DOC_THEO)) readCats(DOC_MAIN);   // fallback to main
-  NOTES=T(DOC_THEO,"note").filter(n=>n.getAttribute("type")==="commentary").map(n=>{
+  NOTES=T(DOC_THEO,"note").filter(n=>n.getAttribute("type")==="theology").map(n=>{
     const themes=(n.getAttribute("ana")||"").split(/\s+/).map(s=>s.split("#").pop()).filter(Boolean);
     const targets=(n.getAttribute("target")||"").split(/\s+/).map(s=>s.split("#").pop()).filter(Boolean);
     let label="",ja="",en="",fr="";
     T(n,"label").forEach(l=>label=l.textContent);
     T(n,"p").forEach(p=>{ const l=getLang(p);
       if(l==="ja") ja=p.textContent; else if(l==="en") en=p.textContent; else if(l==="fr") fr=p.textContent;});
-    return {id:getId(n),themes,targets,label,ja,en,fr,locus:n.getAttribute("n")||""};
+    return {id:getId(n),themes,targets,label,ja,en,fr};
   });
   // Coptic dictionary: lemma -> [ {id,n,pos,en,ja,fr,uja,uen,grc}, ... ]
   // (homographs yield several senses per form; single entries yield one)
@@ -636,14 +591,6 @@ function parse(){
     });
   };
   SEGS_III=wit("wit-rep"); SEGS_V=[];
-  // fold commentary themes onto the segments they annotate (enables theme highlight/dim + "has-note" markers)
-  if(NOTES.length){
-    const byId=new Map(SEGS_III.map(s=>[s.id,s]));
-    NOTES.forEach(nt=>nt.targets.forEach(tid=>{
-      const s=byId.get(tid); if(!s) return;
-      nt.themes.forEach(th=>{ if(!s.themes.includes(th)) s.themes.push(th); });
-    }));
-  }
 }
 /* ---------- Greek parallel (republic_greek.xml): corresp(rep-N) -> {grc,ja,en,cert} ---------- */
 function readGreek(doc){
@@ -657,43 +604,22 @@ function readGreek(doc){
 }
 
 /* ---------- rail ---------- */
-function cmtThemeOrder(){
-  const used=new Set(); NOTES.forEach(n=>n.themes.forEach(t=>used.add(t)));
-  const ids=DOC_THEO ? T(DOC_THEO,"category").map(c=>getId(c)) : [];
-  const ordered=ids.filter(id=>used.has(id));
-  used.forEach(id=>{ if(!ordered.includes(id)) ordered.push(id); });
-  return ordered;
-}
 function buildRail(){
-  const ft=$("#frameThemes"); if(!ft) return; ft.innerHTML="";
-  cmtThemeOrder().forEach(id=>{
+  const sp=$("#spine"); sp.innerHTML="";
+  THEMES_ORDER.forEach(id=>{
     const lab=THEME_LABELS[id]||{ja:id,en:""};
     const b=document.createElement("button");
+    b.className="node"+(ROSE_THEMES.has(id)?" rose":""); b.dataset.theme=id;
+    b.setAttribute("aria-pressed","false");
+    b.innerHTML=`<span class="dot"></span><span class="nm">${lab.ja}<small>${lab.en||""}</small></span>`;
+    b.onclick=()=>toggleTheme(id); sp.appendChild(b);
+  });
+  const ft=$("#frameThemes"); ft.innerHTML="";
+  FRAME_THEMES.forEach(id=>{
+    const lab=THEME_LABELS[id]||{ja:id};
+    const b=document.createElement("button");
     b.className="tchip"; b.dataset.theme=id; b.setAttribute("aria-pressed","false");
-    b.title=lab.en||""; b.textContent=(UL()==="en"&&lab.en)?lab.en:lab.ja;
-    b.onclick=()=>toggleTheme(id); ft.appendChild(b);
-  });
-}
-function buildNotes(){
-  const box=$("#notes"); if(!box) return; box.innerHTML="";
-  if(!NOTES.length){ box.innerHTML=`<p class="rail-intro">${UL()==="en"?'Load <code>republic_commentary.xml</code> to see the notes here.':'注解ファイル <code>republic_commentary.xml</code> を読み込むと、ここに注が表示されます。'}</p>`; return; }
-  NOTES.forEach(n=>{
-    const el=document.createElement("article"); el.className="note"; el.dataset.id=n.id;
-    el.dataset.themes=n.themes.join(" ");
-    const chips=n.themes.map(t=>`<span title="${escapeHTML((THEME_LABELS[t]||{en:t}).en||"")}">${escapeHTML((THEME_LABELS[t]||{ja:t}).ja)}</span>`).join("");
-    const locus=n.locus?`<div class="locus">${escapeHTML(n.locus)}</div>`:"";
-    el.innerHTML=`<div class="themechips">${chips}</div><h3>${escapeHTML(n.label)}</h3>${locus}`+
-      `<p class="ja">${escapeHTML(n.ja)}</p><p class="en">${escapeHTML(n.en)}</p>`+
-      `<button class="jump">${UL()==="en"?"To text ›":"本文へ ›"}</button>`;
-    el.querySelector(".jump").onclick=()=>{ if(n.targets[0]) flashSeg(n.targets[0]); if(window.innerWidth<=1100) H.setAttribute("data-rail","closed"); };
-    box.appendChild(el);
-  });
-  filterNotes();
-}
-function filterNotes(){
-  $$("#notes .note").forEach(el=>{
-    const th=(el.dataset.themes||"").split(" ");
-    el.classList.toggle("hidden", curTheme && !th.includes(curTheme));
+    b.textContent=lab.ja; b.onclick=()=>toggleTheme(id); ft.appendChild(b);
   });
 }
 function toggleTheme(id){
@@ -705,7 +631,7 @@ function toggleTheme(id){
     const note=NOTES.find(n=>n.themes.includes(curTheme));
     if(note&&note.targets[0]) flashSeg(note.targets[0]);
   }
-  if(window.innerWidth<=1100) H.setAttribute("data-rail","closed");
+  if(window.innerWidth<=1080) H.setAttribute("data-rail","closed");
 }
 $("#clearTheme").onclick=()=>{ if(curTheme) toggleTheme(curTheme); };
 
@@ -922,7 +848,6 @@ function doSearch(q){
 function openSearch(){ H.setAttribute("data-search","open"); }
 function closeSearch(){ H.removeAttribute("data-search"); }
 $("#searchClose").onclick=closeSearch;
-{ const rc=$("#railClose"); if(rc) rc.onclick=()=>{ H.setAttribute("data-rail","closed"); const rb=$("#railBtn"); if(rb) rb.setAttribute("aria-pressed","false"); }; }
 document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeSearch(); });
 
 /* ---------- (single witness — no witness tabs) ---------- */
@@ -1068,8 +993,8 @@ applyUILang();
 /* ---------- credit ---------- */
 function buildCredit(){
   $("#credit").innerHTML=`
-   <p><b>本コーパスについて。</b> エウグノストスと同一のビュワー・エンジンで表示しています。データは4ファイルに分離 — <b>本文</b> <code>republic_tei.xml</code>（NHC VI,5 単一証本）、<b>コプト語辞書</b> <code>lexicon.xml</code>（lemma+品詞→語義・辞書リンク）、<b>ギリシア語</b> <code>republic_greek.xml</code>（各 <code>&lt;s&gt;</code> の <code>@corresp</code> でコプト語 <code>&lt;s xml:id&gt;</code> に対応）、<b>注解</b> <code>republic_commentary.xml</code>（先行研究に基づく釈義。各 <code>&lt;note&gt;</code> の <code>@target</code> で本文 <code>&lt;s&gt;</code> に、<code>@ana</code> で主題分類にリンク）。各 <code>&lt;w&gt;</code> は @lemma+@type で辞書を参照し、<b>ギリシア語からの借用語</b>は <code>xml:lang="grc"</code> を持つ語のみを〈借用語〉ボタンでマーキングします。</p>
-   <p>コプト語本文（NHC VI,5）はパブリックドメイン。<b>日本語訳</b>は本プロジェクト。<b>英語</b>は J. Brashler, <i>The Nag Hammadi Library in English</i>（HarperCollins 1990, 著作権あり・作業用参照）。<b>ギリシア語</b>は Plato, <i>Republic</i>（OCT/Burnet, パブリックドメイン）で一次整列・要校訂。ギリシア語の和訳・英訳は本プロジェクト。<b>注解</b>は本プロジェクトが Matsagouras 1976・Ashwin-Siejkowski 2020・Orlandi 1977・Lanzillotta 2014・Jackson 1985・Brashler 1979 を参照して独自に記述（CC BY 4.0）。これらの訳・論考を転記したものではありません。</p>`;
+   <p><b>本コーパスについて。</b> エウグノストスと同一のビュワー・エンジンで表示しています。データは3ファイルに分離 — <b>本文</b> <code>republic_tei.xml</code>（NHC VI,5 単一証本）、<b>コプト語辞書</b> <code>lexicon.xml</code>（lemma+品詞→語義・辞書リンク）、<b>ギリシア語</b> <code>republic_greek.xml</code>（各 <code>&lt;s&gt;</code> の <code>@corresp</code> でコプト語 <code>&lt;s xml:id&gt;</code> に対応）。各 <code>&lt;w&gt;</code> は @lemma+@type で辞書を参照し、<b>ギリシア語からの借用語</b>は <code>xml:lang="grc"</code> を持つ語のみを〈借用語〉ボタンでマーキングします。</p>
+   <p>コプト語本文（NHC VI,5）はパブリックドメイン。<b>日本語訳</b>は本プロジェクト。<b>英語</b>は J. Brashler, <i>The Nag Hammadi Library in English</i>（HarperCollins 1990, 著作権あり・作業用参照）。<b>ギリシア語</b>は Plato, <i>Republic</i>（OCT/Burnet, パブリックドメイン）で一次整列・要校訂。ギリシア語の和訳・英訳は本プロジェクト。</p>`;
 }
 
 /* ---------- manual file load (text / lexicon / Greek; multiple) ---------- */
@@ -1079,19 +1004,17 @@ function classifyAndStore(xml){
   // returns a label of what was loaded, or throws
   if(xml.querySelector("parsererror")) throw new Error("整形式XMLではありません");
   const has=tag=>xml.getElementsByTagNameNS(TEI_NS,tag).length>0;
-  const commentary=Array.from(xml.getElementsByTagNameNS(TEI_NS,"note")).some(nd=>nd.getAttribute("type")==="commentary")||has("standOff");
   const greek=Array.from(xml.getElementsByTagNameNS(TEI_NS,"div")).some(d=>d.getAttribute("type")==="greek-parallel")||has("grc");
   const witness=Array.from(xml.getElementsByTagNameNS(TEI_NS,"text")).some(t=>t.getAttribute("type")==="witness")||has("group");
   const entries=xml.getElementsByTagNameNS(TEI_NS,"entry").length;
-  if(commentary){ DOC_THEO=xml; return "注解(republic_commentary.xml)"; }
   if(greek){ DOC_GREEK=xml; return "ギリシア語(republic_greek.xml)"; }
   if(witness){ DOC_MAIN=xml; return "本文(republic_tei.xml)"; }
   if(entries>0){ DOC_LEX=xml; return "コプト語辞書(lexicon.xml)"; }
-  throw new Error("種類を判別できません(本文/辞書/ギリシア語/注解のいずれでもない)");
+  throw new Error("種類を判別できません(本文/辞書/ギリシア語のいずれでもない)");
 }
 function refreshAfterLoad(){
   $("#loadwarn").hidden=true; curTheme=null; $("#q").value=""; closeSearch();
-  doSearch(""); parse(); render(); buildRail(); buildNotes(); buildCredit();
+  doSearch(""); parse(); render(); buildCredit();
 }
 function readFiles(files){
   const list=Array.from(files||[]); if(!list.length) return;
