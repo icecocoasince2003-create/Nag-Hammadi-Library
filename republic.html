@@ -390,10 +390,10 @@ html[data-tl="en"] .rail.cmt .note p.ja{display:none}
         <button class="chip" id="pageBtn" aria-pressed="false" title="写本のページ番号を表示 / Show codex page numbers"><span class="l-ja">ページ</span><span class="l-en">Pages</span></button>
         <button class="chip" id="lineBtn" aria-pressed="false" title="写本の行番号を表示 / Show manuscript line numbers"><span class="l-ja">行番号</span><span class="l-en">Lines</span></button>
         <button class="chip" id="statsBtn" title="統計 / Statistics"><span class="l-ja">統計</span><span class="l-en">Stats</span></button>
-        <button class="chip" id="glBtn" aria-pressed="false" title="語釈の言語">語釈: 日</button>
-        <button class="chip" id="tlBtn" aria-pressed="false" title="対訳・注解の言語">訳: 日</button>
+        <button class="chip" id="glBtn" aria-pressed="false" title="語釈の言語 / Gloss language">語釈: 日</button>
+        <button class="chip" id="tlBtn" aria-pressed="false" title="対訳・注解の言語 / Translation &amp; notes language">訳: 日</button>
         <button class="chip" id="langBtn" title="Language / 言語">English</button>
-        <button class="chip" id="modeBtn" aria-pressed="false" title="表示モード">◐ アイオーン</button>
+        <button class="chip" id="modeBtn" aria-pressed="false" title="表示モード / Display mode">◐ アイオーン</button>
         <button class="chip" id="pickTop" title="Open TEI XML"><span class="l-ja">XMLを開く</span><span class="l-en">Open XML</span></button>
       </div>
       <div class="search">
@@ -417,7 +417,7 @@ html[data-tl="en"] .rail.cmt .note p.ja{display:none}
   <main id="main" tabindex="-1">
     <div class="doc-head">
       <div class="kick">Nag Hammadi Codex VI,5 · pp. 48–51</div>
-      <h1><span class="cop">ⲡⲟⲗⲓⲧⲉⲓⲁ</span><br>プラトン『国家』588b–589b</h1>
+      <h1><span class="cop">ⲡⲟⲗⲓⲧⲉⲓⲁ</span><br><span class="l-ja">プラトン『国家』588b–589b</span><span class="l-en">Plato, Republic 588b–589b</span></h1>
       <p class="meta"><span class="l-ja">プラトン『国家』第9巻 588b–589b のコプト語訳（NHC VI,5）と、対応するギリシア語原文の対訳。左にコプト語本文、右にギリシア語原文（OCT/Burnet）を並べています。各形態素をクリックすると品詞・語義・辞書が表示され、〈借用語〉ボタンでギリシア語からの借用語が左本文上にマーキングされます。</span><span class="l-en">A Coptic translation of Plato’s Republic, Book IX 588b–589b (NHC VI,5), set in parallel with the Greek original (OCT/Burnet): Coptic on the left, Greek on the right. Click any morpheme for its part of speech, sense and dictionary entry; the “Loanwords” button marks Greek loanwords within the Coptic text.</span></p>
     </div>
     <div class="notice" id="loadwarn" hidden></div>
@@ -431,7 +431,7 @@ html[data-tl="en"] .rail.cmt .note p.ja{display:none}
     <div class="credit" id="credit"></div>
   </main>
 
-  <aside aria-label="検索結果" id="searchAside">
+  <aside aria-label="検索結果 / Search" id="searchAside">
     <div class="aside-tabs">
       <span class="at-title"><span class="l-ja">検索結果</span><span class="l-en">Search</span></span>
       <button class="at-close" id="searchClose" aria-label="閉じる / Close" title="閉じる / Close">×</button>
@@ -442,7 +442,7 @@ html[data-tl="en"] .rail.cmt .note p.ja{display:none}
   </aside>
 </div>
 
-<div class="pop" id="pop" role="dialog" aria-label="形態素の語義"></div>
+<div class="pop" id="pop" role="dialog" aria-label="形態素の語義 / Morpheme gloss"></div>
 
 <div class="modal-back" id="statsBack"></div>
 <div class="modal" id="statsModal" role="dialog" aria-modal="true" aria-label="統計 / Statistics">
@@ -582,11 +582,11 @@ function parse(){
   NOTES=T(DOC_THEO,"note").filter(n=>n.getAttribute("type")==="commentary").map(n=>{
     const themes=(n.getAttribute("ana")||"").split(/\s+/).map(s=>s.split("#").pop()).filter(Boolean);
     const targets=(n.getAttribute("target")||"").split(/\s+/).map(s=>s.split("#").pop()).filter(Boolean);
-    let label="",ja="",en="",fr="";
-    T(n,"label").forEach(l=>label=l.textContent);
+    let labelJa="",labelEn="",ja="",en="",fr="";
+    T(n,"label").forEach(l=>{ const lg=getLang(l); if(lg==="en") labelEn=l.textContent; else labelJa=l.textContent; });
     T(n,"p").forEach(p=>{ const l=getLang(p);
       if(l==="ja") ja=p.textContent; else if(l==="en") en=p.textContent; else if(l==="fr") fr=p.textContent;});
-    return {id:getId(n),themes,targets,label,ja,en,fr,locus:n.getAttribute("n")||""};
+    return {id:getId(n),themes,targets,labelJa,labelEn,ja,en,fr,locus:n.getAttribute("n")||""};
   });
   // Coptic dictionary: lemma -> [ {id,n,pos,en,ja,fr,uja,uen,grc}, ... ]
   // (homographs yield several senses per form; single entries yield one)
@@ -680,11 +680,14 @@ function buildNotes(){
   NOTES.forEach(n=>{
     const el=document.createElement("article"); el.className="note"; el.dataset.id=n.id;
     el.dataset.themes=n.themes.join(" ");
-    const chips=n.themes.map(t=>`<span title="${escapeHTML((THEME_LABELS[t]||{en:t}).en||"")}">${escapeHTML((THEME_LABELS[t]||{ja:t}).ja)}</span>`).join("");
+    const en=UL()==="en";
+    const lbl=en?(n.labelEn||n.labelJa):(n.labelJa||n.labelEn);
+    const chips=n.themes.map(t=>{ const L=THEME_LABELS[t]||{}; const tx=en?(L.en||L.ja||t):(L.ja||L.en||t);
+      return `<span title="${escapeHTML(L.en||"")}">${escapeHTML(tx)}</span>`; }).join("");
     const locus=n.locus?`<div class="locus">${escapeHTML(n.locus)}</div>`:"";
-    el.innerHTML=`<div class="themechips">${chips}</div><h3>${escapeHTML(n.label)}</h3>${locus}`+
+    el.innerHTML=`<div class="themechips">${chips}</div><h3>${escapeHTML(lbl)}</h3>${locus}`+
       `<p class="ja">${escapeHTML(n.ja)}</p><p class="en">${escapeHTML(n.en)}</p>`+
-      `<button class="jump">${UL()==="en"?"To text ›":"本文へ ›"}</button>`;
+      `<button class="jump">${en?"To text ›":"本文へ ›"}</button>`;
     el.querySelector(".jump").onclick=()=>{ if(n.targets[0]) flashSeg(n.targets[0]); if(window.innerWidth<=1100) H.setAttribute("data-rail","closed"); };
     box.appendChild(el);
   });
@@ -770,7 +773,7 @@ function segHTML(s){
   const trCls = tr ? "trans" : "trans pending";
   if(!tr) tr = pendingText();
   const marker = s.themes.length ? `<div class="marker">`+
-     s.themes.slice(0,3).map(t=>`<button class="${ROSE_THEMES.has(t)?'r':''}" data-theme="${t}" title="${(THEME_LABELS[t]||{ja:t}).ja}"></button>`).join("")+`</div>` : "";
+     s.themes.slice(0,3).map(t=>{const L=THEME_LABELS[t]||{}; const tx=UL()==="en"?(L.en||L.ja||t):(L.ja||L.en||t); return `<button class="${ROSE_THEMES.has(t)?'r':''}" data-theme="${t}" title="${escapeHTML(tx)}"></button>`;}).join("")+`</div>` : "";
   return `<div class="prow" id="seg-${s.id}" data-themes="${s.themes.join(' ')}" data-id="${s.id}">
     <div class="pcell ccol"><div class="pcop">
       <div class="no">${s.n||""}</div>${marker}
@@ -838,10 +841,10 @@ function showPop(el){
       if(sn.fr) g.push(`<span>${escapeHTML(sn.fr)}</span>`);
       const u=(sn.uja||sn.uen)?`<span class="usg">${escapeHTML(sn.uja||sn.uen)}</span>`:"";
       const isDef=sn.id&&sn.id===w.defId;
-      const rl=sn.ref?` <a href="${escapeHTML(sn.ref)}" target="_blank" rel="noopener" style="color:var(--gold-bright);font-size:.72rem">辞書 →</a>`:"";
+      const rl=sn.ref?` <a href="${escapeHTML(sn.ref)}" target="_blank" rel="noopener" style="color:var(--gold-bright);font-size:.72rem">${UL()==="en"?"Dictionary →":"辞書 →"}</a>`:"";
       return `<div class="sense${isDef?' def':''}">
         <div class="srow"><span class="snum">${i+1}</span>
-          <span class="pos${w.grc?' grc':''}">${p[0]}</span>${u}
+          <span class="pos${w.grc?' grc':''}">${posLabel(p)}</span>${u}
           ${isDef?'<span class="defmark">'+defLbl()+'</span>':''}</div>
         <div class="sglos">${g.join('<span class="sep">・</span>')}${rl}</div></div>`;
     }).join("");
@@ -854,10 +857,10 @@ function showPop(el){
     if(w.gloss) dl+=`<dt>EN</dt><dd>${escapeHTML(w.gloss)}</dd>`;
     if(w.glossJa) dl+=`<dt>JA</dt><dd class="ja">${escapeHTML(w.glossJa)}</dd>`;
     if(w.glossFr) dl+=`<dt>FR</dt><dd>${escapeHTML(w.glossFr)}</dd>`;
-    if(w.ref) dl+=`<dt>辞書</dt><dd><a href="${escapeHTML(w.ref)}" target="_blank" rel="noopener" style="color:var(--gold-bright)">Coptic Dictionary →</a></dd>`;
+    if(w.ref) dl+=`<dt>${UL()==="en"?"Dict.":"辞書"}</dt><dd><a href="${escapeHTML(w.ref)}" target="_blank" rel="noopener" style="color:var(--gold-bright)">Coptic Dictionary →</a></dd>`;
     inner=`<div class="form">${escapeHTML(w.form)}</div>
       ${w.lemma&&w.lemma!==w.form?`<div class="lemma">${lemmaLbl()} ${escapeHTML(w.lemma)}</div>`:""}
-      <span class="pos${w.grc?' grc':''}">${pos[0]} · ${pos[1]}</span>
+      <span class="pos${w.grc?' grc':''}">${posLabel(pos)}</span>
       ${dl?`<dl>${dl}</dl>`:`<div class="none">${noneLbl()}</div>`}
       ${w.grc?`<div class="grcnote">⬥ ${loanLbl()}</div>`:""}`;
   }
@@ -1017,6 +1020,7 @@ document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeStats(); });
 const LANG_CYCLE=["ja","en","fr"];
 /* ---- UI i18n helpers ---- */
 function UL(){ return H.getAttribute("data-lang")==="en"?"en":"ja"; }
+function posLabel(p){ return UL()==="en"?(p[1]||p[0]||""):(p[0]||p[1]||""); }
 function lemmaLbl(){ return UL()==="en"?"lemma":"レンマ"; }
 function defLbl(){ return UL()==="en"?"default":"既定"; }
 function homoLbl(n){ return UL()==="en"?("homograph — "+n+" senses"):("同形異義 — "+n+" 語義"); }
@@ -1062,14 +1066,17 @@ function applyUILang(){
     H.setAttribute("data-tl",  en?"ja":"en");
     applyUILang();
     if(typeof render==="function") render();
+    if(typeof buildRail==="function"){ buildRail(); buildNotes();
+      $$("#frameThemes .tchip").forEach(b=>b.setAttribute("aria-pressed", b.dataset.theme===curTheme?"true":"false"));
+    }
   }; }
 applyUILang();
 
 /* ---------- credit ---------- */
 function buildCredit(){
   $("#credit").innerHTML=`
-   <p><b>本コーパスについて。</b> エウグノストスと同一のビュワー・エンジンで表示しています。データは4ファイルに分離 — <b>本文</b> <code>republic_tei.xml</code>（NHC VI,5 単一証本）、<b>コプト語辞書</b> <code>lexicon.xml</code>（lemma+品詞→語義・辞書リンク）、<b>ギリシア語</b> <code>republic_greek.xml</code>（各 <code>&lt;s&gt;</code> の <code>@corresp</code> でコプト語 <code>&lt;s xml:id&gt;</code> に対応）、<b>注解</b> <code>republic_commentary.xml</code>（先行研究に基づく釈義。各 <code>&lt;note&gt;</code> の <code>@target</code> で本文 <code>&lt;s&gt;</code> に、<code>@ana</code> で主題分類にリンク）。各 <code>&lt;w&gt;</code> は @lemma+@type で辞書を参照し、<b>ギリシア語からの借用語</b>は <code>xml:lang="grc"</code> を持つ語のみを〈借用語〉ボタンでマーキングします。</p>
-   <p>コプト語本文（NHC VI,5）はパブリックドメイン。<b>日本語訳</b>は本プロジェクト。<b>英語</b>は J. Brashler, <i>The Nag Hammadi Library in English</i>（HarperCollins 1990, 著作権あり・作業用参照）。<b>ギリシア語</b>は Plato, <i>Republic</i>（OCT/Burnet, パブリックドメイン）で一次整列・要校訂。ギリシア語の和訳・英訳は本プロジェクト。<b>注解</b>は本プロジェクトが Matsagouras 1976・Ashwin-Siejkowski 2020・Orlandi 1977・Lanzillotta 2014・Jackson 1985・Brashler 1979 を参照して独自に記述（CC BY 4.0）。これらの訳・論考を転記したものではありません。</p>`;
+   <p><span class="l-ja"><b>本コーパスについて。</b> エウグノストスと同一のビュワー・エンジンで表示しています。データは4ファイルに分離 — <b>本文</b> <code>republic_tei.xml</code>（NHC VI,5 単一証本）、<b>コプト語辞書</b> <code>lexicon.xml</code>（lemma+品詞→語義・辞書リンク）、<b>ギリシア語</b> <code>republic_greek.xml</code>（各 <code>&lt;s&gt;</code> の <code>@corresp</code> でコプト語 <code>&lt;s xml:id&gt;</code> に対応）、<b>注解</b> <code>republic_commentary.xml</code>（先行研究に基づく釈義。各 <code>&lt;note&gt;</code> の <code>@target</code> で本文 <code>&lt;s&gt;</code> に、<code>@ana</code> で主題分類にリンク）。各 <code>&lt;w&gt;</code> は @lemma+@type で辞書を参照し、<b>ギリシア語からの借用語</b>は <code>xml:lang="grc"</code> を持つ語のみを〈借用語〉ボタンでマーキングします。</span><span class="l-en"><b>About this corpus.</b> Rendered with the same viewer engine as Eugnostos. The data is split across four files — <b>text</b> <code>republic_tei.xml</code> (NHC VI,5, single witness); <b>Coptic dictionary</b> <code>lexicon.xml</code> (lemma + POS → sense and dictionary links); <b>Greek</b> <code>republic_greek.xml</code> (each <code>&lt;s&gt;</code> linked to the Coptic <code>&lt;s xml:id&gt;</code> by <code>@corresp</code>); and <b>commentary</b> <code>republic_commentary.xml</code> (exegesis grounded in prior scholarship; each <code>&lt;note&gt;</code> links to a text <code>&lt;s&gt;</code> via <code>@target</code> and to a thematic category via <code>@ana</code>). Each <code>&lt;w&gt;</code> looks up the dictionary by @lemma + @type, and only words bearing <code>xml:lang="grc"</code> are flagged by the “Loanwords” button as Greek loanwords.</span></p>
+   <p><span class="l-ja">コプト語本文（NHC VI,5）はパブリックドメイン。<b>日本語訳</b>は本プロジェクト。<b>英語</b>は J. Brashler, <i>The Nag Hammadi Library in English</i>（HarperCollins 1990, 著作権あり・作業用参照）。<b>ギリシア語</b>は Plato, <i>Republic</i>（OCT/Burnet, パブリックドメイン）で一次整列・要校訂。ギリシア語の和訳・英訳は本プロジェクト。<b>注解</b>は本プロジェクトが Matsagouras 1976・Ashwin-Siejkowski 2020・Orlandi 1977・Lanzillotta 2014・Jackson 1985・Brashler 1979 を参照して独自に記述（CC BY 4.0）。これらの訳・論考を転記したものではありません。</span><span class="l-en">The Coptic text (NHC VI,5) is in the public domain. The <b>Japanese translation</b> is this project’s own. The <b>English</b> is J. Brashler, <i>The Nag Hammadi Library in English</i> (HarperCollins 1990; under copyright, working reference). The <b>Greek</b> is Plato, <i>Republic</i> (OCT/Burnet, public domain), a first-pass alignment to be verified; the Japanese and English of the Greek are this project’s own. The <b>commentary</b> is written independently by this project, drawing on Matsagouras 1976, Ashwin-Siejkowski 2020, Orlandi 1977, Lanzillotta 2014, Jackson 1985 and Brashler 1979 (CC BY 4.0); it does not reproduce those translations or studies.</span></p>`;
 }
 
 /* ---------- manual file load (text / lexicon / Greek; multiple) ---------- */
