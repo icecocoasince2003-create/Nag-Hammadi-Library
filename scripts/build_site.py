@@ -1,14 +1,25 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Build the Nag Hammadi corpus *site shell*:
-  - index.html      … landing page / full catalogue of NHC I–XIII
-  - tractate.html   … generic "coming soon" placeholder (parametric by ?id=)
-The Eugnostos viewer lives in eugnostos.html (built from viewer_template.html).
+==============================================================================
+ build_site.py — サイトの外枠 (index.html / tractate.html) を生成する
+==============================================================================
 
-Only the Eugnostos tractates (III,3 and V,1) are "available"; every other
-tractate links to the placeholder so navigation works end-to-end today and new
-viewers can be dropped in later by flipping a status flag.
+【共同編集者の方へ】
+  実行方法（リポジトリのルートで）:
+
+      python3 scripts/build_site.py
+
+  出力される index.html と tractate.html は自動生成なので直接編集しない
+  でください。目次の内容を変えたいときは、下の CODICES テーブルを編集して
+  再実行します。
+
+【新しい文書を「公開」に切り替える手順】
+  1. ビュワー HTML（例: eugnostos.html）をルートに用意する
+  2. 下の CODICES で該当行の status を S(準備中) → A(公開) に変える
+     ※ リンク先を変える場合は build_index() 内の分岐も確認
+  3. python3 scripts/build_site.py を実行して index.html を再生成
+==============================================================================
 """
 import html, datetime, os
 
@@ -16,8 +27,12 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 # Write the site pages to the project root (this script may live in source/).
 OUTDIR = os.path.dirname(_HERE) if os.path.basename(_HERE).lower() in ("source", "build", "src", "scripts") else _HERE
 
-# --- catalogue --------------------------------------------------------------
-# (roman, codex_no, [(num, ja, en, status), ...])   status: "avail" | "soon"
+# --- 文書カタログ -------------------------------------------------------------
+# 形式: (ローマ数字, コーデックス番号, [(文書番号, 日本語題, 英語題, status), ...])
+#   status:  A = "avail" (公開 → ビュワーへリンク)
+#            S = "soon"  (準備中 → tractate.html へリンク)
+#            R = "rep"   (プラトン『国家』→ republic.html へリンク)
+# 題名の表記を直す・公開状態を変えるときはこの表だけを編集すればOK。
 A = "avail"; S = "soon"; R = "rep"
 CODICES = [
  ("I", 1, [
@@ -408,7 +423,8 @@ if(!t){
             f"{FONTS}<style>{css}</style></head><body>{body}</body></html>")
 
 # --- write ------------------------------------------------------------------
-open(os.path.join(OUTDIR,"index.html"),"w",encoding="utf-8").write(build_index())
-open(os.path.join(OUTDIR,"tractate.html"),"w",encoding="utf-8").write(build_tractate())
+_BANNER = "<!-- 自動生成ファイル: scripts/build_site.py が出力します。直接編集せず、スクリプトの CODICES を編集して再実行してください。 -->\n"
+open(os.path.join(OUTDIR,"index.html"),"w",encoding="utf-8").write(_BANNER + build_index())
+open(os.path.join(OUTDIR,"tractate.html"),"w",encoding="utf-8").write(_BANNER + build_tractate())
 print("wrote index.html (landing) and tractate.html (placeholder)")
 print("codices:", len(CODICES), "| tractates:", TOTAL, "| available:", AVAIL)

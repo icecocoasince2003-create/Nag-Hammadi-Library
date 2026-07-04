@@ -8,30 +8,37 @@
 ## フォルダ構成
 
 ```
-Eugnostos/
-├─ index.html          ← 入口(目次トップ)
-├─ eugnostos.html      ← ビュワー
-├─ tractate.html       ← 準備中ページ(共通)
-├─ README.md
+nag_hammadi_library/
+├─ index.html          ← 目次トップ(自動生成: scripts/build_site.py)
+├─ eugnostos.html      ← エウグノストス・ビュワー(手作業管理)
+├─ republic.html       ← プラトン『国家』断片ビュワー(手作業管理)
+├─ tractate.html       ← 準備中ページ(自動生成)
+├─ README.md           ← この文書
+├─ CONTRIBUTING.md     ← ★共同編集ガイド(招待を受けた方はまずこちら)
 ├─ .nojekyll           ← GitHub Pages 用
+├─ .gitignore
 ├─ image/
 │   └─ icon.svg         ← サイトのアイコン画像(各ページが読み込みます)
-├─ data/               ← 生成されるXML(ビュワーが読み込む)
+├─ data/               ← 自動生成されるXML(直接編集しない)
 │   ├─ eugnostos_tei.xml
-│   ├─ eugnostos_lexicon.xml
-│   └─ eugnostos_theology.xml
-└─ source/             ← ここを編集 → `python3 build_tei.py`
-    ├─ build_tei.py        CSV → data/ のXMLを生成
+│   ├─ lexicon.xml
+│   ├─ eugnostos_theology.xml
+│   └─ republic_*.xml
+├─ source/             ← ★ここを編集(詳細は source/README.md)
+│   ├─ lexicon.csv         辞書(1行=1語義／同形異義語は同じlemmaを複数行)
+│   ├─ translations.csv    対訳(seg_id, ja, en, fr)
+│   ├─ notes.csv           注釈
+│   ├─ themes.csv          主題ラベル
+│   └─ eugnostos_source.tsv  本文ソース(通常編集不要)
+└─ scripts/            ← ビルドスクリプト(通常触らない)
+    ├─ build_tei.py        source/ の CSV → data/ の XML を生成
     ├─ build_site.py       index.html / tractate.html を生成
-    ├─ eugnostos_source.tsv  本文ソース(通常編集不要)
-    ├─ lexicon.csv         辞書(1行=1語義／同形異義語は同じlemmaを複数行)
-    ├─ translations.csv    対訳(seg_id, ja, en, fr)
-    ├─ notes.csv           注釈
-    └─ themes.csv          主題ラベル
+    └─ sync_theology_ana.py 注釈の @ana を本文へ同期する補助ツール
 ```
 
-- **編集するのは `source/` の中の CSV**だけです。編集後 `cd source && python3 build_tei.py` を実行すると、
-  `data/` のXMLが再生成されます(`build_tei.py` は同じ `source/` のCSVを読み、`../data/` に書き出します)。
+- **編集するのは `source/` の中の CSV**だけです。編集後、リポジトリのルートで `python3 scripts/build_tei.py` を実行すると、
+  `data/` のXMLが再生成されます(`build_tei.py` は `source/` のCSVを読み、`data/` に書き出します)。
+- 共同編集の手順(ブランチ・Pull Request・競合の解決)は **CONTRIBUTING.md** を参照してください。
 - 目次トップ(`index.html`)とビュワー(`eugnostos.html`)は `data/` のXMLと `image/icon.svg` を読み込みます。
 - **サイトのアイコン**は `image/icon.svg`。お好きな画像に差し替えてください(同じ名前にすれば各ページが自動で読み込みます)。
 
@@ -70,7 +77,7 @@ Eugnostos/
 内容の編集は **CSV を直すだけ**です。コードを触る必要はありません。編集後に
 
 ```
-python3 build_tei.py
+python3 scripts/build_tei.py
 ```
 
 を実行すると、CSV から3つのXML(本文・辞書・注釈)が再生成されます。スクリプトは自分と同じ
@@ -116,7 +123,7 @@ index.html(目次:全53文書)
 1. その文書の3ファイル(`<name>_tei.xml` / `_lexicon.xml` / `_theology.xml`)を `build_tei.py` と同様に用意。
 2. `eugnostos.html` を雛形に `<name>.html` ビュワーを作成(または共通ビュワー化)。
 3. `build_site.py` の `CODICES` で当該行の status を `S`(準備中)→`A`(公開)に変更し、
-   `href_for()` の遷移先をそのビュワーに向ける。`python3 build_site.py` で目次を再生成。
+   `href_for()` の遷移先をそのビュワーに向ける。`python3 scripts/build_site.py` で目次を再生成。
 
 ## 公開方法
 

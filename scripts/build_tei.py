@@ -1,28 +1,49 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Build the 3 Eugnostos TEI files from simple, hand-editable CSV tables.
+==============================================================================
+ build_tei.py — source/ の CSV から data/ の TEI XML を生成するスクリプト
+==============================================================================
 
-Edit these CSVs (Excel / Numbers / Google Sheets / any text editor), then run:
-    python3 build_tei.py
+【共同編集者の方へ / For collaborators】
+  ふだん編集するのは source/ フォルダの CSV だけです。このスクリプト自体を
+  編集する必要はありません。CSV を直したら、リポジトリのルートで:
 
+      python3 scripts/build_tei.py
+
+  を実行すると data/ の XML が再生成されます。生成された XML は
+  「直接編集しない」でください(次のビルドで上書きされます)。
+
+【入力 (source/ 内・手で編集してよいファイル)】
   lexicon.csv       lemma,n,pos,grc,en,ja,fr,usg_ja,usg_en
-                    1 row = 1 sense.  Put the SAME lemma on several rows (n=1,2,3…)
-                    to make a homograph; grc = Y for Greek loanwords; usg_* = a short
-                    usage hint shown in the sense card.
-  translations.csv  seg_id,ja,en,fr          (segment-level translations)
+                    1行 = 1語義。同じ lemma を複数行 (n=1,2,3…) にすると
+                    同形異義語。grc=Y でギリシア借用語。usg_* は用法ヒント。
+  translations.csv  seg_id,ja,en,fr   … セグメント単位の対訳
   notes.csv         id,themes,targets,label_ja,body_ja,body_en,body_fr
-                    themes / targets are space-separated id lists.
-  themes.csv        id,ja,en,fr              (theme taxonomy labels)
-  eugnostos_source.tsv   the tokenised Coptic source (tab-separated)
+                    themes / targets は空白区切りの ID 列
+  themes.csv        id,ja,en,fr       … 主題分類ラベル
+  eugnostos_source.tsv  トークン化済みコプト語本文 (通常は編集不要)
 
-Outputs (written next to this script):
-  eugnostos_tei.xml  eugnostos_lexicon.xml  eugnostos_theology.xml
-  eugnostos_main_sample.xml  (small sample for the offline viewer)
+【出力 (data/ 内・自動生成。直接編集しない)】
+  eugnostos_tei.xml            本文 (TEI P5)
+  lexicon.xml                  コプト語辞書 (ビュワーは data/lexicon.xml を読む)
+  eugnostos_theology.xml       神学的注釈
+  eugnostos_main_sample.xml    オフライン用の冒頭サンプル
+==============================================================================
 """
 import re, html, sys, datetime, os, csv
 
+# --- パス設定 ---------------------------------------------------------------
+# BASE   = このスクリプトのあるフォルダ (scripts/)
+# ROOT   = プロジェクトのルート
+# SRCDIR = 編集用 CSV / TSV の置き場 (source/)
+# DATA   = 生成 XML の出力先 (data/)
 BASE = os.path.dirname(os.path.abspath(__file__))
+# スクリプトが scripts/ (旧: source/) にある場合、ルートはその親フォルダ
+ROOT = os.path.dirname(BASE) if os.path.basename(BASE).lower() in ("source", "build", "src", "scripts") else BASE
+SRCDIR = os.path.join(ROOT, "source")          # 編集用 CSV / TSV
+if not os.path.isdir(SRCDIR):
+    SRCDIR = BASE                              # 旧レイアウトへの後方互換
 
 def _find_source():
     """Locate the tokenised Coptic source next to this script.
@@ -31,23 +52,20 @@ def _find_source():
         return sys.argv[1]
     import glob
     for cand in ("eugnostos_source.tsv", "Eugnostos.xml", "eugnostos_source.txt"):
-        p = os.path.join(BASE, cand)
+        p = os.path.join(SRCDIR, cand)
         if os.path.exists(p):
             return p
-    hits = sorted(glob.glob(os.path.join(BASE, "*_source.tsv")))
+    hits = sorted(glob.glob(os.path.join(SRCDIR, "*_source.tsv")))
     if hits:
         return hits[0]
     sys.exit(
         "\n[!] 本文ソースが見つかりません。\n"
-        "    このスクリプトと同じフォルダに 'eugnostos_source.tsv' を置いてください。\n"
+        "    source/ フォルダに 'eugnostos_source.tsv' を置いてください。\n"
         "    （探した場所: %s）\n"
-        "    別名のファイルを使う場合:  python3 build_tei.py <ソースのパス>\n" % BASE)
+        "    別名のファイルを使う場合:  python3 scripts/build_tei.py <ソースのパス>\n" % SRCDIR)
 
 SRC  = _find_source()
-# Where to write generated XML: a sibling data/ folder.
-# If this script lives in source/ (or build/ etc.), data/ is at the project root;
-# otherwise data/ is created alongside this script.
-ROOT = os.path.dirname(BASE) if os.path.basename(BASE).lower() in ("source", "build", "src", "scripts") else BASE
+# 生成 XML の出力先 (プロジェクト直下の data/)
 DATA = os.path.join(ROOT, "data")
 os.makedirs(DATA, exist_ok=True)
 OUT  = os.path.join(DATA, "eugnostos_tei.xml")
@@ -63,11 +81,12 @@ GREEK_SUFFIXES = ("\u2c9f\u2ca5", "\u2c93\u2ca5", "\u2c8f\u2ca5", "\u2c93\u2c81"
 # EDITABLE DATA — loaded from the CSV tables described above.
 # ---------------------------------------------------------------------------
 def _csv(name):
-    path = os.path.join(BASE, name)
+    """source/ フォルダの CSV を読む（BOM付きUTF-8対応）。"""
+    path = os.path.join(SRCDIR, name)
     if not os.path.exists(path):
         sys.exit("\n[!] '%s' が見つかりません（探した場所: %s）。\n"
-                 "    4つのCSV(lexicon/translations/notes/themes)を build_tei.py と同じ\n"
-                 "    フォルダに置いてください。\n" % (name, BASE))
+                 "    4つのCSV(lexicon/translations/notes/themes)を source/ フォルダに\n"
+                 "    置いてください。\n" % (name, SRCDIR))
     with open(path, encoding="utf-8-sig", newline="") as f:
         return list(csv.DictReader(f))
 
@@ -473,9 +492,11 @@ def build_main(segs, limit=None):
 # 9. Write the three files (+ a small main sample for the offline viewer)
 # ---------------------------------------------------------------------------
 OUTDIR = DATA
-LEX_OUT  = os.path.join(OUTDIR, "eugnostos_lexicon.xml")
+# 注意: ビュワー (eugnostos.html) は data/lexicon.xml を最優先で読み込むため、
+# 辞書の出力先はこの名前に固定する（旧名 eugnostos_lexicon.xml から変更）。
+LEX_OUT  = os.path.join(OUTDIR, "lexicon.xml")
 THEO_OUT = os.path.join(OUTDIR, "eugnostos_theology.xml")
-MAIN_SAMPLE = os.path.join(BASE, "eugnostos_main_sample.xml")
+MAIN_SAMPLE = os.path.join(OUTDIR, "eugnostos_main_sample.xml")
 
 segs = read_segments(SRC)
 
