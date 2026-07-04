@@ -3,8 +3,8 @@
   <teiHeader>
     <fileDesc>
       <titleStmt>
-        <title ref="urn:cts:copticLit:nag.eugnostos" xml:lang="en">Eugnostos the Blessed</title>
-        <title xml:lang="ja">祝福されたエウグノストス</title>
+        <title ref="urn:cts:copticLit:nag.eugnostos" xml:lang="en">Eugnostos</title>
+        <title xml:lang="ja">エウグノストス</title>
         <title type="sub" xml:lang="en">A two-witness TEI edition with stand-off lexicon and annotations (NHC III,3 and V,1)</title>
         <author>Anonymous (Gnostic; Greek original, 1st–2nd c. CE)</author>
         <respStmt>
@@ -44,7 +44,7 @@
             <msItem n="3">
               <locus from="70" to="90">pp. 70,1–90,11</locus>
               <textLang mainLang="cop" otherLangs="grc">Sahidic Coptic (with Greek loanwords)</textLang>
-              <title>Eugnostos the Blessed</title>
+              <title>Eugnostos</title>
             </msItem>
           </msContents>
         </msDesc>
@@ -58,7 +58,7 @@
             <msItem n="1">
               <locus from="1" to="17">pp. 1,1–17,17 (largely lacunose)</locus>
               <textLang mainLang="cop" otherLangs="grc">Sahidic Coptic</textLang>
-              <title>Eugnostos the Blessed</title>
+              <title>Eugnostos</title>
             </msItem>
           </msContents>
         </msDesc>
@@ -81,7 +81,7 @@
     </fileDesc>
     <encodingDesc>
       <projectDesc>
-        <p xml:lang="ja">ナグ・ハマディ写本『祝福されたエウグノストス』を、形態素ごとに意味を参照でき、写本III,3とV,1を対照でき、神学的解釈を併読できる形で公開するためのTEI符号化。データは3ファイルに分離しています。</p>
+        <p xml:lang="ja">ナグ・ハマディ写本『エウグノストス』を、形態素ごとに意味を参照でき、写本III,3とV,1を対照でき、神学的解釈を併読できる形で公開するためのTEI符号化。データは3ファイルに分離しています。</p>
       </projectDesc>
       <editorialDecl>
         <p xml:lang="ja">本ファイルは&lt;b&gt;本文&lt;/b&gt;です。各 &lt;w&gt; は @type(品詞)・@lemma(レンマ)を持ち、語義は&lt;b&gt;別ファイルのコプト語辞書&lt;/b&gt;(eugnostos_lexicon.xml)を @lemma で参照します。ギリシア借用語は @xml:lang="grc"。セグメント &lt;s&gt; の対訳は独自属性 @transJa / @transEn に格納。神学的解釈(注釈)は&lt;b&gt;別ファイル&lt;/b&gt;(eugnostos_theology.xml)にあり、@target で本文 &lt;s&gt; を指します。</p>
@@ -205,11 +205,11 @@
             </phy>
             <phy>
               <w type="PREP" lemma="ⲛ">ⲛ</w>
-              <w type="PRET" lemma="ⲛⲉ">ⲛⲉ</w>
-              <w type="COP" lemma="ⲧⲉ">ⲧⲉ</w>
+              <w type="ART" lemma="ⲛ">ⲛ</w>
+              <w type="CREL" lemma="ⲉⲧⲉ">ⲉⲧⲉ</w>
             </phy>
             <phy>
-              <w type="PPER" lemma="ⲛⲟⲩ">ⲛⲟⲩ</w>
+              <w type="PPER" lemma="ⲛⲟⲩ" gloss="those of">ⲛⲟⲩ</w>
               <w type="PPER" lemma="ϥ">ϥ</w>
             </phy>
             <phy>
@@ -344,7 +344,8 @@
               <w type="PPER" lemma="ⲩ">ⲩ</w>
               <w type="V" lemma="ϯ">ϯ</w>
               <w type="N" lemma="ⲧⲟⲛⲧⲛ">ⲧⲁⲛⲧⲛ</w>
-              <w type="X" lemma="ⲉⲧⲙⲏⲉ">ⲉⲧⲙⲏⲉ</w>
+              <w type="CREL" lemma="ⲉⲧ">ⲉⲧ</w>
+              <w type="N" lemma="ⲙⲏⲉ">ⲙⲏⲉ</w>
             </phy>
             <phy>
               <w type="CONJ" lemma="ⲁⲩⲱ">ⲁⲩⲱ</w>
@@ -367,8 +368,8 @@
             </phy>
             <phy>
               <w type="ACONJ" lemma="ⲛ">ⲛ</w>
-              <w type="PTC" lemma="ⲛⲧⲟⲕ" xml:lang="grc">ⲅ</w>
-              <w type="AAOR" lemma="ⲁⲣϣⲁ">ⲁⲣϣⲁ</w>
+              <w type="PTC" lemma="ⲅⲁⲣ" xml:lang="grc">ⲅⲁⲣ</w>
+              <w type="HABIT" lemma="ϣⲁⲣⲉ">ϣⲁ</w>
               <w type="PPER" lemma="ⲩ">ⲩ</w>
               <w type="V" lemma="ϣⲁϫⲉ">ϣⲁϫⲉ</w>
             </phy>
@@ -774,81 +775,161 @@
             </phy>
             </s>
             <s xml:id="III-7505196" n="7" transJa="いかなる支配も、いかなる権能も、いかなる従属も、いかなる本性も、世界の創設以来、彼を知ったことはない——彼ご自身を除いては。" transEn="No rule, no authority, no subjection, no nature has known him from the foundation of the world — none but he himself." transFr="Aucune domination, aucune autorité, aucune sujétion, aucune nature ne l&#x27;a connu depuis la fondation du monde — nul sinon lui-même." ana="#th-apophatic">
-              <w type="PREP" lemma="ⲙ">ⲙ</w>
-              <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
-              <w type="N" lemma="ⲁⲣⲭⲏ" xml:lang="grc">ⲁⲣⲭⲏ</w>
-              <w type="V" lemma="ⲥⲟⲩⲱⲛ">ⲥⲟⲩⲱⲛ</w>
-              <w type="PPER" lemma="ϥ">ϥ</w>
-              <w type="NEG" lemma="ⲙⲡⲉ">ⲙⲡⲉ</w>
-              <w type="X" lemma="ⲉⲯⲟⲩ">ⲉⲯⲟⲩ</w>
-              <w type="PPER" lemma="ⲥ">ⲥ</w>
-              <w type="V" lemma="ⲓⲁ">ⲓⲁ</w>
-              <w type="NEG" lemma="ⲙⲡⲉ">ⲙⲡⲉ</w>
-              <w type="N" lemma="ϩⲩⲡⲟⲧⲁⲅⲏ" xml:lang="grc">ϩⲩⲡⲟⲧⲁⲅⲏ</w>
-              <w type="PREP" lemma="ⲙ">ⲙ</w>
-              <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
-              <w type="N" lemma="ⲫⲩⲥⲓⲥ" xml:lang="grc">ⲫⲩⲥⲓⲥ</w>
-              <w type="ADJ" lemma="ⲛⲓⲙ">ⲛⲓⲙ</w>
-              <w type="CONJ" lemma="ϫⲛ">ϫⲛ</w>
-              <w type="PREP" lemma="ⲛ">ⲛ</w>
-              <w type="ART" lemma="ⲧ">ⲧ</w>
-              <w type="N" lemma="ⲕⲁⲧⲁⲃⲟⲗⲏ" xml:lang="grc">ⲕⲁⲧⲁⲃⲟⲗⲏ</w>
-              <w type="PREP" lemma="ⲙ">ⲙ</w>
-              <w type="ART" lemma="ⲡ">ⲡ</w>
-              <w type="N" lemma="ⲕⲟⲥⲙⲟⲥ" xml:lang="grc">ⲕⲟⲥⲙⲟⲥ</w>
-              <w type="CONJ" lemma="ⲉⲓⲙⲏⲧⲓ" xml:lang="grc">ⲉⲓⲙⲏⲧⲓ</w>
-              <w type="PPER" lemma="ⲛⲧⲟϥ">ⲛⲧⲟϥ</w>
-              <w type="X" lemma="ⲟⲩⲁⲁϥ">ⲟⲩⲁⲁϥ</w>
+              <phy>
+                <w type="ANEGAOR" lemma="ⲙⲡⲉ">ⲙⲡⲉ</w>
+              </phy>
+              <phy>
+                <w type="N" lemma="ⲁⲣⲭⲏ" xml:lang="grc">ⲁⲣⲭⲏ</w>
+              </phy>
+              <phy>
+                <w type="V" lemma="ⲥⲟⲟⲩⲛ">ⲥⲟⲩⲱⲛ</w>
+                <w type="PPER" lemma="ϥ">ϥ</w>
+              </phy>
+              <phy>
+                <w type="PREP" lemma="ⲛ">ⲙ</w>
+                <w type="ART" lemma="ⲡⲉ">ⲡⲉ</w>
+                <w type="N" lemma="ⲉⲝⲟⲩⲥⲓⲁ" xml:lang="grc">ⲉⲝⲟⲩⲥⲓⲁ</w>
+              </phy>
+              <phy>
+                <w type="PREP" lemma="ⲛ">ⲙ</w>
+                <w type="ART" lemma="ⲡⲉ">ⲡⲉ</w>
+                <w type="N" lemma="ϩⲩⲡⲟⲧⲁⲅⲏ" xml:lang="grc">ϩⲩⲡⲟⲧⲁⲅⲏ</w>
+              </phy>
+              <phy>
+                <w type="PREP" lemma="ⲛ">ⲙ</w>
+                <w type="ART" lemma="ⲡⲉ">ⲡⲉ</w>
+                <w type="N" lemma="ⲫⲩⲥⲓⲥ" xml:lang="grc">ⲫⲩⲥⲓⲥ</w>
+              </phy>
+              <phy>
+                <w type="N" lemma="ⲛⲓⲙ">ⲛⲓⲙ</w>
+              </phy>
+              <phy>
+                <w type="CONJ" lemma="ϫⲛ">ϫⲛ</w>
+              </phy>
+              <phy>
+                <w type="PREP" lemma="ⲛ">ⲛ</w>
+                <w type="ART" lemma="ⲧ">ⲧ</w>
+                <w type="N" lemma="ⲕⲁⲧⲁⲃⲟⲗⲏ" xml:lang="grc">ⲕⲁⲧⲁⲃⲟⲗⲏ</w>
+              </phy>
+              <phy>
+                <w type="PREP" lemma="ⲛ">ⲙ</w>
+                <w type="ART" lemma="ⲡ">ⲡ</w>
+                <w type="N" lemma="ⲕⲟⲥⲙⲟⲥ" xml:lang="grc">ⲕⲟⲥⲙⲟⲥ</w>
+              </phy>
+              <phy>
+                <w type="CONJ" lemma="ⲉⲓⲙⲏⲧⲓ" xml:lang="grc">ⲉⲓⲙⲏⲧⲓ</w>
+              </phy>
+              <phy>
+                <w type="PPER" lemma="ⲛⲧⲟϥ">ⲛⲧⲟϥ</w>
+              </phy>
+              <phy>
+                <w type="N" lemma="ⲟⲩⲁⲁ">ⲟⲩⲁⲁ</w>
+                <w type="PPER" lemma="ϥ">ϥ</w>
+              </phy>
             </s>
             <s xml:id="III-7505197" n="8" transJa="かの方は不死であり、永遠であって、生まれることがない。生まれるものはすべて滅びるからである。彼は非産出であって、始原を持たない。始原を持つものはすべて終わりを持つからである。" transEn="For that One is immortal and eternal, having no birth, since whatever is born perishes; unbegotten, having no beginning, since whatever has a beginning has an end." transFr="Car Celui-là est immortel et éternel, sans naissance, car tout ce qui naît périt ; inengendré, sans commencement, car tout ce qui a un commencement a une fin." ana="#th-apophatic">
-              <w type="ART" lemma="ⲡ">ⲡ</w>
-              <w type="REL" lemma="ⲉⲧ">ⲉⲧ</w>
-              <w type="ADV" lemma="ⲙⲙⲁⲩ">ⲙⲙⲁⲩ</w>
-              <w type="PTC" lemma="ⲅⲁⲣ" xml:lang="grc">ⲅⲁⲣ</w>
-              <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
-              <w type="ADJ" lemma="ⲁⲑⲁⲛⲁⲧⲟⲥ" xml:lang="grc">ⲁⲑⲁⲛⲁⲧⲟⲥ</w>
-              <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
-              <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
-              <w type="V" lemma="ϣⲁ">ϣⲁ</w>
-              <w type="APST" lemma="ⲁ">ⲁ</w>
-              <w type="PREP" lemma="ⲛ">ⲛ</w>
-              <w type="CONJ" lemma="ⲏ" xml:lang="grc">ⲏ</w>
-              <w type="N" lemma="ϩⲉ">ϩⲉ</w>
-              <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
-              <w type="PREP" lemma="ⲉ">ⲉ</w>
-              <w type="NUM" lemma="ⲙⲛⲧ">ⲙⲛⲧ</w>
-              <w type="PREP" lemma="ⲉ">ⲉ</w>
-              <w type="PPER" lemma="ϥ">ϥ</w>
-              <w type="V" lemma="ϫⲡⲟ">ϫⲡⲟ</w>
-              <w type="N" lemma="ⲟⲩⲟⲛ">ⲟⲩⲟⲛ</w>
-              <w type="PTC" lemma="ⲅⲁⲣ" xml:lang="grc">ⲅⲁⲣ</w>
-              <w type="ADJ" lemma="ⲛⲓⲙ">ⲛⲓⲙ</w>
-              <w type="REL" lemma="ⲉⲧⲉ">ⲉⲧⲉ</w>
-              <w type="EXIST" lemma="ⲟⲩⲛⲧⲁ">ⲟⲩⲛⲧⲁ</w>
-              <w type="PPER" lemma="ϥ">ϥ</w>
-              <w type="V" lemma="ϫⲡⲟ">ϫⲡⲟ</w>
-              <w type="PPER" lemma="ϥ">ϥ</w>
-              <w type="AUX" lemma="ⲛⲁ">ⲛⲁ</w>
-              <w type="V" lemma="ⲧⲁⲕⲟ">ⲧⲁⲕⲟ</w>
-              <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
-              <w type="ADJ" lemma="ⲁⲅⲉⲛⲛⲏⲧⲟⲥ" xml:lang="grc">ⲁⲅⲉⲛⲛⲏⲧⲟⲥ</w>
-              <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
-              <w type="PREP" lemma="ⲉ">ⲉ</w>
-              <w type="NUM" lemma="ⲙⲛⲧ">ⲙⲛⲧ</w>
-              <w type="PPER" lemma="ϥ">ϥ</w>
-              <w type="N" lemma="ⲁⲣⲭⲏ" xml:lang="grc">ⲁⲣⲭⲏ</w>
-              <w type="NUM" lemma="ⲟⲩⲁ">ⲟⲩⲁ</w>
-              <w type="PREP" lemma="ⲛ">ⲛ</w>
-              <w type="PTC" lemma="ⲅⲁⲣ" xml:lang="grc">ⲅⲁⲣ</w>
-              <w type="ADJ" lemma="ⲛⲓⲙ">ⲛⲓⲙ</w>
-              <w type="REL" lemma="ⲉⲧⲉ">ⲉⲧⲉ</w>
-              <w type="EXIST" lemma="ⲟⲩⲛⲧⲁ">ⲟⲩⲛⲧⲁ</w>
-              <w type="PPER" lemma="ϥ">ϥ</w>
-              <w type="N" lemma="ⲁⲣⲭⲏ" xml:lang="grc">ⲁⲣⲭⲏ</w>
-              <w type="EXIST" lemma="ⲟⲩⲛⲧⲁ">ⲟⲩⲛⲧⲁ</w>
-              <w type="PPER" lemma="ϥ">ϥ</w>
-              <w type="N" lemma="ϩⲁⲏ">ϩⲁⲏ</w>
-            </s>
+              <phy>
+                <w type="ART" lemma="ⲡ">ⲡ</w>
+                <w type="REL" lemma="ⲉⲧ">ⲉⲧ</w>
+                <w type="ADV" lemma="ⲙⲙⲁⲩ">ⲙⲙⲁⲩ</w>
+              </phy>
+              <phy>
+                <w type="PTC" lemma="ⲅⲁⲣ" xml:lang="grc">ⲅⲁⲣ</w>
+              </phy>
+              <phy>
+                <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
+                <w type="ADJ" lemma="ⲁⲑⲁⲛⲁⲧⲟⲥ" xml:lang="grc">ⲁⲑⲁⲛⲁⲧⲟⲥ</w>
+              </phy>
+              <phy>
+                <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
+              </phy>
+              <phy>
+                <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
+                <w type="V" lemma="ϣⲁ">ϣⲁ</w>
+              </phy>
+              <phy>
+                <w type="APST" lemma="ⲁ">ⲁ</w>
+                <w type="PREP" lemma="ⲛ">ⲛ</w>
+                <w type="CONJ" lemma="ⲏ" xml:lang="grc">ⲏ</w>
+              </phy>
+              <phy>
+                <w type="N" lemma="ϩⲉ">ϩⲉ</w>
+              </phy>
+              <phy>
+                <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
+              </phy>
+              <phy>
+                <w type="PREP" lemma="ⲉ">ⲉ</w>
+                <w type="NUM" lemma="ⲙⲛⲧ">ⲙⲛⲧ</w>
+                <w type="PREP" lemma="ⲉ">ⲉ</w>
+                <w type="PPER" lemma="ϥ">ϥ</w>
+              </phy>
+              <phy>
+                <w type="V" lemma="ϫⲡⲟ">ϫⲡⲟ</w>
+              </phy>
+              <phy>
+                <w type="N" lemma="ⲟⲩⲟⲛ">ⲟⲩⲟⲛ</w>
+              </phy>
+              <phy>
+                <w type="PTC" lemma="ⲅⲁⲣ" xml:lang="grc">ⲅⲁⲣ</w>
+              </phy>
+              <phy>
+                <w type="ADJ" lemma="ⲛⲓⲙ">ⲛⲓⲙ</w>
+              </phy>
+              <phy>
+                <w type="REL" lemma="ⲉⲧⲉ">ⲉⲧⲉ</w>
+                <w type="EXIST" lemma="ⲟⲩⲛⲧⲁ">ⲟⲩⲛⲧⲁ</w>
+                <w type="PPER" lemma="ϥ">ϥ</w>
+              </phy>
+              <phy>
+                <w type="V" lemma="ϫⲡⲟ">ϫⲡⲟ</w>
+              </phy>
+              <phy>
+                <w type="PPER" lemma="ϥ">ϥ</w>
+                <w type="AUX" lemma="ⲛⲁ">ⲛⲁ</w>
+                <w type="V" lemma="ⲧⲁⲕⲟ">ⲧⲁⲕⲟ</w>
+              </phy>
+              <phy>
+                <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
+                <w type="ADJ" lemma="ⲁⲅⲉⲛⲛⲏⲧⲟⲥ" xml:lang="grc">ⲁⲅⲉⲛⲛⲏⲧⲟⲥ</w>
+              </phy>
+              <phy>
+                <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
+              </phy>
+              <phy>
+                <w type="PREP" lemma="ⲉ">ⲉ</w>
+                <w type="NUM" lemma="ⲙⲛⲧ">ⲙⲛⲧ</w>
+                <w type="PPER" lemma="ϥ">ϥ</w>
+              </phy>
+              <phy>
+                <w type="N" lemma="ⲁⲣⲭⲏ" xml:lang="grc">ⲁⲣⲭⲏ</w>
+              </phy>
+              <phy>
+                <w type="NUM" lemma="ⲟⲩⲁ">ⲟⲩⲁ</w>
+                <w type="PREP" lemma="ⲛ">ⲛ</w>
+              </phy>
+                <w type="PTC" lemma="ⲅⲁⲣ" xml:lang="grc">ⲅⲁⲣ</w>
+              <phy>
+                <w type="ADJ" lemma="ⲛⲓⲙ">ⲛⲓⲙ</w>
+              </phy>
+              <phy>
+                <w type="REL" lemma="ⲉⲧⲉ">ⲉⲧⲉ</w>
+              </phy>
+              <phy>
+                <w type="EXIST" lemma="ⲟⲩⲛⲧⲁ">ⲟⲩⲛⲧⲁ</w>
+                <w type="PPER" lemma="ϥ">ϥ</w>
+              </phy>
+              <phy>
+                <w type="N" lemma="ⲁⲣⲭⲏ" xml:lang="grc">ⲁⲣⲭⲏ</w>
+              </phy>
+              <phy>
+                <w type="EXIST" lemma="ⲟⲩⲛⲧⲁ">ⲟⲩⲛⲧⲁ</w>
+                <w type="PPER" lemma="ϥ">ϥ</w>
+              </phy>
+              <phy>
+                <w type="N" lemma="ϩⲁⲏ">ϩⲁⲏ</w>
+              </phy>
+              </s>
             <s xml:id="III-7505198" n="9" transJa="何ものも彼を支配せず、彼は名を持たない。名を持つものは、他者の被造物だからである。彼には名づけえず、人間の形を持たない。人間の形を持つものは他者の被造物だからである。" transEn="Nothing rules over him, and he has no name, for whoever has a name is another&#x27;s creature; he is unnameable and has no human form, for whoever has human form is another&#x27;s creature." transFr="Rien ne le domine, et il n&#x27;a pas de nom, car quiconque porte un nom est la créature d&#x27;un autre ; il est innommable et sans forme humaine, car quiconque a forme humaine est la créature d&#x27;un autre." ana="#th-apophatic">
               <w type="NEG" lemma="ⲙⲙⲛ">ⲙⲙⲛ</w>
               <w type="N" lemma="ⲗⲁⲁⲩ">ⲗⲁⲁⲩ</w>
