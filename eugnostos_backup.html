@@ -1,10 +1,10 @@
-<!-- プラトン『国家』断片ビュワー（単一HTML・手作業で管理）。本文・対訳・辞書のデータは data/ の XML から読み込みます。データの修正は source/ の CSV を編集 → python3 scripts/build_tei.py で反映してください。HTML/CSS/JS 自体を変更する場合は Pull Request でレビューを受けてください。 -->
+<!-- エウグノストス三言語ビュワー（単一HTML・手作業で管理）。本文・対訳・辞書のデータは data/ の XML から読み込みます。データの修正は source/ の CSV を編集 → python3 scripts/build_tei.py で反映してください。HTML/CSS/JS 自体を変更する場合は Pull Request でレビューを受けてください。 -->
 <!DOCTYPE html>
 <html lang="ja" data-lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>プラトン『国家』588b-589b (NHC VI,5)</title>
+<title>エウグノストス — Eugnostos (NHC III,3 / V,1)</title>
 <link rel="icon" type="image/svg+xml" href="image/icon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,38 +39,8 @@ body{
   font-family:var(--ui); font-size:16px; line-height:1.55;
   -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
 }
-.app{display:grid; grid-template-columns:var(--railw,336px) minmax(0,1fr); grid-template-rows:auto 1fr;
-  grid-template-areas:"head head" "rail main"; height:100vh;}
-/* ---------------- parallel corpus (Coptic | Greek) ---------------- */
-.corpus-head{position:sticky; top:0; z-index:6; display:grid; grid-template-columns:1fr 1fr;
-  gap:0 clamp(16px,3vw,40px); max-width:1180px; margin:0 auto 2px; background:var(--paper);
-  border-bottom:1px solid var(--line-2)}
-.corpus-head .ch{padding:11px 4px 9px; display:flex; align-items:baseline; gap:8px; flex-wrap:wrap}
-.corpus-head .ch .lbl{font-family:var(--disp); font-size:.92rem; color:var(--gold)}
-.corpus-head .ch .lbl .cop{font-family:var(--copt); font-weight:400}
-.corpus-head .ch .sub{font-family:var(--ui); font-size:.64rem; letter-spacing:.09em; text-transform:uppercase; color:var(--ink-faint)}
-.corpus-head .ch.gcol{border-left:1px solid var(--line); padding-left:clamp(14px,2vw,28px)}
-#reading.parallel{max-width:1180px; margin:0 auto}
-.prow{display:grid; grid-template-columns:1fr 1fr; gap:0 clamp(16px,3vw,40px); align-items:start; border-bottom:1px solid var(--line)}
-.prow.dim{opacity:.32}
-.pcell{padding:14px 4px 17px; min-width:0}
-.pcell.gcol{border-left:1px solid var(--line); padding-left:clamp(14px,2vw,28px)}
-.pcop{position:relative; padding-left:40px; border-radius:8px; transition:background .25s}
-.pcop .no{position:absolute; left:2px; top:1px; width:30px; text-align:right; font-family:var(--disp);
-  font-size:.8rem; color:var(--ink-faint); font-variant-numeric:tabular-nums; user-select:none}
-.prow:target .pcop, .prow.flash .pcop{background:var(--hi)}
-.pcop .marker{position:absolute; right:2px; top:2px; display:flex; gap:4px}
-.pcop .marker button{appearance:none; border:0; cursor:pointer; width:9px; height:9px; border-radius:50%; background:var(--gold); opacity:.5; padding:0}
-.pcop .marker button:hover{opacity:1}
-.pcop .marker button.r{background:var(--rose)}
-/* Greek cell */
-.grcline{font-family:"GFS Didot","Spectral","Noto Serif",Georgia,serif; font-size:1.16rem; line-height:1.92; color:var(--ink)}
-.grcja{font-family:"Noto Serif JP",serif; font-size:.9rem; line-height:1.72; color:var(--ink-soft); margin-top:6px}
-.grcen{font-family:var(--disp); font-style:italic; font-size:.86rem; line-height:1.6; color:var(--ink-faint); margin-top:3px}
-.grc-empty{font-size:.8rem; color:var(--ink-faint); font-style:italic; line-height:1.6}
-.grc-prov{display:inline-block; margin-left:7px; font-family:var(--ui); font-style:normal; font-size:.56rem; letter-spacing:.07em;
-  text-transform:uppercase; color:var(--gold); border:1px solid rgba(154,114,32,.45); border-radius:999px; padding:1px 6px; vertical-align:middle}
-.grcsrc-foot{max-width:1180px; margin:14px auto 0; font-size:.72rem; color:var(--ink-faint); line-height:1.6}
+.app{display:grid; grid-template-columns:264px minmax(0,1fr) 372px; grid-template-rows:auto 1fr;
+  grid-template-areas:"head head head" "rail main aside"; height:100vh;}
 /* ---------------- header ---------------- */
 header{grid-area:head; background:var(--chrome); color:var(--chrome-ink);
   display:flex; align-items:center; gap:18px; padding:10px 20px; border-bottom:1px solid #000; z-index:30;}
@@ -232,16 +202,12 @@ html[data-tl="en"] .trans, html[data-tl="fr"] .trans{font-family:var(--disp)}
 .syn .cell .coptic{font-size:1.2rem; line-height:1.7}
 .syn .vgap{font-style:italic; font-size:.84rem; color:var(--ink-faint)}
 /* ---------------- aside ---------------- */
-aside{position:fixed; inset:0 0 0 auto; width:min(440px,92vw); background:var(--paper-2);
-  border-left:1px solid var(--line-2); overflow-y:auto; padding:0; transform:translateX(100%);
-  transition:transform .26s; z-index:45; box-shadow:0 0 40px rgba(20,22,30,.22)}
-html[data-search="open"] aside{transform:none}
-.aside-tabs{position:sticky; top:0; display:flex; align-items:center; background:var(--paper-2); border-bottom:1px solid var(--line); z-index:5}
-.aside-tabs .at-title{flex:1; font-family:var(--disp); font-size:.92rem; color:var(--gold); padding:13px 16px}
-.aside-tabs .at-close{appearance:none; border:0; background:transparent; cursor:pointer; color:var(--ink-soft);
-  font-size:1.3rem; line-height:1; padding:10px 16px; border-radius:8px}
-.aside-tabs .at-close:hover{color:var(--ink)}
-.aside-tabs .at-close:focus-visible{outline:2px solid var(--lapis); outline-offset:-2px}
+aside{grid-area:aside; background:var(--paper-2); border-left:1px solid var(--line); overflow-y:auto; padding:0}
+.aside-tabs{position:sticky; top:0; display:flex; background:var(--paper-2); border-bottom:1px solid var(--line); z-index:5}
+.aside-tabs button{flex:1; appearance:none; border:0; background:transparent; cursor:pointer; font-family:var(--ui);
+  font-size:.78rem; letter-spacing:.04em; padding:13px 8px; color:var(--ink-soft); border-bottom:2px solid transparent}
+.aside-tabs button[aria-selected="true"]{color:var(--ink); border-bottom-color:var(--gold); font-weight:600}
+.aside-tabs button:focus-visible{outline:2px solid var(--lapis); outline-offset:-2px}
 .aside-body{padding:16px 16px 80px}
 .panel-intro{font-size:.78rem; color:var(--ink-faint); margin:0 0 14px; line-height:1.5}
 .note{background:var(--raise); border:1px solid var(--line); border-radius:var(--radius); padding:13px 14px; margin-bottom:12px; box-shadow:var(--shadow)}
@@ -306,83 +272,38 @@ html[data-tl="fr"] .note p.ja{display:none}
 .credit a{color:var(--lapis)}
 /* mobile */
 .railtoggle{display:none}
-@media (max-width:820px){
-  /* stack the parallel columns: Coptic above its Greek, per segment */
-  .corpus-head{grid-template-columns:1fr}
-  .corpus-head .ch.gcol{border-left:0; padding-left:4px}
-  .prow{grid-template-columns:1fr}
-  .pcell.gcol{border-left:0; border-top:1px dashed var(--line); padding-left:40px}
+@media (max-width:1080px){
+  .app{grid-template-columns:1fr; grid-template-rows:auto auto auto; grid-template-areas:"head" "main" "aside"}
+  .rail{position:fixed; inset:0 auto 0 0; width:280px; transform:translateX(-100%); transition:transform .25s; z-index:50; box-shadow:var(--shadow)}
+  html[data-rail="open"] .rail{transform:none}
+  aside{border-left:0; border-top:1px solid var(--line)}
+  .railtoggle{display:inline-flex}
   .syn{grid-template-columns:1fr}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important; scroll-behavior:auto!important}}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-#status{font-size:.78rem; color:var(--gold); font-weight:600}
-#status.err{color:var(--rose)}
-#drop-hint{position:fixed; inset:0; z-index:80; display:flex; align-items:center; justify-content:center;
-  background:rgba(25,28,39,.82); color:var(--chrome-ink); font-family:var(--disp); font-size:1.5rem;
-  border:3px dashed var(--gold); pointer-events:none}
-html[data-drag="on"] #drop-hint{display:flex}
-#drop-hint[hidden]{display:none}
-html:not([data-drag="on"]) #drop-hint{display:none}
 /* ---- UI language toggle (JA/EN) ---- */
 .l-en{display:none}
 html[data-lang="en"] .l-ja{display:none}
 html[data-lang="en"] .l-en{display:revert}
-
-/* ================= commentary rail (left) ================= */
-.rail.cmt{grid-area:rail; background:var(--paper-2); color:var(--ink); border-right:1px solid var(--line-2);
-  overflow-y:auto; padding:16px 15px 90px; display:block;}
-.rail.cmt .rail-h{display:flex; align-items:center; justify-content:space-between; gap:8px;
-  position:sticky; top:0; z-index:3; margin:0 0 10px; padding:4px 0 9px; background:var(--paper-2);
-  border-bottom:1px solid var(--line)}
-.rail.cmt h2{font-family:var(--ui); font-size:.64rem; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); margin:0; font-weight:600}
-.railx{appearance:none; border:0; background:transparent; cursor:pointer; color:var(--ink-soft); font-size:1.3rem; line-height:1; padding:0 2px; display:none}
-.railx:hover{color:var(--ink)}
-.rail.cmt .rail-intro{font-size:.71rem; color:var(--ink-faint); line-height:1.55; margin:0 0 12px}
-.rail.cmt .frame-themes{display:flex; flex-wrap:wrap; gap:5px; margin-bottom:4px}
-.rail.cmt .tchip{appearance:none; font-family:var(--ui); font-size:.64rem; letter-spacing:.01em; padding:4px 9px;
-  border-radius:999px; border:1px solid var(--line-2); background:var(--raise); color:var(--ink-soft); cursor:pointer; transition:background .15s,color .15s}
-.rail.cmt .tchip:hover{border-color:var(--gold)}
-.rail.cmt .tchip[aria-pressed="true"]{background:var(--gold); border-color:var(--gold); color:var(--paper); font-weight:600}
-.rail.cmt .clearf{margin:6px 0 12px; font-size:.7rem; color:var(--ink-faint); background:none; border:0; cursor:pointer; text-decoration:underline; padding:0}
-.rail.cmt .notes{display:flex; flex-direction:column; gap:9px}
-.rail.cmt .note{background:var(--raise); border:1px solid var(--line); border-radius:9px; padding:11px 12px}
-.rail.cmt .note.hidden{display:none}
-.rail.cmt .note .themechips{display:flex; flex-wrap:wrap; gap:4px; margin-bottom:6px}
-.rail.cmt .note .themechips span{font-size:.57rem; letter-spacing:.01em; padding:2px 7px; border-radius:999px;
-  background:var(--paper); color:var(--ink-faint); border:1px solid var(--line)}
-.rail.cmt .note h3{font-family:var(--jpser); font-size:.9rem; font-weight:600; margin:0 0 3px; color:var(--ink); line-height:1.42}
-.rail.cmt .note .locus{font-family:var(--disp); font-size:.64rem; color:var(--gold); margin:0 0 6px}
-.rail.cmt .note p{font-size:.775rem; line-height:1.62; color:var(--ink-soft); margin:0 0 7px}
-.rail.cmt .note p.en{display:none; color:var(--ink-faint)}
-html[data-tl="en"] .rail.cmt .note p.en{display:block}
-html[data-tl="en"] .rail.cmt .note p.ja{display:none}
-.rail.cmt .note .jump{appearance:none; font-family:var(--ui); border:1px solid var(--lapis); color:var(--lapis);
-  background:transparent; font-size:.68rem; padding:4px 11px; border-radius:7px; cursor:pointer}
-.rail.cmt .note .jump:hover{background:var(--lapis); color:var(--paper)}
-.rail.cmt .note.nomatch{opacity:.4}
-/* rail as a left drawer on narrower viewports */
-@media (max-width:1100px){
-  .app{grid-template-columns:minmax(0,1fr); grid-template-areas:"head" "main";}
-  .rail.cmt{position:fixed; inset:0 auto 0 0; width:min(370px,90vw); transform:translateX(-101%);
-    transition:transform .26s ease; z-index:45; box-shadow:0 0 0 100vmax rgba(15,17,24,0);}
-  html[data-rail="open"] .rail.cmt{transform:none; box-shadow:0 18px 50px rgba(15,17,24,.4)}
-  .railtoggle{display:inline-flex!important}
-  .railx{display:block}
-}
 </style>
 </head>
 <body>
 <div class="app">
   <header>
     <a class="chip homelink" href="index.html" title="Index / 一覧へ"><span class="l-ja">← 一覧</span><span class="l-en">← Index</span></a>
-    <button class="chip railtoggle" id="railBtn" aria-label="釈義パネル" aria-pressed="false"><span class="l-ja">☰ 釈義</span><span class="l-en">☰ Notes</span></button>
+    <button class="chip railtoggle" id="railBtn" aria-label="系譜パネル" aria-pressed="false"><span class="l-ja">☰ 系譜</span><span class="l-en">☰ Lineage</span></button>
     <div class="brand">
       <img class="brandlogo" src="image/icon.svg" alt="" width="30" height="30" onerror="this.style.display='none'">
       <div class="brandtext">
-        <div class="t"><span class="cop">ⲡⲟⲗⲓⲧⲉⲓⲁ</span> <span class="l-ja">プラトン『国家』</span><span class="l-en">Plato, Republic</span></div>
-        <div class="s">Plato, Republic 588b–589b · NHC VI,5</div>
+        <div class="t"><span class="cop">ⲉⲩⲅⲛⲱⲥⲧⲟⲥ</span> <span class="l-ja">エウグノストス</span><span class="l-en">Eugnostos</span></div>
+        <div class="s">Eugnostos · NHC III,3 / V,1</div>
       </div>
+    </div>
+    <div class="tabs" role="tablist" aria-label="写本">
+      <button class="tab" role="tab" data-wit="III" aria-selected="true"><span class="l-ja">III,3 本文</span><span class="l-en">III,3 text</span></button>
+      <button class="tab" role="tab" data-wit="V" aria-selected="false">V,1</button>
+      <button class="tab" role="tab" data-wit="SYN" aria-selected="false"><span class="l-ja">対照</span><span class="l-en">Synopsis</span></button>
     </div>
     <div class="controls">
       <div class="seg-ctl">
@@ -391,11 +312,10 @@ html[data-tl="en"] .rail.cmt .note p.ja{display:none}
         <button class="chip" id="pageBtn" aria-pressed="false" title="写本のページ番号を表示 / Show codex page numbers"><span class="l-ja">ページ</span><span class="l-en">Pages</span></button>
         <button class="chip" id="lineBtn" aria-pressed="false" title="写本の行番号を表示 / Show manuscript line numbers"><span class="l-ja">行番号</span><span class="l-en">Lines</span></button>
         <button class="chip" id="statsBtn" title="統計 / Statistics"><span class="l-ja">統計</span><span class="l-en">Stats</span></button>
-        <button class="chip" id="glBtn" aria-pressed="false" title="語釈の言語 / Gloss language">語釈: 日</button>
-        <button class="chip" id="tlBtn" aria-pressed="false" title="対訳・注解の言語 / Translation &amp; notes language">訳: 日</button>
+        <button class="chip" id="glBtn" aria-pressed="false" title="語釈の言語">語釈: 日</button>
+        <button class="chip" id="tlBtn" aria-pressed="false" title="対訳・注解の言語">訳: 日</button>
         <button class="chip" id="langBtn" title="Language / 言語">English</button>
-        <button class="chip" id="modeBtn" aria-pressed="false" title="表示モード / Display mode">◐ アイオーン</button>
-        <button class="chip" id="pickTop" title="Open TEI XML"><span class="l-ja">XMLを開く</span><span class="l-en">Open XML</span></button>
+        <button class="chip" id="modeBtn" aria-pressed="false" title="表示モード">◐ アイオーン</button>
       </div>
       <div class="search">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
@@ -404,52 +324,49 @@ html[data-tl="en"] .rail.cmt .note p.ja{display:none}
     </div>
   </header>
 
-  <nav class="rail cmt" id="cmtRail" aria-label="釈義・注解 / Exegesis & notes">
-    <div class="rail-h">
-      <h2><span class="l-ja">釈義・注解</span><span class="l-en">Exegesis &amp; notes</span></h2>
-      <button class="railx" id="railClose" aria-label="閉じる / Close" title="閉じる / Close">×</button>
-    </div>
-    <p class="rail-intro"><span class="l-ja">先行研究（Matsagouras 1976／Ashwin-Siejkowski 2020 ほか）に基づく注。テーマを選ぶと該当箇所が強調され、注も絞り込まれます。各注の〈本文へ〉で当該セグメントへ移動します。</span><span class="l-en">Notes grounded in prior scholarship (Matsagouras 1976; Ashwin-Siejkowski 2020 and others). Pick a theme to highlight the relevant passages and filter the notes; “To text” jumps to the segment.</span></p>
+  <nav class="rail" aria-label="流出の系譜とテーマ">
+    <h2>流出の系譜 · Emanation</h2>
+    <div class="spine" id="spine"></div>
+    <h2><span class="l-ja">枠組みのテーマ</span><span class="l-en">Themes</span></h2>
     <div class="frame-themes" id="frameThemes"></div>
     <button class="clearf" id="clearTheme" hidden><span class="l-ja">テーマ選択を解除</span><span class="l-en">Clear themes</span></button>
-    <div class="notes" id="notes"><p class="rail-intro" id="notesEmpty"><span class="l-ja">注解ファイル <code>republic_commentary.xml</code> を読み込むと、ここに注が表示されます。</span><span class="l-en">Load <code>republic_commentary.xml</code> to see the notes here.</span></p></div>
   </nav>
 
   <main id="main" tabindex="-1">
     <div class="doc-head">
-      <div class="kick">Nag Hammadi Codex VI,5 · pp. 48–51</div>
-      <h1><span class="cop">ⲡⲟⲗⲓⲧⲉⲓⲁ</span><br><span class="l-ja">プラトン『国家』588b–589b</span><span class="l-en">Plato, Republic 588b–589b</span></h1>
-      <p class="meta"><span class="l-ja">プラトン『国家』第9巻 588b–589b のコプト語訳（NHC VI,5）と、対応するギリシア語原文の対訳。左にコプト語本文、右にギリシア語原文（OCT/Burnet）を並べています。各形態素をクリックすると品詞・語義・辞書が表示され、〈借用語〉ボタンでギリシア語からの借用語が左本文上にマーキングされます。</span><span class="l-en">A Coptic translation of Plato’s Republic, Book IX 588b–589b (NHC VI,5), set in parallel with the Greek original (OCT/Burnet): Coptic on the left, Greek on the right. Click any morpheme for its part of speech, sense and dictionary entry; the “Loanwords” button marks Greek loanwords within the Coptic text.</span></p>
+      <div class="kick">Nag Hammadi Codex III,3 · pp. 70–90</div>
+      <h1><span class="cop">ⲉⲩⲅⲛⲱⲥⲧⲟⲥ ⲡⲙⲁⲕⲁⲣⲓⲟⲥ</span><br><span class="l-ja">エウグノストス</span><span class="l-en">Eugnostos</span></h1>
+      <p class="meta"><span class="l-ja">前1〜2世紀のギリシア語原典に遡るとされる、非キリスト教的な思弁的宇宙生成論。語りえぬ第一原理から、先在の父・自生者・不死の人間・人の子(救済者)・ソフィアと諸アイオーンが流出する次第を、書簡の体裁で説く。各形態素をクリックすると語義が、右側に神学的解釈が表示されます。</span><span class="l-en">A non-Christian speculative cosmogony, held to go back to a Greek original of the 1st–2nd c. BCE. In epistolary form it expounds how, from the ineffable First Principle, there emanate the pre-existent Father, the Self-Begotten, the Immortal Man, the Son of Man (the Saviour), Sophia and the Aeons. Click any morpheme for its sense; the theological interpretation appears on the right.</span></p>
     </div>
     <div class="notice" id="loadwarn" hidden></div>
-    <div id="drop-hint" hidden>ここに <b>republic_tei.xml</b> をドロップ</div>
-    <input id="file" type="file" accept=".xml,application/xml,text/xml" multiple hidden>
-    <div class="corpus-head" id="corpusHead" hidden>
-      <div class="ch ccol"><span class="lbl"><span class="cop">ⲙⲛ̄ⲧⲣⲙ̄ⲛ̄ⲕⲏⲙⲉ</span> <span class="l-ja">コプト語</span><span class="l-en">Coptic</span></span><span class="sub">NHC VI,5</span></div>
-      <div class="ch gcol"><span class="lbl">Ἑλληνικά <span class="l-ja">ギリシア語</span><span class="l-en">Greek</span></span><span class="sub">Plato · OCT / Burnet</span></div>
-    </div>
     <div id="reading" class="col"></div>
     <div class="credit" id="credit"></div>
   </main>
 
-  <aside aria-label="検索結果 / Search" id="searchAside">
-    <div class="aside-tabs">
-      <span class="at-title"><span class="l-ja">検索結果</span><span class="l-en">Search</span></span>
-      <button class="at-close" id="searchClose" aria-label="閉じる / Close" title="閉じる / Close">×</button>
+  <aside aria-label="解釈と検索">
+    <div class="aside-tabs" role="tablist">
+      <button role="tab" id="atIntro" data-pane="intro" aria-selected="true"><span class="l-ja">神学的解釈</span><span class="l-en">Interpretation</span></button>
+      <button role="tab" id="atSearch" data-pane="search" aria-selected="false"><span class="l-ja">検索結果</span><span class="l-en">Search</span></button>
     </div>
     <div class="aside-body">
-      <div id="results"><p class="empty"><span class="l-ja">上の検索窓に入力してください。</span><span class="l-en">Type a query in the search box above.</span></p></div>
+      <div id="paneIntro">
+        <p class="panel-intro"><span class="l-ja">左の系譜やテーマを選ぶと、関連する注のみが絞り込まれます。各注の「本文へ」で該当箇所へ移動します。</span><span class="l-en">Select a lineage or theme on the left to filter the related notes. Use “To text” in each note to jump to the passage.</span></p>
+        <div id="notes"></div>
+      </div>
+      <div id="paneSearch" hidden>
+        <div id="results"><p class="empty"><span class="l-ja">上の検索窓に入力してください。</span><span class="l-en">Type a query in the search box above.</span></p></div>
+      </div>
     </div>
   </aside>
 </div>
 
-<div class="pop" id="pop" role="dialog" aria-label="形態素の語義 / Morpheme gloss"></div>
+<div class="pop" id="pop" role="dialog" aria-label="形態素の語義"></div>
 
 <div class="modal-back" id="statsBack"></div>
 <div class="modal" id="statsModal" role="dialog" aria-modal="true" aria-label="統計 / Statistics">
   <div class="modal-head">
     <h2><span class="l-ja">コーパス統計</span><span class="l-en">Corpus statistics</span></h2>
-    <span class="sub">NHC VI,5</span>
+    <span class="sub" id="statsWit">NHC III,3</span>
     <button class="x" id="statsClose" aria-label="閉じる / Close" title="閉じる / Close">×</button>
   </div>
   <div class="modal-body" id="statsBody"></div>
@@ -470,9 +387,6 @@ const POS={ART:["冠詞","article"],N:["名詞","noun"],NPROP:["固有名詞","p
  PRET:["過去辞","past"],COP:["繋辞","copula"],PFX:["接頭辞","prefix"],INTERJ:["間投詞","interjection"],
  AUX:["助動詞","auxiliary"],POSS:["所有冠詞","possessive art."],
  EXIST:["存在詞","existential"],PINT:["疑問詞","interrogative"],FM:["外来語句","foreign material"],
- APST:["過去接頭","past prefix"],AOPT:["願望辞","optative"],CREL:["関係変換","relative conv."],
- CFOC:["焦点変換","focalizer"],PPERI:["独立人称代名詞","independent pron."],VBD:["動詞","verb"],
- A:["助動詞","auxiliary"],UNKNOWN:["不明","unknown"],
  X:["未注","unglossed"]};
 
 const THEMES_ORDER=["th-apophatic","th-propator","th-autogenes","th-anthropos","th-son",
@@ -480,12 +394,12 @@ const THEMES_ORDER=["th-apophatic","th-propator","th-autogenes","th-anthropos","
 const FRAME_THEMES=["th-frame","th-witness","th-sjc"];
 const ROSE_THEMES=new Set(["th-sophia","th-androgyny"]);
 
-let DOC_MAIN=null, DOC_LEX=null, DOC_THEO=null, DOC_GREEK=null, LEXMAP=new Map(), GREEKMAP=new Map();
+let DOC_MAIN=null, DOC_LEX=null, DOC_THEO=null, LEXMAP=new Map();
 let THEME_LABELS={}, NOTES=[], SEGS_III=[], SEGS_V=[], curWit="III", curTheme=null;
 
 function getId(el){return el.getAttributeNS(XML_NS,"id")||el.getAttribute("xml:id")||"";}
 function getLang(el){return el.getAttributeNS(XML_NS,"lang")||el.getAttribute("xml:lang")||"";}
-function T(el,tag){return el?Array.from(el.getElementsByTagNameNS(TEI_NS,tag)):[];}
+function T(el,tag){return Array.from(el.getElementsByTagNameNS(TEI_NS,tag));}
 function phyGroups(wEls){ const groups=[]; let curPhy=null,cur=null;
   wEls.forEach((w,idx)=>{ const p=w.parentNode; const phy=(p&&p.localName==="phy")?p:null;
     if(phy&&phy===curPhy){ cur.push(idx); } else { cur=[idx]; groups.push(cur); curPhy=phy; } });
@@ -535,32 +449,33 @@ async function fetchFirst(base, names, diag){
   }
   return null;
 }
+
 async function load(){
   const base=location.href.replace(/[#?].*$/,"").replace(/[^/]*$/,"");
   let diag=[];
   const main=await fetchFirst(base,
-    ["data/republic_tei.xml","republic_tei.xml","republic-tei.xml"], diag);
+    ["data/eugnostos_tei.xml","eugnostos_tei.xml","eugnostos tei.xml","eugnostos-tei.xml","Eugnostos_tei.xml"], diag);
   const lex =await fetchFirst(base,
-    ["data/lexicon.xml","lexicon.xml","data/republic_lexicon.xml","republic_lexicon.xml"], diag);
-  const greek=await fetchFirst(base,
-    ["data/republic_greek.xml","republic_greek.xml","data/republic_grc.xml","republic_grc.xml"], diag);
+    ["data/lexicon.xml","lexicon.xml","data/eugnostos_lexicon.xml","eugnostos_lexicon.xml"], diag);
   const theo=await fetchFirst(base,
-    ["data/republic_commentary.xml","republic_commentary.xml","data/republic_theology.xml","republic_theology.xml"], diag);
+    ["data/eugnostos_theology.xml","eugnostos_theology.xml","eugnostos theology.xml","eugnostos-theology.xml"], diag);
 
-  if(!main || !lex){ showLoadError(base, diag); return; }
-  DOC_MAIN=main; DOC_LEX=lex; DOC_GREEK=greek; DOC_THEO=theo;
+  if(!main || !lex || !theo){ showLoadError(base, diag); return; }
+  DOC_MAIN = main; DOC_LEX = lex; DOC_THEO = theo;
   buildAll();
 }
 function buildAll(){
-  parse(); render(); buildRail(); buildNotes(); buildCredit();
+  parse(); buildRail(); buildNotes(); render();
+  buildCredit();
 }
 function showLoadError(base, diag){
-  const url=base+"data/republic_tei.xml";
-  const n=$("#loadwarn"); if(!n) return; n.hidden=false;
+  const url=base+"data/eugnostos_tei.xml";
+  const n=$("#loadwarn"); if(!n) return;
+  n.hidden=false;
   n.innerHTML =
-    `⬥ <b>データを取得できませんでした。</b> 本文 <code>data/republic_tei.xml</code> と辞書 <code>data/lexicon.xml</code>`+
-    `（任意でギリシア語 <code>data/republic_greek.xml</code>）を <b>Webサーバ経由</b>で配信してください（file:// では取得不可）。`+
-    `右上の〈XMLを開く〉から手動で読み込むこともできます。<br>`+
+    `⬥ <b>データを取得できませんでした。</b> 3ファイル `+
+    `(<code>data/eugnostos_tei.xml</code> / <code>data/lexicon.xml</code> / <code>data/eugnostos_theology.xml</code>) を `+
+    `<b>Webサーバ経由</b>で配信してください（file:// では取得できません）。<br>`+
     `想定URL → <a href="${url}" target="_blank" rel="noopener" style="color:var(--lapis);font-weight:600">${escapeHTML(url)}</a><br>`+
     `<small style="color:var(--ink-faint)">試行: ${escapeHTML(diag.join("  /  "))}</small>`;
 }
@@ -580,14 +495,14 @@ function parse(){
   // theme taxonomy + theology notes come from the annotation file
   THEME_LABELS={};
   if(!readCats(DOC_THEO)) readCats(DOC_MAIN);   // fallback to main
-  NOTES=T(DOC_THEO,"note").filter(n=>n.getAttribute("type")==="commentary").map(n=>{
+  NOTES=T(DOC_THEO,"note").filter(n=>n.getAttribute("type")==="theology").map(n=>{
     const themes=(n.getAttribute("ana")||"").split(/\s+/).map(s=>s.split("#").pop()).filter(Boolean);
     const targets=(n.getAttribute("target")||"").split(/\s+/).map(s=>s.split("#").pop()).filter(Boolean);
-    let labelJa="",labelEn="",ja="",en="",fr="";
-    T(n,"label").forEach(l=>{ const lg=getLang(l); if(lg==="en") labelEn=l.textContent; else labelJa=l.textContent; });
+    let label="",ja="",en="",fr="";
+    T(n,"label").forEach(l=>label=l.textContent);
     T(n,"p").forEach(p=>{ const l=getLang(p);
       if(l==="ja") ja=p.textContent; else if(l==="en") en=p.textContent; else if(l==="fr") fr=p.textContent;});
-    return {id:getId(n),themes,targets,labelJa,labelEn,ja,en,fr,locus:n.getAttribute("n")||""};
+    return {id:getId(n),themes,targets,label,ja,en,fr};
   });
   // Coptic dictionary: lemma -> [ {id,n,pos,en,ja,fr,uja,uen,grc}, ... ]
   // (homographs yield several senses per form; single entries yield one)
@@ -601,13 +516,10 @@ function parse(){
       if(l==="en") en=q; else if(l==="ja") ja=q; else if(l==="fr") fr=q; });
     let uja="",uen="";
     T(e,"usg").forEach(u=>{ const l=getLang(u); if(l==="ja") uja=u.textContent; else if(l==="en") uen=u.textContent; });
-    const refEl=T(e,"ref")[0]; const ref=refEl?(refEl.getAttribute("target")||""):"";
-    const sense={id:getId(e), n:e.getAttribute("n")||"", pos, en, ja, fr, uja, uen, ref};
+    const sense={id:getId(e), n:e.getAttribute("n")||"", pos, en, ja, fr, uja, uen};
     if(!LEXMAP.has(lemma)) LEXMAP.set(lemma,[]);
     LEXMAP.get(lemma).push(sense);
   });
-  // Greek parallel text lives in republic_greek.xml, linked by @corresp -> rep-N
-  GREEKMAP=readGreek(DOC_GREEK);
   // witnesses from the text file
   const wit=id=>{
     const t=Array.from(T(DOC_MAIN,"text")).find(x=>getId(x)===id);
@@ -620,84 +532,39 @@ function parse(){
         const pin=(w.getAttribute("ana")||"").split("#").pop();
         let def=senses[0]||{};
         if(pin){ const m=senses.find(x=>x.id===pin); if(m) def=m; }
-        else { const tt=w.getAttribute("type"); if(tt){ const m=senses.find(x=>x.pos===tt); if(m) def=m; } }
         return {form:w.textContent, lemma, senses, defId:def.id||"",
           pos:def.pos||w.getAttribute("type")||"X",
-          gloss:def.en||"", glossJa:def.ja||"", glossFr:def.fr||"", ref:def.ref||"",
+          gloss:def.en||"", glossJa:def.ja||"", glossFr:def.fr||"",
           grc:getLang(w)==="grc", amb:senses.length>1};
       });
-      const sid=getId(s); const gp=GREEKMAP.get(sid)||{};
-      return {id:sid, n:s.getAttribute("n")||"", sub:s.getAttribute("subtype")||"",
+      return {id:getId(s), n:s.getAttribute("n")||"", sub:s.getAttribute("subtype")||"",
         themes:(s.getAttribute("ana")||"").split(/\s+/).map(x=>x.split("#").pop()).filter(Boolean),
         transJa:s.getAttribute("transJa")||"", transEn:s.getAttribute("transEn")||"",
         transFr:s.getAttribute("transFr")||"",
-        grc:gp.grc||"", grcJa:gp.ja||"", grcEn:gp.en||"", grcCert:gp.cert||"",
         corresp:(s.getAttribute("corresp")||"").split("#").pop(),
         gap:T(s,"gap").length>0, words:ws, groups:phyGroups(wEls), flow:buildFlow(s)};
     });
   };
-  SEGS_III=wit("wit-rep"); SEGS_V=[];
-  // fold commentary themes onto the segments they annotate (enables theme highlight/dim + "has-note" markers)
-  if(NOTES.length){
-    const byId=new Map(SEGS_III.map(s=>[s.id,s]));
-    NOTES.forEach(nt=>nt.targets.forEach(tid=>{
-      const s=byId.get(tid); if(!s) return;
-      nt.themes.forEach(th=>{ if(!s.themes.includes(th)) s.themes.push(th); });
-    }));
-  }
-}
-/* ---------- Greek parallel (republic_greek.xml): corresp(rep-N) -> {grc,ja,en,cert} ---------- */
-function readGreek(doc){
-  const map=new Map(); if(!doc) return map;
-  T(doc,"s").forEach(s=>{
-    const key=(s.getAttribute("corresp")||"").split("#").pop(); if(!key) return;
-    const txt=tag=>{ const e=T(s,tag)[0]; return e?e.textContent.trim():""; };
-    map.set(key,{grc:txt("grc"), ja:txt("ja"), en:txt("en"), cert:s.getAttribute("cert")||""});
-  });
-  return map;
+  SEGS_III=wit("wit-III"); SEGS_V=wit("wit-V");
 }
 
 /* ---------- rail ---------- */
-function cmtThemeOrder(){
-  const used=new Set(); NOTES.forEach(n=>n.themes.forEach(t=>used.add(t)));
-  const ids=DOC_THEO ? T(DOC_THEO,"category").map(c=>getId(c)) : [];
-  const ordered=ids.filter(id=>used.has(id));
-  used.forEach(id=>{ if(!ordered.includes(id)) ordered.push(id); });
-  return ordered;
-}
 function buildRail(){
-  const ft=$("#frameThemes"); if(!ft) return; ft.innerHTML="";
-  cmtThemeOrder().forEach(id=>{
+  const sp=$("#spine"); sp.innerHTML="";
+  THEMES_ORDER.forEach(id=>{
     const lab=THEME_LABELS[id]||{ja:id,en:""};
     const b=document.createElement("button");
+    b.className="node"+(ROSE_THEMES.has(id)?" rose":""); b.dataset.theme=id;
+    b.setAttribute("aria-pressed","false");
+    b.innerHTML=`<span class="dot"></span><span class="nm">${lab.ja}<small>${lab.en||""}</small></span>`;
+    b.onclick=()=>toggleTheme(id); sp.appendChild(b);
+  });
+  const ft=$("#frameThemes"); ft.innerHTML="";
+  FRAME_THEMES.forEach(id=>{
+    const lab=THEME_LABELS[id]||{ja:id};
+    const b=document.createElement("button");
     b.className="tchip"; b.dataset.theme=id; b.setAttribute("aria-pressed","false");
-    b.title=lab.en||""; b.textContent=(UL()==="en"&&lab.en)?lab.en:lab.ja;
-    b.onclick=()=>toggleTheme(id); ft.appendChild(b);
-  });
-}
-function buildNotes(){
-  const box=$("#notes"); if(!box) return; box.innerHTML="";
-  if(!NOTES.length){ box.innerHTML=`<p class="rail-intro">${UL()==="en"?'Load <code>republic_commentary.xml</code> to see the notes here.':'注解ファイル <code>republic_commentary.xml</code> を読み込むと、ここに注が表示されます。'}</p>`; return; }
-  NOTES.forEach(n=>{
-    const el=document.createElement("article"); el.className="note"; el.dataset.id=n.id;
-    el.dataset.themes=n.themes.join(" ");
-    const en=UL()==="en";
-    const lbl=en?(n.labelEn||n.labelJa):(n.labelJa||n.labelEn);
-    const chips=n.themes.map(t=>{ const L=THEME_LABELS[t]||{}; const tx=en?(L.en||L.ja||t):(L.ja||L.en||t);
-      return `<span title="${escapeHTML(L.en||"")}">${escapeHTML(tx)}</span>`; }).join("");
-    const locus=n.locus?`<div class="locus">${escapeHTML(n.locus)}</div>`:"";
-    el.innerHTML=`<div class="themechips">${chips}</div><h3>${escapeHTML(lbl)}</h3>${locus}`+
-      `<p class="ja">${escapeHTML(n.ja)}</p><p class="en">${escapeHTML(n.en)}</p>`+
-      `<button class="jump">${en?"To text ›":"本文へ ›"}</button>`;
-    el.querySelector(".jump").onclick=()=>{ if(n.targets[0]) flashSeg(n.targets[0]); if(window.innerWidth<=1100) H.setAttribute("data-rail","closed"); };
-    box.appendChild(el);
-  });
-  filterNotes();
-}
-function filterNotes(){
-  $$("#notes .note").forEach(el=>{
-    const th=(el.dataset.themes||"").split(" ");
-    el.classList.toggle("hidden", curTheme && !th.includes(curTheme));
+    b.textContent=lab.ja; b.onclick=()=>toggleTheme(id); ft.appendChild(b);
   });
 }
 function toggleTheme(id){
@@ -709,41 +576,49 @@ function toggleTheme(id){
     const note=NOTES.find(n=>n.themes.includes(curTheme));
     if(note&&note.targets[0]) flashSeg(note.targets[0]);
   }
-  if(window.innerWidth<=1100) H.setAttribute("data-rail","closed");
+  if(window.innerWidth<=1080) H.setAttribute("data-rail","closed");
 }
 $("#clearTheme").onclick=()=>{ if(curTheme) toggleTheme(curTheme); };
 
 function applyTheme(){
-  $$(".prow").forEach(s=>{
+  $$(".seg").forEach(s=>{
     if(!curTheme){ s.classList.remove("dim"); return; }
     const th=(s.dataset.themes||"").split(" ");
     s.classList.toggle("dim", !th.includes(curTheme));
   });
 }
 
-/* ---------- render reading (parallel: Coptic | Greek) ---------- */
+/* ---------- notes ---------- */
+function buildNotes(){
+  const box=$("#notes"); box.innerHTML="";
+  NOTES.forEach(n=>{
+    const el=document.createElement("article"); el.className="note"; el.dataset.id=n.id;
+    el.dataset.themes=n.themes.join(" ");
+    const chips=n.themes.map(t=>`<span>${(THEME_LABELS[t]||{ja:t}).ja}</span>`).join("");
+    el.innerHTML=`<div class="themechips">${chips}</div><h3>${n.label}</h3>
+      <p class="ja">${n.ja}</p><p class="en">${n.en}</p><p class="fr">${n.fr||""}</p>
+      <button class="jump">${UL()==="en"?"To text ›":"本文へ ›"}</button>`;
+    el.querySelector(".jump").onclick=()=>{ if(n.targets[0]) flashSeg(n.targets[0]); };
+    box.appendChild(el);
+  });
+}
+function filterNotes(){
+  $$(".note").forEach(el=>{
+    const th=(el.dataset.themes||"").split(" ");
+    el.classList.toggle("hidden", curTheme && !th.includes(curTheme));
+  });
+}
+
+/* ---------- render reading ---------- */
 function curTL(){ return H.getAttribute("data-tl")||"ja"; }
 function curGL(){ return H.getAttribute("data-gl")||"ja"; }
 function pickGloss(w){ const l=curGL(); return (l==="fr"?(w.glossFr||w.gloss):l==="en"?w.gloss:w.glossJa)||""; }
 function pickTrans(s){ const l=curTL(); return (l==="fr"?s.transFr:l==="en"?s.transEn:s.transJa)||""; }
 function pendingText(){ const l=curTL(); return l==="fr"?"— traduction à venir —":l==="en"?"translation pending":"—訳は準備中—"; }
 function wordHTML(w,i){
-  const cls="wseg"+(w.grc?" grc":"")+(w.amb?" amb":"")+((!w.senses||w.senses.length===0)?" x":"");
+  const cls="wseg"+(w.grc?" grc":"")+(w.amb?" amb":"")+(w.pos==="X"||(!w.gloss&&!w.glossJa&&!w.glossFr)?" x":"");
   const g = pickGloss(w)||"·";
   return `<span class="${cls}" tabindex="0" role="button" data-i="${i}">${escapeHTML(w.form)}<span class="g">${escapeHTML(g)}</span></span>`;
-}
-/* Greek cell for one segment (grc text + JA/EN of the Greek, following the trans-language toggle) */
-function grcCellHTML(s){
-  if(!s.grc){
-    return `<div class="grc-empty">${UL()==="en"?"(no corresponding Greek)":"（対応するギリシア語なし）"}</div>`;
-  }
-  const badge = s.grcCert==="prov"
-    ? `<span class="grc-prov" title="${UL()==='en'?'provisional alignment — verify against Burnet/OCT':'暫定整列 — 要 Burnet/OCT 校訂'}">${UL()==='en'?'prov.':'暫定'}</span>`
-    : "";
-  const en=curTL()==="en";
-  const gt=en?s.grcEn:s.grcJa;
-  return `<div class="grcline">${escapeHTML(s.grc)}${badge}</div>`+
-    (gt?`<div class="${en?'grcen':'grcja'}">${escapeHTML(gt)}</div>`:"");
 }
 /* lacuna / unclear marker (always visible so the damage is legible) */
 function gapHTML(it){
@@ -754,7 +629,7 @@ function gapHTML(it){
     : (UL()==="en" ? "unclear / illegible" : "判読不能");
   return `<span class="gapm ${lac?'lac':'unc'}" title="${escapeHTML(tip)}" aria-label="${escapeHTML(tip)}">${txt}</span>`;
 }
-function segHTML(s){
+function copticFlowHTML(s){
   const flow = (s.flow&&s.flow.length) ? s.flow : s.words.map((_,i)=>({k:"w",i}));
   let cop=""; let inPhy=false, prevW=false, prevForm="";
   for(const it of flow){
@@ -765,34 +640,39 @@ function segHTML(s){
       if(inPhy&&prevW&&!(/[-=]$/.test(prevForm)||/^[-=]/.test(w.form))) cop+='<span class="msep">-</span>';
       cop+=wordHTML(w,it.i); prevForm=w.form; prevW=true; continue;
     }
-    // line / page markers do NOT break a morpheme group (so words stay joined when hidden)
     if(it.k==="lb"){ cop+=`<span class="lbm" data-n="${escapeHTML(it.n)}" title="${UL()==='en'?'line':'行'} ${escapeHTML(it.n)}">${escapeHTML(it.n)}</span>`; continue; }
     if(it.k==="pd"){ cop+=`<span class="pdm" data-n="${escapeHTML(it.n)}" title="${UL()==='en'?'page':'ページ'} ${escapeHTML(it.n)}">p.${escapeHTML(it.n)}</span>`; continue; }
-    if(it.k==="gap"){ cop+=gapHTML(it); prevW=false; continue; }  // a gap is a real break
+    if(it.k==="gap"){ cop+=gapHTML(it); prevW=false; continue; }
   }
+  return cop;
+}
+function segHTML(s){
+  const words=copticFlowHTML(s);
   let tr = pickTrans(s);
   const trCls = tr ? "trans" : "trans pending";
   if(!tr) tr = pendingText();
   const marker = s.themes.length ? `<div class="marker">`+
-     s.themes.slice(0,3).map(t=>{const L=THEME_LABELS[t]||{}; const tx=UL()==="en"?(L.en||L.ja||t):(L.ja||L.en||t); return `<button class="${ROSE_THEMES.has(t)?'r':''}" data-theme="${t}" title="${escapeHTML(tx)}"></button>`;}).join("")+`</div>` : "";
-  return `<div class="prow" id="seg-${s.id}" data-themes="${s.themes.join(' ')}" data-id="${s.id}">
-    <div class="pcell ccol"><div class="pcop">
-      <div class="no">${s.n||""}</div>${marker}
-      <div class="coptic">${cop}</div>
-      <div class="${trCls}">${escapeHTML(tr)}</div>
-    </div></div>
-    <div class="pcell gcol">${grcCellHTML(s)}</div>
+     s.themes.slice(0,3).map(t=>`<button class="${ROSE_THEMES.has(t)?'r':''}" data-theme="${t}" title="${(THEME_LABELS[t]||{ja:t}).ja}"></button>`).join("")+`</div>` : "";
+  const sub=s.sub?(" "+s.sub):"";
+  return `<div class="seg${sub}" id="seg-${s.id}" data-themes="${s.themes.join(' ')}" data-id="${s.id}">
+    <div class="no">${s.n||""}</div>${marker}
+    <div class="coptic">${words}</div>
+    <div class="${trCls}">${escapeHTML(tr)}</div>
   </div>`;
 }
-function grcCount(){ return SEGS_III.filter(s=>s.grc).length; }
 function render(){
   const box=$("#reading");
-  $("#corpusHead").hidden=false;
-  box.className="parallel";
-  box.innerHTML = SEGS_III.map(segHTML).join("")+
-    `<p class="grcsrc-foot">${UL()==="en"
-      ? `Greek = Plato, <i>Republic</i> 588b–589b (OCT/Burnet, public domain); Japanese/English of the Greek = this project. First-pass alignment, to verify (${grcCount()}/${SEGS_III.length} segments). The Greek text is maintained separately in <code>republic_greek.xml</code>, linked to the Coptic by <code>@corresp</code>.`
-      : `ギリシア語＝Plato, <i>Republic</i> 588b–589b（OCT/Burnet, public domain）。ギリシア語の和訳・英訳は本プロジェクト。いずれも一次整列・要校訂（現在 ${grcCount()}/${SEGS_III.length} セグメント）。ギリシア語本文は <code>republic_greek.xml</code> に分離し、<code>@corresp</code> でコプト語に対応づけています。`}</p>`;
+  if(curWit==="SYN"){ renderSyn(box); relabelLoan(); return; }
+  box.className="col";
+  const segs = curWit==="III" ? SEGS_III : SEGS_V;
+  if(curWit==="V"){
+    const wv=Array.from(T(DOC_MAIN,"text")).find(x=>getId(x)==="wit-V");
+    const editorial = (wv?(T(wv,"note")[0]||{}).textContent:"")||"";
+    box.innerHTML = `<div class="notice" style="border-left-color:var(--rose)">⬥ <b>写本 V,1 は並行証本の枠組みです。</b> ${escapeHTML(editorial)}</div>`+
+      segs.map(segHTML).join("");
+  } else {
+    box.innerHTML = segs.map(segHTML).join("");
+  }
   wireWords(); applyTheme(); relabelLoan();
 }
 function renderSyn(box){
@@ -816,18 +696,19 @@ function renderSyn(box){
 /* ---------- word interaction / popover ---------- */
 let curSeg=null;
 function wireWords(){
-  $$(".pcop .marker button").forEach(b=>b.onclick=()=>{ openTheme(b.dataset.theme); });
+  $$(".seg .marker button").forEach(b=>b.onclick=()=>{ openTheme(b.dataset.theme); });
   $$(".wseg").forEach(el=>{
     el.addEventListener("click",ev=>{ ev.stopPropagation(); showPop(el); });
     el.addEventListener("keydown",ev=>{ if(ev.key==="Enter"||ev.key===" "){ev.preventDefault(); showPop(el);} });
   });
 }
 function openTheme(t){
+  $("#atIntro").click();
   if(curTheme!==t) toggleTheme(t);
 }
 function showPop(el){
-  const seg=el.closest(".prow"); if(!seg) return; const segId=seg.dataset.id;
-  const segData=SEGS_III.find(s=>s.id===segId);
+  const seg=el.closest(".seg"); const segId=seg.dataset.id;
+  const segData=(curWit==="V"?SEGS_V:SEGS_III).find(s=>s.id===segId);
   if(!segData) return;
   const w=segData.words[+el.dataset.i]; if(!w) return;
   const pos=POS[w.pos]||POS.X;
@@ -842,12 +723,11 @@ function showPop(el){
       if(sn.fr) g.push(`<span>${escapeHTML(sn.fr)}</span>`);
       const u=(sn.uja||sn.uen)?`<span class="usg">${escapeHTML(sn.uja||sn.uen)}</span>`:"";
       const isDef=sn.id&&sn.id===w.defId;
-      const rl=sn.ref?` <a href="${escapeHTML(sn.ref)}" target="_blank" rel="noopener" style="color:var(--gold-bright);font-size:.72rem">${UL()==="en"?"Dictionary →":"辞書 →"}</a>`:"";
       return `<div class="sense${isDef?' def':''}">
         <div class="srow"><span class="snum">${i+1}</span>
-          <span class="pos${w.grc?' grc':''}">${posLabel(p)}</span>${u}
+          <span class="pos${w.grc?' grc':''}">${p[0]}</span>${u}
           ${isDef?'<span class="defmark">'+defLbl()+'</span>':''}</div>
-        <div class="sglos">${g.join('<span class="sep">・</span>')}${rl}</div></div>`;
+        <div class="sglos">${g.join('<span class="sep">・</span>')}</div></div>`;
     }).join("");
     inner=`<div class="form">${escapeHTML(w.form)}</div>
       ${w.lemma&&w.lemma!==w.form?`<div class="lemma">${lemmaLbl()} ${escapeHTML(w.lemma)}</div>`:""}
@@ -858,10 +738,9 @@ function showPop(el){
     if(w.gloss) dl+=`<dt>EN</dt><dd>${escapeHTML(w.gloss)}</dd>`;
     if(w.glossJa) dl+=`<dt>JA</dt><dd class="ja">${escapeHTML(w.glossJa)}</dd>`;
     if(w.glossFr) dl+=`<dt>FR</dt><dd>${escapeHTML(w.glossFr)}</dd>`;
-    if(w.ref) dl+=`<dt>${UL()==="en"?"Dict.":"辞書"}</dt><dd><a href="${escapeHTML(w.ref)}" target="_blank" rel="noopener" style="color:var(--gold-bright)">Coptic Dictionary →</a></dd>`;
     inner=`<div class="form">${escapeHTML(w.form)}</div>
       ${w.lemma&&w.lemma!==w.form?`<div class="lemma">${lemmaLbl()} ${escapeHTML(w.lemma)}</div>`:""}
-      <span class="pos${w.grc?' grc':''}">${posLabel(pos)}</span>
+      <span class="pos${w.grc?' grc':''}">${pos[0]} · ${pos[1]}</span>
       ${dl?`<dl>${dl}</dl>`:`<div class="none">${noneLbl()}</div>`}
       ${w.grc?`<div class="grcnote">⬥ ${loanLbl()}</div>`:""}`;
   }
@@ -893,9 +772,9 @@ function flashSeg(id){
 let qt=null;
 $("#q").addEventListener("input",e=>{ clearTimeout(qt); qt=setTimeout(()=>doSearch(e.target.value.trim()),160); });
 function doSearch(q){
-  const res=$("#results");
-  if(!q){ res.innerHTML=`<p class="empty">${UL()==="en"?"Type a query in the search box above.":"上の検索窓に入力してください。"}</p>`; closeSearch(); return; }
-  openSearch();
+  const pane=$("#paneSearch"), res=$("#results");
+  if(!q){ res.innerHTML=`<p class="empty">${UL()==="en"?"Type a query in the search box above.":"上の検索窓に入力してください。"}</p>`; return; }
+  selAside("search");
   const ql=q.toLowerCase();
   const hits=[];
   SEGS_III.forEach(s=>{
@@ -922,15 +801,23 @@ function doSearch(q){
   $$("#results .result").forEach(b=>b.onclick=()=>flashSeg(b.dataset.id));
 }
 
-/* ---------- search drawer ---------- */
-function openSearch(){ H.setAttribute("data-search","open"); }
-function closeSearch(){ H.removeAttribute("data-search"); }
-$("#searchClose").onclick=closeSearch;
-{ const rc=$("#railClose"); if(rc) rc.onclick=()=>{ H.setAttribute("data-rail","closed"); const rb=$("#railBtn"); if(rb) rb.setAttribute("aria-pressed","false"); }; }
-document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeSearch(); });
+/* ---------- aside tabs ---------- */
+function selAside(p){
+  $("#atIntro").setAttribute("aria-selected", p==="intro"?"true":"false");
+  $("#atSearch").setAttribute("aria-selected", p==="search"?"true":"false");
+  $("#paneIntro").hidden = p!=="intro";
+  $("#paneSearch").hidden = p!=="search";
+}
+$("#atIntro").onclick=()=>selAside("intro");
+$("#atSearch").onclick=()=>selAside("search");
 
-/* ---------- (single witness — no witness tabs) ---------- */
-function setWit(w){ curWit=w; render(); }
+/* ---------- witness tabs ---------- */
+function setWit(w){
+  curWit=w;
+  $$(".tab").forEach(t=>t.setAttribute("aria-selected", t.dataset.wit===w?"true":"false"));
+  render();
+}
+$$(".tab").forEach(t=>t.onclick=()=>setWit(t.dataset.wit));
 
 /* ---------- toggles ---------- */
 function toggle(btn,attr,onVal,offVal,onLabel,offLabel){
@@ -943,12 +830,14 @@ $("#ilBtn").onclick=()=>toggle($("#ilBtn"),"data-il","on","off");
 $("#loanBtn").onclick=()=>toggle($("#loanBtn"),"data-loan","on","off");
 $("#pageBtn").onclick=()=>toggle($("#pageBtn"),"data-page","on","off");
 $("#lineBtn").onclick=()=>toggle($("#lineBtn"),"data-line","on","off");
-function loanCount(){ return SEGS_III.reduce((a,s)=>a+s.words.filter(w=>w.grc).length,0); }
+function loanCount(){ const segs = curWit==="V"?SEGS_V:SEGS_III; return segs.reduce((a,s)=>a+s.words.filter(w=>w.grc).length,0); }
 function relabelLoan(){ const e=$("#loanN"); if(e){ const n=loanCount(); e.textContent=n?(" "+n):""; } }
 
 /* ---------- statistics (counts of @type, @lemma, loanwords, pages/lines/gaps) ---------- */
+function statsWit(){ return curWit==="V" ? {id:"wit-V", label:"NHC V,1"} : {id:"wit-III", label:"NHC III,3"}; }
 function computeStats(){
-  const t=Array.from(T(DOC_MAIN,"text")).find(x=>getId(x)==="wit-rep") || DOC_MAIN;
+  const w0=statsWit();
+  const t=Array.from(T(DOC_MAIN,"text")).find(x=>getId(x)===w0.id) || DOC_MAIN;
   const ws=T(t,"w");
   const typeCount={}, lemmaCount={}; let grcTokens=0; const grcLemma={};
   ws.forEach(w=>{
@@ -958,17 +847,15 @@ function computeStats(){
   });
   const gaps=T(t,"gap"); const gapByReason={};
   gaps.forEach(g=>{ const r=(g.getAttribute("reason")||"∅"); gapByReason[r]=(gapByReason[r]||0)+1; });
-  return { tokens:ws.length,
-    typeCount, lemmaCount,
-    distinctTypes:Object.keys(typeCount).length,
-    distinctLemmas:Object.keys(lemmaCount).length,
+  return { wit:w0, tokens:ws.length, typeCount, lemmaCount,
+    distinctTypes:Object.keys(typeCount).length, distinctLemmas:Object.keys(lemmaCount).length,
     grcTokens, grcLemmaCount:Object.keys(grcLemma).length, grcLemma,
     pages:T(t,"pd").concat(T(t,"p").filter(e=>e.hasAttribute("n"))).map(e=>e.getAttribute("n")),
     lines:T(t,"lb").length, gaps:gaps.length, gapByReason };
 }
 function renderStats(){
-  const st=computeStats();
-  const enUI=UL()==="en";
+  const st=computeStats(); const enUI=UL()==="en";
+  $("#statsWit").textContent=st.wit.label;
   const card=(v,sub,k,cls="")=>`<div class="statcard ${cls}"><div class="v">${v}${sub?` <small>${sub}</small>`:""}</div><div class="k">${k}</div></div>`;
   const cards=
     card(st.tokens,"",enUI?"tokens (&lt;w&gt;)":"総語数（&lt;w&gt;）")+
@@ -978,39 +865,28 @@ function renderStats(){
     card(st.pages.length,"",enUI?"codex pages":"写本ページ")+
     card(st.lines,"",enUI?"manuscript lines":"写本行")+
     card(st.gaps,"",enUI?"gaps":"欠損・不明 箇所");
-  // POS distribution
-  const types=Object.entries(st.typeCount).sort((a,b)=>b[1]-a[1]);
-  const maxT=types.length?types[0][1]:1;
-  const posBars=types.map(([ty,ct])=>{
-    const lab=(POS[ty]||[ty,""]); const nm=enUI?(lab[1]||ty):(lab[0]||ty);
+  const types=Object.entries(st.typeCount).sort((a,b)=>b[1]-a[1]); const maxT=types.length?types[0][1]:1;
+  const posBars=types.map(([ty,ct])=>{ const lab=(POS[ty]||[ty,""]); const nm=enUI?(lab[1]||ty):(lab[0]||ty);
     return `<div class="bar"><div class="lab">${escapeHTML(nm)} <code>${escapeHTML(ty)}</code></div>`+
-      `<div class="track"><div class="fill" style="width:${(ct/maxT*100).toFixed(1)}%"></div></div>`+
-      `<div class="ct">${ct}</div></div>`;
+      `<div class="track"><div class="fill" style="width:${(ct/maxT*100).toFixed(1)}%"></div></div><div class="ct">${ct}</div></div>`;
   }).join("");
-  // top lemmas
   const lemmas=Object.entries(st.lemmaCount).filter(([l])=>l!=="∅").sort((a,b)=>b[1]-a[1]).slice(0,24);
   const maxL=lemmas.length?lemmas[0][1]:1;
-  const lemBars=lemmas.map(([le,ct])=>{
-    const isG=!!st.grcLemma[le];
+  const lemBars=lemmas.map(([le,ct])=>{ const isG=!!st.grcLemma[le];
     return `<div class="bar${isG?' grc':''}"><div class="lab"><span style="font-family:var(--copt)">${escapeHTML(le)}</span></div>`+
-      `<div class="track"><div class="fill" style="width:${(ct/maxL*100).toFixed(1)}%"></div></div>`+
-      `<div class="ct">${ct}</div></div>`;
+      `<div class="track"><div class="fill" style="width:${(ct/maxL*100).toFixed(1)}%"></div></div><div class="ct">${ct}</div></div>`;
   }).join("");
-  // loanword lemmas
   const gl=Object.entries(st.grcLemma).sort((a,b)=>b[1]-a[1]);
   const glChips=gl.map(([le,ct])=>`<span class="lx">${escapeHTML(le)}<b>${ct}</b></span>`).join("");
-  // gap breakdown
-  const gapRows=Object.entries(st.gapByReason).sort((a,b)=>b[1]-a[1])
-    .map(([r,ct])=>`${escapeHTML(r)}: ${ct}`).join(" / ");
-
+  const gapRows=Object.entries(st.gapByReason).sort((a,b)=>b[1]-a[1]).map(([r,ct])=>`${escapeHTML(r)}: ${ct}`).join(" / ");
   $("#statsBody").innerHTML=
     `<div class="statgrid">${cards}</div>`+
     `<div class="stat-sec"><h3>${enUI?"Part of speech":"品詞 (@type) 分布"} <small>by @type</small></h3><div class="bars">${posBars}</div></div>`+
     `<div class="stat-sec"><h3>${enUI?"Greek loanwords":"ギリシア語借用語"} <small>xml:lang="grc" · ${st.grcTokens} / ${st.grcLemmaCount}</small></h3><div class="chiplist">${glChips||'<span class="lab">—</span>'}</div></div>`+
     `<div class="stat-sec"><h3>${enUI?"Most frequent lemmas":"頻出レンマ"} <small>top ${lemmas.length} of ${st.distinctLemmas}</small></h3><div class="bars">${lemBars}</div></div>`+
     `<p class="stat-note">${enUI
-      ? `Counts are taken directly from the source <code>republic_tei.xml</code>: every <code>&lt;w&gt;</code> token, its <code>@type</code> and <code>@lemma</code>, and tokens carrying <code>xml:lang="grc"</code>. Gaps — ${gapRows||"none"} — and ${st.pages.length} page / ${st.lines} line markers are also tallied.`
-      : `数値は本文 <code>republic_tei.xml</code> から直接集計しています（各 <code>&lt;w&gt;</code> トークン、その <code>@type</code>・<code>@lemma</code>、<code>xml:lang="grc"</code> を持つトークン）。欠損・不明の内訳は ${gapRows||"なし"}、ページ ${st.pages.length}・行 ${st.lines} のマーカーも計上。`}</p>`;
+      ? `Counts are taken directly from <code>${st.wit.id}</code> in the source: every <code>&lt;w&gt;</code> token, its <code>@type</code> and <code>@lemma</code>, and tokens carrying <code>xml:lang="grc"</code>. Gaps — ${gapRows||"none"} — and ${st.pages.length} page / ${st.lines} line markers are also tallied. Switch witness (III / V) to recount.`
+      : `数値は本文 <code>${st.wit.id}</code> から直接集計（各 <code>&lt;w&gt;</code> トークン、その <code>@type</code>・<code>@lemma</code>、<code>xml:lang="grc"</code> を持つトークン）。欠損・不明の内訳は ${gapRows||"なし"}、ページ ${st.pages.length}・行 ${st.lines} のマーカーも計上。写本タブ（III / V）を切り替えると再集計します。`}</p>`;
 }
 function openStats(){ renderStats(); H.setAttribute("data-stats","open"); }
 function closeStats(){ H.removeAttribute("data-stats"); }
@@ -1021,7 +897,6 @@ document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeStats(); });
 const LANG_CYCLE=["ja","en","fr"];
 /* ---- UI i18n helpers ---- */
 function UL(){ return H.getAttribute("data-lang")==="en"?"en":"ja"; }
-function posLabel(p){ return UL()==="en"?(p[1]||p[0]||""):(p[0]||p[1]||""); }
 function lemmaLbl(){ return UL()==="en"?"lemma":"レンマ"; }
 function defLbl(){ return UL()==="en"?"default":"既定"; }
 function homoLbl(n){ return UL()==="en"?("homograph — "+n+" senses"):("同形異義 — "+n+" 語義"); }
@@ -1067,66 +942,16 @@ function applyUILang(){
     H.setAttribute("data-tl",  en?"ja":"en");
     applyUILang();
     if(typeof render==="function") render();
-    if(typeof buildRail==="function"){ buildRail(); buildNotes();
-      $$("#frameThemes .tchip").forEach(b=>b.setAttribute("aria-pressed", b.dataset.theme===curTheme?"true":"false"));
-    }
   }; }
 applyUILang();
 
 /* ---------- credit ---------- */
 function buildCredit(){
   $("#credit").innerHTML=`
-   <p><span class="l-ja"><b>本コーパスについて。</b> エウグノストスと同一のビュワー・エンジンで表示しています。データは4ファイルに分離 — <b>本文</b> <code>republic_tei.xml</code>（NHC VI,5 単一証本）、<b>コプト語辞書</b> <code>lexicon.xml</code>（lemma+品詞→語義・辞書リンク）、<b>ギリシア語</b> <code>republic_greek.xml</code>（各 <code>&lt;s&gt;</code> の <code>@corresp</code> でコプト語 <code>&lt;s xml:id&gt;</code> に対応）、<b>注解</b> <code>republic_commentary.xml</code>（先行研究に基づく釈義。各 <code>&lt;note&gt;</code> の <code>@target</code> で本文 <code>&lt;s&gt;</code> に、<code>@ana</code> で主題分類にリンク）。各 <code>&lt;w&gt;</code> は @lemma+@type で辞書を参照し、<b>ギリシア語からの借用語</b>は <code>xml:lang="grc"</code> を持つ語のみを〈借用語〉ボタンでマーキングします。</span><span class="l-en"><b>About this corpus.</b> Rendered with the same viewer engine as Eugnostos. The data is split across four files — <b>text</b> <code>republic_tei.xml</code> (NHC VI,5, single witness); <b>Coptic dictionary</b> <code>lexicon.xml</code> (lemma + POS → sense and dictionary links); <b>Greek</b> <code>republic_greek.xml</code> (each <code>&lt;s&gt;</code> linked to the Coptic <code>&lt;s xml:id&gt;</code> by <code>@corresp</code>); and <b>commentary</b> <code>republic_commentary.xml</code> (exegesis grounded in prior scholarship; each <code>&lt;note&gt;</code> links to a text <code>&lt;s&gt;</code> via <code>@target</code> and to a thematic category via <code>@ana</code>). Each <code>&lt;w&gt;</code> looks up the dictionary by @lemma + @type, and only words bearing <code>xml:lang="grc"</code> are flagged by the “Loanwords” button as Greek loanwords.</span></p>
-   <p><span class="l-ja">コプト語本文（NHC VI,5）はパブリックドメイン。<b>日本語訳</b>は本プロジェクト。<b>英語</b>は J. Brashler, <i>The Nag Hammadi Library in English</i>（HarperCollins 1990, 著作権あり・作業用参照）。<b>ギリシア語</b>は Plato, <i>Republic</i>（OCT/Burnet, パブリックドメイン）で一次整列・要校訂。ギリシア語の和訳・英訳は本プロジェクト。<b>注解</b>は本プロジェクトが Matsagouras 1976・Ashwin-Siejkowski 2020・Orlandi 1977・Lanzillotta 2014・Jackson 1985・Brashler 1979 を参照して独自に記述（CC BY 4.0）。これらの訳・論考を転記したものではありません。</span><span class="l-en">The Coptic text (NHC VI,5) is in the public domain. The <b>Japanese translation</b> is this project’s own. The <b>English</b> is J. Brashler, <i>The Nag Hammadi Library in English</i> (HarperCollins 1990; under copyright, working reference). The <b>Greek</b> is Plato, <i>Republic</i> (OCT/Burnet, public domain), a first-pass alignment to be verified; the Japanese and English of the Greek are this project’s own. The <b>commentary</b> is written independently by this project, drawing on Matsagouras 1976, Ashwin-Siejkowski 2020, Orlandi 1977, Lanzillotta 2014, Jackson 1985 and Brashler 1979 (CC BY 4.0); it does not reproduce those translations or studies.</span></p>`;
+   <p><b>本コーパスについて。</b> データは3ファイルに分離しています — <b>本文</b> <code>eugnostos_tei.xml</code>(二証本)、<b>コプト語辞書</b> <code>eugnostos_lexicon.xml</code>(レンマ→品詞・<b>日英仏</b>語義)、<b>注釈</b> <code>eugnostos_theology.xml</code>(神学的解釈)。本文の各 <code>&lt;w&gt;</code> は @lemma で辞書を参照し、注釈は @target で本文 <code>&lt;s&gt;</code> へリンクします。</p>
+   <p>本文(コプト語)はパブリックドメイン。<b>日・英・仏の対訳と注釈、辞書は本プロジェクトによる原文オリジナルの初版シード</b>(CC&nbsp;BY&nbsp;4.0)で、<b>Pasquier(BCNH)・Parrott(NHS 27)・小林稔訳・Painchaud(JBL 1995)</b>等を参照して作成していますが、これらの翻訳を転記したものではありません。権威あるフランス語訳は Pasquier の校訂を参照してください。語義はレンマ単位(文脈非依存)で全トークンの約87%を、フランス語語義は中核語彙をカバー。写本 <b>III,3</b> は全文符号化、<b>V,1</b> は @corresp で対応づけた並行証本の枠です。</p>`;
 }
 
-/* ---------- manual file load (text / lexicon / Greek; multiple) ---------- */
-function setStatus(msg,isErr){ const n=$("#loadwarn"); if(!n||!msg) return;
-  n.hidden=false; n.innerHTML=`<span style="color:${isErr?'var(--rose)':'var(--gold)'}">${escapeHTML(msg)}</span>`; }
-function classifyAndStore(xml){
-  // returns a label of what was loaded, or throws
-  if(xml.querySelector("parsererror")) throw new Error("整形式XMLではありません");
-  const has=tag=>xml.getElementsByTagNameNS(TEI_NS,tag).length>0;
-  const commentary=Array.from(xml.getElementsByTagNameNS(TEI_NS,"note")).some(nd=>nd.getAttribute("type")==="commentary")||has("standOff");
-  const greek=Array.from(xml.getElementsByTagNameNS(TEI_NS,"div")).some(d=>d.getAttribute("type")==="greek-parallel")||has("grc");
-  const witness=Array.from(xml.getElementsByTagNameNS(TEI_NS,"text")).some(t=>t.getAttribute("type")==="witness")||has("group");
-  const entries=xml.getElementsByTagNameNS(TEI_NS,"entry").length;
-  if(commentary){ DOC_THEO=xml; return "注解(republic_commentary.xml)"; }
-  if(greek){ DOC_GREEK=xml; return "ギリシア語(republic_greek.xml)"; }
-  if(witness){ DOC_MAIN=xml; return "本文(republic_tei.xml)"; }
-  if(entries>0){ DOC_LEX=xml; return "コプト語辞書(lexicon.xml)"; }
-  throw new Error("種類を判別できません(本文/辞書/ギリシア語/注解のいずれでもない)");
-}
-function refreshAfterLoad(){
-  $("#loadwarn").hidden=true; curTheme=null; $("#q").value=""; closeSearch();
-  doSearch(""); parse(); render(); buildRail(); buildNotes(); buildCredit();
-}
-function readFiles(files){
-  const list=Array.from(files||[]); if(!list.length) return;
-  let i=0, loaded=[];
-  const next=()=>{
-    if(i>=list.length){ refreshAfterLoad(); setStatus("読み込み完了: "+loaded.join(" / ")); return; }
-    const f=list[i++];
-    setStatus("読み込み中… "+f.name);
-    const ok=tx=>{ try{ const xml=new DOMParser().parseFromString(tx,"application/xml");
-        loaded.push(classifyAndStore(xml)); }catch(err){ setStatus(f.name+": "+err.message,true); } next(); };
-    const fail=()=>{ setStatus(f.name+" を読めませんでした",true); next(); };
-    if(f.text){ f.text().then(ok).catch(()=>{ const r=new FileReader(); r.onload=()=>ok(String(r.result)); r.onerror=fail; r.readAsText(f,"utf-8"); }); }
-    else { const r=new FileReader(); r.onload=()=>ok(String(r.result)); r.onerror=fail; r.readAsText(f,"utf-8"); }
-  };
-  next();
-}
-const fileInput=$("#file");
-fileInput.addEventListener("change",e=>{ readFiles(e.target.files); e.target.value=""; });
-function openPicker(){ try{ fileInput.click(); }catch(e){ setStatus("この環境ではファイル選択が無効です。ドロップするか、Webサーバ経由で開いてください。",true); } }
-$("#pickTop").addEventListener("click",openPicker);
-/* drag & drop anywhere (multiple) */
-let dragDepth=0;
-window.addEventListener("dragenter",e=>{ e.preventDefault(); dragDepth++; H.setAttribute("data-drag","on"); });
-window.addEventListener("dragover",e=>{ e.preventDefault(); });
-window.addEventListener("dragleave",e=>{ e.preventDefault(); if(--dragDepth<=0){ dragDepth=0; H.removeAttribute("data-drag"); } });
-window.addEventListener("drop",e=>{ e.preventDefault(); dragDepth=0; H.removeAttribute("data-drag");
-  if(e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files.length) readFiles(e.dataTransfer.files); });
 
 load();
 </script>

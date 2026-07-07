@@ -1,0 +1,12 @@
+{
+  "label": "Eugnostos the Blessed (NHC III,3 / V,1)",
+  "note": "写本ファクシミリのIIIF設定。pages[].source に各ページの IIIF Image API info.json のURLを記入すると、ビュワーのファクシミリパネルに表示されます。sourceが未記入の間はデモ画像が表示されます。",
+  "attribution": "",
+  "pages": [
+    { "page": "III 70", "source": "" },
+    { "page": "III 71", "source": "" },
+    { "page": "III 72", "source": "" },
+    { "page": "III 73", "source": "" }
+  ],
+  "demoTileSource": "https://openseadragon.github.io/example-images/duomo/duomo.dzi"
+}

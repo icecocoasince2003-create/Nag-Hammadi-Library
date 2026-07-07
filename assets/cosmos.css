@@ -1,0 +1,137 @@
+/* ============================================================
+   cosmos.css — グノーシス的宇宙テーマ（共通レイヤー）
+   各ページの<style>の後に読み込み、既存のCSS変数を上書きします。
+   パレット: 虚空(void)・星雲(nebula)・プレーローマの金・バルベーローの紫
+   ============================================================ */
+
+/* ---- パレット定義（両方の変数体系を全モードで上書き） ---- */
+html, html[data-mode="light"], html[data-mode="dark"], html[data-mode="aeon"] {
+  /* ビュワー系 (republic.html / eugnostos.html) */
+  --paper: rgba(13, 11, 30, .82);
+  --paper-2: rgba(23, 20, 46, .92);
+  --raise: #1d1938;
+  --ink: #ede8dc;
+  --ink-soft: #bdb7d2;
+  --ink-faint: #8a85a6;
+  --chrome: rgba(8, 7, 20, .92);
+  --chrome-ink: #ede8dc;
+  --chrome-faint: #8a85a6;
+  --gold: #d4af6a;
+  --gold-bright: #e7c885;
+  --gold-soft: #d4af6a;
+  --lapis: #9d8be0;
+  --rose: #cf93a6;
+  --line: rgba(190, 180, 230, .16);
+  --line-2: rgba(190, 180, 230, .22);
+  --hi: rgba(212, 175, 106, .14);
+  --sel: rgba(157, 139, 224, .18);
+  --shadow: 0 1px 2px rgba(0,0,0,.5), 0 14px 40px rgba(2,1,10,.6);
+
+  /* index / tractate 系 (build_site.py 生成ページ) */
+  --bg: transparent;
+  --panel: rgba(23, 20, 46, .78);
+  --panel-2: rgba(33, 28, 64, .85);
+
+  /* 書体: 見出しはエピグラフィックな Cinzel */
+  --disp: 'Cinzel', 'Spectral', Georgia, serif;
+}
+
+html { background: #0a0918; }
+body {
+  background: transparent !important;
+  background-image: none !important;
+}
+
+/* ページ本体を星野キャンバスの手前に置く */
+body > .app, body > .wrap, body > header, body > main, body > footer, body > .shell {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---- 星野キャンバス & アイオーンの環 (cosmos.jsが挿入) ---- */
+#cosmos-starfield {
+  position: fixed; inset: 0;
+  width: 100vw; height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+}
+#cosmos-rings {
+  position: fixed;
+  top: -140px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 0;
+  pointer-events: none;
+  opacity: .8;
+}
+#cosmos-rings circle {
+  fill: none;
+  stroke: #d4af6a;
+  vector-effect: non-scaling-stroke;
+}
+@media (prefers-reduced-motion: no-preference) {
+  #cosmos-rings .ring-a { animation: cosmosRing 240s linear infinite; transform-origin: center; }
+  #cosmos-rings .ring-b { animation: cosmosRing 360s linear infinite reverse; transform-origin: center; }
+}
+@keyframes cosmosRing { to { transform: rotate(360deg); } }
+
+/* ---- 共通の微調整 ---- */
+/* 表示モード切替は宇宙テーマ固定のため非表示 */
+#modeBtn { display: none !important; }
+
+/* ビュワー: ページ内検索は search.html に移設したため隠す */
+header .search { display: none !important; }
+#searchAside { display: none !important; }
+#atSearch { display: none !important; }
+
+/* ヘッダーのガラス化 */
+body > .app > header, body > header {
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid rgba(212, 175, 106, .22) !important;
+}
+
+/* 検索ページへのリンクチップ */
+.chip.searchlink {
+  border-color: rgba(212, 175, 106, .45) !important;
+  color: var(--gold-bright) !important;
+}
+.chip.searchlink:hover { background: rgba(212, 175, 106, .14) !important; }
+
+/* ---- IIIF ファクシミリパネル (ビュワーに挿入) ---- */
+.facsimile {
+  max-width: 1180px;
+  margin: 0 auto 22px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper-2);
+  overflow: hidden;
+}
+.facsimile .fx-head {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 16px;
+}
+.facsimile .fx-title {
+  font-family: var(--disp);
+  font-size: .8rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.facsimile .fx-sub { font-size: .74rem; color: var(--ink-faint); flex: 1; }
+.facsimile .fx-head .chip {
+  appearance: none; cursor: pointer;
+  font-size: .76rem; color: var(--ink);
+  background: rgba(255,255,255,.06);
+  border: 1px solid var(--line-2);
+  padding: 6px 14px; border-radius: 999px;
+}
+.facsimile .fx-head .chip:hover { border-color: var(--gold); color: var(--gold-bright); }
+.facsimile #osdView {
+  width: 100%; height: 460px;
+  background: #060512;
+  border-top: 1px solid var(--line);
+}
+.facsimile .fx-note {
+  margin: 0; padding: 8px 16px 10px;
+  font-size: .72rem; color: var(--ink-faint);
+}
+.facsimile .fx-note a { color: var(--lapis); }

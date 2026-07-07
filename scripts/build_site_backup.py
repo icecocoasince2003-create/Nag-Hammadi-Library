@@ -132,13 +132,9 @@ TODAY = datetime.date.today().isoformat()
 FONTS = ('<link rel="icon" type="image/svg+xml" href="image/icon.svg">'
  '<link rel="preconnect" href="https://fonts.googleapis.com">'
  '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
- '<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&'
- 'family=Spectral:ital,wght@0,400;0,500;0,600;1,400&'
+ '<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400&'
  'family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&'
- 'family=Noto+Serif+JP:wght@500;600&family=Noto+Sans+Coptic&display=swap" rel="stylesheet">'
- # 宇宙テーマ(cosmos): 星野・アイオーンの環・パレット上書き
- '<link rel="stylesheet" href="assets/cosmos.css">'
- '<script defer src="assets/cosmos.js"></script>')
+ 'family=Noto+Serif+JP:wght@500;600&family=Noto+Sans+Coptic&display=swap" rel="stylesheet">')
 
 THEME = """
 :root{
@@ -216,12 +212,7 @@ def codex_block(roman, no, tracts):
 def build_index():
     blocks = "\n".join(codex_block(r,n,t) for r,n,t in CODICES)
     css = THEME + """
-.hero{padding:clamp(34px,7vw,72px) 0 22px; display:grid;
- grid-template-columns:minmax(0,1fr) auto; gap:26px; align-items:center}
-.hero-fig{width:clamp(150px,20vw,230px); aspect-ratio:1; border-radius:50%;
- object-fit:cover; object-position:center 24%; border:1px solid rgba(212,175,106,.45);
- box-shadow:0 0 60px rgba(157,139,224,.25)}
-@media(max-width:680px){ .hero{grid-template-columns:1fr} .hero-fig{display:none} }
+.hero{padding:clamp(34px,7vw,72px) 0 22px}
 .eyebrow{font-family:var(--ui); font-size:.74rem; letter-spacing:.22em; text-transform:uppercase;
  color:var(--gold)}
 .hero h1{font-family:var(--disp); font-weight:600; line-height:1.08; margin:.32em 0 .1em;
@@ -229,20 +220,15 @@ def build_index():
 .hero h1 .cop{display:block; font-size:.5em; color:var(--gold-soft); letter-spacing:.04em; margin-bottom:.18em}
 .hero .lead{max-width:62ch; color:var(--ink-soft); font-size:1.02rem}
 .hero .lead b{color:var(--ink)}
-.features{display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:14px; margin-top:22px; grid-column:1/-1}
-.feat{display:grid; grid-template-columns:92px minmax(0,1fr); gap:16px; align-items:center;
- background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:14px 18px}
-.feat img{width:92px; aspect-ratio:1; border-radius:50%; object-fit:cover; object-position:center 22%;
- border:1px solid rgba(212,175,106,.45)}
-.feat .k{font-size:.68rem; letter-spacing:.16em; text-transform:uppercase; color:var(--gold)}
-.feat .ttl{font-family:var(--disp); font-size:1.06rem; margin:2px 0 3px}
-.feat .ttl .cop{color:var(--gold-soft); margin-right:.35em}
-.feat .loc{font-size:.74rem; color:var(--ink-faint)}
-.feat .acts{display:flex; gap:8px; margin-top:9px; flex-wrap:wrap}
-.feat .acts a{font-size:.78rem; text-decoration:none; border-radius:999px; padding:7px 14px;
- border:1px solid var(--line-2); color:var(--ink)}
-.feat .acts a.go{background:var(--lapis); border-color:transparent; color:#141024; font-weight:600}
-.feat .acts a:hover{filter:brightness(1.12)}
+.callout{display:flex; flex-wrap:wrap; align-items:center; gap:14px; margin-top:22px;
+ background:var(--panel); border:1px solid var(--line); border-left:3px solid var(--gold);
+ border-radius:14px; padding:16px 18px}
+.callout .k{font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--gold)}
+.callout .ttl{font-family:var(--disp); font-size:1.12rem}
+.callout .ttl .cop{color:var(--gold-soft); margin-right:.35em}
+.callout a.go{margin-left:auto; background:var(--lapis); color:#fff; border:0; border-radius:999px;
+ padding:10px 18px; font-size:.86rem; text-decoration:none; display:inline-flex; gap:8px; align-items:center}
+.callout a.go:hover{filter:brightness(1.08)}
 .rule{height:1px; background:linear-gradient(90deg,transparent,var(--line),transparent); margin:30px 0 8px}
 .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:20px; padding-bottom:60px}
 .codex{background:var(--panel); border:1px solid var(--line); border-radius:16px; overflow:hidden;
@@ -282,42 +268,23 @@ footer b{color:var(--ink-soft)}
   <span class="spacer"></span>
   <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
    <input id="q" type="search" placeholder="文書名で絞り込み（日・英）" autocomplete="off" aria-label="文書名で検索"></div>
-  <a class="chip searchlink" href="search.html">⌕ コーパス検索</a>
   <button class="chip" id="modeBtn" title="表示モード">☀ アイオーン</button>
 </header>
 
 <div class="wrap">
  <section class="hero">
-  <div>
    <div class="eyebrow">Nag Hammadi Codices I–XIII</div>
    <h1><span class="cop">ⲛⲁⲅ ϩⲁⲙⲙⲁⲇⲓ</span>ナグ・ハマディ写本コーパス</h1>
    <p class="lead">ナグ・ハマディ写本(全13冊・約{TOTAL}文書)を、<b>形態素グロス・コプト語辞書・神学注釈・日英仏訳</b>を備えた
    TEI&nbsp;P5 デジタル版として整備するプロジェクトです。各文書は本文(コプト語)・辞書・注釈の3ファイルに分離し、
    共通のビュワーで読めるようにします。</p>
-  </div>
-  <img class="hero-fig" src="image/web/aion.jpg" alt="アイオーン" loading="lazy">
-  <div class="features">
-   <div class="feat">
-     <img src="image/web/chibi_eugnostos.jpg" alt="" loading="lazy">
+   <div class="callout">
      <div>
-       <div class="k">公開中</div>
-       <div class="ttl"><span class="cop">ⲉⲩⲅⲛⲱⲥⲧⲟⲥ</span>祝福されたエウグノストス</div>
-       <div class="loc">NHC III,3 / V,1 · 二証本対照・三言語対訳</div>
-       <div class="acts"><a class="go" href="eugnostos.html">全文表示 →</a>
-        <a href="search.html?doc=eugnostos">コーパス検索</a></div>
+       <div class="k">現在公開中</div>
+       <div class="ttl"><span class="cop">ⲉⲩⲅⲛⲱⲥⲧⲟⲥ</span>祝福されたエウグノストス <span style="color:var(--ink-faint);font-size:.85rem">— NHC III,3 / V,1</span></div>
      </div>
+     <a class="go" href="eugnostos.html">読む <span aria-hidden="true">→</span></a>
    </div>
-   <div class="feat">
-     <img src="image/web/scriber.jpg" alt="" loading="lazy">
-     <div>
-       <div class="k">公開中</div>
-       <div class="ttl"><span class="cop">ⲡⲟⲗⲓⲧⲉⲓⲁ</span>プラトン『国家』588b–589b</div>
-       <div class="loc">NHC VI,5 · ギリシア語原文対照・IIIFファクシミリ</div>
-       <div class="acts"><a class="go" href="republic.html">全文表示 →</a>
-        <a href="search.html?doc=republic">コーパス検索</a></div>
-     </div>
-   </div>
-  </div>
  </section>
 
  <div class="rule"></div>
@@ -356,7 +323,7 @@ mb.onclick=()=>{{ const d=H.getAttribute('data-mode')==='dark';
   H.setAttribute('data-mode', d?'light':'dark'); mb.textContent = d?'☀ アイオーン':'☾ アルコーン'; }};
 </script>
 """
-    return ("<!doctype html><html lang=\"ja\" data-mode=\"aeon\"><head><meta charset=\"utf-8\">"
+    return ("<!doctype html><html lang=\"ja\" data-mode=\"light\"><head><meta charset=\"utf-8\">"
             "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
             "<title>ナグ・ハマディ写本コーパス — Nag Hammadi Library</title>"
             f"{FONTS}<style>{css}</style></head><body>{body}</body></html>")
@@ -432,8 +399,6 @@ if(!t){
    <div class="soon"><span class="dot"></span> このテキストは整備予定です（準備中）</div>
    <div class="rail"><i></i><i></i><i></i><i></i><i></i></div>
    <div class="card">
-     <img src="image/web/chibi_ouroboros.jpg" alt="" loading="lazy"
-       style="float:right; width:110px; aspect-ratio:1; border-radius:50%; object-fit:cover; object-position:center 22%; border:1px solid rgba(212,175,106,.45); margin:0 0 10px 14px">
      <h2>完成時に備わる構成</h2>
      <p>本文書は本コーパスの拡張対象です。完成時には<b>エウグノストスと同一の構成</b>で公開され、
         同じビュワーで形態素クリック・三言語切替・注釈の併読ができるようになります。</p>
@@ -452,7 +417,7 @@ if(!t){
 </script>
 """
     body = body.replace("__CATALOG__", cat)
-    return ("<!doctype html><html lang=\"ja\" data-mode=\"aeon\"><head><meta charset=\"utf-8\">"
+    return ("<!doctype html><html lang=\"ja\" data-mode=\"light\"><head><meta charset=\"utf-8\">"
             "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
             "<title>準備中 — ナグ・ハマディ写本コーパス</title>"
             f"{FONTS}<style>{css}</style></head><body>{body}</body></html>")

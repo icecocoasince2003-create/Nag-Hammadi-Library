@@ -1,6 +1,6 @@
 <!-- エウグノストス三言語ビュワー（単一HTML・手作業で管理）。本文・対訳・辞書のデータは data/ の XML から読み込みます。データの修正は source/ の CSV を編集 → python3 scripts/build_tei.py で反映してください。HTML/CSS/JS 自体を変更する場合は Pull Request でレビューを受けてください。 -->
 <!DOCTYPE html>
-<html lang="ja" data-lang="ja">
+<html lang="ja" data-lang="ja" data-mode="aeon">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -287,6 +287,10 @@ html[data-tl="fr"] .note p.ja{display:none}
 html[data-lang="en"] .l-ja{display:none}
 html[data-lang="en"] .l-en{display:revert}
 </style>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/cosmos.css">
+<script defer src="assets/cosmos.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.1/openseadragon.min.js"></script>
 </head>
 <body>
 <div class="app">
@@ -317,6 +321,7 @@ html[data-lang="en"] .l-en{display:revert}
         <button class="chip" id="langBtn" title="Language / 言語">English</button>
         <button class="chip" id="modeBtn" aria-pressed="false" title="表示モード">◐ アイオーン</button>
       </div>
+      <a class="chip searchlink" href="search.html?doc=eugnostos" title="コーパス検索 / Corpus search">⌕ <span class="l-ja">コーパス検索</span><span class="l-en">Corpus search</span></a>
       <div class="search">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
         <input id="q" type="search" placeholder="コプト語・語釈・訳を検索" autocomplete="off" aria-label="検索">
@@ -338,6 +343,20 @@ html[data-lang="en"] .l-en{display:revert}
       <h1><span class="cop">ⲉⲩⲅⲛⲱⲥⲧⲟⲥ ⲡⲙⲁⲕⲁⲣⲓⲟⲥ</span><br><span class="l-ja">エウグノストス</span><span class="l-en">Eugnostos</span></h1>
       <p class="meta"><span class="l-ja">前1〜2世紀のギリシア語原典に遡るとされる、非キリスト教的な思弁的宇宙生成論。語りえぬ第一原理から、先在の父・自生者・不死の人間・人の子(救済者)・ソフィアと諸アイオーンが流出する次第を、書簡の体裁で説く。各形態素をクリックすると語義が、右側に神学的解釈が表示されます。</span><span class="l-en">A non-Christian speculative cosmogony, held to go back to a Greek original of the 1st–2nd c. BCE. In epistolary form it expounds how, from the ineffable First Principle, there emanate the pre-existent Father, the Self-Begotten, the Immortal Man, the Son of Man (the Saviour), Sophia and the Aeons. Click any morpheme for its sense; the theological interpretation appears on the right.</span></p>
     </div>
+        <section class="facsimile" id="facsimile" aria-label="写本ファクシミリ / Facsimile">
+      <div class="fx-head">
+        <span class="fx-title">Facsimile · IIIF</span>
+        <span class="fx-sub" id="fxStatus">iiif/eugnostos.json</span>
+        <button class="chip" id="fxPrev" hidden>‹</button>
+        <span class="fx-sub" id="fxPage" hidden style="flex:none"></span>
+        <button class="chip" id="fxNext" hidden>›</button>
+        <button class="chip" id="fxToggle" aria-expanded="false"><span class="l-ja">開く</span><span class="l-en">Open</span></button>
+      </div>
+      <div class="fx-body" id="fxBody" hidden>
+        <div id="osdView"></div>
+        <p class="fx-note" id="fxNote"></p>
+      </div>
+    </section>
     <div class="notice" id="loadwarn" hidden></div>
     <div id="reading" class="col"></div>
     <div class="credit" id="credit"></div>
@@ -955,5 +974,73 @@ function buildCredit(){
 
 load();
 </script>
+<script>
+/* ---- IIIFファクシミリパネル（iiif/FX_DOC.json を読み込み、初回展開時に初期化） ---- */
+(function(){
+  var FX_DOC = "eugnostos";
+  var cfg = null, viewer = null, pageIdx = 0;
+  var $ = function(s){ return document.querySelector(s); };
+  var btn = $("#fxToggle"), body = $("#fxBody"), status = $("#fxStatus"), note = $("#fxNote");
+  var prev = $("#fxPrev"), next = $("#fxNext"), pageLbl = $("#fxPage");
+  if(!btn) return;
+
+  function sourceFor(i){
+    var p = cfg.pages && cfg.pages[i];
+    return (p && p.source) ? p.source : null;
+  }
+  function openPage(i){
+    if(!viewer || !cfg) return;
+    pageIdx = i;
+    var src = sourceFor(i) || cfg.demoTileSource;
+    viewer.open(src);
+    var p = cfg.pages && cfg.pages[i];
+    pageLbl.textContent = p ? ("p. " + p.page + "  (" + (i+1) + "/" + cfg.pages.length + ")") : "";
+    var isDemo = !sourceFor(i);
+    note.textContent = isDemo
+      ? "デモ画像を表示中です。実際の写本画像を表示するには iiif/" + FX_DOC + ".json の pages[].source に IIIF info.json のURLを記入してください。"
+      : (cfg.attribution || "");
+  }
+  function init(){
+    if(viewer) return;
+    if(typeof OpenSeadragon === "undefined"){
+      note.textContent = "OpenSeadragon を読み込めませんでした（オフラインの可能性）。";
+      return;
+    }
+    fetch("iiif/" + FX_DOC + ".json", {cache:"no-store"})
+      .then(function(r){ if(!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+      .catch(function(){ return { label:"", pages:[], demoTileSource:"https://openseadragon.github.io/example-images/duomo/duomo.dzi" }; })
+      .then(function(c){
+        cfg = c;
+        viewer = OpenSeadragon({
+          id: "osdView",
+          prefixUrl: "https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.1/images/",
+          showNavigator: true,
+          navigatorPosition: "BOTTOM_RIGHT",
+          crossOriginPolicy: "Anonymous"
+        });
+        viewer.addHandler("open-failed", function(){
+          note.textContent = "画像を読み込めませんでした。iiif/" + FX_DOC + ".json の source を確認してください。";
+        });
+        if(cfg.pages && cfg.pages.length > 1){
+          prev.hidden = next.hidden = pageLbl.hidden = false;
+          prev.onclick = function(){ openPage((pageIdx - 1 + cfg.pages.length) % cfg.pages.length); };
+          next.onclick = function(){ openPage((pageIdx + 1) % cfg.pages.length); };
+        }
+        openPage(0);
+        if(cfg.label) status.textContent = cfg.label;
+      });
+  }
+  btn.onclick = function(){
+    var open = !body.hidden;
+    body.hidden = open;
+    btn.setAttribute("aria-expanded", String(!open));
+    btn.innerHTML = open
+      ? '<span class="l-ja">開く</span><span class="l-en">Open</span>'
+      : '<span class="l-ja">閉じる</span><span class="l-en">Close</span>';
+    if(!open) init();
+  };
+})();
+</script>
+
 </body>
 </html>
