@@ -39,3 +39,19 @@
   未記入の間はデモ画像＋案内文が表示されます。
 - 画像を差し替える場合は `image/` にPNGを置き、Web用は
   幅640px（chibi）／1200px（フル）程度のJPEGを `image/web/` に用意してください。
+
+## サイトアイコンの運用（2026-07-07 更新）
+
+ファビコンは各HTMLの `<head>` に **data URIとして直接埋め込み** です。
+外部ファイル（favicon.ico 等）には依存しません。
+
+- `image/icon.svg` を差し替えたら、リポジトリのルートで
+  `python3 scripts/update_icon.py` を実行（**追加インストール不要**、
+  macOS標準の qlmanage/sips で動作）。手作業管理3ページの埋め込み更新と
+  `apple-touch-icon.png` の再生成、index/tractate の再ビルドまで自動で行います。
+- `scripts/build_site.py` 単体でも、ビルド時に `image/icon.svg` を読んで
+  index/tractate へ自動埋め込みします。
+- 廃止・削除: ルートの `favicon.ico`、`image/favicon-192.png`、
+  旧 `scripts/make_favicons.py`（cairo依存のため update_icon.py に置換）、
+  未使用の `image/web/*.jpg`（使用中の5枚のみ残置。元PNGは `image/` にあるので
+  必要になれば再生成可能）。
