@@ -32,8 +32,16 @@ html, html[data-mode="light"], html[data-mode="dark"], html[data-mode="aeon"] {
   --panel: rgba(23, 20, 46, .78);
   --panel-2: rgba(33, 28, 64, .85);
 
-  /* 書体: 見出しはエピグラフィックな Cinzel */
-  --disp: 'Cinzel', 'Spectral', Georgia, serif;
+  /* 書体: 本文系の --disp は Spectral（Cinzelは大文字専用のため見出し限定で適用） */
+  --disp: 'Spectral', Georgia, serif;
+}
+
+/* 見出しだけエピグラフィックな Cinzel を適用（英語小文字を含む本文には使わない） */
+.doc-head h1, .doc-head .kick,
+.hero h1, .eyebrow, .chead .rn,
+.brand .t, .brand b,
+.facsimile .fx-title, .shell h1 {
+  font-family: 'Cinzel', 'Spectral', Georgia, serif;
 }
 
 html { background: #0a0918; }

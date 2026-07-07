@@ -130,6 +130,9 @@ TODAY = datetime.date.today().isoformat()
 
 # --- shared head / theme ----------------------------------------------------
 FONTS = ('<link rel="icon" type="image/svg+xml" href="image/icon.svg">'
+ '<link rel="alternate icon" type="image/png" sizes="32x32" href="image/favicon-32.png">'
+ '<link rel="icon" type="image/png" sizes="192x192" href="image/favicon-192.png">'
+ '<link rel="apple-touch-icon" href="image/apple-touch-icon.png">'
  '<link rel="preconnect" href="https://fonts.googleapis.com">'
  '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
  '<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&'
