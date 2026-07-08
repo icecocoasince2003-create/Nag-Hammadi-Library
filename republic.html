@@ -39,8 +39,8 @@ body{
   font-family:var(--ui); font-size:16px; line-height:1.55;
   -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
 }
-.app{display:grid; grid-template-columns:var(--railw,336px) minmax(0,1fr); grid-template-rows:auto 1fr;
-  grid-template-areas:"head head" "rail main"; height:100vh;}
+.app{display:grid; grid-template-rows:auto 1fr;
+  grid-template-areas:"head" "main"; height:100vh;}
 /* ---------------- parallel corpus (Coptic | Greek) ---------------- */
 .corpus-head{position:sticky; top:0; z-index:6; display:grid; grid-template-columns:1fr 1fr;
   gap:0 clamp(16px,3vw,40px); max-width:1180px; margin:0 auto 2px; background:var(--paper);
@@ -100,33 +100,8 @@ header{grid-area:head; background:var(--chrome); color:var(--chrome-ink);
 .chip:focus-visible{outline:2px solid var(--lapis); outline-offset:2px}
 a.chip.homelink{text-decoration:none; white-space:nowrap}
 a.chip.homelink:hover{background:rgba(255,255,255,.12)}
-/* ---------------- rail (signature) ---------------- */
-.rail{grid-area:rail; background:var(--chrome); color:var(--chrome-ink); overflow-y:auto;
-  padding:20px 16px 40px; border-right:1px solid #000}
-.rail h2{font-family:var(--ui); font-size:.64rem; letter-spacing:.2em; text-transform:uppercase;
-  color:var(--chrome-faint); margin:0 0 16px; font-weight:600}
-.spine{position:relative; margin:0 0 22px; padding:0}
-.spine::before{content:""; position:absolute; left:13px; top:8px; bottom:8px; width:2px;
-  background:linear-gradient(var(--gold-bright),var(--gold) 30%,rgba(154,114,32,.15)); border-radius:2px}
-.node{position:relative; display:flex; align-items:flex-start; gap:11px; width:100%; text-align:left;
-  appearance:none; background:transparent; border:0; color:var(--chrome-ink); cursor:pointer;
-  padding:7px 8px 7px 0; border-radius:7px; font-family:var(--ui)}
-.node .dot{flex:0 0 auto; width:14px; height:14px; margin-top:3px; border-radius:50%; background:var(--chrome);
-  border:2px solid var(--gold); box-shadow:0 0 0 3px var(--chrome); position:relative; z-index:1; transition:background .2s,box-shadow .2s}
-.node .nm{font-size:.82rem; line-height:1.25}
-.node .nm small{display:block; font-size:.64rem; letter-spacing:.04em; color:var(--chrome-faint); margin-top:1px}
-.node:hover .nm{color:#fff}
-.node:hover .dot{background:var(--gold)}
-.node[aria-pressed="true"] .dot{background:var(--gold-bright); box-shadow:0 0 0 3px var(--chrome),0 0 12px var(--gold-bright)}
-.node[aria-pressed="true"] .nm{color:var(--gold-bright); font-weight:600}
-.node:focus-visible{outline:2px solid var(--lapis); outline-offset:1px}
-.node.rose .dot{border-color:var(--rose)} .node.rose[aria-pressed="true"] .dot{background:var(--rose); box-shadow:0 0 0 3px var(--chrome),0 0 12px var(--rose)}
-.frame-themes{display:flex; flex-wrap:wrap; gap:6px}
-.frame-themes .tchip{font-size:.7rem; padding:5px 9px; border-radius:999px; border:1px solid var(--line-2);
-  background:transparent; color:var(--chrome-ink); cursor:pointer; font-family:var(--ui)}
-.frame-themes .tchip[aria-pressed="true"]{background:var(--lapis); border-color:var(--lapis); color:#fff}
-.frame-themes .tchip:focus-visible{outline:2px solid var(--lapis); outline-offset:2px}
-.rail .clearf{margin-top:14px; font-size:.72rem; color:var(--chrome-faint); background:none; border:0; cursor:pointer; text-decoration:underline; padding:0}
+/* ---------------- theme chips: focus ---------------- */
+.tchip:focus-visible{outline:2px solid var(--lapis); outline-offset:2px}
 /* ---------------- main reading ---------------- */
 main{grid-area:main; overflow-y:auto; padding:34px clamp(18px,4vw,60px) 120px; scroll-behavior:smooth}
 .doc-head{max-width:760px; margin:0 auto 26px}
@@ -305,7 +280,6 @@ html[data-tl="fr"] .note p.ja{display:none}
 .credit b{color:var(--ink-soft)}
 .credit a{color:var(--lapis)}
 /* mobile */
-.railtoggle{display:none}
 @media (max-width:820px){
   /* stack the parallel columns: Coptic above its Greek, per segment */
   .corpus-head{grid-template-columns:1fr}
@@ -329,47 +303,45 @@ html:not([data-drag="on"]) #drop-hint{display:none}
 html[data-lang="en"] .l-ja{display:none}
 html[data-lang="en"] .l-en{display:revert}
 
-/* ================= commentary rail (left) ================= */
-.rail.cmt{grid-area:rail; background:var(--paper-2); color:var(--ink); border-right:1px solid var(--line-2);
-  overflow-y:auto; padding:16px 15px 90px; display:block;}
-.rail.cmt .rail-h{display:flex; align-items:center; justify-content:space-between; gap:8px;
-  position:sticky; top:0; z-index:3; margin:0 0 10px; padding:4px 0 9px; background:var(--paper-2);
-  border-bottom:1px solid var(--line)}
-.rail.cmt h2{font-family:var(--ui); font-size:.64rem; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); margin:0; font-weight:600}
-.railx{appearance:none; border:0; background:transparent; cursor:pointer; color:var(--ink-soft); font-size:1.3rem; line-height:1; padding:0 2px; display:none}
-.railx:hover{color:var(--ink)}
-.rail.cmt .rail-intro{font-size:.71rem; color:var(--ink-faint); line-height:1.55; margin:0 0 12px}
-.rail.cmt .frame-themes{display:flex; flex-wrap:wrap; gap:5px; margin-bottom:4px}
-.rail.cmt .tchip{appearance:none; font-family:var(--ui); font-size:.64rem; letter-spacing:.01em; padding:4px 9px;
+/* ================= endnotes: 釈義・注解（本文末尾） ================= */
+.endnotes{max-width:1180px; margin:64px auto 0; padding-top:22px; border-top:2px solid var(--line-2);
+  scroll-margin-top:70px}
+.endnotes h2{font-family:var(--ui); font-size:.72rem; letter-spacing:.24em; text-transform:uppercase;
+  color:var(--gold); margin:0 0 10px; font-weight:600}
+.endnotes .en-intro{font-size:.78rem; color:var(--ink-faint); line-height:1.6; margin:0 0 14px; max-width:78ch}
+.endnotes .frame-themes{display:flex; flex-wrap:wrap; gap:5px; margin-bottom:4px}
+.endnotes .tchip{appearance:none; font-family:var(--ui); font-size:.68rem; letter-spacing:.01em; padding:5px 11px;
   border-radius:999px; border:1px solid var(--line-2); background:var(--raise); color:var(--ink-soft); cursor:pointer; transition:background .15s,color .15s}
-.rail.cmt .tchip:hover{border-color:var(--gold)}
-.rail.cmt .tchip[aria-pressed="true"]{background:var(--gold); border-color:var(--gold); color:var(--paper); font-weight:600}
-.rail.cmt .clearf{margin:6px 0 12px; font-size:.7rem; color:var(--ink-faint); background:none; border:0; cursor:pointer; text-decoration:underline; padding:0}
-.rail.cmt .notes{display:flex; flex-direction:column; gap:9px}
-.rail.cmt .note{background:var(--raise); border:1px solid var(--line); border-radius:9px; padding:11px 12px}
-.rail.cmt .note.hidden{display:none}
-.rail.cmt .note .themechips{display:flex; flex-wrap:wrap; gap:4px; margin-bottom:6px}
-.rail.cmt .note .themechips span{font-size:.57rem; letter-spacing:.01em; padding:2px 7px; border-radius:999px;
+.endnotes .tchip:hover{border-color:var(--gold)}
+.endnotes .tchip[aria-pressed="true"]{background:var(--gold); border-color:var(--gold); color:var(--paper); font-weight:600}
+.endnotes .clearf{margin:6px 0 14px; font-size:.72rem; color:var(--ink-faint); background:none; border:0; cursor:pointer; text-decoration:underline; padding:0}
+.endnotes .notes{display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:12px; align-items:start}
+.endnotes .note{background:var(--raise); border:1px solid var(--line); border-radius:10px; padding:13px 14px;
+  scroll-margin-top:76px; transition:background .3s, border-color .3s}
+.endnotes .note.hidden{display:none}
+.endnotes .note:target, .endnotes .note.flash{background:var(--hi); border-color:var(--gold)}
+.endnotes .note .nhead{display:flex; align-items:baseline; gap:8px; margin-bottom:6px}
+.endnotes .note .nnum{flex:none; font-family:var(--disp); font-size:.78rem; font-weight:600; color:var(--paper);
+  background:var(--gold); border-radius:999px; min-width:1.7em; height:1.7em; display:inline-flex;
+  align-items:center; justify-content:center; line-height:1}
+.endnotes .note .themechips{display:flex; flex-wrap:wrap; gap:4px}
+.endnotes .note .themechips span{font-size:.6rem; letter-spacing:.01em; padding:2px 7px; border-radius:999px;
   background:var(--paper); color:var(--ink-faint); border:1px solid var(--line)}
-.rail.cmt .note h3{font-family:var(--jpser); font-size:.9rem; font-weight:600; margin:0 0 3px; color:var(--ink); line-height:1.42}
-.rail.cmt .note .locus{font-family:var(--disp); font-size:.64rem; color:var(--gold); margin:0 0 6px}
-.rail.cmt .note p{font-size:.775rem; line-height:1.62; color:var(--ink-soft); margin:0 0 7px}
-.rail.cmt .note p.en{display:none; color:var(--ink-faint)}
-html[data-tl="en"] .rail.cmt .note p.en{display:block}
-html[data-tl="en"] .rail.cmt .note p.ja{display:none}
-.rail.cmt .note .jump{appearance:none; font-family:var(--ui); border:1px solid var(--lapis); color:var(--lapis);
-  background:transparent; font-size:.68rem; padding:4px 11px; border-radius:7px; cursor:pointer}
-.rail.cmt .note .jump:hover{background:var(--lapis); color:var(--paper)}
-.rail.cmt .note.nomatch{opacity:.4}
-/* rail as a left drawer on narrower viewports */
-@media (max-width:1100px){
-  .app{grid-template-columns:minmax(0,1fr); grid-template-areas:"head" "main";}
-  .rail.cmt{position:fixed; inset:0 auto 0 0; width:min(370px,90vw); transform:translateX(-101%);
-    transition:transform .26s ease; z-index:45; box-shadow:0 0 0 100vmax rgba(15,17,24,0);}
-  html[data-rail="open"] .rail.cmt{transform:none; box-shadow:0 18px 50px rgba(15,17,24,.4)}
-  .railtoggle{display:inline-flex!important}
-  .railx{display:block}
-}
+.endnotes .note h3{font-family:var(--jpser); font-size:.94rem; font-weight:600; margin:0 0 3px; color:var(--ink); line-height:1.42}
+.endnotes .note .locus{font-family:var(--disp); font-size:.66rem; color:var(--gold); margin:0 0 6px}
+.endnotes .note p{font-size:.8rem; line-height:1.66; color:var(--ink-soft); margin:0 0 7px}
+.endnotes .note p.en{display:none; color:var(--ink-faint)}
+html[data-tl="en"] .endnotes .note p.en{display:block}
+html[data-tl="en"] .endnotes .note p.ja{display:none}
+.endnotes .note .jump{appearance:none; font-family:var(--ui); border:1px solid var(--lapis); color:var(--lapis);
+  background:transparent; font-size:.7rem; padding:4px 11px; border-radius:7px; cursor:pointer}
+.endnotes .note .jump:hover{background:var(--lapis); color:var(--paper)}
+/* in-text numbered note markers → jump to endnote */
+.nrefs{display:inline-flex; gap:3px; vertical-align:super; margin-left:2px}
+.nref{font-family:var(--disp); font-size:.62rem; font-weight:600; line-height:1; text-decoration:none;
+  color:var(--gold); border:1px solid rgba(154,114,32,.5); border-radius:999px; padding:2px 6px;
+  background:rgba(154,114,32,.1); cursor:pointer}
+.nref:hover{background:var(--gold); color:var(--paper)}
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/cosmos.css">
@@ -380,7 +352,7 @@ html[data-tl="en"] .rail.cmt .note p.ja{display:none}
 <div class="app">
   <header>
     <a class="chip homelink" href="index.html" title="Index / 一覧へ"><span class="l-ja">← 一覧</span><span class="l-en">← Index</span></a>
-    <button class="chip railtoggle" id="railBtn" aria-label="釈義パネル" aria-pressed="false"><span class="l-ja">☰ 釈義</span><span class="l-en">☰ Notes</span></button>
+    <a class="chip" id="notesJump" href="#endnotes" title="釈義・注解（ページ末尾） / Exegesis &amp; notes (end of page)"><span class="l-ja">☟ 釈義・注解</span><span class="l-en">☟ Notes</span></a>
     <div class="brand">
       <img class="brandlogo" src="image/icon.svg" alt="" width="30" height="30" onerror="this.style.display='none'">
       <div class="brandtext">
@@ -408,17 +380,6 @@ html[data-tl="en"] .rail.cmt .note p.ja{display:none}
       </div>
     </div>
   </header>
-
-  <nav class="rail cmt" id="cmtRail" aria-label="釈義・注解 / Exegesis & notes">
-    <div class="rail-h">
-      <h2><span class="l-ja">釈義・注解</span><span class="l-en">Exegesis &amp; notes</span></h2>
-      <button class="railx" id="railClose" aria-label="閉じる / Close" title="閉じる / Close">×</button>
-    </div>
-    <p class="rail-intro"><span class="l-ja">先行研究（Matsagouras 1976／Ashwin-Siejkowski 2020 ほか）に基づく注。テーマを選ぶと該当箇所が強調され、注も絞り込まれます。各注の〈本文へ〉で当該セグメントへ移動します。</span><span class="l-en">Notes grounded in prior scholarship (Matsagouras 1976; Ashwin-Siejkowski 2020 and others). Pick a theme to highlight the relevant passages and filter the notes; “To text” jumps to the segment.</span></p>
-    <div class="frame-themes" id="frameThemes"></div>
-    <button class="clearf" id="clearTheme" hidden><span class="l-ja">テーマ選択を解除</span><span class="l-en">Clear themes</span></button>
-    <div class="notes" id="notes"><p class="rail-intro" id="notesEmpty"><span class="l-ja">注解ファイル <code>republic_commentary.xml</code> を読み込むと、ここに注が表示されます。</span><span class="l-en">Load <code>republic_commentary.xml</code> to see the notes here.</span></p></div>
-  </nav>
 
   <main id="main" tabindex="-1">
     <div class="doc-head">
@@ -448,6 +409,13 @@ html[data-tl="en"] .rail.cmt .note p.ja{display:none}
       <div class="ch gcol"><span class="lbl">Ἑλληνικά <span class="l-ja">ギリシア語</span><span class="l-en">Greek</span></span><span class="sub">Plato · OCT / Burnet</span></div>
     </div>
     <div id="reading" class="col"></div>
+    <section class="endnotes" id="endnotes" aria-label="釈義・注解 / Exegesis &amp; notes">
+      <h2><span class="l-ja">釈義・注解</span><span class="l-en">Exegesis &amp; notes</span></h2>
+      <p class="en-intro"><span class="l-ja">先行研究（Matsagouras 1976／Ashwin-Siejkowski 2020 ほか）に基づく注。本文中の番号（<span class="nref" style="cursor:default">1</span> など）をクリックすると該当する注へ移動し、各注の〈本文へ〉で当該セグメントに戻れます。テーマを選ぶと該当箇所が強調され、注も絞り込まれます。</span><span class="l-en">Notes grounded in prior scholarship (Matsagouras 1976; Ashwin-Siejkowski 2020 and others). Click a number in the text (e.g. <span class="nref" style="cursor:default">1</span>) to jump to the corresponding note; “To text” in each note returns to the segment. Pick a theme to highlight the relevant passages and filter the notes.</span></p>
+      <div class="frame-themes" id="frameThemes"></div>
+      <button class="clearf" id="clearTheme" hidden><span class="l-ja">テーマ選択を解除</span><span class="l-en">Clear themes</span></button>
+      <div class="notes" id="notes"><p class="en-intro" id="notesEmpty"><span class="l-ja">注解ファイル <code>republic_commentary.xml</code> を読み込むと、ここに注が表示されます。</span><span class="l-en">Load <code>republic_commentary.xml</code> to see the notes here.</span></p></div>
+    </section>
     <div class="credit" id="credit"></div>
   </main>
 
@@ -500,7 +468,7 @@ const FRAME_THEMES=["th-frame","th-witness","th-sjc"];
 const ROSE_THEMES=new Set(["th-sophia","th-androgyny"]);
 
 let DOC_MAIN=null, DOC_LEX=null, DOC_THEO=null, DOC_GREEK=null, LEXMAP=new Map(), GREEKMAP=new Map();
-let THEME_LABELS={}, NOTES=[], SEGS_III=[], SEGS_V=[], curWit="III", curTheme=null;
+let THEME_LABELS={}, NOTES=[], NOTE_REFS=new Map(), SEGS_III=[], SEGS_V=[], curWit="III", curTheme=null;
 
 function getId(el){return el.getAttributeNS(XML_NS,"id")||el.getAttribute("xml:id")||"";}
 function getLang(el){return el.getAttributeNS(XML_NS,"lang")||el.getAttribute("xml:lang")||"";}
@@ -608,6 +576,9 @@ function parse(){
       if(l==="ja") ja=p.textContent; else if(l==="en") en=p.textContent; else if(l==="fr") fr=p.textContent;});
     return {id:getId(n),themes,targets,labelJa,labelEn,ja,en,fr,locus:n.getAttribute("n")||""};
   });
+  NOTE_REFS=new Map();
+  NOTES.forEach((n,i)=>{ n.num=i+1;
+    n.targets.forEach(t=>{ if(!NOTE_REFS.has(t)) NOTE_REFS.set(t,[]); NOTE_REFS.get(t).push(n); }); });
   // Coptic dictionary: lemma -> [ {id,n,pos,en,ja,fr,uja,uen,grc}, ... ]
   // (homographs yield several senses per form; single entries yield one)
   LEXMAP=new Map();
@@ -676,7 +647,7 @@ function readGreek(doc){
   return map;
 }
 
-/* ---------- rail ---------- */
+/* ---------- theme chips (endnotes内) ---------- */
 function cmtThemeOrder(){
   const used=new Set(); NOTES.forEach(n=>n.themes.forEach(t=>used.add(t)));
   const ids=DOC_THEO ? T(DOC_THEO,"category").map(c=>getId(c)) : [];
@@ -696,19 +667,21 @@ function buildRail(){
 }
 function buildNotes(){
   const box=$("#notes"); if(!box) return; box.innerHTML="";
-  if(!NOTES.length){ box.innerHTML=`<p class="rail-intro">${UL()==="en"?'Load <code>republic_commentary.xml</code> to see the notes here.':'注解ファイル <code>republic_commentary.xml</code> を読み込むと、ここに注が表示されます。'}</p>`; return; }
+  if(!NOTES.length){ box.innerHTML=`<p class="en-intro">${UL()==="en"?'Load <code>republic_commentary.xml</code> to see the notes here.':'注解ファイル <code>republic_commentary.xml</code> を読み込むと、ここに注が表示されます。'}</p>`; return; }
   NOTES.forEach(n=>{
     const el=document.createElement("article"); el.className="note"; el.dataset.id=n.id;
+    el.id="note-"+n.id;
     el.dataset.themes=n.themes.join(" ");
     const en=UL()==="en";
     const lbl=en?(n.labelEn||n.labelJa):(n.labelJa||n.labelEn);
     const chips=n.themes.map(t=>{ const L=THEME_LABELS[t]||{}; const tx=en?(L.en||L.ja||t):(L.ja||L.en||t);
       return `<span title="${escapeHTML(L.en||"")}">${escapeHTML(tx)}</span>`; }).join("");
     const locus=n.locus?`<div class="locus">${escapeHTML(n.locus)}</div>`:"";
-    el.innerHTML=`<div class="themechips">${chips}</div><h3>${escapeHTML(lbl)}</h3>${locus}`+
+    el.innerHTML=`<div class="nhead"><span class="nnum">${n.num}</span><div class="themechips">${chips}</div></div>`+
+      `<h3>${escapeHTML(lbl)}</h3>${locus}`+
       `<p class="ja">${escapeHTML(n.ja)}</p><p class="en">${escapeHTML(n.en)}</p>`+
       `<button class="jump">${en?"To text ›":"本文へ ›"}</button>`;
-    el.querySelector(".jump").onclick=()=>{ if(n.targets[0]) flashSeg(n.targets[0]); if(window.innerWidth<=1100) H.setAttribute("data-rail","closed"); };
+    el.querySelector(".jump").onclick=()=>{ if(n.targets[0]) flashSeg(n.targets[0]); };
     box.appendChild(el);
   });
   filterNotes();
@@ -728,7 +701,6 @@ function toggleTheme(id){
     const note=NOTES.find(n=>n.themes.includes(curTheme));
     if(note&&note.targets[0]) flashSeg(note.targets[0]);
   }
-  if(window.innerWidth<=1100) H.setAttribute("data-rail","closed");
 }
 $("#clearTheme").onclick=()=>{ if(curTheme) toggleTheme(curTheme); };
 
@@ -794,11 +766,13 @@ function segHTML(s){
   if(!tr) tr = pendingText();
   const marker = s.themes.length ? `<div class="marker">`+
      s.themes.slice(0,3).map(t=>{const L=THEME_LABELS[t]||{}; const tx=UL()==="en"?(L.en||L.ja||t):(L.ja||L.en||t); return `<button class="${ROSE_THEMES.has(t)?'r':''}" data-theme="${t}" title="${escapeHTML(tx)}"></button>`;}).join("")+`</div>` : "";
+  const refs=(NOTE_REFS.get(s.id)||[]).map(n=>
+    `<a class="nref" href="#note-${n.id}" data-note="${n.id}" title="${UL()==='en'?'Note':'注'} ${n.num}">${n.num}</a>`).join("");
   return `<div class="prow" id="seg-${s.id}" data-themes="${s.themes.join(' ')}" data-id="${s.id}">
     <div class="pcell ccol"><div class="pcop">
       <div class="no">${s.n||""}</div>${marker}
       <div class="coptic">${cop}</div>
-      <div class="${trCls}">${escapeHTML(tr)}</div>
+      <div class="${trCls}">${escapeHTML(tr)}${refs?`<span class="nrefs">${refs}</span>`:""}</div>
     </div></div>
     <div class="pcell gcol">${grcCellHTML(s)}</div>
   </div>`;
@@ -907,6 +881,16 @@ function flashSeg(id){
     el.classList.add("flash"); setTimeout(()=>el.classList.remove("flash"),1600);
   });
 }
+/* 本文中の番号マーカー → 末尾の注へジャンプ */
+function flashNote(id){
+  const el=document.getElementById("note-"+id); if(!el) return;
+  el.scrollIntoView({behavior:"smooth",block:"center"});
+  el.classList.add("flash"); setTimeout(()=>el.classList.remove("flash"),1800);
+}
+document.addEventListener("click",e=>{
+  const a=e.target.closest("a.nref[data-note]"); if(!a) return;
+  e.preventDefault(); flashNote(a.dataset.note);
+});
 
 /* ---------- search ---------- */
 let qt=null;
@@ -945,7 +929,6 @@ function doSearch(q){
 function openSearch(){ H.setAttribute("data-search","open"); }
 function closeSearch(){ H.removeAttribute("data-search"); }
 $("#searchClose").onclick=closeSearch;
-{ const rc=$("#railClose"); if(rc) rc.onclick=()=>{ H.setAttribute("data-rail","closed"); const rb=$("#railBtn"); if(rb) rb.setAttribute("aria-pressed","false"); }; }
 document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeSearch(); });
 
 /* ---------- (single witness — no witness tabs) ---------- */
@@ -1069,7 +1052,6 @@ function cycleLang(btn,attr,key){
 $("#glBtn").onclick=()=>cycleLang($("#glBtn"),"data-gl","gl");
 $("#tlBtn").onclick=()=>cycleLang($("#tlBtn"),"data-tl","tl");
 $("#modeBtn").onclick=()=>{ toggle($("#modeBtn"),"data-mode","aeon","codex","◑ アルコーン","◐ アイオーン"); relabelMode(); };
-{ const rb=$("#railBtn"); if(rb) rb.onclick=()=>{ const open=H.getAttribute("data-rail")==="open"; H.setAttribute("data-rail",open?"closed":"open"); rb.setAttribute("aria-pressed",open?"false":"true"); }; }
 function applyUILang(){
   const en=UL()==="en";
   const lb=$("#langBtn"); if(lb) lb.textContent=en?"日本語":"English";
