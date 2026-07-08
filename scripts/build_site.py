@@ -311,16 +311,15 @@ footer b{color:var(--ink-soft)}
    <div class="eyebrow">Nag Hammadi Codices I–XIII</div>
    <h1><span class="cop">ⲛⲁⲅ ϩⲁⲙⲙⲁⲇⲓ</span>ナグ・ハマディ写本コーパス</h1>
    <p class="lead">ナグ・ハマディ写本(全13冊・約{TOTAL}文書)を、<b>形態素グロス・コプト語辞書・神学注釈・日英仏訳</b>を備えた
-   TEI&nbsp;P5 デジタル版として整備するプロジェクトです。各文書は本文(コプト語)・辞書・注釈の3ファイルに分離し、
-   共通のビュワーで読めるようにします。</p>
+   TEI&nbsp;P5 デジタル版として整備するプロジェクトです。</p>
   </div>
   <img class="hero-fig" src="image/web/aion.jpg" alt="アイオーン" loading="lazy">
   <div class="features">
    <div class="feat">
-     <img src="image/web/chibi_eugnostos.jpg" alt="" loading="lazy">
+     <img src="image/web/icon-pleroma.svg" alt="" loading="lazy">
      <div>
        <div class="k">公開中</div>
-       <div class="ttl"><span class="cop">ⲉⲩⲅⲛⲱⲥⲧⲟⲥ</span>祝福されたエウグノストス</div>
+       <div class="ttl"><span class="cop">ⲉⲩⲅⲛⲱⲥⲧⲟⲥ</span>エウグノストス</div>
        <div class="loc">NHC III,3 / V,1 · 二証本対照・三言語対訳</div>
        <div class="acts"><a class="go" href="eugnostos.html">全文表示 →</a>
         <a href="search.html?doc=eugnostos">コーパス検索</a></div>
