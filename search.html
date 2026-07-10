@@ -1,7 +1,8 @@
 <!-- コーパス検索ページ（手作業管理）。?doc=republic / ?doc=eugnostos で対象文書を切り替えます。
-     本文・辞書は data/ の XML を読み込みます。検索結果はビュワーの該当セグメント (#seg-ID) へリンクします。 -->
+     本文・辞書は data/ の XML を読み込みます。検索結果はビュワーの該当セグメント (#seg-ID) へリンクします。
+     UI言語は republic.html と同じ方式（html[data-lang] + .l-ja/.l-en + #langBtn）で JA/EN を切替。 -->
 <!DOCTYPE html>
-<html lang="ja" data-mode="aeon">
+<html lang="ja" data-lang="ja" data-mode="aeon">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -39,6 +40,7 @@ header{position:sticky; top:0; z-index:5; background:rgba(8,7,20,.92);
   border:1px solid var(--line-2); padding:7px 13px; border-radius:999px;
   text-decoration:none; white-space:nowrap}
 .chip:hover{border-color:var(--gold); color:var(--gold-bright)}
+button.chip{appearance:none; cursor:pointer; font-family:var(--ui)}
 
 .wrap{position:relative; z-index:1; max-width:980px; margin:0 auto;
   padding:0 clamp(16px,4vw,40px) 80px}
@@ -99,6 +101,11 @@ header{position:sticky; top:0; z-index:5; background:rgba(8,7,20,.92);
   border:1px solid var(--rose); border-radius:10px; padding:12px 16px;
   font-size:.82rem; color:var(--ink-soft)}
 .notice code{color:var(--gold-bright)}
+
+/* ---- UI language toggle (JA/EN) — same scheme as republic.html ---- */
+.l-en{display:none}
+html[data-lang="en"] .l-ja{display:none}
+html[data-lang="en"] .l-en{display:revert}
 </style>
 <link rel="stylesheet" href="assets/cosmos.css">
 <script defer src="assets/cosmos.js"></script>
@@ -107,11 +114,12 @@ header{position:sticky; top:0; z-index:5; background:rgba(8,7,20,.92);
 <header>
   <a class="brand" href="index.html">
     <img src="image/icon.svg" alt="" width="30" height="30" onerror="this.style.display='none'">
-    <span class="bt"><b>ⲛⲁⲅ ϩⲁⲙⲙⲁⲇⲓ · コーパス検索</b>
+    <span class="bt"><b>ⲛⲁⲅ ϩⲁⲙⲙⲁⲇⲓ · <span class="l-ja">コーパス検索</span><span class="l-en">Corpus Search</span></b>
     <small>Nag Hammadi Library · corpus search</small></span></a>
   <span class="spacer"></span>
-  <a class="chip" href="index.html">← 文書一覧</a>
-  <a class="chip" id="readerLink" href="republic.html">全文表示へ →</a>
+  <a class="chip" href="index.html"><span class="l-ja">← 文書一覧</span><span class="l-en">← Index</span></a>
+  <a class="chip" id="readerLink" href="republic.html"><span class="l-ja">全文表示へ →</span><span class="l-en">Open full text →</span></a>
+  <button class="chip" id="langBtn" title="Language / 言語">English</button>
 </header>
 
 <div class="wrap">
@@ -121,17 +129,17 @@ header{position:sticky; top:0; z-index:5; background:rgba(8,7,20,.92);
     <div class="sub" id="docSub"></div>
   </section>
 
-  <nav class="doc-tabs" aria-label="対象文書" id="docTabs"></nav>
+  <nav class="doc-tabs" aria-label="対象文書 / Documents" id="docTabs"></nav>
 
   <div class="searchbox">
     <input id="q" type="search" placeholder="コプト語・レンマ・語釈・対訳を検索（例: ⲛⲟⲩⲧⲉ / soul / 魂）"
       autocomplete="off" aria-label="コーパス検索">
   </div>
-  <div class="fields" role="group" aria-label="検索対象">
-    <label><input type="checkbox" id="fForm" checked>コプト語形</label>
-    <label><input type="checkbox" id="fLemma" checked>レンマ</label>
-    <label><input type="checkbox" id="fGloss" checked>語釈 (日/英/仏)</label>
-    <label><input type="checkbox" id="fTrans" checked>対訳 (日/英/仏)</label>
+  <div class="fields" role="group" aria-label="検索対象 / Search fields">
+    <label><input type="checkbox" id="fForm" checked><span class="l-ja">コプト語形</span><span class="l-en">Coptic form</span></label>
+    <label><input type="checkbox" id="fLemma" checked><span class="l-ja">レンマ</span><span class="l-en">Lemma</span></label>
+    <label><input type="checkbox" id="fGloss" checked><span class="l-ja">語釈 (日/英/仏)</span><span class="l-en">Gloss (JA/EN/FR)</span></label>
+    <label><input type="checkbox" id="fTrans" checked><span class="l-ja">対訳 (日/英/仏)</span><span class="l-en">Translation (JA/EN/FR)</span></label>
   </div>
   <div class="stats" id="stats"></div>
 
@@ -144,17 +152,18 @@ header{position:sticky; top:0; z-index:5; background:rgba(8,7,20,.92);
 const TEI = "http://www.tei-c.org/ns/1.0";
 const DOCS = {
   republic: {
-    ja:"プラトン『国家』588b–589b", cop:"ⲡⲟⲗⲓⲧⲉⲓⲁ", siglum:"NHC VI,5",
+    ja:"プラトン『国家』588b–589b", en:"Plato, Republic 588b–589b", cop:"ⲡⲟⲗⲓⲧⲉⲓⲁ", siglum:"NHC VI,5",
     tei:"data/republic_tei.xml", lex:"data/lexicon.xml", reader:"republic.html",
     guide:"image/web/scriber.jpg", guideName:"The Scribe"
   },
   eugnostos: {
-    ja:"祝福されたエウグノストス", cop:"ⲉⲩⲅⲛⲱⲥⲧⲟⲥ", siglum:"NHC III,3 / V,1",
+    ja:"祝福されたエウグノストス", en:"Eugnostos the Blessed", cop:"ⲉⲩⲅⲛⲱⲥⲧⲟⲥ", siglum:"NHC III,3 / V,1",
     tei:"data/eugnostos_tei.xml", lex:"data/lexicon.xml", reader:"eugnostos.html",
     guide:"image/web/chibi_sophia.jpg", guideName:"Sophia"
   }
 };
 const $ = s => document.querySelector(s);
+const H = document.documentElement;
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 /* 合成記号（上線・気息記号など）を除去して比較する正規化 */
 const norm = s => (s||"").normalize("NFD").replace(/[\u0300-\u036f\ufe24-\ufe26]/g,"").normalize("NFC").toLowerCase();
@@ -164,21 +173,43 @@ const docKey = (new URLSearchParams(location.search).get("doc") in DOCS)
 const DOC = DOCS[docKey];
 let SEGS = [], LEX = {}, ready = false;
 
-/* ---------- ヘッダ・タブ ---------- */
-document.title = "コーパス検索 · " + DOC.ja + " — ナグ・ハマディ写本コーパス";
-$("#docTitle").innerHTML = '<span class="cop">' + DOC.cop + '</span> ' + esc(DOC.ja);
-$("#docSub").textContent = DOC.siglum + " · 本文・辞書・対訳を横断検索";
-$("#readerLink").href = DOC.reader;
-$("#docTabs").innerHTML = Object.entries(DOCS).map(([k,d]) =>
-  '<a class="doc-tab" aria-current="' + (k===docKey) + '" href="search.html?doc=' + k + '">' +
-  '<span class="cop">' + d.cop + '</span>' + esc(d.ja) + '</a>').join("");
+/* ---------- UI言語 (JA/EN) ---------- */
+function UL(){ return H.getAttribute("data-lang")==="en" ? "en" : "ja"; }
+function docName(d){ return UL()==="en" ? (d.en||d.ja) : d.ja; }
+function applyUILang(){
+  const en = UL()==="en";
+  H.setAttribute("lang", en ? "en" : "ja");
+  const lb = $("#langBtn"); if(lb) lb.textContent = en ? "日本語" : "English";
+  document.title = en
+    ? "Corpus Search · " + DOC.en + " — Nag Hammadi Library"
+    : "コーパス検索 · " + DOC.ja + " — ナグ・ハマディ写本コーパス";
+  $("#docTitle").innerHTML = '<span class="cop">' + DOC.cop + '</span> ' + esc(docName(DOC));
+  $("#docSub").textContent = DOC.siglum + (en ? " · search across text, lexicon and translations" : " · 本文・辞書・対訳を横断検索");
+  const qi = $("#q");
+  if(qi){
+    qi.placeholder = en
+      ? "Search Coptic, lemmas, glosses, translations (e.g. ⲛⲟⲩⲧⲉ / soul / 魂)"
+      : "コプト語・レンマ・語釈・対訳を検索（例: ⲛⲟⲩⲧⲉ / soul / 魂）";
+    qi.setAttribute("aria-label", en ? "Corpus search" : "コーパス検索");
+  }
+  $("#docTabs").innerHTML = Object.entries(DOCS).map(([k,d]) =>
+    '<a class="doc-tab" aria-current="' + (k===docKey) + '" href="search.html?doc=' + k + '">' +
+    '<span class="cop">' + d.cop + '</span>' + esc(docName(d)) + '</a>').join("");
+  renderBaseStats();
+  const q = $("#q").value.trim();
+  if(ready){ q ? run(q) : idleState(); }
+}
+{ const lgb = $("#langBtn"); if(lgb) lgb.onclick = () => {
+    H.setAttribute("data-lang", UL()==="en" ? "ja" : "en");
+    applyUILang();
+  }; }
 
 /* ---------- 読み込み ---------- */
 async function fetchXML(url){
   const r = await fetch(url, {cache:"no-store"});
   if(!r.ok) throw new Error(url + " → HTTP " + r.status);
   const x = new DOMParser().parseFromString(await r.text(), "application/xml");
-  if(x.querySelector("parsererror")) throw new Error(url + " → XML整形式エラー");
+  if(x.querySelector("parsererror")) throw new Error(url + (UL()==="en" ? " → XML not well-formed" : " → XML整形式エラー"));
   return x;
 }
 function T(node, name){ return Array.from(node.getElementsByTagNameNS(TEI, name)); }
@@ -220,26 +251,49 @@ function parseTEI(xml){
     });
   });
 }
+function renderBaseStats(){
+  if(!ready) return;
+  const q = $("#q").value.trim();
+  if(q) return; // 検索中は run() が統計行を描画
+  const tokens = SEGS.reduce((a,s)=>a+s.words.length, 0);
+  $("#stats").innerHTML = UL()==="en"
+    ? "Segments <b>" + SEGS.length + "</b> · tokens <b>" + tokens.toLocaleString() +
+      "</b> · lexicon lemmas <b>" + Object.keys(LEX).length.toLocaleString() + "</b>"
+    : "セグメント <b>" + SEGS.length + "</b> · トークン <b>" + tokens.toLocaleString() +
+      "</b> · 辞書レンマ <b>" + Object.keys(LEX).length.toLocaleString() + "</b>";
+}
 async function load(){
   try{
     const [tei, lex] = await Promise.all([fetchXML(DOC.tei), fetchXML(DOC.lex)]);
     parseTEI(tei); parseLex(lex);
     ready = true;
-    const tokens = SEGS.reduce((a,s)=>a+s.words.length, 0);
-    $("#stats").innerHTML = "セグメント <b>" + SEGS.length + "</b> · トークン <b>" +
-      tokens.toLocaleString() + "</b> · 辞書レンマ <b>" + Object.keys(LEX).length.toLocaleString() + "</b>";
+    renderBaseStats();
     idleState();
     const q0 = new URLSearchParams(location.search).get("q");
     if(q0){ $("#q").value = q0; run(q0); }
   }catch(e){
     const w = $("#loadwarn"); w.hidden = false;
-    w.innerHTML = "⬥ <b>データを取得できませんでした。</b> <code>" + esc(DOC.tei) +
-      "</code> と <code>" + esc(DOC.lex) + "</code> をWebサーバ経由で配信してください（file:// では取得不可）。<br>" +
-      "<small>" + esc(e.message) + "</small>";
+    w.innerHTML = UL()==="en"
+      ? "⬥ <b>Could not load the data.</b> Serve <code>" + esc(DOC.tei) + "</code> and <code>" + esc(DOC.lex) +
+        "</code> via a web server (file:// will not work).<br><small>" + esc(e.message) + "</small>"
+      : "⬥ <b>データを取得できませんでした。</b> <code>" + esc(DOC.tei) +
+        "</code> と <code>" + esc(DOC.lex) + "</code> をWebサーバ経由で配信してください（file:// では取得不可）。<br>" +
+        "<small>" + esc(e.message) + "</small>";
   }
 }
 
 /* ---------- 検索 ---------- */
+function whereLbl(key){
+  const en = UL()==="en";
+  return ({
+    form:  en ? "Form"      : "語形",
+    lemma: en ? "Lemma"     : "レンマ",
+    gloss: en ? "Gloss"     : "語釈",
+    ja:    en ? "JA trans." : "和訳",
+    en:    en ? "EN trans." : "英訳",
+    fr:    en ? "FR trans." : "仏訳"
+  })[key];
+}
 function glossesOf(w){
   const out = w.gloss ? [w.gloss] : [];
   (LEX[w.lemma] || []).forEach(s => out.push(...s.ja, ...s.en, ...s.fr));
@@ -261,25 +315,31 @@ function run(q){
   if(!ready) return;
   q = q.trim();
   const res = $("#results");
-  if(!q){ idleState(); return; }
+  if(!q){ renderBaseStats(); idleState(); return; }
+  const en = UL()==="en";
   const qn = norm(q), ql = q.toLowerCase();
   const hits = [];
   SEGS.forEach(s => {
     const where = [];
-    if($("#fForm").checked  && s.words.some(w => norm(w.form).includes(qn))) where.push("語形");
-    if($("#fLemma").checked && s.words.some(w => norm(w.lemma).includes(qn))) where.push("レンマ");
-    if($("#fGloss").checked && s.words.some(w => glossesOf(w).some(g => g.toLowerCase().includes(ql)))) where.push("語釈");
+    if($("#fForm").checked  && s.words.some(w => norm(w.form).includes(qn))) where.push(whereLbl("form"));
+    if($("#fLemma").checked && s.words.some(w => norm(w.lemma).includes(qn))) where.push(whereLbl("lemma"));
+    if($("#fGloss").checked && s.words.some(w => glossesOf(w).some(g => g.toLowerCase().includes(ql)))) where.push(whereLbl("gloss"));
     if($("#fTrans").checked){
-      if(s.ja.includes(q)) where.push("和訳");
-      if(s.en.toLowerCase().includes(ql)) where.push("英訳");
-      if(s.fr.toLowerCase().includes(ql)) where.push("仏訳");
+      if(s.ja.includes(q)) where.push(whereLbl("ja"));
+      if(s.en.toLowerCase().includes(ql)) where.push(whereLbl("en"));
+      if(s.fr.toLowerCase().includes(ql)) where.push(whereLbl("fr"));
     }
     if(where.length) hits.push({s, where});
   });
-  $("#stats").innerHTML = "「<b>" + esc(q) + "</b>」 — <b>" + hits.length + "</b> セグメントが一致";
+  $("#stats").innerHTML = en
+    ? "\u201C<b>" + esc(q) + "</b>\u201D — <b>" + hits.length + "</b> segment" + (hits.length===1?"":"s") + " match"
+    : "「<b>" + esc(q) + "</b>」 — <b>" + hits.length + "</b> セグメントが一致";
   if(!hits.length){
-    res.innerHTML = '<div class="state"><div>「' + esc(q) + '」に一致する箇所はありません。' +
-      '<br><small>上線などの合成記号は無視して照合しています。</small></div></div>';
+    res.innerHTML = en
+      ? '<div class="state"><div>No matches for \u201C' + esc(q) + '\u201D.' +
+        '<br><small>Combining marks (supralinear strokes etc.) are ignored in matching.</small></div></div>'
+      : '<div class="state"><div>「' + esc(q) + '」に一致する箇所はありません。' +
+        '<br><small>上線などの合成記号は無視して照合しています。</small></div></div>';
     return;
   }
   res.innerHTML = hits.map(({s, where}) => {
@@ -291,23 +351,28 @@ function run(q){
       '<div class="meta"><span class="no">§' + esc(s.n) + '</span>' +
       (s.wit ? '<span class="wit">' + esc(s.wit) + '</span>' : "") +
       '<span>' + where.join(" · ") + '</span>' +
-      '<span class="go">本文へ →</span></div>' +
+      '<span class="go">' + (en ? "To text →" : "本文へ →") + '</span></div>' +
       '<div class="copline">' + markCop(s.words, qn) + '</div>' + trHTML + '</a>';
   }).join("");
 }
 function idleState(){
+  const en = UL()==="en";
   $("#results").innerHTML =
     '<div class="state">' +
     '<img src="' + DOC.guide + '" alt="" loading="lazy">' +
     '<div><div class="cap">' + esc(DOC.guideName) + '</div>' +
-    '検索語を入力すると、コプト語形・レンマ・語釈・対訳を横断して該当セグメントを一覧します。<br>' +
-    '結果をクリックすると全文表示の該当箇所へ移動します。</div></div>';
+    (en
+      ? 'Type a query to search across Coptic forms, lemmas, glosses and translations.<br>' +
+        'Click a result to jump to the segment in the full-text viewer.</div></div>'
+      : '検索語を入力すると、コプト語形・レンマ・語釈・対訳を横断して該当セグメントを一覧します。<br>' +
+        '結果をクリックすると全文表示の該当箇所へ移動します。</div></div>');
 }
 
 let qt = null;
 $("#q").addEventListener("input", e => { clearTimeout(qt); qt = setTimeout(() => run(e.target.value), 180); });
 ["fForm","fLemma","fGloss","fTrans"].forEach(id =>
   $("#"+id).addEventListener("change", () => run($("#q").value)));
+applyUILang();
 load();
 </script>
 </body>
