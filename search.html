@@ -118,6 +118,7 @@ html[data-lang="en"] .l-en{display:revert}
     <small>Nag Hammadi Library · corpus search</small></span></a>
   <span class="spacer"></span>
   <a class="chip" href="index.html"><span class="l-ja">← 文書一覧</span><span class="l-en">← Index</span></a>
+  <a class="chip" id="statsLink" href="stats.html"><span class="l-ja">∑ コーパス統計</span><span class="l-en">∑ Corpus statistics</span></a>
   <a class="chip" id="readerLink" href="republic.html"><span class="l-ja">全文表示へ →</span><span class="l-en">Open full text →</span></a>
   <button class="chip" id="langBtn" title="Language / 言語">English</button>
 </header>
@@ -192,6 +193,7 @@ function applyUILang(){
       : "コプト語・レンマ・語釈・対訳を検索（例: ⲛⲟⲩⲧⲉ / soul / 魂）";
     qi.setAttribute("aria-label", en ? "Corpus search" : "コーパス検索");
   }
+  { const sl = $("#statsLink"); if(sl) sl.href = "stats.html?doc=" + docKey; }
   $("#docTabs").innerHTML = Object.entries(DOCS).map(([k,d]) =>
     '<a class="doc-tab" aria-current="' + (k===docKey) + '" href="search.html?doc=' + k + '">' +
     '<span class="cop">' + d.cop + '</span>' + esc(docName(d)) + '</a>').join("");

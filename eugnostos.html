@@ -1,6 +1,6 @@
 <!-- エウグノストス三言語ビュワー（単一HTML・手作業で管理）。本文・対訳・辞書のデータは data/ の XML から読み込みます。データの修正は source/ の CSV を編集 → python3 scripts/build_tei.py で反映してください。HTML/CSS/JS 自体を変更する場合は Pull Request でレビューを受けてください。 -->
 <!DOCTYPE html>
-<html lang="ja" data-lang="ja" data-mode="aeon">
+<html lang="ja" data-lang="ja" data-mode="aeon" data-il="on">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -63,6 +63,11 @@ header{grid-area:head; background:var(--chrome); color:var(--chrome-ink);
 .search input:focus-visible{outline:2px solid var(--lapis); outline-offset:1px; border-color:var(--lapis)}
 .search svg{position:absolute; left:10px; top:50%; transform:translateY(-50%); width:14px; height:14px; opacity:.6}
 .seg-ctl{display:flex; align-items:center; gap:7px}
+/* ページ遷移・別パネルを開くもの（統計・コーパス検索・関連・XML・表示モード）は分離 */
+.nav-ctl{display:flex; align-items:center; gap:7px; padding-left:11px;
+  border-left:1px solid var(--line-2)}
+.nav-ctl a.chip{text-decoration:none; white-space:nowrap}
+.nav-ctl a.chip:hover{background:rgba(255,255,255,.12)}
 .chip{appearance:none; cursor:pointer; font-family:var(--ui); font-size:.74rem; letter-spacing:.02em;
   color:var(--chrome-ink); background:rgba(255,255,255,.06); border:1px solid var(--line-2);
   padding:6px 11px; border-radius:999px; display:inline-flex; align-items:center; gap:6px}
@@ -313,17 +318,18 @@ html[data-lang="en"] .l-en{display:revert}
     </div>
     <div class="controls">
       <div class="seg-ctl">
-        <button class="chip" id="ilBtn" aria-pressed="false"><span class="l-ja">語釈を重ねる</span><span class="l-en">Interlinear</span></button>
+        <button class="chip" id="ilBtn" aria-pressed="true" title="語釈を本文に重ねて表示 / Show interlinear glosses"><span class="l-ja">語釈</span><span class="l-en">Interlinear</span></button>
         <button class="chip" id="loanBtn" aria-pressed="false" title="ギリシア語借用語をマーキング / Mark Greek loanwords"><span class="l-ja">借用語</span><span class="l-en">Loanwords</span><span id="loanN" class="loann"></span></button>
         <button class="chip" id="pageBtn" aria-pressed="false" title="写本のページ番号を表示 / Show codex page numbers"><span class="l-ja">ページ</span><span class="l-en">Pages</span></button>
-        <button class="chip" id="lineBtn" aria-pressed="false" title="写本の行番号を表示 / Show manuscript line numbers"><span class="l-ja">行番号</span><span class="l-en">Lines</span></button>
-        <button class="chip" id="statsBtn" title="統計 / Statistics"><span class="l-ja">統計</span><span class="l-en">Stats</span></button>
-        <button class="chip" id="glBtn" aria-pressed="false" title="語釈の言語">語釈: 日</button>
-        <button class="chip" id="tlBtn" aria-pressed="false" title="対訳・注解の言語">訳: 日</button>
+        <button class="chip" id="lineBtn" aria-pressed="false" title="写本の行番号を表示 / Show manuscript line numbers"><span class="l-ja">行</span><span class="l-en">Lines</span></button>
+        <button class="chip" id="tlBtn" aria-pressed="false" title="語釈・対訳・注解の言語 / Language of glosses, translation and notes">訳: 日</button>
         <button class="chip" id="langBtn" title="Language / 言語">English</button>
-        <button class="chip" id="modeBtn" aria-pressed="false" title="表示モード">◐ アイオーン</button>
       </div>
-      <a class="chip searchlink" href="search.html?doc=eugnostos" title="コーパス検索 / Corpus search">⌕ <span class="l-ja">コーパス検索</span><span class="l-en">Corpus search</span></a>
+      <div class="nav-ctl">
+        <a class="chip statslink" href="stats.html?doc=eugnostos" title="コーパス統計 / Corpus statistics">∑ <span class="l-ja">統計</span><span class="l-en">Stats</span></a>
+        <a class="chip searchlink" href="search.html?doc=eugnostos" title="コーパス検索 / Corpus search">⌕ <span class="l-ja">コーパス検索</span><span class="l-en">Corpus search</span></a>
+        <button class="chip" id="modeBtn" aria-pressed="false" title="表示モード / Display mode">◐ アイオーン</button>
+      </div>
       <div class="search">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
         <input id="q" type="search" placeholder="コプト語・語釈・訳を検索" autocomplete="off" aria-label="検索">
@@ -375,16 +381,6 @@ html[data-lang="en"] .l-en{display:revert}
 </div>
 
 <div class="pop" id="pop" role="dialog" aria-label="形態素の語義"></div>
-
-<div class="modal-back" id="statsBack"></div>
-<div class="modal" id="statsModal" role="dialog" aria-modal="true" aria-label="統計 / Statistics">
-  <div class="modal-head">
-    <h2><span class="l-ja">コーパス統計</span><span class="l-en">Corpus statistics</span></h2>
-    <span class="sub" id="statsWit">NHC III,3</span>
-    <button class="x" id="statsClose" aria-label="閉じる / Close" title="閉じる / Close">×</button>
-  </div>
-  <div class="modal-body" id="statsBody"></div>
-</div>
 
 <script>
 "use strict";
@@ -857,67 +853,9 @@ $("#lineBtn").onclick=()=>toggle($("#lineBtn"),"data-line","on","off");
 function loanCount(){ const segs = curWit==="V"?SEGS_V:SEGS_III; return segs.reduce((a,s)=>a+s.words.filter(w=>w.grc).length,0); }
 function relabelLoan(){ const e=$("#loanN"); if(e){ const n=loanCount(); e.textContent=n?(" "+n):""; } }
 
-/* ---------- statistics (counts of @type, @lemma, loanwords, pages/lines/gaps) ---------- */
-function statsWit(){ return curWit==="V" ? {id:"wit-V", label:"NHC V,1"} : {id:"wit-III", label:"NHC III,3"}; }
-function computeStats(){
-  const w0=statsWit();
-  const t=Array.from(T(DOC_MAIN,"text")).find(x=>getId(x)===w0.id) || DOC_MAIN;
-  const ws=T(t,"w");
-  const typeCount={}, lemmaCount={}; let grcTokens=0; const grcLemma={};
-  ws.forEach(w=>{
-    const ty=(w.getAttribute("type")||"∅"); typeCount[ty]=(typeCount[ty]||0)+1;
-    const le=(w.getAttribute("lemma")||"∅"); lemmaCount[le]=(lemmaCount[le]||0)+1;
-    if(getLang(w)==="grc"){ grcTokens++; grcLemma[le]=(grcLemma[le]||0)+1; }
-  });
-  const gaps=T(t,"gap"); const gapByReason={};
-  gaps.forEach(g=>{ const r=(g.getAttribute("reason")||"∅"); gapByReason[r]=(gapByReason[r]||0)+1; });
-  return { wit:w0, tokens:ws.length, typeCount, lemmaCount,
-    distinctTypes:Object.keys(typeCount).length, distinctLemmas:Object.keys(lemmaCount).length,
-    grcTokens, grcLemmaCount:Object.keys(grcLemma).length, grcLemma,
-    pages:T(t,"pd").concat(T(t,"p").filter(e=>e.hasAttribute("n"))).map(e=>e.getAttribute("n")),
-    lines:T(t,"lb").length, gaps:gaps.length, gapByReason };
-}
-function renderStats(){
-  const st=computeStats(); const enUI=UL()==="en";
-  $("#statsWit").textContent=st.wit.label;
-  const card=(v,sub,k,cls="")=>`<div class="statcard ${cls}"><div class="v">${v}${sub?` <small>${sub}</small>`:""}</div><div class="k">${k}</div></div>`;
-  const cards=
-    card(st.tokens,"",enUI?"tokens (&lt;w&gt;)":"総語数（&lt;w&gt;）")+
-    card(st.distinctLemmas,"",enUI?"distinct lemmas":"異なりレンマ")+
-    card(st.distinctTypes,"",enUI?"distinct types":"品詞タイプ数")+
-    card(st.grcTokens,`/ ${st.grcLemmaCount}`,enUI?"loanword tokens / lemmas":"借用語 語数 / レンマ","grc")+
-    card(st.pages.length,"",enUI?"codex pages":"写本ページ")+
-    card(st.lines,"",enUI?"manuscript lines":"写本行")+
-    card(st.gaps,"",enUI?"gaps":"欠損・不明 箇所");
-  const types=Object.entries(st.typeCount).sort((a,b)=>b[1]-a[1]); const maxT=types.length?types[0][1]:1;
-  const posBars=types.map(([ty,ct])=>{ const lab=(POS[ty]||[ty,""]); const nm=enUI?(lab[1]||ty):(lab[0]||ty);
-    return `<div class="bar"><div class="lab">${escapeHTML(nm)} <code>${escapeHTML(ty)}</code></div>`+
-      `<div class="track"><div class="fill" style="width:${(ct/maxT*100).toFixed(1)}%"></div></div><div class="ct">${ct}</div></div>`;
-  }).join("");
-  const lemmas=Object.entries(st.lemmaCount).filter(([l])=>l!=="∅").sort((a,b)=>b[1]-a[1]).slice(0,24);
-  const maxL=lemmas.length?lemmas[0][1]:1;
-  const lemBars=lemmas.map(([le,ct])=>{ const isG=!!st.grcLemma[le];
-    return `<div class="bar${isG?' grc':''}"><div class="lab"><span style="font-family:var(--copt)">${escapeHTML(le)}</span></div>`+
-      `<div class="track"><div class="fill" style="width:${(ct/maxL*100).toFixed(1)}%"></div></div><div class="ct">${ct}</div></div>`;
-  }).join("");
-  const gl=Object.entries(st.grcLemma).sort((a,b)=>b[1]-a[1]);
-  const glChips=gl.map(([le,ct])=>`<span class="lx">${escapeHTML(le)}<b>${ct}</b></span>`).join("");
-  const gapRows=Object.entries(st.gapByReason).sort((a,b)=>b[1]-a[1]).map(([r,ct])=>`${escapeHTML(r)}: ${ct}`).join(" / ");
-  $("#statsBody").innerHTML=
-    `<div class="statgrid">${cards}</div>`+
-    `<div class="stat-sec"><h3>${enUI?"Part of speech":"品詞 (@type) 分布"} <small>by @type</small></h3><div class="bars">${posBars}</div></div>`+
-    `<div class="stat-sec"><h3>${enUI?"Greek loanwords":"ギリシア語借用語"} <small>xml:lang="grc" · ${st.grcTokens} / ${st.grcLemmaCount}</small></h3><div class="chiplist">${glChips||'<span class="lab">—</span>'}</div></div>`+
-    `<div class="stat-sec"><h3>${enUI?"Most frequent lemmas":"頻出レンマ"} <small>top ${lemmas.length} of ${st.distinctLemmas}</small></h3><div class="bars">${lemBars}</div></div>`+
-    `<p class="stat-note">${enUI
-      ? `Counts are taken directly from <code>${st.wit.id}</code> in the source: every <code>&lt;w&gt;</code> token, its <code>@type</code> and <code>@lemma</code>, and tokens carrying <code>xml:lang="grc"</code>. Gaps — ${gapRows||"none"} — and ${st.pages.length} page / ${st.lines} line markers are also tallied. Switch witness (III / V) to recount.`
-      : `数値は本文 <code>${st.wit.id}</code> から直接集計（各 <code>&lt;w&gt;</code> トークン、その <code>@type</code>・<code>@lemma</code>、<code>xml:lang="grc"</code> を持つトークン）。欠損・不明の内訳は ${gapRows||"なし"}、ページ ${st.pages.length}・行 ${st.lines} のマーカーも計上。写本タブ（III / V）を切り替えると再集計します。`}</p>`;
-}
-function openStats(){ renderStats(); H.setAttribute("data-stats","open"); }
-function closeStats(){ H.removeAttribute("data-stats"); }
-$("#statsBtn").onclick=openStats;
-$("#statsClose").onclick=closeStats;
-$("#statsBack").onclick=closeStats;
-document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeStats(); });
+/* ---------- statistics ---------- */
+/* コーパス統計は stats.html?doc=… に移設（ヘッダの〈統計〉リンク）。
+   集計ロジックは stats.html 側で TEI を直接読み込んで再実装しています。 */
 const LANG_CYCLE=["ja","en","fr"];
 /* ---- UI i18n helpers ---- */
 function UL(){ return H.getAttribute("data-lang")==="en"?"en":"ja"; }
@@ -946,14 +884,22 @@ function cycleLang(btn,attr,key){
   btn.setAttribute("aria-pressed", next==="ja"?"false":"true");
   render();
 }
-$("#glBtn").onclick=()=>cycleLang($("#glBtn"),"data-gl","gl");
-$("#tlBtn").onclick=()=>cycleLang($("#tlBtn"),"data-tl","tl");
+/* 〈訳〉ボタン：語釈 (data-gl) と対訳・注解 (data-tl) の言語をまとめて切替 */
+function cycleTransLang(){
+  const cur=H.getAttribute("data-tl")||"ja";
+  const next=LANG_CYCLE[(LANG_CYCLE.indexOf(cur)+1)%LANG_CYCLE.length];
+  H.setAttribute("data-tl",next); H.setAttribute("data-gl",next);
+  const b=$("#tlBtn");
+  relabelLangBtn(b,"data-tl","tl");
+  b.setAttribute("aria-pressed", next==="ja"?"false":"true");
+  render();
+}
+$("#tlBtn").onclick=cycleTransLang;
 $("#modeBtn").onclick=()=>{ toggle($("#modeBtn"),"data-mode","aeon","codex","◑ アルコーン","◐ アイオーン"); relabelMode(); };
 function applyUILang(){
   const en=UL()==="en";
   const lb=$("#langBtn"); if(lb) lb.textContent=en?"日本語":"English";
   const qi=$("#q"); if(qi){ qi.placeholder=en?"Search Coptic, glosses, translations":"コプト語・語釈・訳を検索"; qi.setAttribute("aria-label",en?"Search":"検索"); }
-  relabelLangBtn($("#glBtn"),"data-gl","gl");
   relabelLangBtn($("#tlBtn"),"data-tl","tl");
   relabelMode();
   H.setAttribute("lang", en?"en":"ja");

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- コーパスカタログ（data/catalog.xml）。文書レベルのメタデータと関連リソースを一元管理します。
+     - 各文書は <bibl type="document" xml:id="doc-…"> で記述
+     - 文書間の関連は <relatedItem type="corpus" target="#doc-…">（コーパス内）
+     - 外部リソースは <relatedItem type="external"> 内の <bibl>（<ref target="URL"/> 必須）
+     - 公開前の文書は <bibl subtype="planned">（ビュワーには「準備中」として表示されます）
+     - URL を追加する際は必ず実在を確認してから記入してください
+     ビュワー（republic.html 等）はこのファイルを読み込み、ヘッダの〈関連〉パネルを生成します。 -->
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title xml:lang="ja">ナグ・ハマディ写本コーパス — 文書カタログ</title>
+        <title xml:lang="en">Nag Hammadi Library Corpus — Document Catalogue</title>
+      </titleStmt>
+      <publicationStmt>
+        <p xml:lang="ja">本プロジェクトによる公開データ。文書メタデータと関連リソースの一覧。</p>
+        <p xml:lang="en">Published by this project: document metadata and related resources.</p>
+      </publicationStmt>
+      <sourceDesc>
+        <p xml:lang="ja">本文・辞書・注解の各XMLファイルを参照。</p>
+        <p xml:lang="en">See the individual text, lexicon and commentary XML files.</p>
+      </sourceDesc>
+    </fileDesc>
+  </teiHeader>
+  <standOff>
+    <listBibl type="catalog" xml:id="catalog">
+
+      <!-- ═══════════ プラトン『国家』588b–589b ═══════════ -->
+      <bibl type="document" xml:id="doc-republic">
+        <title xml:lang="cop">ⲡⲟⲗⲓⲧⲉⲓⲁ</title>
+        <title xml:lang="ja">プラトン『国家』588b–589b</title>
+        <title xml:lang="en">Plato, Republic 588b–589b</title>
+        <idno type="siglum">NHC VI,5</idno>
+        <idno type="pages">pp. 48–51</idno>
+        <note type="genre" xml:lang="ja">哲学的抜粋（ギリシア語からの翻訳）</note>
+        <note type="genre" xml:lang="en">Philosophical excerpt (translated from Greek)</note>
+        <note type="lang">cop (Sahidic) ← grc</note>
+        <note type="desc" xml:lang="ja">『国家』第9巻「魂の像」の比喩のコプト語訳。ギリシア語原文（OCT/Burnet）との文対応つき。</note>
+        <note type="desc" xml:lang="en">A Coptic rendering of the “image of the soul” passage from Republic IX, aligned sentence by sentence with the Greek (OCT/Burnet).</note>
+        <ref type="reader" target="republic.html"/>
+        <ref type="search" target="search.html?doc=republic"/>
+        <ref type="stats" target="stats.html?doc=republic"/>
+        <ref type="xml" target="data/republic_tei.xml"/>
+        <relatedItem type="corpus" target="#doc-eugnostos">
+          <note xml:lang="ja">同じビュワー・エンジンと共通辞書で公開中の姉妹文書</note>
+          <note xml:lang="en">Companion document, published with the same viewer engine and shared lexicon</note>
+        </relatedItem>
+        <relatedItem type="corpus" target="#doc-thomas">
+          <note xml:lang="ja">次の比較対象（同一パイプラインでの計測を予定）</note>
+          <note xml:lang="en">Next comparandum (same measurement pipeline planned)</note>
+        </relatedItem>
+        <relatedItem type="external">
+          <bibl>
+            <title>Coptic Dictionary Online</title>
+            <ref target="https://coptic-dictionary.org/"/>
+            <note xml:lang="ja">語ポップオーバーの辞書リンク先</note>
+            <note xml:lang="en">Target of the per-word dictionary links</note>
+          </bibl>
+        </relatedItem>
+        <relatedItem type="external">
+          <bibl>
+            <title>Coptic Scriptorium</title>
+            <ref target="https://copticscriptorium.org/"/>
+            <note xml:lang="ja">句グループ化の際に参照した標準</note>
+            <note xml:lang="en">Standard consulted for phrase grouping</note>
+          </bibl>
+        </relatedItem>
+        <relatedItem type="edition">
+          <bibl>
+            <title>Plato, Respublica — J. Burnet (ed.), Platonis Opera, OCT</title>
+            <note xml:lang="ja">ギリシア語本文の底本（パブリックドメイン）。対訳の右列に表示。</note>
+            <note xml:lang="en">Base text of the Greek column (public domain).</note>
+            <!-- 信頼できるデジタル版のURLを確認後にここへ <ref target="…"/> を追加 -->
+          </bibl>
+        </relatedItem>
+      </bibl>
+
+      <!-- ═══════════ 祝福されたエウグノストス ═══════════ -->
+      <bibl type="document" xml:id="doc-eugnostos">
+        <title xml:lang="cop">ⲉⲩⲅⲛⲱⲥⲧⲟⲥ</title>
+        <title xml:lang="ja">祝福されたエウグノストス</title>
+        <title xml:lang="en">Eugnostos the Blessed</title>
+        <idno type="siglum">NHC III,3 / V,1</idno>
+        <note type="genre" xml:lang="ja">書簡体の教理文書（二証本）</note>
+        <note type="genre" xml:lang="en">Doctrinal epistle (two witnesses)</note>
+        <note type="lang">cop (Sahidic)</note>
+        <ref type="reader" target="eugnostos.html"/>
+        <ref type="search" target="search.html?doc=eugnostos"/>
+        <ref type="stats" target="stats.html?doc=eugnostos"/>
+        <ref type="xml" target="data/eugnostos_tei.xml"/>
+        <relatedItem type="corpus" target="#doc-republic">
+          <note xml:lang="ja">同じビュワー・エンジンと共通辞書で公開中の姉妹文書</note>
+          <note xml:lang="en">Companion document, published with the same viewer engine and shared lexicon</note>
+        </relatedItem>
+        <relatedItem type="external">
+          <bibl>
+            <title>Coptic Dictionary Online</title>
+            <ref target="https://coptic-dictionary.org/"/>
+          </bibl>
+        </relatedItem>
+      </bibl>
+
+      <!-- ═══════════ トマス福音書（準備中） ═══════════ -->
+      <bibl type="document" subtype="planned" xml:id="doc-thomas">
+        <title xml:lang="cop">ⲡⲉⲩⲁⲅⲅⲉⲗⲓⲟⲛ ⲡⲕⲁⲧⲁ ⲑⲱⲙⲁⲥ</title>
+        <title xml:lang="ja">トマス福音書（準備中）</title>
+        <title xml:lang="en">Gospel of Thomas (in preparation)</title>
+        <idno type="siglum">NHC II,2</idno>
+        <note type="genre" xml:lang="ja">語録集。ギリシア語断片（P.Oxy. 1, 654, 655）との比較対象。</note>
+        <note type="genre" xml:lang="en">Sayings collection; comparandum with the Greek fragments (P.Oxy. 1, 654, 655).</note>
+        <note type="lang">cop (Sahidic) ‖ grc (fragments)</note>
+        <note type="desc" xml:lang="ja">翻訳普遍性の同一パイプラインを適用する次の対象。公開時期未定。</note>
+        <note type="desc" xml:lang="en">Next target for the same translation-universals pipeline; publication date TBD.</note>
+        <relatedItem type="corpus" target="#doc-republic"/>
+      </bibl>
+
+    </listBibl>
+  </standOff>
+</TEI>

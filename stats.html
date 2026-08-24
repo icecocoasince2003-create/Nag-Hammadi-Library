@@ -1,0 +1,486 @@
+<!-- コーパス統計ページ（手作業管理）。?doc=republic / ?doc=eugnostos で対象文書を切り替えます。
+     data/ の TEI・辞書 XML を直接読み込んで集計します（ビュワーの実装には依存しません）。
+     セクションを増やすときは JS 内の SECTIONS 配列に1要素 push するだけで、目次と本体が自動生成されます。
+     UI言語は search.html と同じ方式（html[data-lang] + .l-ja/.l-en + #langBtn）で JA/EN を切替。 -->
+<!DOCTYPE html>
+<html lang="ja" data-lang="ja" data-mode="aeon">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>コーパス統計 — ナグ・ハマディ写本コーパス</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22 role=%22img%22 aria-label=%22icon%22%3E %3Cdefs%3E %3CradialGradient id=%22bg%22 cx=%2250%25%22 cy=%2242%25%22 r=%2278%25%22%3E %3Cstop offset=%220%22 stop-color=%22%232b2856%22/%3E %3Cstop offset=%220.55%22 stop-color=%22%231b1937%22/%3E %3Cstop offset=%221%22 stop-color=%22%230e0d20%22/%3E %3C/radialGradient%3E %3ClinearGradient id=%22gold%22 x1=%220%22 y1=%220%22 x2=%220%22 y2=%221%22%3E %3Cstop offset=%220%22 stop-color=%22%23f7e9ad%22/%3E %3Cstop offset=%220.5%22 stop-color=%22%23d8b863%22/%3E %3Cstop offset=%221%22 stop-color=%22%23a37e30%22/%3E %3C/linearGradient%3E %3CradialGradient id=%22spark%22 cx=%2250%25%22 cy=%2250%25%22 r=%2250%25%22%3E %3Cstop offset=%220%22 stop-color=%22%23fff8e0%22/%3E %3Cstop offset=%220.4%22 stop-color=%22%23f4e3a0%22/%3E %3Cstop offset=%221%22 stop-color=%22%23caa241%22/%3E %3C/radialGradient%3E %3C/defs%3E %3Ccircle cx=%22256%22 cy=%22256%22 r=%22246%22 fill=%22url(%23bg)%22/%3E %3Ccircle cx=%22256%22 cy=%22256%22 r=%22232%22 fill=%22none%22 stroke=%22%23efe4c6%22 stroke-opacity=%220.18%22 stroke-width=%221.5%22/%3E %3Ccircle cx=%22256%22 cy=%22256%22 r=%22150%22 fill=%22none%22 stroke=%22%23efe4c6%22 stroke-opacity=%220.12%22 stroke-width=%221%22/%3E %3Cpath d=%22M 185.57,81.69 A 188 188 0 1 0 326.43,81.69%22 fill=%22none%22 stroke=%22url(%23gold)%22 stroke-width=%2219%22 stroke-linecap=%22round%22/%3E %3Cpath d=%22M 185.57,81.69 A 188 188 0 1 0 326.43,81.69%22 fill=%22none%22 stroke=%22%237a5a22%22 stroke-opacity=%220.5%22 stroke-width=%222%22/%3E %3Cpath d=%22M 331.3,69.64 L 260.92,68.06 L 321.56,93.74 Z%22 fill=%22url(%23gold)%22/%3E %3Ccircle cx=%22308.1%22 cy=%2274.32%22 r=%222.6%22 fill=%22%231b1937%22/%3E %3Ccircle cx=%22185.57%22 cy=%2281.69%22 r=%222%22 fill=%22%237a5a22%22 fill-opacity=%220.6%22/%3E %3Ccircle cx=%22313.4%22 cy=%22117.42%22 r=%223%22 fill=%22url(%23gold)%22 fill-opacity=%220.55%22/%3E %3Ccircle cx=%22394.58%22 cy=%22198.6%22 r=%223%22 fill=%22url(%23gold)%22 fill-opacity=%220.55%22/%3E %3Ccircle cx=%22394.58%22 cy=%22313.4%22 r=%223%22 fill=%22url(%23gold)%22 fill-opacity=%220.55%22/%3E %3Ccircle cx=%22313.4%22 cy=%22394.58%22 r=%223%22 fill=%22url(%23gold)%22 fill-opacity=%220.55%22/%3E %3Ccircle cx=%22198.6%22 cy=%22394.58%22 r=%223%22 fill=%22url(%23gold)%22 fill-opacity=%220.55%22/%3E %3Ccircle cx=%22117.42%22 cy=%22313.4%22 r=%223%22 fill=%22url(%23gold)%22 fill-opacity=%220.55%22/%3E %3Ccircle cx=%22117.42%22 cy=%22198.6%22 r=%223%22 fill=%22url(%23gold)%22 fill-opacity=%220.55%22/%3E %3Ccircle cx=%22198.6%22 cy=%22117.42%22 r=%223%22 fill=%22url(%23gold)%22 fill-opacity=%220.55%22/%3E %3Cpolygon points=%22256.0,144.0 272.46,216.27 335.2,176.8 295.73,239.54 368.0,256.0 295.73,272.46 335.2,335.2 272.46,295.73 256.0,368.0 239.54,295.73 176.8,335.2 216.27,272.46 144.0,256.0 216.27,239.54 176.8,176.8 239.54,216.27%22 fill=%22url(%23gold)%22 stroke=%22%237a5a22%22 stroke-opacity=%220.4%22 stroke-width=%221%22/%3E %3Ccircle cx=%22256%22 cy=%22256%22 r=%2234%22 fill=%22%2315142c%22/%3E %3Ccircle cx=%22256%22 cy=%22256%22 r=%2234%22 fill=%22none%22 stroke=%22url(%23gold)%22 stroke-width=%222%22 stroke-opacity=%220.7%22/%3E %3Ccircle cx=%22256%22 cy=%22256%22 r=%229%22 fill=%22url(%23spark)%22/%3E %3Cline x1=%22256.0%22 y1=%22245.0%22 x2=%22256.0%22 y2=%22230.0%22 stroke=%22%23f4e3a0%22 stroke-width=%221.4%22 stroke-opacity=%220.85%22/%3E %3Cline x1=%22267.0%22 y1=%22256.0%22 x2=%22282.0%22 y2=%22256.0%22 stroke=%22%23f4e3a0%22 stroke-width=%221.4%22 stroke-opacity=%220.85%22/%3E %3Cline x1=%22256.0%22 y1=%22267.0%22 x2=%22256.0%22 y2=%22282.0%22 stroke=%22%23f4e3a0%22 stroke-width=%221.4%22 stroke-opacity=%220.85%22/%3E %3Cline x1=%22245.0%22 y1=%22256.0%22 x2=%22230.0%22 y2=%22256.0%22 stroke=%22%23f4e3a0%22 stroke-width=%221.4%22 stroke-opacity=%220.85%22/%3E %3C/svg%3E"><link rel="alternate icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAIkklEQVRYhaWXa3BV1RXHf3vvc195Abk3CRAerQkRjAoYX7UqPrC1goNMpUXbqdOXOvKhztQv1nFadYTO1Bms9TFttbWdPqxYWyuDHbWKRUGILSAlUCViIAkJeSfc3Mc5e69+OPdebhg7lbpn7tyz9zlr/9f67/XaitMeV3izZ+eaQVpAKsI1NQnqvd7e2CHYGpzOburjfNTa2hodG65eKcgqz5iVSqvaqeIS/jmZ8AP3umj3zIwZ6T/u378//0kVUI0zL7xRa7NeG9OsClDOCaBOgRe0DtcEsNYeQdyD3cd2Pgm401agsfGiOQq1ydPexUVQhQKlToKXaSClB0HKlAms3YFmTXf3jp6PrcDs2ecvNSr6gjF6rrUO0NSlKrl2eQvP/+UA2WxAUYNkbZzV151Ba8sMTqR9TDTCj37SzuBQGnAYrbHijonvVnf3v73zVCxz6sKchraLjIn8XWuddA6ikQjrvn0RG+69nFRtglfe6CKXcyilUUqRyVp27xtk//5uUhUDnHvOHNbd+hnisSi73+0nsA6tVbVS8pXqypmvjJ/oncLEFAbmp9pmuZjXrrVpdA7qk1U8vGE5NVURHnrsn7y5swfQIb2ncCdS9A3HZZfM5a47ljI6kuPOe15lYDiN1oIT6XMiF/T07OwuyulyZYKo97zSptFaqEtV8fOHlzM8PMHNt73Emzt7MVpTEdMoZRDRIAYkfFbKUBFTGK3Ztr2bm2/dwvjEJD/duJxkbSXWKrTSMxH1h3LDSw+zG9pujsSiv7WBEI1EeWrjVYyN57nrvp1YB8ZoxCmU0qBUWQwUGCg6oDiUFqx1eAY2/uBiEgmPb333NfzAxxiFn/dv6u1/55kSA62trVFlzP3iQp2+sbaFyrhwz4ZdWCsYfRJcqeK/Zs6sKhpnVpbmxXfiQiaCQLh7/S6m1yhuWXsmoBARjNbrm5ubYyUFhgcS12ttmqwVUrUJ1qxsZOOTHaQzFm00YdgXQrAEpjl7US1nL0qW5hTYQSmcgDaaicmAjT/rYO3KRmqnxbAWMObT6fHa6076gGYVCErBDdfOofPwKNvbj6M1iAujXqG45rJ66pLxcKY0i5qrOWtBdagAirpknGsuqy99Lw60hm27+vnwyBg3fGFuwXkFhawqKHCFZ7RagYTZbVlbDS+93gcoYpHCORes2tMxzqMPtLJmZQMRT7OoKcaipijGaK69IsUj97ey98DYSbagsIfir1uPsez8aaHbiaAjrIA1xps1a3yB0l6ts0KyNsrsBo8du4dQSpHLT3W0oeE8v/tTF9/5+jw+u7SKmXVh/nvo7vmcvbCKH/+yi8Ehf4pMLq9QSrFrzzC33zSL6dURRsazaKNSjan3mjzx1RnFdDR/VpyJiQzHB3MYYxARVFnAC7DltWEuP7+C9z8cY933DwKw7qsLEZtly2vDxbJUlh8EpYSe/iyZdI75c+KMdGQBsEo3eWKYVszl06s1wyOZKYAKSE43tMyLsrA5QWtTjMa6gDsfOMC8htCFHvvNQZ5/tI2Hv1fHgc4sHZ1ZOo/k+OCoLe0hAiNjk9RU6lBJAdFM98ACBgScszjrUyqvSCG+HdY5bODj5yGf9UGV2+rIZzP4eYcf+FhryeRsKFu2lwt8nHOU0+QpyxheuDIy7lMVd6E/SrHECYMjAUOjjvZ/5fG05t7bKvjaihS/2jyAQnHL9Sk6u7Lc9/gkgXOIhL9wj5NKJOLC6Hi+NFeOUU+L6ZTCQldPFk8L9UnD4Eh4/ietCJlY1qb51CyL71fyxN1xAPqGDPPqLcva4NVdrsBbgT0FToSGpEFjOXosV2AWLHJI9w5VH8LKuFKakXHLkd4MSxZEcc4Rj+mSNSKOadXC1RcIv35xkg2/yNHTZ+npszz4VI4nNk1yZZtjeo1MkYnHNM45lrTE6OrOMDphUUrhLIMDAws+8GBrENilb0Si+nprYfveNJcuifPy22myOR+kyIKjabbjh087RtOh8/27K2x0rNNsfxc6Oh1NcxxDo6H3I0Im6wOOS5cY3tqbJuycwPfdZthkdRgq/D78Xnh5R5r6GY4lLRGsdSgNFKxpPwDDE4KIRcRx6EjAoaNBwVrL8ITQfoDC+YeyzjnOWxQhWSO8vD2NiISuodyfoZCK+wf1c4G1h7SBkXHL5m2TrL0mQiImWGtRihKIiEUKjna4Dw4fK7xzZe/FoRRYa6mIC2uXR3hxW5rxtEUbCKw7nOr3X4JSR3TMVSbqBjzP3OiccKg7oK3FsHiBpr3D4ZxDax3SWpYlMjlFJheGYbEXDGuKwlmLMcIdX4yQyVme3pwpVEKFs8Hthyf3vVumAKQn+/dXJBo+F/H03MAKezsDli01nNOk2NdpyfuCVopEwsMPXFl4FUJNQSLhYQOLdaHlt632qErAI89myeYEzyiCwL7VN7DnriLulJ4wnmjcopT7staqJpMTdh+0XLAQrjoPhsagf1jwfUuxcpZG4Yjy+QBxjnOb4JsrhVxeePQ5n4lJh9GCc3IsF9jPZzL942WiU8fM5OILtae3Kq0T1gqep7j6PMWVS+D4mOKdg4qDR2FoTJWJC6lpcOY84cKFQqrG8bc9itf/IQRWMEbhnMtIIMv6hva0l+N9ZFteV7d4qWfMC0aruUHgQCmqE4qLz4Jzz3DUzxDyPpwolI2qBEQjcHwE9nRqdnYoTmTDo/E8jbOu1wVudd/Q3l2nYv3Xi0kyubjRM+rZiNGXOMDZQllRUBVXNMyAqkTolCcyiv4RCqAhI9ootAI/sG9Zp780OLi796Nw/ufVrK7unBu1Mus9o5sBnBRvSVOHAFqHoACBtV04t75/cN//dzWbOlqj9Um1Aq1XaaVXaKNSFPtEKEWBszLorGwG98LxIbcFPvnl9CPGGpNKvdcEdgHo6nDNTYB5f3CwpRM22dPZ7T+tuWZjlUn9dQAAAABJRU5ErkJggg=="><link rel="apple-touch-icon" href="image/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+Coptic&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#ede8dc; --ink-soft:#bdb7d2; --ink-faint:#8a85a6;
+  --gold:#d4af6a; --gold-bright:#e7c885; --lapis:#9d8be0; --rose:#cf93a6;
+  --panel:rgba(23,20,46,.78); --panel-2:rgba(33,28,64,.85);
+  --line:rgba(190,180,230,.16); --line-2:rgba(190,180,230,.24);
+  --disp:'Cinzel',Georgia,serif; --ui:'Inter','Noto Sans JP',system-ui,sans-serif;
+  --cop:'Noto Sans Coptic','Antinoou',serif;
+}
+*{box-sizing:border-box}
+html{background:#0a0918}
+body{margin:0; color:var(--ink); font-family:var(--ui); line-height:1.6;
+  -webkit-font-smoothing:antialiased}
+a{color:inherit}
+.cop{font-family:var(--cop)}
+
+header{position:sticky; top:0; z-index:5; background:rgba(8,7,20,.92);
+  backdrop-filter:blur(6px); border-bottom:1px solid rgba(212,175,106,.22);
+  display:flex; align-items:center; gap:14px; padding:11px clamp(14px,4vw,40px)}
+.brand{display:flex; align-items:center; gap:9px; text-decoration:none}
+.brand img{border-radius:6px}
+.brand .bt{display:flex; flex-direction:column; line-height:1.15}
+.brand b{font-family:var(--disp); font-weight:500; font-size:1rem; letter-spacing:.05em}
+.brand small{color:var(--ink-faint); font-size:.7rem; letter-spacing:.08em}
+.spacer{flex:1}
+.chip{font-size:.78rem; color:var(--ink); background:rgba(255,255,255,.06);
+  border:1px solid var(--line-2); padding:7px 13px; border-radius:999px;
+  text-decoration:none; white-space:nowrap}
+.chip:hover{border-color:var(--gold); color:var(--gold-bright)}
+button.chip{appearance:none; cursor:pointer; font-family:var(--ui)}
+
+.wrap{position:relative; z-index:1; max-width:980px; margin:0 auto;
+  padding:0 clamp(16px,4vw,40px) 80px}
+
+.hero{padding:clamp(30px,6vw,58px) 0 8px; text-align:center}
+.eyebrow{font-family:var(--disp); font-size:.74rem; letter-spacing:.32em;
+  text-transform:uppercase; color:var(--gold)}
+.hero h1{font-family:var(--disp); font-weight:500; letter-spacing:.08em;
+  font-size:clamp(1.6rem,4vw,2.3rem); margin:.4em 0 .2em}
+.hero .sub{color:var(--ink-faint); font-size:.9rem}
+
+.doc-tabs{display:flex; justify-content:center; gap:8px; margin:20px 0 14px}
+.doc-tab{font-family:var(--ui); font-size:.84rem; cursor:pointer; text-decoration:none;
+  color:var(--ink-soft); background:var(--panel); border:1px solid var(--line);
+  border-radius:999px; padding:8px 18px}
+.doc-tab[aria-current="true"]{color:var(--gold-bright); border-color:var(--gold);
+  background:rgba(212,175,106,.1)}
+.doc-tab .cop{color:var(--gold); margin-right:.35em}
+
+
+
+.state{display:flex; flex-direction:column; align-items:center; gap:16px;
+  text-align:center; padding:34px 0; color:var(--ink-faint); font-size:.9rem}
+.state img{width:190px; border-radius:50%; border:1px solid rgba(212,175,106,.4);
+  aspect-ratio:1; object-fit:cover; object-position:center 20%}
+.state .cap{font-family:var(--disp); font-size:.7rem; letter-spacing:.28em;
+  text-transform:uppercase; color:var(--gold)}
+.notice{max-width:640px; margin:20px auto; background:var(--panel);
+  border:1px solid var(--rose); border-radius:10px; padding:12px 16px;
+  font-size:.82rem; color:var(--ink-soft)}
+.notice code{color:var(--gold-bright)}
+
+/* ---- UI language toggle (JA/EN) — same scheme as republic.html ---- */
+.l-en{display:none}
+html[data-lang="en"] .l-ja{display:none}
+html[data-lang="en"] .l-en{display:revert}
+
+/* ══════════ 統計ページ専用 ══════════ */
+.toolbar{display:flex; flex-wrap:wrap; align-items:center; justify-content:center;
+  gap:8px; margin:6px 0 26px}
+.toolbar .lab{font-size:.74rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-faint); font-family:var(--disp)}
+.wit-tab{font-size:.8rem; cursor:pointer; font-family:var(--ui); color:var(--ink-soft);
+  background:var(--panel); border:1px solid var(--line); border-radius:999px; padding:6px 15px}
+.wit-tab[aria-pressed="true"]{color:var(--gold-bright); border-color:var(--gold);
+  background:rgba(212,175,106,.1); font-weight:600}
+
+/* セクション目次 */
+.toc{display:flex; flex-wrap:wrap; justify-content:center; gap:6px; margin:0 0 30px}
+.toc a{font-size:.76rem; text-decoration:none; color:var(--ink-soft);
+  border:1px solid var(--line); border-radius:999px; padding:5px 13px}
+.toc a:hover{border-color:var(--gold); color:var(--gold-bright)}
+
+/* セクション */
+.sec{margin:0 0 38px; scroll-margin-top:74px}
+.sec > h2{font-family:var(--disp); font-weight:500; letter-spacing:.06em;
+  font-size:1.05rem; color:var(--gold); margin:0 0 4px;
+  border-bottom:1px solid var(--line); padding-bottom:7px;
+  display:flex; align-items:baseline; gap:10px; flex-wrap:wrap}
+.sec > h2 small{font-family:var(--ui); font-size:.7rem; letter-spacing:.02em;
+  color:var(--ink-faint); font-weight:400}
+.sec .note{font-size:.78rem; color:var(--ink-faint); margin:10px 0 0}
+.sec .note code{color:var(--gold-bright)}
+
+/* 数値カード */
+.cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(148px,1fr));
+  gap:10px; margin:16px 0 0}
+.card{background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  padding:13px 15px}
+.card .v{font-family:var(--disp); font-size:1.5rem; color:var(--gold-bright);
+  line-height:1.15; font-variant-numeric:tabular-nums}
+.card .v small{font-family:var(--ui); font-size:.78rem; color:var(--ink-faint)}
+.card .k{font-size:.72rem; color:var(--ink-faint); margin-top:3px}
+.card.grc{border-color:rgba(157,139,224,.45)}
+.card.grc .v{color:#cfc4f5}
+
+/* 横棒グラフ */
+.bars{display:flex; flex-direction:column; gap:5px; margin-top:14px}
+.bar{display:grid; grid-template-columns:minmax(120px,190px) 1fr 46px;
+  align-items:center; gap:10px; font-size:.78rem}
+.bar .lab{color:var(--ink-soft); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.bar .lab code{font-size:.68rem; color:var(--ink-faint)}
+.bar .lab .cop{font-size:.95rem}
+.bar .track{background:rgba(255,255,255,.06); border-radius:999px; height:9px; overflow:hidden}
+.bar .fill{height:100%; background:linear-gradient(90deg,var(--gold),var(--gold-bright));
+  border-radius:999px}
+.bar.grc .fill{background:linear-gradient(90deg,#6f5fb0,var(--lapis))}
+.bar .ct{text-align:right; color:var(--ink-faint); font-variant-numeric:tabular-nums}
+
+/* チップ列 */
+.chiplist{display:flex; flex-wrap:wrap; gap:6px; margin-top:14px}
+.lx{font-family:var(--cop); font-size:.95rem; color:var(--ink);
+  background:rgba(157,139,224,.14); border:1px solid rgba(157,139,224,.34);
+  border-radius:999px; padding:3px 11px}
+.lx b{font-family:var(--ui); font-size:.68rem; color:var(--lapis); margin-left:6px}
+.lx.warn{background:rgba(207,147,166,.13); border-color:rgba(207,147,166,.36)}
+.lx.warn b{color:var(--rose)}
+
+/* 内訳テーブル */
+.kv{width:100%; border-collapse:collapse; margin-top:14px; font-size:.8rem}
+.kv th,.kv td{text-align:left; padding:7px 10px; border-bottom:1px solid var(--line)}
+.kv th{color:var(--ink-faint); font-weight:500; font-size:.72rem;
+  letter-spacing:.06em; text-transform:uppercase}
+.kv td:last-child{text-align:right; font-variant-numeric:tabular-nums; color:var(--gold-bright)}
+
+.loading{text-align:center; color:var(--ink-faint); font-size:.85rem; padding:40px 0}
+@media (max-width:620px){
+  .bar{grid-template-columns:minmax(92px,130px) 1fr 40px}
+}
+</style>
+</head>
+<body>
+<header>
+  <a class="brand" href="index.html">
+    <img src="image/icon.svg" alt="" width="30" height="30" onerror="this.style.display='none'">
+    <span class="bt"><b>ⲛⲁⲅ ϩⲁⲙⲙⲁⲇⲓ · <span class="l-ja">コーパス統計</span><span class="l-en">Corpus Statistics</span></b>
+    <small>Nag Hammadi Library · corpus statistics</small></span></a>
+  <span class="spacer"></span>
+  <a class="chip" href="index.html"><span class="l-ja">← 文書一覧</span><span class="l-en">← Index</span></a>
+  <a class="chip" id="searchLink" href="search.html"><span class="l-ja">⌕ コーパス検索</span><span class="l-en">⌕ Corpus search</span></a>
+  <a class="chip" id="readerLink" href="republic.html"><span class="l-ja">全文表示へ →</span><span class="l-en">Open full text →</span></a>
+  <button class="chip" id="langBtn" title="Language / 言語">English</button>
+</header>
+
+<div class="wrap">
+  <section class="hero">
+    <div class="eyebrow">Corpus statistics</div>
+    <h1 id="docTitle">コーパス統計</h1>
+    <div class="sub" id="docSub"></div>
+  </section>
+
+  <nav class="doc-tabs" aria-label="対象文書 / Documents" id="docTabs"></nav>
+  <div class="toolbar" id="witBar" hidden></div>
+  <nav class="toc" aria-label="セクション / Sections" id="toc"></nav>
+
+  <div class="notice" id="loadwarn" hidden></div>
+  <div id="sections"><p class="loading"><span class="l-ja">読み込み中…</span><span class="l-en">Loading…</span></p></div>
+</div>
+
+<script>
+"use strict";
+/* ══════════════════════════════════════════════════════════════════════════
+   コーパス統計ページ。?doc=eugnostos / ?doc=republic で対象文書を切り替えます。
+   data/ の TEI を直接読み込んで集計するので、ビュワー側の実装には依存しません。
+
+   ▼ 拡張のしかた
+   1) 新しい数値が要るときは computeStats() の返り値にフィールドを足す。
+   2) 表示を足すときは SECTIONS 配列に
+        { id:"…", ja:"見出し", en:"Heading", sub:st=>"…", render:(st,en)=>"HTML文字列" }
+      を push するだけ。目次 (.toc) と本体は SECTIONS から自動生成されます。
+   3) 特定の文書だけに出したいセクションは docs:["republic"] を添える。
+   ══════════════════════════════════════════════════════════════════════════ */
+const TEI = "http://www.tei-c.org/ns/1.0";
+const XMLNS = "http://www.w3.org/XML/1998/namespace";
+
+const DOCS = {
+  republic: {
+    ja:"プラトン『国家』588b–589b", en:"Plato, Republic 588b–589b", cop:"ⲡⲟⲗⲓⲧⲉⲓⲁ", siglum:"NHC VI,5",
+    tei:"data/republic_tei.xml", lex:"data/lexicon.xml", reader:"republic.html",
+    search:"search.html?doc=republic", wits:null
+  },
+  eugnostos: {
+    ja:"祝福されたエウグノストス", en:"Eugnostos the Blessed", cop:"ⲉⲩⲅⲛⲱⲥⲧⲟⲥ", siglum:"NHC III,3 / V,1",
+    tei:"data/eugnostos_tei.xml", lex:"data/lexicon.xml", reader:"eugnostos.html",
+    search:"search.html?doc=eugnostos",
+    wits:[{key:"III", id:"wit-III", label:"NHC III,3"}, {key:"V", id:"wit-V", label:"NHC V,1"}]
+  }
+};
+
+const POS={ART:["冠詞","article"],N:["名詞","noun"],NPROP:["固有名詞","proper noun"],V:["動詞","verb"],
+ VSTAT:["状態動詞","stative"],PREP:["前置詞","preposition"],PPER:["人称代名詞","pronoun"],
+ PPOS:["所有詞","possessive"],PDEM:["指示詞","demonstrative"],CONJ:["接続詞","conjunction"],
+ PTC:["不変化詞","particle"],NEG:["否定辞","negation"],NUM:["数詞","numeral"],ADV:["副詞","adverb"],
+ ADJ:["形容詞","adjective"],REL:["関係詞","relative"],CONV:["変換詞","converter"],FUT:["未来辞","future"],
+ PRET:["過去辞","past"],COP:["繋辞","copula"],PFX:["接頭辞","prefix"],INTERJ:["間投詞","interjection"],
+ AUX:["助動詞","auxiliary"],POSS:["所有冠詞","possessive art."],
+ EXIST:["存在詞","existential"],PINT:["疑問詞","interrogative"],FM:["外来語句","foreign material"],
+ X:["未注","unglossed"]};
+
+const $ = s => document.querySelector(s);
+const H = document.documentElement;
+const esc = s => String(s==null?"":s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const pct = (a,b) => b ? (a/b*100).toFixed(1) : "0.0";
+
+const params = new URLSearchParams(location.search);
+const docKey = (params.get("doc") in DOCS) ? params.get("doc") : "republic";
+const DOC = DOCS[docKey];
+let TEXT_XML = null, LEXSET = null, curWit = (DOC.wits ? DOC.wits[0].key : null), STATS = null;
+
+function UL(){ return H.getAttribute("data-lang")==="en" ? "en" : "ja"; }
+function docName(d){ return UL()==="en" ? (d.en||d.ja) : d.ja; }
+function posLabel(ty, en){ const l = POS[ty]; return l ? (en ? (l[1]||ty) : (l[0]||ty)) : ty; }
+
+/* ---------- 読み込み ---------- */
+async function fetchXML(url){
+  const r = await fetch(url, {cache:"no-store"});
+  if(!r.ok) throw new Error(url + " → HTTP " + r.status);
+  const x = new DOMParser().parseFromString(await r.text(), "application/xml");
+  if(x.querySelector("parsererror")) throw new Error(url + (UL()==="en" ? " → XML not well-formed" : " → XML整形式エラー"));
+  return x;
+}
+function T(node, name){ return Array.from(node.getElementsByTagNameNS(TEI, name)); }
+function attrNS(el, name){ return el.getAttributeNS(XMLNS, name) || el.getAttribute("xml:" + name) || ""; }
+
+/* 辞書：語釈が1つでも登録されている (lemma, POS) の集合と lemma 単位の集合 */
+function parseLex(xml){
+  const pairs = new Set(), lemmas = new Set();
+  T(xml, "entry").forEach(e => {
+    const orth = T(e, "orth")[0]; if(!orth) return;
+    const lemma = orth.textContent.trim();
+    const pos = ((T(e, "pos")[0] || {}).textContent || "").trim();
+    const hasSense = T(e, "quote").some(q => q.textContent.trim());
+    if(!hasSense) return;
+    lemmas.add(lemma);
+    pairs.add(lemma + "\u0000" + pos);
+  });
+  return { pairs, lemmas };
+}
+
+/* ---------- 集計 ---------- */
+function scopeNode(){
+  if(!DOC.wits) return TEXT_XML;
+  const want = DOC.wits.find(w => w.key === curWit);
+  const t = T(TEXT_XML, "text").find(x => attrNS(x, "id") === want.id);
+  return t || TEXT_XML;
+}
+function computeStats(){
+  const root = scopeNode();
+  const ws = T(root, "w");
+  const typeCount = {}, lemmaCount = {}, grcLemma = {};
+  let grcTokens = 0, glossed = 0;
+  const unknown = {};
+  ws.forEach(w => {
+    const ty = w.getAttribute("type") || "∅";
+    const le = w.getAttribute("lemma") || "∅";
+    typeCount[ty] = (typeCount[ty]||0) + 1;
+    lemmaCount[le] = (lemmaCount[le]||0) + 1;
+    if(attrNS(w, "lang") === "grc"){ grcTokens++; grcLemma[le] = (grcLemma[le]||0) + 1; }
+    if(LEXSET){
+      const hit = LEXSET.pairs.has(le + "\u0000" + ty) || LEXSET.lemmas.has(le);
+      if(hit) glossed++;
+      else if(le !== "∅" && !le.includes("…")) unknown[le] = (unknown[le]||0) + 1;
+    }
+  });
+  const gaps = T(root, "gap"), gapByReason = {};
+  gaps.forEach(g => { const r = g.getAttribute("reason") || "∅"; gapByReason[r] = (gapByReason[r]||0) + 1; });
+  const lemmaEntries = Object.entries(lemmaCount).filter(([l]) => l !== "∅");
+  const hapax = lemmaEntries.filter(([,c]) => c === 1).length;
+  return {
+    label: DOC.wits ? DOC.wits.find(w => w.key === curWit).label : DOC.siglum,
+    scopeId: DOC.wits ? DOC.wits.find(w => w.key === curWit).id : "",
+    tokens: ws.length,
+    segments: T(root, "s").length,
+    typeCount, lemmaCount, grcLemma, gapByReason,
+    distinctTypes: Object.keys(typeCount).length,
+    distinctLemmas: lemmaEntries.length,
+    hapax,
+    grcTokens, grcLemmaCount: Object.keys(grcLemma).length,
+    glossed, unknown,
+    pages: T(root, "pd").concat(T(root, "p").filter(e => e.hasAttribute("n"))).length,
+    lines: T(root, "lb").length,
+    gaps: gaps.length
+  };
+}
+
+/* ---------- 部品 ---------- */
+function cards(list){
+  return '<div class="cards">' + list.map(c =>
+    '<div class="card ' + (c.cls||"") + '"><div class="v">' + c.v +
+    (c.sub ? ' <small>' + c.sub + '</small>' : "") + '</div><div class="k">' + c.k + '</div></div>'
+  ).join("") + '</div>';
+}
+function bars(rows){
+  const max = rows.length ? Math.max.apply(null, rows.map(r => r.n)) : 1;
+  return '<div class="bars">' + rows.map(r =>
+    '<div class="bar' + (r.grc ? " grc" : "") + '"><div class="lab">' + r.lab + '</div>' +
+    '<div class="track"><div class="fill" style="width:' + (r.n/max*100).toFixed(1) + '%"></div></div>' +
+    '<div class="ct">' + r.n + '</div></div>').join("") + '</div>';
+}
+
+/* ══════════ セクション定義（ここに足すだけで拡張できます） ══════════ */
+const SECTIONS = [
+{
+  id:"overview", ja:"概観", en:"Overview",
+  sub:(st,en) => (en ? "counted from " : "集計対象 ") + st.label,
+  render:(st,en) => cards([
+    {v:st.tokens,          k:en?"tokens (&lt;w&gt;)":"総語数（&lt;w&gt;）"},
+    {v:st.segments,        k:en?"segments (&lt;s&gt;)":"セグメント（&lt;s&gt;）"},
+    {v:st.distinctLemmas,  k:en?"distinct lemmas":"異なりレンマ"},
+    {v:st.distinctTypes,   k:en?"distinct POS types":"品詞タイプ数"},
+    {v:pct(st.distinctLemmas, st.tokens), sub:"%", k:en?"type–token ratio":"異なり語数比 (TTR)"},
+    {v:st.hapax,           k:en?"hapax legomena":"1回のみ出現のレンマ"},
+    {v:st.grcTokens, sub:"/ " + st.grcLemmaCount, cls:"grc", k:en?"loanword tokens / lemmas":"借用語 語数 / レンマ"},
+    {v:pct(st.grcTokens, st.tokens), sub:"%", cls:"grc", k:en?"loanword share":"借用語の割合"}
+  ]) +
+  '<p class="note">' + (en
+    ? 'All figures are counted directly from <code>' + esc(DOC.tei) + '</code>: every <code>&lt;w&gt;</code> token with its <code>@type</code> and <code>@lemma</code>, and tokens carrying <code>xml:lang="grc"</code>.'
+    : '数値はすべて <code>' + esc(DOC.tei) + '</code> から直接集計しています（各 <code>&lt;w&gt;</code> トークンとその <code>@type</code>・<code>@lemma</code>、<code>xml:lang="grc"</code> を持つトークン）。') + '</p>'
+},
+{
+  id:"pos", ja:"品詞 (@type) 分布", en:"Part of speech",
+  sub:(st,en) => (en ? st.distinctTypes + " types" : st.distinctTypes + " 種"),
+  render:(st,en) => bars(
+    Object.entries(st.typeCount).sort((a,b) => b[1]-a[1]).map(([ty,n]) => ({
+      lab: esc(posLabel(ty, en)) + ' <code>' + esc(ty) + '</code>', n
+    })))
+},
+{
+  id:"loan", ja:"ギリシア語借用語", en:"Greek loanwords",
+  sub:(st,en) => 'xml:lang="grc" · ' + st.grcTokens + " / " + st.grcLemmaCount,
+  render:(st,en) => {
+    const gl = Object.entries(st.grcLemma).sort((a,b) => b[1]-a[1]);
+    if(!gl.length) return '<p class="note">' + (en ? "None recorded." : "該当なし。") + '</p>';
+    return '<div class="chiplist">' + gl.map(([le,n]) =>
+      '<span class="lx">' + esc(le) + '<b>' + n + '</b></span>').join("") + '</div>' +
+      '<p class="note">' + (en
+        ? 'Detected strictly by <code>xml:lang="grc"</code> on the <code>&lt;w&gt;</code> token — never inferred from the lexicon.'
+        : '判定は <code>&lt;w&gt;</code> の <code>xml:lang="grc"</code> のみに基づきます（辞書からの推定は行いません）。') + '</p>';
+  }
+},
+{
+  id:"lemma", ja:"頻出レンマ", en:"Most frequent lemmas",
+  sub:(st,en) => en ? "top 30 of " + st.distinctLemmas : "上位30 / " + st.distinctLemmas,
+  render:(st,en) => bars(
+    Object.entries(st.lemmaCount).filter(([l]) => l !== "∅")
+      .sort((a,b) => b[1]-a[1]).slice(0,30).map(([le,n]) => ({
+        lab: '<span class="cop">' + esc(le) + '</span>', n, grc: !!st.grcLemma[le]
+      })))
+},
+{
+  id:"lexicon", ja:"辞書カバー率", en:"Lexicon coverage",
+  sub:(st,en) => "data/lexicon.xml",
+  render:(st,en) => {
+    const un = Object.entries(st.unknown).sort((a,b) => b[1]-a[1]);
+    return cards([
+      {v:pct(st.glossed, st.tokens), sub:"%", k:en?"tokens with a sense":"語釈のあるトークン"},
+      {v:st.glossed, sub:"/ " + st.tokens, k:en?"glossed / total tokens":"語釈あり / 総語数"},
+      {v:un.length, k:en?"lemmas without a sense":"語釈のないレンマ"}
+    ]) +
+    (un.length
+      ? '<div class="chiplist">' + un.slice(0,60).map(([le,n]) =>
+          '<span class="lx warn">' + esc(le) + '<b>' + n + '</b></span>').join("") + '</div>'
+      : "") +
+    '<p class="note">' + (en
+      ? 'A token counts as covered when its <code>@lemma</code> (with or without <code>@type</code>) has at least one sense in the shared lexicon. The chips above list the lemmas still to be added.'
+      : '共有辞書に語義が1つ以上ある <code>@lemma</code>（<code>@type</code> 一致・レンマ一致のいずれか）をカバー済みとみなします。上のチップは未登録のレンマです。') + '</p>';
+  }
+},
+{
+  id:"structure", ja:"写本の構造", en:"Manuscript structure",
+  sub:(st,en) => en ? "pages, lines, lacunae" : "ページ・行・欠損",
+  render:(st,en) => cards([
+    {v:st.pages, k:en?"codex pages":"写本ページ"},
+    {v:st.lines, k:en?"manuscript lines":"写本行"},
+    {v:st.gaps,  k:en?"gaps / lacunae":"欠損・不明 箇所"}
+  ]) +
+  (Object.keys(st.gapByReason).length
+    ? '<table class="kv"><tr><th>' + (en?"gap @reason":"欠損の理由 (@reason)") + '</th><th>' + (en?"count":"件数") + '</th></tr>' +
+      Object.entries(st.gapByReason).sort((a,b) => b[1]-a[1]).map(([r,n]) =>
+        '<tr><td><code>' + esc(r) + '</code></td><td>' + n + '</td></tr>').join("") + '</table>'
+    : '<p class="note">' + (en ? "No gaps recorded." : "欠損の記録はありません。") + '</p>')
+}
+];
+
+/* ---------- 描画 ---------- */
+function activeSections(){
+  return SECTIONS.filter(s => !s.docs || s.docs.includes(docKey));
+}
+function renderSections(){
+  if(!STATS) return;
+  const en = UL()==="en";
+  const secs = activeSections();
+  $("#toc").innerHTML = secs.map(s =>
+    '<a href="#sec-' + s.id + '">' + esc(en ? s.en : s.ja) + '</a>').join("");
+  const empty = STATS.tokens === 0
+    ? '<div class="notice">' + (en
+        ? "This witness carries no encoded <code>&lt;w&gt;</code> tokens yet — it is held as a parallel frame linked by <code>@corresp</code>."
+        : "この証本にはまだ <code>&lt;w&gt;</code> が符号化されていません（<code>@corresp</code> で対応づけた並行証本の枠のみ）。") + '</div>'
+    : "";
+  $("#sections").innerHTML = empty + secs.map(s => {
+    const sub = s.sub ? s.sub(STATS, en) : "";
+    return '<section class="sec" id="sec-' + s.id + '">' +
+      '<h2>' + esc(en ? s.en : s.ja) + (sub ? ' <small>' + sub + '</small>' : "") + '</h2>' +
+      s.render(STATS, en) + '</section>';
+  }).join("");
+}
+function renderWitBar(){
+  const bar = $("#witBar");
+  if(!DOC.wits){ bar.hidden = true; return; }
+  const en = UL()==="en";
+  bar.hidden = false;
+  bar.innerHTML = '<span class="lab">' + (en ? "Witness" : "写本") + '</span>' +
+    DOC.wits.map(w => '<button class="wit-tab" data-wit="' + w.key + '" aria-pressed="' +
+      (w.key===curWit) + '">' + esc(w.label) + '</button>').join("");
+  bar.querySelectorAll(".wit-tab").forEach(b => b.onclick = () => {
+    curWit = b.dataset.wit;
+    STATS = computeStats();
+    renderWitBar(); renderSections();
+  });
+}
+function applyUILang(){
+  const en = UL()==="en";
+  H.setAttribute("lang", en ? "en" : "ja");
+  $("#langBtn").textContent = en ? "日本語" : "English";
+  document.title = en
+    ? "Corpus Statistics · " + DOC.en + " — Nag Hammadi Library"
+    : "コーパス統計 · " + DOC.ja + " — ナグ・ハマディ写本コーパス";
+  $("#docTitle").innerHTML = '<span class="cop">' + DOC.cop + '</span> ' + esc(docName(DOC));
+  $("#docSub").textContent = DOC.siglum + (en
+    ? " · counts taken directly from the TEI source"
+    : " · TEIソースから直接集計した計量値");
+  $("#readerLink").href = DOC.reader;
+  $("#searchLink").href = DOC.search;
+  $("#docTabs").innerHTML = Object.entries(DOCS).map(([k,d]) =>
+    '<a class="doc-tab" aria-current="' + (k===docKey) + '" href="stats.html?doc=' + k + '">' +
+    '<span class="cop">' + d.cop + '</span>' + esc(docName(d)) + '</a>').join("");
+  renderWitBar();
+  renderSections();
+}
+$("#langBtn").onclick = () => { H.setAttribute("data-lang", UL()==="en" ? "ja" : "en"); applyUILang(); };
+
+/* ---------- 起動 ---------- */
+async function load(){
+  try{
+    const [tei, lex] = await Promise.all([fetchXML(DOC.tei), fetchXML(DOC.lex).catch(() => null)]);
+    TEXT_XML = tei;
+    LEXSET = lex ? parseLex(lex) : null;
+    STATS = computeStats();
+    applyUILang();
+  }catch(err){
+    const w = $("#loadwarn");
+    w.hidden = false;
+    w.innerHTML = (UL()==="en" ? "Could not load the source: " : "ソースを読み込めませんでした: ") +
+      "<code>" + esc(err.message) + "</code>";
+    $("#sections").innerHTML = "";
+  }
+}
+applyUILang();
+load();
+</script>
+</body>
+</html>
