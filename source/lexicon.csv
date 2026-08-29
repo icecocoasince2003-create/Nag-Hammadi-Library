@@ -23,7 +23,7 @@
 ϥⲧⲟⲟⲩ,1,NUM,,four,四,quatre,,,
 ϩⲁ,1,PREP,,"under, for, before",～の下に・のために,"sous, pour, devant",,,
 ϩⲁⲉⲓⲃⲉⲥ,1,N,,shadow,影,ombre,,,
-ϩⲁⲏ,1,N,,"end, last",終わり・最後,"fin, dernier",,,
+ϩⲁⲉ,1,N,,"end, last",終わり・最後,"fin, dernier",,,
 ϩⲁⲑⲏ,1,PREP,,"before, prior to",～より前に,"avant, antérieurement à",,,
 ϩⲁⲧⲉⲩ,1,PREP,,before them,彼らの前に,avant eux,,,
 ϩⲁⲧⲏ,1,PREP,,"before, in front of",～の前に,"devant, en face de",,,
@@ -67,6 +67,7 @@
 ϫⲟⲉⲓⲥ,1,N,,"lord, master",主・主人,"seigneur, maître",,,
 ϫⲟⲟ,1,V,,"say, tell",言う・語る,"dire, raconter",,,
 ϫⲡⲟ,1,V,,"beget, bring forth, acquire",生む・産出する,"engendrer, produire, acquérir",,,
+ϫⲡⲟ,2,N,,"birth, product, possession",生まれ・産物・所有物,"naissance, produit, possession",,,C7300
 ϫⲱ,1,V,,"say, speak",言う,dire,,,
 ϭⲉ,1,PTC,,"then, therefore (οὖν)",それゆえ・では,"donc, alors",,,
 ϭⲟⲙ,1,N,,"power, might, ability",力・能力,"puissance, force",,,
@@ -83,9 +84,9 @@
 ⲁⲅⲁⲡⲏ,1,N,Y,"Love, Agape (ἀγάπη)",愛・アガペー(ἀγάπη),"Amour, Agapè (ἀγάπη)",,,
 ⲁⲅⲅⲉⲗⲟⲥ,1,N,Y,angel (ἄγγελος),天使(ἄγγελος),ange (ἄγγελος),,,
 ⲁⲅⲉ,1,V,Y,"lead, bring (ἄγω)",導く(ἄγω),"conduire, mener (ἄγω)",,,
-ⲁⲅⲉⲛⲛⲏⲧⲟⲥ,1,ADJ,Y,unbegotten (ἀγέννητος),非産出の・自存の(ἀγέννητος),inengendré (ἀγέννητος),,,
+ⲁⲅⲉⲛⲛⲏⲧⲟⲥ,1,N,Y,unbegotten (ἀγέννητος),非産出の・自存の(ἀγέννητος),inengendré (ἀγέννητος),,,
 ⲁⲇⲁⲙ,1,NPROP,Y,Adam,アダム,Adam,,,
-ⲁⲑⲁⲛⲁⲧⲟⲥ,1,ADJ,Y,immortal (ἀθάνατος),不死の(ἀθάνατος),immortel (ἀθάνατος),,,
+ⲁⲑⲁⲛⲁⲧⲟⲥ,1,N,Y,immortal (ἀθάνατος),不死の(ἀθάνατος),immortel (ἀθάνατος),,,
 ⲁⲓⲱⲛ,1,N,Y,aeon (αἰών),アイオーン(αἰών),"éon, âge (αἰών)",,,
 ⲁⲗⲏⲑⲉⲓⲁ,1,N,Y,truth (ἀλήθεια),真理(ἀλήθεια),vérité (ἀλήθεια),,,
 ⲁⲗⲗⲁ,1,CONJ,Y,but (ἀλλά),しかし(ἀλλά),mais (ἀλλά),,,
@@ -161,12 +162,12 @@
 ⲉⲛⲛⲟⲓⲁ,1,N,Y,"thought, Ennoia (ἔννοια)",思念・エンノイア(ἔννοια),"pensée, Ennoia (ἔννοια)",,,
 ⲉⲝⲟⲩⲥⲓⲁ,1,N,Y,"authority, power (ἐξουσία)",権能(ἐξουσία),"autorité, pouvoir (ἐξουσία)",,,
 ⲉⲟⲟⲩ,1,N,,"glory, honour",栄光,gloire,,,
-ⲉⲣⲉ,1,CONV,,(circumstantial / while),～しつつ(状況),(circonstanciel) tandis que,,,
+ⲉⲣⲉ,1,CCIRC,,(circumstantial / while),～しつつ(状況),(circonstanciel) tandis que,,,
 ⲉⲣⲟ,1,PREP,,to/at (him/it) [ⲉ + suff.],～に(対格),à (lui/cela),,,
 ⲉⲧ,1,REL,,"who, which, that (rel.)",～である(関係),"qui, que (relatif)",,,
 ⲉⲧⲃⲉ,1,PREP,,"because of, concerning",～のために・について,"à cause de, au sujet de",,,
 ⲉⲧⲃⲏⲧ,1,PREP,,concerning (him/it),～について,"à son sujet, le concernant",,,
-ⲉⲧⲉ,1,REL,,"which is, namely",すなわち・～である,"qui est, à savoir",,,
+ⲉⲧⲉ,1,CREL,,"which is, namely",すなわち・～である,"qui est, à savoir",,,
 ⲉⲧⲓⲣⲁ,1,N,Y,-begettress (γενέτειρα),産出母(部分),génératrice (γενέτειρα) [partie],,,
 ⲉⲧⲙⲙⲁⲩ,1,PDEM,,that,かの・その,"ce, celui-là",,,
 ⲉⲧⲱⲣ,1,N,Y,-begetter (γενέτωρ),産出者(～ゲネトール),-engendreur (γενέτωρ),,,
@@ -267,7 +268,7 @@
 ⲛⲉⲩ,1,PPOS,,their (pl. noun) / they were,彼らの・彼らは～だった,leur (pl.) / ils étaient,,,
 ⲛⲑⲉ,1,ADV,,"like, as, in the manner of",～のように,"comme, à la manière de",,,
 ⲛⲓ,1,ART,,"the (pl., dem.)",その・かの(複数),"les, ces (pl., dém.)",,,
-ⲛⲓⲙ,1,ADJ,,"every, each; who?",あらゆる・誰,chaque ; qui ?,,,
+ⲛⲓⲙ,1,N,,"every, each; who?",あらゆる・誰,chaque ; qui ?,,,
 ⲛⲓⲡⲧⲏⲣϥ,1,N,,"the All (pl.), the universe",万有,"le Tout, l'univers (pl.)",,,
 ⲛⲙⲙⲁ,1,PREP,,with (+ suff.),～と共に,avec (+ suff.),,,
 ⲛⲟ,1,V,,"throw, cast",投げる,jeter,動詞(ⲛⲟⲩϫⲉ),verb 'throw',
@@ -872,7 +873,7 @@
 ⲙⲛⲧⲁⲧⲥⲱⲧⲙ,1,N,,,,,,,
 ⲙⲛⲧⲃⲁⲃⲉⲣⲱⲙⲉ,1,N,,,,,,,
 ⲙⲛⲧⲃⲗⲗⲉ,1,N,,,,,,,
-ⲙⲛⲧⲉ,1,EXIST,,not have,持たない,ne pas avoir,,,
+ⲙⲛⲧⲉ,1,PTC,N,not to have,持たない,il n'y a pas à,,,C1891
 ⲙⲛⲧⲙⲁⲓ,1,N,,,,,,,
 ⲙⲛⲧⲛⲟⲩϫ,1,N,,,,,,,
 ⲙⲛⲧⲣⲉϥϭⲛⲁⲣⲓⲕⲉ,1,N,,,,,,,
@@ -954,8 +955,8 @@
 ⲟⲩⲛ,1,EXIST,,"there is, there are",～がある,il y a,,,
 ⲟⲩⲛⲁⲙ,1,N,,,,,,,
 ⲟⲩⲛⲟⲩ,1,N,,,,,,,
-ⲟⲩⲛⲧⲁ,1,EXIST,,have (possess),持つ,"avoir, posséder",,,
-ⲟⲩⲛⲧⲉ,1,EXIST,,have (possess),持つ,"avoir, posséder",,,
+ⲟⲩⲛⲧⲁ,1,EXIST,,"be, exist, there is",,,,,C5038
+ⲟⲩⲛⲧⲉ,1,EXIST,,"be, exist, there is",,,,,C5038
 ⲟⲩⲟϣⲕ,1,VSTAT,,,,,,,
 ⲟⲩⲟⲉⲓϣ,1,N,,,,,,,
 ⲟⲩⲟⲉⲓⲉ,1,N,,"farmer, husbandman",農夫,cultivateur,,,
@@ -3844,3 +3845,4 @@
 ⲅⲉⲱⲣⲅⲟⲥ,1,N,Y,farmer (γεωργός),農夫,,,,C8675
 ⲕⲱⲗⲩⲉ,1,V,Y,"to prevent, hinder, to refuse, to restrain (κολύω)",妨げる・拒む・抑える,,,,C9576
 ⲉⲡⲓⲇⲏ,1,CONJ,Y,"since, because (ἐπειδή)",〜なので・〜だから,,,,C8985
+ϣⲁ,2,V,N,"begin",〜し始める,,,,C5676
