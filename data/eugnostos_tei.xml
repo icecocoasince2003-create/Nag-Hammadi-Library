@@ -345,7 +345,7 @@
               <w type="V" lemma="ϯ">ϯ</w>
               <w type="N" lemma="ⲧⲟⲛⲧⲛ">ⲧⲁⲛⲧⲛ</w>
               <w type="CREL" lemma="ⲉⲧ">ⲉⲧ</w>
-              <w type="N" lemma="ⲙⲏⲉ">ⲙⲏⲉ</w>
+              <w type="N" lemma="ⲙⲉ">ⲙⲏⲉ</w>
             </phy>
             <phy>
               <w type="CONJ" lemma="ⲁⲩⲱ">ⲁⲩⲱ</w>
@@ -360,7 +360,7 @@
             </phy>
             <phy>
               <w type="ART" lemma="ⲧ">ⲧ</w>
-              <w type="N" lemma="ⲙⲏⲉ">ⲙⲏⲉ</w>
+              <w type="N" lemma="ⲙⲉ">ⲙⲏⲉ</w>
             </phy>
             <phy>
               <w type="ART" lemma="ⲧ">ⲧ</w>
@@ -444,8 +444,7 @@
               <w type="CONJ" lemma="ϫⲉ">ϫⲉ</w>
             </phy>
             <phy>
-              <w type="CFOC" lemma="ⲛⲧ">ⲛⲧ</w>
-              <w type="APST" lemma="ⲁ">ⲁ</w>
+              <w type="CFOC" lemma="ⲛⲧ">ⲛⲧⲁ</w>
               <w type="PPER" lemma="ⲩ">ⲩ</w>
               <w type="V" lemma="ⲁⲅⲉ">ⲁⲅⲉ</w>
             </phy>  
@@ -476,7 +475,7 @@
               <w type="CONJ" lemma="ϫⲉ">ϫⲉ</w>
             </phy>
             <phy>
-              <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
+              <w type="PINT" lemma="ⲟⲩ">ⲟⲩ</w>
               <w type="N" lemma="ⲡⲣⲟⲛⲟⲓⲁ" xml:lang="grc">ⲡⲣⲟⲛⲟⲓⲁ</w>
             </phy>
             <phy>
@@ -558,7 +557,7 @@
             </phy>
             <phy>
               <w type="REL" lemma="ⲉⲧ">ⲉⲧ</w>
-              <w type="N" lemma="ⲙⲏⲉ" gloss="true">ⲙⲏⲉ</w>
+              <w type="N" lemma="ⲙⲉ" gloss="true">ⲙⲏⲉ</w>
             </phy>
             </s>
             <s xml:id="III-7505194" n="5" transJa="なぜなら彼自身によって出たものは、空しい生だからである。それが摂理をなし、（それは）愚かさである。運命はそれを知覚しない。" transEn="For what comes from itself is an empty life; providence has no wisdom, and fate is without discernment." transFr="Car ce qui vient de soi-même n&#x27;est qu&#x27;une vie vide ; la providence est sans sagesse, et le destin sans discernement." ana="#th-apophatic #th-frame">
@@ -594,13 +593,13 @@
               <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
             </phy>
             <phy>
-              <w type="AAOR" lemma="ϣⲁ">ϣⲁ</w>
+              <w type="A" lemma="ϣⲁ">ϣⲁ</w>
               <w type="PPER" lemma="ϥ">ϥ</w>
               <w type="V" lemma="ⲁⲁ">ⲁⲁ</w>
               <w type="PPER" lemma="ϥ">ϥ</w>
             </phy>
             <phy>
-              <w type="ART" lemma="ⲧⲉ">ⲧⲉ</w>
+              <w type="ART" lemma="ⲧ">ⲧⲉ</w>
               <w type="N" lemma="ⲡⲣⲟⲛⲟⲓⲁ" xml:lang="grc">ⲡⲣⲟⲛⲟⲓⲁ</w>
             </phy>
             <phy>
@@ -620,7 +619,7 @@
               <w type="CCIRC" lemma="ⲉ">ⲉ</w>
               <w type="ANEGAOR" lemma="ⲙⲉ">ⲙⲉ</w>
               <w type="PPER" lemma="ⲥ">ⲥ</w>
-              <w type="V" lemma="ⲁⲓⲥⲑⲁⲛⲉ">ⲉⲥⲑⲁⲛⲉ</w>
+              <w type="V" lemma="ⲁⲓⲥⲑⲁⲛⲉ" xml:lang="grc">ⲉⲥⲑⲁⲛⲉ</w>
             </phy>
             <phy>
               <w type="COP" lemma="ⲧⲉ">ⲧⲉ</w>
@@ -657,7 +656,8 @@
               <w type="N" lemma="ⲃⲟⲗ">ⲃⲟⲗ</w>
             </phy>
             <phy>
-              <w type="X" lemma="ⲛⲧⲉⲉⲓ">ⲛⲧⲉⲉⲓ</w>
+              <w type="REL" lemma="ⲛⲧⲁ">ⲛⲧⲉ</w>
+              <w type="PREP" lemma="ⲉⲓ">ⲉⲓ</w>
               <w type="NUM" lemma="ϣⲟⲙⲧⲉ">ϣⲟⲙⲧⲉ</w>
             </phy>
             <phy>
@@ -712,15 +712,14 @@
               <w type="V" lemma="ⲥⲩⲙⲫⲱⲛⲓ" gloss="to agree" xml:lang="grc">ⲥⲩⲙⲫⲱⲛⲓ</w>
             </phy>
             <phy>
-              <w type="PREP" lemma="ⲛ">ⲛ</w>
+              <w type="ART" lemma="ⲛ">ⲛ</w>
               <w type="N" lemma="ⲟⲩⲟⲛ">ⲟⲩⲟⲛ</w>
             </phy>
             <phy>
               <w type="PINT" lemma="ⲛⲓⲙ">ⲛⲓⲙ</w>
             </phy>
             <phy>
-              <w type="PREP" lemma="ⲉⲧ">ⲉⲧ</w>
-              <w type="V" lemma="ⲃⲱⲧⲉ">ⲃⲏⲧ</w>
+              <w type="PREP" lemma="ⲉⲧⲃⲉ">ⲉⲧⲃⲏⲧ</w>
               <w type="PPER" lemma="ϥ">ϥ</w>
             </phy>
             <phy>
@@ -734,7 +733,7 @@
               <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
             </phy>
             <phy>
-              <w type="PREP" lemma="ⲉ">ⲉ</w>
+              <w type="CCIRC" lemma="ⲉ">ⲉ</w>
               <w type="PPER" lemma="ϥ">ϥ</w>
               <w type="VSTAT" lemma="ϣⲟⲟⲡ">ϣⲟⲟⲡ</w>
             </phy>
@@ -752,7 +751,7 @@
             </phy>
             <phy>
               <w type="CCIRC" lemma="ⲉ">ⲉ</w>
-              <w type="AAOR" lemma="ϣⲁ">ϣⲁ</w>
+              <w type="A" lemma="ϣⲁ">ϣⲁ</w>
               <w type="PPER" lemma="ⲩ">ⲩ</w>
               <w type="V" lemma="ⲙⲟⲩ">ⲙⲟⲩ</w>
             </phy>
@@ -845,9 +844,7 @@
               </phy>
               <phy>
                 <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
-                <w type="V" lemma="ϣⲁ">ϣⲁ</w>
-              </phy>
-              <phy>
+                <w type="A" lemma="ϣⲁ">ϣⲁ</w>
                 <w type="N" lemma="ⲉⲛⲉϩ">ⲁⲛⲏϩⲉ</w>
               </phy>
               <phy>
@@ -1002,7 +999,7 @@
                 <w type="CONJ" lemma="ⲉⲓⲧⲉ" xml:lang="grc">ⲉⲧⲉ</w>
               </phy>
               <phy>
-                <w type="N" lemma="ⲟⲩⲛⲧ">ⲟⲩⲛⲧ</w>
+                <w type="EXIST" lemma="ⲟⲩⲛⲧ">ⲟⲩⲛⲧ</w>
                 <w type="PPER" lemma="ϥ">ϥ</w>
               </phy>
               <phy>
