@@ -1,8 +1,19 @@
-<!-- コーパス検索ページ（手作業管理）。?doc=republic / ?doc=eugnostos で対象文書を切り替えます。
-     本文・辞書は data/ の XML を読み込みます。検索結果はビュワーの該当セグメント (#seg-ID) へリンクします。
-     UI言語は republic.html と同じ方式（html[data-lang] + .l-ja/.l-en + #langBtn）で JA/EN を切替。 -->
 <!DOCTYPE html>
-<html lang="ja" data-lang="ja" data-mode="aeon">
+<!-- コーパス検索ページ（手作業管理）
+     - 既定で全文書を横断検索します。左の〈文書〉一覧で証本ごとに絞り込めます。
+       旧URL（?doc=republic / ?doc=eugnostos）は、その文書だけを選択した状態で開きます。
+     - 文書一覧は data/catalog.xml から生成します。<bibl type="document"> のうち <ref type="xml"> を持つものを読み込み、
+       本文 XML 内の <text type="witness"> を証本として並べます（subtype="planned" は「準備中」として表示のみ）。
+       新しい文書は catalog.xml に1件足せば、この画面にも自動で加わります。
+     - 結果はレンマ単位（<w @lemma> + @type）で集計し、語義（data/lexicon.xml）・品詞・活用型・語形・頻度・文書別分布を表示します。
+       行をクリックすると語義の詳細と用例（KWIC）を開き、用例から全文表示の該当箇所 (#seg-ID) へ移動できます。
+     - 活用型: 辞書の <entry><gramGrp><iType> と、本文の <w @msd> を読み込みます（未付与の間は「—」）。
+     - 同形異義語の参照はビュワーと同じ規則（@ana による固定 → レンマ＋品詞 → レンマのみ）。
+     - UI言語は site.js の三言語切替（html[data-i18n="full"]）に従います。
+     URL パラメータ: q=検索語, m=part|pre|ex（一致方法）, f=flg（対象: f語形 lレンマ g語義）, w=証本ID（カンマ区切り）, xpos=除外する品詞 -->
+<html lang="ja" data-lang="ja" data-i18n="full"
+  data-title-en="Corpus search — Nag Hammadi Library"
+  data-title-fr="Recherche dans le corpus — Bibliothèque de Nag Hammadi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,382 +21,877 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22 role=%22img%22 aria-label=%22icon%22%3E %3Cdefs%3E %3CradialGradient id=%22bg%22 cx=%2250%25%22 cy=%2242%25%22 r=%2278%25%22%3E %3Cstop offset=%220%22 stop-color=%22%232b2856%22/%3E %3Cstop offset=%220.55%22 stop-color=%22%231b1937%22/%3E %3Cstop offset=%221%22 stop-color=%22%230e0d20%22/%3E %3C/radialGradient%3E %3ClinearGradient id=%22gold%22 x1=%220%22 y1=%220%22 x2=%220%22 y2=%221%22%3E %3Cstop offset=%220%22 stop-color=%22%23f7e9ad%22/%3E %3Cstop offset=%220.5%22 stop-color=%22%23d8b863%22/%3E %3Cstop offset=%221%22 stop-color=%22%23a37e30%22/%3E %3C/linearGradient%3E %3CradialGradient id=%22spark%22 cx=%2250%25%22 cy=%2250%25%22 r=%2250%25%22%3E %3Cstop offset=%220%22 stop-color=%22%23fff8e0%22/%3E %3Cstop offset=%220.4%22 stop-color=%22%23f4e3a0%22/%3E %3Cstop offset=%221%22 stop-color=%22%23caa241%22/%3E %3C/radialGradient%3E %3C/defs%3E %3Ccircle cx=%22256%22 cy=%22256%22 r=%22246%22 fill=%22url(%23bg)%22/%3E %3Ccircle cx=%22256%22 cy=%22256%22 r=%22232%22 fill=%22none%22 stroke=%22%23efe4c6%22 stroke-opacity=%220.18%22 stroke-width=%221.5%22/%3E %3Ccircle cx=%22256%22 cy=%22256%22 r=%22150%22 fill=%22none%22 stroke=%22%23efe4c6%22 stroke-opacity=%220.12%22 stroke-width=%221%22/%3E %3Cpath d=%22M 185.57,81.69 A 188 188 0 1 0 326.43,81.69%22 fill=%22none%22 stroke=%22url(%23gold)%22 stroke-width=%2219%22 stroke-linecap=%22round%22/%3E %3Cpath d=%22M 185.57,81.69 A 188 188 0 1 0 326.43,81.69%22 fill=%22none%22 stroke=%22%237a5a22%22 stroke-opacity=%220.5%22 stroke-width=%222%22/%3E %3Cpath d=%22M 331.3,69.64 L 260.92,68.06 L 321.56,93.74 Z%22 fill=%22url(%23gold)%22/%3E %3Ccircle cx=%22308.1%22 cy=%2274.32%22 r=%222.6%22 fill=%22%231b1937%22/%3E %3Ccircle cx=%22185.57%22 cy=%2281.69%22 r=%222%22 fill=%22%237a5a22%22 fill-opacity=%220.6%22/%3E %3Ccircle cx=%22313.4%22 cy=%22117.42%22 r=%223%22 fill=%22url(%23gold)%22 fill-opacity=%220.55%22/%3E %3Ccircle cx=%22394.58%22 cy=%22198.6%22 r=%223%22 fill=%22url(%23gold)%22 fill-opacity=%220.55%22/%3E %3Ccircle cx=%22394.58%22 cy=%22313.4%22 r=%223%22 fill=%22url(%23gold)%22 fill-opacity=%220.55%22/%3E %3Ccircle cx=%22313.4%22 cy=%22394.58%22 r=%223%22 fill=%22url(%23gold)%22 fill-opacity=%220.55%22/%3E %3Ccircle cx=%22198.6%22 cy=%22394.58%22 r=%223%22 fill=%22url(%23gold)%22 fill-opacity=%220.55%22/%3E %3Ccircle cx=%22117.42%22 cy=%22313.4%22 r=%223%22 fill=%22url(%23gold)%22 fill-opacity=%220.55%22/%3E %3Ccircle cx=%22117.42%22 cy=%22198.6%22 r=%223%22 fill=%22url(%23gold)%22 fill-opacity=%220.55%22/%3E %3Ccircle cx=%22198.6%22 cy=%22117.42%22 r=%223%22 fill=%22url(%23gold)%22 fill-opacity=%220.55%22/%3E %3Cpolygon points=%22256.0,144.0 272.46,216.27 335.2,176.8 295.73,239.54 368.0,256.0 295.73,272.46 335.2,335.2 272.46,295.73 256.0,368.0 239.54,295.73 176.8,335.2 216.27,272.46 144.0,256.0 216.27,239.54 176.8,176.8 239.54,216.27%22 fill=%22url(%23gold)%22 stroke=%22%237a5a22%22 stroke-opacity=%220.4%22 stroke-width=%221%22/%3E %3Ccircle cx=%22256%22 cy=%22256%22 r=%2234%22 fill=%22%2315142c%22/%3E %3Ccircle cx=%22256%22 cy=%22256%22 r=%2234%22 fill=%22none%22 stroke=%22url(%23gold)%22 stroke-width=%222%22 stroke-opacity=%220.7%22/%3E %3Ccircle cx=%22256%22 cy=%22256%22 r=%229%22 fill=%22url(%23spark)%22/%3E %3Cline x1=%22256.0%22 y1=%22245.0%22 x2=%22256.0%22 y2=%22230.0%22 stroke=%22%23f4e3a0%22 stroke-width=%221.4%22 stroke-opacity=%220.85%22/%3E %3Cline x1=%22267.0%22 y1=%22256.0%22 x2=%22282.0%22 y2=%22256.0%22 stroke=%22%23f4e3a0%22 stroke-width=%221.4%22 stroke-opacity=%220.85%22/%3E %3Cline x1=%22256.0%22 y1=%22267.0%22 x2=%22256.0%22 y2=%22282.0%22 stroke=%22%23f4e3a0%22 stroke-width=%221.4%22 stroke-opacity=%220.85%22/%3E %3Cline x1=%22245.0%22 y1=%22256.0%22 x2=%22230.0%22 y2=%22256.0%22 stroke=%22%23f4e3a0%22 stroke-width=%221.4%22 stroke-opacity=%220.85%22/%3E %3C/svg%3E"><link rel="alternate icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAIkklEQVRYhaWXa3BV1RXHf3vvc195Abk3CRAerQkRjAoYX7UqPrC1goNMpUXbqdOXOvKhztQv1nFadYTO1Bms9TFttbWdPqxYWyuDHbWKRUGILSAlUCViIAkJeSfc3Mc5e69+OPdebhg7lbpn7tyz9zlr/9f67/XaitMeV3izZ+eaQVpAKsI1NQnqvd7e2CHYGpzOburjfNTa2hodG65eKcgqz5iVSqvaqeIS/jmZ8AP3umj3zIwZ6T/u378//0kVUI0zL7xRa7NeG9OsClDOCaBOgRe0DtcEsNYeQdyD3cd2Pgm401agsfGiOQq1ydPexUVQhQKlToKXaSClB0HKlAms3YFmTXf3jp6PrcDs2ecvNSr6gjF6rrUO0NSlKrl2eQvP/+UA2WxAUYNkbZzV151Ba8sMTqR9TDTCj37SzuBQGnAYrbHijonvVnf3v73zVCxz6sKchraLjIn8XWuddA6ikQjrvn0RG+69nFRtglfe6CKXcyilUUqRyVp27xtk//5uUhUDnHvOHNbd+hnisSi73+0nsA6tVbVS8pXqypmvjJ/oncLEFAbmp9pmuZjXrrVpdA7qk1U8vGE5NVURHnrsn7y5swfQIb2ncCdS9A3HZZfM5a47ljI6kuPOe15lYDiN1oIT6XMiF/T07OwuyulyZYKo97zSptFaqEtV8fOHlzM8PMHNt73Emzt7MVpTEdMoZRDRIAYkfFbKUBFTGK3Ztr2bm2/dwvjEJD/duJxkbSXWKrTSMxH1h3LDSw+zG9pujsSiv7WBEI1EeWrjVYyN57nrvp1YB8ZoxCmU0qBUWQwUGCg6oDiUFqx1eAY2/uBiEgmPb333NfzAxxiFn/dv6u1/55kSA62trVFlzP3iQp2+sbaFyrhwz4ZdWCsYfRJcqeK/Zs6sKhpnVpbmxXfiQiaCQLh7/S6m1yhuWXsmoBARjNbrm5ubYyUFhgcS12ttmqwVUrUJ1qxsZOOTHaQzFm00YdgXQrAEpjl7US1nL0qW5hTYQSmcgDaaicmAjT/rYO3KRmqnxbAWMObT6fHa6076gGYVCErBDdfOofPwKNvbj6M1iAujXqG45rJ66pLxcKY0i5qrOWtBdagAirpknGsuqy99Lw60hm27+vnwyBg3fGFuwXkFhawqKHCFZ7RagYTZbVlbDS+93gcoYpHCORes2tMxzqMPtLJmZQMRT7OoKcaipijGaK69IsUj97ey98DYSbagsIfir1uPsez8aaHbiaAjrIA1xps1a3yB0l6ts0KyNsrsBo8du4dQSpHLT3W0oeE8v/tTF9/5+jw+u7SKmXVh/nvo7vmcvbCKH/+yi8Ehf4pMLq9QSrFrzzC33zSL6dURRsazaKNSjan3mjzx1RnFdDR/VpyJiQzHB3MYYxARVFnAC7DltWEuP7+C9z8cY933DwKw7qsLEZtly2vDxbJUlh8EpYSe/iyZdI75c+KMdGQBsEo3eWKYVszl06s1wyOZKYAKSE43tMyLsrA5QWtTjMa6gDsfOMC8htCFHvvNQZ5/tI2Hv1fHgc4sHZ1ZOo/k+OCoLe0hAiNjk9RU6lBJAdFM98ACBgScszjrUyqvSCG+HdY5bODj5yGf9UGV2+rIZzP4eYcf+FhryeRsKFu2lwt8nHOU0+QpyxheuDIy7lMVd6E/SrHECYMjAUOjjvZ/5fG05t7bKvjaihS/2jyAQnHL9Sk6u7Lc9/gkgXOIhL9wj5NKJOLC6Hi+NFeOUU+L6ZTCQldPFk8L9UnD4Eh4/ietCJlY1qb51CyL71fyxN1xAPqGDPPqLcva4NVdrsBbgT0FToSGpEFjOXosV2AWLHJI9w5VH8LKuFKakXHLkd4MSxZEcc4Rj+mSNSKOadXC1RcIv35xkg2/yNHTZ+npszz4VI4nNk1yZZtjeo1MkYnHNM45lrTE6OrOMDphUUrhLIMDAws+8GBrENilb0Si+nprYfveNJcuifPy22myOR+kyIKjabbjh087RtOh8/27K2x0rNNsfxc6Oh1NcxxDo6H3I0Im6wOOS5cY3tqbJuycwPfdZthkdRgq/D78Xnh5R5r6GY4lLRGsdSgNFKxpPwDDE4KIRcRx6EjAoaNBwVrL8ITQfoDC+YeyzjnOWxQhWSO8vD2NiISuodyfoZCK+wf1c4G1h7SBkXHL5m2TrL0mQiImWGtRihKIiEUKjna4Dw4fK7xzZe/FoRRYa6mIC2uXR3hxW5rxtEUbCKw7nOr3X4JSR3TMVSbqBjzP3OiccKg7oK3FsHiBpr3D4ZxDax3SWpYlMjlFJheGYbEXDGuKwlmLMcIdX4yQyVme3pwpVEKFs8Hthyf3vVumAKQn+/dXJBo+F/H03MAKezsDli01nNOk2NdpyfuCVopEwsMPXFl4FUJNQSLhYQOLdaHlt632qErAI89myeYEzyiCwL7VN7DnriLulJ4wnmjcopT7staqJpMTdh+0XLAQrjoPhsagf1jwfUuxcpZG4Yjy+QBxjnOb4JsrhVxeePQ5n4lJh9GCc3IsF9jPZzL942WiU8fM5OILtae3Kq0T1gqep7j6PMWVS+D4mOKdg4qDR2FoTJWJC6lpcOY84cKFQqrG8bc9itf/IQRWMEbhnMtIIMv6hva0l+N9ZFteV7d4qWfMC0aruUHgQCmqE4qLz4Jzz3DUzxDyPpwolI2qBEQjcHwE9nRqdnYoTmTDo/E8jbOu1wVudd/Q3l2nYv3Xi0kyubjRM+rZiNGXOMDZQllRUBVXNMyAqkTolCcyiv4RCqAhI9ootAI/sG9Zp780OLi796Nw/ufVrK7unBu1Mus9o5sBnBRvSVOHAFqHoACBtV04t75/cN//dzWbOlqj9Um1Aq1XaaVXaKNSFPtEKEWBszLorGwG98LxIbcFPvnl9CPGGpNKvdcEdgHo6nDNTYB5f3CwpRM22dPZ7T+tuWZjlUn9dQAAAABJRU5ErkJggg=="><link rel="apple-touch-icon" href="image/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+Coptic&display=swap" rel="stylesheet">
-<style>
-:root{
-  --ink:#ede8dc; --ink-soft:#bdb7d2; --ink-faint:#8a85a6;
-  --gold:#d4af6a; --gold-bright:#e7c885; --lapis:#9d8be0; --rose:#cf93a6;
-  --panel:rgba(23,20,46,.78); --panel-2:rgba(33,28,64,.85);
-  --line:rgba(190,180,230,.16); --line-2:rgba(190,180,230,.24);
-  --disp:'Cinzel',Georgia,serif; --ui:'Inter','Noto Sans JP',system-ui,sans-serif;
-  --cop:'Noto Sans Coptic','Antinoou',serif;
-}
-*{box-sizing:border-box}
-html{background:#0a0918}
-body{margin:0; color:var(--ink); font-family:var(--ui); line-height:1.6;
-  -webkit-font-smoothing:antialiased}
-a{color:inherit}
-.cop{font-family:var(--cop)}
-
-header{position:sticky; top:0; z-index:5; background:rgba(8,7,20,.92);
-  backdrop-filter:blur(6px); border-bottom:1px solid rgba(212,175,106,.22);
-  display:flex; align-items:center; gap:14px; padding:11px clamp(14px,4vw,40px)}
-.brand{display:flex; align-items:center; gap:9px; text-decoration:none}
-.brand img{border-radius:6px}
-.brand .bt{display:flex; flex-direction:column; line-height:1.15}
-.brand b{font-family:var(--disp); font-weight:500; font-size:1rem; letter-spacing:.05em}
-.brand small{color:var(--ink-faint); font-size:.7rem; letter-spacing:.08em}
-.spacer{flex:1}
-.chip{font-size:.78rem; color:var(--ink); background:rgba(255,255,255,.06);
-  border:1px solid var(--line-2); padding:7px 13px; border-radius:999px;
-  text-decoration:none; white-space:nowrap}
-.chip:hover{border-color:var(--gold); color:var(--gold-bright)}
-button.chip{appearance:none; cursor:pointer; font-family:var(--ui)}
-
-.wrap{position:relative; z-index:1; max-width:980px; margin:0 auto;
-  padding:0 clamp(16px,4vw,40px) 80px}
-
-.hero{padding:clamp(30px,6vw,58px) 0 8px; text-align:center}
-.eyebrow{font-family:var(--disp); font-size:.74rem; letter-spacing:.32em;
-  text-transform:uppercase; color:var(--gold)}
-.hero h1{font-family:var(--disp); font-weight:500; letter-spacing:.08em;
-  font-size:clamp(1.6rem,4vw,2.3rem); margin:.4em 0 .2em}
-.hero .sub{color:var(--ink-faint); font-size:.9rem}
-
-.doc-tabs{display:flex; justify-content:center; gap:8px; margin:20px 0 14px}
-.doc-tab{font-family:var(--ui); font-size:.84rem; cursor:pointer; text-decoration:none;
-  color:var(--ink-soft); background:var(--panel); border:1px solid var(--line);
-  border-radius:999px; padding:8px 18px}
-.doc-tab[aria-current="true"]{color:var(--gold-bright); border-color:var(--gold);
-  background:rgba(212,175,106,.1)}
-.doc-tab .cop{color:var(--gold); margin-right:.35em}
-
-.searchbox{display:flex; gap:8px; margin:10px auto 0; max-width:640px}
-.searchbox input{flex:1; font-family:var(--ui); font-size:1rem; color:var(--ink);
-  background:var(--panel-2); border:1px solid var(--line-2); border-radius:10px;
-  padding:12px 16px; outline:none}
-.searchbox input:focus{border-color:var(--gold)}
-.searchbox input::placeholder{color:var(--ink-faint)}
-.fields{display:flex; flex-wrap:wrap; justify-content:center; gap:6px 16px;
-  margin:12px 0 4px; font-size:.8rem; color:var(--ink-soft)}
-.fields label{display:inline-flex; align-items:center; gap:6px; cursor:pointer}
-.fields input{accent-color:#d4af6a}
-.stats{ text-align:center; font-size:.76rem; color:var(--ink-faint); margin:8px 0 22px;
-  font-variant-numeric:tabular-nums}
-.stats b{color:var(--gold)}
-
-.results{display:flex; flex-direction:column; gap:12px}
-.hit{display:block; text-decoration:none; background:var(--panel);
-  border:1px solid var(--line); border-radius:12px; padding:14px 18px;
-  transition:border-color .15s, transform .15s}
-.hit:hover{border-color:var(--gold); transform:translateY(-1px)}
-.hit .meta{display:flex; align-items:baseline; gap:10px; font-size:.72rem;
-  color:var(--ink-faint); margin-bottom:6px}
-.hit .meta .no{font-family:var(--disp); color:var(--gold); letter-spacing:.08em}
-.hit .meta .wit{border:1px solid var(--line); border-radius:999px; padding:1px 8px}
-.hit .meta .go{margin-left:auto; color:var(--lapis)}
-.hit .copline{font-family:var(--cop); font-size:1.14rem; line-height:1.9}
-.hit .copline mark{background:rgba(212,175,106,.28); color:var(--gold-bright);
-  border-radius:3px; padding:0 2px}
-.hit .trline{font-size:.84rem; color:var(--ink-soft); margin-top:5px}
-.hit .trline mark{background:rgba(157,139,224,.25); color:#cfc4f5;
-  border-radius:3px; padding:0 2px}
-
-.state{display:flex; flex-direction:column; align-items:center; gap:16px;
-  text-align:center; padding:34px 0; color:var(--ink-faint); font-size:.9rem}
-.state img{width:190px; border-radius:50%; border:1px solid rgba(212,175,106,.4);
-  aspect-ratio:1; object-fit:cover; object-position:center 20%}
-.state .cap{font-family:var(--disp); font-size:.7rem; letter-spacing:.28em;
-  text-transform:uppercase; color:var(--gold)}
-.notice{max-width:640px; margin:20px auto; background:var(--panel);
-  border:1px solid var(--rose); border-radius:10px; padding:12px 16px;
-  font-size:.82rem; color:var(--ink-soft)}
-.notice code{color:var(--gold-bright)}
-
-/* ---- UI language toggle (JA/EN) — same scheme as republic.html ---- */
-.l-en{display:none}
-html[data-lang="en"] .l-ja{display:none}
-html[data-lang="en"] .l-en{display:revert}
-</style>
-<link rel="stylesheet" href="assets/cosmos.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+Coptic&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/site.css">
 <link rel="stylesheet" href="assets/community.css">
-<script defer src="assets/cosmos.js"></script>
 <script defer src="assets/site.js"></script>
 <script defer src="assets/community-config.js"></script>
 <script defer src="assets/community.js"></script>
+<style>
+/* このページだけ明るい紙面の配色（宇宙テーマは読み込まない）。
+   変数名は --s-* にして、共通部品（ログイン欄など）の配色には影響させない。 */
+html{background:#fbfaf7}
+body{margin:0; background:#fbfaf7; color:#1d1c1a;
+  font-family:"Noto Sans JP",system-ui,-apple-system,"Hiragino Sans",sans-serif;
+  font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased}
+.sp{--s-ink:#1d1c1a; --s-mut:#6b675f; --s-faint:#9a958b; --s-rule:#d9d5cb; --s-rule2:#ebe8e0;
+  --s-acc:#7d2d14; --s-mark:#f1e2bd; --s-bar:#a8a397; --s-bg:#fbfaf7; --s-bg2:#f3f1ec;
+  --s-cop:"Noto Sans Coptic","Antinoou",serif}
+.cop{font-family:"Noto Sans Coptic","Antinoou",serif}
+.num{font-variant-numeric:tabular-nums; text-align:right; white-space:nowrap}
+
+/* 上部ナビもこのページでは明るく */
+body .sitebar{--chrome-ink:#1d1c1a; --chrome-faint:#6b675f; --gold:#7d2d14; --gold-bright:#7d2d14;
+  --line-2:#d9d5cb; background:#fff; border-bottom:1px solid #d9d5cb; backdrop-filter:none; color:#1d1c1a}
+
+.layout{display:grid; grid-template-columns:250px minmax(0,1fr); max-width:1440px; margin:0 auto; color:var(--s-ink)}
+
+/* ---- 左：文書と品詞の絞り込み（独立してスクロール） ---- */
+.side{position:sticky; top:var(--sbh,47px); height:calc(100vh - var(--sbh,47px)); overflow-y:auto;
+  scrollbar-gutter:stable; border-right:1px solid var(--s-rule); padding:22px 14px 40px 20px;
+  font-size:.84rem; scrollbar-width:thin; scrollbar-color:#c9c4b8 transparent}
+.side h2{font-size:.74rem; font-weight:700; color:var(--s-mut); margin:0 0 8px;
+  display:flex; align-items:baseline; gap:8px}
+.side h2 + .lnk{margin-left:auto}
+.side section + section{margin-top:26px; padding-top:18px; border-top:1px solid var(--s-rule2)}
+.side ul{list-style:none; margin:0; padding:0}
+.side li{margin:0}
+.opt{display:flex; align-items:baseline; gap:7px; padding:4px 0; cursor:pointer}
+.opt input{margin:0; accent-color:#7d2d14; flex:none; transform:translateY(1px)}
+.opt .nm{flex:1; min-width:0}
+.opt .nm small{display:block; color:var(--s-mut); font-size:.74rem}
+.opt .ct{color:var(--s-faint); font-size:.74rem; font-variant-numeric:tabular-nums}
+.opt:hover .nm{text-decoration:underline; text-decoration-color:var(--s-rule)}
+.side ul.sub{padding-left:22px}
+.planned{color:var(--s-faint); padding:4px 0 4px 20px; font-size:.8rem}
+.planned small{display:block; font-size:.72rem}
+.only{appearance:none; border:0; background:none; padding:0; font:inherit; font-size:.72rem;
+  color:var(--s-acc); cursor:pointer; visibility:hidden}
+.opt:hover .only, .only:focus-visible{visibility:visible}
+.lnk{appearance:none; border:0; background:none; padding:0; font:inherit; font-size:.74rem; font-weight:400;
+  color:var(--s-acc); cursor:pointer; text-decoration:underline; text-underline-offset:3px}
+.side .doctitle small .cop{margin-right:.4em}
+.opt.nodata .nm{color:var(--s-faint)}
+
+/* ---- 右：検索と結果 ---- */
+main{min-width:0; padding:26px clamp(16px,3vw,40px) 90px}
+h1{font-size:1.45rem; font-weight:700; margin:0 0 4px; letter-spacing:.01em}
+.lede{color:var(--s-mut); margin:0 0 18px; font-size:.9rem}
+.qrow{display:flex; gap:10px; align-items:stretch; max-width:760px}
+.qrow input{flex:1; min-width:0; font:inherit; font-size:1.05rem; padding:9px 12px; color:var(--s-ink);
+  background:#fff; border:1px solid #bdb8ad; border-radius:3px; outline:none}
+.qrow input:focus{border-color:var(--s-acc); box-shadow:0 0 0 1px var(--s-acc)}
+.opts{display:flex; flex-wrap:wrap; gap:6px 22px; margin:10px 0 0; font-size:.82rem; color:var(--s-mut)}
+.opts fieldset{border:0; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:4px 14px; align-items:center}
+.opts legend{float:left; margin-right:6px; color:var(--s-mut)}
+.opts label{display:inline-flex; gap:5px; align-items:center; cursor:pointer; color:var(--s-ink)}
+.opts input{margin:0; accent-color:#7d2d14}
+.opts select{font:inherit; font-size:.82rem; padding:2px 4px; border:1px solid #bdb8ad; border-radius:3px; background:#fff; color:var(--s-ink)}
+.scope{margin:14px 0 0; font-size:.8rem; color:var(--s-mut)}
+
+h2.sec{font-size:1rem; font-weight:700; margin:34px 0 10px; padding-bottom:6px; border-bottom:1px solid var(--s-ink);
+  display:flex; align-items:baseline; gap:12px; flex-wrap:wrap}
+h2.sec small{font-weight:400; color:var(--s-mut); font-size:.8rem}
+h2.sec .right{margin-left:auto; display:flex; gap:14px}
+
+/* 統計 */
+.sumline{font-size:.9rem; margin:0 0 14px}
+.sumline b{font-variant-numeric:tabular-nums}
+.statgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:10px 36px}
+.statgrid h3{font-size:.78rem; font-weight:700; color:var(--s-mut); margin:0 0 4px}
+table.st{border-collapse:collapse; width:100%; font-size:.82rem}
+table.st th, table.st td{padding:4px 8px 4px 0; border-bottom:1px solid var(--s-rule2); vertical-align:baseline}
+table.st th{font-weight:500; color:var(--s-mut); text-align:left; border-bottom:1px solid var(--s-rule)}
+table.st th.num{text-align:right}
+table.st td.barc{width:34%; padding-right:0}
+.bar{display:block; height:7px; background:var(--s-rule2)}
+.bar i{display:block; height:100%; background:var(--s-bar)}
+table.st tfoot td{border-bottom:0; color:var(--s-mut)}
+
+/* レンマ表 */
+.tblwrap{overflow:visible}
+table.lx{border-collapse:collapse; width:100%; font-size:.86rem}
+table.lx th{position:sticky; top:var(--sbh,47px); z-index:2; background:var(--s-bg); text-align:left; font-weight:500;
+  color:var(--s-mut); font-size:.76rem; border-bottom:1px solid var(--s-ink); padding:6px 10px 5px 0; white-space:nowrap}
+table.lx th.num{text-align:right}
+table.lx th button{appearance:none; border:0; background:none; padding:0; font:inherit; color:inherit; cursor:pointer}
+table.lx th button:hover{color:var(--s-ink); text-decoration:underline; text-underline-offset:3px}
+table.lx th[aria-sort="ascending"] button::after{content:" ↑"; color:var(--s-ink)}
+table.lx th[aria-sort="descending"] button::after{content:" ↓"; color:var(--s-ink)}
+table.lx td{padding:6px 10px 6px 0; border-bottom:1px solid var(--s-rule2); vertical-align:baseline}
+table.lx tr.row{cursor:pointer}
+table.lx tr.row:hover td{background:var(--s-bg2)}
+table.lx tr.row.open td{background:var(--s-bg2); border-bottom-color:transparent}
+td.lem{white-space:nowrap}
+td.lem .cop{font-size:1.08rem}
+td.lem .tw{display:inline-block; width:1em; color:var(--s-faint); font-size:.7rem}
+.grc{font-size:.66rem; color:var(--s-mut); margin-left:4px; vertical-align:super; letter-spacing:.04em}
+td.pos{white-space:nowrap; color:var(--s-mut); font-size:.8rem}
+td.pos code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.74rem; color:var(--s-ink)}
+td.gl{max-width:28em}
+td.gl .amb{color:var(--s-faint); font-size:.74rem}
+td.it{color:var(--s-faint); white-space:nowrap}
+td.fm .cop{font-size:.98rem}
+td.fm small{color:var(--s-faint); font-size:.72rem; margin-left:1px}
+td.fm .more{color:var(--s-faint); font-size:.74rem}
+td.dist{color:var(--s-mut)}
+td.zero{color:#cfcabe}
+mark{background:var(--s-mark); color:inherit; padding:0 1px}
+.partial{color:var(--s-faint); font-size:.74rem}
+
+/* 詳細行 */
+tr.detail td{padding:4px 0 22px 1.4em; background:var(--s-bg2); border-bottom:1px solid var(--s-rule)}
+.dgrid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:6px 34px; font-size:.84rem}
+.dgrid h4{margin:12px 0 4px; font-size:.74rem; font-weight:700; color:var(--s-mut)}
+.sense{margin:0 0 6px}
+.sense .n{color:var(--s-faint); margin-right:6px; font-variant-numeric:tabular-nums}
+.sense .l{color:var(--s-faint); font-size:.72rem; margin-right:4px}
+.sense .u{color:var(--s-mut); font-size:.76rem}
+.dgrid a, .kwic a{color:var(--s-acc); text-underline-offset:3px}
+.kwic{grid-column:1 / -1}
+table.kw{border-collapse:collapse; width:100%; font-size:.86rem}
+table.kw td{padding:3px 8px; border-bottom:1px solid var(--s-rule2); vertical-align:baseline}
+table.kw td.loc{white-space:nowrap; font-size:.76rem; padding-left:0; width:1%}
+table.kw td.lc{text-align:right; color:var(--s-mut); white-space:nowrap; overflow:hidden; max-width:0; width:42%; direction:rtl}
+table.kw td.lc span{direction:ltr; unicode-bidi:embed}
+table.kw td.kc{white-space:nowrap; text-align:center; width:1%}
+table.kw td.kc b{font-weight:700; color:var(--s-acc)}
+table.kw td.rc{color:var(--s-mut); white-space:nowrap; overflow:hidden; max-width:0; width:42%}
+.kwic .cop{font-size:1rem}
+
+.morebar{margin:14px 0 0; font-size:.84rem}
+.btn{appearance:none; font:inherit; font-size:.82rem; padding:5px 12px; border:1px solid #bdb8ad; background:#fff;
+  color:var(--s-ink); border-radius:3px; cursor:pointer}
+.btn:hover{border-color:var(--s-ink)}
+.empty{padding:28px 0; color:var(--s-mut); font-size:.9rem}
+.notice{border-left:3px solid var(--s-acc); background:#fff; padding:10px 14px; font-size:.84rem; margin:16px 0}
+.notice code{font-size:.8rem}
+.foot{margin-top:46px; padding-top:12px; border-top:1px solid var(--s-rule); font-size:.74rem; color:var(--s-mut); line-height:1.8}
+.foot code{font-size:.72rem}
+.vh{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+
+@media (max-width: 860px){
+  .layout{grid-template-columns:1fr}
+  .side{position:static; height:auto; max-height:42vh; border-right:0; border-bottom:1px solid var(--s-rule); padding:16px}
+  .dgrid{grid-template-columns:1fr}
+  td.gl{max-width:16em}
+  .tblwrap{overflow-x:auto}
+  table.lx th{position:static}
+}
+</style>
 </head>
 <body>
 <nav id="sitebar" class="sitebar"></nav>
-<header>
-  <a class="brand" href="index.html">
-    <img src="image/icon.svg" alt="" width="30" height="30" onerror="this.style.display='none'">
-    <span class="bt"><b>ⲛⲁⲅ ϩⲁⲙⲙⲁⲇⲓ · <span class="l-ja">コーパス検索</span><span class="l-en">Corpus Search</span></b>
-    <small>Nag Hammadi Library · corpus search</small></span></a>
-  <span class="spacer"></span>
-  <a class="chip" href="index.html"><span class="l-ja">← 文書一覧</span><span class="l-en">← Index</span></a>
-  <a class="chip" id="statsLink" href="stats.html"><span class="l-ja">∑ コーパス統計</span><span class="l-en">∑ Corpus statistics</span></a>
-  <a class="chip" id="readerLink" href="republic.html"><span class="l-ja">全文表示へ →</span><span class="l-en">Open full text →</span></a>
-  <button class="chip" id="langBtn" title="Language / 言語">English</button>
-</header>
 
-<div class="wrap">
-  <section class="hero">
-    <div class="eyebrow">Corpus search</div>
-    <h1 id="docTitle">コーパス検索</h1>
-    <div class="sub" id="docSub"></div>
-  </section>
+<div class="layout sp">
+  <aside class="side" aria-label="絞り込み / Filters">
+    <section>
+      <h2><span class="l-ja">文書</span><span class="l-en">Texts</span><span class="l-fr">Textes</span>
+        <button type="button" class="lnk" id="allDocs" style="margin-left:auto"><span class="l-ja">すべて選択</span><span class="l-en">Select all</span><span class="l-fr">Tout sélectionner</span></button></h2>
+      <ul id="docList"><li class="planned">…</li></ul>
+    </section>
+    <section>
+      <h2><span class="l-ja">品詞</span><span class="l-en">Part of speech</span><span class="l-fr">Partie du discours</span>
+        <button type="button" class="lnk" id="allPos" style="margin-left:auto"><span class="l-ja">すべて</span><span class="l-en">All</span><span class="l-fr">Tout</span></button></h2>
+      <ul id="posList"></ul>
+    </section>
+  </aside>
 
-  <nav class="doc-tabs" aria-label="対象文書 / Documents" id="docTabs"></nav>
+  <main>
+    <h1><span class="l-ja">コーパス検索</span><span class="l-en">Corpus search</span><span class="l-fr">Recherche dans le corpus</span></h1>
+    <p class="lede">
+      <span class="l-ja">公開中の全文書を横断して、レンマ・語形・語義から検索します。結果はレンマごとに集計されます。</span>
+      <span class="l-en">Search all published texts at once by lemma, word form or meaning. Results are grouped by lemma.</span>
+      <span class="l-fr">Recherche dans tous les textes publiés par lemme, forme ou sens. Les résultats sont regroupés par lemme.</span>
+    </p>
 
-  <div class="searchbox">
-    <input id="q" type="search" placeholder="コプト語・レンマ・語釈・対訳を検索（例: ⲛⲟⲩⲧⲉ / soul / 魂）"
-      autocomplete="off" aria-label="コーパス検索">
-  </div>
-  <div class="fields" role="group" aria-label="検索対象 / Search fields">
-    <label><input type="checkbox" id="fForm" checked><span class="l-ja">コプト語形</span><span class="l-en">Coptic form</span></label>
-    <label><input type="checkbox" id="fLemma" checked><span class="l-ja">レンマ</span><span class="l-en">Lemma</span></label>
-    <label><input type="checkbox" id="fGloss" checked><span class="l-ja">語釈 (日/英/仏)</span><span class="l-en">Gloss (JA/EN/FR)</span></label>
-    <label><input type="checkbox" id="fTrans" checked><span class="l-ja">対訳 (日/英/仏)</span><span class="l-en">Translation (JA/EN/FR)</span></label>
-  </div>
-  <div class="stats" id="stats"></div>
+    <form class="qrow" id="qform" role="search" onsubmit="return false">
+      <label class="vh" for="q">検索語 / Query</label>
+      <input id="q" type="search" autocomplete="off" spellcheck="false">
+    </form>
+    <div class="opts">
+      <fieldset>
+        <legend><span class="l-ja">対象</span><span class="l-en">Match in</span><span class="l-fr">Chercher dans</span></legend>
+        <label><input type="checkbox" id="fLemma" checked><span class="l-ja">レンマ</span><span class="l-en">lemma</span><span class="l-fr">lemme</span></label>
+        <label><input type="checkbox" id="fForm" checked><span class="l-ja">語形</span><span class="l-en">form</span><span class="l-fr">forme</span></label>
+        <label><input type="checkbox" id="fGloss" checked><span class="l-ja">語義（日・英・仏）</span><span class="l-en">meaning (JA/EN/FR)</span><span class="l-fr">sens (JA/EN/FR)</span></label>
+      </fieldset>
+      <fieldset>
+        <legend><label for="mode"><span class="l-ja">一致</span><span class="l-en">Matching</span><span class="l-fr">Correspondance</span></label></legend>
+        <select id="mode">
+          <option value="part"></option><option value="pre"></option><option value="ex"></option>
+        </select>
+      </fieldset>
+    </div>
+    <p class="scope" id="scope"></p>
 
-  <div class="notice" id="loadwarn" hidden></div>
-  <div class="results" id="results"></div>
+    <div class="notice" id="loadwarn" hidden></div>
+
+    <section id="statSec" aria-live="polite"></section>
+
+    <h2 class="sec" id="listHead"></h2>
+    <div class="tblwrap"><table class="lx" id="lx"><thead></thead><tbody></tbody></table></div>
+    <div class="morebar" id="more"></div>
+
+    <p class="foot">
+      <span class="l-ja">本文: <code>data/*_tei.xml</code>（各 <code>&lt;w&gt;</code> の <code>@lemma</code>・<code>@type</code>）／ 語義: <code>data/lexicon.xml</code>（レンマ＋品詞で参照、<code>@ana</code> による語義の固定を優先）／ 文書: <code>data/catalog.xml</code>。上線などの合成記号は無視して照合します。ギリシア語借用語の印（grc）は <code>xml:lang="grc"</code> を持つ語のみ。活用型は辞書の <code>&lt;iType&gt;</code> または本文の <code>@msd</code> が付与されると表示されます。</span>
+      <span class="l-en">Text: <code>data/*_tei.xml</code> (<code>@lemma</code> and <code>@type</code> of each <code>&lt;w&gt;</code>) · meanings: <code>data/lexicon.xml</code> (looked up by lemma + POS; senses pinned with <code>@ana</code> take priority) · texts: <code>data/catalog.xml</code>. Combining marks such as supralinear strokes are ignored in matching. The “grc” mark appears only on words bearing <code>xml:lang="grc"</code>. Inflection class is shown once <code>&lt;iType&gt;</code> (lexicon) or <code>@msd</code> (text) is supplied.</span>
+      <span class="l-fr">Texte : <code>data/*_tei.xml</code> (<code>@lemma</code> et <code>@type</code> de chaque <code>&lt;w&gt;</code>) · sens : <code>data/lexicon.xml</code> (lemme + partie du discours ; les sens fixés par <code>@ana</code> sont prioritaires) · textes : <code>data/catalog.xml</code>. Les signes diacritiques (traits suscrits, etc.) sont ignorés. La marque « grc » ne concerne que les mots portant <code>xml:lang="grc"</code>. La classe flexionnelle s’affiche dès que <code>&lt;iType&gt;</code> (lexique) ou <code>@msd</code> (texte) est renseigné.</span>
+    </p>
+  </main>
 </div>
 
 <script>
 "use strict";
 const TEI = "http://www.tei-c.org/ns/1.0";
-const DOCS = {
-  republic: {
-    ja:"プラトン『国家』588b–589b", en:"Plato, Republic 588b–589b", cop:"ⲡⲟⲗⲓⲧⲉⲓⲁ", siglum:"NHC VI,5",
-    tei:"data/republic_tei.xml", lex:"data/lexicon.xml", reader:"republic.html",
-    guide:"image/web/scriber.jpg", guideName:"The Scribe"
-  },
-  eugnostos: {
-    ja:"エウグノストス", en:"Eugnostos", cop:"ⲉⲩⲅⲛⲱⲥⲧⲟⲥ", siglum:"NHC III,3『祝福されたエウグノストス』/ V,1『エウグノストス』",
-    tei:"data/eugnostos_tei.xml", lex:"data/lexicon.xml", reader:"eugnostos.html",
-    guide:"image/web/chibi_sophia.jpg", guideName:"Sophia"
-  }
-};
+const XMLNS = "http://www.w3.org/XML/1998/namespace";
+const CATALOG = "data/catalog.xml", LEXICON = "data/lexicon.xml";
 const $ = s => document.querySelector(s);
 const H = document.documentElement;
-const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-/* 合成記号（上線・気息記号など）を除去して比較する正規化 */
-const norm = s => (s||"").normalize("NFD").replace(/[\u0300-\u036f\ufe24-\ufe26]/g,"").normalize("NFC").toLowerCase();
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+/* 合成記号（上線・気息記号など）を除去し小文字化して比較 */
+const norm = s => (s || "").normalize("NFD").replace(/[̀-ͯ︠-︯]/g, "").normalize("NFC").toLowerCase();
+const fmt = n => n.toLocaleString("en-US");
+const T = (node, name) => Array.from(node.getElementsByTagNameNS(TEI, name));
+const kids = (node, name) => Array.from(node.children).filter(c => c.localName === name);
+const xmlLang = el => el.getAttributeNS(XMLNS, "lang") || el.getAttribute("xml:lang") || "";
+const xmlId = el => el.getAttributeNS(XMLNS, "id") || el.getAttribute("xml:id") || "";
 
-const docKey = (new URLSearchParams(location.search).get("doc") in DOCS)
-  ? new URLSearchParams(location.search).get("doc") : "republic";
-const DOC = DOCS[docKey];
-let SEGS = [], LEX = {}, ready = false;
+/* ---------- UI 言語 ---------- */
+const UL = () => { const l = H.getAttribute("data-lang"); return l === "en" || l === "fr" ? l : "ja"; };
+const I18N = {
+  ph:       {ja:"レンマ・語形・語義で検索（例: ⲛⲟⲩⲧⲉ / ⲯⲩⲭⲏ / soul / 魂）", en:"Search by lemma, form or meaning (e.g. ⲛⲟⲩⲧⲉ / ⲯⲩⲭⲏ / soul / 魂)", fr:"Lemme, forme ou sens (ex. ⲛⲟⲩⲧⲉ / ⲯⲩⲭⲏ / âme / 魂)"},
+  part:     {ja:"部分一致", en:"contains", fr:"contient"},
+  pre:      {ja:"前方一致", en:"begins with", fr:"commence par"},
+  ex:       {ja:"完全一致", en:"exact", fr:"exact"},
+  only:     {ja:"のみ", en:"only", fr:"seul"},
+  planned:  {ja:"準備中", en:"in preparation", fr:"en préparation"},
+  scope:    {ja:(w,n)=>"対象: "+w+" 証本 · 延べ "+n+" 語", en:(w,n)=>"Scope: "+w+" witness"+(w==="1"?"":"es")+" · "+n+" tokens", fr:(w,n)=>"Périmètre : "+w+" témoin"+(w==="1"?"":"s")+" · "+n+" occurrences"},
+  noText:   {ja:"本文未入力", en:"text not yet entered", fr:"texte non encore saisi"},
+  noSel:    {ja:"選択中の文書には検索できる本文がありません。左の一覧から文書を選んでください。", en:"The selected texts contain no searchable text yet. Select a text on the left.", fr:"Les textes sélectionnés ne contiennent pas encore de texte. Choisissez un texte à gauche."},
+  listAll:  {ja:"レンマ一覧", en:"Lemmas", fr:"Lemmes"},
+  listHit:  {ja:"検索結果", en:"Results", fr:"Résultats"},
+  nLem:     {ja:n=>n+" 語彙項目", en:n=>n+" lemma"+(n==="1"?"":"s"), fr:n=>n+" lemme"+(n==="1"?"":"s")},
+  csv:      {ja:"CSV で保存", en:"Download CSV", fr:"Télécharger CSV"},
+  cLemma:   {ja:"レンマ", en:"Lemma", fr:"Lemme"},
+  cPos:     {ja:"品詞", en:"POS", fr:"PdD"},
+  cGloss:   {ja:"語義", en:"Meaning", fr:"Sens"},
+  cIType:   {ja:"活用型", en:"Inflection", fr:"Flexion"},
+  cForms:   {ja:"語形", en:"Forms", fr:"Formes"},
+  cFreq:    {ja:"頻度", en:"Freq.", fr:"Fréq."},
+  cRel:     {ja:"‰", en:"‰", fr:"‰"},
+  cRelT:    {ja:"1,000語あたりの出現数（対象範囲）", en:"Occurrences per 1,000 tokens in scope", fr:"Occurrences pour 1 000 mots du périmètre"},
+  cDist:    {ja:"分布", en:"Spread", fr:"Répartition"},
+  iTypeT:   {ja:"辞書の <iType> または本文の @msd（今後付与予定）", en:"<iType> in the lexicon or @msd in the text (to be added)", fr:"<iType> du lexique ou @msd du texte (à venir)"},
+  grcT:     {ja:"ギリシア語借用語（xml:lang=\"grc\"）", en:"Greek loanword (xml:lang=\"grc\")", fr:"Emprunt grec (xml:lang=\"grc\")"},
+  ambT:     {ja:"品詞の一致する辞書項目がないため、同じレンマの全項目を表示", en:"No entry with this POS; showing all entries for the lemma", fr:"Aucune entrée pour cette PdD ; toutes les entrées du lemme"},
+  noGloss:  {ja:"（語義未登録）", en:"(no gloss yet)", fr:"(sens non saisi)"},
+  showMore: {ja:n=>"さらに表示（残り "+n+" 件）", en:n=>"Show more ("+n+" left)", fr:n=>"Afficher plus ("+n+" restants)"},
+  none:     {ja:q=>"「"+q+"」に一致するレンマはありません。", en:q=>"No lemma matches “"+q+"”.", fr:q=>"Aucun lemme ne correspond à « "+q+" »."},
+  noneHint: {ja:"一致方法を「部分一致」に、対象に「語義」を含めると見つかることがあります。", en:"Try “contains” and include “meaning”.", fr:"Essayez « contient » et cochez « sens »."},
+  /* 統計 */
+  stOver:   {ja:"コーパスの概要", en:"Corpus overview", fr:"Vue d’ensemble"},
+  stQuery:  {ja:q=>"「"+q+"」の統計", en:q=>"Statistics for “"+q+"”", fr:q=>"Statistiques pour « "+q+" »"},
+  sumAll:   {ja:(t,l,h,r)=>"延べ語数 <b>"+t+"</b> · 異なりレンマ <b>"+l+"</b> · 1回のみの語 <b>"+h+"</b> · 異なり/延べ比 <b>"+r+"</b>",
+             en:(t,l,h,r)=>"Tokens <b>"+t+"</b> · lemmas <b>"+l+"</b> · hapax legomena <b>"+h+"</b> · type/token ratio <b>"+r+"</b>",
+             fr:(t,l,h,r)=>"Occurrences <b>"+t+"</b> · lemmes <b>"+l+"</b> · hapax <b>"+h+"</b> · rapport types/occurrences <b>"+r+"</b>"},
+  sumHit:   {ja:(l,t,p)=>"一致したレンマ <b>"+l+"</b> · 一致した語 <b>"+t+"</b>（対象範囲の "+p+"%）",
+             en:(l,t,p)=>"Matching lemmas <b>"+l+"</b> · matching tokens <b>"+t+"</b> ("+p+"% of scope)",
+             fr:(l,t,p)=>"Lemmes trouvés <b>"+l+"</b> · occurrences <b>"+t+"</b> ("+p+" % du périmètre)"},
+  byDoc:    {ja:"文書別", en:"By witness", fr:"Par témoin"},
+  byPos:    {ja:"品詞別", en:"By part of speech", fr:"Par partie du discours"},
+  hWit:     {ja:"証本", en:"Witness", fr:"Témoin"},
+  hTok:     {ja:"延べ語数", en:"Tokens", fr:"Occ."},
+  hLem:     {ja:"異なり", en:"Lemmas", fr:"Lemmes"},
+  hHapax:   {ja:"1回のみ", en:"Hapax", fr:"Hapax"},
+  hHit:     {ja:"一致", en:"Hits", fr:"Trouvés"},
+  hPer:     {ja:"‰", en:"‰", fr:"‰"},
+  hShare:   {ja:"%", en:"%", fr:"%"},
+  total:    {ja:"計", en:"Total", fr:"Total"},
+  other:    {ja:"その他", en:"Other", fr:"Autres"},
+  /* 詳細 */
+  dSenses:  {ja:"語義（辞書）", en:"Senses (lexicon)", fr:"Sens (lexique)"},
+  dWGloss:  {ja:"本文中の語釈（@gloss）", en:"In-text glosses (@gloss)", fr:"Gloses du texte (@gloss)"},
+  dForms:   {ja:"語形", en:"Forms", fr:"Formes"},
+  dIType:   {ja:"活用型", en:"Inflection", fr:"Flexion"},
+  dITypeNA: {ja:"未付与（辞書の <iType> または本文の @msd を付与すると表示されます）", en:"Not yet annotated (add <iType> to the lexicon or @msd to the text)", fr:"Pas encore annoté (ajouter <iType> au lexique ou @msd au texte)"},
+  dCdo:     {ja:"Coptic Dictionary Online の項目", en:"Coptic Dictionary Online entry", fr:"Entrée du Coptic Dictionary Online"},
+  dKwic:    {ja:n=>"用例（"+n+" 件）", en:n=>"Occurrences ("+n+")", fr:n=>"Occurrences ("+n+")"},
+  dAllK:    {ja:n=>"すべての用例を表示（"+n+" 件）", en:n=>"Show all "+n+" occurrences", fr:n=>"Afficher les "+n+" occurrences"},
+  dToText:  {ja:"本文の該当箇所へ", en:"Open in the text", fr:"Ouvrir dans le texte"},
+  dPartial: {ja:(a,b)=>"語形で一致した "+a+" 件（このレンマの全 "+b+" 件中）", en:(a,b)=>a+" of "+b+" tokens matched by form", fr:(a,b)=>a+" sur "+b+" occurrences (par forme)"},
+  loadErr:  {ja:"データを取得できませんでした。Web サーバ経由で開いてください（file:// では読み込めません）。", en:"Could not load the data. Open this page through a web server (file:// will not work).", fr:"Impossible de charger les données. Ouvrez la page via un serveur web (file:// ne fonctionne pas)."},
+  loading:  {ja:"読み込み中…", en:"Loading…", fr:"Chargement…"}
+};
+function t(k, ...a){ const e = I18N[k]; if(!e) return k; const v = e[UL()] ?? e.ja; return typeof v === "function" ? v(...a) : v; }
 
-/* ---------- UI言語 (JA/EN) ---------- */
-function UL(){ return H.getAttribute("data-lang")==="en" ? "en" : "ja"; }
-function docName(d){ return UL()==="en" ? (d.en||d.ja) : d.ja; }
-function applyUILang(){
-  const en = UL()==="en";
-  H.setAttribute("lang", en ? "en" : "ja");
-  const lb = $("#langBtn"); if(lb) lb.textContent = en ? "日本語" : "English";
-  document.title = en
-    ? "Corpus Search · " + DOC.en + " — Nag Hammadi Library"
-    : "コーパス検索 · " + DOC.ja + " — ナグ・ハマディ写本コーパス";
-  $("#docTitle").innerHTML = '<span class="cop">' + DOC.cop + '</span> ' + esc(docName(DOC));
-  $("#docSub").textContent = DOC.siglum + (en ? " · search across text, lexicon and translations" : " · 本文・辞書・対訳を横断検索");
-  const qi = $("#q");
-  if(qi){
-    qi.placeholder = en
-      ? "Search Coptic, lemmas, glosses, translations (e.g. ⲛⲟⲩⲧⲉ / soul / 魂)"
-      : "コプト語・レンマ・語釈・対訳を検索（例: ⲛⲟⲩⲧⲉ / soul / 魂）";
-    qi.setAttribute("aria-label", en ? "Corpus search" : "コーパス検索");
-  }
-  { const sl = $("#statsLink"); if(sl) sl.href = "stats.html?doc=" + docKey; }
-  $("#docTabs").innerHTML = Object.entries(DOCS).map(([k,d]) =>
-    '<a class="doc-tab" aria-current="' + (k===docKey) + '" href="search.html?doc=' + k + '">' +
-    '<span class="cop">' + d.cop + '</span>' + esc(docName(d)) + '</a>').join("");
-  renderBaseStats();
-  const q = $("#q").value.trim();
-  if(ready){ q ? run(q) : idleState(); }
-}
-{ const lgb = $("#langBtn"); if(lgb) lgb.onclick = () => {
-    H.setAttribute("data-lang", UL()==="en" ? "ja" : "en");
-    applyUILang();
-  }; }
+/* 品詞ラベル（stats.html と同じ表に、Coptic Scriptorium 系のタグを補ったもの） */
+const POS = {ART:["冠詞","article","article"],N:["名詞","noun","nom"],NPROP:["固有名詞","proper noun","nom propre"],
+  V:["動詞","verb","verbe"],VSTAT:["状態動詞","stative","statif"],PREP:["前置詞","preposition","préposition"],
+  PPER:["人称代名詞","personal pronoun","pronom personnel"],PPOS:["所有詞","possessive","possessif"],
+  PDEM:["指示詞","demonstrative","démonstratif"],CONJ:["接続詞","conjunction","conjonction"],
+  PTC:["不変化詞","particle","particule"],NEG:["否定辞","negation","négation"],NUM:["数詞","numeral","numéral"],
+  ADV:["副詞","adverb","adverbe"],ADJ:["形容詞","adjective","adjectif"],REL:["関係詞","relative","relatif"],
+  CONV:["変換詞","converter","convertisseur"],FUT:["未来辞","future","futur"],PRET:["過去辞","preterite","prétérit"],
+  COP:["繋辞","copula","copule"],PFX:["接頭辞","prefix","préfixe"],INTERJ:["間投詞","interjection","interjection"],
+  AUX:["助動詞","auxiliary","auxiliaire"],POSS:["所有冠詞","possessive article","article possessif"],
+  EXIST:["存在詞","existential","existentiel"],PINT:["疑問詞","interrogative","interrogatif"],
+  FM:["外来語句","foreign material","matériel étranger"],
+  APST:["完了（過去）助動詞","perfect auxiliary","auxiliaire du parfait"],
+  AAOR:["アオリスト助動詞","aorist auxiliary","auxiliaire de l’aoriste"],
+  ACONJ:["接続法助動詞","conjunctive auxiliary","auxiliaire du conjonctif"],
+  ACAUS:["使役不定詞","causative infinitive","infinitif causatif"],
+  AOPT:["希求法助動詞","optative auxiliary","auxiliaire de l’optatif"],
+  ANEGAOR:["否定アオリスト助動詞","negative aorist aux.","aux. de l’aoriste négatif"],
+  ANEGPST:["否定完了助動詞","negative perfect aux.","aux. du parfait négatif"],
+  CREL:["関係変換詞","relative converter","convertisseur relatif"],
+  CCIRC:["状況変換詞","circumstantial converter","convertisseur circonstanciel"],
+  CFOC:["焦点化変換詞","focalising converter","convertisseur focalisant"],
+  CPRET:["過去変換詞","preterite converter","convertisseur prétérit"],
+  X:["未注","unannotated","non annoté"]};
+const posName = p => { const e = POS[p]; return e ? e[{ja:0,en:1,fr:2}[UL()]] : p; };
+
+/* コプト文字の配列順（ⲁ…ⲱ のあとに ϣ ϥ ϧ ϩ ϫ ϭ ϯ）で並べる */
+const ALPHA = "ⲁⲃⲅⲇⲉⲋⲍⲏⲑⲓⲕⲗⲙⲛⲝⲟⲡⲣⲥⲧⲩⲫⲭⲯⲱϣϥϧϩϫϭϯ";
+const RANK = new Map([...ALPHA].map((c,i) => [c,i]));
+const ckey = s => [...norm(s)].map(c => RANK.has(c) ? String.fromCharCode(0x4e00 + RANK.get(c))
+  : /[\[\]\.‐\-\s]/.test(c) ? "" : String.fromCharCode(0x6000 + (c.codePointAt(0) % 0x1000))).join("");
+
+/* ---------- 状態 ---------- */
+const ST = {
+  docs: [],            // {key, ja, en, fr, cop, siglum, reader, xml, planned, wits:[]}
+  wits: [],            // {id, label, short, doc, segs:[], groups:[[tokIdx]], ntok}
+  toks: [],            // {w, s, g, form, lemma, pos, grc, msd, ana, gl, key}
+  groups: new Map(),   // key(lemma\tpos) → {key, lemma, pos, toks:[], ents:[], amb, wgl:Map, grc, itypes:[], gsearch:[]}
+  lex: new Map(),      // lemma → [entry]
+  lexById: new Map(),
+  sel: new Set(),      // 選択中の証本 ID
+  posOff: new Set(),   // 除外する品詞
+  sort: {k:"n", d:-1},
+  open: new Set(),
+  allK: new Set(),
+  limit: 200,
+  ready: false,
+  rows: [], N: 0
+};
 
 /* ---------- 読み込み ---------- */
 async function fetchXML(url){
   const r = await fetch(url, {cache:"no-store"});
   if(!r.ok) throw new Error(url + " → HTTP " + r.status);
   const x = new DOMParser().parseFromString(await r.text(), "application/xml");
-  if(x.querySelector("parsererror")) throw new Error(url + (UL()==="en" ? " → XML not well-formed" : " → XML整形式エラー"));
+  if(x.querySelector("parsererror")) throw new Error(url + " → XML not well-formed");
   return x;
 }
-function T(node, name){ return Array.from(node.getElementsByTagNameNS(TEI, name)); }
-
+function parseCatalog(xml){
+  T(xml, "bibl").filter(b => b.getAttribute("type") === "document").forEach(b => {
+    const title = {};
+    kids(b, "title").forEach(ti => { title[xmlLang(ti)] = ti.textContent.trim(); });
+    const ref = {};
+    kids(b, "ref").forEach(r => { ref[r.getAttribute("type")] = r.getAttribute("target"); });
+    const sig = kids(b, "idno").find(i => i.getAttribute("type") === "siglum");
+    ST.docs.push({
+      key: xmlId(b).replace(/^doc-/, ""), ja: title.ja || title.en || "", en: title.en || title.ja || "",
+      fr: title.fr || title.en || title.ja || "", cop: title.cop || "", siglum: sig ? sig.textContent.trim() : "",
+      reader: ref.reader || "", xml: ref.xml || "",
+      planned: b.getAttribute("subtype") === "planned" || !ref.xml, wits: []
+    });
+  });
+}
 function parseLex(xml){
   T(xml, "entry").forEach(e => {
     const orth = T(e, "orth")[0]; if(!orth) return;
     const lemma = orth.textContent.trim();
-    const pos = (T(e, "pos")[0] || {}).textContent || "";
-    const senses = { pos, ja:[], en:[], fr:[] };
-    T(e, "quote").forEach(q => {
-      const l = q.parentElement.getAttribute("xml:lang");
-      if(senses[l]) senses[l].push(q.textContent.trim());
-    });
-    (LEX[lemma] = LEX[lemma] || []).push(senses);
+    const ent = {id: xmlId(e), n: e.getAttribute("n") || "", pos: (T(e, "pos")[0] || {}).textContent || "X",
+      ja:[], en:[], fr:[], u:{}, ref:"", itype:[]};
+    T(e, "cit").forEach(c => { const l = xmlLang(c); const q = (T(c, "quote")[0] || {}).textContent;
+      if(ent[l] && q && q.trim()) ent[l].push(q.trim()); });
+    T(e, "usg").forEach(u => { const l = xmlLang(u); if(l) ent.u[l] = u.textContent.trim(); });
+    const cdo = T(e, "ref").find(r => r.getAttribute("type") === "cdo");
+    if(cdo) ent.ref = cdo.getAttribute("target") || "";
+    T(e, "iType").forEach(i => { const v = (i.getAttribute("type") || i.textContent || "").trim(); if(v) ent.itype.push(v); });
+    if(!ST.lex.has(lemma)) ST.lex.set(lemma, []);
+    ST.lex.get(lemma).push(ent);
+    if(ent.id) ST.lexById.set(ent.id, ent);
   });
 }
-function witnessOf(el){
-  for(let p = el.parentElement; p; p = p.parentElement){
-    if(p.localName === "text" && p.getAttribute("n")) return p.getAttribute("n");
-  }
-  return "";
-}
-function parseTEI(xml){
-  T(xml, "s").forEach(s => {
-    const id = s.getAttribute("xml:id"); if(!id) return;
-    const words = T(s, "w").map(w => ({
-      form: w.textContent.trim(),
-      lemma: w.getAttribute("lemma") || "",
-      type: w.getAttribute("type") || "",
-      gloss: w.getAttribute("gloss") || ""
-    }));
-    SEGS.push({
-      id, n: s.getAttribute("n") || "",
-      wit: witnessOf(s),
-      words,
-      ja: s.getAttribute("transJa") || "",
-      en: s.getAttribute("transEn") || "",
-      fr: s.getAttribute("transFr") || ""
+function parseText(xml, doc){
+  T(xml, "text").filter(x => x.getAttribute("type") === "witness").forEach(tx => {
+    const label = tx.getAttribute("n") || doc.siglum;
+    const wit = {id: xmlId(tx) || doc.key, label, short: label.replace(/^NHC\s*/, ""), doc, segs: [], groups: [], ntok: 0};
+    const wi = ST.wits.length;
+    T(tx, "s").forEach(s => {
+      const sid = xmlId(s); if(!sid) return;
+      const si = wit.segs.length;
+      wit.segs.push({id: sid, n: s.getAttribute("n") || ""});
+      let lastPhy = null;
+      T(s, "w").forEach(w => {
+        const phy = w.closest("phy");
+        if(!phy || phy !== lastPhy){ wit.groups.push([]); lastPhy = phy; }
+        const form = w.textContent.trim();
+        const lemma = (w.getAttribute("lemma") || form).trim();
+        const pos = w.getAttribute("type") || "X";
+        const tk = {w: wi, s: si, g: wit.groups.length - 1, form, lemma, pos,
+          grc: xmlLang(w) === "grc", msd: w.getAttribute("msd") || "",
+          ana: (w.getAttribute("ana") || "").split("#").pop(), gl: w.getAttribute("gloss") || "",
+          key: lemma + "\t" + pos};
+        wit.groups[wit.groups.length - 1].push(ST.toks.length);
+        ST.toks.push(tk);
+        wit.ntok++;
+      });
     });
+    doc.wits.push(wit);
+    ST.wits.push(wit);
   });
 }
-function renderBaseStats(){
-  if(!ready) return;
-  const q = $("#q").value.trim();
-  if(q) return; // 検索中は run() が統計行を描画
-  const tokens = SEGS.reduce((a,s)=>a+s.words.length, 0);
-  $("#stats").innerHTML = UL()==="en"
-    ? "Segments <b>" + SEGS.length + "</b> · tokens <b>" + tokens.toLocaleString() +
-      "</b> · lexicon lemmas <b>" + Object.keys(LEX).length.toLocaleString() + "</b>"
-    : "セグメント <b>" + SEGS.length + "</b> · トークン <b>" + tokens.toLocaleString() +
-      "</b> · 辞書レンマ <b>" + Object.keys(LEX).length.toLocaleString() + "</b>";
+/* 同形異義語の参照：① @ana による固定 → ② レンマ＋品詞 → ③ レンマ一致の全項目 */
+function buildGroups(){
+  ST.toks.forEach((tk, i) => {
+    let g = ST.groups.get(tk.key);
+    if(!g){
+      const all = ST.lex.get(tk.lemma) || [];
+      const byPos = all.filter(e => e.pos === tk.pos);
+      g = {key: tk.key, lemma: tk.lemma, pos: tk.pos, toks: [], ents: byPos.length ? byPos.slice() : all.slice(),
+        amb: !byPos.length && all.length > 1, wgl: new Map(), grc: false, msd: new Map(), gsearch: []};
+      ST.groups.set(tk.key, g);
+    }
+    g.toks.push(i);
+    if(tk.ana && ST.lexById.has(tk.ana)){
+      const e = ST.lexById.get(tk.ana);
+      if(!g.ents.includes(e)) g.ents.push(e);
+    }
+    if(tk.grc) g.grc = true;
+    if(tk.gl) g.wgl.set(tk.gl, (g.wgl.get(tk.gl) || 0) + 1);
+    if(tk.msd) g.msd.set(tk.msd, (g.msd.get(tk.msd) || 0) + 1);
+  });
+  ST.groups.forEach(g => {
+    g.itypes = [...new Set(g.ents.flatMap(e => e.itype))];
+    g.gsearch = [...g.ents.flatMap(e => [...e.ja, ...e.en, ...e.fr]), ...g.wgl.keys()];
+    g.ck = ckey(g.lemma);
+  });
 }
+
 async function load(){
+  $("#listHead").textContent = t("loading");
   try{
-    const [tei, lex] = await Promise.all([fetchXML(DOC.tei), fetchXML(DOC.lex)]);
-    parseTEI(tei); parseLex(lex);
-    ready = true;
-    renderBaseStats();
-    idleState();
-    const q0 = new URLSearchParams(location.search).get("q");
-    if(q0){ $("#q").value = q0; run(q0); }
+    const [cat, lex] = await Promise.all([fetchXML(CATALOG), fetchXML(LEXICON)]);
+    parseCatalog(cat); parseLex(lex);
+    const live = ST.docs.filter(d => !d.planned);
+    const texts = await Promise.all(live.map(d => fetchXML(d.xml)));
+    texts.forEach((x, i) => parseText(x, live[i]));
+    buildGroups();
+    readURL();
+    ST.ready = true;
+    render();
   }catch(e){
     const w = $("#loadwarn"); w.hidden = false;
-    w.innerHTML = UL()==="en"
-      ? "⬥ <b>Could not load the data.</b> Serve <code>" + esc(DOC.tei) + "</code> and <code>" + esc(DOC.lex) +
-        "</code> via a web server (file:// will not work).<br><small>" + esc(e.message) + "</small>"
-      : "⬥ <b>データを取得できませんでした。</b> <code>" + esc(DOC.tei) +
-        "</code> と <code>" + esc(DOC.lex) + "</code> をWebサーバ経由で配信してください（file:// では取得不可）。<br>" +
-        "<small>" + esc(e.message) + "</small>";
+    w.innerHTML = esc(t("loadErr")) + "<br><small>" + esc(e.message) + "</small>";
+    $("#listHead").textContent = "";
   }
 }
 
-/* ---------- 検索 ---------- */
-function whereLbl(key){
-  const en = UL()==="en";
-  return ({
-    form:  en ? "Form"      : "語形",
-    lemma: en ? "Lemma"     : "レンマ",
-    gloss: en ? "Gloss"     : "語釈",
-    ja:    en ? "JA trans." : "和訳",
-    en:    en ? "EN trans." : "英訳",
-    fr:    en ? "FR trans." : "仏訳"
-  })[key];
+/* ---------- URL ---------- */
+function readURL(){
+  const p = new URLSearchParams(location.search);
+  const ids = new Set(ST.wits.map(w => w.id));
+  const w = (p.get("w") || "").split(",").filter(x => ids.has(x));
+  const d = ST.docs.find(x => x.key === p.get("doc") && x.wits.length);
+  if(w.length) w.forEach(x => ST.sel.add(x));
+  else if(d) d.wits.forEach(x => ST.sel.add(x.id));       // 旧URL ?doc=… との互換
+  else ST.wits.forEach(x => ST.sel.add(x.id));            // 既定: 全文書
+  (p.get("xpos") || "").split(",").filter(Boolean).forEach(x => ST.posOff.add(x));
+  if(p.get("q")) $("#q").value = p.get("q");
+  if(["part","pre","ex"].includes(p.get("m"))) $("#mode").value = p.get("m");
+  const f = p.get("f");
+  if(f){ $("#fForm").checked = f.includes("f"); $("#fLemma").checked = f.includes("l"); $("#fGloss").checked = f.includes("g"); }
 }
-function glossesOf(w){
-  const out = w.gloss ? [w.gloss] : [];
-  // 同形異義語は「レンマ＋品詞」で参照（品詞の一致する項目がなければレンマ一致の全項目）
-  const all = LEX[w.lemma] || [];
-  const byPos = w.type ? all.filter(s => s.pos === w.type) : [];
-  (byPos.length ? byPos : all).forEach(s => out.push(...s.ja, ...s.en, ...s.fr));
-  return out;
+function writeURL(){
+  const p = new URLSearchParams();
+  const q = $("#q").value.trim(); if(q) p.set("q", q);
+  if($("#mode").value !== "part") p.set("m", $("#mode").value);
+  const f = ($("#fForm").checked ? "f" : "") + ($("#fLemma").checked ? "l" : "") + ($("#fGloss").checked ? "g" : "");
+  if(f !== "flg") p.set("f", f);
+  if(ST.sel.size !== ST.wits.length) p.set("w", [...ST.sel].join(","));
+  if(ST.posOff.size) p.set("xpos", [...ST.posOff].join(","));
+  const s = p.toString();
+  history.replaceState(null, "", location.pathname + (s ? "?" + s : ""));
 }
-function markCop(words, qn){
-  return words.map(w => {
-    const hit = ($("#fForm").checked && norm(w.form).includes(qn)) ||
-                ($("#fLemma").checked && norm(w.lemma).includes(qn));
-    return hit ? "<mark>" + esc(w.form) + "</mark>" : esc(w.form);
-  }).join(" ");
-}
-function markText(t, q){
-  const i = t.toLowerCase().indexOf(q.toLowerCase());
-  if(i < 0) return esc(t);
-  return esc(t.slice(0,i)) + "<mark>" + esc(t.slice(i, i+q.length)) + "</mark>" + esc(t.slice(i+q.length));
-}
-function run(q){
-  if(!ready) return;
-  q = q.trim();
-  const res = $("#results");
-  if(!q){ renderBaseStats(); idleState(); return; }
-  const en = UL()==="en";
-  const qn = norm(q), ql = q.toLowerCase();
-  const hits = [];
-  SEGS.forEach(s => {
-    const where = [];
-    if($("#fForm").checked  && s.words.some(w => norm(w.form).includes(qn))) where.push(whereLbl("form"));
-    if($("#fLemma").checked && s.words.some(w => norm(w.lemma).includes(qn))) where.push(whereLbl("lemma"));
-    if($("#fGloss").checked && s.words.some(w => glossesOf(w).some(g => g.toLowerCase().includes(ql)))) where.push(whereLbl("gloss"));
-    if($("#fTrans").checked){
-      if(s.ja.includes(q)) where.push(whereLbl("ja"));
-      if(s.en.toLowerCase().includes(ql)) where.push(whereLbl("en"));
-      if(s.fr.toLowerCase().includes(ql)) where.push(whereLbl("fr"));
+
+/* ---------- 計算 ---------- */
+function matcher(q, mode){
+  const qn = norm(q);
+  const test = v => mode === "ex" ? v === qn : mode === "pre" ? v.startsWith(qn) : v.includes(qn);
+  return {
+    word: s => test(norm(s)),
+    gloss: s => {
+      if(mode !== "ex") return test(norm(s));
+      return norm(s) === qn || s.split(/[,;，、・\/／()（）「」『』]+|\s+or\s+/).some(p => norm(p.trim()) === qn);
     }
-    if(where.length) hits.push({s, where});
-  });
-  $("#stats").innerHTML = en
-    ? "\u201C<b>" + esc(q) + "</b>\u201D — <b>" + hits.length + "</b> segment" + (hits.length===1?"":"s") + " match"
-    : "「<b>" + esc(q) + "</b>」 — <b>" + hits.length + "</b> セグメントが一致";
-  if(!hits.length){
-    res.innerHTML = en
-      ? '<div class="state"><div>No matches for \u201C' + esc(q) + '\u201D.' +
-        '<br><small>Combining marks (supralinear strokes etc.) are ignored in matching.</small></div></div>'
-      : '<div class="state"><div>「' + esc(q) + '」に一致する箇所はありません。' +
-        '<br><small>上線などの合成記号は無視して照合しています。</small></div></div>';
-    return;
-  }
-  res.innerHTML = hits.map(({s, where}) => {
-    const tr = s.ja || s.en || s.fr;
-    const trHTML = tr ? '<div class="trline">' +
-      (s.ja.includes(q) || s.en.toLowerCase().includes(ql) || s.fr.toLowerCase().includes(ql)
-        ? markText(tr, q) : esc(tr)) + "</div>" : "";
-    const witQ = docKey === "eugnostos" ? "?wit=" + (/^V-/.test(s.id) ? "V" : "III") : "";
-    return '<a class="hit" href="' + DOC.reader + witQ + '#seg-' + esc(s.id) + '">' +
-      '<div class="meta"><span class="no">§' + esc(s.n) + '</span>' +
-      (s.wit ? '<span class="wit">' + esc(s.wit) + '</span>' : "") +
-      '<span>' + where.join(" · ") + '</span>' +
-      '<span class="go">' + (en ? "To text →" : "本文へ →") + '</span></div>' +
-      '<div class="copline">' + markCop(s.words, qn) + '</div>' + trHTML + '</a>';
-  }).join("");
+  };
 }
-function idleState(){
-  const en = UL()==="en";
-  $("#results").innerHTML =
-    '<div class="state">' +
-    '<img src="' + DOC.guide + '" alt="" loading="lazy">' +
-    '<div><div class="cap">' + esc(DOC.guideName) + '</div>' +
-    (en
-      ? 'Type a query to search across Coptic forms, lemmas, glosses and translations.<br>' +
-        'Click a result to jump to the segment in the full-text viewer.</div></div>'
-      : '検索語を入力すると、コプト語形・レンマ・語釈・対訳を横断して該当セグメントを一覧します。<br>' +
-        '結果をクリックすると全文表示の該当箇所へ移動します。</div></div>');
+function compute(){
+  const q = $("#q").value.trim(), mode = $("#mode").value;
+  const fF = $("#fForm").checked, fL = $("#fLemma").checked, fG = $("#fGloss").checked;
+  const wits = ST.wits.filter(w => ST.sel.has(w.id) && w.ntok);
+  const N = wits.reduce((a, w) => a + w.ntok, 0);
+  const inWit = new Set(wits.map(w => ST.wits.indexOf(w)));
+  const m = q ? matcher(q, mode) : null;
+  const rows = [];
+  ST.groups.forEach(g => {
+    if(ST.posOff.has(g.pos)) return;
+    const st = g.toks.filter(i => inWit.has(ST.toks[i].w));
+    if(!st.length) return;
+    let hits = st, partial = false, byForm = false;
+    if(m){
+      const whole = (fL && m.word(g.lemma)) || (fG && g.gsearch.some(m.gloss));
+      if(!whole){
+        if(!fF) return;
+        hits = st.filter(i => m.word(ST.toks[i].form));
+        if(!hits.length) return;
+        partial = hits.length < st.length; byForm = true;
+      } else if(fF){ byForm = st.some(i => m.word(ST.toks[i].form)); }
+    }
+    const byWit = {}, forms = new Map();
+    hits.forEach(i => { const tk = ST.toks[i]; const wid = ST.wits[tk.w].id;
+      byWit[wid] = (byWit[wid] || 0) + 1; forms.set(tk.form, (forms.get(tk.form) || 0) + 1); });
+    rows.push({g, hits, all: st.length, n: hits.length, byWit, forms, partial, nWit: Object.keys(byWit).length, byForm});
+  });
+  return {q, mode, m, wits, N, rows};
 }
 
+/* ---------- 表示 ---------- */
+function glossText(g, lang){
+  const L = lang || UL();
+  let v = g.ents.flatMap(e => e[L]);
+  if(!v.length) v = g.ents.flatMap(e => e.en.length ? e.en : e.ja.length ? e.ja : e.fr);
+  if(!v.length && g.wgl.size) v = [[...g.wgl.entries()].sort((a, b) => b[1] - a[1])[0][0]];
+  return [...new Set(v)].join("; ");
+}
+function hl(text, r, ctx){
+  // 検索語に一致した部分に <mark>（語形・レンマは合成記号を無視して判定するため語全体を囲む）
+  if(!ctx.m) return esc(text);
+  return (ctx.kind === "gloss" ? ctx.m.gloss(text) : ctx.m.word(text)) ? "<mark>" + esc(text) + "</mark>" : esc(text);
+}
+function markGloss(s, q){
+  if(!q) return esc(s);
+  const qn = norm(q), sn = norm(s);
+  const i = sn.indexOf(qn);
+  if(i < 0 || sn.length !== s.length) return esc(s);
+  return esc(s.slice(0, i)) + "<mark>" + esc(s.slice(i, i + q.length)) + "</mark>" + esc(s.slice(i + q.length));
+}
+const perMille = (n, N) => N ? (n / N * 1000).toFixed(1) : "0.0";
+const pct = (n, N) => { if(!N) return "0.0"; const v = n / N * 100; return v > 0 && v < 1 ? v.toFixed(2) : v.toFixed(1); };
+const bar = (v, max) => '<span class="bar"><i style="width:' + (max ? Math.max(1, v / max * 100) : 0).toFixed(1) + '%"></i></span>';
+
+function renderSide(){
+  const L = UL();
+  const name = d => d[L] || d.ja;
+  $("#docList").innerHTML = ST.docs.map(d => {
+    if(d.planned || !d.wits.length){
+      return '<li class="planned">' + esc(name(d).replace(/[（(][^（()）]*[)）]\s*$/, "")) +
+        '<small>' + esc(d.siglum) + ' · ' + esc(t("planned")) + '</small></li>';
+    }
+    const ntok = d.wits.reduce((a, w) => a + w.ntok, 0);
+    const on = d.wits.filter(w => ST.sel.has(w.id)).length;
+    const head = '<label class="opt doctitle"><input type="checkbox" data-doc="' + esc(d.key) + '"' +
+      (on === d.wits.length ? " checked" : "") + (on && on < d.wits.length ? ' data-ind="1"' : "") + '>' +
+      '<span class="nm">' + esc(name(d)) +
+      '<small>' + (d.cop ? '<span class="cop">' + esc(d.cop) + '</span>' : "") + esc(d.siglum) + '</small></span>' +
+      '<button type="button" class="only" data-only-doc="' + esc(d.key) + '">' + esc(t("only")) + '</button>' +
+      '<span class="ct">' + fmt(ntok) + '</span></label>';
+    if(d.wits.length < 2) return '<li>' + head + '</li>';
+    return '<li>' + head + '<ul class="sub">' + d.wits.map(w =>
+      '<li><label class="opt' + (w.ntok ? "" : " nodata") + '"><input type="checkbox" data-wit="' + esc(w.id) + '"' + (ST.sel.has(w.id) ? " checked" : "") + '>' +
+      '<span class="nm">' + esc(w.label) + (w.ntok ? "" : '<small>' + esc(t("noText")) + '</small>') + '</span>' +
+      (w.ntok ? '<button type="button" class="only" data-only-wit="' + esc(w.id) + '">' + esc(t("only")) + '</button>' : "") +
+      '<span class="ct">' + fmt(w.ntok) + '</span></label></li>').join("") + '</ul></li>';
+  }).join("");
+  document.querySelectorAll('#docList input[data-ind]').forEach(i => { i.indeterminate = true; });
+
+  // 品詞：選択中の文書に現れる品詞と語数
+  const inWit = new Set(ST.wits.filter(w => ST.sel.has(w.id)).map(w => ST.wits.indexOf(w)));
+  const cnt = new Map();
+  ST.toks.forEach(tk => { if(inWit.has(tk.w)) cnt.set(tk.pos, (cnt.get(tk.pos) || 0) + 1); });
+  ST.posOff.forEach(p => { if(!cnt.has(p)) cnt.set(p, 0); });
+  $("#posList").innerHTML = [...cnt.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([p, n]) =>
+    '<li><label class="opt"><input type="checkbox" data-pos="' + esc(p) + '"' + (ST.posOff.has(p) ? "" : " checked") + '>' +
+    '<span class="nm">' + esc(posName(p)) + (POS[p] ? ' <small style="display:inline">' + esc(p) + '</small>' : "") + '</span>' +
+    '<button type="button" class="only" data-only-pos="' + esc(p) + '">' + esc(t("only")) + '</button>' +
+    '<span class="ct">' + fmt(n) + '</span></label></li>').join("");
+}
+
+function renderStats(R){
+  const sec = $("#statSec");
+  if(!R.wits.length){ sec.innerHTML = ""; return; }
+  const hitTok = R.rows.reduce((a, r) => a + r.n, 0);
+  const posCnt = new Map();
+  R.rows.forEach(r => posCnt.set(r.g.pos, (posCnt.get(r.g.pos) || 0) + r.n));
+  const posArr = [...posCnt.entries()].sort((a, b) => b[1] - a[1]);
+  const top = posArr.slice(0, 12), rest = posArr.slice(12).reduce((a, x) => a + x[1], 0);
+  if(rest) top.push([null, rest]);
+  const posMax = top.length ? Math.max(...top.filter(x => x[0]).map(x => x[1])) : 0;
+  const posTbl = '<div><h3>' + esc(t("byPos")) + '</h3><table class="st"><thead><tr><th>' + esc(t("cPos")) + '</th><th class="num">' +
+    esc(R.q ? t("hHit") : t("hTok")) + '</th><th class="num">' + esc(t("hShare")) + '</th><th></th></tr></thead><tbody>' +
+    top.map(([p, n]) => '<tr><td>' + (p ? esc(posName(p)) : esc(t("other"))) + '</td><td class="num">' + fmt(n) + '</td><td class="num">' +
+      pct(n, hitTok) + '</td><td class="barc">' + (p ? bar(n, posMax) : "") + '</td></tr>').join("") + '</tbody></table></div>';
+
+  let head, line, docTbl;
+  if(!R.q){
+    // 概要：証本ごとの延べ語数・異なりレンマ・hapax
+    const lemmasPer = {}, hapaxAll = R.rows.filter(r => r.n === 1).length;
+    R.rows.forEach(r => Object.keys(r.byWit).forEach(w => { lemmasPer[w] = (lemmasPer[w] || 0) + 1; }));
+    const hapaxPer = {};
+    R.rows.forEach(r => Object.entries(r.byWit).forEach(([w, n]) => { if(n === 1) hapaxPer[w] = (hapaxPer[w] || 0) + 1; }));
+    const max = Math.max(...R.wits.map(w => w.ntok));
+    head = t("stOver");
+    line = t("sumAll", fmt(hitTok), fmt(R.rows.length), fmt(hapaxAll), hitTok ? (R.rows.length / hitTok).toFixed(3) : "—");
+    docTbl = '<div><h3>' + esc(t("byDoc")) + '</h3><table class="st"><thead><tr><th>' + esc(t("hWit")) + '</th><th class="num">' + esc(t("hTok")) +
+      '</th><th class="num">' + esc(t("hLem")) + '</th><th class="num">' + esc(t("hHapax")) + '</th><th></th></tr></thead><tbody>' +
+      R.wits.map(w => '<tr><td>' + esc(witName(w)) + '</td><td class="num">' + fmt(w.ntok) + '</td><td class="num">' + fmt(lemmasPer[w.id] || 0) +
+        '</td><td class="num">' + fmt(hapaxPer[w.id] || 0) + '</td><td class="barc">' + bar(w.ntok, max) + '</td></tr>').join("") +
+      '</tbody></table></div>';
+  } else {
+    const per = R.wits.map(w => { const n = R.rows.reduce((a, r) => a + (r.byWit[w.id] || 0), 0); return {w, n, pm: w.ntok ? n / w.ntok * 1000 : 0}; });
+    const max = Math.max(0, ...per.map(x => x.pm));
+    head = t("stQuery", R.q);
+    line = t("sumHit", fmt(R.rows.length), fmt(hitTok), pct(hitTok, R.N));
+    docTbl = '<div><h3>' + esc(t("byDoc")) + '</h3><table class="st"><thead><tr><th>' + esc(t("hWit")) + '</th><th class="num">' + esc(t("hHit")) +
+      '</th><th class="num">' + esc(t("hTok")) + '</th><th class="num" title="' + esc(t("cRelT")) + '">' + esc(t("hPer")) + '</th><th></th></tr></thead><tbody>' +
+      per.map(x => '<tr><td>' + esc(witName(x.w)) + '</td><td class="num">' + fmt(x.n) + '</td><td class="num">' + fmt(x.w.ntok) +
+        '</td><td class="num">' + x.pm.toFixed(1) + '</td><td class="barc">' + bar(x.pm, max) + '</td></tr>').join("") +
+      (per.length > 1 ? '</tbody><tfoot><tr><td>' + esc(t("total")) + '</td><td class="num">' + fmt(hitTok) + '</td><td class="num">' + fmt(R.N) +
+        '</td><td class="num">' + perMille(hitTok, R.N) + '</td><td></td></tr></tfoot>' : '</tbody>') + '</table></div>';
+  }
+  sec.innerHTML = '<h2 class="sec">' + esc(head) + '</h2><p class="sumline">' + line + '</p><div class="statgrid">' + docTbl + posTbl + '</div>';
+}
+function witName(w){
+  const d = w.doc, L = UL();
+  return d.wits.length > 1 ? (d[L] || d.ja) + " " + w.short : (d[L] || d.ja);
+}
+
+function sortRows(R){
+  const {k, d} = ST.sort, L = UL();
+  const gl = new Map();
+  const val = r => k === "lemma" ? r.g.ck : k === "pos" ? posName(r.g.pos)
+    : k === "gloss" ? (gl.has(r) ? gl.get(r) : (gl.set(r, glossText(r.g, L) || "￿"), gl.get(r)))
+    : k.startsWith("w:") ? (r.byWit[k.slice(2)] || 0) : k === "dist" ? r.nWit : r.n;
+  R.rows.sort((a, b) => {
+    const x = val(a), y = val(b);
+    const c = typeof x === "number" ? x - y : x < y ? -1 : x > y ? 1 : 0;
+    return c * d || b.n - a.n || (a.g.ck < b.g.ck ? -1 : a.g.ck > b.g.ck ? 1 : 0);
+  });
+}
+function cols(R){
+  const many = R.wits.length > 6;
+  const c = [
+    {k:"lemma", lab:t("cLemma")}, {k:"pos", lab:t("cPos")}, {k:"gloss", lab:t("cGloss")},
+    {k:null, lab:t("cIType"), title:t("iTypeT")}, {k:null, lab:t("cForms")},
+    {k:"n", lab:t("cFreq"), num:true}, {k:"n", lab:t("cRel"), num:true, title:t("cRelT"), noSortMark:true}
+  ];
+  if(many || R.wits.length < 2){ if(many) c.push({k:"dist", lab:t("cDist"), num:true}); }
+  else R.wits.forEach(w => c.push({k:"w:" + w.id, lab:w.short, num:true, title:witName(w)}));
+  return c;
+}
+function renderTable(R){
+  const C = cols(R);
+  $("#lx thead").innerHTML = '<tr>' + C.map(c => {
+    const s = c.k && !c.noSortMark && ST.sort.k === c.k ? (ST.sort.d > 0 ? "ascending" : "descending") : null;
+    const lab = esc(c.lab);
+    return '<th' + (c.num ? ' class="num"' : "") + (s ? ' aria-sort="' + s + '"' : "") + (c.title ? ' title="' + esc(c.title) + '"' : "") + '>' +
+      (c.k ? '<button type="button" data-sort="' + esc(c.k) + '">' + lab + '</button>' : lab) + '</th>';
+  }).join("") + '</tr>';
+  const ctxL = {m: R.q && $("#fLemma").checked ? R.m : null, kind:"word"};
+  const ctxF = {m: R.q && $("#fForm").checked ? R.m : null, kind:"word"};
+  const qG = R.q && $("#fGloss").checked ? R.q : "";
+  const many = R.wits.length > 6;
+  const shown = R.rows.slice(0, ST.limit);
+  $("#lx tbody").innerHTML = shown.map(r => {
+    const g = r.g, open = ST.open.has(g.key);
+    const fs = [...r.forms.entries()].sort((a, b) => b[1] - a[1]);
+    const formsH = fs.slice(0, 4).map(([f, n]) => '<span class="cop">' + hl(f, r, ctxF) + '</span><small>' + n + '</small>').join(", ") +
+      (fs.length > 4 ? ' <span class="more">+' + (fs.length - 4) + '</span>' : "");
+    const gtxt = glossText(g);
+    const it = g.itypes.length ? g.itypes.join(", ") : g.msd.size ? [...g.msd.keys()].slice(0, 3).join(", ") : "—";
+    let tail = "";
+    if(many) tail = '<td class="num dist">' + r.nWit + '/' + R.wits.length + '</td>';
+    else if(R.wits.length > 1) tail = R.wits.map(w => { const n = r.byWit[w.id] || 0;
+      return '<td class="num' + (n ? "" : " zero") + '">' + (n ? fmt(n) : "·") + '</td>'; }).join("");
+    return '<tr class="row' + (open ? " open" : "") + '" data-key="' + esc(g.key) + '" tabindex="0" aria-expanded="' + open + '">' +
+      '<td class="lem"><span class="tw" aria-hidden="true">' + (open ? "▾" : "▸") + '</span><span class="cop">' + hl(g.lemma, r, ctxL) + '</span>' +
+        (g.grc ? '<span class="grc" title="' + esc(t("grcT")) + '">grc</span>' : "") + '</td>' +
+      '<td class="pos" title="' + esc(g.pos) + '">' + esc(posName(g.pos)) + '</td>' +
+      '<td class="gl">' + (gtxt ? markGloss(gtxt, qG) : '<span class="amb">' + esc(t("noGloss")) + '</span>') +
+        (g.amb ? ' <span class="amb" title="' + esc(t("ambT")) + '">*</span>' : "") + '</td>' +
+      '<td class="it">' + esc(it) + '</td>' +
+      '<td class="fm">' + formsH + '</td>' +
+      '<td class="num">' + fmt(r.n) + (r.partial ? '<span class="partial">/' + fmt(r.all) + '</span>' : "") + '</td>' +
+      '<td class="num">' + perMille(r.n, R.N) + '</td>' + tail + '</tr>' +
+      (open ? '<tr class="detail"><td colspan="' + C.length + '">' + detail(r, R) + '</td></tr>' : "");
+  }).join("");
+  const left = R.rows.length - shown.length;
+  $("#more").innerHTML = left > 0 ? '<button type="button" class="btn" id="moreBtn">' + esc(t("showMore", fmt(left))) + '</button>' : "";
+}
+
+function groupText(wit, gi){ return wit.groups[gi] ? wit.groups[gi].map(i => ST.toks[i].form).join("") : ""; }
+function readerHref(wit, seg){
+  const d = wit.doc;
+  return d.reader + (d.wits.length > 1 ? "?wit=" + encodeURIComponent(wit.id.replace(/^wit-/, "")) : "") + "#seg-" + encodeURIComponent(seg.id);
+}
+function detail(r, R){
+  const g = r.g, L = UL();
+  const order = {ja:["ja","en","fr"], en:["en","ja","fr"], fr:["fr","en","ja"]}[L];
+  const senses = g.ents.map((e, i) => {
+    const parts = order.filter(l => e[l].length).map(l => '<span class="l">' + l.toUpperCase() + '</span>' + esc(e[l].join("; ")));
+    const u = e.u[L] || e.u.en || e.u.ja || "";
+    return '<p class="sense"><span class="n">' + (g.ents.length > 1 ? (i + 1) + "." : "") + '</span>' +
+      (g.ents.length > 1 || e.pos !== g.pos ? esc(posName(e.pos)) + " · " : "") +
+      (parts.length ? parts.join(" &nbsp; ") : '<span class="u">' + esc(t("noGloss")) + '</span>') +
+      (u ? ' <span class="u">(' + esc(u) + ')</span>' : "") +
+      (e.ref ? ' · <a href="' + esc(e.ref) + '" target="_blank" rel="noopener">' + esc(t("dCdo")) + '</a>' : "") + '</p>';
+  }).join("") || '<p class="sense"><span class="u">' + esc(t("noGloss")) + '</span></p>';
+  const wgl = g.wgl.size ? '<h4>' + esc(t("dWGloss")) + '</h4><p class="sense">' +
+    [...g.wgl.entries()].sort((a, b) => b[1] - a[1]).map(([s, n]) => esc(s) + ' <span class="n">' + n + '</span>').join(", ") + '</p>' : "";
+  const fs = [...r.forms.entries()].sort((a, b) => b[1] - a[1]);
+  const forms = '<p class="sense">' + fs.map(([f, n]) => '<span class="cop">' + esc(f) + '</span> <span class="n">' + n + '</span>').join(", ") + '</p>' +
+    (r.partial ? '<p class="sense"><span class="u">' + esc(t("dPartial", fmt(r.n), fmt(r.all))) + '</span></p>' : "");
+  const itH = g.itypes.length ? esc(g.itypes.join(", "))
+    : g.msd.size ? [...g.msd.entries()].map(([m, n]) => esc(m) + ' <span class="n">' + n + '</span>').join(", ")
+    : '<span class="u">' + esc(t("dITypeNA")) + '</span>';
+
+  const all = ST.allK.has(g.key), lim = all ? r.hits.length : 25;
+  const kw = r.hits.slice(0, lim).map(i => {
+    const tk = ST.toks[i], wit = ST.wits[tk.w], seg = wit.segs[tk.s];
+    const left = [], right = [];
+    for(let k = tk.g - 1; k >= 0 && left.length < 5; k--) left.unshift(groupText(wit, k));
+    for(let k = tk.g + 1; k < wit.groups.length && right.length < 5; k++) right.push(groupText(wit, k));
+    const mid = wit.groups[tk.g].map(j => j === i ? "<b>" + esc(ST.toks[j].form) + "</b>" : esc(ST.toks[j].form)).join("");
+    return '<tr><td class="loc"><a href="' + esc(readerHref(wit, seg)) + '" title="' + esc(t("dToText")) + '">' +
+      esc(wit.short) + ' §' + esc(seg.n) + '</a></td>' +
+      '<td class="lc"><span class="cop">' + esc(left.join(" ")) + '</span></td>' +
+      '<td class="kc cop">' + mid + '</td>' +
+      '<td class="rc cop">' + esc(right.join(" ")) + '</td></tr>';
+  }).join("");
+  return '<div class="dgrid">' +
+    '<div><h4>' + esc(t("dSenses")) + '</h4>' + senses + wgl + '</div>' +
+    '<div><h4>' + esc(t("dForms")) + '</h4>' + forms + '<h4>' + esc(t("dIType")) + '</h4><p class="sense">' + itH + '</p></div>' +
+    '<div class="kwic"><h4>' + esc(t("dKwic", fmt(r.hits.length))) + '</h4><table class="kw"><tbody>' + kw + '</tbody></table>' +
+    (r.hits.length > lim ? '<p class="morebar"><button type="button" class="btn" data-allk="' + esc(g.key) + '">' + esc(t("dAllK", fmt(r.hits.length))) + '</button></p>' : "") +
+    '</div></div>';
+}
+
+let LAST = null;
+function render(){
+  if(!ST.ready) return;
+  const R = compute();
+  sortRows(R);
+  LAST = R;
+  renderSide();
+  $("#scope").textContent = R.wits.length ? t("scope", fmt(R.wits.length), fmt(R.N)) : "";
+  const lh = $("#listHead");
+  if(!R.wits.length){
+    lh.innerHTML = ""; $("#statSec").innerHTML = ""; $("#lx thead").innerHTML = ""; $("#lx tbody").innerHTML = "";
+    $("#more").innerHTML = '<p class="empty">' + esc(t("noSel")) + '</p>';
+    writeURL(); return;
+  }
+  renderStats(R);
+  lh.innerHTML = esc(R.q ? t("listHit") : t("listAll")) + ' <small>' + esc(t("nLem", fmt(R.rows.length))) + '</small>' +
+    '<span class="right"><button type="button" class="lnk" id="csvBtn">' + esc(t("csv")) + '</button></span>';
+  if(!R.rows.length){
+    $("#lx thead").innerHTML = ""; $("#lx tbody").innerHTML = "";
+    $("#more").innerHTML = '<p class="empty">' + esc(t("none", R.q)) + '<br><small>' + esc(t("noneHint")) + '</small></p>';
+  } else renderTable(R);
+  writeURL();
+}
+function applyLang(){
+  const q = $("#q");
+  q.placeholder = t("ph");
+  q.setAttribute("aria-label", t("ph"));
+  const sel = $("#mode");
+  ["part","pre","ex"].forEach((v, i) => { sel.options[i].textContent = t(v); });
+  render();
+}
+
+/* ---------- CSV ---------- */
+function csv(){
+  if(!LAST) return;
+  const R = LAST, cell = v => '"' + String(v).replace(/"/g, '""') + '"';
+  const head = ["lemma","pos","gloss_ja","gloss_en","gloss_fr","inflection","forms","freq","per_1000", ...R.wits.map(w => w.label)];
+  const lines = [head.map(cell).join(",")].concat(R.rows.map(r => [
+    r.g.lemma, r.g.pos, glossText(r.g, "ja"), glossText(r.g, "en"), glossText(r.g, "fr"), r.g.itypes.join(" "),
+    [...r.forms.entries()].map(([f, n]) => f + ":" + n).join(" "), r.n, perMille(r.n, R.N),
+    ...R.wits.map(w => r.byWit[w.id] || 0)].map(cell).join(",")));
+  const blob = new Blob(["﻿" + lines.join("\r\n")], {type:"text/csv;charset=utf-8"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "nhc-lemmas" + (R.q ? "-" + R.q.replace(/[\\\/:*?"<>|\s]+/g, "_") : "") + ".csv";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+/* ---------- 操作 ---------- */
 let qt = null;
-$("#q").addEventListener("input", e => { clearTimeout(qt); qt = setTimeout(() => run(e.target.value), 180); });
-["fForm","fLemma","fGloss","fTrans"].forEach(id =>
-  $("#"+id).addEventListener("change", () => run($("#q").value)));
-applyUILang();
+$("#q").addEventListener("input", () => { clearTimeout(qt); qt = setTimeout(() => { ST.limit = 200; render(); }, 160); });
+["fForm","fLemma","fGloss","mode"].forEach(id => $("#" + id).addEventListener("change", () => { ST.limit = 200; render(); }));
+
+$("#docList").addEventListener("change", e => {
+  const i = e.target;
+  if(i.dataset.doc){ const d = ST.docs.find(x => x.key === i.dataset.doc);
+    d.wits.forEach(w => i.checked ? ST.sel.add(w.id) : ST.sel.delete(w.id)); }
+  else if(i.dataset.wit){ i.checked ? ST.sel.add(i.dataset.wit) : ST.sel.delete(i.dataset.wit); }
+  ST.limit = 200; render();
+});
+$("#docList").addEventListener("click", e => {
+  const b = e.target.closest(".only"); if(!b) return;
+  e.preventDefault();
+  ST.sel.clear();
+  if(b.dataset.onlyDoc) ST.docs.find(x => x.key === b.dataset.onlyDoc).wits.forEach(w => ST.sel.add(w.id));
+  else ST.sel.add(b.dataset.onlyWit);
+  ST.limit = 200; render();
+});
+$("#allDocs").addEventListener("click", () => { ST.wits.forEach(w => ST.sel.add(w.id)); render(); });
+$("#posList").addEventListener("change", e => {
+  const p = e.target.dataset.pos; if(!p) return;
+  e.target.checked ? ST.posOff.delete(p) : ST.posOff.add(p);
+  ST.limit = 200; render();
+});
+$("#posList").addEventListener("click", e => {
+  const b = e.target.closest(".only"); if(!b) return;
+  e.preventDefault();
+  const keep = b.dataset.onlyPos;
+  ST.posOff.clear();
+  document.querySelectorAll("#posList input[data-pos]").forEach(i => { if(i.dataset.pos !== keep) ST.posOff.add(i.dataset.pos); });
+  ST.limit = 200; render();
+});
+$("#allPos").addEventListener("click", () => { ST.posOff.clear(); render(); });
+
+$("#lx").addEventListener("click", e => {
+  const s = e.target.closest("button[data-sort]");
+  if(s){ const k = s.dataset.sort;
+    ST.sort = ST.sort.k === k ? {k, d: -ST.sort.d} : {k, d: (k === "lemma" || k === "pos" || k === "gloss") ? 1 : -1};
+    render(); return; }
+  const ak = e.target.closest("button[data-allk]");
+  if(ak){ ST.allK.add(ak.dataset.allk); render(); return; }
+  if(e.target.closest("a")) return;
+  const tr = e.target.closest("tr.row"); if(!tr) return;
+  const k = tr.dataset.key;
+  ST.open.has(k) ? ST.open.delete(k) : ST.open.add(k);
+  render();
+});
+$("#lx").addEventListener("keydown", e => {
+  if((e.key === "Enter" || e.key === " ") && e.target.matches("tr.row")){ e.preventDefault(); e.target.click(); }
+});
+document.addEventListener("click", e => {
+  if(e.target.closest("#moreBtn")){ ST.limit += 200; render(); }
+  if(e.target.closest("#csvBtn")) csv();
+});
+
+/* 上部ナビの高さ（固定見出し・左欄の位置合わせ） */
+function measureBar(){ const sb = $("#sitebar"); if(sb) H.style.setProperty("--sbh", sb.offsetHeight + "px"); }
+document.addEventListener("nhc:sitebar", () => { measureBar(); applyLang(); });
+addEventListener("resize", measureBar);
+document.addEventListener("nhc:lang", applyLang);
+
+applyLang();
 load();
 </script>
 </body>
