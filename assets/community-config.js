@@ -10,8 +10,8 @@
    ブラウザ内だけで動くデモモードになります（?community=off で解除）。
    ============================================================ */
 window.NHC_COMMUNITY_CONFIG = {
-  supabaseUrl: "",        // 例: "https://abcdefghijkl.supabase.co"
-  supabaseAnonKey: "",    // 例: "sb_publishable_..."（プロジェクト画面上部の Connect、または Project Settings → API Keys）
-  providers: { google: true, email: true },   // ログイン方法（Google 連携 / メール登録）
+  supabaseUrl: "https://ngzzklrjbkzsnegozpps.supabase.co",
+  supabaseAnonKey: "sb_publishable__9_fU-JrN7-IVd8dBsPQ-A_E5bIriZR",
+  providers: { google: true, email: true },
   supabaseJs: "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
 };
