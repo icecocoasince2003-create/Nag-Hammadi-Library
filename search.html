@@ -28,28 +28,30 @@
 <script defer src="assets/community-config.js"></script>
 <script defer src="assets/community.js"></script>
 <style>
-/* このページだけ明るい紙面の配色（宇宙テーマは読み込まない）。
-   変数名は --s-* にして、共通部品（ログイン欄など）の配色には影響させない。 */
-html{background:#fbfaf7}
-body{margin:0; background:#fbfaf7; color:#1d1c1a;
+/* このページはシンプルなダーク配色（宇宙テーマの星野などは読み込まない）。
+   配色はここの --s-* 変数だけで管理。共通部品（ログイン欄など）の変数名とは分けてある。 */
+:root{color-scheme:dark;
+  --s-bg:#17181b; --s-bg2:#202226; --s-field:#1e2024; --s-ink:#e6e3dc; --s-mut:#a29d93; --s-faint:#77736b;
+  --s-rule:#3a3c41; --s-rule2:#2a2c30; --s-edge:#4b4d53; --s-acc:#d9a46b; --s-mark:rgba(217,164,107,.30);
+  --s-bar:#8f8a80; --s-zero:#4a4c51;
+  --s-cop:"Noto Sans Coptic","Antinoou",serif}
+html{background:var(--s-bg)}
+body{margin:0; background:var(--s-bg); color:var(--s-ink);
   font-family:"Noto Sans JP",system-ui,-apple-system,"Hiragino Sans",sans-serif;
   font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased}
-.sp{--s-ink:#1d1c1a; --s-mut:#6b675f; --s-faint:#9a958b; --s-rule:#d9d5cb; --s-rule2:#ebe8e0;
-  --s-acc:#7d2d14; --s-mark:#f1e2bd; --s-bar:#a8a397; --s-bg:#fbfaf7; --s-bg2:#f3f1ec;
-  --s-cop:"Noto Sans Coptic","Antinoou",serif}
 .cop{font-family:"Noto Sans Coptic","Antinoou",serif}
 .num{font-variant-numeric:tabular-nums; text-align:right; white-space:nowrap}
 
-/* 上部ナビもこのページでは明るく */
-body .sitebar{--chrome-ink:#1d1c1a; --chrome-faint:#6b675f; --gold:#7d2d14; --gold-bright:#7d2d14;
-  --line-2:#d9d5cb; background:#fff; border-bottom:1px solid #d9d5cb; backdrop-filter:none; color:#1d1c1a}
+/* 上部ナビも同じ配色に（半透明・ぼかしなし） */
+body .sitebar{--chrome-ink:var(--s-ink); --chrome-faint:var(--s-mut); --gold:var(--s-acc); --gold-bright:var(--s-acc);
+  --line-2:var(--s-rule); background:#111214; border-bottom:1px solid var(--s-rule); backdrop-filter:none; color:var(--s-ink)}
 
 .layout{display:grid; grid-template-columns:250px minmax(0,1fr); max-width:1440px; margin:0 auto; color:var(--s-ink)}
 
 /* ---- 左：文書と品詞の絞り込み（独立してスクロール） ---- */
 .side{position:sticky; top:var(--sbh,47px); height:calc(100vh - var(--sbh,47px)); overflow-y:auto;
   scrollbar-gutter:stable; border-right:1px solid var(--s-rule); padding:22px 14px 40px 20px;
-  font-size:.84rem; scrollbar-width:thin; scrollbar-color:#c9c4b8 transparent}
+  font-size:.84rem; scrollbar-width:thin; scrollbar-color:#45474c transparent}
 .side h2{font-size:.74rem; font-weight:700; color:var(--s-mut); margin:0 0 8px;
   display:flex; align-items:baseline; gap:8px}
 .side h2 + .lnk{margin-left:auto}
@@ -57,7 +59,7 @@ body .sitebar{--chrome-ink:#1d1c1a; --chrome-faint:#6b675f; --gold:#7d2d14; --go
 .side ul{list-style:none; margin:0; padding:0}
 .side li{margin:0}
 .opt{display:flex; align-items:baseline; gap:7px; padding:4px 0; cursor:pointer}
-.opt input{margin:0; accent-color:#7d2d14; flex:none; transform:translateY(1px)}
+.opt input{margin:0; accent-color:var(--s-acc); flex:none; transform:translateY(1px)}
 .opt .nm{flex:1; min-width:0}
 .opt .nm small{display:block; color:var(--s-mut); font-size:.74rem}
 .opt .ct{color:var(--s-faint); font-size:.74rem; font-variant-numeric:tabular-nums}
@@ -79,17 +81,18 @@ h1{font-size:1.45rem; font-weight:700; margin:0 0 4px; letter-spacing:.01em}
 .lede{color:var(--s-mut); margin:0 0 18px; font-size:.9rem}
 .qrow{display:flex; gap:10px; align-items:stretch; max-width:760px}
 .qrow input{flex:1; min-width:0; font:inherit; font-size:1.05rem; padding:9px 12px; color:var(--s-ink);
-  background:#fff; border:1px solid #bdb8ad; border-radius:3px; outline:none}
+  background:var(--s-field); border:1px solid var(--s-edge); border-radius:3px; outline:none}
+.qrow input::placeholder{color:var(--s-faint)}
 .qrow input:focus{border-color:var(--s-acc); box-shadow:0 0 0 1px var(--s-acc)}
 .opts{display:flex; flex-wrap:wrap; gap:6px 22px; margin:10px 0 0; font-size:.82rem; color:var(--s-mut)}
 .opts fieldset{border:0; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:4px 14px; align-items:center}
 .opts legend{float:left; margin-right:6px; color:var(--s-mut)}
 .opts label{display:inline-flex; gap:5px; align-items:center; cursor:pointer; color:var(--s-ink)}
-.opts input{margin:0; accent-color:#7d2d14}
-.opts select{font:inherit; font-size:.82rem; padding:2px 4px; border:1px solid #bdb8ad; border-radius:3px; background:#fff; color:var(--s-ink)}
+.opts input{margin:0; accent-color:var(--s-acc)}
+.opts select{font:inherit; font-size:.82rem; padding:2px 4px; border:1px solid var(--s-edge); border-radius:3px; background:var(--s-field); color:var(--s-ink)}
 .scope{margin:14px 0 0; font-size:.8rem; color:var(--s-mut)}
 
-h2.sec{font-size:1rem; font-weight:700; margin:34px 0 10px; padding-bottom:6px; border-bottom:1px solid var(--s-ink);
+h2.sec{font-size:1rem; font-weight:700; margin:34px 0 10px; padding-bottom:6px; border-bottom:1px solid var(--s-edge);
   display:flex; align-items:baseline; gap:12px; flex-wrap:wrap}
 h2.sec small{font-weight:400; color:var(--s-mut); font-size:.8rem}
 h2.sec .right{margin-left:auto; display:flex; gap:14px}
@@ -112,7 +115,7 @@ table.st tfoot td{border-bottom:0; color:var(--s-mut)}
 .tblwrap{overflow:visible}
 table.lx{border-collapse:collapse; width:100%; font-size:.86rem}
 table.lx th{position:sticky; top:var(--sbh,47px); z-index:2; background:var(--s-bg); text-align:left; font-weight:500;
-  color:var(--s-mut); font-size:.76rem; border-bottom:1px solid var(--s-ink); padding:6px 10px 5px 0; white-space:nowrap}
+  color:var(--s-mut); font-size:.76rem; border-bottom:1px solid var(--s-edge); padding:6px 10px 5px 0; white-space:nowrap}
 table.lx th.num{text-align:right}
 table.lx th button{appearance:none; border:0; background:none; padding:0; font:inherit; color:inherit; cursor:pointer}
 table.lx th button:hover{color:var(--s-ink); text-decoration:underline; text-underline-offset:3px}
@@ -135,7 +138,7 @@ td.fm .cop{font-size:.98rem}
 td.fm small{color:var(--s-faint); font-size:.72rem; margin-left:1px}
 td.fm .more{color:var(--s-faint); font-size:.74rem}
 td.dist{color:var(--s-mut)}
-td.zero{color:#cfcabe}
+td.zero{color:var(--s-zero)}
 mark{background:var(--s-mark); color:inherit; padding:0 1px}
 .partial{color:var(--s-faint); font-size:.74rem}
 
@@ -160,11 +163,11 @@ table.kw td.rc{color:var(--s-mut); white-space:nowrap; overflow:hidden; max-widt
 .kwic .cop{font-size:1rem}
 
 .morebar{margin:14px 0 0; font-size:.84rem}
-.btn{appearance:none; font:inherit; font-size:.82rem; padding:5px 12px; border:1px solid #bdb8ad; background:#fff;
+.btn{appearance:none; font:inherit; font-size:.82rem; padding:5px 12px; border:1px solid var(--s-edge); background:var(--s-field);
   color:var(--s-ink); border-radius:3px; cursor:pointer}
-.btn:hover{border-color:var(--s-ink)}
+.btn:hover{border-color:var(--s-mut)}
 .empty{padding:28px 0; color:var(--s-mut); font-size:.9rem}
-.notice{border-left:3px solid var(--s-acc); background:#fff; padding:10px 14px; font-size:.84rem; margin:16px 0}
+.notice{border-left:3px solid var(--s-acc); background:var(--s-bg2); padding:10px 14px; font-size:.84rem; margin:16px 0}
 .notice code{font-size:.8rem}
 .foot{margin-top:46px; padding-top:12px; border-top:1px solid var(--s-rule); font-size:.74rem; color:var(--s-mut); line-height:1.8}
 .foot code{font-size:.72rem}
