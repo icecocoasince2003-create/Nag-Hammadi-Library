@@ -1,0 +1,129 @@
+<!-- 運営用：投稿（コメント・注釈・誤りの指摘）の承認ページ（手作業管理）。
+     admins テーブルに登録されたアカウントでログインしたときだけ操作できます（権限はサーバ側の行レベルセキュリティで判定）。 -->
+<!DOCTYPE html>
+<html lang="ja" data-lang="ja" data-i18n="full" data-mode="aeon" data-title-en="Moderation — The Nag Hammadi Library" data-title-fr="Modération — Bibliothèque de Nag Hammadi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>投稿の承認 — ナグ・ハマディ写本コーパス</title>
+<link rel="icon" type="image/svg+xml" href="image/icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+Coptic&display=swap" rel="stylesheet">
+<style>
+:root{ --ui:'Inter','Noto Sans JP',system-ui,sans-serif; }
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
+.filters{display:flex; flex-wrap:wrap; gap:6px 22px; margin:18px 0 14px; border-bottom:1px solid var(--line); padding-bottom:10px}
+.filters button{appearance:none; background:none; border:0; padding:4px 0; cursor:pointer; font:inherit; font-size:.88rem; color:var(--ink-soft); text-underline-offset:6px}
+.filters button:hover{text-decoration:underline; text-decoration-color:var(--gold)}
+.filters button[aria-pressed="true"]{color:var(--gold-bright); font-weight:600}
+.filters .n{font-size:.72rem; color:var(--ink-faint); margin-left:4px}
+.queue{display:flex; flex-direction:column; gap:12px}
+.q{border:1px solid var(--line); border-left:3px solid var(--lapis); border-radius:10px; padding:14px 16px; background:var(--panel)}
+.q.k-annotation{border-left-color:var(--gold)} .q.k-correction{border-left-color:var(--rose)}
+.q .meta{display:flex; flex-wrap:wrap; gap:4px 14px; font-size:.74rem; color:var(--ink-faint); margin-bottom:6px}
+.q .meta b{color:var(--gold); letter-spacing:.08em; text-transform:uppercase; font-size:.68rem}
+.q .meta .cop{font-family:"Noto Sans Coptic",serif; color:var(--ink)}
+.q .body{white-space:pre-wrap; word-break:break-word; font-size:.92rem; line-height:1.75; color:var(--ink)}
+.q .sugg{margin-top:6px; font-size:.86rem; color:var(--ink-soft); white-space:pre-wrap}
+.q .acts{display:flex; flex-wrap:wrap; align-items:center; gap:10px 16px; margin-top:12px}
+.q textarea{flex:1 1 260px; min-height:38px; background:rgba(0,0,0,.25); color:var(--ink); border:1px solid var(--line-2); border-radius:8px; padding:7px 10px; font:inherit; font-size:.82rem}
+.q .ok,.q .ng{appearance:none; border:0; border-radius:8px; padding:8px 14px; cursor:pointer; font:inherit; font-size:.82rem; font-weight:600}
+.q .ok{background:var(--gold); color:#1a140a} .q .ng{background:rgba(207,147,166,.18); color:var(--rose)}
+.q .open{font-size:.8rem; color:var(--lapis); text-underline-offset:4px}
+.q .st{font-size:.72rem; border:1px solid currentColor; border-radius:999px; padding:0 8px}
+.msg{color:var(--ink-faint); font-size:.9rem; padding:20px 0}
+</style>
+<link rel="stylesheet" href="assets/cosmos.css">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/community.css">
+<script defer src="assets/cosmos.js"></script>
+<script defer src="assets/site.js"></script>
+<script defer src="assets/community-config.js"></script>
+<script defer src="assets/community.js"></script>
+</head>
+<body>
+<nav id="sitebar" class="sitebar sticky"></nav>
+<main class="page">
+  <div class="eyebrow">Moderation</div>
+  <h1><span class="l-ja jp">投稿の承認</span><span class="l-en">Moderation</span><span class="l-fr">Modération</span></h1>
+  <p class="lede" style="font-size:.9rem"><span class="l-ja">コメント・注釈・誤りの指摘は「承認待ち」で届きます。内容を確認して〈承認〉すると公開され、〈却下〉すると投稿者本人にだけメモ付きで表示されます。</span><span class="l-en">Comments, annotations and corrections arrive as “pending”. Approve to publish; reject to keep it private (the author sees your note).</span><span class="l-fr">Les contributions arrivent « en attente ». Approuver les publie ; rejeter les garde privées (l’auteur voit votre note).</span></p>
+  <div class="filters" id="filters">
+    <button data-s="pending" aria-pressed="true"><span class="l-ja">承認待ち</span><span class="l-en">Pending</span><span class="l-fr">En attente</span><span class="n"></span></button>
+    <button data-s="approved" aria-pressed="false"><span class="l-ja">公開済み</span><span class="l-en">Approved</span><span class="l-fr">Publiées</span><span class="n"></span></button>
+    <button data-s="rejected" aria-pressed="false"><span class="l-ja">却下</span><span class="l-en">Rejected</span><span class="l-fr">Rejetées</span><span class="n"></span></button>
+  </div>
+  <div class="queue" id="queue"><p class="msg">…</p></div>
+</main>
+<script>
+(function(){
+  "use strict";
+  const DOCS={ eugnostos:{reader:"eugnostos.html", title:"Eugnostos"}, republic:{reader:"republic.html", title:"Republic (NHC VI,5)"} };
+  const $=s=>document.querySelector(s);
+  let cur="pending";
+  function lang(){ return document.documentElement.getAttribute("data-lang")||"ja"; }
+  function L(ja,en,fr){ return {ja,en,fr}[lang()]||ja; }
+  function msg(t){ $("#queue").innerHTML=`<p class="msg">${t}</p>`; }
+
+  function link(it){
+    const d=DOCS[it.doc]; if(!d) return "";
+    const wit=it.doc==="eugnostos"&&it.witness?`?wit=${encodeURIComponent(it.witness)}`:"";
+    return d.reader+wit+(it.seg_id?"#seg-"+encodeURIComponent(it.seg_id):"");
+  }
+  function card(api,it){
+    const esc=api.esc, t=api.t;
+    const where=it.seg_id?("§"+(it.seg_label||it.seg_id)+(it.token_form?` · <span class="cop">${esc(it.token_form)}</span>`:"")):L("文書全体","whole text","texte entier");
+    return `<article class="q k-${esc(it.kind)}" data-id="${esc(it.id)}">
+      <div class="meta"><b>${esc(t("kind_"+it.kind))}</b><span>${esc((DOCS[it.doc]||{}).title||it.doc)}${it.witness?" "+esc(it.witness):""}</span><span>${where}</span>
+        <span>${esc(it.author_name||"")}</span><span>${esc(api.fmtDate(it.created_at))}</span>
+        ${it.status!=="pending"?`<span class="st">${esc(t(it.status))}</span>`:""}</div>
+      <div class="body">${esc(it.body)}</div>
+      ${it.suggestion?`<div class="sugg"><b>${L("修正案","Suggested fix","Correction proposée")}:</b> ${esc(it.suggestion)}</div>`:""}
+      ${it.moderator_note?`<div class="sugg"><b>${L("運営メモ","Note","Note")}:</b> ${esc(it.moderator_note)}</div>`:""}
+      <div class="acts">
+        <a class="open" href="${esc(link(it))}" target="_blank" rel="noopener">${L("該当箇所を開く ↗","Open in viewer ↗","Ouvrir ↗")}</a>
+        <textarea placeholder="${L("投稿者へのメモ（任意・却下時に表示）","Note to the author (optional)","Note à l’auteur (facultatif)")}">${esc(it.moderator_note||"")}</textarea>
+        ${it.status!=="approved"?`<button class="ok">${L("承認して公開","Approve","Approuver")}</button>`:""}
+        ${it.status!=="rejected"?`<button class="ng">${L("却下","Reject","Rejeter")}</button>`:""}
+      </div></article>`;
+  }
+  function load(api){
+    const B=api.backend(), u=api.user();
+    if(api.mode==="off"){ msg(L("コメント機能が未設定です（assets/community-config.js と docs/COMMUNITY_SETUP.md を参照）。","The community feature is not configured yet.","La fonction communautaire n’est pas encore configurée.")); return; }
+    if(!u){ msg(L("運営アカウントでログインしてください。","Please sign in with an editor account.","Veuillez vous connecter avec un compte éditeur.")+` <button class="cm-linkbtn" id="adLogin">${api.t("login")}</button>`);
+      const b=$("#adLogin"); if(b) b.onclick=api.openLogin; return; }
+    if(!u.isAdmin){ msg(L("このアカウントには承認の権限がありません。","This account has no moderation rights.","Ce compte n’a pas les droits de modération.")); return; }
+    msg("…");
+    Promise.all([B.moderationList(null)]).then(([all])=>{
+      document.querySelectorAll("#filters button").forEach(b=>{ const n=all.filter(x=>x.status===b.dataset.s).length; b.querySelector(".n").textContent=n||""; });
+      const rows=all.filter(x=>x.status===cur);
+      if(!rows.length){ msg(L("該当する投稿はありません。","Nothing here.","Rien à afficher.")); return; }
+      $("#queue").innerHTML=rows.map(it=>card(api,it)).join("");
+      document.querySelectorAll("#queue .q").forEach(el=>{
+        const id=el.dataset.id, key=isNaN(+id)?id:+id;
+        const note=()=>el.querySelector("textarea").value.trim();
+        const ok=el.querySelector(".ok"), ng=el.querySelector(".ng");
+        if(ok) ok.onclick=()=>B.moderate(key,"approved",note()).then(()=>load(api)).catch(e=>alert(e.message));
+        if(ng) ng.onclick=()=>B.moderate(key,"rejected",note()).then(()=>load(api)).catch(e=>alert(e.message));
+      });
+    }).catch(e=>msg(api.t("err")+api.esc(e.message||e)));
+  }
+  function start(){
+    const api=window.NHC_COMMUNITY; if(!api){ msg("community.js が読み込まれていません。"); return; }
+    api.ready.then(()=>{
+      load(api);
+      api.onChange(()=>load(api));
+      document.addEventListener("nhc:lang",()=>load(api));
+      document.querySelectorAll("#filters button").forEach(b=>b.onclick=()=>{
+        cur=b.dataset.s; document.querySelectorAll("#filters button").forEach(x=>x.setAttribute("aria-pressed",String(x===b))); load(api);
+      });
+    });
+  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",start); else start();
+})();
+</script>
+</body>
+</html>

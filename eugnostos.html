@@ -296,11 +296,17 @@ html[data-lang="en"] .l-en{display:revert}
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/cosmos.css">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/community.css">
 <script defer src="assets/cosmos.js"></script>
+<script defer src="assets/site.js"></script>
+<script defer src="assets/community-config.js"></script>
+<script defer src="assets/community.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.1/openseadragon.min.js"></script>
 </head>
-<body>
+<body data-doc="eugnostos">
 <div class="app">
+  <nav id="sitebar" class="sitebar"></nav>
   <header>
     <a class="chip homelink" href="index.html" title="Index / 一覧へ"><span class="l-ja">← 一覧</span><span class="l-en">← Index</span></a>
     <a class="chip" id="notesJump" href="#endnotes" title="神学的解釈（ページ末尾） / Interpretation (end of page)"><span class="l-ja">☟ 神学的解釈</span><span class="l-en">☟ Notes</span></a>
@@ -328,6 +334,16 @@ html[data-lang="en"] .l-en{display:revert}
       <div class="nav-ctl">
         <a class="chip statslink" href="stats.html?doc=eugnostos" title="コーパス統計 / Corpus statistics">∑ <span class="l-ja">統計</span><span class="l-en">Stats</span></a>
         <a class="chip searchlink" href="search.html?doc=eugnostos" title="コーパス検索 / Corpus search">⌕ <span class="l-ja">コーパス検索</span><span class="l-en">Corpus search</span></a>
+        <div class="xmlmenu">
+          <button class="chip xmlmenu-btn" id="xmlBtn" aria-haspopup="true" aria-expanded="false" title="このページが参照している XML をダウンロード / Download the XML used by this page">⤓ XML</button>
+          <div class="xmlmenu-pop" id="xmlMenu" hidden>
+            <div class="xm-h"><span class="l-ja">このページが参照している XML</span><span class="l-en">XML used by this page</span></div>
+            <a href="data/eugnostos_tei.xml" download><code>eugnostos_tei.xml</code><span class="l-ja">本文（III,3 / V,1）</span><span class="l-en">text (III,3 / V,1)</span><small data-size></small></a>
+            <a href="data/lexicon.xml" download><code>lexicon.xml</code><span class="l-ja">コプト語辞書</span><span class="l-en">Coptic lexicon</span><small data-size></small></a>
+            <a href="data/eugnostos_theology.xml" download><code>eugnostos_theology.xml</code><span class="l-ja">注釈</span><span class="l-en">notes</span><small data-size></small></a>
+            <hr><div class="xm-h"><span class="l-ja">TEI P5 · UTF-8 · 本文はパブリックドメイン、辞書・注釈・対訳は CC BY 4.0</span><span class="l-en">TEI P5 · UTF-8 · text public domain; lexicon, notes, translations CC BY 4.0</span></div>
+          </div>
+        </div>
         <button class="chip" id="modeBtn" aria-pressed="false" title="表示モード / Display mode">◐ アイオーン</button>
       </div>
       <div class="search">
@@ -339,8 +355,8 @@ html[data-lang="en"] .l-en{display:revert}
 
   <main id="main" tabindex="-1">
     <div class="doc-head">
-      <div class="kick">Nag Hammadi Codex III,3 · pp. 70–90</div>
-      <h1><span class="cop">ⲉⲩⲅⲛⲱⲥⲧⲟⲥ ⲡⲙⲁⲕⲁⲣⲓⲟⲥ</span><br><span class="l-ja">エウグノストス</span><span class="l-en">Eugnostos</span></h1>
+      <div class="kick" id="docKick">Nag Hammadi Codex III,3 · pp. 70–90</div>
+      <h1 id="docH1"><span class="cop">ⲉⲩⲅⲛⲱⲥⲧⲟⲥ ⲡⲙⲁⲕⲁⲣⲓⲟⲥ</span><br><span class="l-ja">祝福されたエウグノストス</span><span class="l-en">Eugnostos the Blessed</span></h1>
       <p class="meta"><span class="l-ja">前1〜2世紀のギリシア語原典に遡るとされる、非キリスト教的な思弁的宇宙生成論。語りえぬ第一原理から、先在の父・自生者・不死の人間・人の子(救済者)・ソフィアと諸アイオーンが流出する次第を、書簡の体裁で説く。各形態素をクリックすると語義が表示されます。神学的解釈はページ末尾にまとめ、本文中の番号をクリックすると該当する注へ移動できます。</span><span class="l-en">A non-Christian speculative cosmogony, held to go back to a Greek original of the 1st–2nd c. BCE. In epistolary form it expounds how, from the ineffable First Principle, there emanate the pre-existent Father, the Self-Begotten, the Immortal Man, the Son of Man (the Saviour), Sophia and the Aeons. Click any morpheme for its sense. The theological notes are collected at the end of the page; click a number in the text to jump to the corresponding note.</span></p>
     </div>
         <section class="facsimile" id="facsimile" aria-label="写本ファクシミリ / Facsimile">
@@ -540,15 +556,14 @@ function parse(){
     return T(t,"s").map(s=>{
       const wEls=T(s,"w"); const ws=wEls.map(w=>{
         const lemma=w.getAttribute("lemma")||w.textContent;
-        const senses=LEXMAP.get(lemma)||[];
+        const type=w.getAttribute("type")||"";
         // a token may pin a specific homograph via @ana="#lex-…-n"
         const pin=(w.getAttribute("ana")||"").split("#").pop();
-        let def=senses[0]||{};
-        if(pin){ const m=senses.find(x=>x.id===pin); if(m) def=m; }
-        return {form:w.textContent, lemma, senses, defId:def.id||"",
-          pos:def.pos||w.getAttribute("type")||"X",
+        const r=resolveSenses(lemma,type,pin), def=r.def;
+        return {form:w.textContent, lemma, senses:r.cands, others:r.others, how:r.how, defId:def.id||"",
+          pos:type||def.pos||"X",
           gloss:def.en||"", glossJa:def.ja||"", glossFr:def.fr||"",
-          grc:getLang(w)==="grc", amb:senses.length>1};
+          grc:getLang(w)==="grc", amb:r.cands.length>1};
       });
       return {id:getId(s), n:s.getAttribute("n")||"", sub:s.getAttribute("subtype")||"",
         themes:(s.getAttribute("ana")||"").split(/\s+/).map(x=>x.split("#").pop()).filter(Boolean),
@@ -559,6 +574,23 @@ function parse(){
     });
   };
   SEGS_III=wit("wit-III"); SEGS_V=wit("wit-V");
+}
+
+/* ---------- 同形異義語の参照：レンマ＋品詞 ----------
+   辞書の項目は (lemma, POS) で一意。トークンは @lemma と @type（品詞）の組で辞書を引く。
+   優先順位: ① @ana による語義の固定（#lex-…）
+            ② 同じレンマで @type が一致する項目（通常は1件 → 同形異義の表示なし）
+            ③ 品詞が一致する項目がない場合のみ、レンマ一致の全項目を候補として表示 */
+function resolveSenses(lemma,type,pin){
+  const all=LEXMAP.get(lemma)||[];
+  let cands=all, how=all.length>1?"lemma":"single";
+  if(type&&all.length){
+    const m=all.filter(x=>x.pos===type);
+    if(m.length){ cands=m; how="pos"; } else if(all.length>1) how="pos-miss";
+  }
+  let def=cands[0]||{};
+  if(pin){ const m=all.find(x=>x.id===pin); if(m){ def=m; cands=[m]; how="pin"; } }
+  return {cands, def, others:all.filter(x=>!cands.includes(x)), how};
 }
 
 /* ---------- theme chips (endnotes内) ---------- */
@@ -675,6 +707,7 @@ function segHTML(s){
   </div>`;
 }
 function render(){
+  if(!DOC_MAIN) return;   // データ読込前（言語切替などで先に呼ばれた場合）は何もしない
   const box=$("#reading");
   if(curWit==="SYN"){ renderSyn(box); relabelLoan(); return; }
   box.className="col";
@@ -729,6 +762,7 @@ function showPop(el){
   const pos=POS[w.pos]||POS.X;
   const pop=$("#pop");
   let inner;
+  const extra=homNoteHTML(w);
   if(w.senses.length>1){
     const rows=w.senses.map((sn,i)=>{
       const p=POS[sn.pos]||POS.X;
@@ -746,8 +780,8 @@ function showPop(el){
     }).join("");
     inner=`<div class="form">${escapeHTML(w.form)}</div>
       ${w.lemma&&w.lemma!==w.form?`<div class="lemma">${lemmaLbl()} ${escapeHTML(w.lemma)}</div>`:""}
-      <div class="hommark">⬥ ${homoLbl(w.senses.length)}</div>
-      <div class="senses">${rows}</div>`;
+      <div class="hommark">⬥ ${w.how==="pos-miss"?missLbl(w.pos,w.senses.length):homoLbl(w.senses.length)}</div>
+      <div class="senses">${rows}</div>${extra}`;
   } else {
     let dl="";
     if(w.gloss) dl+=`<dt>EN</dt><dd>${escapeHTML(w.gloss)}</dd>`;
@@ -757,7 +791,7 @@ function showPop(el){
       ${w.lemma&&w.lemma!==w.form?`<div class="lemma">${lemmaLbl()} ${escapeHTML(w.lemma)}</div>`:""}
       <span class="pos${w.grc?' grc':''}">${pos[0]} · ${pos[1]}</span>
       ${dl?`<dl>${dl}</dl>`:`<div class="none">${noneLbl()}</div>`}
-      ${w.grc?`<div class="grcnote">⬥ ${loanLbl()}</div>`:""}`;
+      ${w.grc?`<div class="grcnote">⬥ ${loanLbl()}</div>`:""}${extra}`;
   }
   pop.innerHTML=inner;
   const r=el.getBoundingClientRect();
@@ -835,9 +869,26 @@ $("#searchClose").onclick=closeSearch;
 function setWit(w){
   curWit=w;
   $$(".tab").forEach(t=>t.setAttribute("aria-selected", t.dataset.wit===w?"true":"false"));
+  updateDocHead();
+  try{ const u=new URL(location.href); u.searchParams.set("wit",w); history.replaceState(null,"",u.pathname+u.search+u.hash); }catch(e){}
   render();
 }
+/* 写本ごとの標題: III,3 は末尾標題「祝福されたエウグノストス」、V,1 は「エウグノストス」 */
+const WIT_HEAD={
+  III:{kick:"Nag Hammadi Codex III,3 · pp. 70–90", cop:"ⲉⲩⲅⲛⲱⲥⲧⲟⲥ ⲡⲙⲁⲕⲁⲣⲓⲟⲥ", ja:"祝福されたエウグノストス", en:"Eugnostos the Blessed"},
+  V:{kick:"Nag Hammadi Codex V,1 · pp. 1–17", cop:"ⲉⲩⲅⲛⲱⲥⲧⲟⲥ", ja:"エウグノストス", en:"Eugnostos"},
+  SYN:{kick:"Nag Hammadi Codex III,3 ‖ V,1", cop:"ⲉⲩⲅⲛⲱⲥⲧⲟⲥ", ja:"エウグノストス — III,3 と V,1 の対照", en:"Eugnostos — III,3 and V,1 in parallel"}
+};
+function updateDocHead(){
+  const h=WIT_HEAD[curWit]||WIT_HEAD.III;
+  const k=$("#docKick"), h1=$("#docH1"); if(!k||!h1) return;
+  k.textContent=h.kick;
+  h1.innerHTML=`<span class="cop">${h.cop}</span><br><span class="l-ja">${h.ja}</span><span class="l-en">${h.en}</span>`;
+  document.title=(UL()==="en"?h.en:h.ja)+" — "+(curWit==="SYN"?"NHC III,3 / V,1":h.kick.replace("Nag Hammadi Codex ","NHC ").split(" · ")[0]);
+}
 $$(".tab").forEach(t=>t.onclick=()=>setWit(t.dataset.wit));
+{ const w0=new URLSearchParams(location.search).get("wit"); if(w0&&WIT_HEAD[w0]){ curWit=w0;
+    $$(".tab").forEach(t=>t.setAttribute("aria-selected", t.dataset.wit===w0?"true":"false")); } }
 
 /* ---------- toggles ---------- */
 function toggle(btn,attr,onVal,offVal,onLabel,offLabel){
@@ -861,7 +912,15 @@ const LANG_CYCLE=["ja","en","fr"];
 function UL(){ return H.getAttribute("data-lang")==="en"?"en":"ja"; }
 function lemmaLbl(){ return UL()==="en"?"lemma":"レンマ"; }
 function defLbl(){ return UL()==="en"?"default":"既定"; }
-function homoLbl(n){ return UL()==="en"?("homograph — "+n+" senses"):("同形異義 — "+n+" 語義"); }
+function homoLbl(n){ return UL()==="en"?("homograph (same part of speech) — "+n+" senses"):("同形異義（同じ品詞）— "+n+" 語義"); }
+function missLbl(p,n){ const L=POS[p]||[p,p]; return UL()==="en"?("part of speech “"+(L[1]||p)+"” not in the lexicon — "+n+" candidates by lemma"):("品詞「"+(L[0]||p)+"」は辞書に未登録 — レンマ一致の候補 "+n+" 件"); }
+/* 同じ綴りで品詞の異なる語（参照対象外）を小さく併記 */
+function homNoteHTML(w){
+  if(!w.others||!w.others.length) return "";
+  const en=UL()==="en";
+  const items=w.others.map(o=>{ const p=POS[o.pos]||POS.X; const g=en?(o.en||o.ja):(o.ja||o.en); return `${escapeHTML(en?p[1]:p[0])}${g?"「"+escapeHTML(g)+"」":""}`; }).join(" / ");
+  return `<div class="usg" style="margin-top:8px;font-size:.64rem;color:var(--chrome-faint)">${en?"Other homographs":"同形の別品詞"}: ${items}</div>`;
+}
 function noneLbl(){ return UL()==="en"?"No sense registered yet (extend in the lexicon).":"語義は未登録です（語彙集で拡張可能）。"; }
 function loanLbl(){ return UL()==="en"?"Greek loanword":"ギリシア語からの借用語"; }
 function langLbl(v){ return (UL()==="en"?{ja:"JA",en:"EN",fr:"FR"}:{ja:"日",en:"英",fr:"仏"})[v]; }
@@ -903,6 +962,7 @@ function applyUILang(){
   relabelLangBtn($("#tlBtn"),"data-tl","tl");
   relabelMode();
   H.setAttribute("lang", en?"en":"ja");
+  if(typeof updateDocHead==="function") updateDocHead();
 }
 { const lgb=$("#langBtn"); if(lgb) lgb.onclick=()=>{
     const en=UL()==="en";
@@ -917,7 +977,7 @@ applyUILang();
 /* ---------- credit ---------- */
 function buildCredit(){
   $("#credit").innerHTML=`
-   <p><b>本コーパスについて。</b> データは3ファイルに分離しています — <b>本文</b> <code>eugnostos_tei.xml</code>(二証本)、<b>コプト語辞書</b> <code>eugnostos_lexicon.xml</code>(レンマ→品詞・<b>日英仏</b>語義)、<b>注釈</b> <code>eugnostos_theology.xml</code>(神学的解釈)。本文の各 <code>&lt;w&gt;</code> は @lemma で辞書を参照し、注釈は @target で本文 <code>&lt;s&gt;</code> へリンクします。</p>
+   <p><b>本コーパスについて。</b> データは3ファイルに分離しています — <b>本文</b> <code>eugnostos_tei.xml</code>(二証本)、<b>コプト語辞書</b> <code>lexicon.xml</code>(レンマ＋品詞→<b>日英仏</b>語義)、<b>注釈</b> <code>eugnostos_theology.xml</code>(神学的解釈)。本文の各 <code>&lt;w&gt;</code> は <b>@lemma と @type(品詞)の組</b>で辞書を参照し(同形異義語は品詞で区別)、注釈は @target で本文 <code>&lt;s&gt;</code> へリンクします。</p>
    <p>本文(コプト語)はパブリックドメイン。<b>日・英・仏の対訳と注釈、辞書は本プロジェクトによる原文オリジナルの初版シード</b>(CC&nbsp;BY&nbsp;4.0)で、<b>Pasquier(BCNH)・Parrott(NHS 27)・小林稔訳・Painchaud(JBL 1995)</b>等を参照して作成していますが、これらの翻訳を転記したものではありません。権威あるフランス語訳は Pasquier の校訂を参照してください。語義はレンマ単位(文脈非依存)で全トークンの約87%を、フランス語語義は中核語彙をカバー。写本 <b>III,3</b> は全文符号化、<b>V,1</b> は @corresp で対応づけた並行証本の枠です。</p>`;
 }
 

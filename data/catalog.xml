@@ -76,11 +76,18 @@
         </relatedItem>
       </bibl>
 
-      <!-- ═══════════ 祝福されたエウグノストス ═══════════ -->
+      <!-- ═══════════ エウグノストス（III,3『祝福されたエウグノストス』/ V,1『エウグノストス』） ═══════════
+           文書全体の題は「エウグノストス」。写本ごとの標題は @type="witness" の <title> に記述
+           （III,3 は末尾標題 ⲉⲩⲅⲛⲱⲥⲧⲟⲥ ⲡⲙⲁⲕⲁⲣⲓⲟⲥ、V,1 は ⲉⲩⲅⲛⲱⲥⲧⲟⲥ）。 -->
       <bibl type="document" xml:id="doc-eugnostos">
         <title xml:lang="cop">ⲉⲩⲅⲛⲱⲥⲧⲟⲥ</title>
-        <title xml:lang="ja">祝福されたエウグノストス</title>
-        <title xml:lang="en">Eugnostos the Blessed</title>
+        <title xml:lang="ja">エウグノストス</title>
+        <title xml:lang="en">Eugnostos</title>
+        <title type="witness" n="NHC III,3" xml:lang="cop">ⲉⲩⲅⲛⲱⲥⲧⲟⲥ ⲡⲙⲁⲕⲁⲣⲓⲟⲥ</title>
+        <title type="witness" n="NHC III,3" xml:lang="ja">祝福されたエウグノストス</title>
+        <title type="witness" n="NHC III,3" xml:lang="en">Eugnostos the Blessed</title>
+        <title type="witness" n="NHC V,1" xml:lang="ja">エウグノストス</title>
+        <title type="witness" n="NHC V,1" xml:lang="en">Eugnostos</title>
         <idno type="siglum">NHC III,3 / V,1</idno>
         <note type="genre" xml:lang="ja">書簡体の教理文書（二証本）</note>
         <note type="genre" xml:lang="en">Doctrinal epistle (two witnesses)</note>

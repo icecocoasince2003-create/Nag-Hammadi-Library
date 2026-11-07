@@ -1,0 +1,58 @@
+{
+  "_comment": "サイトの更新情報（HOME の NEWS 欄）。新しい項目を items の先頭に追加してください。date は YYYY-MM-DD、ja/en/fr は HTML 可、link は任意。",
+  "items": [
+    {
+      "date": "2026-11-07",
+      "ja": "<b>サイトを全面リニューアルしました。</b>上部ナビの刷新、HOME の英語・フランス語表示、「グノーシス主義とは」「プロジェクト」ページを追加。エウグノストスを写本ごとの標題（III,3『祝福されたエウグノストス』／V,1『エウグノストス』）で表示し、同形異義語は品詞で辞書を参照する方式に変更しました。参照している XML はビュワーからダウンロードできます。",
+      "en": "<b>The site has been redesigned.</b> New top navigation, English and French on the home page, and new pages on Gnosticism and on the project. Eugnostos is now listed under each codex’s own title (III,3 <i>Eugnostos the Blessed</i> / V,1 <i>Eugnostos</i>); homographs are now looked up in the lexicon by part of speech; the XML files behind each viewer can be downloaded.",
+      "fr": "<b>Le site a été entièrement remanié.</b> Nouvelle navigation, page d’accueil en anglais et en français, nouvelles pages sur le gnosticisme et sur le projet. Eugnoste figure désormais sous le titre propre à chaque codex (III,3 <i>Eugnoste le Bienheureux</i> / V,1 <i>Eugnoste</i>) ; les homographes sont recherchés dans le lexique par catégorie grammaticale ; les fichiers XML de chaque visionneuse sont téléchargeables."
+    },
+    {
+      "date": "2026-08-29",
+      "ja": "エウグノストスの TEI 本文とコプト語辞書を改訂しました。",
+      "en": "Revised the TEI text of Eugnostos and the Coptic lexicon.",
+      "fr": "Révision du texte TEI d’Eugnoste et du lexique copte."
+    },
+    {
+      "date": "2026-08-24",
+      "ja": "コーパス統計を独立したページにしました。文書カタログ（<code>data/catalog.xml</code>）と、ビュワーの〈関連〉パネルを追加。",
+      "en": "Corpus statistics now have their own page. Added a document catalogue (<code>data/catalog.xml</code>) and a “Related” panel in the viewer.",
+      "fr": "Les statistiques du corpus ont désormais leur propre page. Ajout d’un catalogue des documents (<code>data/catalog.xml</code>) et d’un panneau « Liens » dans la visionneuse.",
+      "link": "stats.html"
+    },
+    {
+      "date": "2026-07-10",
+      "ja": "コーパス検索ページに英語表示を追加しました。",
+      "en": "The corpus search page is now available in English.",
+      "fr": "La page de recherche est désormais disponible en anglais.",
+      "link": "search.html"
+    },
+    {
+      "date": "2026-07-09",
+      "ja": "全文書共通のコプト語辞書（<code>data/lexicon.xml</code>）を導入しました。",
+      "en": "Introduced a shared Coptic lexicon for all texts (<code>data/lexicon.xml</code>).",
+      "fr": "Mise en place d’un lexique copte commun à tous les textes (<code>data/lexicon.xml</code>)."
+    },
+    {
+      "date": "2026-07-07",
+      "ja": "サイトのデザインを刷新し、コーパス検索ページを公開しました。",
+      "en": "New site design; the corpus search page is online.",
+      "fr": "Nouveau design du site ; la page de recherche est en ligne.",
+      "link": "search.html"
+    },
+    {
+      "date": "2026-06-17",
+      "ja": "プラトン『国家』588b–589b（NHC VI,5）を公開しました。",
+      "en": "Published Plato, <i>Republic</i> 588b–589b (NHC VI,5).",
+      "fr": "Publication de Platon, <i>République</i> 588b–589b (NHC VI,5).",
+      "link": "republic.html"
+    },
+    {
+      "date": "2026-06-16",
+      "ja": "『エウグノストス』（NHC III,3 / V,1）を公開しました。",
+      "en": "Published <i>Eugnostos</i> (NHC III,3 / V,1).",
+      "fr": "Publication d’<i>Eugnoste</i> (NHC III,3 / V,1).",
+      "link": "eugnostos.html"
+    }
+  ]
+}

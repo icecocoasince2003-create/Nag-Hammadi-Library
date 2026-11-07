@@ -152,8 +152,14 @@ html[data-lang="en"] .l-en{display:revert}
   .bar{grid-template-columns:minmax(92px,130px) 1fr 40px}
 }
 </style>
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/community.css">
+<script defer src="assets/site.js"></script>
+<script defer src="assets/community-config.js"></script>
+<script defer src="assets/community.js"></script>
 </head>
 <body>
+<nav id="sitebar" class="sitebar"></nav>
 <header>
   <a class="brand" href="index.html">
     <img src="image/icon.svg" alt="" width="30" height="30" onerror="this.style.display='none'">
@@ -204,7 +210,7 @@ const DOCS = {
     search:"search.html?doc=republic", wits:null
   },
   eugnostos: {
-    ja:"祝福されたエウグノストス", en:"Eugnostos the Blessed", cop:"ⲉⲩⲅⲛⲱⲥⲧⲟⲥ", siglum:"NHC III,3 / V,1",
+    ja:"エウグノストス", en:"Eugnostos", cop:"ⲉⲩⲅⲛⲱⲥⲧⲟⲥ", siglum:"NHC III,3『祝福されたエウグノストス』/ V,1『エウグノストス』",
     tei:"data/eugnostos_tei.xml", lex:"data/lexicon.xml", reader:"eugnostos.html",
     search:"search.html?doc=eugnostos",
     wits:[{key:"III", id:"wit-III", label:"NHC III,3"}, {key:"V", id:"wit-V", label:"NHC V,1"}]

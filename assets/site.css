@@ -1,0 +1,204 @@
+/* ============================================================
+   site.css — サイト共通レイヤー（全ページで cosmos.css の後に読み込む）
+   1) 上部ナビ（#sitebar）: 文字のみ・ホバーで下線
+   2) 既存ページのヘッダー内チップ／タブも文字のみの表示に統一
+   3) 三言語表示 (.l-ja / .l-en / .l-fr)
+   4) 広い画面でのビュワー本文幅の拡張
+   5) 解説ページ（gnosticism / project / admin）の共通部品
+   ============================================================ */
+
+/* ---------- 3) 言語表示 ---------- */
+.l-en, .l-fr { display: none; }
+html[data-lang="en"] .l-ja, html[data-lang="fr"] .l-ja { display: none; }
+html[data-lang="en"] .l-en { display: revert; }
+html[data-lang="fr"] .l-fr { display: revert; }
+html[data-lang="fr"] .l-en { display: none; }
+
+/* ---------- 1) 上部ナビ ---------- */
+.sitebar {
+  position: relative; z-index: 40;
+  display: flex; align-items: center; gap: 10px 22px; flex-wrap: wrap;
+  min-height: 46px;
+  padding: 8px clamp(14px, 4vw, 40px);
+  background: rgba(6, 5, 16, .94);
+  border-bottom: 1px solid rgba(212, 175, 106, .22);
+  backdrop-filter: blur(6px);
+  font-family: var(--ui, "Inter", "Noto Sans JP", system-ui, sans-serif);
+  color: var(--chrome-ink, #ede8dc);
+}
+.sitebar.sticky { position: sticky; top: 0; }
+.app > .sitebar { grid-area: site; }
+.sitebar a { color: inherit; text-decoration: none; }
+.sb-brand { display: flex; align-items: center; gap: 9px; flex: none; }
+.sb-brand img { width: 26px; height: 26px; border-radius: 6px; flex: none; }
+.sb-brand .sb-name { display: flex; flex-direction: column; line-height: 1.12; }
+.sb-brand .sb-name b {
+  font-family: 'Cinzel', 'Spectral', Georgia, serif; font-weight: 500;
+  font-size: .9rem; letter-spacing: .05em;
+}
+.sb-brand .sb-name small { font-size: .64rem; letter-spacing: .08em; color: var(--chrome-faint, #8a85a6); }
+.sb-brand .cop { font-family: "Noto Sans Coptic", serif; color: var(--gold-bright, #e7c885); margin-right: .3em; }
+
+.sb-links { display: flex; align-items: center; gap: 4px 20px; flex-wrap: wrap; flex: 1; min-width: 0; }
+.sb-tools { display: flex; align-items: center; gap: 4px 14px; flex: none; }
+.sb-sep { width: 1px; height: 14px; background: var(--line-2, rgba(190,180,230,.22)); }
+
+/* 文字のみ・ホバー時に下線 */
+.sb-link, .sb-lang, .sb-auth {
+  appearance: none; background: none; border: 0; padding: 4px 0; cursor: pointer;
+  font: inherit; font-size: .8rem; letter-spacing: .02em; white-space: nowrap;
+  color: var(--chrome-ink, #ede8dc);
+  text-decoration: none; text-underline-offset: 6px; text-decoration-thickness: 1px;
+}
+.sb-link:hover, .sb-lang:hover, .sb-auth:hover,
+.sb-link:focus-visible, .sb-lang:focus-visible, .sb-auth:focus-visible {
+  text-decoration: underline; text-decoration-color: var(--gold, #d4af6a); outline: none;
+}
+.sb-link[aria-current="page"] { color: var(--gold-bright, #e7c885); }
+.sb-lang { font-size: .74rem; color: var(--chrome-faint, #8a85a6); }
+.sb-lang[aria-pressed="true"] { color: var(--gold-bright, #e7c885); }
+.sb-auth { color: var(--gold-bright, #e7c885); }
+.sb-auth[hidden] { display: none; }
+@media (max-width: 760px) {
+  .sb-links { order: 3; flex-basis: 100%; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 2px;
+    scrollbar-width: none; }
+  .sb-links::-webkit-scrollbar { display: none; }
+  .sb-brand .sb-name small { display: none; }
+  .sb-tools { margin-left: auto; }
+}
+
+/* ビュワー（.app グリッド）にナビ行を追加 */
+.app { grid-template-rows: auto auto 1fr !important; grid-template-areas: "site" "head" "main" !important; }
+
+/* ---------- 2) 既存ヘッダー内のチップ・タブを文字のみに ---------- */
+body header .chip, body header a.chip, body header button.chip,
+body header .tab, body header .tabs {
+  background: none !important; border: 0 !important; border-radius: 0 !important;
+  box-shadow: none !important;
+}
+body header .tabs { padding: 0 !important; gap: 14px !important; }
+body header .chip, body header .tab {
+  padding: 4px 0 !important;
+  color: var(--chrome-ink, var(--ink)) !important;
+  text-decoration: none; text-underline-offset: 6px; text-decoration-thickness: 1px;
+  font-weight: 400;
+}
+body header .chip:hover, body header .tab:hover,
+body header .chip:focus-visible, body header .tab:focus-visible {
+  background: none !important; text-decoration: underline !important;
+  text-decoration-color: var(--gold) !important; outline: none !important;
+}
+/* 選択中・オンの状態は金色の文字で示す（囲みなし） */
+body header .chip[aria-pressed="true"], body header .tab[aria-selected="true"] {
+  color: var(--gold-bright, var(--gold)) !important; font-weight: 600 !important;
+}
+body header .seg-ctl, body header .nav-ctl { gap: 14px !important; }
+body header .chip.searchlink { color: var(--gold-bright) !important; }
+
+/* XML ダウンロードメニュー（ビュワー） */
+.xmlmenu { position: relative; }
+.xmlmenu-pop {
+  position: absolute; right: 0; top: calc(100% + 10px); z-index: 70; min-width: 300px;
+  background: var(--chrome, #0c0d14); border: 1px solid var(--line-2); border-radius: 10px;
+  box-shadow: 0 14px 40px rgba(0,0,0,.55); padding: 10px 0; font-size: .8rem;
+}
+.xmlmenu-pop[hidden] { display: none; }
+.xmlmenu-pop .xm-h { padding: 4px 16px 8px; font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; color: var(--chrome-faint); }
+.xmlmenu-pop a, .xmlmenu-pop button {
+  display: flex; align-items: baseline; gap: 10px; width: 100%; text-align: left;
+  padding: 7px 16px; color: var(--chrome-ink); text-decoration: none; background: none; border: 0;
+  font: inherit; cursor: pointer;
+}
+.xmlmenu-pop a:hover, .xmlmenu-pop button:hover { text-decoration: underline; text-decoration-color: var(--gold); }
+.xmlmenu-pop code { font-size: .74rem; color: var(--gold-bright); }
+.xmlmenu-pop small { color: var(--chrome-faint); font-size: .68rem; margin-left: auto; white-space: nowrap; }
+.xmlmenu-pop hr { border: 0; border-top: 1px solid var(--line); margin: 6px 0; }
+
+/* ---------- 4) 広い画面では本文の幅も広げる ---------- */
+@media (min-width: 1240px) {
+  .app main .doc-head, .app main .notice, .app main .col, .app main .credit {
+    max-width: min(86vw, 1320px);
+  }
+  .app main .trans { max-width: 78ch; }
+  .app main #reading.parallel, .app main .corpus-head, .app main .grcsrc-foot,
+  .app main .endnotes, .app main .facsimile, .app main .syn {
+    max-width: min(94vw, 1760px);
+  }
+  .app main .corpus-head, .app main .prow { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+}
+@media (min-width: 1600px) {
+  .app main .coptic { font-size: 1.62rem; }
+  .app main .msep { font-size: 1.62rem; }
+  .app main .grcline { font-size: 1.3rem; }
+  .app main .facsimile #osdView { height: 600px; }
+}
+
+/* ---------- 5) 解説ページの共通部品 ---------- */
+.page { position: relative; z-index: 1; max-width: 1040px; margin: 0 auto;
+  padding: clamp(28px, 6vw, 64px) clamp(16px, 4vw, 40px) 90px; color: var(--ink); }
+.page .eyebrow { font-family: 'Cinzel', 'Spectral', serif; font-size: .74rem; letter-spacing: .3em;
+  text-transform: uppercase; color: var(--gold); }
+.page h1 { font-family: 'Cinzel', 'Spectral', Georgia, serif; font-weight: 500; letter-spacing: .04em;
+  font-size: clamp(1.9rem, 4.6vw, 3rem); line-height: 1.15; margin: .3em 0 .25em; }
+.page h1 .jp { font-family: "Noto Serif JP", serif; letter-spacing: .02em; }
+.page .lede { color: var(--ink-soft); font-size: 1.04rem; line-height: 1.85; max-width: 70ch; }
+.page h2 { font-family: "Noto Serif JP", 'Spectral', serif; font-weight: 600; font-size: 1.32rem;
+  margin: 2.4em 0 .6em; padding-bottom: .4em; border-bottom: 1px solid var(--line-2); color: var(--ink); }
+html[data-lang="en"] .page h2, html[data-lang="fr"] .page h2 { font-family: 'Spectral', Georgia, serif; }
+.page h2 .num { color: var(--gold); font-family: 'Cinzel', serif; margin-right: .6em; font-size: .9em; }
+.page h3 { font-size: 1.02rem; margin: 1.6em 0 .4em; color: var(--gold-bright); font-weight: 600; }
+.prose p, .prose li { color: var(--ink-soft); line-height: 1.95; font-size: .97rem; }
+html[data-lang="en"] .prose p, html[data-lang="fr"] .prose p,
+html[data-lang="en"] .prose li, html[data-lang="fr"] .prose li { line-height: 1.75; font-family: 'Spectral', Georgia, serif; font-size: 1.04rem; }
+.prose p { max-width: 74ch; }
+.prose b, .prose strong { color: var(--ink); }
+.prose a { color: var(--lapis); }
+.prose .cop { font-family: "Noto Sans Coptic", serif; color: var(--gold-bright); }
+.toc { display: flex; flex-wrap: wrap; gap: 6px 22px; margin: 26px 0 0; padding: 14px 0;
+  border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); font-size: .84rem; }
+.toc a { color: var(--ink-soft); text-decoration: none; text-underline-offset: 5px; }
+.toc a:hover { text-decoration: underline; text-decoration-color: var(--gold); color: var(--ink); }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; margin: 16px 0; }
+.card { background: var(--panel, rgba(23,20,46,.78)); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
+.card h4 { margin: 0 0 6px; font-size: .98rem; color: var(--ink); }
+.card p { margin: 0; font-size: .86rem; line-height: 1.75; color: var(--ink-soft); }
+.card .k { font-size: .64rem; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+.figure { display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 18px; align-items: center;
+  margin: 22px 0; padding: 16px 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--panel, rgba(23,20,46,.6)); }
+.figure img { width: 140px; aspect-ratio: 1; border-radius: 50%; object-fit: cover; object-position: center 22%;
+  border: 1px solid rgba(212,175,106,.45); }
+.figure p { margin: 0; }
+@media (max-width: 600px) { .figure { grid-template-columns: 1fr; } .figure img { width: 110px; } }
+.reflist { font-size: .84rem; line-height: 1.8; color: var(--ink-soft); padding-left: 1.2em; }
+.reflist li { margin-bottom: .3em; }
+.reflist i { color: var(--ink); }
+.callout { border-left: 3px solid var(--gold); background: rgba(212,175,106,.07); padding: 12px 16px;
+  border-radius: 0 10px 10px 0; font-size: .88rem; color: var(--ink-soft); line-height: 1.8; margin: 18px 0; }
+.btnlink { display: inline-flex; align-items: center; gap: 6px; color: var(--gold-bright); text-decoration: none;
+  text-underline-offset: 5px; font-size: .88rem; }
+.btnlink:hover { text-decoration: underline; }
+.site-foot { position: relative; z-index: 1; border-top: 1px solid var(--line); color: var(--ink-faint);
+  font-size: .76rem; padding: 22px clamp(16px, 4vw, 40px) 46px; text-align: center; line-height: 1.8; }
+.site-foot a { color: var(--ink-soft); text-underline-offset: 4px; }
+.sb-sep:has(+ .sb-auth[hidden]) { display: none; }
+/* 固定見出し（コプト語｜ギリシア語、対照表示）は背景を不透明に */
+.app main .corpus-head, .app main .syn .colhead { background: #0d0b1e; }
+@media (max-width: 600px) {
+  .sitebar { gap: 6px 12px; padding: 8px 14px; }
+  .sb-brand .cop { display: none; }
+  .sb-brand .sb-name b { font-size: .82rem; }
+  .sb-tools { gap: 4px 10px; }
+  body > header { flex-wrap: wrap; row-gap: 6px !important; }
+  body > header .brand .bt small { display: none; }
+}
+@media (max-width: 900px) {
+  .app > header { flex-wrap: wrap; gap: 8px 16px !important; }
+  .app > header .controls { margin-left: 0 !important; justify-content: flex-start !important; }
+  .app > header .chip, .app > header .tab { white-space: nowrap; }
+  .app > header .nav-ctl { border-left: 0 !important; padding-left: 0 !important; flex-wrap: wrap; }
+  .app > header .seg-ctl { flex-wrap: wrap; }
+  .app > .sitebar { min-width: 0; }
+  .app { max-width: 100vw; overflow-x: hidden; }
+}
+.xmlmenu-pop { max-width: calc(100vw - 24px); }
+@media (max-width: 600px) { .xmlmenu-pop { right: auto; left: 0; min-width: 0; width: calc(100vw - 40px); } }

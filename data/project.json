@@ -1,0 +1,79 @@
+{
+  "_comment": [
+    "プロジェクト紹介ページ（project.html）のメンバー・資金協力のデータ。",
+    "public: true の項目だけがページに表示されます。資金協力は公開時期が来たら public を true にしてください。",
+    "※ このファイル自体は GitHub 上で誰でも閲覧できます（非表示であって秘匿ではありません）。",
+    "メンバーを追加するときは members に 1 件追加します。kind は human / ai。image は顔写真などのパス（空ならイニシャル表示）。"
+  ],
+  "members": [
+    {
+      "id": "nabatame",
+      "public": true,
+      "kind": "human",
+      "name": { "ja": "生田目 心愛", "en": "Kokoa Nabatame", "fr": "Kokoa Nabatame" },
+      "reading": "Nabatame Kokoa",
+      "role": {
+        "ja": "代表・編集 — TEI 符号化、辞書、翻訳、注釈、サイト設計",
+        "en": "Project lead and editor — TEI encoding, lexicon, translations, notes, site design",
+        "fr": "Responsable et éditrice — encodage TEI, lexique, traductions, notes, conception du site"
+      },
+      "affiliation": {
+        "ja": "筑波大学大学院 人文社会科学研究群（博士前期課程）",
+        "en": "Graduate School of Humanities and Social Sciences, University of Tsukuba (Master’s programme)",
+        "fr": "Graduate School of Humanities and Social Sciences, Université de Tsukuba (master)"
+      },
+      "bio": {
+        "ja": "言語学・コプト語学。チャコス写本『ユダの福音書』における示差的目的語標示（DOM）を中心に、古代コプト語文献の言語と本文を研究している。",
+        "en": "Linguistics and Coptic studies. Works on the language and text of ancient Coptic literature, with a focus on differential object marking (DOM) in the Gospel of Judas (Codex Tchacos).",
+        "fr": "Linguistique et études coptes. Travaille sur la langue et le texte de la littérature copte ancienne, en particulier le marquage différentiel de l’objet (DOM) dans l’Évangile de Judas (Codex Tchacos)."
+      },
+      "image": "",
+      "links": [
+        { "label": "GitHub", "url": "https://github.com/icecocoasince2003-create" }
+      ]
+    },
+    {
+      "id": "claude",
+      "public": false,
+      "kind": "ai",
+      "name": { "ja": "Claude（Anthropic）", "en": "Claude (Anthropic)", "fr": "Claude (Anthropic)" },
+      "role": {
+        "ja": "AI 協力者 — サイト・スクリプトの実装、データ検証の補助",
+        "en": "AI collaborator — implementation of the site and scripts, help with data validation",
+        "fr": "Collaborateur IA — développement du site et des scripts, aide à la validation des données"
+      },
+      "affiliation": { "ja": "AI アシスタント", "en": "AI assistant", "fr": "Assistant IA" },
+      "bio": {
+        "ja": "翻訳・注釈・校訂の判断はすべて人間の編集者が行い、AI はその作業を支える道具として用いている。",
+        "en": "All decisions on translation, annotation and text are made by the human editor; the AI is used as a tool to support that work.",
+        "fr": "Toutes les décisions de traduction, d’annotation et d’établissement du texte relèvent de l’éditrice ; l’IA est un outil au service de ce travail."
+      },
+      "image": "",
+      "links": []
+    }
+  ],
+  "funding": [
+    {
+      "id": "jsps-dc1",
+      "public": false,
+      "name": {
+        "ja": "日本学術振興会 特別研究員（DC1）",
+        "en": "Japan Society for the Promotion of Science (JSPS), Research Fellowship for Young Scientists (DC1)",
+        "fr": "Japan Society for the Promotion of Science (JSPS), Research Fellowship for Young Scientists (DC1)"
+      },
+      "note": {
+        "ja": "JSPS 科研費（特別研究員奨励費）課題番号: （採用後に記入）",
+        "en": "JSPS KAKENHI (Grant-in-Aid for JSPS Fellows), grant number: (to be added)",
+        "fr": "JSPS KAKENHI (Grant-in-Aid for JSPS Fellows), numéro : (à compléter)"
+      },
+      "url": "https://www.jsps.go.jp/"
+    },
+    {
+      "id": "humai",
+      "public": false,
+      "name": { "ja": "日本財団 HUMAI", "en": "The Nippon Foundation — HUMAI", "fr": "The Nippon Foundation — HUMAI" },
+      "note": { "ja": "", "en": "", "fr": "" },
+      "url": ""
+    }
+  ]
+}

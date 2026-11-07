@@ -108,9 +108,15 @@ html[data-lang="en"] .l-ja{display:none}
 html[data-lang="en"] .l-en{display:revert}
 </style>
 <link rel="stylesheet" href="assets/cosmos.css">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/community.css">
 <script defer src="assets/cosmos.js"></script>
+<script defer src="assets/site.js"></script>
+<script defer src="assets/community-config.js"></script>
+<script defer src="assets/community.js"></script>
 </head>
 <body>
+<nav id="sitebar" class="sitebar"></nav>
 <header>
   <a class="brand" href="index.html">
     <img src="image/icon.svg" alt="" width="30" height="30" onerror="this.style.display='none'">
@@ -158,7 +164,7 @@ const DOCS = {
     guide:"image/web/scriber.jpg", guideName:"The Scribe"
   },
   eugnostos: {
-    ja:"祝福されたエウグノストス", en:"Eugnostos the Blessed", cop:"ⲉⲩⲅⲛⲱⲥⲧⲟⲥ", siglum:"NHC III,3 / V,1",
+    ja:"エウグノストス", en:"Eugnostos", cop:"ⲉⲩⲅⲛⲱⲥⲧⲟⲥ", siglum:"NHC III,3『祝福されたエウグノストス』/ V,1『エウグノストス』",
     tei:"data/eugnostos_tei.xml", lex:"data/lexicon.xml", reader:"eugnostos.html",
     guide:"image/web/chibi_sophia.jpg", guideName:"Sophia"
   }
@@ -241,6 +247,7 @@ function parseTEI(xml){
     const words = T(s, "w").map(w => ({
       form: w.textContent.trim(),
       lemma: w.getAttribute("lemma") || "",
+      type: w.getAttribute("type") || "",
       gloss: w.getAttribute("gloss") || ""
     }));
     SEGS.push({
@@ -298,7 +305,10 @@ function whereLbl(key){
 }
 function glossesOf(w){
   const out = w.gloss ? [w.gloss] : [];
-  (LEX[w.lemma] || []).forEach(s => out.push(...s.ja, ...s.en, ...s.fr));
+  // 同形異義語は「レンマ＋品詞」で参照（品詞の一致する項目がなければレンマ一致の全項目）
+  const all = LEX[w.lemma] || [];
+  const byPos = w.type ? all.filter(s => s.pos === w.type) : [];
+  (byPos.length ? byPos : all).forEach(s => out.push(...s.ja, ...s.en, ...s.fr));
   return out;
 }
 function markCop(words, qn){
@@ -349,7 +359,8 @@ function run(q){
     const trHTML = tr ? '<div class="trline">' +
       (s.ja.includes(q) || s.en.toLowerCase().includes(ql) || s.fr.toLowerCase().includes(ql)
         ? markText(tr, q) : esc(tr)) + "</div>" : "";
-    return '<a class="hit" href="' + DOC.reader + '#seg-' + esc(s.id) + '">' +
+    const witQ = docKey === "eugnostos" ? "?wit=" + (/^V-/.test(s.id) ? "V" : "III") : "";
+    return '<a class="hit" href="' + DOC.reader + witQ + '#seg-' + esc(s.id) + '">' +
       '<div class="meta"><span class="no">§' + esc(s.n) + '</span>' +
       (s.wit ? '<span class="wit">' + esc(s.wit) + '</span>' : "") +
       '<span>' + where.join(" · ") + '</span>' +

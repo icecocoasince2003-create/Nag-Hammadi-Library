@@ -371,11 +371,17 @@ html[data-tl="en"] .endnotes .note p.ja{display:none}
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/cosmos.css">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/community.css">
 <script defer src="assets/cosmos.js"></script>
+<script defer src="assets/site.js"></script>
+<script defer src="assets/community-config.js"></script>
+<script defer src="assets/community.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.1/openseadragon.min.js"></script>
 </head>
-<body>
+<body data-doc="republic">
 <div class="app">
+  <nav id="sitebar" class="sitebar"></nav>
   <header>
     <a class="chip homelink" href="index.html" title="Index / 一覧へ"><span class="l-ja">← 一覧</span><span class="l-en">← Index</span></a>
     <a class="chip" id="notesJump" href="#endnotes" title="釈義・注解（ページ末尾） / Exegesis &amp; notes (end of page)"><span class="l-ja">☟ 釈義・注解</span><span class="l-en">☟ Notes</span></a>
@@ -400,7 +406,20 @@ html[data-tl="en"] .endnotes .note p.ja{display:none}
         <a class="chip searchlink" href="search.html?doc=republic" title="コーパス検索 / Corpus search">⌕ <span class="l-ja">コーパス検索</span><span class="l-en">Corpus search</span></a>
         <button class="chip" id="relBtn" title="関連文書・リソース / Related documents &amp; resources"><span class="l-ja">⇄ 関連</span><span class="l-en">⇄ Related</span></button>
         <button class="chip" id="modeBtn" aria-pressed="false" title="表示モード / Display mode">◐ アイオーン</button>
-        <button class="chip" id="pickTop" title="Open TEI XML"><span class="l-ja">XMLを開く</span><span class="l-en">Open XML</span></button>
+        <div class="xmlmenu">
+          <button class="chip xmlmenu-btn" id="xmlBtn" aria-haspopup="true" aria-expanded="false" title="このページが参照している XML をダウンロード / Download the XML used by this page">⤓ XML</button>
+          <div class="xmlmenu-pop" id="xmlMenu" hidden>
+            <div class="xm-h"><span class="l-ja">このページが参照している XML</span><span class="l-en">XML used by this page</span></div>
+            <a href="data/republic_tei.xml" download><code>republic_tei.xml</code><span class="l-ja">コプト語本文</span><span class="l-en">Coptic text</span><small data-size></small></a>
+            <a href="data/republic_greek.xml" download><code>republic_greek.xml</code><span class="l-ja">ギリシア語原文</span><span class="l-en">Greek text</span><small data-size></small></a>
+            <a href="data/lexicon.xml" download><code>lexicon.xml</code><span class="l-ja">コプト語辞書</span><span class="l-en">Coptic lexicon</span><small data-size></small></a>
+            <a href="data/republic_commentary.xml" download><code>republic_commentary.xml</code><span class="l-ja">釈義・注解</span><span class="l-en">commentary</span><small data-size></small></a>
+            <a href="data/catalog.xml" download><code>catalog.xml</code><span class="l-ja">文書カタログ</span><span class="l-en">catalogue</span><small data-size></small></a>
+            <hr>
+            <button type="button" id="pickTop"><span class="l-ja">手元の XML を読み込んで表示…</span><span class="l-en">Open a local XML file…</span></button>
+            <div class="xm-h"><span class="l-ja">TEI P5 · UTF-8 · 本文はパブリックドメイン、辞書・注釈・対訳は CC BY 4.0</span><span class="l-en">TEI P5 · UTF-8 · texts public domain; lexicon, notes, translations CC BY 4.0</span></div>
+          </div>
+        </div>
       </div>
       <div class="search">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
@@ -578,7 +597,7 @@ function showLoadError(base, diag){
   n.innerHTML =
     `⬥ <b>データを取得できませんでした。</b> 本文 <code>data/republic_tei.xml</code> と辞書 <code>data/lexicon.xml</code>`+
     `（任意でギリシア語 <code>data/republic_greek.xml</code>）を <b>Webサーバ経由</b>で配信してください（file:// では取得不可）。`+
-    `右上の〈XMLを開く〉から手動で読み込むこともできます。<br>`+
+    `右上の〈⤓ XML〉メニューの「手元の XML を読み込んで表示」から手動で読み込むこともできます。<br>`+
     `想定URL → <a href="${url}" target="_blank" rel="noopener" style="color:var(--lapis);font-weight:600">${escapeHTML(url)}</a><br>`+
     `<small style="color:var(--ink-faint)">試行: ${escapeHTML(diag.join("  /  "))}</small>`;
 }
@@ -636,16 +655,14 @@ function parse(){
     return T(t,"s").map(s=>{
       const wEls=T(s,"w"); const ws=wEls.map(w=>{
         const lemma=w.getAttribute("lemma")||w.textContent;
-        const senses=LEXMAP.get(lemma)||[];
+        const type=w.getAttribute("type")||"";
         // a token may pin a specific homograph via @ana="#lex-…-n"
         const pin=(w.getAttribute("ana")||"").split("#").pop();
-        let def=senses[0]||{};
-        if(pin){ const m=senses.find(x=>x.id===pin); if(m) def=m; }
-        else { const tt=w.getAttribute("type"); if(tt){ const m=senses.find(x=>x.pos===tt); if(m) def=m; } }
-        return {form:w.textContent, lemma, senses, defId:def.id||"",
-          pos:def.pos||w.getAttribute("type")||"X",
+        const r=resolveSenses(lemma,type,pin), def=r.def;
+        return {form:w.textContent, lemma, senses:r.cands, others:r.others, how:r.how, defId:def.id||"",
+          pos:type||def.pos||"X",
           gloss:def.en||"", glossJa:def.ja||"", glossFr:def.fr||"", ref:def.ref||"",
-          grc:getLang(w)==="grc", amb:senses.length>1};
+          grc:getLang(w)==="grc", amb:r.cands.length>1};
       });
       const sid=getId(s); const gp=GREEKMAP.get(sid)||{};
       return {id:sid, n:s.getAttribute("n")||"", sub:s.getAttribute("subtype")||"",
@@ -666,6 +683,22 @@ function parse(){
       nt.themes.forEach(th=>{ if(!s.themes.includes(th)) s.themes.push(th); });
     }));
   }
+}
+/* ---------- 同形異義語の参照：レンマ＋品詞 ----------
+   辞書の項目は (lemma, POS) で一意。トークンは @lemma と @type（品詞）の組で辞書を引く。
+   優先順位: ① @ana による語義の固定（#lex-…）
+            ② 同じレンマで @type が一致する項目（通常は1件 → 同形異義の表示なし）
+            ③ 品詞が一致する項目がない場合のみ、レンマ一致の全項目を候補として表示 */
+function resolveSenses(lemma,type,pin){
+  const all=LEXMAP.get(lemma)||[];
+  let cands=all, how=all.length>1?"lemma":"single";
+  if(type&&all.length){
+    const m=all.filter(x=>x.pos===type);
+    if(m.length){ cands=m; how="pos"; } else if(all.length>1) how="pos-miss";
+  }
+  let def=cands[0]||{};
+  if(pin){ const m=all.find(x=>x.id===pin); if(m){ def=m; cands=[m]; how="pin"; } }
+  return {cands, def, others:all.filter(x=>!cands.includes(x)), how};
 }
 /* ---------- Greek parallel (republic_greek.xml): corresp(rep-N) -> {grc,ja,en,cert} ---------- */
 function readGreek(doc){
@@ -857,6 +890,7 @@ function showPop(el){
   const pos=POS[w.pos]||POS.X;
   const pop=$("#pop");
   let inner;
+  const extra=homNoteHTML(w);
   if(w.senses.length>1){
     const rows=w.senses.map((sn,i)=>{
       const p=POS[sn.pos]||POS.X;
@@ -875,8 +909,8 @@ function showPop(el){
     }).join("");
     inner=`<div class="form">${escapeHTML(w.form)}</div>
       ${w.lemma&&w.lemma!==w.form?`<div class="lemma">${lemmaLbl()} ${escapeHTML(w.lemma)}</div>`:""}
-      <div class="hommark">⬥ ${homoLbl(w.senses.length)}</div>
-      <div class="senses">${rows}</div>`;
+      <div class="hommark">⬥ ${w.how==="pos-miss"?missLbl(w.pos,w.senses.length):homoLbl(w.senses.length)}</div>
+      <div class="senses">${rows}</div>${extra}`;
   } else {
     let dl="";
     if(w.gloss) dl+=`<dt>EN</dt><dd>${escapeHTML(w.gloss)}</dd>`;
@@ -887,7 +921,7 @@ function showPop(el){
       ${w.lemma&&w.lemma!==w.form?`<div class="lemma">${lemmaLbl()} ${escapeHTML(w.lemma)}</div>`:""}
       <span class="pos${w.grc?' grc':''}">${posLabel(pos)}</span>
       ${dl?`<dl>${dl}</dl>`:`<div class="none">${noneLbl()}</div>`}
-      ${w.grc?`<div class="grcnote">⬥ ${loanLbl()}</div>`:""}`;
+      ${w.grc?`<div class="grcnote">⬥ ${loanLbl()}</div>`:""}${extra}`;
   }
   pop.innerHTML=inner;
   const r=el.getBoundingClientRect();
@@ -986,7 +1020,7 @@ function relabelLoan(){ const e=$("#loanN"); if(e){ const n=loanCount(); e.textC
 /* ---------- related panel (data/catalog.xml) ---------- */
 function catTitle(b, lang){
   let out={cop:"",ja:"",en:""};
-  T(b,"title").forEach(t=>{ const l=getLang(t);
+  T(b,"title").forEach(t=>{ if(t.getAttribute("type")) return; const l=getLang(t);
     if(l==="cop") out.cop=t.textContent.trim();
     else if(l==="en") out.en=t.textContent.trim();
     else out.ja=t.textContent.trim(); });
@@ -1102,7 +1136,15 @@ function UL(){ return H.getAttribute("data-lang")==="en"?"en":"ja"; }
 function posLabel(p){ return UL()==="en"?(p[1]||p[0]||""):(p[0]||p[1]||""); }
 function lemmaLbl(){ return UL()==="en"?"lemma":"レンマ"; }
 function defLbl(){ return UL()==="en"?"default":"既定"; }
-function homoLbl(n){ return UL()==="en"?("homograph — "+n+" senses"):("同形異義 — "+n+" 語義"); }
+function homoLbl(n){ return UL()==="en"?("homograph (same part of speech) — "+n+" senses"):("同形異義（同じ品詞）— "+n+" 語義"); }
+function missLbl(p,n){ const L=POS[p]||[p,p]; return UL()==="en"?("part of speech “"+(L[1]||p)+"” not in the lexicon — "+n+" candidates by lemma"):("品詞「"+(L[0]||p)+"」は辞書に未登録 — レンマ一致の候補 "+n+" 件"); }
+/* 同じ綴りで品詞の異なる語（参照対象外）を小さく併記 */
+function homNoteHTML(w){
+  if(!w.others||!w.others.length) return "";
+  const en=UL()==="en";
+  const items=w.others.map(o=>{ const p=POS[o.pos]||POS.X; const g=en?(o.en||o.ja):(o.ja||o.en); return `${escapeHTML(en?p[1]:p[0])}${g?"「"+escapeHTML(g)+"」":""}`; }).join(" / ");
+  return `<div class="usg" style="margin-top:8px;font-size:.64rem;color:var(--chrome-faint)">${en?"Other homographs":"同形の別品詞"}: ${items}</div>`;
+}
 function noneLbl(){ return UL()==="en"?"No sense registered yet (extend in the lexicon).":"語義は未登録です（語彙集で拡張可能）。"; }
 function loanLbl(){ return UL()==="en"?"Greek loanword":"ギリシア語からの借用語"; }
 function langLbl(v){ return (UL()==="en"?{ja:"JA",en:"EN",fr:"FR"}:{ja:"日",en:"英",fr:"仏"})[v]; }

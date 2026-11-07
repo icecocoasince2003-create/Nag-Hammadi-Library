@@ -1,0 +1,285 @@
+<!-- 解説ページ「グノーシス主義とは」（手作業管理）。日・英・仏の本文は <article class="prose l-ja|l-en|l-fr"> に分けて記述しています。
+     本文はプロジェクトによる書き下ろし（CC BY 4.0）。挿絵はプロジェクトのオリジナル・アートワークです。 -->
+<!DOCTYPE html>
+<html lang="ja" data-lang="ja" data-i18n="full" data-mode="aeon" data-title-en="What is Gnosticism? — The Nag Hammadi Library" data-title-fr="Qu’est-ce que le gnosticisme ? — Bibliothèque de Nag Hammadi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>グノーシス主義とは — ナグ・ハマディ写本コーパス</title>
+<meta name="description" content="グノーシス主義の基本概念・主な潮流・資料・ナグ・ハマディ写本の発見についての解説 / An introduction to Gnosticism and the Nag Hammadi Codices.">
+<link rel="icon" type="image/svg+xml" href="image/icon.svg">
+<link rel="alternate icon" type="image/png" sizes="32x32" href="image/favicon-32.png">
+<link rel="apple-touch-icon" href="image/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600&family=Noto+Sans+Coptic&display=swap" rel="stylesheet">
+<style>
+:root{ --ui:'Inter','Noto Sans JP',system-ui,sans-serif; }
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
+.hero-g{display:grid; grid-template-columns:minmax(0,1fr) 220px; gap:30px; align-items:center}
+.hero-g img{width:220px; aspect-ratio:1; border-radius:50%; object-fit:cover; object-position:center 24%;
+  border:1px solid rgba(212,175,106,.45); box-shadow:0 0 60px rgba(157,139,224,.25)}
+@media(max-width:720px){ .hero-g{grid-template-columns:1fr} .hero-g img{display:none} }
+.myth{display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:12px; margin:16px 0}
+.myth .card .cop{font-family:"Noto Sans Coptic",serif; color:var(--gold-bright); font-size:.86rem}
+.schools td,.schools th{padding:9px 10px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; font-size:.86rem; line-height:1.7}
+.schools th{color:var(--gold); font-weight:600; font-size:.74rem; letter-spacing:.06em; white-space:nowrap}
+.schools td:first-child{color:var(--ink); white-space:nowrap; font-weight:600}
+.schools td{color:var(--ink-soft)}
+.schools{border-collapse:collapse; width:100%; margin:12px 0}
+.tablewrap{overflow-x:auto}
+.timeline{list-style:none; padding:0; margin:14px 0; border-left:1px solid var(--line-2)}
+.timeline li{position:relative; padding:0 0 14px 22px; font-size:.9rem; line-height:1.75; color:var(--ink-soft)}
+.timeline li::before{content:""; position:absolute; left:-5px; top:.55em; width:9px; height:9px; border-radius:50%; background:var(--gold)}
+.timeline b{color:var(--gold-bright); font-family:'Spectral',serif; margin-right:.5em}
+</style>
+<link rel="stylesheet" href="assets/cosmos.css">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/community.css">
+<script defer src="assets/cosmos.js"></script>
+<script defer src="assets/site.js"></script>
+<script defer src="assets/community-config.js"></script>
+<script defer src="assets/community.js"></script>
+</head>
+<body>
+<nav id="sitebar" class="sitebar sticky"></nav>
+
+<main class="page">
+
+<!-- ======================= 日本語 ======================= -->
+<article class="prose l-ja" lang="ja">
+  <div class="hero-g">
+    <div>
+      <div class="eyebrow">Gnosis · Gnosticism</div>
+      <h1><span class="jp">グノーシス主義とは</span></h1>
+      <p class="lede">「グノーシス」はギリシア語で<b>「認識」「知」</b>を意味します。紀元後2〜3世紀を中心に、地中海世界のキリスト教・ユダヤ教・プラトン主義が交わるところで、<b>救いは隠された真理を〈知る〉ことによってもたらされる</b>と説いた一群の思想と文書がありました。現代の研究者はそれを「グノーシス主義」と呼んでいます。このページでは、ナグ・ハマディ写本を読むための手がかりとして、その基本的な考え方と研究上の論点を紹介します。</p>
+    </div>
+    <img src="image/web/aion.jpg" alt="" loading="lazy">
+  </div>
+  <nav class="toc" aria-label="目次">
+    <a href="#ja-word">1. 言葉と概念</a><a href="#ja-myth">2. 典型的な神話</a><a href="#ja-schools">3. 主な潮流</a>
+    <a href="#ja-sources">4. 資料</a><a href="#ja-nh">5. ナグ・ハマディ写本</a><a href="#ja-site">6. 本サイトの文書</a><a href="#ja-books">7. 読書案内</a>
+  </nav>
+
+  <h2 id="ja-word"><span class="num">I</span>「グノーシス」という言葉と概念</h2>
+  <p><b>グノーシス（γνῶσις）</b>は「知ること・認識」を表すごく普通のギリシア語で、新約聖書にも現れます。ただしここでいう「知」は学問的知識ではなく、<b>自分が本来どこから来た何者であり、どこへ帰るのかを悟る、救済をもたらす洞察</b>を指します。</p>
+  <p>一方、「グノーシス主義（Gnosticism）」という総称は近代の学術用語です。古代には、エイレナイオスらの反異端論者が一部の集団を「グノーシス派（グノースティコイ）」と呼んだり、一部の集団自身がそう名乗ったりしましたが、多様な文書を一つの「宗教」としてまとめる名称はありませんでした。17世紀に生まれたこの総称は、20世紀の宗教史学派の研究で広く用いられるようになります。</p>
+  <div class="callout"><b>研究上の論点。</b>1966年のメッシーナ会議は、広い意味の「グノーシス」と、2世紀の特定の諸体系としての「グノーシス主義」を区別しようとしました。さらに M. A. ウィリアムズ（1996）や K. L. キング（2003）は、「グノーシス主義」という範疇そのものが反異端論者の論争的な視点を受け継いだ人工的なものだと批判し、ウィリアムズは「聖書的デミウルゴス伝承」という呼称を提案しています。D. ブラッケ（2010）のように、古代の自称に即して「グノーシス派」をより狭く（主にセツ派に）限定する立場もあります。本サイトでは便宜上「グノーシス主義」の語を用いますが、それが一枚岩の宗派ではないことに注意してください。</div>
+
+  <h2 id="ja-myth"><span class="num">II</span>典型的な神話と考え方</h2>
+  <p>グノーシス文書のすべてに共通する教義はありませんが、多くの文書に繰り返し現れる「型」があります。代表的なのは『ヨハネのアポクリュフォン』に見られる神話で、おおよそ次のように語られます。</p>
+  <div class="myth">
+    <div class="card"><div class="k">The Invisible Spirit</div><h4>語りえぬ至高神</h4><p>あらゆる言葉や属性を超えた、目に見えない根源の父。否定の言葉（「〜でない」）によってしか語れない。<span class="cop">ⲡⲓⲱⲧ</span></p></div>
+    <div class="card"><div class="k">Pleroma · Aeons</div><h4>プレーローマとアイオーン</h4><p>至高神から、バルベーローをはじめとする神的な存在（アイオーン）が対をなして次々に流出し、光に満ちた神的世界「プレーローマ（充満）」を形づくる。</p></div>
+    <div class="card"><div class="k">Sophia</div><h4>ソフィアの過失</h4><p>最も下位のアイオーンであるソフィア（知恵）が、伴侶の同意なしに単独で何かを生み出そうとし、不完全な存在を生んでしまう。</p></div>
+    <div class="card"><div class="k">Demiurge · Archons</div><h4>造物主とアルコーン</h4><p>こうして生まれたヤルダバオート（デミウルゴス＝造物主）は、自分の上に何もないと思い込み、支配者たち（アルコーン）と共に物質世界と人間の身体を造る。</p></div>
+    <div class="card"><div class="k">Spark of light</div><h4>人間の内なる光</h4><p>ソフィアから奪われた神的な力が人間の中に吹き込まれ、人間は造物主よりも優れたものを内に宿すことになる。</p></div>
+    <div class="card"><div class="k">Revealer · Gnosis</div><h4>啓示者と〈認識〉</h4><p>上の世界から啓示者（キリスト、セツ、プロノイアなど）が遣わされ、人間に自らの由来を思い出させる。この〈認識〉が救いであり、魂は本来の場所へ帰還する。</p></div>
+  </div>
+  <div class="figure"><img src="image/web/demiurgos.jpg" alt="" loading="lazy"><p>この神話には、<b>創世記の物語の大胆な読み替え</b>（創造神を無知な造物主とみなす）と、<b>プラトン『ティマイオス』に由来する造物主（デーミウールゴス）や流出の考え方</b>が組み合わされています。グノーシス思想は、聖書解釈とギリシア哲学が出会う場所で生まれたといえます。</p></div>
+  <p>ただし、すべての文書がこの神話を共有しているわけではありません。たとえば本サイトで公開している『エウグノストス』には、造物主の反逆もソフィアの過失による悲劇も語られず、語りえぬ父から光の世界が整然と流出する次第が、哲学的な書簡の形で描かれています。</p>
+
+  <h2 id="ja-schools"><span class="num">III</span>主な潮流</h2>
+  <div class="tablewrap"><table class="schools">
+    <tr><th>潮流</th><th>特徴</th><th>ナグ・ハマディ写本の主な文書</th></tr>
+    <tr><td>セツ派</td><td>アダムの子セツとその「種族」を救いの担い手とする神話。バルベーロー、自生者、四つの光（ハルモゼールほか）などの存在が登場。後期には新プラトン主義的な上昇の瞑想を描く。</td><td>ヨハネのアポクリュフォン、エジプト人の福音書、アダムの黙示録、ゾストリアノス、アロゲネス、セツの三つの碑、マルサネス、三形態の原初思想 ほか（写本外ではチャコス写本の『ユダの福音書』）</td></tr>
+    <tr><td>ヴァレンティノス派</td><td>2世紀ローマで活動したヴァレンティノスとその弟子たちの学派。教会の内部にとどまりつつ、聖書を象徴的に解釈した。</td><td>真理の福音、フィリポによる福音書、三部の教え、復活についての教え、ヴァレンティノス派の講解</td></tr>
+    <tr><td>トマス系の伝承</td><td>使徒トマスに結びつけられた、内面的な自己認識を重んじる語録・対話。体系的な宇宙論は乏しい。</td><td>トマスによる福音書、闘技者トマスの書</td></tr>
+    <tr><td>ヘルメス文書</td><td>エジプトの神トート＝ヘルメス・トリスメギストスの名で伝わる宗教哲学文書。厳密には「グノーシス主義」とは別の伝統。</td><td>第八と第九についての講話、感謝の祈り、アスクレピオス</td></tr>
+  </table></div>
+  <p>このほか、バシレイデース、マルキオン（厳密にはグノーシス主義と区別されることが多い）、3世紀のマニ教、そして今日まで続くマンダ教なども、関連する思想として論じられます。</p>
+
+  <h2 id="ja-sources"><span class="num">IV</span>資料 — 反駁書から写本の発見へ</h2>
+  <p>20世紀半ばまで、グノーシス主義は主に<b>それを論駁した正統派教父の著作</b>を通して知られていました。リヨンのエイレナイオス『異端反駁』（180年頃）、ヒッポリュトス『全異端反駁』、エピファニオス『薬籠』などです。新プラトン主義の哲学者プロティノスも『エンネアデス』II 9「グノーシス派に対して」で彼らを批判しています。</p>
+  <p>18〜19世紀には、グノーシス派自身の文書を含むコプト語写本が知られるようになりました（『ピスティス・ソフィア』を含むアスキュー写本、『イェウの書』を含むブルース写本、ベルリン写本 BG 8502）。そして1945年のナグ・ハマディ写本の発見が、研究を一変させます。2006年には『ユダの福音書』を含むチャコス写本が公刊されました。</p>
+
+  <h2 id="ja-nh"><span class="num">V</span>ナグ・ハマディ写本</h2>
+  <ul class="timeline">
+    <li><b>1945年12月</b>上エジプトのナグ・ハマディ近郊、ジャバル・アッ＝ターリフの崖のふもとで、土器の壺に納められた写本が地元の農民によって発見される。</li>
+    <li><b>4世紀</b>写本の製作年代。表紙の補強に使われた古紙（カルトナージュ）に340年代の日付を持つ文書が含まれる。</li>
+    <li><b>1946年〜</b>写本は順次カイロのコプト博物館に収められる（第I写本はいったんスイスに渡って「ユング写本」と呼ばれ、のちに返還された）。</li>
+    <li><b>1972〜1977年</b>ユネスコとエジプト政府の協力によるファクシミリ版が刊行され、全文書が研究者に公開される。</li>
+  </ul>
+  <p>写本は<b>革装のパピルス冊子本（コデックス）13冊</b>で（第XIII写本は数葉のみで、第VI写本の表紙に挟まれていた）、<b>約50の文書</b>を含みます（重複を数えると52）。いずれも<b>ギリシア語原典からのコプト語訳</b>で、大半はサイード方言、一部（第I写本や第XI写本の一部など）はリュコポリス方言（準アクミーム方言）で書かれています。</p>
+  <p>重要なのは、この「ナグ・ハマディ文庫」が<b>グノーシス主義の文書だけの集成ではない</b>ことです。プラトン『国家』の抜粋、『セクストスの金言』、『シルワノスの教え』、ヘルメス文書など、さまざまな宗教的・哲学的文書が含まれています。誰が、なぜこれらを集めて埋めたのか（近くのパコミオス系修道院との関係など）は、今も議論が続いています。</p>
+
+  <h2 id="ja-site"><span class="num">VI</span>本サイトで読める文書との関係</h2>
+  <div class="cards">
+    <div class="card"><div class="k">NHC III,3 / V,1</div><h4>エウグノストス</h4><p>キリスト教的要素を含まない、書簡体の宇宙生成論。同じ第III写本で続く『イエス・キリストの知恵』は、この文書を復活したキリストと弟子たちの対話に書き換えたもので、非キリスト教的な思弁がキリスト教化される過程を示す貴重な例です。<br><a class="btnlink" href="eugnostos.html?wit=III">読む →</a></p></div>
+    <div class="card"><div class="k">NHC VI,5</div><h4>プラトン『国家』588b–589b</h4><p>魂を多頭の怪物・獅子・人間の合成像にたとえる一節のコプト語訳。原文とは大きく異なる訳になっており、プラトンがどのように読まれ、取り込まれたかを考える手がかりになります。<br><a class="btnlink" href="republic.html">読む →</a></p></div>
+  </div>
+
+  <h2 id="ja-books"><span class="num">VII</span>読書案内</h2>
+  <ul class="reflist">
+    <li>荒井献・大貫隆・小林稔・筒井賢治 編訳『ナグ・ハマディ文書』全4巻、岩波書店、1997–98年。</li>
+    <li>大貫隆『グノーシスの神話』岩波書店、1999年（講談社学術文庫、2014年）。</li>
+    <li>筒井賢治『グノーシス — 古代キリスト教の〈異端思想〉』講談社選書メチエ、2004年。</li>
+    <li>ハンス・ヨナス『グノーシスの宗教』秋山さと子・入江良平訳、人文書院、1986年。</li>
+    <li>B. Layton, <i>The Gnostic Scriptures</i>, 1987（2nd ed. with D. Brakke, 2021）.</li>
+    <li>M. Meyer (ed.), <i>The Nag Hammadi Scriptures</i>, HarperOne, 2007.</li>
+    <li>M. A. Williams, <i>Rethinking “Gnosticism”</i>, Princeton UP, 1996. / K. L. King, <i>What Is Gnosticism?</i>, Harvard UP, 2003. / D. Brakke, <i>The Gnostics</i>, Harvard UP, 2010.</li>
+  </ul>
+  <p style="font-size:.78rem;color:var(--ink-faint)">本ページの文章は本プロジェクトによる書き下ろしです（CC BY 4.0）。挿絵はプロジェクトのオリジナル・アートワークです。誤りのご指摘は<a href="project.html">プロジェクト</a>までお寄せください。</p>
+</article>
+
+<!-- ======================= English ======================= -->
+<article class="prose l-en" lang="en">
+  <div class="hero-g">
+    <div>
+      <div class="eyebrow">Gnosis · Gnosticism</div>
+      <h1>What is Gnosticism?</h1>
+      <p class="lede"><i>Gnōsis</i> is Greek for <b>“knowledge”</b>. In the second and third centuries CE, where Christianity, Judaism and Platonism met in the Mediterranean world, a family of teachings and texts held that <b>salvation comes from knowing a hidden truth</b>. Modern scholars call them “Gnosticism”. This page offers an orientation for reading the Nag Hammadi Codices: the basic ideas, and the questions scholars still debate.</p>
+    </div>
+    <img src="image/web/aion.jpg" alt="" loading="lazy">
+  </div>
+  <nav class="toc" aria-label="Contents">
+    <a href="#en-word">1. Word and concept</a><a href="#en-myth">2. A typical myth</a><a href="#en-schools">3. Main currents</a>
+    <a href="#en-sources">4. Sources</a><a href="#en-nh">5. The Nag Hammadi Codices</a><a href="#en-site">6. Texts on this site</a><a href="#en-books">7. Further reading</a>
+  </nav>
+
+  <h2 id="en-word"><span class="num">I</span>The word and the concept</h2>
+  <p><b>Gnōsis (γνῶσις)</b> is an ordinary Greek word for knowing, found in the New Testament too. Here, however, it means not learning but <b>a saving insight into who one really is, where one came from and where one is going</b>.</p>
+  <p>“Gnosticism”, by contrast, is a modern scholarly label. In antiquity, heresiologists such as Irenaeus called certain groups “Gnostics” (<i>gnōstikoi</i>), and some groups may have used the name for themselves, but no ancient term gathered these diverse texts into a single religion. The collective label was coined in the seventeenth century and became standard in the twentieth-century history-of-religions school.</p>
+  <div class="callout"><b>A debated category.</b> The 1966 Messina colloquium tried to distinguish “gnosis” in a broad sense from “Gnosticism” as a set of specific second-century systems. M. A. Williams (1996) and K. L. King (2003) argued that the category itself inherits the polemical perspective of the heresiologists; Williams proposed “biblical demiurgical traditions” instead. Others, like D. Brakke (2010), restrict “the Gnostics” to the group that used the name, chiefly the Sethians. This site uses “Gnosticism” for convenience, without implying a single unified sect.</div>
+
+  <h2 id="en-myth"><span class="num">II</span>A typical myth and its ideas</h2>
+  <p>No doctrine is shared by every Gnostic text, but some patterns recur. The best-known is the myth of the <i>Apocryphon of John</i>, which runs roughly as follows.</p>
+  <div class="myth">
+    <div class="card"><div class="k">The Invisible Spirit</div><h4>The ineffable God</h4><p>An invisible first Father beyond every name and attribute, who can only be described by negation (“not this, not that”).</p></div>
+    <div class="card"><div class="k">Pleroma · Aeons</div><h4>Pleroma and Aeons</h4><p>From this God emanate, in pairs, divine beings (Aeons), beginning with Barbelo, who together form the radiant divine realm, the Pleroma (“fullness”).</p></div>
+    <div class="card"><div class="k">Sophia</div><h4>Sophia’s fault</h4><p>Sophia (Wisdom), the lowest Aeon, tries to bring something forth on her own, without her partner’s consent, and produces an imperfect being.</p></div>
+    <div class="card"><div class="k">Demiurge · Archons</div><h4>Demiurge and Archons</h4><p>This being, Yaldabaoth the Demiurge (“craftsman”), believes there is nothing above him and, with his rulers (Archons), fashions the material world and the human body.</p></div>
+    <div class="card"><div class="k">Spark of light</div><h4>The light within</h4><p>Divine power taken from Sophia is breathed into the human being, who thus carries within something greater than the Demiurge.</p></div>
+    <div class="card"><div class="k">Revealer · Gnosis</div><h4>Revealer and knowledge</h4><p>A revealer (Christ, Seth, Pronoia…) descends to remind humans of their origin. This knowledge is salvation: the soul returns to where it belongs.</p></div>
+  </div>
+  <div class="figure"><img src="image/web/demiurgos.jpg" alt="" loading="lazy"><p>The myth combines <b>a daring rereading of Genesis</b> (the creator as an ignorant craftsman) with <b>the demiurge and the idea of emanation drawn from Plato’s <i>Timaeus</i> and later Platonism</b>. Gnostic thought grew where biblical interpretation met Greek philosophy.</p></div>
+  <p>Not every text shares this myth. <i>Eugnostos</i>, published on this site, has no rebellious creator and no tragic fall of Sophia; in the form of a philosophical letter it describes an orderly unfolding of the world of light from the ineffable Father.</p>
+
+  <h2 id="en-schools"><span class="num">III</span>Main currents</h2>
+  <div class="tablewrap"><table class="schools">
+    <tr><th>Current</th><th>Characteristics</th><th>Main texts in the Nag Hammadi Codices</th></tr>
+    <tr><td>Sethian</td><td>A myth in which Seth, son of Adam, and his “race” carry salvation; figures such as Barbelo, the Self-Begotten and the four Luminaries; later texts describe a Neoplatonic contemplative ascent.</td><td>Apocryphon of John, Gospel of the Egyptians, Apocalypse of Adam, Zostrianos, Allogenes, Three Steles of Seth, Marsanes, Trimorphic Protennoia… (outside the codices: the Gospel of Judas in Codex Tchacos)</td></tr>
+    <tr><td>Valentinian</td><td>The school of Valentinus (active in Rome in the 2nd c.) and his pupils, who stayed within the church while reading scripture symbolically.</td><td>Gospel of Truth, Gospel of Philip, Tripartite Tractate, Treatise on the Resurrection, A Valentinian Exposition</td></tr>
+    <tr><td>Thomasine</td><td>Sayings and dialogues linked to the apostle Thomas, stressing self-knowledge, with little systematic cosmology.</td><td>Gospel of Thomas, Book of Thomas the Contender</td></tr>
+    <tr><td>Hermetic</td><td>Religious-philosophical texts ascribed to Hermes Trismegistus; strictly speaking a tradition distinct from “Gnosticism”.</td><td>Discourse on the Eighth and Ninth, Prayer of Thanksgiving, Asclepius</td></tr>
+  </table></div>
+  <p>Basilides, Marcion (often distinguished from Gnosticism proper), Manichaeism in the third century and the still-living Mandaean tradition are also discussed in connection with these ideas.</p>
+
+  <h2 id="en-sources"><span class="num">IV</span>Sources: from refutations to manuscripts</h2>
+  <p>Until the mid-twentieth century Gnosticism was known mostly <b>through the writings of its opponents</b>: Irenaeus of Lyon’s <i>Against Heresies</i> (c. 180), Hippolytus’ <i>Refutation of All Heresies</i>, Epiphanius’ <i>Panarion</i>. The Neoplatonist Plotinus also attacked them in <i>Enneads</i> II 9, “Against the Gnostics”.</p>
+  <p>From the eighteenth and nineteenth centuries, Coptic manuscripts with Gnostic texts became known (the Askew Codex with the <i>Pistis Sophia</i>, the Bruce Codex with the <i>Books of Jeu</i>, the Berlin Codex BG 8502). The discovery at Nag Hammadi in 1945 transformed the field; in 2006 Codex Tchacos, with the <i>Gospel of Judas</i>, was published.</p>
+
+  <h2 id="en-nh"><span class="num">V</span>The Nag Hammadi Codices</h2>
+  <ul class="timeline">
+    <li><b>Dec. 1945</b>Local farmers find the codices in a sealed jar at the foot of the Jabal al-Tarif cliffs near Nag Hammadi, Upper Egypt.</li>
+    <li><b>4th c.</b>Date of the codices: scrap papyrus (cartonnage) used to stiffen the covers includes documents dated to the 340s.</li>
+    <li><b>1946–</b>The codices gradually enter the Coptic Museum in Cairo (Codex I went first to Switzerland as the “Jung Codex” and was later returned).</li>
+    <li><b>1972–1977</b>A facsimile edition sponsored by UNESCO and the Egyptian government makes all the texts available to scholars.</li>
+  </ul>
+  <p>The find consists of <b>thirteen leather-bound papyrus codices</b> (Codex XIII survives as a few leaves tucked inside the cover of Codex VI), containing <b>some fifty texts</b> (52 counting duplicates). All are <b>Coptic translations of Greek originals</b>, mostly in Sahidic, some (Codex I and parts of Codex XI, for instance) in Lycopolitan (Subachmimic).</p>
+  <p>Importantly, this “Nag Hammadi library” is <b>not a purely Gnostic collection</b>: it also contains an excerpt from Plato’s <i>Republic</i>, the <i>Sentences of Sextus</i>, the <i>Teachings of Silvanus</i> and Hermetic texts. Who collected and buried them, and why (for instance, their relation to nearby Pachomian monasteries), is still debated.</p>
+
+  <h2 id="en-site"><span class="num">VI</span>The texts on this site</h2>
+  <div class="cards">
+    <div class="card"><div class="k">NHC III,3 / V,1</div><h4>Eugnostos</h4><p>A letter-form cosmogony with no Christian elements. The <i>Sophia of Jesus Christ</i>, which follows it in Codex III, recasts it as a dialogue between the risen Christ and his disciples — a precious example of how non-Christian speculation was Christianised.<br><a class="btnlink" href="eugnostos.html?wit=III">Read →</a></p></div>
+    <div class="card"><div class="k">NHC VI,5</div><h4>Plato, Republic 588b–589b</h4><p>A Coptic version of the passage likening the soul to a composite of a many-headed beast, a lion and a human. It departs considerably from the Greek and shows how Plato was read and appropriated.<br><a class="btnlink" href="republic.html">Read →</a></p></div>
+  </div>
+
+  <h2 id="en-books"><span class="num">VII</span>Further reading</h2>
+  <ul class="reflist">
+    <li>B. Layton, <i>The Gnostic Scriptures</i>, 1987 (2nd ed. with D. Brakke, 2021).</li>
+    <li>M. Meyer (ed.), <i>The Nag Hammadi Scriptures</i>, HarperOne, 2007.</li>
+    <li>J. M. Robinson (ed.), <i>The Nag Hammadi Library in English</i>, 3rd ed., 1988.</li>
+    <li>M. A. Williams, <i>Rethinking “Gnosticism”</i>, Princeton UP, 1996.</li>
+    <li>K. L. King, <i>What Is Gnosticism?</i>, Harvard UP, 2003.</li>
+    <li>D. Brakke, <i>The Gnostics: Myth, Ritual, and Diversity in Early Christianity</i>, Harvard UP, 2010.</li>
+  </ul>
+  <p style="font-size:.78rem;color:var(--ink-faint)">Text written by this project (CC BY 4.0). Illustrations are original project artwork.</p>
+</article>
+
+<!-- ======================= Français ======================= -->
+<article class="prose l-fr" lang="fr">
+  <div class="hero-g">
+    <div>
+      <div class="eyebrow">Gnosis · Gnosticisme</div>
+      <h1>Qu’est-ce que le gnosticisme ?</h1>
+      <p class="lede"><i>Gnôsis</i> signifie en grec <b>« connaissance »</b>. Aux IIe et IIIe siècles de notre ère, là où se croisaient christianisme, judaïsme et platonisme, tout un ensemble de doctrines et d’écrits affirmait que <b>le salut vient de la connaissance d’une vérité cachée</b>. Les chercheurs modernes l’appellent « gnosticisme ». Cette page propose quelques repères pour lire les codices de Nag Hammadi : les idées fondamentales et les débats de la recherche.</p>
+    </div>
+    <img src="image/web/aion.jpg" alt="" loading="lazy">
+  </div>
+  <nav class="toc" aria-label="Sommaire">
+    <a href="#fr-word">1. Le mot et la notion</a><a href="#fr-myth">2. Un mythe type</a><a href="#fr-schools">3. Courants</a>
+    <a href="#fr-sources">4. Sources</a><a href="#fr-nh">5. Les codices de Nag Hammadi</a><a href="#fr-site">6. Textes du site</a><a href="#fr-books">7. Bibliographie</a>
+  </nav>
+
+  <h2 id="fr-word"><span class="num">I</span>Le mot et la notion</h2>
+  <p><b>Gnôsis (γνῶσις)</b> est un mot grec courant pour « connaître », présent aussi dans le Nouveau Testament. Il désigne ici non un savoir érudit, mais <b>une intuition salvatrice de ce que l’on est vraiment, d’où l’on vient et où l’on va</b>.</p>
+  <p>« Gnosticisme », en revanche, est une étiquette savante moderne. Dans l’Antiquité, des hérésiologues comme Irénée appelaient certains groupes « gnostiques » (<i>gnôstikoi</i>), et certains groupes ont pu se nommer ainsi, mais aucun terme ancien ne réunissait ces écrits divers en une seule religion. Le terme collectif, forgé au XVIIe siècle, s’est imposé avec l’école de l’histoire des religions au XXe siècle.</p>
+  <div class="callout"><b>Une catégorie débattue.</b> Le colloque de Messine (1966) a voulu distinguer la « gnose » au sens large du « gnosticisme », ensemble de systèmes précis du IIe siècle. M. A. Williams (1996) et K. L. King (2003) ont montré que la catégorie elle-même hérite du regard polémique des hérésiologues ; Williams propose de parler de « traditions démiurgiques bibliques ». D’autres, comme D. Brakke (2010), réservent le nom de « gnostiques » au groupe qui le revendiquait, surtout les séthiens. Ce site emploie « gnosticisme » par commodité, sans supposer une secte unique.</div>
+
+  <h2 id="fr-myth"><span class="num">II</span>Un mythe type</h2>
+  <p>Aucune doctrine n’est commune à tous les textes gnostiques, mais certains schémas reviennent. Le plus connu est le mythe du <i>Livre des secrets de Jean</i> (Apocryphon de Jean), qui se déroule à peu près ainsi.</p>
+  <div class="myth">
+    <div class="card"><div class="k">L’Esprit invisible</div><h4>Le Dieu ineffable</h4><p>Un Père premier et invisible, au-delà de tout nom et de tout attribut, qu’on ne peut dire que par la négation.</p></div>
+    <div class="card"><div class="k">Plérôme · Éons</div><h4>Plérôme et éons</h4><p>De lui émanent par couples des êtres divins (les éons), à commencer par Barbélô, qui forment le monde divin lumineux, le Plérôme (« plénitude »).</p></div>
+    <div class="card"><div class="k">Sophia</div><h4>La faute de Sophia</h4><p>Sophia (la Sagesse), le dernier des éons, veut engendrer seule, sans l’accord de son conjoint, et produit un être imparfait.</p></div>
+    <div class="card"><div class="k">Démiurge · Archontes</div><h4>Démiurge et archontes</h4><p>Cet être, Yaldabaoth le Démiurge, se croit sans supérieur et façonne avec ses archontes le monde matériel et le corps humain.</p></div>
+    <div class="card"><div class="k">Étincelle</div><h4>La lumière intérieure</h4><p>La puissance divine dérobée à Sophia est insufflée dans l’homme, qui porte ainsi en lui plus grand que le Démiurge.</p></div>
+    <div class="card"><div class="k">Révélateur · Gnose</div><h4>Le révélateur et la connaissance</h4><p>Un révélateur (le Christ, Seth, la Pronoia…) descend rappeler aux hommes leur origine. Cette connaissance est le salut : l’âme remonte vers son lieu propre.</p></div>
+  </div>
+  <div class="figure"><img src="image/web/demiurgos.jpg" alt="" loading="lazy"><p>Ce mythe unit <b>une relecture audacieuse de la Genèse</b> (le créateur vu comme un artisan ignorant) et <b>le démiurge et l’émanation issus du <i>Timée</i> de Platon et du platonisme tardif</b>. La pensée gnostique est née de la rencontre entre exégèse biblique et philosophie grecque.</p></div>
+  <p>Tous les textes ne partagent pas ce mythe. <i>Eugnoste</i>, publié sur ce site, ne connaît ni créateur rebelle ni chute tragique de Sophia : sous la forme d’une lettre philosophique, il décrit le déploiement ordonné du monde de lumière à partir du Père ineffable.</p>
+
+  <h2 id="fr-schools"><span class="num">III</span>Principaux courants</h2>
+  <div class="tablewrap"><table class="schools">
+    <tr><th>Courant</th><th>Caractéristiques</th><th>Principaux textes de Nag Hammadi</th></tr>
+    <tr><td>Séthien</td><td>Un mythe où Seth, fils d’Adam, et sa « race » portent le salut ; figures de Barbélô, de l’Autogène et des quatre Luminaires ; les textes tardifs décrivent une ascension contemplative d’inspiration néoplatonicienne.</td><td>Livre des secrets de Jean, Évangile des Égyptiens, Apocalypse d’Adam, Zostrien, Allogène, Trois Stèles de Seth, Marsanès, Prôtennoia trimorphe… (hors des codices : l’Évangile de Judas du Codex Tchacos)</td></tr>
+    <tr><td>Valentinien</td><td>L’école de Valentin (actif à Rome au IIe siècle) et de ses disciples, restés dans l’Église tout en lisant l’Écriture de façon symbolique.</td><td>Évangile de la Vérité, Évangile selon Philippe, Traité tripartite, Traité sur la résurrection, Exposé valentinien</td></tr>
+    <tr><td>Tradition thomasienne</td><td>Paroles et dialogues attribués à l’apôtre Thomas, centrés sur la connaissance de soi, sans cosmologie systématique.</td><td>Évangile selon Thomas, Livre de Thomas</td></tr>
+    <tr><td>Hermétisme</td><td>Écrits religieux et philosophiques attribués à Hermès Trismégiste ; à proprement parler une tradition distincte du « gnosticisme ».</td><td>L’Ogdoade et l’Ennéade, Prière d’action de grâces, Asclépius</td></tr>
+  </table></div>
+  <p>On évoque aussi Basilide, Marcion (souvent distingué du gnosticisme proprement dit), le manichéisme au IIIe siècle et la tradition mandéenne, toujours vivante.</p>
+
+  <h2 id="fr-sources"><span class="num">IV</span>Sources : des réfutations aux manuscrits</h2>
+  <p>Jusqu’au milieu du XXe siècle, le gnosticisme était surtout connu <b>par les écrits de ses adversaires</b> : Irénée de Lyon, <i>Contre les hérésies</i> (vers 180), Hippolyte, <i>Réfutation de toutes les hérésies</i>, Épiphane, <i>Panarion</i>. Le néoplatonicien Plotin les combat aussi dans les <i>Ennéades</i> II 9, « Contre les gnostiques ».</p>
+  <p>Aux XVIIIe et XIXe siècles apparaissent des manuscrits coptes contenant des textes gnostiques (Codex Askew avec la <i>Pistis Sophia</i>, Codex Bruce avec les <i>Livres de Iéou</i>, Codex de Berlin BG 8502). La découverte de Nag Hammadi en 1945 a bouleversé la recherche ; en 2006 a été publié le Codex Tchacos, qui contient l’<i>Évangile de Judas</i>.</p>
+
+  <h2 id="fr-nh"><span class="num">V</span>Les codices de Nag Hammadi</h2>
+  <ul class="timeline">
+    <li><b>Déc. 1945</b>Des paysans découvrent les codices dans une jarre scellée, au pied de la falaise du Djebel el-Tarif, près de Nag Hammadi (Haute-Égypte).</li>
+    <li><b>IVe s.</b>Date des codices : le cartonnage des couvertures contient des documents datés des années 340.</li>
+    <li><b>1946–</b>Les codices entrent peu à peu au Musée copte du Caire (le Codex I passe d’abord en Suisse sous le nom de « Codex Jung », avant d’être restitué).</li>
+    <li><b>1972–1977</b>Une édition en fac-similé, soutenue par l’UNESCO et le gouvernement égyptien, rend tous les textes accessibles.</li>
+  </ul>
+  <p>La trouvaille comprend <b>treize codices de papyrus reliés de cuir</b> (le Codex XIII ne subsiste que par quelques feuillets glissés dans la couverture du Codex VI) et <b>une cinquantaine de textes</b> (52 en comptant les doublets). Tous sont <b>des traductions coptes d’originaux grecs</b>, la plupart en sahidique, certains (le Codex I et une partie du Codex XI, par exemple) en lycopolitain (subachmimique).</p>
+  <p>Cette « bibliothèque de Nag Hammadi » <b>n’est pas un recueil purement gnostique</b> : on y trouve un extrait de la <i>République</i> de Platon, les <i>Sentences de Sextus</i>, les <i>Leçons de Silvanos</i> et des textes hermétiques. Qui les a réunis et enfouis, et pourquoi (en lien, peut-être, avec les monastères pachômiens voisins), reste débattu.</p>
+
+  <h2 id="fr-site"><span class="num">VI</span>Les textes de ce site</h2>
+  <div class="cards">
+    <div class="card"><div class="k">NHC III,3 / V,1</div><h4>Eugnoste</h4><p>Une cosmogonie en forme de lettre, sans élément chrétien. La <i>Sagesse de Jésus-Christ</i>, qui la suit dans le Codex III, la réécrit en dialogue entre le Christ ressuscité et ses disciples — un exemple précieux de christianisation d’une spéculation non chrétienne.<br><a class="btnlink" href="eugnostos.html?wit=III">Lire →</a></p></div>
+    <div class="card"><div class="k">NHC VI,5</div><h4>Platon, République 588b–589b</h4><p>Une version copte du passage qui compare l’âme à un composé de bête polycéphale, de lion et d’homme. Elle s’écarte beaucoup du grec et montre comment Platon fut lu et approprié.<br><a class="btnlink" href="republic.html">Lire →</a></p></div>
+  </div>
+
+  <h2 id="fr-books"><span class="num">VII</span>Bibliographie</h2>
+  <ul class="reflist">
+    <li>J.-P. Mahé et P.-H. Poirier (dir.), <i>Écrits gnostiques. La bibliothèque de Nag Hammadi</i>, Gallimard, « Bibliothèque de la Pléiade », 2007.</li>
+    <li><i>Bibliothèque copte de Nag Hammadi</i> (BCNH), Presses de l’Université Laval / Peeters.</li>
+    <li>B. Layton, <i>The Gnostic Scriptures</i>, 1987 (2e éd. avec D. Brakke, 2021).</li>
+    <li>M. A. Williams, <i>Rethinking “Gnosticism”</i>, 1996 ; K. L. King, <i>What Is Gnosticism?</i>, 2003 ; D. Brakke, <i>The Gnostics</i>, 2010.</li>
+  </ul>
+  <p style="font-size:.78rem;color:var(--ink-faint)">Texte rédigé par le projet (CC BY 4.0). Les illustrations sont des créations originales du projet.</p>
+</article>
+
+</main>
+
+<footer class="site-foot">
+  <span class="l-ja">ナグ・ハマディ写本コーパス · 本文はパブリックドメイン、注釈・辞書・対訳・解説は CC BY 4.0 · <a href="project.html">プロジェクトについて</a></span>
+  <span class="l-en">The Nag Hammadi Library · source texts public domain; notes, lexicon, translations and essays CC BY 4.0 · <a href="project.html">About</a></span>
+  <span class="l-fr">Bibliothèque de Nag Hammadi · textes sources dans le domaine public ; notes, lexique, traductions et essais CC BY 4.0 · <a href="project.html">À propos</a></span>
+  <br><a href="privacy.html"><span class="l-ja">プライバシーポリシー</span><span class="l-en">Privacy policy</span><span class="l-fr">Confidentialité</span></a> ·
+  <a href="terms.html"><span class="l-ja">利用規約</span><span class="l-en">Terms of use</span><span class="l-fr">Conditions d’utilisation</span></a>
+</footer>
+</body>
+</html>

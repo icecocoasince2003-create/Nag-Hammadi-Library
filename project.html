@@ -1,0 +1,169 @@
+<!-- プロジェクト紹介ページ（手作業管理）。メンバーと資金協力は data/project.json から描画します
+     （public: true の項目のみ表示。資金協力の欄は表示する項目が 1 つもなければ見出しごと非表示）。 -->
+<!DOCTYPE html>
+<html lang="ja" data-lang="ja" data-i18n="full" data-mode="aeon" data-title-en="About the project — The Nag Hammadi Library" data-title-fr="À propos du projet — Bibliothèque de Nag Hammadi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>プロジェクトについて — ナグ・ハマディ写本コーパス</title>
+<meta name="description" content="ナグ・ハマディ写本コーパス・プロジェクトの目的、データ、メンバー、参加方法 / About the Nag Hammadi Library digital edition project.">
+<link rel="icon" type="image/svg+xml" href="image/icon.svg">
+<link rel="alternate icon" type="image/png" sizes="32x32" href="image/favicon-32.png">
+<link rel="apple-touch-icon" href="image/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600&family=Noto+Sans+Coptic&display=swap" rel="stylesheet">
+<style>
+:root{ --ui:'Inter','Noto Sans JP',system-ui,sans-serif; }
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
+.members{display:grid; grid-template-columns:repeat(auto-fill,minmax(420px,1fr)); gap:14px; margin:14px 0}
+@media(max-width:520px){ .members{grid-template-columns:1fr} }
+.member{display:grid; grid-template-columns:96px minmax(0,1fr); gap:16px; align-items:start;
+  background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:16px 18px}
+.member img{width:96px; aspect-ratio:1; border-radius:50%; object-fit:cover; object-position:center 22%; border:1px solid rgba(212,175,106,.45)}
+.member .mono{width:96px; aspect-ratio:1; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:"Cinzel",serif; font-size:2.2rem; color:var(--gold-bright); background:radial-gradient(circle at 50% 40%, rgba(157,139,224,.25), rgba(10,9,24,.6)); border:1px solid rgba(212,175,106,.45)}
+.member .nm{font-size:1.1rem; font-weight:600; color:var(--ink)}
+html[data-lang="ja"] .member .nm{font-family:"Noto Serif JP",serif}
+.member .rd{font-size:.74rem; color:var(--ink-faint); margin-left:.5em; font-weight:400}
+.member .ai{display:inline-block; margin-left:.5em; font-size:.6rem; letter-spacing:.1em; color:var(--lapis); border:1px solid currentColor; border-radius:999px; padding:0 6px; vertical-align:middle}
+.member .rl{font-size:.82rem; color:var(--gold-bright); margin:3px 0}
+.member .af{font-size:.76rem; color:var(--ink-faint)}
+.member p{font-size:.84rem; line-height:1.75; color:var(--ink-soft); margin:8px 0 0}
+.member .lk{display:flex; gap:14px; margin-top:8px; font-size:.78rem}
+.member .lk a{color:var(--lapis); text-underline-offset:4px}
+.funders{list-style:none; padding:0; margin:12px 0}
+.funders li{padding:12px 0; border-bottom:1px solid var(--line); font-size:.9rem; color:var(--ink)}
+.funders li small{display:block; color:var(--ink-faint); font-size:.78rem; margin-top:2px}
+.funders a{color:inherit; text-underline-offset:4px}
+.cite{font-family:'Spectral',Georgia,serif; font-size:.92rem; background:rgba(0,0,0,.25); border:1px solid var(--line); border-radius:10px; padding:12px 14px; color:var(--ink-soft); line-height:1.7}
+.feat-list{display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:12px; margin:14px 0}
+</style>
+<link rel="stylesheet" href="assets/cosmos.css">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/community.css">
+<script defer src="assets/cosmos.js"></script>
+<script defer src="assets/site.js"></script>
+<script defer src="assets/community-config.js"></script>
+<script defer src="assets/community.js"></script>
+</head>
+<body>
+<nav id="sitebar" class="sitebar sticky"></nav>
+
+<main class="page prose">
+  <div class="eyebrow">About the project</div>
+  <h1><span class="l-ja jp">プロジェクトについて</span><span class="l-en">About the project</span><span class="l-fr">À propos du projet</span></h1>
+  <p class="lede">
+    <span class="l-ja">「ナグ・ハマディ写本コーパス」は、ナグ・ハマディ写本（NHC I–XIII）のコプト語本文を <b>TEI P5</b> で符号化し、形態素ごとの語釈・コプト語辞書・注釈・日英仏の対訳を備えた<b>オープンなデジタル版</b>として公開するプロジェクトです。言語学的な分析に使えるデータであると同時に、初学者が原文に触れられる読書環境をめざしています。</span>
+    <span class="l-en">The Nag Hammadi Library corpus encodes the Coptic text of the Nag Hammadi Codices (NHC I–XIII) in <b>TEI P5</b> and publishes it as an <b>open digital edition</b> with morpheme-level glosses, a Coptic lexicon, notes and Japanese, English and French translations. It aims to be both research data for linguistic analysis and a reading environment in which newcomers can engage with the original text.</span>
+    <span class="l-fr">Le corpus de la bibliothèque de Nag Hammadi encode en <b>TEI P5</b> le texte copte des codices de Nag Hammadi (NHC I–XIII) et le publie sous forme d’<b>édition numérique ouverte</b>, avec gloses par morphème, lexique copte, notes et traductions japonaise, anglaise et française. Il se veut à la fois une ressource pour l’analyse linguistique et un environnement de lecture qui ouvre le texte original aux débutants.</span>
+  </p>
+  <nav class="toc">
+    <a href="#aims"><span class="l-ja">目的と特色</span><span class="l-en">Aims</span><span class="l-fr">Objectifs</span></a>
+    <a href="#data"><span class="l-ja">データ</span><span class="l-en">Data</span><span class="l-fr">Données</span></a>
+    <a href="#members"><span class="l-ja">メンバー</span><span class="l-en">Team</span><span class="l-fr">Équipe</span></a>
+    <a href="#funding" id="tocFunding" hidden><span class="l-ja">資金協力</span><span class="l-en">Funding</span><span class="l-fr">Financement</span></a>
+    <a href="#join"><span class="l-ja">参加・協力</span><span class="l-en">Contribute</span><span class="l-fr">Contribuer</span></a>
+    <a href="#cite"><span class="l-ja">引用・ライセンス</span><span class="l-en">Citation &amp; licence</span><span class="l-fr">Citation et licence</span></a>
+  </nav>
+
+  <h2 id="aims"><span class="num">I</span><span class="l-ja">目的と特色</span><span class="l-en">Aims and features</span><span class="l-fr">Objectifs et caractéristiques</span></h2>
+  <div class="feat-list">
+    <div class="card"><div class="k">TEI P5</div>
+      <h4><span class="l-ja">形態素レベルの符号化</span><span class="l-en">Morpheme-level encoding</span><span class="l-fr">Encodage par morphème</span></h4>
+      <p><span class="l-ja">各語 <code>&lt;w&gt;</code> にレンマと品詞を付与し、ギリシア語借用語・写本の行とページ・欠損を明示。</span><span class="l-en">Every <code>&lt;w&gt;</code> carries a lemma and part of speech; Greek loanwords, manuscript lines and pages, and lacunae are marked.</span><span class="l-fr">Chaque <code>&lt;w&gt;</code> porte lemme et catégorie ; emprunts grecs, lignes et pages du manuscrit et lacunes sont balisés.</span></p></div>
+    <div class="card"><div class="k">Lexicon</div>
+      <h4><span class="l-ja">共有コプト語辞書</span><span class="l-en">Shared Coptic lexicon</span><span class="l-fr">Lexique copte commun</span></h4>
+      <p><span class="l-ja">全文書が一つの辞書を（レンマ＋品詞で）参照。Coptic Dictionary Online へのリンクつき。</span><span class="l-en">All texts look up one lexicon by lemma + part of speech, linked to the Coptic Dictionary Online.</span><span class="l-fr">Tous les textes consultent un seul lexique (lemme + catégorie), relié au Coptic Dictionary Online.</span></p></div>
+    <div class="card"><div class="k">Witnesses</div>
+      <h4><span class="l-ja">証本の対照と原文対照</span><span class="l-en">Witnesses and parallels</span><span class="l-fr">Témoins et parallèles</span></h4>
+      <p><span class="l-ja">エウグノストスの III,3 と V,1、『国家』のコプト語訳とギリシア語原文を並べて読める。</span><span class="l-en">Read Eugnostos III,3 beside V,1, and the Coptic Republic beside the Greek.</span><span class="l-fr">Lire Eugnoste III,3 en regard de V,1, et la République copte en regard du grec.</span></p></div>
+    <div class="card"><div class="k">Open data</div>
+      <h4><span class="l-ja">オープンデータ</span><span class="l-en">Open data</span><span class="l-fr">Données ouvertes</span></h4>
+      <p><span class="l-ja">本文・辞書・注釈の XML は各ビュワーからダウンロードでき、GitHub で公開。</span><span class="l-en">Text, lexicon and note XML can be downloaded from each viewer and are on GitHub.</span><span class="l-fr">Les XML du texte, du lexique et des notes sont téléchargeables depuis chaque visionneuse et publiés sur GitHub.</span></p></div>
+  </div>
+
+  <h2 id="data"><span class="num">II</span><span class="l-ja">データと技術</span><span class="l-en">Data and technology</span><span class="l-fr">Données et technique</span></h2>
+  <p><span class="l-ja">データは本文（<code>*_tei.xml</code>）、辞書（<code>lexicon.xml</code>）、注釈（<code>*_theology.xml</code> / <code>*_commentary.xml</code>）、文書カタログ（<code>catalog.xml</code>）に分離したスタンドオフ形式です。サイトはこれらの XML をブラウザで直接読み込んで表示する静的サイトで、写本画像は IIIF で表示します。</span>
+  <span class="l-en">The data are kept in stand-off form: text (<code>*_tei.xml</code>), lexicon (<code>lexicon.xml</code>), notes (<code>*_theology.xml</code> / <code>*_commentary.xml</code>) and a document catalogue (<code>catalog.xml</code>). The site is static: the browser reads these XML files directly, and manuscript images are shown via IIIF.</span>
+  <span class="l-fr">Les données sont séparées (stand-off) : texte (<code>*_tei.xml</code>), lexique (<code>lexicon.xml</code>), notes (<code>*_theology.xml</code> / <code>*_commentary.xml</code>) et catalogue (<code>catalog.xml</code>). Le site est statique : le navigateur lit directement ces XML, et les images des manuscrits s’affichent via IIIF.</span></p>
+  <p><a class="btnlink" href="https://github.com/icecocoasince2003-create/Nag-Hammadi-Library" target="_blank" rel="noopener">GitHub ↗</a></p>
+
+  <h2 id="members"><span class="num">III</span><span class="l-ja">メンバー</span><span class="l-en">Team</span><span class="l-fr">Équipe</span></h2>
+  <div class="members" id="memberList"></div>
+
+  <section id="funding" hidden>
+    <h2><span class="num">IV</span><span class="l-ja">資金協力</span><span class="l-en">Funding</span><span class="l-fr">Financement</span></h2>
+    <p><span class="l-ja">本プロジェクトは以下の支援を受けています。</span><span class="l-en">This project is supported by:</span><span class="l-fr">Ce projet bénéficie du soutien de :</span></p>
+    <ul class="funders" id="fundList"></ul>
+  </section>
+
+  <h2 id="join"><span class="num">V</span><span class="l-ja">参加・協力</span><span class="l-en">How to contribute</span><span class="l-fr">Contribuer</span></h2>
+  <p><span class="l-ja">本文の読みや語釈・訳についての<b>注釈、誤りの指摘、コメント</b>を歓迎します。ビュワーでログイン（Google アカウントまたはメールアドレス）すると、各セグメントや語ごとに投稿できます。投稿は運営が確認したのちに公開されます。データの直接の修正は GitHub の Pull Request でも受け付けています。</span>
+  <span class="l-en"><b>Annotations, corrections and comments</b> on readings, glosses and translations are welcome. Sign in from a viewer (with a Google account or e-mail) to post on any segment or word; contributions are published after review. Direct data corrections are also welcome as GitHub pull requests.</span>
+  <span class="l-fr"><b>Annotations, corrections et commentaires</b> sur les lectures, les gloses et les traductions sont bienvenus. Connectez-vous depuis une visionneuse (compte Google ou e-mail) pour contribuer sur un segment ou un mot ; les contributions sont publiées après relecture. Les corrections directes sont aussi possibles par pull request sur GitHub.</span></p>
+
+  <h2 id="cite"><span class="num">VI</span><span class="l-ja">引用・ライセンス</span><span class="l-en">Citation and licence</span><span class="l-fr">Citation et licence</span></h2>
+  <p><span class="l-ja">コプト語本文（およびプラトン『国家』のギリシア語本文、OCT/Burnet）はパブリックドメインです。注釈・辞書・対訳・解説は本プロジェクトによるもので、<a href="https://creativecommons.org/licenses/by/4.0/deed.ja" target="_blank" rel="noopener">CC BY 4.0</a> で公開しています。引用の際は次のように記載してください。</span>
+  <span class="l-en">The Coptic texts (and the Greek of Plato’s Republic, OCT/Burnet) are in the public domain. Notes, lexicon, translations and essays are this project’s own work, published under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>. Please cite as:</span>
+  <span class="l-fr">Les textes coptes (et le grec de la République de Platon, OCT/Burnet) sont dans le domaine public. Notes, lexique, traductions et essais sont l’œuvre du projet, publiés sous <a href="https://creativecommons.org/licenses/by/4.0/deed.fr" target="_blank" rel="noopener">CC BY 4.0</a>. Citation proposée :</span></p>
+  <div class="cite" id="citeBox"></div>
+</main>
+
+<footer class="site-foot">
+  <span class="l-ja">ナグ・ハマディ写本コーパス · 本文はパブリックドメイン、注釈・辞書・対訳・解説は CC BY 4.0</span>
+  <span class="l-en">The Nag Hammadi Library · source texts public domain; notes, lexicon, translations and essays CC BY 4.0</span>
+  <span class="l-fr">Bibliothèque de Nag Hammadi · textes sources dans le domaine public ; notes, lexique, traductions et essais CC BY 4.0</span>
+  <br><a href="privacy.html"><span class="l-ja">プライバシーポリシー</span><span class="l-en">Privacy policy</span><span class="l-fr">Confidentialité</span></a> ·
+  <a href="terms.html"><span class="l-ja">利用規約</span><span class="l-en">Terms of use</span><span class="l-fr">Conditions d’utilisation</span></a>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  const H=document.documentElement;
+  const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const tri=o=>{ o=o||{}; return ["ja","en","fr"].map(l=>`<span class="l-${l}">${esc(o[l]||o.en||o.ja||"")}</span>`).join(""); };
+
+  /* 引用表記（閲覧日は今日の日付） */
+  const today=new Date().toISOString().slice(0,10);
+  const url=location.origin && location.origin.startsWith("http") ? location.origin+"/" : "https://nag-hammadi-library.vercel.app/";
+  document.getElementById("citeBox").innerHTML=
+    `<span class="l-ja">生田目心愛 編『ナグ・ハマディ写本コーパス』2026年–. ${esc(url)}（${today} 閲覧）</span>`+
+    `<span class="l-en">Kokoa Nabatame (ed.), <i>The Nag Hammadi Library: A Digital TEI Edition</i>, 2026–. ${esc(url)} (accessed ${today}).</span>`+
+    `<span class="l-fr">Kokoa Nabatame (éd.), <i>La bibliothèque de Nag Hammadi : édition numérique TEI</i>, 2026–. ${esc(url)} (consulté le ${today}).</span>`;
+
+  fetch("data/project.json",{cache:"no-store"}).then(r=>r.ok?r.json():Promise.reject(r.status)).then(d=>{
+    const members=(d.members||[]).filter(m=>m.public);
+    document.getElementById("memberList").innerHTML=members.map(m=>`
+      <div class="member">
+        ${m.image?`<img src="${esc(m.image)}" alt="" loading="lazy">`:`<span class="mono" aria-hidden="true">${esc(m.kind==="ai"?"✦":((m.name||{}).en||"?").trim().charAt(0))}</span>`}
+        <div>
+          <div class="nm">${tri(m.name)}${m.reading?`<span class="rd l-ja">${esc(m.reading)}</span>`:""}${m.kind==="ai"?'<span class="ai">AI</span>':""}</div>
+          <div class="rl">${tri(m.role)}</div>
+          <div class="af">${tri(m.affiliation)}</div>
+          ${m.bio?`<p>${tri(m.bio)}</p>`:""}
+          ${(m.links||[]).length?`<div class="lk">${m.links.map(l=>`<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)} ↗</a>`).join("")}</div>`:""}
+        </div>
+      </div>`).join("");
+    const funds=(d.funding||[]).filter(f=>f.public);
+    if(funds.length){
+      document.getElementById("funding").hidden=false;
+      document.getElementById("tocFunding").hidden=false;
+      document.getElementById("fundList").innerHTML=funds.map(f=>{
+        const nm=tri(f.name);
+        const note=f.note&&(f.note.ja||f.note.en)?`<small>${tri(f.note)}</small>`:"";
+        return `<li>${f.url?`<a href="${esc(f.url)}" target="_blank" rel="noopener">${nm}</a>`:nm}${note}</li>`;
+      }).join("");
+    }
+  }).catch(()=>{}).finally(renumber);
+  /* 表示中の見出しに通し番号（I, II, …）を振り直す */
+  function renumber(){
+    const R=["I","II","III","IV","V","VI","VII","VIII","IX","X"]; let i=0;
+    document.querySelectorAll("main h2 .num").forEach(n=>{ if(n.closest("[hidden]")) return; n.textContent=R[i++]||""; });
+  }
+})();
+</script>
+</body>
+</html>
