@@ -10,7 +10,7 @@ update_icon.py — image/icon.svg を差し替えたあとにアイコンを全�
 やること:
   1. image/icon.svg から image/favicon-32.png と image/apple-touch-icon.png を再生成
      （macOS標準の qlmanage + sips を使用。cairosvg が入っていればそちらを優先）
-  2. republic.html / eugnostos.html / search.html の <head> に埋め込まれた
+  2. republic.html / eugnostos.html / search.html / stats.html の <head> に埋め込まれた
      ファビコン(data URI)を新しいデザインに書き換え
   3. scripts/build_site.py を実行して index.html / tractate.html も再生成
 
@@ -23,7 +23,7 @@ ROOT = os.path.dirname(_HERE) if os.path.basename(_HERE) == "scripts" else _HERE
 SRC = os.path.join(ROOT, "image", "icon.svg")
 PNG32 = os.path.join(ROOT, "image", "favicon-32.png")
 TOUCH = os.path.join(ROOT, "image", "apple-touch-icon.png")
-PAGES = ["republic.html", "eugnostos.html", "search.html"]
+PAGES = ["republic.html", "eugnostos.html", "search.html", "stats.html"]
 
 if not os.path.exists(SRC):
     sys.exit("image/icon.svg が見つかりません: " + SRC)

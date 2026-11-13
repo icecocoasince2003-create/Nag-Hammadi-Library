@@ -35,43 +35,20 @@
 1. <https://supabase.com> でアカウントを作り、**New project** を作成（リージョンは Tokyo を推奨）。
 2. 左メニュー **SQL Editor** → New query に `supabase/schema.sql` の内容を全部貼り付けて **Run**。
    - テーブル `profiles` / `admins` / `contributions`、権限（RLS）、トリガーが作られます。
-3. 接続に使う 2 つの値を控えます。いちばん簡単なのは、プロジェクト画面上部の **Connect** ボタンです
-   （開いたダイアログに URL と鍵がまとめて表示されます）。個別に探す場合は次の場所にあります。
-   - **Project URL**（`https://xxxx.supabase.co`）: Project Settings → **Data API**
-   - **Publishable key**（`sb_publishable_...` で始まる、公開してよい鍵）: Project Settings → **API Keys**
-     - 古い形式の `anon` key（`eyJ...` で始まる）でも動きます。API Keys 画面の「Legacy API Keys」タブにあります。
-   - ※ **Secret key**（`sb_secret_...`）や `service_role` key は絶対にサイトに書かないでください。
+3. **Project Settings → API** で次の 2 つを控えます。
+   - Project URL（`https://ngzzklrjbkzsnegozpps.supabase.co/rest/v1/`）
+   - `anon` `public` key（公開してよい鍵）
+   - ※ `service_role` key は絶対にサイトに書かないでください。
 
 ## 2. Google ログインを有効にする
 
-Google Cloud Console の画面は 2025 年に変わり、OAuth の設定は「API とサービス → 認証情報」ではなく
-**Google Auth Platform** にまとめられています。
-
-1. **プロジェクトを作る**: <https://console.cloud.google.com/projectcreate> で新規プロジェクトを作成
-   （名前は「nag-hammadi-library」など。課金設定は不要）。
-2. **Google Auth Platform を開く**: 左上の ≡ メニュー → **Google Auth Platform**
-   （見つからなければ上部の検索欄に「Google Auth Platform」または「OAuth」と入力。
-   直接 <https://console.cloud.google.com/auth/overview> を開いても構いません）。
-3. **アプリを登録する**（初回のみ）: **開始**（Get started）を押してウィザードに入力。
-   - アプリ情報: アプリ名「ナグ・ハマディ写本コーパス」、ユーザーサポートメール
-   - 対象（Audience）: **外部**（External）を選ぶ ← ここを「内部」にすると一般の人がログインできません
-   - 連絡先情報: 自分のメールアドレス → ポリシーに同意して **作成**
-4. **クライアントを作る**: 左メニュー **クライアント**（Clients）→ **クライアントを作成**（Create client）
-   - アプリケーションの種類: **ウェブ アプリケーション**
-   - 名前: 「NHC site」など（ラベルなので何でも可）
-   - 承認済みの JavaScript 生成元: 空欄で可
-   - **承認済みのリダイレクト URI**: Supabase のコールバック URL を追加
-     `https://<あなたのプロジェクト>.supabase.co/auth/v1/callback`
-     （Supabase の **Authentication → Sign In / Providers → Google** を開くと「Callback URL」として表示されているので、
-     それをそのままコピーするのが確実です）
-   - **作成** を押す
-5. 表示される **クライアント ID** と **クライアント シークレット** を控えます
-   （シークレットはこの画面でしか表示されないので、JSON をダウンロードしておくと安心です）。
-6. Supabase の **Authentication → Sign In / Providers → Google** を開き、
-   クライアント ID とシークレットを入力して **有効化（Enable）→ Save**。
-7. **公開する**: Google Auth Platform の **対象**（Audience）で、公開ステータスが「テスト中」になっていたら
-   **アプリを公開**（Publish app）を押します。テスト中のままだと、テストユーザーに登録した人しかログインできません。
-   このサイトが使うのはメールアドレスと名前（基本スコープ）だけなので、公開に Google の審査は不要です。
+1. Google Cloud Console（<https://console.cloud.google.com/>）でプロジェクトを作成。
+2. **API とサービス → OAuth 同意画面** を設定（外部、アプリ名「ナグ・ハマディ写本コーパス」など）。
+3. **認証情報 → 認証情報を作成 → OAuth クライアント ID**（種類: ウェブ アプリケーション）
+   - 「承認済みのリダイレクト URI」に Supabase のコールバック URL を登録:
+     `https://ngzzklrjbkzsnegozpps.supabase.co/auth/v1/callback`
+4. 発行された **クライアント ID / クライアント シークレット** を、
+   Supabase の **Authentication → Sign In / Providers → Google** に入力して有効化。
 
 ## 3. メールアドレスでの登録（Google を使わない人向け）
 
@@ -94,8 +71,8 @@ Supabase の **Authentication → URL Configuration**:
 
 ```js
 window.NHC_COMMUNITY_CONFIG = {
-  supabaseUrl: "https://xxxx.supabase.co",
-  supabaseAnonKey: "sb_publishable_...",   // Publishable key（または旧形式の anon key）
+  supabaseUrl: "https://ngzzklrjbkzsnegozpps.supabase.co",
+  supabaseAnonKey: "sb_secret_xxxx",
   providers: { google: true, email: true },
   supabaseJs: "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
 };

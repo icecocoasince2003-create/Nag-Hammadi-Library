@@ -26,9 +26,9 @@
     { id: "news",   href: "index.html#news",     ja: "NEWS",            en: "News",            fr: "Actualités" }
   ];
   var SITE = {
-    ja: { name: "ナグ・ハマディ写本コーパス", sub: "The Nag Hammadi Library · digital TEI edition", nav: "サイト内ナビゲーション" },
-    en: { name: "Nag Hammadi Library", sub: "Digital TEI edition of the Nag Hammadi Codices", nav: "Site navigation" },
-    fr: { name: "Bibliothèque de Nag Hammadi", sub: "Édition numérique TEI des codices", nav: "Navigation du site" }
+    ja: { name: "Sheneset", sub: "ナグ・ハマディ写本コーパス", nav: "サイト内ナビゲーション" },
+    en: { name: "Sheneset", sub: "Digital TEI edition of the Nag Hammadi Codices", nav: "Site navigation" },
+    fr: { name: "Sheneset", sub: "Édition numérique TEI des codices de Nag Hammadi", nav: "Navigation du site" }
   };
 
   function stored() {
@@ -69,7 +69,7 @@
     nav.setAttribute("aria-label", S.nav);
     nav.innerHTML =
       '<a class="sb-brand" href="index.html"><img src="image/icon.svg" alt="" width="26" height="26" onerror="this.style.display=\'none\'">' +
-      '<span class="sb-name"><b><span class="cop">ⲛⲁⲅ ϩⲁⲙⲙⲁⲇⲓ</span>' + esc(S.name) + '</b><small>' + esc(S.sub) + '</small></span></a>' +
+      '<span class="sb-name"><b><span class="cop">ϣⲉⲛⲉⲥⲏⲧ</span>' + esc(S.name) + '</b><small>' + esc(S.sub) + '</small></span></a>' +
       '<div class="sb-links">' + NAV.map(function (n) {
         return '<a class="sb-link" data-nav="' + n.id + '" href="' + n.href + '"' + (n.id === cur ? ' aria-current="page"' : "") + '>' + esc(n[L] || n.ja) + '</a>';
       }).join("") + '</div>' +

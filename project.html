@@ -1,12 +1,12 @@
 <!-- プロジェクト紹介ページ（手作業管理）。メンバーと資金協力は data/project.json から描画します
      （public: true の項目のみ表示。資金協力の欄は表示する項目が 1 つもなければ見出しごと非表示）。 -->
 <!DOCTYPE html>
-<html lang="ja" data-lang="ja" data-i18n="full" data-mode="aeon" data-title-en="About the project — The Nag Hammadi Library" data-title-fr="À propos du projet — Bibliothèque de Nag Hammadi">
+<html lang="ja" data-lang="ja" data-i18n="full" data-mode="aeon" data-title-en="About the project — Sheneset" data-title-fr="À propos du projet — Sheneset">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>プロジェクトについて — ナグ・ハマディ写本コーパス</title>
-<meta name="description" content="ナグ・ハマディ写本コーパス・プロジェクトの目的、データ、メンバー、参加方法 / About the Nag Hammadi Library digital edition project.">
+<title>プロジェクトについて — Sheneset</title>
+<meta name="description" content="Sheneset（ナグ・ハマディ写本コーパス）の目的、データ、メンバー、参加方法 / About Sheneset, a digital edition of the Nag Hammadi Codices.">
 <link rel="icon" type="image/svg+xml" href="image/icon.svg">
 <link rel="alternate icon" type="image/png" sizes="32x32" href="image/favicon-32.png">
 <link rel="apple-touch-icon" href="image/apple-touch-icon.png">
@@ -55,9 +55,9 @@ html[data-lang="ja"] .member .nm{font-family:"Noto Serif JP",serif}
   <div class="eyebrow">About the project</div>
   <h1><span class="l-ja jp">プロジェクトについて</span><span class="l-en">About the project</span><span class="l-fr">À propos du projet</span></h1>
   <p class="lede">
-    <span class="l-ja">「ナグ・ハマディ写本コーパス」は、ナグ・ハマディ写本（NHC I–XIII）のコプト語本文を <b>TEI P5</b> で符号化し、形態素ごとの語釈・コプト語辞書・注釈・日英仏の対訳を備えた<b>オープンなデジタル版</b>として公開するプロジェクトです。言語学的な分析に使えるデータであると同時に、初学者が原文に触れられる読書環境をめざしています。</span>
-    <span class="l-en">The Nag Hammadi Library corpus encodes the Coptic text of the Nag Hammadi Codices (NHC I–XIII) in <b>TEI P5</b> and publishes it as an <b>open digital edition</b> with morpheme-level glosses, a Coptic lexicon, notes and Japanese, English and French translations. It aims to be both research data for linguistic analysis and a reading environment in which newcomers can engage with the original text.</span>
-    <span class="l-fr">Le corpus de la bibliothèque de Nag Hammadi encode en <b>TEI P5</b> le texte copte des codices de Nag Hammadi (NHC I–XIII) et le publie sous forme d’<b>édition numérique ouverte</b>, avec gloses par morphème, lexique copte, notes et traductions japonaise, anglaise et française. Il se veut à la fois une ressource pour l’analyse linguistique et un environnement de lecture qui ouvre le texte original aux débutants.</span>
+    <span class="l-ja">「Sheneset」は、ナグ・ハマディ写本（NHC I–XIII）のコプト語本文を <b>TEI P5</b> で符号化し、形態素ごとの語釈・コプト語辞書・注釈・日英仏の対訳を備えた<b>オープンなデジタル版</b>として公開するプロジェクトです。言語学的な分析に使えるデータであると同時に、初学者が原文に触れられる読書環境をめざしています。</span>
+    <span class="l-en">Sheneset encodes the Coptic text of the Nag Hammadi Codices (NHC I–XIII) in <b>TEI P5</b> and publishes it as an <b>open digital edition</b> with morpheme-level glosses, a Coptic lexicon, notes and Japanese, English and French translations. It aims to be both research data for linguistic analysis and a reading environment in which newcomers can engage with the original text.</span>
+    <span class="l-fr">Sheneset encode en <b>TEI P5</b> le texte copte des codices de Nag Hammadi (NHC I–XIII) et le publie sous forme d’<b>édition numérique ouverte</b>, avec gloses par morphème, lexique copte, notes et traductions japonaise, anglaise et française. Il se veut à la fois une ressource pour l’analyse linguistique et un environnement de lecture qui ouvre le texte original aux débutants.</span>
   </p>
   <nav class="toc">
     <a href="#aims"><span class="l-ja">目的と特色</span><span class="l-en">Aims</span><span class="l-fr">Objectifs</span></a>
@@ -66,6 +66,7 @@ html[data-lang="ja"] .member .nm{font-family:"Noto Serif JP",serif}
     <a href="#funding" id="tocFunding" hidden><span class="l-ja">資金協力</span><span class="l-en">Funding</span><span class="l-fr">Financement</span></a>
     <a href="#join"><span class="l-ja">参加・協力</span><span class="l-en">Contribute</span><span class="l-fr">Contribuer</span></a>
     <a href="#cite"><span class="l-ja">引用・ライセンス</span><span class="l-en">Citation &amp; licence</span><span class="l-fr">Citation et licence</span></a>
+    <a href="#sheneset"><span class="l-ja">サイト名とマスコット</span><span class="l-en">Name and mascot</span><span class="l-fr">Nom et mascotte</span></a>
   </nav>
 
   <h2 id="aims"><span class="num">I</span><span class="l-ja">目的と特色</span><span class="l-en">Aims and features</span><span class="l-fr">Objectifs et caractéristiques</span></h2>
@@ -109,12 +110,20 @@ html[data-lang="ja"] .member .nm{font-family:"Noto Serif JP",serif}
   <span class="l-en">The Coptic texts (and the Greek of Plato’s Republic, OCT/Burnet) are in the public domain. Notes, lexicon, translations and essays are this project’s own work, published under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>. The site’s source code (HTML, CSS, JavaScript and Python scripts) is released under the <a href="https://github.com/icecocoasince2003-create/Nag-Hammadi-Library/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>. Please cite as:</span>
   <span class="l-fr">Les textes coptes (et le grec de la République de Platon, OCT/Burnet) sont dans le domaine public. Notes, lexique, traductions et essais sont l’œuvre du projet, publiés sous <a href="https://creativecommons.org/licenses/by/4.0/deed.fr" target="_blank" rel="noopener">CC BY 4.0</a>. Le code source du site (HTML, CSS, JavaScript et scripts Python) est publié sous <a href="https://github.com/icecocoasince2003-create/Nag-Hammadi-Library/blob/main/LICENSE" target="_blank" rel="noopener">licence MIT</a>. Citation proposée :</span></p>
   <div class="cite" id="citeBox"></div>
+
+  <h2 id="sheneset"><span class="num">VII</span><span class="l-ja">サイト名とマスコット</span><span class="l-en">The name and the mascot</span><span class="l-fr">Le nom et la mascotte</span></h2>
+  <p><span class="l-ja">サイト名の「Sheneset（シェネセト）」は、ナグ・ハマディ写本が見つかったジャバル・アッ＝ターリフの崖に近い古代の町の、コプト語の名前 <span class="cop">ϣⲉⲛⲉⲥⲏⲧ</span> に由来します。この町はギリシア語でケノボスキオン（「ガチョウの牧場」）と呼ばれ、初期の研究では写本も「ケノボスキオン写本」と呼ばれていました。<span class="cop">ϣⲉⲛⲉⲥⲏⲧ</span> の原義は「セトの木（々）」です。このセトはエジプトの神ですが、写本に多く含まれるセツ派の文書とも響き合う名前です。</span>
+  <span class="l-en">The name “Sheneset” comes from <span class="cop">ϣⲉⲛⲉⲥⲏⲧ</span>, the Coptic name of the ancient town near the cliff of Jabal al-Ṭārif where the Nag Hammadi Codices were found. In Greek the town was called Chenoboskion, “goose pasture”, and early scholarship sometimes spoke of the “Chenoboskion manuscripts”. <span class="cop">ϣⲉⲛⲉⲥⲏⲧ</span> means “tree(s) of Seth”: this Seth is the Egyptian god, but the name also echoes the many Sethian texts in the codices.</span>
+  <span class="l-fr">Le nom « Sheneset » vient de <span class="cop">ϣⲉⲛⲉⲥⲏⲧ</span>, nom copte de la ville antique proche de la falaise du Djebel el-Tarif, où les codices de Nag Hammadi ont été découverts. En grec, la ville s’appelait Chénoboskion, « le pâturage des oies », et les premières études parlaient parfois des « manuscrits de Chénoboskion ». <span class="cop">ϣⲉⲛⲉⲥⲏⲧ</span> signifie « arbre(s) de Seth » : ce Seth est le dieu égyptien, mais le nom fait aussi écho aux nombreux textes séthiens des codices.</span></p>
+  <div class="figure"><img src="image/web/gengen.svg" alt="" loading="lazy"><p><span class="l-ja">マスコットの「ゲンゲン」は、シェネセトの牧場に住むガチョウです。名前は、宇宙の卵を守るとされた古代エジプトのガチョウの姿の創造神ゲンゲン・ウェル（Ngg wr、「大いなる鳴き声の者」）から取りました。写本が封をした壺の中で眠っていたことにちなみ、写本を「卵」に見立てて見守っています。抱えているのはフラップと革ひも付きの革装写本で、表紙には <span class="cop">ϣⲉⲛⲉⲥⲏⲧ</span> の頭文字 <span class="cop">ϣ</span> が金で押されています。頭のうしろには葦ペンを差し、目もとには古代エジプトのコール墨を思わせるアイラインを引いています。配色は、ゲンゲン・ウェルの姿ともされるエジプトガンにならいました。コプト語でガチョウは <span class="cop">ⲣⲟ</span> といいます。</span>
+  <span class="l-en">Our mascot, Gengen, is a goose living in the pastures of Sheneset. The name comes from Gengen-Wer (Ngg wr, “the Great Cackler”), an ancient Egyptian creator god in the form of a goose, said to guard the cosmic egg. Since the codices lay buried in a sealed jar, Gengen watches over them as if they were eggs. Gengen carries a leather-bound codex with a flap and a tie, stamped in gold with <span class="cop">ϣ</span>, the initial of <span class="cop">ϣⲉⲛⲉⲥⲏⲧ</span>, keeps a reed pen tucked behind the head, and wears eyeliner that recalls ancient Egyptian kohl. The colours follow the Egyptian goose, the bird Gengen-Wer is sometimes thought to have been. In Coptic, a goose is <span class="cop">ⲣⲟ</span>.</span>
+  <span class="l-fr">Notre mascotte, Gengen, est une oie qui vit dans les pâturages de Sheneset. Son nom vient de Gengen-Ouer (Ngg wr, « le Grand Caqueteur »), dieu créateur égyptien à forme d’oie, réputé garder l’œuf cosmique. Comme les codices ont dormi dans une jarre scellée, Gengen veille sur eux comme sur des œufs. Gengen tient un codex relié de cuir, avec rabat et lanière, marqué d’un <span class="cop">ϣ</span> doré, initiale de <span class="cop">ϣⲉⲛⲉⲥⲏⲧ</span> ; un calame est glissé derrière sa tête et son trait d’eye-liner rappelle le khôl égyptien. Ses couleurs reprennent celles de l’oie d’Égypte, à laquelle on rattache parfois Gengen-Ouer. En copte, l’oie se dit <span class="cop">ⲣⲟ</span>.</span></p></div>
 </main>
 
 <footer class="site-foot">
-  <span class="l-ja">ナグ・ハマディ写本コーパス · 本文はパブリックドメイン、注釈・辞書・対訳・解説は CC BY 4.0</span>
-  <span class="l-en">The Nag Hammadi Library · source texts public domain; notes, lexicon, translations and essays CC BY 4.0</span>
-  <span class="l-fr">Bibliothèque de Nag Hammadi · textes sources dans le domaine public ; notes, lexique, traductions et essais CC BY 4.0</span>
+  <span class="l-ja">Sheneset · 本文はパブリックドメイン、注釈・辞書・対訳・解説は CC BY 4.0</span>
+  <span class="l-en">Sheneset · source texts public domain; notes, lexicon, translations and essays CC BY 4.0</span>
+  <span class="l-fr">Sheneset · textes sources dans le domaine public ; notes, lexique, traductions et essais CC BY 4.0</span>
   <br><a href="privacy.html"><span class="l-ja">プライバシーポリシー</span><span class="l-en">Privacy policy</span><span class="l-fr">Confidentialité</span></a> ·
   <a href="terms.html"><span class="l-ja">利用規約</span><span class="l-en">Terms of use</span><span class="l-fr">Conditions d’utilisation</span></a>
 </footer>
@@ -130,9 +139,9 @@ html[data-lang="ja"] .member .nm{font-family:"Noto Serif JP",serif}
   const today=new Date().toISOString().slice(0,10);
   const url=location.origin && location.origin.startsWith("http") ? location.origin+"/" : "https://nag-hammadi-library.vercel.app/";
   document.getElementById("citeBox").innerHTML=
-    `<span class="l-ja">生田目心愛 編『ナグ・ハマディ写本コーパス』2026年–. ${esc(url)}（${today} 閲覧）</span>`+
-    `<span class="l-en">Kokoa Nabatame (ed.), <i>The Nag Hammadi Library: A Digital TEI Edition</i>, 2026–. ${esc(url)} (accessed ${today}).</span>`+
-    `<span class="l-fr">Kokoa Nabatame (éd.), <i>La bibliothèque de Nag Hammadi : édition numérique TEI</i>, 2026–. ${esc(url)} (consulté le ${today}).</span>`;
+    `<span class="l-ja">生田目心愛 編『Sheneset：ナグ・ハマディ写本コーパス』2026年–. ${esc(url)}（${today} 閲覧）</span>`+
+    `<span class="l-en">Kokoa Nabatame (ed.), <i>Sheneset: A Digital TEI Edition of the Nag Hammadi Codices</i>, 2026–. ${esc(url)} (accessed ${today}).</span>`+
+    `<span class="l-fr">Kokoa Nabatame (éd.), <i>Sheneset : édition numérique TEI des codices de Nag Hammadi</i>, 2026–. ${esc(url)} (consulté le ${today}).</span>`;
 
   fetch("data/project.json",{cache:"no-store"}).then(r=>r.ok?r.json():Promise.reject(r.status)).then(d=>{
     const members=(d.members||[]).filter(m=>m.public);

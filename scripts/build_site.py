@@ -232,6 +232,7 @@ INDEX_CSS = """
 .hero h1{font-family:var(--disp); font-weight:600; line-height:1.1; margin:.32em 0 .16em;
  font-size:clamp(2.1rem,5.4vw,3.4rem)}
 .hero h1 .cop{display:block; font-size:.5em; color:var(--gold-soft); letter-spacing:.04em; margin-bottom:.18em}
+.hero h1 .tag{display:block; font-size:.4em; font-weight:500; color:var(--ink-soft); letter-spacing:.02em; margin-top:.45em}
 html[data-lang="ja"] .hero h1 .l-ja{font-family:'Noto Serif JP',serif; letter-spacing:.02em}
 .hero .lead{max-width:64ch; color:var(--ink-soft); font-size:1.02rem; line-height:1.8}
 .hero .lead b{color:var(--ink)}
@@ -246,10 +247,8 @@ html[data-lang="ja"] .hero h1 .l-ja{font-family:'Noto Serif JP',serif; letter-sp
 .sec-h .rule{flex:1; height:1px; background:linear-gradient(90deg,var(--line),transparent)}
 
 .features{display:grid; grid-template-columns:repeat(auto-fit,minmax(340px,1fr)); gap:14px}
-.feat{display:grid; grid-template-columns:96px minmax(0,1fr); gap:18px; align-items:center;
+.feat{display:grid; grid-template-columns:minmax(0,1fr); gap:18px; align-items:center;
  background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:16px 20px}
-.feat img{width:96px; aspect-ratio:1; border-radius:50%; object-fit:cover; object-position:center 22%;
- border:1px solid rgba(212,175,106,.45)}
 .feat .k{font-size:.66rem; letter-spacing:.16em; text-transform:uppercase; color:var(--gold)}
 .feat .ttl{font-family:var(--disp); font-size:1.1rem; margin:2px 0 3px}
 .feat .ttl .cop{color:var(--gold-soft); margin-right:.35em}
@@ -335,7 +334,7 @@ def build_index():
  <section class="hero">
   <div>
    <div class="eyebrow">Nag Hammadi Codices I–XIII</div>
-   <h1><span class="cop">ⲛⲁⲅ ϩⲁⲙⲙⲁⲇⲓ</span>{tri("ナグ・ハマディ写本コーパス", "The Nag Hammadi Library", "La bibliothèque de Nag Hammadi")}</h1>
+   <h1><span class="cop">ϣⲉⲛⲉⲥⲏⲧ</span>Sheneset<span class="tag">{tri("ナグ・ハマディ写本コーパス", "A digital TEI edition of the Nag Hammadi Codices", "Édition numérique TEI des codices de Nag Hammadi")}</span></h1>
    <p class="lead">{tri(
      f"ナグ・ハマディ写本(全13冊・約{TOTAL}文書)を、<b>形態素グロス・コプト語辞書・神学注釈・日英仏訳</b>を備えた TEI&nbsp;P5 デジタル版として整備するプロジェクトです。各語をクリックすると語義が表示され、写本どうしの対照、注釈の併読ができます。",
      f"A digital TEI&nbsp;P5 edition of the Nag Hammadi Codices (13 codices, some {TOTAL} tractates), with <b>morpheme-level glosses, a Coptic lexicon, theological notes and Japanese, English and French translations</b>. Click any word for its sense, compare the manuscript witnesses side by side and read the commentary alongside the text.",
@@ -346,13 +345,12 @@ def build_index():
      <a href="#corpus">{tri("文書一覧へ ↓", "Browse the codices ↓", "Parcourir les codices ↓")}</a>
    </div>
   </div>
-  <img class="hero-fig" src="image/web/aion.jpg" alt="" loading="lazy">
+  <img class="hero-fig" src="image/web/gengen.svg" alt="" loading="lazy">
  </section>
 
  <div class="sec-h"><h2>{tri("公開中のテキスト", "Published texts", "Textes publiés")}</h2><span class="rule"></span></div>
  <div class="features">
    <div class="feat">
-     <img src="image/web/icon-pleroma.svg" alt="" loading="lazy">
      <div>
        <div class="k">NHC III,3 / V,1</div>
        <div class="ttl"><span class="cop">ⲉⲩⲅⲛⲱⲥⲧⲟⲥ</span>{tri("エウグノストス", "Eugnostos", "Eugnoste")}</div>
@@ -368,7 +366,6 @@ def build_index():
      </div>
    </div>
    <div class="feat">
-     <img src="image/web/scriber.jpg" alt="" loading="lazy">
      <div>
        <div class="k">NHC VI,5</div>
        <div class="ttl"><span class="cop">ⲡⲟⲗⲓⲧⲉⲓⲁ</span>{tri("プラトン『国家』588b–589b", "Plato, <i>Republic</i> 588b–589b", "Platon, <i>République</i> 588b–589b")}</div>
@@ -467,10 +464,10 @@ fetch('data/links.json',{{cache:'no-store'}}).then(r=>r.ok?r.json():Promise.reje
 </script>
 """
     return ("<!doctype html><html lang=\"ja\" data-lang=\"ja\" data-i18n=\"full\" data-mode=\"aeon\""
-            " data-title-en=\"The Nag Hammadi Library — a digital TEI edition\""
-            " data-title-fr=\"La bibliothèque de Nag Hammadi — édition numérique TEI\"><head><meta charset=\"utf-8\">"
+            " data-title-en=\"Sheneset — a digital TEI edition of the Nag Hammadi Codices\""
+            " data-title-fr=\"Sheneset — édition numérique TEI des codices de Nag Hammadi\"><head><meta charset=\"utf-8\">"
             "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
-            "<title>ナグ・ハマディ写本コーパス — The Nag Hammadi Library</title>"
+            "<title>Sheneset — ナグ・ハマディ写本コーパス</title>"
             "<meta name=\"description\" content=\"ナグ・ハマディ写本のTEI P5デジタル版（コプト語本文・形態素グロス・辞書・注釈・日英仏訳）/ A digital TEI edition of the Nag Hammadi Codices.\">"
             f"{FONTS}<style>{THEME}{INDEX_CSS}</style></head><body>{body}</body></html>")
 
@@ -533,7 +530,7 @@ if(!t){
    <div class="soon"><span class="dot"></span> ${tri('このテキストは整備予定です（準備中）','This text is in preparation','Ce texte est en préparation')}</div>
    <div class="rail"><i></i><i></i><i></i><i></i><i></i></div>
    <div class="card">
-     <img src="image/web/chibi_ouroboros.jpg" alt="" loading="lazy"
+     <img src="image/web/gengen_sleep.svg" alt="" loading="lazy"
        style="float:right; width:110px; aspect-ratio:1; border-radius:50%; object-fit:cover; object-position:center 22%; border:1px solid rgba(212,175,106,.45); margin:0 0 10px 14px">
      <h2>${tri('完成時に備わる構成','What the finished edition will offer','Ce que l’édition offrira')}</h2>
      <p>${tri('本文書は本コーパスの拡張対象です。完成時には<b>エウグノストスと同一の構成</b>で公開され、同じビュワーで形態素クリック・三言語切替・注釈の併読ができるようになります。',
@@ -556,7 +553,7 @@ if(!t){
     body = body.replace("__CATALOG__", json.dumps(cat, ensure_ascii=False))
     return ("<!doctype html><html lang=\"ja\" data-lang=\"ja\" data-i18n=\"full\" data-mode=\"aeon\"><head><meta charset=\"utf-8\">"
             "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
-            "<title>準備中 — ナグ・ハマディ写本コーパス</title>"
+            "<title>準備中 — Sheneset</title>"
             f"{FONTS}<style>{css}</style></head><body>{body}</body></html>")
 
 # --- write ------------------------------------------------------------------

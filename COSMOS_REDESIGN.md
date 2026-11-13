@@ -55,3 +55,18 @@
   旧 `scripts/make_favicons.py`（cairo依存のため update_icon.py に置換）、
   未使用の `image/web/*.jpg`（使用中の5枚のみ残置。元PNGは `image/` にあるので
   必要になれば再生成可能）。
+
+## サイト名を Sheneset に変更、キャラクター画像をゲンゲンに統一（2026-11-13 更新）
+
+サイト名を「Sheneset」（ϣⲉⲛⲉⲥⲏⲧ）に変更し、サイトの画像をマスコットのゲンゲン（エジプトガン配色のガチョウ、SVG）に差し替えました。
+
+- サイト名: ヘッダーのロゴ（`assets/site.js`）、各ページの `<title>`・`data-title-*`、トップの見出し、フッター、プライバシーポリシー・利用規約、引用表記を変更。GitHub のリポジトリ名と公開 URL は従来のまま
+- 「プロジェクトについて」（`project.html`）に「サイト名とマスコット」の節を追加
+- `image/web/gengen.svg`（基本ポーズ）: トップのヒーロー画像（旧アイオーン）
+- `image/web/gengen_smile.svg`: 「グノーシス主義とは」冒頭の画像（旧アイオーン、日英仏3か所）
+- `image/web/gengen_honk.svg`: 同ページの神話の図（旧デーミウルゴス、日英仏3か所）
+- `image/web/gengen_sleep.svg`: 準備中ページの画像（旧ウロボロス）
+- `image/icon.svg`: サイトアイコン（ファビコン・ヘッダーのロゴ）。`update_icon.py` で反映済み
+- トップ「公開中のテキスト」のカード左の画像は削除し、カードは文字だけの1カラムに変更
+- `scripts/update_icon.py` の埋め込み更新対象に `stats.html` を追加（手作業管理4ページ）
+- 旧キャラクター画像（`image/web/` の jpg・png）はどこからも参照されていませんが、ファイルは残しています
