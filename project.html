@@ -137,7 +137,7 @@ html[data-lang="ja"] .member .nm{font-family:"Noto Serif JP",serif}
 
   /* 引用表記（閲覧日は今日の日付） */
   const today=new Date().toISOString().slice(0,10);
-  const url=location.origin && location.origin.startsWith("http") ? location.origin+"/" : "https://nag-hammadi-library.vercel.app/";
+  const url=location.origin && location.origin.startsWith("http") ? location.origin+"/" : "https://sheneset.vercel.app/";
   document.getElementById("citeBox").innerHTML=
     `<span class="l-ja">生田目心愛 編『Sheneset：ナグ・ハマディ写本コーパス』2026年–. ${esc(url)}（${today} 閲覧）</span>`+
     `<span class="l-en">Kokoa Nabatame (ed.), <i>Sheneset: A Digital TEI Edition of the Nag Hammadi Codices</i>, 2026–. ${esc(url)} (accessed ${today}).</span>`+

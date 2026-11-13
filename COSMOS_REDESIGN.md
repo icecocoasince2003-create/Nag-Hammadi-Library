@@ -66,7 +66,7 @@
 - `image/web/gengen_smile.svg`: 「グノーシス主義とは」冒頭の画像（旧アイオーン、日英仏3か所）
 - `image/web/gengen_honk.svg`: 同ページの神話の図（旧デーミウルゴス、日英仏3か所）
 - `image/web/gengen_sleep.svg`: 準備中ページの画像（旧ウロボロス）
-- `image/icon.svg`: サイトアイコン（ファビコン・ヘッダーのロゴ）。`update_icon.py` で反映済み
+- `image/icon.svg`: サイトアイコン（ファビコン・ヘッダーのロゴ）はマスコットにせず、以前のアイコン（`image/web/icon.svg`）をもとに描き直したもの（尾をくわえたウロボロスの環と八芒星）。`update_icon.py` で反映済み
 - トップ「公開中のテキスト」のカード左の画像は削除し、カードは文字だけの1カラムに変更
 - `scripts/update_icon.py` の埋め込み更新対象に `stats.html` を追加（手作業管理4ページ）
 - 旧キャラクター画像（`image/web/` の jpg・png）はどこからも参照されていませんが、ファイルは残しています

@@ -60,9 +60,9 @@ Google だけにしたい場合は `assets/community-config.js` の `providers.e
 
 Supabase の **Authentication → URL Configuration**:
 
-- **Site URL**: `https://nag-hammadi-library.vercel.app`（公開 URL）
+- **Site URL**: `https://sheneset.vercel.app`（公開 URL）
 - **Redirect URLs** に追加:
-  - `https://nag-hammadi-library.vercel.app/**`
+  - `https://sheneset.vercel.app/**`
   - ローカル確認用に `http://localhost:8000/**` など
 
 ## 5. サイトに接続する
