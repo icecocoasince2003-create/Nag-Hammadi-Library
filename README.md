@@ -13,7 +13,9 @@
 | `gnosticism.html` | 解説「グノーシス主義とは」（日・英・仏） | 手作業 |
 | `project.html` | プロジェクト紹介。メンバー・資金協力は `data/project.json`（`public: true` のみ表示） | 手作業＋JSON |
 | `eugnostos.html` | エウグノストス。`?wit=III`（祝福されたエウグノストス）/ `?wit=V`（エウグノストス）/ `?wit=SYN`（対照） | 手作業 |
-| `republic.html` / `search.html` / `stats.html` | 『国家』ビュワー / コーパス検索 / コーパス統計 | 手作業 |
+| `republic.html` | 『国家』ビュワー | 手作業 |
+| `search.html` | コーパス検索・統計。見出し下のタブで〈検索〉と〈統計〉を切替（`?view=stats` で統計を直接開く）。左の〈文書〉〈品詞〉の絞り込みは両方に共通。統計のセクションは JS 内の `SECTIONS` に追加 | 手作業 |
+| `stats.html` | 旧コーパス統計。`search.html?view=stats` への転送のみ（`?doc=…` は引き継ぐ） | 手作業 |
 | `admin.html` | 投稿（コメント・注釈・誤りの指摘）の承認（運営用） | 手作業 |
 
 共通部品: `assets/site.css`・`assets/site.js`（上部ナビ・言語切替・XML ダウンロードメニュー・ワイド表示）、

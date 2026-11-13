@@ -402,7 +402,7 @@ html[data-tl="en"] .endnotes .note p.ja{display:none}
         <button class="chip" id="langBtn" title="Language / 言語">English</button>
       </div>
       <div class="nav-ctl">
-        <a class="chip statslink" href="stats.html?doc=republic" title="コーパス統計 / Corpus statistics">∑ <span class="l-ja">統計</span><span class="l-en">Stats</span></a>
+        <a class="chip statslink" href="search.html?doc=republic&amp;view=stats" title="コーパス統計 / Corpus statistics">∑ <span class="l-ja">統計</span><span class="l-en">Stats</span></a>
         <a class="chip searchlink" href="search.html?doc=republic" title="コーパス検索 / Corpus search">⌕ <span class="l-ja">コーパス検索</span><span class="l-en">Corpus search</span></a>
         <button class="chip" id="relBtn" title="関連文書・リソース / Related documents &amp; resources"><span class="l-ja">⇄ 関連</span><span class="l-en">⇄ Related</span></button>
         <button class="chip" id="modeBtn" aria-pressed="false" title="表示モード / Display mode">◐ アイオーン</button>
@@ -1014,8 +1014,8 @@ function loanCount(){ return SEGS_III.reduce((a,s)=>a+s.words.filter(w=>w.grc).l
 function relabelLoan(){ const e=$("#loanN"); if(e){ const n=loanCount(); e.textContent=n?(" "+n):""; } }
 
 /* ---------- statistics ---------- */
-/* コーパス統計は stats.html?doc=… に移設（ヘッダの〈統計〉リンク）。
-   集計ロジックは stats.html 側で TEI を直接読み込んで再実装しています。 */
+/* コーパス統計は search.html（コーパス検索・統計）の〈統計〉ビューに統合（ヘッダの〈統計〉リンク → search.html?doc=…&view=stats）。
+   集計ロジックは search.html 側で TEI を直接読み込んで再実装しています。 */
 
 /* ---------- related panel (data/catalog.xml) ---------- */
 function catTitle(b, lang){

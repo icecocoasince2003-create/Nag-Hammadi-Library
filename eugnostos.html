@@ -332,7 +332,7 @@ html[data-lang="en"] .l-en{display:revert}
         <button class="chip" id="langBtn" title="Language / 言語">English</button>
       </div>
       <div class="nav-ctl">
-        <a class="chip statslink" href="stats.html?doc=eugnostos" title="コーパス統計 / Corpus statistics">∑ <span class="l-ja">統計</span><span class="l-en">Stats</span></a>
+        <a class="chip statslink" href="search.html?doc=eugnostos&amp;view=stats" title="コーパス統計 / Corpus statistics">∑ <span class="l-ja">統計</span><span class="l-en">Stats</span></a>
         <a class="chip searchlink" href="search.html?doc=eugnostos" title="コーパス検索 / Corpus search">⌕ <span class="l-ja">コーパス検索</span><span class="l-en">Corpus search</span></a>
         <div class="xmlmenu">
           <button class="chip xmlmenu-btn" id="xmlBtn" aria-haspopup="true" aria-expanded="false" title="このページが参照している XML をダウンロード / Download the XML used by this page">⤓ XML</button>
@@ -905,8 +905,8 @@ function loanCount(){ const segs = curWit==="V"?SEGS_V:SEGS_III; return segs.red
 function relabelLoan(){ const e=$("#loanN"); if(e){ const n=loanCount(); e.textContent=n?(" "+n):""; } }
 
 /* ---------- statistics ---------- */
-/* コーパス統計は stats.html?doc=… に移設（ヘッダの〈統計〉リンク）。
-   集計ロジックは stats.html 側で TEI を直接読み込んで再実装しています。 */
+/* コーパス統計は search.html（コーパス検索・統計）の〈統計〉ビューに統合（ヘッダの〈統計〉リンク → search.html?doc=…&view=stats）。
+   集計ロジックは search.html 側で TEI を直接読み込んで再実装しています。 */
 const LANG_CYCLE=["ja","en","fr"];
 /* ---- UI i18n helpers ---- */
 function UL(){ return H.getAttribute("data-lang")==="en"?"en":"ja"; }

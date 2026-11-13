@@ -362,7 +362,7 @@ def build_index():
         <a href="eugnostos.html?wit=V">{tri("V,1 を読む", "Read V,1", "Lire V,1")}</a>
         <a href="eugnostos.html?wit=SYN">{tri("対照表示", "Synopsis", "Synopse")}</a>
         <a href="search.html?doc=eugnostos">{tri("検索", "Search", "Recherche")}</a>
-        <a href="stats.html?doc=eugnostos">{tri("統計", "Statistics", "Statistiques")}</a></div>
+        <a href="search.html?doc=eugnostos&amp;view=stats">{tri("統計", "Statistics", "Statistiques")}</a></div>
      </div>
    </div>
    <div class="feat">
@@ -372,7 +372,7 @@ def build_index():
        <div class="loc">{tri("ギリシア語原文対照・IIIFファクシミリ", "Greek parallel text · IIIF facsimile", "Texte grec en regard · fac-similé IIIF")}</div>
        <div class="acts"><a class="go" href="republic.html">{tri("全文を読む →", "Read the text →", "Lire le texte →")}</a>
         <a href="search.html?doc=republic">{tri("検索", "Search", "Recherche")}</a>
-        <a href="stats.html?doc=republic">{tri("統計", "Statistics", "Statistiques")}</a></div>
+        <a href="search.html?doc=republic&amp;view=stats">{tri("統計", "Statistics", "Statistiques")}</a></div>
      </div>
    </div>
  </div>
