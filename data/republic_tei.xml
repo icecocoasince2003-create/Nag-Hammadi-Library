@@ -6,8 +6,7 @@
         <title>Plato, Republic 588B–589B (NHC VI,5) — Coptic with JA/EN/Greek parallel</title>
       </titleStmt>
       <publicationStmt>
-        <p>Working file. Coptic = public domain; Japanese = this project (CC BY 4.0);
-        English = J. Brashler, The Nag Hammadi Library in English (HarperCollins 1990, under copyright — working reference);
+        <p>Working file. Coptic = public domain; Japanese and English translations = this project (CC BY 4.0);
         Greek = Plato, Republic (OCT/Burnet, public domain) — first-pass alignment, to verify.</p>
       </publicationStmt>
       <sourceDesc>
@@ -15,12 +14,8 @@
           <bibl xml:id="src_cop">
             <author>Plato</author>
             <title level="a">Plato, Republic 588B–589B (NHC VI,5)</title>
-            <editor role="translator">James Brashler</editor>
-            <title level="m">The Nag Hammadi Library in English</title>
-            <edition>revised</edition>
-            <publisher>HarperCollins</publisher>
-            <date>1990</date>
             <idno type="NHC">VI,5</idno>
+            <citedRange>48,16–51,23</citedRange>
           </bibl>
           <bibl xml:id="src_grc">
             <author>Plato</author>
@@ -39,12 +34,15 @@
         <language ident="grc">Ancient Greek</language>
       </langUsage>
     </profileDesc>
+    <revisionDesc>
+      <change when="2026-11-12">English translation (@transEn) replaced throughout with this project’s own translation, aligned with the Japanese.</change>
+    </revisionDesc>
   </teiHeader>
   <text type="witness" xml:id="wit-rep" n="NHC VI,5" xml:lang="cop">
     <body>
       <div type="tractate" n="Republic" subtype="codexVI">
         <head xml:lang="en">Plato, Republic 588b–589b — Nag Hammadi Codex VI,5</head>
-        <s xml:id="rep-1" n="1" transJa="さて、議論がこの段階に至ったからには、" transEn="Since we have come to this point in a discussion,">
+        <s xml:id="rep-1" n="1" transJa="さて、議論がこの段階に至ったからには、" transEn="Now, since our argument has reached this stage,">
           <p n="48"/>
           <lb n="16"/>
           <phy>
@@ -70,7 +68,7 @@
             <w type="N" lemma="ⲙⲁ" gloss="part">ⲙⲁ</w>
           </phy>
         </s>
-        <s xml:id="rep-2" n="2" transJa="われわれに語られた最初のことを改めて取り上げよう。" transEn="let us again take up the first things that were said to us.">
+        <s xml:id="rep-2" n="2" transJa="われわれに語られた最初のことを改めて取り上げよう。" transEn="let us go back once more to what we were told at the start.">
           <phy>
             <w type="AOPT" lemma="ⲙⲁⲣⲉ">ⲙⲁⲣ</w>
             <w type="PPER" lemma="ⲁⲛⲟⲛ" gloss="we">ⲛ</w>
@@ -101,7 +99,7 @@
             <w type="PPER" lemma="ⲛ" gloss="us">ⲛ</w>
           </phy>
         </s>
-        <s xml:id="rep-3" n="3" transJa="そしてわれわれは彼が次のように言っていることに気づくだろう。" transEn="And we will find that he says,">
+        <s xml:id="rep-3" n="3" transJa="そしてわれわれは彼が次のように言っていることに気づくだろう。" transEn="And we shall find him saying this:">
           <phy>
             <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
           </phy>
@@ -125,7 +123,7 @@
             <w type="PPER" lemma="ⲥ" gloss="it">ⲥ</w>
           </phy>
         </s>
-        <s xml:id="rep-4" n="4" transJa="「まったく不正を受けた者は幸いである。" transEn="'Good is he who has been done injustice completely.">
+        <s xml:id="rep-4" n="4" transJa="「まったく不正を受けた者は幸いである。" transEn="“Blessed is the one who has been utterly wronged.">
           <phy>
             <w type="CONJ" lemma="ϫⲉ" gloss=":">ϫⲉ</w>
           </phy>
@@ -149,7 +147,7 @@
             <w type="ADV" lemma="ⲧⲉⲗⲉⲱⲥ" gloss="completely" xml:lang="grc">ⲧⲉⲗⲉ<lb n="22" break="no"/>ⲱⲥ</w>
           </phy>
         </s>
-        <s xml:id="rep-5" n="5" transJa="彼は正しく称えられる。」" transEn="He is glorified justly.'">
+        <s xml:id="rep-5" n="5" transJa="彼は正しく称えられる。」" transEn="He is rightly held in honour.”">
           <phy>
             <w type="A" lemma="ϣⲁⲣⲉ" gloss="(habit)">ϣⲁ</w>
             <w type="PPER" lemma="ϥ" gloss="he">ϥ</w>
@@ -162,7 +160,7 @@
             <w type="ADV" lemma="ⲇⲓⲕⲁⲓⲱⲥ" gloss="justly" xml:lang="grc">ⲇⲓⲕⲁⲓⲱⲥ</w>
           </phy>
         </s>
-        <s xml:id="rep-6" n="6" transJa="これが彼を責めた言い方ではなかったか？" transEn="Is not this how he was reproached?">
+        <s xml:id="rep-6" n="6" transJa="これが彼を責めた言い方ではなかったか？" transEn="Was this not the way in which he was rebuked?">
           <lb n="23"/>
           <phy>
             <w type="PTC" lemma="ⲙⲏ" gloss="not" xml:lang="grc">ⲙⲏ</w>
@@ -190,7 +188,7 @@
             <w type="PPER" lemma="ϥ" gloss="he">ϥ</w>
           </phy>
         </s>
-        <s xml:id="rep-7" n="7" transJa="「それはたしかに適切な言い方だ！」" transEn='"This is certainly the fitting way!"'>
+        <s xml:id="rep-7" n="7" transJa="「それはたしかに適切な言い方だ！」" transEn="“Indeed, that is the proper way to put it!”">
           <phy>
             <w type="PDEM" lemma="ⲧⲁⲓ" gloss="this">ⲧⲉⲓ</w>
           </phy>
@@ -215,7 +213,7 @@
             <w type="V" lemma="ϣϣⲉ" gloss="it is fitting">ϣϣⲉ</w>
           </phy>
         </s>
-        <s xml:id="rep-8" n="8" transJa="そして私は言った。「では今こそ、" transEn='And I said: "Now then,'>
+        <s xml:id="rep-8" n="8" transJa="そして私は言った。「では今こそ、" transEn="And I said, “Well then, now —">
           <phy>
             <w type="VBD" lemma="ⲡⲉϫⲁ" gloss="say">ⲡⲉϫⲁ</w>
             <w type="PPER" lemma="ⲓ" gloss="I">ⲓ</w>
@@ -238,13 +236,13 @@
             <w type="PTC" lemma="ϭⲉ">ϭⲉ</w>
           </phy>
         </s>
-        <s xml:id="rep-9" n="9" transJa="われわれは語ってきた——" transEn="we have spoken">
+        <s xml:id="rep-9" n="9" transJa="われわれは語ってきた——" transEn="we have been speaking —">
           <phy>
             <w type="PPER" lemma="ⲁⲛⲟⲛ" gloss="we">ⲁⲛ</w>
             <w type="V" lemma="ϣⲁϫⲉ" gloss="speak">ϣⲁϫⲉ</w>
           </phy>
         </s>
-        <s xml:id="rep-10" n="10" transJa="彼が「不正を行なう者は" transEn="because he said that he who does injustice">
+        <s xml:id="rep-10" n="10" transJa="彼が「不正を行なう者は" transEn="since he said, ‘The one who acts unjustly">
           <phy>
             <w type="CONJ" lemma="ⲉⲡⲓⲇⲏ" gloss="because" xml:lang="grc">ⲉⲡⲓⲇⲏ</w>
           </phy>
@@ -272,7 +270,7 @@
             <w type="N" lemma="ϭⲟⲛⲥ" gloss="injustice">ϭⲟⲛⲥ</w>
           </phy>
         </s>
-        <s xml:id="rep-11" n="11" transJa="そして正義を行なう者は、それぞれに力を持つ」と言ったからである。」" transEn="and he who does justice">
+        <s xml:id="rep-11" n="11" transJa="そして正義を行なう者は、それぞれに力を持つ」と言ったからである。」" transEn="and the one who acts justly —">
           <phy>
             <w type="CONJ" lemma="ⲙⲛ" gloss="and">ⲙⲛ</w>
           </phy>
@@ -285,7 +283,7 @@
             <w type="N" lemma="ⲇⲓⲕⲁⲓⲟⲛ" gloss="justice" xml:lang="grc">ⲇⲓⲕⲁⲓ<lb n="29" break="no"/>ⲟⲛ</w>
           </phy>
         </s>
-        <s xml:id="rep-12" n="12" transJa="「それぞれが力を備えているのだ」。" transEn='each has a force."'>
+        <s xml:id="rep-12" n="12" transJa="「それぞれが力を備えているのだ」。" transEn="each of them has power.’”">
           <phy>
             <w type="ART" lemma="ⲡ" gloss="the">ⲡ</w>
             <w type="N" lemma="ⲟⲩⲁ" gloss="one">ⲟⲩⲁ</w>
@@ -304,7 +302,7 @@
             <w type="N" lemma="ϭⲟⲙ" gloss="force">ϭⲟⲙ</w>
           </phy>
         </s>
-        <s xml:id="rep-13" n="13" transJa="「ではどうか」。彼は言った——「似たもののない像こそ、魂の理性(ロゴス)である」、" transEn="&quot;How then?&quot; &quot;He said, 'An image that has no likeness is the rationality of the soul,'">
+        <s xml:id="rep-13" n="13" transJa="「ではどうか」。彼は言った——「似たもののない像こそ、魂の理性(ロゴス)である」、" transEn="“In what way, then?” He said, “It is an image without likeness that is the reason (logos) of the soul,”">
           <phy>
             <w type="PREP" lemma="ⲛ">ⲛ</w>
             <w type="PINT" lemma="ⲁϣ" gloss="whatever">ⲁϣ</w>
@@ -349,7 +347,7 @@
             <w type="N" lemma="ⲯⲩⲭⲏ" gloss="soul" xml:lang="grc">ⲯⲩⲭⲏ</w>
           </phy>
         </s>
-        <s xml:id="rep-14" n="14" transJa="これらのことを語った者が理解するために。彼は 〔……〕あるいはそうでないか？われわれは〔……〕私にとって。" transEn="so that he who said these things will understand. He [...] or not? We [...] is for me.">
+        <s xml:id="rep-14" n="14" transJa="これらのことを語った者が理解するために。彼は 〔……〕あるいはそうでないか？われわれは〔……〕私にとって。" transEn="so that the one who spoke these words may come to understand. He […] — or is it not so? We […] for me.">
           <lb n="33"/>
           <phy>
             <w type="CONJ" lemma="ϫⲉⲕⲁⲁⲥ" gloss="so that">ϫⲉⲕⲁⲁⲥ</w>
@@ -422,7 +420,7 @@
             <w type="PPER" lemma="ⲁⲛⲟⲕ">ⲓ</w>
           </phy>
         </s>
-        <s xml:id="rep-15" n="15" transJa="しかしすべて〔……〕それらを語った者〔……〕支配者——" transEn="But all [...] who told them [...] ruler,">
+        <s xml:id="rep-15" n="15" transJa="しかしすべて〔……〕それらを語った者〔……〕支配者——" transEn="But all […] the one who spoke them […] ruler (archon) —">
           <phy>
             <w type="PTC" lemma="ⲁⲗⲗⲁ" gloss="but" xml:lang="grc">ⲁⲗⲗⲁ</w>
           </phy>
@@ -449,7 +447,7 @@
             <w type="NPROP" lemma="ⲁⲣⲭⲱⲛ" gloss="ruler" xml:lang="grc">ⲁⲣⲭⲱⲛ</w>
           </phy>
         </s>
-        <s xml:id="rep-16" n="16" transJa="これらは今や、本性として生じた生き物となっている。" transEn="these now have become natural creatures">
+        <s xml:id="rep-16" n="16" transJa="これらは今や、本性として生じた生き物となっている。" transEn="These are now living beings that came into existence by nature.">
           <phy>
             <w type="PDEM" lemma="ⲛⲁⲓ" gloss="these">ⲛⲁⲓ</w>
           </phy>
@@ -469,7 +467,7 @@
             <w type="N" lemma="ⲫⲩⲥⲓⲥ" gloss="creatures" xml:lang="grc">ⲫⲩⲥⲓⲥ</w>
           </phy>
         </s>
-        <s xml:id="rep-17" n="17" transJa="キマイラやケルベロス、そして言及されたそのほか全てのものさえも。" transEn="even Chimaera, and Cerberus, and all the rest that were mentioned.">
+        <s xml:id="rep-17" n="17" transJa="キマイラやケルベロス、そして言及されたそのほか全てのものさえも。" transEn="So too the Chimera and Cerberus, and all the others that were spoken of.">
           <phy>
             <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
           </phy>
@@ -514,7 +512,7 @@
             <w type="PPER" lemma="ⲟⲩ">ⲟⲩ</w>
           </phy>
         </s>
-        <s xml:id="rep-18" n="18" transJa="それらはみな降りてきて、形と像を脱ぎ捨てた。" transEn="They all came down and they cast off forms and images.">
+        <s xml:id="rep-18" n="18" transJa="それらはみな降りてきて、形と像を脱ぎ捨てた。" transEn="All of them descended and shed shapes and images.">
           <phy>
             <w type="APST" lemma="ⲁ">ⲁ</w>
             <w type="PPER" lemma="ⲩ">ⲩ</w>
@@ -551,7 +549,7 @@
             <w type="N" lemma="ⲉⲓⲛⲉ">ⲉⲓⲛⲉ</w>
           </phy>
         </s>
-        <s xml:id="rep-19" n="19" transJa="そしてそれらはみな、一つの像となった。" transEn="And they all became a single image.">
+        <s xml:id="rep-19" n="19" transJa="そしてそれらはみな、一つの像となった。" transEn="And all of them came to be one image.">
           <phy>
             <w type="PTC" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
           </phy>
@@ -573,7 +571,7 @@
             <w type="N" lemma="ⲟⲩⲱⲧ">ⲟⲩⲱⲧ</w>
           </phy>
         </s>
-        <s xml:id="rep-20" n="20" transJa="「さあ、造り上げよ」と言われた。" transEn="It was said, 'Work now!'">
+        <s xml:id="rep-20" n="20" transJa="「さあ、造り上げよ」と言われた。" transEn="“Come, fashion it,” it was said.">
           <phy>
             <w type="CCIRC" lemma="ⲉ">ⲉ</w>
             <w type="PPER" lemma="ⲩ">ⲩ</w>
@@ -597,7 +595,7 @@
             <w type="ADV" lemma="ⲧⲉⲛⲟⲩ">ⲧⲉ<lb n="16" break="no"/>ⲛⲟⲩ</w>
           </phy>
         </s>
-        <s xml:id="rep-21" n="21" transJa="たしかに、その像となったのは一つの像であり、" transEn="Certainly it is a single image that became the image">
+        <s xml:id="rep-21" n="21" transJa="たしかに、その像となったのは一つの像であり、" transEn="It is, to be sure, one image,">
           <phy>
             <w type="ART" lemma="ⲟⲩⲉⲓⲛⲉ">ⲟⲩ</w>
             <w type="N" lemma="ⲉⲓⲛⲉ">ⲉⲓⲛⲉ</w>
@@ -614,7 +612,7 @@
             <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
           </phy>
         </s>
-        <s xml:id="rep-22" n="22" transJa="それは、多くの頭を持つ入り組んだ獣の像となった。" transEn="that became the image gof a complex beast with many heads">
+        <s xml:id="rep-22" n="22" transJa="それは、多くの頭を持つ入り組んだ獣の像となった。" transEn="and it became the image of an intricate, many-headed beast.">
           <phy>
             <w type="PDEM" lemma="ⲡⲁⲓ">ⲡⲁⲓ</w>
           </phy>
@@ -652,7 +650,7 @@
             <w type="N" lemma="ⲁⲡⲉ" gloss="head">ⲁⲡⲉ</w>
           </phy>
         </s>
-        <s xml:id="rep-23" n="23" transJa="ある日には、それはまさに野獣の像のようである。" transEn="Some days indeed it is like the image of a wild beast.">
+        <s xml:id="rep-23" n="23" transJa="ある日には、それはまさに野獣の像のようである。" transEn="There are days when it is just like the image of a wild beast.">
           <lb n="20"/>
           <phy>
             <w type="ART" lemma="ϩⲉⲛ">ϩⲉⲛ</w>
@@ -687,7 +685,7 @@
             <w type="N" lemma="ⲁⲅⲣⲓⲟⲛ" gloss="wild" xml:lang="grc">ⲁⲅⲣⲓⲟⲛ</w>
           </phy>
         </s>
-        <s xml:id="rep-24" n="24" transJa="そのとき、それは最初の像を脱ぎ捨てることができる。" transEn="Then it is able to cast off the first image.">
+        <s xml:id="rep-24" n="24" transJa="そのとき、それは最初の像を脱ぎ捨てることができる。" transEn="At such a time it has the strength to throw off the first image.">
           <lb n="22"/>
           <phy>
             <w type="ADV" lemma="ⲧⲟⲧⲉ" xml:lang="grc">ⲧⲟⲧⲉ</w>
@@ -715,7 +713,7 @@
             <w type="N" lemma="ϣⲟⲣⲡ">ϣⲟⲣⲡ</w>
           </phy>
         </s>
-        <s xml:id="rep-25" n="25" transJa="そして、これらすべての困難、" transEn="And all these hard">
+        <s xml:id="rep-25" n="25" transJa="そして、これらすべての困難、" transEn="And all these figures that are harsh">
           <phy>
             <w type="PREP" lemma="ⲛⲧⲉ">ⲛⲧⲉ</w>
           </phy>
@@ -737,7 +735,7 @@
             <w type="V" lemma="ⲛⲁϣⲧ" gloss="be hard">ⲛⲁϣⲧ</w>
           </phy>
         </s>
-        <s xml:id="rep-26" n="26" transJa="そして、そこからは手強い諸形態が労苦とともに生じ出る、" transEn="and difficult forms emanate from it with effort,">
+        <s xml:id="rep-26" n="26" transJa="そして、そこからは手強い諸形態が労苦とともに生じ出る、" transEn="and grievous spring forth from it with toil,">
           <phy>
             <w type="CONJ" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
           </phy>
@@ -768,7 +766,7 @@
             <w type="N" lemma="ⲉⲣⲅⲟⲛ" gloss="creation" xml:lang="grc">ⲉⲣⲅⲟⲛ</w>
           </phy>
         </s>
-        <s xml:id="rep-27" n="27" transJa="これらが今や、傲慢のうちに形づくられるのだから。" transEn="since these are formed now with arrogance.">
+        <s xml:id="rep-27" n="27" transJa="これらが今や、傲慢のうちに形づくられるのだから。" transEn="since it is in arrogance that these are now being moulded.">
           <phy>
             <w type="CONJ" lemma="ⲉⲡⲓⲇⲏ" xml:lang="grc">ⲉⲡⲓⲇⲏ</w>
           </phy>
@@ -797,7 +795,7 @@
             <w type="N" lemma="ⲗⲁϩⲗⲉϩ" gloss="height">ⲗⲁϩⲗⲉϩ</w>
           </phy>
         </s>
-        <s xml:id="rep-28" n="28" transJa="またそれらに似た他のすべても、今や言葉によって形づくられる。" transEn="And also all the rest that are like them are formed now through the word.">
+        <s xml:id="rep-28" n="28" transJa="またそれらに似た他のすべても、今や言葉によって形づくられる。" transEn="So too all the others that resemble them are now being moulded by the word.">
           <phy>
             <w type="CONJ" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
           </phy>
@@ -841,7 +839,7 @@
             <w type="N" lemma="ϣⲁϫⲉ" gloss="word">ϣⲁϫⲉ</w>
           </phy>
         </s>
-        <s xml:id="rep-29" n="29" transJa="なぜなら今や、それは一つの像だからである。" transEn="For now it is a single image.">
+        <s xml:id="rep-29" n="29" transJa="なぜなら今や、それは一つの像だからである。" transEn="For it is now one image.">
           <phy>
             <w type="ADV" lemma="ⲧⲉⲛⲟⲩ" gloss="now">ⲧⲉⲛⲟⲩ</w>
           </phy>
@@ -860,7 +858,7 @@
             <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
           </phy>
         </s>
-        <s xml:id="rep-30" n="30" transJa="獅子の像と人間の像とは別物だからである。〔……〕唯一の〔……〕は〔……〕の〔……〕結合である。" transEn="For the image of the lion is one thing and the image of the man is another. [ ] single [ ] is the [ ] of [ ] join.">
+        <s xml:id="rep-30" n="30" transJa="獅子の像と人間の像とは別物だからである。〔……〕唯一の〔……〕は〔……〕の〔……〕結合である。" transEn="For the image of the lion and the image of the human being are different things. […] single […] is the […] of […] union.">
           <phy>
             <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
             <lb n="34"/>
@@ -921,7 +919,7 @@
             <w type="V" lemma="ⲧⲱⲱϭⲉ" gloss="be joined">ⲧⲱϭⲉ</w>
           </phy>
         </s>
-        <s xml:id="rep-31" n="31" transJa="そしてこれは〔……〕最初のものよりはるかに入り組んでいる。" transEn="And this [ ] much more complex than the first.">
+        <s xml:id="rep-31" n="31" transJa="そしてこれは〔……〕最初のものよりはるかに入り組んでいる。" transEn="And this one […] is far more intricate than the first.">
           <phy>
             <w type="CONJ" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
           </phy>
@@ -951,7 +949,7 @@
             <w type="N" lemma="ϣⲟⲣⲡ">ϣⲟⲣⲡ</w>
           </phy>
         </s>
-        <s xml:id="rep-32" n="32" transJa="「そして第二のものは小さい」。" transEn="And the second is small.'">
+        <s xml:id="rep-32" n="32" transJa="「そして第二のものは小さい」。" transEn="“And the second is a small one.”">
           <phy>
             <w type="CONJ" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
           </phy>
@@ -969,7 +967,7 @@
             <w type="N" lemma="ϣⲏⲙ" gloss="small">ϣⲙ</w>
           </phy>
         </s>
-        <s xml:id="rep-33" n="33" transJa="「それは形づくられた」。" transEn="'It has been formed.'">
+        <s xml:id="rep-33" n="33" transJa="「それは形づくられた」。" transEn="“It has been moulded.”">
           <phy>
             <w type="APST" lemma="ⲁ">ⲁ</w>
             <w type="PPER" lemma="ⲩ">ⲩ</w>
@@ -981,7 +979,7 @@
             <w type="PPER" lemma="ϥ">ϥ</w>
           </phy>
         </s>
-        <s xml:id="rep-34" n="34" transJa="「さあ、それらを互いに結び合わせ、一つのものとせよ——" transEn="'Now then, join them to each other and make them a single one">
+        <s xml:id="rep-34" n="34" transJa="「さあ、それらを互いに結び合わせ、一つのものとせよ——" transEn="“Come now, bind them to one another and make them one —">
           <lb n="6"/>
           <phy>
             <w type="ADV" lemma="ⲧⲉⲛⲟⲩ" gloss="now">ⲧⲉⲛⲟⲩ</w>
@@ -1018,7 +1016,7 @@
             <w type="N" lemma="ⲟⲩⲱⲧ">ⲟⲩⲱⲧ</w>
           </phy>
         </s>
-        <s xml:id="rep-35" n="35" transJa="——それらは三つあるのだから——" transEn="--for they are three--">
+        <s xml:id="rep-35" n="35" transJa="——それらは三つあるのだから——" transEn="— for there are three of them —">
           <phy>
             <w type="NUM" lemma="ϣⲟⲙⲛⲧ">ϣⲟⲙⲉⲧ</w>
           </phy>
@@ -1029,7 +1027,7 @@
             <w type="COP" lemma="ⲛⲉ">ⲛⲉ</w>
           </phy>
         </s>
-        <s xml:id="rep-36" n="36" transJa="それらが共に生い育ち、すべてが、人間の像を外側として、一つの像のうちに収まるように。" transEn="so that they grow together and all are in a single image outside of the image of the man">
+        <s xml:id="rep-36" n="36" transJa="それらが共に生い育ち、すべてが、人間の像を外側として、一つの像のうちに収まるように。" transEn="so that they grow up together and all are contained within one image, with the image of the human being on the outside.">
           <phy>
             <w type="CONJ" lemma="ϩⲱⲥⲧⲉ" gloss="so that" xml:lang="grc">ϩⲱⲥ<lb n="9" break="no"/>ⲧⲉ</w>
           </phy>
@@ -1081,7 +1079,7 @@
             <w type="N" lemma="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</w>
           </phy>
         </s>
-        <s xml:id="rep-37" n="37" transJa="ちょうど、自らの内なるものを見ることのできぬ者のように。" transEn="just like him who is unable to see the things inside him.">
+        <s xml:id="rep-37" n="37" transJa="ちょうど、自らの内なるものを見ることのできぬ者のように。" transEn="Just like someone who has no power to see what lies within him.">
           <phy>
             <w type="PREP" lemma="ⲛ">ⲛ</w>
             <w type="ART" lemma="ⲧ">ⲑ[ⲧ]</w>
@@ -1122,7 +1120,7 @@
             <w type="N" lemma="ϩⲟⲩⲛ">ϩⲟⲩⲛ</w>
           </phy>
         </s>
-        <s xml:id="rep-38" n="38" transJa="彼が見るのは、ただ外側にあるものだけである。" transEn="But what is outside only is what he sees.">
+        <s xml:id="rep-38" n="38" transJa="彼が見るのは、ただ外側にあるものだけである。" transEn="What he sees is only what lies outside.">
           <phy>
             <w type="CONJ" lemma="ⲁⲗⲗⲁ" xml:lang="grc">ⲁⲗⲗⲁ</w>
           </phy>
@@ -1146,7 +1144,7 @@
             <w type="PPER" lemma="ϥ">ϥ</w>
           </phy>
         </s>
-        <s xml:id="rep-39" n="39" transJa="そして、彼の像がいかなる生き物の内にあるのかは明らかであり、" transEn="And it is apparent what creature his image is in">
+        <s xml:id="rep-39" n="39" transJa="そして、彼の像がいかなる生き物の内にあるのかは明らかであり、" transEn="And it is plain in what sort of living being his image is found,">
           <lb n="16"/>
           <phy>
             <w type="CONJ" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
@@ -1178,7 +1176,7 @@
             <w type="N" lemma="ⲍⲱⲟⲛ" gloss="creature" xml:lang="grc">ⲍⲱⲟⲛ</w>
           </phy>
         </s>
-        <s xml:id="rep-40" n="40" transJa="また、彼が人間の像として形づくられたことも明らかである。" transEn="and that he was formed in a human image.">
+        <s xml:id="rep-40" n="40" transJa="また、彼が人間の像として形づくられたことも明らかである。" transEn="and plain, too, that he was moulded in the image of a human being.">
           <phy>
             <w type="CONJ" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
           </phy>
@@ -1210,7 +1208,7 @@
             <w type="N" lemma="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</w>
           </phy>
         </s>
-        <s xml:id="rep-41" n="41" transJa="そして私は、人にとって不正を行なうことに益があると説く者に向かって語った。" transEn="And I spoke to him who said that there is profit in the doing of injustice for the man.">
+        <s xml:id="rep-41" n="41" transJa="そして私は、人にとって不正を行なうことに益があると説く者に向かって語った。" transEn="And I addressed the one who maintains that acting unjustly brings profit to a human being.">
           <phy>
             <w type="V" lemma="ⲡⲉϫⲁ">ⲡⲉϫⲁ</w>
             <w type="PPER" lemma="ⲉⲓ">ⲉⲓ</w>
@@ -1251,7 +1249,7 @@
             <w type="N" lemma="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</w>
           </phy>
         </s>
-        <s xml:id="rep-42" n="42" transJa="不正を行なう者は、まことには益を得ず、" transEn="He who does injustice truly does not profit">
+        <s xml:id="rep-42" n="42" transJa="不正を行なう者は、まことには益を得ず、" transEn="For the one who acts unjustly there is in truth no profit,">
           <lb n="22"/>
           <phy>
             <w type="ART" lemma="ⲡ">ⲡ</w>
@@ -1286,7 +1284,7 @@
             <w type="NEG" lemma="ⲁⲛ">ⲁⲛ</w>
           </phy>
         </s>
-        <s xml:id="rep-43" n="43" transJa="利することもない。" transEn="nor does he benefit.">
+        <s xml:id="rep-43" n="43" transJa="利することもない。" transEn="nor does any benefit come to him.">
           <phy>
             <w type="CONJ" lemma="ⲟⲩⲧⲉ" xml:lang="grc">ⲟⲩⲧⲉ</w>
           </phy>
@@ -1303,7 +1301,7 @@
             <w type="ADV" lemma="ⲙⲙⲁⲩ">ⲙⲙⲁⲩ</w>
           </phy>
         </s>
-        <s xml:id="rep-44" n="44" transJa="彼にとって益となるのはこれである——すなわち、かの悪しき獣のあらゆる像を打ち倒し、" transEn="But what is profitable for him is this: that he cast down every image of the evil beast">
+        <s xml:id="rep-44" n="44" transJa="彼にとって益となるのはこれである——すなわち、かの悪しき獣のあらゆる像を打ち倒し、" transEn="What does profit him, rather, is this — to overthrow every image of that wicked beast">
           <phy>
             <w type="CONJ" lemma="ⲁⲗⲗⲁ" xml:lang="grc">ⲁⲗⲗⲁ</w>
           </phy>
@@ -1351,7 +1349,7 @@
             <w type="VSTAT" lemma="ϩⲟⲟⲩ">ⲑⲟⲟⲩ</w>
           </phy>
         </s>
-        <s xml:id="rep-45" n="45" transJa="それらを、獅子の像とともに踏みにじることである。" transEn="and trample them along with the images of the lion.">
+        <s xml:id="rep-45" n="45" transJa="それらを、獅子の像とともに踏みにじることである。" transEn="and to tread them underfoot together with the images of the lion.">
           <phy>
             <w type="CONJ" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
           </phy>
@@ -1373,7 +1371,7 @@
             <w type="N" lemma="ⲙⲟⲩⲓ">ⲙⲟⲩⲉⲓ</w>
           </phy>
         </s>
-        <s xml:id="rep-46" n="46" transJa="しかし内なる人間は、この点において弱さのうちにある。" transEn="But the man is in weakness in this regard.">
+        <s xml:id="rep-46" n="46" transJa="しかし内なる人間は、この点において弱さのうちにある。" transEn="But the inner human being lies in a weakness of this kind.">
           <lb n="29"/>
           <phy>
             <w type="ART" lemma="ⲡ">ⲡ</w>
@@ -1399,7 +1397,7 @@
             <w type="N" lemma="ⲙⲓⲛⲉ" gloss="sort">ⲙⲓⲛⲉ</w>
           </phy>
         </s>
-        <s xml:id="rep-47" n="47" transJa="そして、彼のなすことはすべて弱い。" transEn="And all the things that he does are weak.">
+        <s xml:id="rep-47" n="47" transJa="そして、彼のなすことはすべて弱い。" transEn="And everything he does is weak.">
           <phy>
             <w type="CONJ" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
           </phy>
@@ -1426,7 +1424,7 @@
             <w type="COP" lemma="ⲛⲉ">ⲛⲉ</w>
           </phy>
         </s>
-        <s xml:id="rep-48" n="48" transJa="その結果、彼はそれらと日々を共にする場所へと引き寄せられる。しかし彼は〔……〕敵意〔……〕を引き起こす。そして争いとともに、彼らは互いを貪り食う——" transEn="As a result he is drawn to the place where he spends the day with them. But he brings about [ ] enmity [ ]. And with strife they devour">
+        <s xml:id="rep-48" n="48" transJa="その結果、彼はそれらと日々を共にする場所へと引き寄せられる。しかし彼は〔……〕敵意〔……〕を引き起こす。そして争いとともに、彼らは互いを貪り食う——" transEn="Consequently he is pulled toward the place where he shares his days with them. Yet he stirs up […] enmity […]. And amid strife they devour —">
           <lb n="32"/>
           <phy>
             <w type="CONJ" lemma="ϩⲱⲥⲧⲉ" xml:lang="grc">ϩⲱⲥⲧⲉ</w>
@@ -1533,7 +1531,7 @@
             <w type="V" lemma="ⲟⲩⲱⲙ" gloss="eat, bite">ⲟⲩ<lb n="7" break="no"/>ⲱⲙ</w>
           </phy>
         </s>
-        <s xml:id="rep-49" n="49" transJa="——おのれら同士で、たがいを。" transEn="each other among themselves.">
+        <s xml:id="rep-49" n="49" transJa="——おのれら同士で、たがいを。" transEn="— one another, in their own midst.">
           <phy>
             <w type="PREP" lemma="ⲙⲛ">ⲙⲛ</w>
             <w type="PPOS" lemma="ⲛⲉⲩ">ⲛⲉⲩ</w>
@@ -1548,7 +1546,7 @@
             <w type="PPER" lemma="ⲟⲩ">ⲟⲩ</w>
           </phy>
         </s>
-        <s xml:id="rep-50" n="50" transJa="まことに、これらすべてのことを、彼は、不正を行なうことを称賛するすべての者に向かって語ったのである」。" transEn="Yes, all these things he said to everyone who praises the doing of injustice'.">
+        <s xml:id="rep-50" n="50" transJa="まことに、これらすべてのことを、彼は、不正を行なうことを称賛するすべての者に向かって語ったのである」。" transEn="Truly, it was to everyone who extols acting unjustly that he said all these things.”">
           <phy>
             <w type="PDEM" lemma="ⲛⲁⲓ">ⲛⲁⲓ</w>
           </phy>
@@ -1588,7 +1586,7 @@
             <w type="N" lemma="ϭⲟⲛⲥ">ϭⲟⲛⲥ</w>
           </phy>
         </s>
-        <s xml:id="rep-51" n="51" transJa="「では、正しく語る者にとっては益とならないのか」。" transEn="'Then is it not profitable for him who speaks justly?'">
+        <s xml:id="rep-51" n="51" transJa="「では、正しく語る者にとっては益とならないのか」。" transEn="“Does it not, then, profit the one who speaks with justice?”">
           <lb n="11"/>
           <phy>
             <w type="ADV" lemma="ⲟⲩⲕⲟⲩⲛ" gloss="therefore" xml:lang="grc">ⲟⲩⲕⲟⲩⲛ</w>
@@ -1624,7 +1622,7 @@
             <w type="PPER" lemma="ϥ">ϥ</w>
           </phy>
         </s>
-        <s xml:id="rep-52" n="52" transJa="「そして、もし彼がこれらを行ない、それらに即して語るなら、内なる人間のうちで、それらは堅く根を張る。" transEn="'And if he does these things and speaks in them, within the man they take hold firmly.">
+        <s xml:id="rep-52" n="52" transJa="「そして、もし彼がこれらを行ない、それらに即して語るなら、内なる人間のうちで、それらは堅く根を張る。" transEn="“And should he do these things and speak in keeping with them, they take firm root within the inner human being.">
           <phy>
             <w type="CONJ" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
           </phy>
@@ -1670,7 +1668,7 @@
             <w type="N" lemma="ⲧⲁϫⲣⲟ" gloss="firmness">ⲧⲁϫⲣⲟ</w>
           </phy>
         </s>
-        <s xml:id="rep-53" n="53" transJa="それゆえ彼はとりわけ、それらを世話することに努め、それらを養い育てる、" transEn="Therefore especially he strives to take core of them and he nourishes them,">
+        <s xml:id="rep-53" n="53" transJa="それゆえ彼はとりわけ、それらを世話することに努め、それらを養い育てる、" transEn="For this reason above all he takes pains to care for them, and he nurtures them,">
           <phy>
             <w type="PREP" lemma="ⲉⲧⲃⲉ">ⲉⲧⲃⲉ</w>
           </phy>
@@ -1704,7 +1702,7 @@
             <w type="PPER" lemma="ⲟⲩ">ⲟⲩ</w>
           </phy>
         </s>
-        <s xml:id="rep-54" n="54" transJa="ちょうど農夫が日々その作物を養い育てるように。" transEn="just as the farmer nourishes his produce daily.">
+        <s xml:id="rep-54" n="54" transJa="ちょうど農夫が日々その作物を養い育てるように。" transEn="just as a farmer nurtures his crops day by day.">
           <phy>
             <w type="PREP" lemma="ⲛ">ⲛ</w>
             <w type="ART" lemma="ⲧ">ⲑ[ⲧ]</w>
@@ -1736,7 +1734,7 @@
             <w type="N" lemma="ⲙⲏⲛⲉ" gloss="daily">ⲙⲏⲛⲉ</w>
           </phy>
         </s>
-        <s xml:id="rep-55" n="55" transJa="そして、野生の獣どもがそれの成長を妨げる」。" transEn="And the wild beasts keep it from frowing.'">
+        <s xml:id="rep-55" n="55" transJa="そして、野生の獣どもがそれの成長を妨げる」。" transEn="And the wild beasts hinder its growth.”">
           <phy>
             <w type="CONJ" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
           </phy>

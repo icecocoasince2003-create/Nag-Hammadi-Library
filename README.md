@@ -263,6 +263,19 @@ index.html(目次:全53文書)
 
 いずれも CC BY 4.0。本コーパスを公開する際は上記への帰属を併記してください。
 
+## ライセンス
+
+| 対象 | ライセンス |
+|---|---|
+| ソースコード（HTML のマークアップ・CSS・JavaScript、`assets/`、`scripts/` の Python、`supabase/schema.sql`） | [MIT License](LICENSE) |
+| 本プロジェクトが作成したデータとテキスト（`data/`・`source/` の TEI 符号化・対訳・語釈・辞書・注釈、ページ内の解説文） | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.ja) |
+| コプト語本文、プラトン『国家』のギリシア語本文（OCT/Burnet） | パブリックドメイン |
+| 第三者の資料（上記「辞書データの出典」の Coptic SCRIPTORIUM ほか、IIIF で表示する写本画像、外部のフォント・ライブラリ） | 各提供元の条件に従います |
+
+挿絵・アイコンなどの画像（`image/`）は本プロジェクトのオリジナル・アートワークで、上表のライセンスには含めていません。
+
+Code is released under the MIT License (see `LICENSE`). Data and texts created by the project are released under CC BY 4.0. The Coptic and Greek source texts are in the public domain.
+
 ## 参考文献
 
 - Douglas M. Parrott (ed.), *Nag Hammadi Codices III,3–4 and V,1 with Papyrus Berolinensis 8502,3:
@@ -278,7 +291,7 @@ index.html(目次:全53文書)
 - ビュワー: `republic.html`(eugnostos と同じデザイン／操作)。データ: `data/republic_tei.xml`(手編集する作業用TEI)。
 - 構造: `<ab>` 単位、`<seg type="coptic">` 内に `<phr>` で形態素をグループ化し各 `<w>`(`lemma`/`type`/`gloss`/`ref`)を保持、`<seg type="translation" xml:lang="en|ja">` に対訳を直書き。`<phr>` 内の `<w>` は表層形(例 `ⲁ-`, `ⲡⲓ-`, `ⲙⲙⲟ=ⲥ`)をそのまま連結表示。
 - 形態素クリックで品詞・英語語義・Coptic Dictionary へのリンク。行間グロス・日英訳切替・アイオーン/アルコーン対応。
-- **著作権**: コプト語本文(NHC VI,5)はパブリックドメイン。**日本語訳は本プロジェクトによる**。**英語訳は J. Brashler, _The Nag Hammadi Library in English_(rev. ed., HarperCollins 1990)に基づく作業用参照で、著作権があります**。公開サイトで英語訳をそのまま配信するのは権利上の懸念があるため、独自訳への置換を推奨します(日本語と同じく CC BY のオリジナル訳に)。
+- **著作権**: コプト語本文(NHC VI,5)はパブリックドメイン。**日本語訳・英語訳はいずれも本プロジェクトによる**(CC BY 4.0。英語訳は 2026-11 に本プロジェクトの独自訳へ置き換え済み)。
 
 
 ## プラトン『国家』 NHC VI,5 (republic.html) — 改訂
@@ -286,7 +299,7 @@ index.html(目次:全53文書)
 - `data/republic_tei.xml` を **eugnostos と同形式**に再構成: `<text type="witness" xml:id="wit-rep">` → `<s xml:id="rep-N" n="N" transJa="…" transEn="…" transGrc="…">` → `<phy>`（旧 `<phr>`）→ `<w type/lemma/gloss/xml:lang/ref>`。対訳は `<s>` の属性（transJa/transEn/transGrc）。
 - **ギリシア語層を追加**: `transGrc` に Plato, *Republic* 588b–589b（OCT/Burnet, パブリックドメイン）を一次整列で付与（象徴的な21/55セグメント）。**校訂版での検証・残りの整列はこれから**。
 - `republic.html` は **2カラム対訳**: 左にコプト語本文（形態素クリックで品詞・語義・辞書リンク）＋日英訳、**右にギリシア語**。ヘッダの「ギリシア語」ボタンで右ウィンドウの表示/非表示、「訳: 日/英」「語釈を重ねる」「アイオーン/アルコーン」対応。
-- **著作権**: コプト語＝PD、日本語＝本プロジェクト、英語＝Brashler 1990（著作権あり・作業用参照、公開時は独自訳推奨）、ギリシア語＝PD。
+- **著作権**: コプト語＝PD、日本語・英語＝本プロジェクト（CC BY 4.0）、ギリシア語＝PD。
 
 
 ## Republic: 辞書リンクを lexicon に分離（改訂）
