@@ -1,4 +1,5 @@
-<!-- 運営用：投稿（コメント・注釈・誤りの指摘）の承認ページ（手作業管理）。
+<!-- 運営用：投稿（コメント・注釈・誤りの指摘）の承認、公開済みの投稿への「修正の申請」の承認、
+     運営へのメッセージ（バグの報告・応援メッセージ）の確認を行うページ（手作業管理）。
      admins テーブルに登録されたアカウントでログインしたときだけ操作できます（権限はサーバ側の行レベルセキュリティで判定）。 -->
 <!DOCTYPE html>
 <html lang="ja" data-lang="ja" data-i18n="full" data-mode="aeon" data-title-en="Moderation — Sheneset" data-title-fr="Modération — Sheneset">
@@ -36,6 +37,22 @@ body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
 .q .open{font-size:.8rem; color:var(--lapis); text-underline-offset:4px}
 .q .st{font-size:.72rem; border:1px solid currentColor; border-radius:999px; padding:0 8px}
 .msg{color:var(--ink-faint); font-size:.9rem; padding:20px 0}
+.filters .sep{width:1px; align-self:center; height:14px; background:var(--line-2)}
+.q.k-bug{border-left-color:var(--rose)} .q.k-cheer{border-left-color:var(--gold)}
+.q .sugg b{color:var(--ink); font-weight:600}
+.q .tech{margin-top:4px; font-size:.76rem; color:var(--ink-faint); overflow-wrap:anywhere}
+.q .ghost{appearance:none; background:none; border:1px solid var(--line-2); border-radius:8px; padding:7px 13px; cursor:pointer; font:inherit; font-size:.82rem; color:var(--ink-soft)}
+.q .ghost:hover{border-color:var(--gold); color:var(--ink)}
+/* 修正の申請: 公開中の内容と修正後の内容を並べる */
+.cmp{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+@media(max-width:700px){ .cmp{grid-template-columns:1fr} }
+.cmp > div{border:1px solid var(--line); border-radius:8px; padding:10px 12px; background:rgba(0,0,0,.18); min-width:0}
+.cmp > div.new{border-color:rgba(212,175,106,.5)}
+.cmp-h{font-size:.68rem; letter-spacing:.08em; color:var(--ink-faint); margin-bottom:4px}
+.cmp > div.new .cmp-h{color:var(--gold-bright)}
+.cmp-h b{margin-left:.8em; color:var(--gold); font-weight:600}
+.banner{border-left:3px solid var(--rose); background:rgba(207,147,166,.08); border-radius:0 10px 10px 0; padding:10px 14px; margin:0 0 14px; font-size:.86rem; line-height:1.8; color:var(--ink-soft)}
+.banner code{color:var(--gold-bright)}
 </style>
 <link rel="stylesheet" href="assets/cosmos.css">
 <link rel="stylesheet" href="assets/site.css">
@@ -50,66 +67,144 @@ body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
 <main class="page">
   <div class="eyebrow">Moderation</div>
   <h1><span class="l-ja jp">投稿の承認</span><span class="l-en">Moderation</span><span class="l-fr">Modération</span></h1>
-  <p class="lede" style="font-size:.9rem"><span class="l-ja">コメント・注釈・誤りの指摘は「承認待ち」で届きます。内容を確認して〈承認〉すると公開され、〈却下〉すると投稿者本人にだけメモ付きで表示されます。</span><span class="l-en">Comments, annotations and corrections arrive as “pending”. Approve to publish; reject to keep it private (the author sees your note).</span><span class="l-fr">Les contributions arrivent « en attente ». Approuver les publie ; rejeter les garde privées (l’auteur voit votre note).</span></p>
+  <p class="lede" style="font-size:.9rem"><span class="l-ja">コメント・注釈・誤りの指摘は「承認待ち」で届きます。内容を確認して〈承認〉すると公開され、〈却下〉すると投稿者本人にだけメモ付きで表示されます。公開済みの投稿を投稿者が修正したときは〈修正の申請〉に届き、承認するまでは元の内容が公開されたままになります。〈メッセージ〉には、プロフィールページから送られたバグの報告と応援メッセージが届きます（公開されません）。</span><span class="l-en">Comments, annotations and corrections arrive as “pending”. Approve to publish; reject to keep it private (the author sees your note). When an author edits a published contribution it arrives under “Revisions”, and the original text stays online until you approve the change. “Messages” holds the bug reports and messages of support sent from the profile page (never published).</span><span class="l-fr">Les contributions arrivent « en attente ». Approuver les publie ; rejeter les garde privées (l’auteur voit votre note). Lorsqu’un auteur modifie une contribution publiée, la demande arrive sous « Révisions » et le texte d’origine reste en ligne jusqu’à votre approbation. « Messages » réunit les signalements de bogues et les messages d’encouragement envoyés depuis la page de profil (jamais publiés).</span></p>
+  <div class="banner" id="schemaBanner" hidden><span class="l-ja">データベースの更新が必要です。〈修正の申請〉と〈メッセージ〉（およびブックマーク）を使うには、Supabase の SQL Editor で <code>supabase/schema.sql</code> の全体をもう一度実行してください（既存のデータは消えません）。</span><span class="l-en">The database needs updating. To use “Revisions” and “Messages” (and bookmarks), run the whole of <code>supabase/schema.sql</code> again in the Supabase SQL Editor (existing data is kept).</span><span class="l-fr">La base de données doit être mise à jour. Pour utiliser « Révisions » et « Messages » (et les marque-pages), exécutez de nouveau l’intégralité de <code>supabase/schema.sql</code> dans le SQL Editor de Supabase (les données existantes sont conservées).</span></div>
   <div class="filters" id="filters">
     <button data-s="pending" aria-pressed="true"><span class="l-ja">承認待ち</span><span class="l-en">Pending</span><span class="l-fr">En attente</span><span class="n"></span></button>
+    <button data-s="revisions" aria-pressed="false"><span class="l-ja">修正の申請</span><span class="l-en">Revisions</span><span class="l-fr">Révisions</span><span class="n"></span></button>
     <button data-s="approved" aria-pressed="false"><span class="l-ja">公開済み</span><span class="l-en">Approved</span><span class="l-fr">Publiées</span><span class="n"></span></button>
     <button data-s="rejected" aria-pressed="false"><span class="l-ja">却下</span><span class="l-en">Rejected</span><span class="l-fr">Rejetées</span><span class="n"></span></button>
+    <span class="sep" aria-hidden="true"></span>
+    <button data-s="feedback" aria-pressed="false"><span class="l-ja">メッセージ</span><span class="l-en">Messages</span><span class="l-fr">Messages</span><span class="n"></span></button>
   </div>
   <div class="queue" id="queue"><p class="msg">…</p></div>
 </main>
 <script>
 (function(){
   "use strict";
-  const DOCS={ eugnostos:{reader:"eugnostos.html", title:"Eugnostos"}, republic:{reader:"republic.html", title:"Republic (NHC VI,5)"} };
   const $=s=>document.querySelector(s);
   let cur="pending";
   function lang(){ return document.documentElement.getAttribute("data-lang")||"ja"; }
   function L(ja,en,fr){ return {ja,en,fr}[lang()]||ja; }
   function msg(t){ $("#queue").innerHTML=`<p class="msg">${t}</p>`; }
+  const key=id=>isNaN(+id)?id:+id;
 
-  function link(it){
-    const d=DOCS[it.doc]; if(!d) return "";
-    const wit=it.doc==="eugnostos"&&it.witness?`?wit=${encodeURIComponent(it.witness)}`:"";
-    return d.reader+wit+(it.seg_id?"#seg-"+encodeURIComponent(it.seg_id):"");
+  /* 文書名と該当箇所へのリンクは assets/community.js の DOCS（新しいビュワーはそちらに追加） */
+  function metaHTML(api,it,label,date){
+    const esc=api.esc;
+    const where=it.seg_id?("§"+esc(it.seg_label||it.seg_id)+(it.token_form?` · <span class="cop">${esc(it.token_form)}</span>`:"")):L("文書全体","whole text","texte entier");
+    return `<b>${esc(label)}</b><span>${esc(api.docLabel(it))}</span><span>${where}</span>
+        <span>${esc(it.author_name||"")}</span><span>${esc(api.fmtDate(date||it.created_at))}</span>`;
   }
+  function openLink(api,it){
+    const href=api.docLink(it);
+    return href?`<a class="open" href="${api.esc(href)}" target="_blank" rel="noopener">${L("該当箇所を開く ↗","Open in viewer ↗","Ouvrir ↗")}</a>`:"";
+  }
+  function suggHTML(api,sg){ return sg?`<div class="sugg"><b>${L("修正案","Suggested fix","Correction proposée")}:</b> ${api.esc(sg)}</div>`:""; }
+
+  /* 投稿（承認待ち・公開済み・却下） */
   function card(api,it){
     const esc=api.esc, t=api.t;
-    const where=it.seg_id?("§"+(it.seg_label||it.seg_id)+(it.token_form?` · <span class="cop">${esc(it.token_form)}</span>`:"")):L("文書全体","whole text","texte entier");
     return `<article class="q k-${esc(it.kind)}" data-id="${esc(it.id)}">
-      <div class="meta"><b>${esc(t("kind_"+it.kind))}</b><span>${esc((DOCS[it.doc]||{}).title||it.doc)}${it.witness?" "+esc(it.witness):""}</span><span>${where}</span>
-        <span>${esc(it.author_name||"")}</span><span>${esc(api.fmtDate(it.created_at))}</span>
+      <div class="meta">${metaHTML(api,it,t("kind_"+it.kind))}
+        ${it.updated_at?`<span>${L("修正","edited","modifié")} ${esc(api.fmtDate(it.updated_at))}</span>`:""}
         ${it.status!=="pending"?`<span class="st">${esc(t(it.status))}</span>`:""}</div>
       <div class="body">${esc(it.body)}</div>
-      ${it.suggestion?`<div class="sugg"><b>${L("修正案","Suggested fix","Correction proposée")}:</b> ${esc(it.suggestion)}</div>`:""}
+      ${suggHTML(api,it.suggestion)}
       ${it.moderator_note?`<div class="sugg"><b>${L("運営メモ","Note","Note")}:</b> ${esc(it.moderator_note)}</div>`:""}
       <div class="acts">
-        <a class="open" href="${esc(link(it))}" target="_blank" rel="noopener">${L("該当箇所を開く ↗","Open in viewer ↗","Ouvrir ↗")}</a>
-        <textarea placeholder="${L("投稿者へのメモ（任意・却下時に表示）","Note to the author (optional)","Note à l’auteur (facultatif)")}">${esc(it.moderator_note||"")}</textarea>
+        ${openLink(api,it)}
+        <textarea placeholder="${L("メモ（任意）— 却下: 投稿者にだけ表示 / 承認: 公開の投稿に「運営より」として表示","Note (optional) — if rejected: shown to the author only / if approved: shown publicly as “Editors”","Note (facultatif) — refus : visible par l’auteur seul / approbation : affichée publiquement (« Éditeurs »)")}">${esc(it.moderator_note||"")}</textarea>
         ${it.status!=="approved"?`<button class="ok">${L("承認して公開","Approve","Approuver")}</button>`:""}
         ${it.status!=="rejected"?`<button class="ng">${L("却下","Reject","Rejeter")}</button>`:""}
       </div></article>`;
   }
+  /* 公開済みの投稿への修正の申請: 公開中の内容と修正後の内容を並べて表示 */
+  function revCard(api,x){
+    const esc=api.esc, t=api.t, c=x.contribution, r=x.revision;
+    const kindOf=k=>k!==c.kind||r.kind!==c.kind?`<b>${esc(t("kind_"+k))}</b>`:"";
+    return `<article class="q k-${esc(r.kind)}" data-id="${esc(c.id)}">
+      <div class="meta">${metaHTML(api,c,L("修正の申請","Revision","Révision"),r.created_at)}</div>
+      <div class="cmp">
+        <div><div class="cmp-h">${L("公開中","PUBLISHED NOW","EN LIGNE")}${kindOf(c.kind)}</div><div class="body">${esc(c.body)}</div>${suggHTML(api,c.suggestion)}</div>
+        <div class="new"><div class="cmp-h">${L("修正後","AFTER THE CHANGE","APRÈS MODIFICATION")}${kindOf(r.kind)}</div><div class="body">${esc(r.body)}</div>${suggHTML(api,r.suggestion)}</div>
+      </div>
+      <div class="acts">
+        ${openLink(api,c)}
+        <textarea placeholder="${L("投稿者へのメモ（任意）— 却下したときに、投稿者にだけ表示","Note to the author (optional) — shown to the author only, if you reject","Note à l’auteur (facultatif) — visible par l’auteur seul, en cas de refus")}"></textarea>
+        <button class="ok">${L("修正を承認して反映","Approve the change","Approuver la modification")}</button>
+        <button class="ng">${L("却下（元の内容のまま）","Reject (keep the original)","Rejeter (garder l’original)")}</button>
+      </div></article>`;
+  }
+  /* 運営へのメッセージ（バグの報告・応援メッセージ）。公開されない。返信は送信者のプロフィールにだけ表示される */
+  function fbCard(api,f){
+    const esc=api.esc, bug=f.kind==="bug", done=f.status==="done";
+    return `<article class="q k-${bug?"bug":"cheer"}" data-id="${esc(f.id)}">
+      <div class="meta"><b>${bug?L("バグの報告","Bug report","Signalement de bogue"):L("応援メッセージ","Message of support","Message d’encouragement")}</b>
+        <span>${esc(f.author_name||"")}</span><span>${esc(api.fmtDate(f.created_at))}</span>
+        ${done?`<span class="st">${bug?L("対応済み","handled","traité"):L("確認済み","read","lu")}</span>`:""}</div>
+      <div class="body">${esc(f.body)}</div>
+      ${f.page?`<div class="tech">${L("ページ","Page","Page")}: ${esc(f.page)}</div>`:""}
+      ${f.user_agent?`<div class="tech">${L("ブラウザ","Browser","Navigateur")}: ${esc(f.user_agent)}</div>`:""}
+      <div class="acts">
+        <textarea placeholder="${L("送信者への返信（任意・送信者のプロフィールにだけ表示されます）","Reply to the sender (optional; shown only on their profile)","Réponse à l’expéditeur (facultatif ; visible uniquement sur son profil)")}">${esc(f.reply||"")}</textarea>
+        ${done?`<button class="ghost save">${L("返信を保存","Save reply","Enregistrer la réponse")}</button><button class="ng">${bug?L("未対応に戻す","Reopen","Rouvrir"):L("未確認に戻す","Mark unread","Marquer non lu")}</button>`
+              :`<button class="ghost save">${L("返信だけ保存","Save reply only","Enregistrer la réponse")}</button><button class="ok">${bug?L("対応済みにする","Mark handled","Marquer traité"):L("確認済みにする","Mark read","Marquer lu")}</button>`}
+      </div></article>`;
+  }
+
   function load(api){
     const B=api.backend(), u=api.user();
+    $("#schemaBanner").hidden=true;
     if(api.mode==="off"){ msg(L("コメント機能が未設定です（assets/community-config.js と docs/COMMUNITY_SETUP.md を参照）。","The community feature is not configured yet.","La fonction communautaire n’est pas encore configurée.")); return; }
     if(!u){ msg(L("運営アカウントでログインしてください。","Please sign in with an editor account.","Veuillez vous connecter avec un compte éditeur.")+` <button class="cm-linkbtn" id="adLogin">${api.t("login")}</button>`);
-      const b=$("#adLogin"); if(b) b.onclick=api.openLogin; return; }
+      const b=$("#adLogin"); if(b) b.onclick=()=>api.openLogin(); return; }
     if(!u.isAdmin){ msg(L("このアカウントには承認の権限がありません。","This account has no moderation rights.","Ce compte n’a pas les droits de modération.")); return; }
     msg("…");
-    Promise.all([B.moderationList(null)]).then(([all])=>{
-      document.querySelectorAll("#filters button").forEach(b=>{ const n=all.filter(x=>x.status===b.dataset.s).length; b.querySelector(".n").textContent=n||""; });
+    // 修正の申請・メッセージのテーブルがまだ無い（schema.sql を再実行していない）ときは、空として扱い、案内を出す
+    let outdated=false;
+    const soft=p=>p.catch(e=>{ if(api.isMissing(e)){ outdated=true; return []; } throw e; });
+    const redo=()=>load(api), fail=e=>alert(api.errText(e));
+    Promise.all([B.moderationList(null), soft(B.revisionList()), soft(B.feedbackList())]).then(([all,revs,fbs])=>{
+      $("#schemaBanner").hidden=!outdated;
+      const count={ pending:all.filter(x=>x.status==="pending").length, approved:all.filter(x=>x.status==="approved").length,
+        rejected:all.filter(x=>x.status==="rejected").length, revisions:revs.length, feedback:fbs.filter(f=>f.status!=="done").length };
+      document.querySelectorAll("#filters button").forEach(b=>{ b.querySelector(".n").textContent=count[b.dataset.s]||""; });
+      const empty=()=>msg(L("該当するものはありません。","Nothing here.","Rien à afficher."));
+      if(cur==="revisions"){
+        if(!revs.length){ empty(); return; }
+        $("#queue").innerHTML=revs.map(x=>revCard(api,x)).join("");
+        document.querySelectorAll("#queue .q").forEach(el=>{
+          const id=key(el.dataset.id), note=()=>el.querySelector("textarea").value.trim();
+          el.querySelector(".ok").onclick=()=>B.reviewRevision(id,true,note()).then(redo).catch(fail);
+          el.querySelector(".ng").onclick=()=>B.reviewRevision(id,false,note()).then(redo).catch(fail);
+        });
+        return;
+      }
+      if(cur==="feedback"){
+        if(!fbs.length){ empty(); return; }
+        const rows=fbs.slice().sort((a,b)=>(a.status==="done")-(b.status==="done"));      // 未対応を先に（日付順は保つ）
+        $("#queue").innerHTML=rows.map(f=>fbCard(api,f)).join("");
+        document.querySelectorAll("#queue .q").forEach(el=>{
+          const id=key(el.dataset.id), reply=()=>el.querySelector("textarea").value;
+          const ok=el.querySelector(".ok"), ng=el.querySelector(".ng"), sv=el.querySelector(".save");
+          if(ok) ok.onclick=()=>B.updateFeedback(id,{status:"done",reply:reply()}).then(redo).catch(fail);
+          if(ng) ng.onclick=()=>B.updateFeedback(id,{status:"new",reply:reply()}).then(redo).catch(fail);
+          if(sv) sv.onclick=()=>B.updateFeedback(id,{reply:reply()}).then(redo).catch(fail);
+        });
+        return;
+      }
       const rows=all.filter(x=>x.status===cur);
-      if(!rows.length){ msg(L("該当する投稿はありません。","Nothing here.","Rien à afficher.")); return; }
+      if(!rows.length){ empty(); return; }
       $("#queue").innerHTML=rows.map(it=>card(api,it)).join("");
       document.querySelectorAll("#queue .q").forEach(el=>{
-        const id=el.dataset.id, key=isNaN(+id)?id:+id;
+        const id=key(el.dataset.id);
         const note=()=>el.querySelector("textarea").value.trim();
         const ok=el.querySelector(".ok"), ng=el.querySelector(".ng");
-        if(ok) ok.onclick=()=>B.moderate(key,"approved",note()).then(()=>load(api)).catch(e=>alert(e.message));
-        if(ng) ng.onclick=()=>B.moderate(key,"rejected",note()).then(()=>load(api)).catch(e=>alert(e.message));
+        if(ok) ok.onclick=()=>B.moderate(id,"approved",note()).then(redo).catch(fail);
+        if(ng) ng.onclick=()=>B.moderate(id,"rejected",note()).then(redo).catch(fail);
       });
-    }).catch(e=>msg(api.t("err")+api.esc(e.message||e)));
+    }).catch(e=>msg(api.esc(api.errText(e))));
   }
   function start(){
     const api=window.NHC_COMMUNITY; if(!api){ msg("community.js が読み込まれていません。"); return; }

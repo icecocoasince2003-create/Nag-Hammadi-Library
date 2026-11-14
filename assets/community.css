@@ -103,3 +103,29 @@
 .cm-acc-links { display: flex; gap: 20px; align-items: baseline; margin-top: 14px; font-size: .84rem; }
 .cm-acc-links a { color: var(--gold-bright, #e7c885); text-underline-offset: 4px; }
 .cm-fine a { color: var(--lapis, #9d8be0); text-underline-offset: 3px; }
+
+/* ---- セグメントごとの〈ブックマーク〉（〈注釈・コメント〉の右隣。ブックマーク済みは常に表示） ---- */
+.cm-bm {
+  appearance: none; background: none; border: 0; cursor: pointer; padding: 2px 0; margin: 6px 0 0 16px;
+  font-family: var(--ui, "Inter", "Noto Sans JP", sans-serif); font-size: .7rem; letter-spacing: .02em;
+  color: var(--ink-faint, #8a85a6); opacity: 0; transition: opacity .15s;
+  text-decoration: none; text-underline-offset: 4px;
+}
+.seg:hover .cm-bm, .prow:hover .cm-bm, .cm-bm:focus-visible, .cm-bm.on { opacity: 1; }
+.cm-bm:hover { text-decoration: underline; color: var(--ink, #ede8dc); }
+.cm-bm.on { color: var(--gold-bright, #e7c885); }
+.cm-bm:disabled { cursor: progress; }
+@media (hover: none) { .cm-bm { opacity: .7; } }
+a.cm-linkbtn { text-decoration: none; }
+
+/* ---- 画面下の一言メッセージ ---- */
+.cm-toast {
+  position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); z-index: 95;
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: center; gap: 4px 16px;
+  width: max-content; max-width: min(92vw, 540px); padding: 10px 18px; border-radius: 10px;
+  background: #1d1938; color: var(--ink, #ede8dc); border: 1px solid rgba(212, 175, 106, .45);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, .55);
+  font-family: var(--ui, "Inter", "Noto Sans JP", sans-serif); font-size: .82rem; line-height: 1.5;
+}
+.cm-toast[hidden] { display: none; }
+.cm-toast a { color: var(--gold-bright, #e7c885); text-underline-offset: 4px; white-space: nowrap; }

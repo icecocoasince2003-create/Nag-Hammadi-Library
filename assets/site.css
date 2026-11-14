@@ -58,6 +58,8 @@ html[data-lang="fr"] .l-en { display: none; }
 .sb-lang { font-size: .74rem; color: var(--chrome-faint, #8a85a6); }
 .sb-lang[aria-pressed="true"] { color: var(--gold-bright, #e7c885); }
 .sb-auth { color: var(--gold-bright, #e7c885); }
+/* ログイン中は表示名（プロフィールへのリンク）。長い名前は省略して1行に収める */
+.sb-auth { display: inline-block; max-width: 14em; overflow: hidden; text-overflow: ellipsis; vertical-align: middle; }
 .sb-auth[hidden] { display: none; }
 @media (max-width: 760px) {
   .sb-links { order: 3; flex-basis: 100%; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 2px;

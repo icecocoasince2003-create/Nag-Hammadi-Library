@@ -1,0 +1,549 @@
+<!-- プロフィールページ（手作業管理）。ログイン中の利用者が、表示名の変更・自分の投稿の確認と修正・
+     ブックマーク・運営へのバグの報告と応援メッセージを扱います。
+     データの読み書きは assets/community.js（window.NHC_COMMUNITY）のバックエンド経由で、
+     権限はサーバ側の行レベルセキュリティ（supabase/schema.sql）で判定します。
+     確認だけしたいときは profile.html?community=demo（ブラウザ内だけで動くデモ）。 -->
+<!DOCTYPE html>
+<html lang="ja" data-lang="ja" data-i18n="full" data-mode="aeon" data-title-en="Profile — Sheneset" data-title-fr="Profil — Sheneset">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>プロフィール — Sheneset</title>
+<link rel="icon" type="image/svg+xml" href="image/icon.svg">
+<link rel="alternate icon" type="image/png" sizes="32x32" href="image/favicon-32.png">
+<link rel="apple-touch-icon" href="image/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600&family=Noto+Sans+Coptic&display=swap" rel="stylesheet">
+<style>
+:root{ --ui:'Inter','Noto Sans JP',system-ui,sans-serif; }
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
+.page{max-width:920px}
+.page h1{overflow-wrap:anywhere}
+.page h2{scroll-margin-top:72px}
+[hidden]{display:none !important}
+
+/* 見出しまわり */
+.pf-head{display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:8px 28px}
+.pf-meta{font-size:.84rem; color:var(--ink-faint); margin:0}
+.pf-badge{display:inline-block; font-size:.66rem; letter-spacing:.08em; color:var(--gold-bright); border:1px solid currentColor; border-radius:999px; padding:0 8px; margin-left:.7em; vertical-align:middle}
+.pf-top-acts{display:flex; flex-wrap:wrap; gap:6px 22px; align-items:baseline; font-size:.84rem; padding-bottom:.2em}
+.pf-top-acts a{color:var(--gold-bright); text-underline-offset:4px}
+.pf-top-acts .cm-linkbtn{font-size:.84rem}
+.pf-lead{font-size:.92rem; line-height:1.85; color:var(--ink-soft); max-width:74ch; margin:.4em 0 1em}
+.pf-fine{font-size:.76rem; line-height:1.7; color:var(--ink-faint); max-width:74ch; margin:.6em 0 0}
+.pf-sub{font-size:.82rem; font-weight:600; letter-spacing:.04em; color:var(--ink-soft); margin:1.8em 0 .7em}
+
+/* フォーム */
+.pf-form{display:flex; flex-direction:column; gap:10px; max-width:640px}
+.pf-form label{display:flex; flex-direction:column; gap:4px; font-size:.78rem; color:var(--ink-soft)}
+.pf-form input:not([type=checkbox]):not([type=radio]), .pf-form textarea, .pf-memoform input{
+  width:100%; background:rgba(0,0,0,.25); color:var(--ink); border:1px solid var(--line-2); border-radius:8px;
+  padding:9px 11px; font:inherit; font-size:.9rem; line-height:1.6}
+.pf-form textarea{resize:vertical; min-height:6.5em}
+.pf-form input:focus, .pf-form textarea:focus, .pf-memoform input:focus{outline:2px solid var(--lapis); outline-offset:0}
+.pf-row{display:flex; flex-wrap:wrap; gap:10px 14px; align-items:center}
+.pf-row > input{flex:1 1 240px; width:auto !important}
+.pf-form label.pf-check{flex-direction:row; align-items:baseline; gap:8px; line-height:1.6; cursor:pointer}
+.pf-check small{display:block; color:var(--ink-faint); font-size:.7rem; word-break:break-all}
+.cm-primary[disabled]{opacity:.55; cursor:progress}
+
+/* 絞り込み（文字のみ・選択中は金色） */
+.filters{display:flex; flex-wrap:wrap; gap:6px 22px; margin:14px 0; border-bottom:1px solid var(--line); padding-bottom:10px}
+.filters button{appearance:none; background:none; border:0; padding:4px 0; cursor:pointer; font:inherit; font-size:.88rem; color:var(--ink-soft); text-underline-offset:6px}
+.filters button:hover{text-decoration:underline; text-decoration-color:var(--gold)}
+.filters button[aria-pressed="true"]{color:var(--gold-bright); font-weight:600}
+.filters .n{font-size:.72rem; color:var(--ink-faint); margin-left:4px; font-weight:400}
+
+/* 一覧のカード（投稿・ブックマーク・送信したメッセージ） */
+.pf-list{display:flex; flex-direction:column; gap:12px}
+.pf-card{border:1px solid var(--line); border-left:3px solid var(--lapis); border-radius:10px; padding:14px 16px; background:var(--panel)}
+.pf-card.k-annotation, .pf-card.pf-bm{border-left-color:var(--gold)}
+.pf-card.k-correction, .pf-card.k-bug{border-left-color:var(--rose)}
+.pf-cmeta{display:flex; flex-wrap:wrap; gap:4px 14px; align-items:baseline; font-size:.76rem; color:var(--ink-faint); margin-bottom:6px}
+.pf-cmeta .kind{color:var(--gold); letter-spacing:.08em; font-size:.7rem; font-weight:600}
+.pf-cmeta .where{font-family:var(--ui),"Noto Sans Coptic",sans-serif; color:var(--ink-soft)}
+.pf-cmeta a.where{color:var(--ink); text-decoration-color:var(--line-2); text-underline-offset:4px}
+.pf-cmeta a.where:hover{text-decoration-color:var(--gold)}
+.pf-cmeta .cm-st.approved, .pf-cmeta .cm-st.done{color:var(--lapis)}
+.pf-cmeta .cm-st.new{color:var(--gold-bright)}
+.pf-cbody{white-space:pre-wrap; overflow-wrap:anywhere; font-size:.92rem; line-height:1.75; color:var(--ink)}
+.pf-csugg, .pf-cnote, .pf-cpage{margin-top:6px; font-size:.86rem; line-height:1.7; color:var(--ink-soft); white-space:pre-wrap; overflow-wrap:anywhere}
+.pf-csugg b, .pf-cnote b{color:var(--ink); font-weight:600}
+.pf-cnote{border-left:2px solid var(--gold); padding-left:10px}
+.pf-cpage{font-size:.78rem; color:var(--ink-faint)}
+.pf-acts{display:flex; flex-wrap:wrap; gap:6px 20px; align-items:baseline; margin-top:10px}
+.pf-acts .cm-linkbtn{font-size:.8rem}
+.pf-acts .danger{color:var(--rose)}
+.pf-rev{margin-top:12px; padding:10px 12px; border:1px dashed rgba(212,175,106,.45); border-radius:8px; background:rgba(212,175,106,.05)}
+.pf-rev.rejected{border-color:rgba(207,147,166,.5); background:rgba(207,147,166,.06)}
+.pf-rev-h{font-size:.78rem; line-height:1.6; color:var(--gold-bright); margin-bottom:6px}
+.pf-rev.rejected .pf-rev-h{color:var(--rose)}
+.pf-card .cm-post{margin-top:2px; border-top:0; padding-top:0}
+.pf-card .cm-post textarea{resize:vertical}
+.pf-excerpt{font-family:"Noto Sans Coptic",var(--ui),serif; font-size:1.04rem; line-height:1.7; color:var(--ink); overflow-wrap:anywhere}
+.pf-memo{margin-top:6px; font-size:.86rem; line-height:1.7; color:var(--ink-soft); white-space:pre-wrap; overflow-wrap:anywhere}
+.pf-memo b{color:var(--gold); font-weight:600; font-size:.74rem; letter-spacing:.06em; margin-right:.6em}
+.pf-memoform{margin-top:8px}
+.pf-msg{color:var(--ink-faint); font-size:.88rem; margin:6px 0}
+
+/* マスコットつきの案内（空の一覧・フォームの横・未ログイン） */
+.pf-note{display:grid; grid-template-columns:104px minmax(0,1fr); gap:18px; align-items:center; padding:14px 18px;
+  border:1px dashed var(--line-2); border-radius:12px; color:var(--ink-soft); font-size:.9rem; line-height:1.85}
+.pf-note img{width:104px; height:104px}
+.pf-note p{margin:0}
+.pf-note p + p{margin-top:.5em}
+.pf-note a{color:var(--gold-bright); text-underline-offset:4px}
+.pf-two{display:grid; grid-template-columns:132px minmax(0,1fr); gap:22px; align-items:start}
+.pf-two > img{width:132px; height:132px; margin-top:4px}
+.pf-gate{margin-top:26px}
+@media(max-width:600px){
+  .pf-two{grid-template-columns:1fr} .pf-two > img{width:92px; height:92px}
+  .pf-note{grid-template-columns:68px minmax(0,1fr); gap:12px; padding:12px 14px} .pf-note img{width:68px; height:68px}
+}
+</style>
+<link rel="stylesheet" href="assets/cosmos.css">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/community.css">
+<script defer src="assets/cosmos.js"></script>
+<script defer src="assets/site.js"></script>
+<script defer src="assets/analytics.js"></script>
+<script defer src="assets/community-config.js"></script>
+<script defer src="assets/community.js"></script>
+</head>
+<body>
+<nav id="sitebar" class="sitebar sticky"></nav>
+
+<main class="page">
+  <div class="pf-head">
+    <div>
+      <div class="eyebrow">Profile</div>
+      <h1><span class="jp" id="pfName"><span class="l-ja">プロフィール</span><span class="l-en">Profile</span><span class="l-fr">Profil</span></span></h1>
+      <p class="pf-meta" id="pfMeta" hidden></p>
+    </div>
+    <div class="pf-top-acts" id="pfTopActs" hidden>
+      <a href="admin.html" id="pfAdmin" hidden><span class="l-ja">投稿の承認（運営）→</span><span class="l-en">Moderation →</span><span class="l-fr">Modération →</span></a>
+      <button type="button" class="cm-linkbtn" id="pfLogout"><span class="l-ja">ログアウト</span><span class="l-en">Sign out</span><span class="l-fr">Déconnexion</span></button>
+    </div>
+  </div>
+
+  <!-- 読み込み中・未ログイン・機能が使えないとき -->
+  <p class="pf-msg" id="pfLoading">…</p>
+  <div class="pf-note pf-gate" id="pfGate" hidden>
+    <img src="image/gengen_images/svg/poses/gengen_hello.svg" alt="" width="104" height="104">
+    <div>
+      <p id="pfGateLogin"><span class="l-ja">プロフィールを表示するにはログインしてください。ログインすると、表示名の変更、投稿の確認と修正、ブックマーク、運営へのバグの報告や応援メッセージの送信ができます。</span><span class="l-en">Please sign in to see your profile. Once signed in you can change your display name, review and edit your contributions, keep bookmarks, and send bug reports or messages of support to the editors.</span><span class="l-fr">Connectez-vous pour afficher votre profil. Vous pourrez alors modifier votre nom affiché, consulter et corriger vos contributions, gérer vos marque-pages et envoyer à l’équipe un signalement de bogue ou un message d’encouragement.</span></p>
+      <p id="pfGateOff" hidden><span class="l-ja">ログイン機能は現在ご利用いただけません。</span><span class="l-en">Sign-in is not available at the moment.</span><span class="l-fr">La connexion n’est pas disponible pour le moment.</span></p>
+      <p id="pfGateBtn"><button type="button" class="cm-primary" id="pfLogin"><span class="l-ja">ログイン / ユーザー登録</span><span class="l-en">Sign in / Register</span><span class="l-fr">Connexion / Inscription</span></button></p>
+    </div>
+  </div>
+
+  <div id="pfBody" hidden>
+    <p class="cm-demo" id="pfDemo" hidden style="margin-top:10px">⚑ <span class="l-ja">デモモード（この端末内だけに保存）</span><span class="l-en">Demo mode (stored on this device only)</span><span class="l-fr">Mode démo (stocké sur cet appareil)</span></p>
+    <nav class="toc">
+      <a href="#name"><span class="l-ja">表示名</span><span class="l-en">Display name</span><span class="l-fr">Nom affiché</span></a>
+      <a href="#posts"><span class="l-ja">投稿</span><span class="l-en">Contributions</span><span class="l-fr">Contributions</span></a>
+      <a href="#bookmarks"><span class="l-ja">ブックマーク</span><span class="l-en">Bookmarks</span><span class="l-fr">Marque-pages</span></a>
+      <a href="#bug"><span class="l-ja">バグの報告</span><span class="l-en">Report a bug</span><span class="l-fr">Signaler un bogue</span></a>
+      <a href="#cheer"><span class="l-ja">応援メッセージ</span><span class="l-en">Message of support</span><span class="l-fr">Message d’encouragement</span></a>
+    </nav>
+
+    <!-- ============ I 表示名 ============ -->
+    <h2 id="name"><span class="num">I</span><span class="l-ja">表示名</span><span class="l-en">Display name</span><span class="l-fr">Nom affiché</span></h2>
+    <form class="pf-form" id="nameForm">
+      <label for="nameInput"><span><span class="l-ja">表示名（公開されます・60 文字まで）</span><span class="l-en">Display name (public, up to 60 characters)</span><span class="l-fr">Nom affiché (public, 60 caractères max.)</span></span></label>
+      <div class="pf-row">
+        <input id="nameInput" name="name" maxlength="60" required autocomplete="nickname">
+        <button type="submit" class="cm-primary"><span class="l-ja">保存</span><span class="l-en">Save</span><span class="l-fr">Enregistrer</span></button>
+      </div>
+      <p class="cm-msg" id="nameMsg" role="status"></p>
+    </form>
+    <p class="pf-fine"><span class="l-ja">公開された投稿には、この表示名が添えられます。変更すると、これまでの投稿の表示名も新しい名前に変わります。メールアドレスが公開されることはありません。</span><span class="l-en">Published contributions carry this name. If you change it, the name shown on your earlier contributions changes too. Your e-mail address is never published.</span><span class="l-fr">Ce nom accompagne vos contributions publiées. Si vous le modifiez, il est aussi mis à jour sur vos contributions antérieures. Votre adresse e-mail n’est jamais publiée.</span></p>
+
+    <!-- ============ II 投稿 ============ -->
+    <h2 id="posts"><span class="num">II</span><span class="l-ja">投稿</span><span class="l-en">Contributions</span><span class="l-fr">Contributions</span></h2>
+    <p class="pf-lead"><span class="l-ja">あなたが送ったコメント・注釈・誤りの指摘の状況を確認し、内容を修正できます。公開済みの投稿を修正したときは、運営が確認するまで、現在の内容がそのまま公開されます。</span><span class="l-en">Check the status of the comments, annotations and corrections you have sent, and edit them. When you edit a published contribution, the current text stays online until the editors have reviewed your changes.</span><span class="l-fr">Suivez l’état de vos commentaires, annotations et corrections, et modifiez-les. Lorsque vous modifiez une contribution publiée, le texte actuel reste en ligne jusqu’à la relecture de vos changements.</span></p>
+    <div class="filters" id="postFilters" role="group">
+      <button type="button" data-s="all" aria-pressed="true"><span class="l-ja">すべて</span><span class="l-en">All</span><span class="l-fr">Toutes</span><span class="n"></span></button>
+      <button type="button" data-s="pending" aria-pressed="false"><span class="l-ja">承認待ち</span><span class="l-en">Pending</span><span class="l-fr">En attente</span><span class="n"></span></button>
+      <button type="button" data-s="approved" aria-pressed="false"><span class="l-ja">公開済み</span><span class="l-en">Published</span><span class="l-fr">Publiées</span><span class="n"></span></button>
+      <button type="button" data-s="rejected" aria-pressed="false" hidden><span class="l-ja">非公開</span><span class="l-en">Not published</span><span class="l-fr">Non publiées</span><span class="n"></span></button>
+    </div>
+    <div class="pf-list" id="postList"></div>
+
+    <!-- ============ III ブックマーク ============ -->
+    <h2 id="bookmarks"><span class="num">III</span><span class="l-ja">ブックマーク</span><span class="l-en">Bookmarks</span><span class="l-fr">Marque-pages</span></h2>
+    <p class="pf-lead"><span class="l-ja">本文のビュワーで、各セグメントの〈☆ ブックマーク〉または文書メニューの〈ブックマーク〉を押すと、ここに追加されます。ブックマークとメモは、あなただけが見られます。</span><span class="l-en">In a text viewer, press “☆ Bookmark” on a segment, or “Bookmark” in the document menu, to add it here. Only you can see your bookmarks and notes.</span><span class="l-fr">Dans une visionneuse, cliquez sur « ☆ Marque-page » sous un segment, ou sur « Marque-page » dans le menu du document, pour l’ajouter ici. Vous seul·e voyez vos marque-pages et vos notes.</span></p>
+    <div class="pf-list" id="bmList"></div>
+
+    <!-- ============ IV バグの報告 ============ -->
+    <h2 id="bug"><span class="num">IV</span><span class="l-ja">バグの報告</span><span class="l-en">Report a bug</span><span class="l-fr">Signaler un bogue</span></h2>
+    <div class="pf-two">
+      <img src="image/gengen_images/svg/poses/gengen_shrug.svg" alt="" width="132" height="132" loading="lazy">
+      <div>
+        <p class="pf-lead"><span class="l-ja">表示の崩れ、動かないボタン、データが読み込めないなど、サイトの不具合を運営に知らせることができます。本文・語釈・訳の誤りについては、ビュワーの〈誤りの指摘〉からお寄せください。</span><span class="l-en">Tell the editors about problems with the site: broken layout, buttons that do nothing, data that fails to load. For mistakes in the text, glosses or translations, please use “Correction” in a viewer.</span><span class="l-fr">Signalez à l’équipe les problèmes du site : affichage cassé, boutons inactifs, données qui ne se chargent pas. Pour les erreurs dans le texte, les gloses ou les traductions, utilisez « Correction » dans une visionneuse.</span></p>
+        <form class="pf-form" id="bugForm">
+          <label for="bugBody"><span><span class="l-ja">起きた問題（何をしたら、どうなったか）</span><span class="l-en">What happened (what you did and what you saw)</span><span class="l-fr">Ce qui s’est passé (ce que vous avez fait, ce que vous avez vu)</span></span>
+            <textarea id="bugBody" name="body" maxlength="4000" required rows="5"></textarea></label>
+          <label for="bugPage"><span><span class="l-ja">問題が起きたページ（任意）</span><span class="l-en">Page where it happened (optional)</span><span class="l-fr">Page concernée (facultatif)</span></span>
+            <input id="bugPage" name="page" maxlength="300" autocomplete="off"></label>
+          <label class="pf-check" for="bugUa"><input type="checkbox" id="bugUa" name="ua" checked>
+            <span><span class="l-ja">ブラウザの種類を添える（原因の調査に使います）</span><span class="l-en">Include my browser type (helps us find the cause)</span><span class="l-fr">Joindre le type de navigateur (utile pour trouver la cause)</span><small id="bugUaText"></small></span></label>
+          <div class="pf-row"><button type="submit" class="cm-primary"><span class="l-ja">報告を送信</span><span class="l-en">Send report</span><span class="l-fr">Envoyer le signalement</span></button></div>
+          <p class="cm-msg" id="bugMsg" role="status"></p>
+        </form>
+      </div>
+    </div>
+    <div id="bugSent" hidden>
+      <h3 class="pf-sub"><span class="l-ja">送信した報告</span><span class="l-en">Reports you have sent</span><span class="l-fr">Vos signalements</span></h3>
+      <div class="pf-list" id="bugList"></div>
+    </div>
+
+    <!-- ============ V 応援メッセージ ============ -->
+    <h2 id="cheer"><span class="num">V</span><span class="l-ja">応援メッセージ</span><span class="l-en">Message of support</span><span class="l-fr">Message d’encouragement</span></h2>
+    <div class="pf-two">
+      <img src="image/gengen_images/svg/poses/gengen_love.svg" alt="" width="132" height="132" loading="lazy" id="cheerFig">
+      <div>
+        <p class="pf-lead"><span class="l-ja">感想や励ましのことばを運営に送ることができます。いただいたメッセージは運営だけが読み、サイトに公開されることはありません。</span><span class="l-en">Send the editors your impressions or a word of encouragement. Messages are read only by the editors and are never published on the site.</span><span class="l-fr">Envoyez à l’équipe vos impressions ou un mot d’encouragement. Les messages ne sont lus que par l’équipe et ne sont jamais publiés sur le site.</span></p>
+        <form class="pf-form" id="cheerForm">
+          <label for="cheerBody"><span><span class="l-ja">メッセージ</span><span class="l-en">Message</span><span class="l-fr">Message</span></span>
+            <textarea id="cheerBody" name="body" maxlength="4000" required rows="4"></textarea></label>
+          <div class="pf-row"><button type="submit" class="cm-primary"><span class="l-ja">メッセージを送信</span><span class="l-en">Send message</span><span class="l-fr">Envoyer le message</span></button></div>
+          <p class="cm-msg" id="cheerMsg" role="status"></p>
+        </form>
+      </div>
+    </div>
+    <div id="cheerSent" hidden>
+      <h3 class="pf-sub"><span class="l-ja">送信したメッセージ</span><span class="l-en">Messages you have sent</span><span class="l-fr">Vos messages</span></h3>
+      <div class="pf-list" id="cheerList"></div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <a href="privacy.html"><span class="l-ja">プライバシーポリシー</span><span class="l-en">Privacy policy</span><span class="l-fr">Confidentialité</span></a> ·
+  <a href="terms.html"><span class="l-ja">利用規約</span><span class="l-en">Terms of use</span><span class="l-fr">Conditions d’utilisation</span></a> ·
+  <a href="project.html"><span class="l-ja">プロジェクトについて</span><span class="l-en">About</span><span class="l-fr">À propos</span></a>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+  const H=document.documentElement;
+  const lang=()=>H.getAttribute("data-lang")||"ja";
+  const L=(ja,en,fr)=>({ja,en,fr}[lang()]||ja);                                   // いまの表示言語の文言（確認ダイアログ・一言メッセージ用）
+  const tri=(ja,en,fr)=>`<span class="l-ja">${ja}</span><span class="l-en">${en}</span><span class="l-fr">${fr}</span>`;   // 三言語のスパン（言語切替で描き直さずに済む）
+  const KIND={comment:["コメント","Comment","Commentaire"], annotation:["注釈","Annotation","Annotation"], correction:["誤りの指摘","Correction","Correction"]};
+  const STATUS={pending:["承認待ち","Pending","En attente"], approved:["公開済み","Published","Publié"], rejected:["非公開","Not published","Non publié"]};
+  const POSE="image/gengen_images/svg/poses/";
+
+  let api=null, B=null, U=null, esc=s=>String(s==null?"":s);
+  let posts=[], bms=[], fbs=[];
+  let postFilter="all", editing=null, memoEditing=null, firstShow=true;
+  const key=id=>isNaN(+id)?id:+id;                                                // data-id（文字列）→ 元の id
+  const byId=(arr,id)=>arr.find(x=>String(x.id)===String(id));
+
+  /* ---------- 文書名・箇所 ---------- */
+  function whereHTML(it, withScope){
+    const part=l=>{
+      let s=esc(api.docLabel(it,l));
+      if(it.seg_id) s+=" · §"+esc(it.seg_label||it.seg_id);
+      else if(withScope) s+=" · "+{ja:"文書全体",en:"whole text",fr:"texte entier"}[l];
+      if(it.token_form) s+=" · "+{ja:"語",en:"word",fr:"mot"}[l]+" "+esc(it.token_form);
+      return s;
+    };
+    return tri(part("ja"),part("en"),part("fr"));
+  }
+  function whereLink(it, withScope){
+    const href=api.docLink(it), inner=whereHTML(it,withScope);
+    return href?`<a class="where" href="${esc(href)}">${inner}</a>`:`<span class="where">${inner}</span>`;
+  }
+  function viewerLinks(){
+    return Object.keys(api.docs).map(k=>{ const d=api.docs[k];
+      return `<a href="${esc(d.reader)}">${tri(esc(d.title.ja),esc(d.title.en),esc(d.title.fr))}</a>`; }).join(" · ");
+  }
+  function note(pose, html){ return `<div class="pf-note"><img src="${POSE}${pose}.svg" alt="" width="104" height="104" loading="lazy"><div>${html}</div></div>`; }
+  function failHTML(e){ return `<p class="pf-msg">${esc(api.errText(e))}</p>`; }
+
+  /* ---------- 画面の出し分け ---------- */
+  function gate(kind){
+    $("#pfLoading").hidden=true; $("#pfBody").hidden=true; $("#pfGate").hidden=false;
+    $("#pfMeta").hidden=true; $("#pfTopActs").hidden=true;
+    $("#pfName").innerHTML=tri("プロフィール","Profile","Profil");
+    $("#pfGateLogin").hidden=kind==="off"; $("#pfGateBtn").hidden=kind==="off"; $("#pfGateOff").hidden=kind!=="off";
+  }
+  function showBody(){
+    $("#pfLoading").hidden=true; $("#pfGate").hidden=true; $("#pfBody").hidden=false;
+    $("#pfName").textContent=U.name;
+    $("#pfMeta").hidden=false;
+    $("#pfMeta").innerHTML=esc(U.email||"")+" "+tri("（メールアドレスは公開されません）","(your e-mail address is not public)","(votre adresse e-mail n’est pas publique)")+
+      (U.isAdmin?`<span class="pf-badge">${tri("運営","EDITOR","ÉDITION")}</span>`:"");
+    $("#pfTopActs").hidden=false; $("#pfAdmin").hidden=!U.isAdmin;
+    $("#pfDemo").hidden=api.mode!=="demo";
+    const ni=$("#nameInput"); if(document.activeElement!==ni) ni.value=U.name;
+  }
+
+  /* ---------- II 投稿 ---------- */
+  function postCounts(){
+    const n={all:posts.length,pending:0,approved:0,rejected:0};
+    posts.forEach(p=>{ if(n[p.status]!=null) n[p.status]++; });
+    $$("#postFilters button").forEach(b=>{ b.querySelector(".n").textContent=n[b.dataset.s]||""; });
+    const rj=$('#postFilters button[data-s="rejected"]');
+    rj.hidden=!n.rejected;                                                       // 〈非公開〉は該当があるときだけ出す
+    if(!n.rejected&&postFilter==="rejected") setFilter("all");
+  }
+  function setFilter(s){
+    postFilter=s;
+    $$("#postFilters button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.s===s)));
+  }
+  function contentHTML(c){
+    return `<div class="pf-cbody">${esc(c.body)}</div>`+
+      (c.suggestion?`<div class="pf-csugg"><b>${tri("修正案","Suggested fix","Correction proposée")}</b> ${esc(c.suggestion)}</div>`:"");
+  }
+  function editFormHTML(p){
+    const src=p.status==="approved"&&p.revision?p.revision:p;                    // 申請中の修正があれば、その内容から書き直す
+    const hint=p.status==="approved"
+      ? tri("公開済みの投稿です。修正は運営の確認後に反映され、それまでは現在の内容が公開されたままになります。","This contribution is published. Your changes will appear once the editors have reviewed them; until then the current text stays online.","Cette contribution est publiée. Vos modifications apparaîtront après relecture ; d’ici là, le texte actuel reste en ligne.")
+      : p.status==="rejected"
+      ? tri("修正して送信すると、もう一度承認待ちになります。","When you save your changes, the contribution goes back to the editors for review.","En enregistrant vos modifications, la contribution est de nouveau soumise à relecture.")
+      : tri("承認待ちの投稿です。保存すると、修正後の内容で運営が確認します。","This contribution is awaiting review. The editors will review the text as you save it.","Cette contribution est en attente. L’équipe relira le texte tel que vous l’enregistrez.");
+    return `<form class="cm-post pf-edit">
+      <div class="cm-kinds" role="radiogroup">${Object.keys(KIND).map(k=>`<label><input type="radio" name="kind" value="${k}"${k===src.kind?" checked":""}> ${tri(...KIND[k])}</label>`).join("")}</div>
+      <textarea name="body" maxlength="4000" required rows="6" aria-label="${esc(L("本文","Text","Texte"))}">${esc(src.body)}</textarea>
+      <label class="cm-sugg-l">${tri("修正案（任意）","Suggested fix (optional)","Correction proposée (facultatif)")}<input name="suggestion" maxlength="1000" value="${esc(src.suggestion||"")}"></label>
+      <p class="pf-fine" style="margin:0">${hint}</p>
+      <div class="pf-row"><button type="submit" class="cm-primary">${p.status==="approved"?tri("修正を申請","Submit changes","Soumettre les modifications"):tri("保存","Save","Enregistrer")}</button>
+        <button type="button" class="cm-linkbtn act-cancel">${tri("キャンセル","Cancel","Annuler")}</button></div>
+      <p class="cm-msg" role="status"></p></form>`;
+  }
+  function revisionHTML(p){
+    const r=p.revision; if(!r) return "";
+    if(r.status==="rejected") return `<div class="pf-rev rejected">
+      <div class="pf-rev-h"><b>${tri("修正の申請は反映されませんでした","Your changes were not accepted","Vos modifications n’ont pas été retenues")}</b>${r.reviewed_at?" · "+esc(api.fmtDate(r.reviewed_at)):""}</div>
+      ${r.moderator_note?`<div class="pf-cnote" style="margin:0 0 8px"><b>${tri("運営より:","Editors:","Équipe :")}</b> ${esc(r.moderator_note)}</div>`:""}
+      ${contentHTML(r)}
+      <div class="pf-acts"><button type="button" class="cm-linkbtn act-edit">${tri("修正し直す","Edit again","Modifier à nouveau")}</button>
+        <button type="button" class="cm-linkbtn act-revdrop">${tri("この表示を消す","Dismiss","Masquer")}</button></div></div>`;
+    return `<div class="pf-rev">
+      <div class="pf-rev-h"><b>${tri("修正を申請中","Changes awaiting review","Modifications en attente")}</b> · ${esc(api.fmtDate(r.created_at))} · ${tri("運営の確認後に、上の内容と入れ替わります","they will replace the text above once reviewed","elles remplaceront le texte ci-dessus après relecture")}</div>
+      ${r.kind!==p.kind?`<div class="pf-cmeta" style="margin:0 0 4px"><span class="kind">${tri(...KIND[r.kind])}</span></div>`:""}
+      ${contentHTML(r)}
+      <div class="pf-acts"><button type="button" class="cm-linkbtn act-edit">${tri("さらに修正","Edit again","Modifier à nouveau")}</button>
+        <button type="button" class="cm-linkbtn danger act-revcancel">${tri("申請を取り下げる","Withdraw changes","Retirer les modifications")}</button></div></div>`;
+  }
+  function postHTML(p){
+    const open=String(editing)===String(p.id);
+    const href=api.docLink(p);
+    return `<article class="pf-card k-${esc(p.kind)}" data-id="${esc(p.id)}">
+      <div class="pf-cmeta"><span class="kind">${tri(...(KIND[p.kind]||KIND.comment))}</span>${whereLink(p,true)}
+        <span class="cm-st ${esc(p.status)}">${tri(...(STATUS[p.status]||STATUS.pending))}</span>
+        <span>${esc(api.fmtDate(p.created_at))}${p.updated_at?" · "+tri("修正","edited","modifié")+" "+esc(api.fmtDate(p.updated_at)):""}</span></div>
+      ${open?editFormHTML(p):contentHTML(p)+
+        (p.moderator_note?`<div class="pf-cnote"><b>${tri("運営より:","Editors:","Équipe :")}</b> ${esc(p.moderator_note)}</div>`:"")+
+        (p.status==="approved"?revisionHTML(p):"")+
+        `<div class="pf-acts">
+          ${p.status==="approved"&&p.revision?"":`<button type="button" class="cm-linkbtn act-edit">${p.status==="rejected"?tri("修正して再申請","Edit and resubmit","Modifier et soumettre à nouveau"):tri("修正","Edit","Modifier")}</button>`}
+          ${p.status!=="approved"?`<button type="button" class="cm-linkbtn danger act-del">${tri("取り消す","Withdraw","Retirer")}</button>`:""}
+          ${href?`<a class="cm-linkbtn" href="${esc(href)}">${tri("該当箇所を開く →","Open in viewer →","Ouvrir dans la visionneuse →")}</a>`:""}
+        </div>`}
+    </article>`;
+  }
+  function renderPosts(){
+    postCounts();
+    const box=$("#postList");
+    if(!posts.length){
+      box.innerHTML=note("gengen_write",`<p>${tri("まだ投稿はありません。ビュワーで本文の各セグメントや語を選ぶと、コメント・注釈・誤りの指摘を投稿できます。","You have not contributed yet. In a viewer, pick a segment or a word to post a comment, an annotation or a correction.","Vous n’avez pas encore contribué. Dans une visionneuse, choisissez un segment ou un mot pour publier un commentaire, une annotation ou une correction.")}</p><p>${viewerLinks()}</p>`);
+      return;
+    }
+    const rows=posts.filter(p=>postFilter==="all"||p.status===postFilter);
+    box.innerHTML=rows.length?rows.map(postHTML).join(""):`<p class="pf-msg">${tri("該当する投稿はありません。","Nothing here.","Rien à afficher.")}</p>`;
+    const f=box.querySelector(".pf-edit");
+    if(f){                                                                       // 修正フォーム: 〈誤りの指摘〉のときだけ修正案の欄を出す
+      const sl=f.querySelector(".cm-sugg-l");
+      const sync=()=>{ sl.hidden=f.querySelector("input[name=kind]:checked").value!=="correction"; };
+      f.querySelectorAll("input[name=kind]").forEach(r=>r.onchange=sync); sync();
+    }
+  }
+  function reloadPosts(){
+    return B.myContributions().then(rows=>{ posts=rows||[]; if(editing!=null&&!byId(posts,editing)) editing=null; renderPosts(); })
+      .catch(e=>{ posts=[]; postCounts(); $("#postList").innerHTML=failHTML(e); });
+  }
+  $("#postFilters").addEventListener("click",e=>{
+    const b=e.target.closest("button[data-s]"); if(!b) return;
+    editing=null; setFilter(b.dataset.s); renderPosts();
+  });
+  $("#postList").addEventListener("click",e=>{
+    const card=e.target.closest(".pf-card"); if(!card) return;
+    const id=key(card.dataset.id), p=byId(posts,id); if(!p) return;
+    const has=c=>!!e.target.closest("."+c);
+    if(has("act-edit")){ editing=id; renderPosts(); const ta=$("#postList .pf-edit textarea"); if(ta) ta.focus(); }
+    else if(has("act-cancel")){ editing=null; renderPosts(); }
+    else if(has("act-del")){
+      if(!confirm(L("この投稿を取り消しますか？（元に戻せません）","Withdraw this contribution? This cannot be undone.","Retirer cette contribution ? Cette action est définitive."))) return;
+      B.remove(id).then(reloadPosts).catch(er=>api.toast(api.errText(er)));
+    }
+    else if(has("act-revcancel")){
+      if(!confirm(L("修正の申請を取り下げますか？（公開中の内容はそのまま残ります）","Withdraw your changes? The published text stays as it is.","Retirer vos modifications ? Le texte publié reste inchangé."))) return;
+      B.cancelRevision(id).then(reloadPosts).catch(er=>api.toast(api.errText(er)));
+    }
+    else if(has("act-revdrop")){ B.cancelRevision(id).then(reloadPosts).catch(er=>api.toast(api.errText(er))); }
+  });
+  $("#postList").addEventListener("submit",e=>{
+    const f=e.target.closest(".pf-edit"); if(!f) return;
+    e.preventDefault();
+    const id=key(f.closest(".pf-card").dataset.id);
+    const kind=f.querySelector("input[name=kind]:checked").value, body=f.body.value.trim();
+    const msg=f.querySelector(".cm-msg"), btn=f.querySelector("button[type=submit]");
+    if(!body) return;
+    msg.className="cm-msg"; msg.textContent="…"; btn.disabled=true;
+    B.editContribution(id,{kind, body, suggestion:kind==="correction"?f.suggestion.value.trim():""}).then(r=>{
+      editing=null;
+      api.toast(r==="revision"?L("修正を申請しました。運営の確認後に反映されます。","Changes submitted. They will appear once reviewed.","Modifications soumises. Elles apparaîtront après relecture.")
+        : r==="unchanged"?L("公開中の内容と同じため、変更はありません。","Nothing changed: the text is the same as the published one.","Aucun changement : le texte est identique à celui publié.")
+        : L("修正を保存しました（承認待ち）。","Saved. The contribution is awaiting review.","Enregistré. La contribution est en attente de relecture."));
+      return reloadPosts();
+    }).catch(er=>{ btn.disabled=false; msg.className="cm-msg err"; msg.textContent=api.errText(er); });
+  });
+
+  /* ---------- III ブックマーク ---------- */
+  function bmHTML(b){
+    const href=api.docLink(b), open=String(memoEditing)===String(b.id);
+    return `<article class="pf-card pf-bm" data-id="${esc(b.id)}">
+      <div class="pf-cmeta">${whereLink(b,false)}<span>${esc(api.fmtDate(b.created_at))}</span></div>
+      ${b.excerpt?`<div class="pf-excerpt" lang="cop">${esc(b.excerpt)}</div>`:""}
+      ${open?`<form class="pf-memoform"><div class="pf-row"><input name="note" maxlength="500" value="${esc(b.note||"")}" aria-label="${esc(L("メモ","Note","Note"))}">
+          <button type="submit" class="cm-primary">${tri("保存","Save","Enregistrer")}</button>
+          <button type="button" class="cm-linkbtn act-cancel">${tri("キャンセル","Cancel","Annuler")}</button></div></form>`
+        :(b.note?`<div class="pf-memo"><b>${tri("メモ","NOTE","NOTE")}</b>${esc(b.note)}</div>`:"")}
+      ${open?"":`<div class="pf-acts">
+        ${href?`<a class="cm-linkbtn" href="${esc(href)}">${tri("開く →","Open →","Ouvrir →")}</a>`:""}
+        <button type="button" class="cm-linkbtn act-memo">${b.note?tri("メモを編集","Edit note","Modifier la note"):tri("メモを書く","Add a note","Ajouter une note")}</button>
+        <button type="button" class="cm-linkbtn danger act-del">${tri("削除","Remove","Supprimer")}</button></div>`}
+    </article>`;
+  }
+  function renderBookmarks(){
+    $("#bmList").innerHTML=bms.length?bms.map(bmHTML).join("")
+      :note("gengen_read",`<p>${tri("まだブックマークはありません。読み返したい箇所を見つけたら、ビュワーで〈☆ ブックマーク〉を押してください。","No bookmarks yet. When you find a passage you want to come back to, press “☆ Bookmark” in a viewer.","Aucun marque-page pour l’instant. Lorsque vous trouvez un passage à retrouver, cliquez sur « ☆ Marque-page » dans une visionneuse.")}</p><p>${viewerLinks()}</p>`);
+  }
+  function reloadBookmarks(){
+    return B.bookmarks().then(rows=>{ bms=rows||[]; if(memoEditing!=null&&!byId(bms,memoEditing)) memoEditing=null; renderBookmarks(); })
+      .catch(e=>{ bms=[]; $("#bmList").innerHTML=failHTML(e); });
+  }
+  $("#bmList").addEventListener("click",e=>{
+    const card=e.target.closest(".pf-card"); if(!card) return;
+    const id=key(card.dataset.id);
+    const has=c=>!!e.target.closest("."+c);
+    if(has("act-memo")){ memoEditing=id; renderBookmarks(); const i=$("#bmList .pf-memoform input"); if(i){ i.focus(); i.select(); } }
+    else if(has("act-cancel")){ memoEditing=null; renderBookmarks(); }
+    else if(has("act-del")){
+      if(!confirm(L("このブックマークを削除しますか？","Remove this bookmark?","Supprimer ce marque-page ?"))) return;
+      B.removeBookmark(id).then(reloadBookmarks).catch(er=>api.toast(api.errText(er)));
+    }
+  });
+  $("#bmList").addEventListener("submit",e=>{
+    const f=e.target.closest(".pf-memoform"); if(!f) return;
+    e.preventDefault();
+    const id=key(f.closest(".pf-card").dataset.id);
+    B.updateBookmark(id,{note:f.note.value.trim()}).then(()=>{ memoEditing=null; return reloadBookmarks(); })
+      .catch(er=>api.toast(api.errText(er)));
+  });
+
+  /* ---------- IV・V 運営へのメッセージ ---------- */
+  function fbHTML(f){
+    const bug=f.kind==="bug";
+    return `<article class="pf-card k-${bug?"bug":"cheer"}" data-id="${esc(f.id)}">
+      <div class="pf-cmeta"><span>${esc(api.fmtDate(f.created_at))}</span>
+        ${bug?(f.status==="done"?`<span class="cm-st done">${tri("対応済み","Handled","Traité")}</span>`:`<span class="cm-st new">${tri("受付済み","Received","Reçu")}</span>`):""}</div>
+      <div class="pf-cbody">${esc(f.body)}</div>
+      ${f.page?`<div class="pf-cpage">${tri("ページ:","Page:","Page :")} ${esc(f.page)}</div>`:""}
+      ${f.reply?`<div class="pf-cnote"><b>${tri("運営より:","Editors:","Équipe :")}</b> ${esc(f.reply)}</div>`:""}
+      <div class="pf-acts"><button type="button" class="cm-linkbtn danger act-del">${tri("削除","Delete","Supprimer")}</button></div>
+    </article>`;
+  }
+  function renderFeedback(){
+    const bugs=fbs.filter(f=>f.kind==="bug"), cheers=fbs.filter(f=>f.kind==="cheer");
+    $("#bugSent").hidden=!bugs.length; $("#bugList").innerHTML=bugs.map(fbHTML).join("");
+    $("#cheerSent").hidden=!cheers.length; $("#cheerList").innerHTML=cheers.map(fbHTML).join("");
+  }
+  function reloadFeedback(){
+    return B.myFeedback().then(rows=>{ fbs=rows||[]; renderFeedback(); })
+      .catch(()=>{ fbs=[]; renderFeedback(); });                                 // 一覧が読めなくても、送信フォームは使えるようにしておく
+  }
+  function onFbListClick(e){
+    if(!e.target.closest(".act-del")) return;
+    const card=e.target.closest(".pf-card"); if(!card) return;
+    if(!confirm(L("このメッセージを削除しますか？（運営側からも消えます）","Delete this message? It will also be removed for the editors.","Supprimer ce message ? Il sera aussi supprimé pour l’équipe."))) return;
+    B.removeFeedback(key(card.dataset.id)).then(reloadFeedback).catch(er=>api.toast(api.errText(er)));
+  }
+  $("#bugList").addEventListener("click",onFbListClick);
+  $("#cheerList").addEventListener("click",onFbListClick);
+  function wireFeedbackForm(form, msgEl, build, thanks){
+    form.addEventListener("submit",e=>{
+      e.preventDefault();
+      const body=form.body.value.trim(); if(!body||!B) return;
+      const btn=form.querySelector("button[type=submit]");
+      msgEl.className="cm-msg"; msgEl.textContent="…"; btn.disabled=true;
+      B.sendFeedback(build(body)).then(()=>{
+        form.body.value=""; if(form.page) form.page.value="";
+        msgEl.className="cm-msg ok"; msgEl.textContent=thanks();
+        return reloadFeedback();
+      }).catch(er=>{ msgEl.className="cm-msg err"; msgEl.textContent=api.errText(er); })
+        .then(()=>{ btn.disabled=false; });
+    });
+  }
+  const UA=(navigator.userAgent||"").slice(0,400);
+  $("#bugUaText").textContent=UA;
+  wireFeedbackForm($("#bugForm"), $("#bugMsg"),
+    body=>({kind:"bug", body, page:$("#bugPage").value.trim()||null, user_agent:$("#bugUa").checked&&UA?UA:null}),
+    ()=>L("報告を送信しました。ご協力ありがとうございます。","Report sent. Thank you for your help.","Signalement envoyé. Merci de votre aide."));
+  wireFeedbackForm($("#cheerForm"), $("#cheerMsg"),
+    body=>({kind:"cheer", body, page:null, user_agent:null}),
+    ()=>{ $("#cheerFig").src=POSE+"gengen_bow.svg"; return L("メッセージを送信しました。ありがとうございます！","Message sent. Thank you!","Message envoyé. Merci !"); });
+
+  /* ---------- I 表示名 ---------- */
+  $("#nameForm").addEventListener("submit",e=>{
+    e.preventDefault();
+    const v=$("#nameInput").value.trim(), msg=$("#nameMsg"); if(!v||!B) return;
+    if(U&&v===U.name){ msg.className="cm-msg"; msg.textContent=L("変更はありません。","Nothing to change.","Aucun changement."); return; }
+    msg.className="cm-msg"; msg.textContent="…";
+    B.updateName(v).then(()=>{ msg.className="cm-msg ok"; msg.textContent=L("保存しました。","Saved.","Enregistré."); })
+      .catch(er=>{ msg.className="cm-msg err"; msg.textContent=api.errText(er); });
+  });
+  $("#pfLogout").addEventListener("click",()=>{ if(B) B.signOut().catch(er=>api.toast(api.errText(er))); });
+  $("#pfLogin").addEventListener("click",()=>{ if(api) api.openLogin(); });
+
+  /* ---------- 言語で変わる属性（placeholder） ---------- */
+  function applyAttrs(){
+    $("#bugBody").placeholder=L("例: 『国家』のページで〈語釈〉を押しても何も表示されない","e.g. On the Republic page, pressing “Interlinear” shows nothing","ex. : sur la page de la République, « Interlinear » n’affiche rien");
+    $("#bugPage").placeholder=L("例: republic.html、検索ページ","e.g. republic.html, the search page","ex. : republic.html, la page de recherche");
+    $("#cheerBody").placeholder=L("感想や励ましのことばをどうぞ","Your impressions or a word of encouragement","Vos impressions ou un mot d’encouragement");
+  }
+
+  /* ---------- 読み込み ---------- */
+  function load(){
+    U=api.user(); B=api.backend();
+    if(api.mode==="off"||!B){ gate("off"); return; }
+    if(!U){ gate("login"); return; }
+    showBody();
+    Promise.all([reloadPosts(), reloadBookmarks(), reloadFeedback()]).then(()=>{
+      if(!firstShow) return; firstShow=false;
+      // #bookmarks などのリンクで開いたとき: 中身を出し終えてから、その見出しへ移動する
+      if(location.hash.length>1){ const t=document.getElementById(decodeURIComponent(location.hash.slice(1))); if(t) t.scrollIntoView(); }
+    });
+  }
+  function start(){
+    api=window.NHC_COMMUNITY;
+    if(!api){ $("#pfLoading").textContent="community.js が読み込まれていません。"; return; }
+    esc=api.esc; applyAttrs();
+    document.addEventListener("nhc:lang",applyAttrs);
+    api.ready.then(()=>{ load(); api.onChange(load); });
+  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",start); else start();
+})();
+</script>
+</body>
+</html>

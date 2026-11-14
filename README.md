@@ -16,10 +16,12 @@
 | `republic.html` | 『国家』ビュワー | 手作業 |
 | `search.html` | コーパス検索・統計。見出し下のタブで〈検索〉と〈統計〉を切替（`?view=stats` で統計を直接開く）。左の〈文書〉〈品詞〉の絞り込みは両方に共通。統計のセクションは JS 内の `SECTIONS` に追加 | 手作業 |
 | `stats.html` | 旧コーパス統計。`search.html?view=stats` への転送のみ（`?doc=…` は引き継ぐ） | 手作業 |
-| `admin.html` | 投稿（コメント・注釈・誤りの指摘）の承認（運営用） | 手作業 |
+| `profile.html` | プロフィール（ログイン中の利用者用）。表示名の変更、自分の投稿の確認と修正、ブックマーク、運営へのバグの報告・応援メッセージ | 手作業 |
+| `admin.html` | 投稿（コメント・注釈・誤りの指摘）の承認、公開済みの投稿への修正の申請の承認、運営へのメッセージの確認（運営用） | 手作業 |
 
 共通部品: `assets/site.css`・`assets/site.js`（上部ナビ・言語切替・XML ダウンロードメニュー・ワイド表示）、
-`assets/community.*`（ログインと承認制の投稿。設定は `assets/community-config.js`、手順は `docs/COMMUNITY_SETUP.md`）。
+`assets/community.*`（ログイン、承認制の投稿、ブックマーク。設定は `assets/community-config.js`、手順は `docs/COMMUNITY_SETUP.md`。
+データベースの定義は `supabase/schema.sql` で、更新したときは Supabase の SQL Editor で全体を再実行します）。
 上部ナビの項目は `assets/site.js` の `NAV` を編集すれば全ページに反映されます。
 
 **同形異義語の参照**: 本文の `<w>` は `@lemma` と `@type`（品詞）の組で `lexicon.xml` を引きます。
