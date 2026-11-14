@@ -345,7 +345,7 @@ def build_index():
      <a href="#corpus">{tri("文書一覧へ ↓", "Browse the codices ↓", "Parcourir les codices ↓")}</a>
    </div>
   </div>
-  <img class="hero-fig" src="image/web/gengen.svg" alt="" loading="lazy">
+  <img class="hero-fig" src="image/web/gengen_guide.svg" alt="" loading="lazy">
  </section>
 
  <div class="sec-h"><h2>{tri("公開中のテキスト", "Published texts", "Textes publiés")}</h2><span class="rule"></span></div>
@@ -362,7 +362,7 @@ def build_index():
         <a href="eugnostos.html?wit=V">{tri("V,1 を読む", "Read V,1", "Lire V,1")}</a>
         <a href="eugnostos.html?wit=SYN">{tri("対照表示", "Synopsis", "Synopse")}</a>
         <a href="search.html?doc=eugnostos">{tri("検索", "Search", "Recherche")}</a>
-        <a href="search.html?doc=eugnostos&amp;view=stats">{tri("統計", "Statistics", "Statistiques")}</a></div>
+        <a href="stats.html?doc=eugnostos">{tri("統計", "Statistics", "Statistiques")}</a></div>
      </div>
    </div>
    <div class="feat">
@@ -372,7 +372,7 @@ def build_index():
        <div class="loc">{tri("ギリシア語原文対照・IIIFファクシミリ", "Greek parallel text · IIIF facsimile", "Texte grec en regard · fac-similé IIIF")}</div>
        <div class="acts"><a class="go" href="republic.html">{tri("全文を読む →", "Read the text →", "Lire le texte →")}</a>
         <a href="search.html?doc=republic">{tri("検索", "Search", "Recherche")}</a>
-        <a href="search.html?doc=republic&amp;view=stats">{tri("統計", "Statistics", "Statistiques")}</a></div>
+        <a href="stats.html?doc=republic">{tri("統計", "Statistics", "Statistiques")}</a></div>
      </div>
    </div>
  </div>
@@ -530,7 +530,7 @@ if(!t){
    <div class="soon"><span class="dot"></span> ${tri('このテキストは整備予定です（準備中）','This text is in preparation','Ce texte est en préparation')}</div>
    <div class="rail"><i></i><i></i><i></i><i></i><i></i></div>
    <div class="card">
-     <img src="image/web/gengen_sleep.svg" alt="" loading="lazy"
+     <img src="image/web/gengen_roost.svg" alt="" loading="lazy"
        style="float:right; width:110px; aspect-ratio:1; border-radius:50%; object-fit:cover; object-position:center 22%; border:1px solid rgba(212,175,106,.45); margin:0 0 10px 14px">
      <h2>${tri('完成時に備わる構成','What the finished edition will offer','Ce que l’édition offrira')}</h2>
      <p>${tri('本文書は本コーパスの拡張対象です。完成時には<b>エウグノストスと同一の構成</b>で公開され、同じビュワーで形態素クリック・三言語切替・注釈の併読ができるようになります。',

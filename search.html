@@ -1,67 +1,57 @@
 <!DOCTYPE html>
-<!-- コーパス検索・統計ページ（手作業管理）
-     - 見出し下のタブで〈検索〉と〈統計〉を切り替えます（旧 stats.html をこのページに統合。統計は ?view=stats で直接開けます）。
-       左の〈文書〉〈品詞〉の絞り込みは、検索と統計の両方に共通です。
-     - 既定で全文書を横断します。左の〈文書〉一覧で証本ごとに絞り込めます。
+<!-- コーパス検索ページ（手作業管理）
+     - 既定で全文書を横断検索します。左の〈文書〉一覧で証本ごとに絞り込めます。
        旧URL（?doc=republic / ?doc=eugnostos）は、その文書だけを選択した状態で開きます。
      - 文書一覧は data/catalog.xml から生成します。<bibl type="document"> のうち <ref type="xml"> を持つものを読み込み、
        本文 XML 内の <text type="witness"> を証本として並べます（subtype="planned" は「準備中」として表示のみ）。
        新しい文書は catalog.xml に1件足せば、この画面にも自動で加わります。
-     - 〈検索〉の結果はレンマ単位（<w @lemma> + @type）で集計し、語義（data/lexicon.xml）・品詞・活用型・語形・頻度・文書別分布を表示します。
+     - 結果はレンマ単位（<w @lemma> + @type）で集計し、語義（data/lexicon.xml）・品詞・活用型・語形・頻度・文書別分布を表示します。
        行をクリックすると語義の詳細と用例（KWIC）を開き、用例から全文表示の該当箇所 (#seg-ID) へ移動できます。
-     - 〈統計〉は、選択中の証本・品詞の範囲を TEI から直接集計します（検索語には依存しません）。
-       セクションを増やすときは JS 内の SECTIONS 配列に1要素 push するだけで、目次と本体が自動生成されます。
      - 活用型: 辞書の <entry><gramGrp><iType> と、本文の <w @msd> を読み込みます（未付与の間は「—」）。
      - 同形異義語の参照はビュワーと同じ規則（@ana による固定 → レンマ＋品詞 → レンマのみ）。
      - UI言語は site.js の三言語切替（html[data-i18n="full"]）に従います。
-     - 配色はサイト共通の宇宙テーマ（assets/cosmos.css）に合わせています。色はページ内 <style> 冒頭の CSS 変数でまとめて管理します。
-     URL パラメータ: view=stats（統計を開く）, q=検索語, m=part|pre|ex（一致方法）, f=flg（対象: f語形 lレンマ g語義）,
-                     w=証本ID（カンマ区切り）, xpos=除外する品詞 -->
-<html lang="ja" data-lang="ja" data-i18n="full" data-mode="aeon"
-  data-title-en="Corpus search and statistics — Sheneset"
-  data-title-fr="Recherche et statistiques — Sheneset">
+     URL パラメータ: q=検索語, m=part|pre|ex（一致方法）, f=flg（対象: f語形 lレンマ g語義）, w=証本ID（カンマ区切り）, xpos=除外する品詞 -->
+<html lang="ja" data-lang="ja" data-i18n="full"
+  data-title-en="Corpus search — Sheneset"
+  data-title-fr="Recherche dans le corpus — Sheneset">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>コーパス検索・統計 — Sheneset</title>
+<title>コーパス検索 — Sheneset</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22 role=%22img%22 aria-label=%22Sheneset%22%3E %3Cdefs%3E%3CradialGradient id=%22bg%22 cx=%2250%25%22 cy=%2242%25%22 r=%2278%25%22%3E%3Cstop offset=%220%22 stop-color=%22%232b2856%22/%3E%3Cstop offset=%22.55%22 stop-color=%22%231b1937%22/%3E%3Cstop offset=%221%22 stop-color=%22%230e0d20%22/%3E%3C/radialGradient%3E%3ClinearGradient id=%22gold%22 gradientUnits=%22userSpaceOnUse%22 x1=%220%22 y1=%2256%22 x2=%220%22 y2=%22456%22%3E%3Cstop offset=%220%22 stop-color=%22%23f7e9ad%22/%3E%3Cstop offset=%22.5%22 stop-color=%22%23d8b863%22/%3E%3Cstop offset=%221%22 stop-color=%22%23a37e30%22/%3E%3C/linearGradient%3E%3CradialGradient id=%22spark%22%3E%3Cstop offset=%220%22 stop-color=%22%23fff8e0%22/%3E%3Cstop offset=%22.38%22 stop-color=%22%23f4e3a0%22/%3E%3Cstop offset=%22.72%22 stop-color=%22%23d8b863%22/%3E%3Cstop offset=%221%22 stop-color=%22%23caa241%22 stop-opacity=%220%22/%3E%3C/radialGradient%3E%3CradialGradient id=%22glow%22%3E%3Cstop offset=%220%22 stop-color=%22%239d8be0%22 stop-opacity=%22.36%22/%3E%3Cstop offset=%221%22 stop-color=%22%239d8be0%22 stop-opacity=%220%22/%3E%3C/radialGradient%3E%3C/defs%3E %3Ccircle cx=%22256%22 cy=%22256%22 r=%22246%22 fill=%22url(%23bg)%22/%3E%3Ccircle cx=%22256%22 cy=%22256%22 r=%22236%22 fill=%22none%22 stroke=%22%23efe4c6%22 stroke-opacity=%22.2%22 stroke-width=%222%22/%3E%3Ccircle cx=%22256%22 cy=%22256%22 r=%22176%22 fill=%22url(%23glow)%22/%3E %3Ccircle cx=%22256%22 cy=%22256%22 r=%22150%22 fill=%22none%22 stroke=%22%23efe4c6%22 stroke-opacity=%22.14%22 stroke-width=%221.5%22/%3E %3Ccircle cx=%22313.4%22 cy=%22117.42%22 r=%225%22 fill=%22url(%23gold)%22 fill-opacity=%220.8%22/%3E%3Ccircle cx=%22394.58%22 cy=%22198.6%22 r=%225%22 fill=%22url(%23gold)%22 fill-opacity=%220.8%22/%3E%3Ccircle cx=%22394.58%22 cy=%22313.4%22 r=%225%22 fill=%22url(%23gold)%22 fill-opacity=%220.8%22/%3E%3Ccircle cx=%22313.4%22 cy=%22394.58%22 r=%225%22 fill=%22url(%23gold)%22 fill-opacity=%220.8%22/%3E%3Ccircle cx=%22198.6%22 cy=%22394.58%22 r=%225%22 fill=%22url(%23gold)%22 fill-opacity=%220.8%22/%3E%3Ccircle cx=%22117.42%22 cy=%22313.4%22 r=%225%22 fill=%22url(%23gold)%22 fill-opacity=%220.8%22/%3E%3Ccircle cx=%22117.42%22 cy=%22198.6%22 r=%225%22 fill=%22url(%23gold)%22 fill-opacity=%220.8%22/%3E%3Ccircle cx=%22198.6%22 cy=%22117.42%22 r=%225%22 fill=%22url(%23gold)%22 fill-opacity=%220.8%22/%3E %3Cpath d=%22M 339.29,85.23 A 190 190 0 1 1 102.29,144.32%22 fill=%22none%22 stroke=%22url(%23gold)%22 stroke-width=%2220%22/%3E%3Cpath d=%22M 92.17,141.28 L 98.46,132.92 L 105.23,124.94 L 112.43,117.35 L 120.03,110.19 L 128.01,103.47 L 136.34,97.2 L 144.98,91.41 L 153.92,86.11 L 163.11,81.3 L 172.54,77.01 L 182.16,73.25 L 191.96,70.01 L 201.9,67.32 L 211.94,65.17 L 222.07,63.58 L 232.24,62.53 L 242.44,62.03 L 252.62,62.09 L 262.75,62.69 L 272.81,63.83 L 282.77,65.51 L 292.6,67.71 L 302.27,70.43 L 301.66,72.86 L 291.91,71.27 L 282.11,70.19 L 272.31,69.62 L 262.51,69.54 L 252.75,69.97 L 243.06,70.89 L 233.44,72.3 L 223.94,74.2 L 214.57,76.56 L 205.36,79.4 L 196.32,82.69 L 187.49,86.42 L 178.87,90.59 L 170.49,95.18 L 162.37,100.17 L 154.52,105.56 L 146.97,111.31 L 139.73,117.43 L 132.81,123.89 L 126.22,130.68 L 119.98,137.76 L 114.1,145.13 L 108.55,152.76 Z%22 fill=%22url(%23gold)%22/%3E%3Cpath d=%22M 339.29,85.23 A 190 190 0 1 1 102.29,144.32%22 fill=%22none%22 stroke=%22%236b4d17%22 stroke-opacity=%22.5%22 stroke-width=%222.6%22 stroke-linecap=%22round%22 stroke-dasharray=%22.1 11.8%22/%3E%3Cpath d=%22M 341.72,97.14 C 329.55,100.59 319.71,97.62 311.92,92.36 C 302.18,85.78 293.23,77.06 292.06,66.93 C 299.46,59.92 311.93,59 323.62,60.22 C 332.97,61.2 342.41,65.24 349.52,75.71 Z%22 fill=%22url(%23gold)%22/%3E%3Ccircle cx=%22311.6%22 cy=%2282.77%22 r=%223.1%22 fill=%22%231b1937%22/%3E%3Ccircle cx=%22317.21%22 cy=%2267.36%22 r=%223.1%22 fill=%22%231b1937%22/%3E %3Cpolygon points=%22239.93,217.2 256,138 272.07,217.2 339.44,172.56 294.8,239.93 374,256 294.8,272.07 339.44,339.44 272.07,294.8 256,374 239.93,294.8 172.56,339.44 217.2,272.07 138,256 217.2,239.93 172.56,172.56%22 fill=%22url(%23gold)%22/%3E%3Cpath d=%22M 256,256 L 256,138 L 272.07,217.2 Z M 256,256 L 339.44,172.56 L 294.8,239.93 Z M 256,256 L 374,256 L 294.8,272.07 Z M 256,256 L 339.44,339.44 L 272.07,294.8 Z M 256,256 L 256,374 L 239.93,294.8 Z M 256,256 L 172.56,339.44 L 217.2,272.07 Z M 256,256 L 138,256 L 217.2,239.93 Z M 256,256 L 172.56,172.56 L 239.93,217.2 Z%22 fill=%22%235a3f12%22 fill-opacity=%220.28%22/%3E %3Ccircle cx=%22256%22 cy=%22256%22 r=%2231%22 fill=%22%2315142c%22/%3E %3Ccircle cx=%22256%22 cy=%22256%22 r=%2231%22 fill=%22none%22 stroke=%22url(%23gold)%22 stroke-width=%223%22/%3E %3Ccircle cx=%22256%22 cy=%22256%22 r=%2217%22 fill=%22url(%23spark)%22/%3E %3C/svg%3E"><link rel="alternate icon" type="image/png" sizes="32x32" href="data:image/png;base64,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"><link rel="apple-touch-icon" href="image/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+Coptic&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/cosmos.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+Coptic&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/site.css">
 <link rel="stylesheet" href="assets/community.css">
-<script defer src="assets/cosmos.js"></script>
 <script defer src="assets/site.js"></script>
 <script defer src="assets/community-config.js"></script>
 <script defer src="assets/community.js"></script>
 <style>
-/* 配色はサイト共通の宇宙テーマ（assets/cosmos.css：虚空の藍黒・プレーローマの金・バルベーローの紫）に合わせる。
-   このページの色はここの --s-* 変数だけで管理し、値はテーマ側の変数（--ink / --gold / --lapis / --panel / --line など）を参照する。
-   var() の第2引数は cosmos.css と同じ値の予備。地の色・星野・上部ナビは他のページと共通（cosmos.css / cosmos.js / site.css）。
-   --s-bg は固定見出し用の不透明な地（site.css のビュワー固定見出しと同色）。 */
+/* このページはシンプルなダーク配色（宇宙テーマの星野などは読み込まない）。
+   配色はここの --s-* 変数だけで管理。共通部品（ログイン欄など）の変数名とは分けてある。 */
 :root{color-scheme:dark;
-  --ui:'Inter','Noto Sans JP',system-ui,-apple-system,"Hiragino Sans",sans-serif;
-  --s-bg:#0d0b1e; --s-bg2:var(--panel,rgba(23,20,46,.78)); --s-field:var(--panel-2,rgba(33,28,64,.85));
-  --s-ink:var(--ink,#ede8dc); --s-mut:var(--ink-soft,#bdb7d2); --s-faint:var(--ink-faint,#8a85a6);
-  --s-rule:var(--line-2,rgba(190,180,230,.22)); --s-rule2:var(--line,rgba(190,180,230,.16)); --s-edge:rgba(190,180,230,.36);
-  --s-acc:var(--gold-bright,#e7c885); --s-gold:var(--gold,#d4af6a); --s-link:var(--lapis,#9d8be0); --s-warn:var(--rose,#cf93a6);
-  --s-mark:rgba(212,175,106,.28); --s-bar:linear-gradient(90deg,var(--gold,#d4af6a),var(--gold-bright,#e7c885));
-  --s-zero:rgba(138,133,166,.5);
+  --s-bg:#17181b; --s-bg2:#202226; --s-field:#1e2024; --s-ink:#e6e3dc; --s-mut:#a29d93; --s-faint:#77736b;
+  --s-rule:#3a3c41; --s-rule2:#2a2c30; --s-edge:#4b4d53; --s-acc:#d9a46b; --s-mark:rgba(217,164,107,.30);
+  --s-bar:#8f8a80; --s-zero:#4a4c51;
   --s-cop:"Noto Sans Coptic","Antinoou",serif}
-*{box-sizing:border-box}   /* 他のページと同じ指定（上部ナビの高さが揃う） */
-body{margin:0; color:var(--s-ink); font-family:var(--ui);
+html{background:var(--s-bg)}
+body{margin:0; background:var(--s-bg); color:var(--s-ink);
+  font-family:"Noto Sans JP",system-ui,-apple-system,"Hiragino Sans",sans-serif;
   font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased}
 .cop{font-family:"Noto Sans Coptic","Antinoou",serif}
 .num{font-variant-numeric:tabular-nums; text-align:right; white-space:nowrap}
 
-/* 本体は星野キャンバス（cosmos.js）の手前に置く */
-.layout{position:relative; z-index:1; display:grid; grid-template-columns:250px minmax(0,1fr); max-width:1440px; margin:0 auto; color:var(--s-ink)}
+/* 上部ナビも同じ配色に（半透明・ぼかしなし） */
+body .sitebar{--chrome-ink:var(--s-ink); --chrome-faint:var(--s-mut); --gold:var(--s-acc); --gold-bright:var(--s-acc);
+  --line-2:var(--s-rule); background:#111214; border-bottom:1px solid var(--s-rule); backdrop-filter:none; color:var(--s-ink)}
+
+.layout{display:grid; grid-template-columns:250px minmax(0,1fr); max-width:1440px; margin:0 auto; color:var(--s-ink)}
 
 /* ---- 左：文書と品詞の絞り込み（独立してスクロール） ---- */
 .side{position:sticky; top:var(--sbh,47px); height:calc(100vh - var(--sbh,47px)); overflow-y:auto;
   scrollbar-gutter:stable; border-right:1px solid var(--s-rule); padding:22px 14px 40px 20px;
-  font-size:.84rem; scrollbar-width:thin; scrollbar-color:rgba(190,180,230,.3) transparent}
+  font-size:.84rem; scrollbar-width:thin; scrollbar-color:#45474c transparent}
 .side h2{font-size:.74rem; font-weight:700; color:var(--s-mut); margin:0 0 8px;
   display:flex; align-items:baseline; gap:8px}
 .side h2 + .lnk{margin-left:auto}
@@ -69,7 +59,7 @@ body{margin:0; color:var(--s-ink); font-family:var(--ui);
 .side ul{list-style:none; margin:0; padding:0}
 .side li{margin:0}
 .opt{display:flex; align-items:baseline; gap:7px; padding:4px 0; cursor:pointer}
-.opt input{margin:0; accent-color:var(--s-gold); flex:none; transform:translateY(1px)}
+.opt input{margin:0; accent-color:var(--s-acc); flex:none; transform:translateY(1px)}
 .opt .nm{flex:1; min-width:0}
 .opt .nm small{display:block; color:var(--s-mut); font-size:.74rem}
 .opt .ct{color:var(--s-faint); font-size:.74rem; font-variant-numeric:tabular-nums}
@@ -91,18 +81,18 @@ h1{font-size:1.45rem; font-weight:700; margin:0 0 4px; letter-spacing:.01em}
 .lede{color:var(--s-mut); margin:0 0 18px; font-size:.9rem}
 .qrow{display:flex; gap:10px; align-items:stretch; max-width:760px}
 .qrow input{flex:1; min-width:0; font:inherit; font-size:1.05rem; padding:9px 12px; color:var(--s-ink);
-  background:var(--s-field); border:1px solid var(--s-edge); border-radius:8px; outline:none}
+  background:var(--s-field); border:1px solid var(--s-edge); border-radius:3px; outline:none}
 .qrow input::placeholder{color:var(--s-faint)}
-.qrow input:focus{border-color:var(--s-gold); box-shadow:0 0 0 1px var(--s-gold)}
+.qrow input:focus{border-color:var(--s-acc); box-shadow:0 0 0 1px var(--s-acc)}
 .opts{display:flex; flex-wrap:wrap; gap:6px 22px; margin:10px 0 0; font-size:.82rem; color:var(--s-mut)}
 .opts fieldset{border:0; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:4px 14px; align-items:center}
 .opts legend{float:left; margin-right:6px; color:var(--s-mut)}
 .opts label{display:inline-flex; gap:5px; align-items:center; cursor:pointer; color:var(--s-ink)}
-.opts input{margin:0; accent-color:var(--s-gold)}
-.opts select{font:inherit; font-size:.82rem; padding:2px 4px; border:1px solid var(--s-edge); border-radius:6px; background:var(--s-field); color:var(--s-ink)}
+.opts input{margin:0; accent-color:var(--s-acc)}
+.opts select{font:inherit; font-size:.82rem; padding:2px 4px; border:1px solid var(--s-edge); border-radius:3px; background:var(--s-field); color:var(--s-ink)}
 .scope{margin:14px 0 0; font-size:.8rem; color:var(--s-mut)}
 
-h2.sec{font-size:1rem; font-weight:700; color:var(--s-gold); margin:34px 0 10px; padding-bottom:6px; border-bottom:1px solid var(--s-rule);
+h2.sec{font-size:1rem; font-weight:700; margin:34px 0 10px; padding-bottom:6px; border-bottom:1px solid var(--s-edge);
   display:flex; align-items:baseline; gap:12px; flex-wrap:wrap}
 h2.sec small{font-weight:400; color:var(--s-mut); font-size:.8rem}
 h2.sec .right{margin-left:auto; display:flex; gap:14px}
@@ -117,8 +107,8 @@ table.st th, table.st td{padding:4px 8px 4px 0; border-bottom:1px solid var(--s-
 table.st th{font-weight:500; color:var(--s-mut); text-align:left; border-bottom:1px solid var(--s-rule)}
 table.st th.num{text-align:right}
 table.st td.barc{width:34%; padding-right:0}
-.bar{display:block; height:7px; border-radius:999px; overflow:hidden; background:rgba(255,255,255,.06)}
-.bar i{display:block; height:100%; border-radius:999px; background:var(--s-bar)}
+.bar{display:block; height:7px; background:var(--s-rule2)}
+.bar i{display:block; height:100%; background:var(--s-bar)}
 table.st tfoot td{border-bottom:0; color:var(--s-mut)}
 
 /* レンマ表 */
@@ -138,7 +128,7 @@ table.lx tr.row.open td{background:var(--s-bg2); border-bottom-color:transparent
 td.lem{white-space:nowrap}
 td.lem .cop{font-size:1.08rem}
 td.lem .tw{display:inline-block; width:1em; color:var(--s-faint); font-size:.7rem}
-.grc{font-size:.66rem; color:var(--s-link); margin-left:4px; vertical-align:super; letter-spacing:.04em}
+.grc{font-size:.66rem; color:var(--s-mut); margin-left:4px; vertical-align:super; letter-spacing:.04em}
 td.pos{white-space:nowrap; color:var(--s-mut); font-size:.8rem}
 td.pos code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.74rem; color:var(--s-ink)}
 td.gl{max-width:28em}
@@ -149,7 +139,7 @@ td.fm small{color:var(--s-faint); font-size:.72rem; margin-left:1px}
 td.fm .more{color:var(--s-faint); font-size:.74rem}
 td.dist{color:var(--s-mut)}
 td.zero{color:var(--s-zero)}
-mark{background:var(--s-mark); color:inherit; padding:0 1px; border-radius:2px}
+mark{background:var(--s-mark); color:inherit; padding:0 1px}
 .partial{color:var(--s-faint); font-size:.74rem}
 
 /* 詳細行 */
@@ -160,7 +150,7 @@ tr.detail td{padding:4px 0 22px 1.4em; background:var(--s-bg2); border-bottom:1p
 .sense .n{color:var(--s-faint); margin-right:6px; font-variant-numeric:tabular-nums}
 .sense .l{color:var(--s-faint); font-size:.72rem; margin-right:4px}
 .sense .u{color:var(--s-mut); font-size:.76rem}
-.dgrid a, .kwic a{color:var(--s-link); text-underline-offset:3px}
+.dgrid a, .kwic a{color:var(--s-acc); text-underline-offset:3px}
 .kwic{grid-column:1 / -1}
 table.kw{border-collapse:collapse; width:100%; font-size:.86rem}
 table.kw td{padding:3px 8px; border-bottom:1px solid var(--s-rule2); vertical-align:baseline}
@@ -173,79 +163,26 @@ table.kw td.rc{color:var(--s-mut); white-space:nowrap; overflow:hidden; max-widt
 .kwic .cop{font-size:1rem}
 
 .morebar{margin:14px 0 0; font-size:.84rem}
-.btn{appearance:none; font:inherit; font-size:.82rem; padding:5px 14px; border:1px solid var(--s-rule); background:rgba(255,255,255,.06);
-  color:var(--s-ink); border-radius:999px; cursor:pointer}
-.btn:hover{border-color:var(--s-gold); color:var(--s-acc)}
+.btn{appearance:none; font:inherit; font-size:.82rem; padding:5px 12px; border:1px solid var(--s-edge); background:var(--s-field);
+  color:var(--s-ink); border-radius:3px; cursor:pointer}
+.btn:hover{border-color:var(--s-mut)}
 .empty{padding:28px 0; color:var(--s-mut); font-size:.9rem}
-.notice{border-left:3px solid var(--s-warn); border-radius:0 8px 8px 0; background:var(--s-bg2); padding:10px 14px; font-size:.84rem; margin:16px 0}
+.notice{border-left:3px solid var(--s-acc); background:var(--s-bg2); padding:10px 14px; font-size:.84rem; margin:16px 0}
 .notice code{font-size:.8rem}
+.notice .fail{display:flex; gap:14px; align-items:center; flex:1 1 100%; min-width:0}
+.notice .fail img{flex:none; width:92px; height:92px}
+.notice .fail>div{min-width:0}
 .foot{margin-top:46px; padding-top:12px; border-top:1px solid var(--s-rule); font-size:.74rem; color:var(--s-mut); line-height:1.8}
 .foot code{font-size:.72rem}
 .vh{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
-
-/* ---- 見出しと表示切替（検索 / 統計） ---- */
-.eyebrow{font-size:.7rem; letter-spacing:.3em; text-transform:uppercase; color:var(--s-gold); margin:0 0 4px}
-.views{display:flex; gap:0 28px; margin:14px 0 20px; border-bottom:1px solid var(--s-rule)}
-.views button{appearance:none; border:0; border-bottom:2px solid transparent; margin:0 0 -1px; background:none;
-  padding:7px 2px 8px; font:inherit; font-size:.95rem; color:var(--s-mut); cursor:pointer}
-.views button:hover{color:var(--s-ink)}
-.views button[aria-selected="true"]{color:var(--s-acc); border-bottom-color:var(--s-gold); font-weight:700}
-.views button:focus-visible{outline:2px solid var(--s-link); outline-offset:2px}
-
-/* ---- 統計ビュー（旧 stats.html を統合。クラス名は sv- で始める） ---- */
-.sv-toc{display:flex; flex-wrap:wrap; gap:4px 20px; margin:12px 0 0; font-size:.82rem}
-.sv-toc a{color:var(--s-mut); text-decoration:none; text-underline-offset:5px}
-.sv-toc a:hover{color:var(--s-ink); text-decoration:underline; text-decoration-color:var(--s-gold)}
-.sv-sec{scroll-margin-top:calc(var(--sbh,47px) + 10px)}
-.sv-note{font-size:.78rem; color:var(--s-faint); margin:10px 0 0; line-height:1.7; max-width:92ch}
-.sv-note code{font-size:.74rem; color:var(--s-acc)}
-/* 数値カード */
-.sv-cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(164px,1fr)); gap:10px; margin:14px 0 0}
-.sv-card{background:var(--s-bg2); border:1px solid var(--s-rule2); border-radius:12px; padding:12px 15px}
-.sv-card .v{font-family:var(--disp,'Spectral',Georgia,serif); font-size:1.5rem; line-height:1.15; color:var(--s-acc);
-  font-variant-numeric:tabular-nums}
-.sv-card .v small{font-family:var(--ui); font-size:.76rem; color:var(--s-faint)}
-.sv-card .k{font-size:.72rem; color:var(--s-mut); margin-top:3px}
-.sv-card.loan{border-color:rgba(157,139,224,.45)}
-.sv-card.loan .v{color:#cfc4f5}
-/* 横棒グラフ */
-.sv-bars{display:flex; flex-direction:column; gap:5px; margin:14px 0 0; max-width:900px}
-.sv-bar{display:grid; grid-template-columns:minmax(120px,220px) minmax(0,1fr) 52px; align-items:center; gap:10px; font-size:.8rem}
-.sv-bars.pc .sv-bar{grid-template-columns:minmax(120px,220px) minmax(0,1fr) 52px 44px}
-.sv-bar .lab{overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
-.sv-bar .lab code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.7rem; color:var(--s-faint); margin-left:3px}
-.sv-bar .lab .cop{font-size:1rem}
-.sv-bar .lab a{color:inherit; text-decoration:none; text-underline-offset:4px}
-.sv-bar .lab a:hover{text-decoration:underline; text-decoration-color:var(--s-gold)}
-.sv-bar .track{height:8px; border-radius:999px; overflow:hidden; background:rgba(255,255,255,.06)}
-.sv-bar .track i{display:block; height:100%; border-radius:999px; background:var(--s-bar)}
-.sv-bar.loan .track i{background:linear-gradient(90deg,#6f5fb0,var(--s-link))}
-.sv-bar .ct, .sv-bar .pc{text-align:right; font-variant-numeric:tabular-nums}
-.sv-bar .pc{color:var(--s-faint); font-size:.74rem}
-/* チップ列（借用語・辞書に語釈のないレンマ） */
-.sv-chips{display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin:14px 0 0}
-.sv-chip{font-family:var(--s-cop); font-size:.95rem; color:var(--s-ink); text-decoration:none;
-  background:rgba(157,139,224,.14); border:1px solid rgba(157,139,224,.34); border-radius:999px; padding:2px 11px}
-.sv-chip b{font-family:var(--ui); font-size:.68rem; font-weight:600; color:var(--s-link); margin-left:6px; font-variant-numeric:tabular-nums}
-.sv-chip.warn{background:rgba(207,147,166,.13); border-color:rgba(207,147,166,.36)}
-.sv-chip.warn b{color:var(--s-warn)}
-.sv-chip:hover{border-color:var(--s-gold)}
-.sv-more{font-size:.76rem; color:var(--s-faint); margin-left:4px}
-/* 統計ビューの表 */
-.sv-tbl{margin:12px 0 0; max-width:980px}
-.sv-tbl table.st td.barc{width:24%}
-.sv-tbl.narrow{max-width:420px}
 
 @media (max-width: 860px){
   .layout{grid-template-columns:1fr}
   .side{position:static; height:auto; max-height:42vh; border-right:0; border-bottom:1px solid var(--s-rule); padding:16px}
   .dgrid{grid-template-columns:1fr}
   td.gl{max-width:16em}
-  .tblwrap, .sv-tbl{overflow-x:auto}
+  .tblwrap{overflow-x:auto}
   table.lx th{position:static}
-  .sv-bar{grid-template-columns:minmax(92px,132px) minmax(0,1fr) 44px}
-  .sv-bars.pc .sv-bar{grid-template-columns:minmax(92px,132px) minmax(0,1fr) 44px 38px}
-  .sv-tbl:not(.narrow) table.st{min-width:620px}
 }
 </style>
 </head>
@@ -267,18 +204,7 @@ table.kw td.rc{color:var(--s-mut); white-space:nowrap; overflow:hidden; max-widt
   </aside>
 
   <main>
-    <div class="eyebrow">Corpus search &amp; statistics</div>
-    <h1><span class="l-ja">コーパス検索・統計</span><span class="l-en">Corpus search and statistics</span><span class="l-fr">Recherche et statistiques du corpus</span></h1>
-
-    <div class="views" role="tablist" aria-label="表示の切替 / View">
-      <button type="button" role="tab" id="tabSearch" data-view="search" aria-controls="viewSearch" aria-selected="true"><span class="l-ja">検索</span><span class="l-en">Search</span><span class="l-fr">Recherche</span></button>
-      <button type="button" role="tab" id="tabStats" data-view="stats" aria-controls="viewStats" aria-selected="false" tabindex="-1"><span class="l-ja">統計</span><span class="l-en">Statistics</span><span class="l-fr">Statistiques</span></button>
-    </div>
-
-    <div class="notice" id="loadwarn" hidden></div>
-
-    <!-- ═══════ 検索 ═══════ -->
-    <div id="viewSearch" role="tabpanel" aria-labelledby="tabSearch">
+    <h1><span class="l-ja">コーパス検索</span><span class="l-en">Corpus search</span><span class="l-fr">Recherche dans le corpus</span></h1>
     <p class="lede">
       <span class="l-ja">公開中の全文書を横断して、レンマ・語形・語義から検索します。結果はレンマごとに集計されます。</span>
       <span class="l-en">Search all published texts at once by lemma, word form or meaning. Results are grouped by lemma.</span>
@@ -305,24 +231,13 @@ table.kw td.rc{color:var(--s-mut); white-space:nowrap; overflow:hidden; max-widt
     </div>
     <p class="scope" id="scope"></p>
 
+    <div class="notice" id="loadwarn" hidden></div>
+
     <section id="statSec" aria-live="polite"></section>
 
     <h2 class="sec" id="listHead"></h2>
     <div class="tblwrap"><table class="lx" id="lx"><thead></thead><tbody></tbody></table></div>
     <div class="morebar" id="more"></div>
-    </div>
-
-    <!-- ═══════ 統計（旧 stats.html を統合） ═══════ -->
-    <div id="viewStats" role="tabpanel" aria-labelledby="tabStats" hidden>
-    <p class="lede">
-      <span class="l-ja">左で選んだ文書と品詞の範囲について、TEI ソースから直接集計した計量値です。レンマをクリックすると、その語の検索結果を開きます。</span>
-      <span class="l-en">Figures counted directly from the TEI source for the texts and parts of speech selected on the left. Click a lemma to open its search results.</span>
-      <span class="l-fr">Chiffres calculés directement à partir de la source TEI pour les textes et les parties du discours sélectionnés à gauche. Cliquez sur un lemme pour ouvrir ses résultats de recherche.</span>
-    </p>
-    <p class="scope" id="scopeStats"></p>
-    <nav class="sv-toc" id="toc" aria-label="セクション / Sections"></nav>
-    <div id="sections"></div>
-    </div>
 
     <p class="foot">
       <span class="l-ja">本文: <code>data/*_tei.xml</code>（各 <code>&lt;w&gt;</code> の <code>@lemma</code>・<code>@type</code>）／ 語義: <code>data/lexicon.xml</code>（レンマ＋品詞で参照、<code>@ana</code> による語義の固定を優先）／ 文書: <code>data/catalog.xml</code>。上線などの合成記号は無視して照合します。ギリシア語借用語の印（grc）は <code>xml:lang="grc"</code> を持つ語のみ。活用型は辞書の <code>&lt;iType&gt;</code> または本文の <code>@msd</code> が付与されると表示されます。</span>
@@ -343,7 +258,6 @@ const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;
 /* 合成記号（上線・気息記号など）を除去し小文字化して比較 */
 const norm = s => (s || "").normalize("NFD").replace(/[̀-ͯ︠-︯]/g, "").normalize("NFC").toLowerCase();
 const fmt = n => n.toLocaleString("en-US");
-const inc = (map, key, n = 1) => map.set(key, (map.get(key) || 0) + n);
 const T = (node, name) => Array.from(node.getElementsByTagNameNS(TEI, name));
 const kids = (node, name) => Array.from(node.children).filter(c => c.localName === name);
 const xmlLang = el => el.getAttributeNS(XMLNS, "lang") || el.getAttribute("xml:lang") || "";
@@ -381,8 +295,12 @@ const I18N = {
   showMore: {ja:n=>"さらに表示（残り "+n+" 件）", en:n=>"Show more ("+n+" left)", fr:n=>"Afficher plus ("+n+" restants)"},
   none:     {ja:q=>"「"+q+"」に一致するレンマはありません。", en:q=>"No lemma matches “"+q+"”.", fr:q=>"Aucun lemme ne correspond à « "+q+" »."},
   noneHint: {ja:"一致方法を「部分一致」に、対象に「語義」を含めると見つかることがあります。", en:"Try “contains” and include “meaning”.", fr:"Essayez « contient » et cochez « sens »."},
-  /* 検索語の統計（〈検索〉の結果の上に表示。コーパス全体の統計は〈統計〉ビュー） */
+  /* 統計 */
+  stOver:   {ja:"コーパスの概要", en:"Corpus overview", fr:"Vue d’ensemble"},
   stQuery:  {ja:q=>"「"+q+"」の統計", en:q=>"Statistics for “"+q+"”", fr:q=>"Statistiques pour « "+q+" »"},
+  sumAll:   {ja:(t,l,h,r)=>"延べ語数 <b>"+t+"</b> · 異なりレンマ <b>"+l+"</b> · 1回のみの語 <b>"+h+"</b> · 異なり/延べ比 <b>"+r+"</b>",
+             en:(t,l,h,r)=>"Tokens <b>"+t+"</b> · lemmas <b>"+l+"</b> · hapax legomena <b>"+h+"</b> · type/token ratio <b>"+r+"</b>",
+             fr:(t,l,h,r)=>"Occurrences <b>"+t+"</b> · lemmes <b>"+l+"</b> · hapax <b>"+h+"</b> · rapport types/occurrences <b>"+r+"</b>"},
   sumHit:   {ja:(l,t,p)=>"一致したレンマ <b>"+l+"</b> · 一致した語 <b>"+t+"</b>（対象範囲の "+p+"%）",
              en:(l,t,p)=>"Matching lemmas <b>"+l+"</b> · matching tokens <b>"+t+"</b> ("+p+"% of scope)",
              fr:(l,t,p)=>"Lemmes trouvés <b>"+l+"</b> · occurrences <b>"+t+"</b> ("+p+" % du périmètre)"},
@@ -390,26 +308,13 @@ const I18N = {
   byPos:    {ja:"品詞別", en:"By part of speech", fr:"Par partie du discours"},
   hWit:     {ja:"証本", en:"Witness", fr:"Témoin"},
   hTok:     {ja:"延べ語数", en:"Tokens", fr:"Occ."},
-  hLem:     {ja:"異なりレンマ", en:"Lemmas", fr:"Lemmes"},
+  hLem:     {ja:"異なり", en:"Lemmas", fr:"Lemmes"},
   hHapax:   {ja:"1回のみ", en:"Hapax", fr:"Hapax"},
   hHit:     {ja:"一致", en:"Hits", fr:"Trouvés"},
   hPer:     {ja:"‰", en:"‰", fr:"‰"},
   hShare:   {ja:"%", en:"%", fr:"%"},
   total:    {ja:"計", en:"Total", fr:"Total"},
   other:    {ja:"その他", en:"Other", fr:"Autres"},
-  /* 〈統計〉ビュー（旧 stats.html を統合）。各セクションの文言は SECTIONS の中に L3() で書いてある */
-  scopePos: {ja:n=>" · 品詞の絞り込み中（"+n+" 語を集計）", en:n=>" · POS filter on ("+n+" tokens counted)", fr:n=>" · filtre par PdD actif ("+n+" occurrences comptées)"},
-  nWit:     {ja:n=>n+" 証本", en:n=>n+" witness"+(n==="1"?"":"es"), fr:n=>n+" témoin"+(n==="1"?"":"s")},
-  svFrom:   {ja:s=>"集計対象 "+s, en:s=>"counted from "+s, fr:s=>"périmètre : "+s},
-  svOpen:   {ja:"このレンマを検索", en:"Search this lemma", fr:"Rechercher ce lemme"},
-  hTtr:     {ja:"TTR %", en:"TTR %", fr:"TTR %"},
-  hTtrT:    {ja:"異なり語数比（異なりレンマ ÷ 延べ語数）", en:"Type–token ratio (distinct lemmas ÷ tokens)", fr:"Rapport types/occurrences (lemmes distincts ÷ occurrences)"},
-  hLoan:    {ja:"借用語", en:"Loanwords", fr:"Emprunts"},
-  hLoanP:   {ja:"借用語 %", en:"Loan %", fr:"Emprunts %"},
-  hSeg:     {ja:"セグメント", en:"Segments", fr:"Segments"},
-  hPage:    {ja:"写本ページ", en:"Pages", fr:"Pages"},
-  hLine:    {ja:"写本行", en:"Lines", fr:"Lignes"},
-  hGap:     {ja:"欠損・不明", en:"Gaps", fr:"Lacunes"},
   /* 詳細 */
   dSenses:  {ja:"語義（辞書）", en:"Senses (lexicon)", fr:"Sens (lexique)"},
   dWGloss:  {ja:"本文中の語釈（@gloss）", en:"In-text glosses (@gloss)", fr:"Gloses du texte (@gloss)"},
@@ -426,7 +331,7 @@ const I18N = {
 };
 function t(k, ...a){ const e = I18N[k]; if(!e) return k; const v = e[UL()] ?? e.ja; return typeof v === "function" ? v(...a) : v; }
 
-/* 品詞ラベル（検索・統計で共通。Coptic Scriptorium 系のタグを含む） */
+/* 品詞ラベル（stats.html と同じ表に、Coptic Scriptorium 系のタグを補ったもの） */
 const POS = {ART:["冠詞","article","article"],N:["名詞","noun","nom"],NPROP:["固有名詞","proper noun","nom propre"],
   V:["動詞","verb","verbe"],VSTAT:["状態動詞","stative","statif"],PREP:["前置詞","preposition","préposition"],
   PPER:["人称代名詞","personal pronoun","pronom personnel"],PPOS:["所有詞","possessive","possessif"],
@@ -460,14 +365,12 @@ const ckey = s => [...norm(s)].map(c => RANK.has(c) ? String.fromCharCode(0x4e00
 
 /* ---------- 状態 ---------- */
 const ST = {
-  view: "search",      // "search"（検索）| "stats"（統計）
   docs: [],            // {key, ja, en, fr, cop, siglum, reader, xml, planned, wits:[]}
-  wits: [],            // {id, label, short, doc, segs:[], groups:[[tokIdx]], ntok, nseg, pages, lines, gaps:Map(reason → 件数)}
+  wits: [],            // {id, label, short, doc, segs:[], groups:[[tokIdx]], ntok}
   toks: [],            // {w, s, g, form, lemma, pos, grc, msd, ana, gl, key}
   groups: new Map(),   // key(lemma\tpos) → {key, lemma, pos, toks:[], ents:[], amb, wgl:Map, grc, itypes:[], gsearch:[]}
   lex: new Map(),      // lemma → [entry]
   lexById: new Map(),
-  sense: new Set(),    // 辞書に語義が1つ以上あるレンマ（〈統計〉の辞書カバー率）
   sel: new Set(),      // 選択中の証本 ID
   posOff: new Set(),   // 除外する品詞
   sort: {k:"n", d:-1},
@@ -516,19 +419,12 @@ function parseLex(xml){
     if(!ST.lex.has(lemma)) ST.lex.set(lemma, []);
     ST.lex.get(lemma).push(ent);
     if(ent.id) ST.lexById.set(ent.id, ent);
-    if(T(e, "quote").some(q => q.textContent.trim())) ST.sense.add(lemma);   // 語義が1つでも登録されているレンマ
   });
 }
 function parseText(xml, doc){
   T(xml, "text").filter(x => x.getAttribute("type") === "witness").forEach(tx => {
     const label = tx.getAttribute("n") || doc.siglum;
     const wit = {id: xmlId(tx) || doc.key, label, short: label.replace(/^NHC\s*/, ""), doc, segs: [], groups: [], ntok: 0};
-    // 写本の構造（〈統計〉用）：セグメント・ページ・行・欠損を証本ごとに数えておく
-    wit.nseg = T(tx, "s").length;
-    wit.pages = T(tx, "pd").length + T(tx, "p").filter(p => p.hasAttribute("n")).length;
-    wit.lines = T(tx, "lb").length;
-    wit.gaps = new Map();
-    T(tx, "gap").forEach(g => inc(wit.gaps, g.getAttribute("reason") || "∅"));
     const wi = ST.wits.length;
     T(tx, "s").forEach(s => {
       const sid = xmlId(s); if(!sid) return;
@@ -583,7 +479,6 @@ function buildGroups(){
 
 async function load(){
   $("#listHead").textContent = t("loading");
-  $("#sections").innerHTML = '<p class="empty">' + esc(t("loading")) + '</p>';
   try{
     const [cat, lex] = await Promise.all([fetchXML(CATALOG), fetchXML(LEXICON)]);
     parseCatalog(cat); parseLex(lex);
@@ -594,19 +489,11 @@ async function load(){
     readURL();
     ST.ready = true;
     render();
-    gotoHash();
   }catch(e){
     const w = $("#loadwarn"); w.hidden = false;
-    w.innerHTML = esc(t("loadErr")) + "<br><small>" + esc(e.message) + "</small>";
+    w.innerHTML = '<div class="fail"><img src="image/web/gengen_cry.svg" alt="" width="92" height="92"><div>' + esc(t("loadErr")) + "<br><small>" + esc(e.message) + "</small></div></div>";
     $("#listHead").textContent = "";
-    $("#sections").innerHTML = "";
   }
-}
-/* 〈統計〉のセクションへの直リンク（…?view=stats#sec-loan など）は、描画が終わってから該当箇所へ移動する */
-function gotoHash(){
-  if(ST.view !== "stats" || !/^#sec-/.test(location.hash)) return;
-  const el = document.getElementById(location.hash.slice(1));
-  if(el) el.scrollIntoView();
 }
 
 /* ---------- URL ---------- */
@@ -626,7 +513,6 @@ function readURL(){
 }
 function writeURL(){
   const p = new URLSearchParams();
-  if(ST.view === "stats") p.set("view", "stats");
   const q = $("#q").value.trim(); if(q) p.set("q", q);
   if($("#mode").value !== "part") p.set("m", $("#mode").value);
   const f = ($("#fForm").checked ? "f" : "") + ($("#fLemma").checked ? "l" : "") + ($("#fGloss").checked ? "g" : "");
@@ -634,14 +520,7 @@ function writeURL(){
   if(ST.sel.size !== ST.wits.length) p.set("w", [...ST.sel].join(","));
   if(ST.posOff.size) p.set("xpos", [...ST.posOff].join(","));
   const s = p.toString();
-  history.replaceState(null, "", location.pathname + (s ? "?" + s : "") + (ST.view === "stats" ? location.hash : ""));
-}
-/* 〈統計〉のレンマから〈検索〉へ：そのレンマの完全一致（対象はレンマのみ）を、いまの絞り込みのまま開くリンク */
-function lemmaHref(lemma){
-  const p = new URLSearchParams({q: lemma, m: "ex", f: "l"});
-  if(ST.sel.size !== ST.wits.length) p.set("w", [...ST.sel].join(","));
-  if(ST.posOff.size) p.set("xpos", [...ST.posOff].join(","));
-  return "?" + p.toString();
+  history.replaceState(null, "", location.pathname + (s ? "?" + s : ""));
 }
 
 /* ---------- 計算 ---------- */
@@ -747,10 +626,9 @@ function renderSide(){
     '<span class="ct">' + fmt(n) + '</span></label></li>').join("");
 }
 
-/* 検索語があるときだけ、一致した語の統計（証本別・品詞別）を結果の上に出す。コーパス全体の統計は〈統計〉ビューへ */
 function renderStats(R){
   const sec = $("#statSec");
-  if(!R.wits.length || !R.q){ sec.innerHTML = ""; return; }
+  if(!R.wits.length){ sec.innerHTML = ""; return; }
   const hitTok = R.rows.reduce((a, r) => a + r.n, 0);
   const posCnt = new Map();
   R.rows.forEach(r => posCnt.set(r.g.pos, (posCnt.get(r.g.pos) || 0) + r.n));
@@ -759,20 +637,37 @@ function renderStats(R){
   if(rest) top.push([null, rest]);
   const posMax = top.length ? Math.max(...top.filter(x => x[0]).map(x => x[1])) : 0;
   const posTbl = '<div><h3>' + esc(t("byPos")) + '</h3><table class="st"><thead><tr><th>' + esc(t("cPos")) + '</th><th class="num">' +
-    esc(t("hHit")) + '</th><th class="num">' + esc(t("hShare")) + '</th><th></th></tr></thead><tbody>' +
+    esc(R.q ? t("hHit") : t("hTok")) + '</th><th class="num">' + esc(t("hShare")) + '</th><th></th></tr></thead><tbody>' +
     top.map(([p, n]) => '<tr><td>' + (p ? esc(posName(p)) : esc(t("other"))) + '</td><td class="num">' + fmt(n) + '</td><td class="num">' +
       pct(n, hitTok) + '</td><td class="barc">' + (p ? bar(n, posMax) : "") + '</td></tr>').join("") + '</tbody></table></div>';
 
-  const per = R.wits.map(w => { const n = R.rows.reduce((a, r) => a + (r.byWit[w.id] || 0), 0); return {w, n, pm: w.ntok ? n / w.ntok * 1000 : 0}; });
-  const max = Math.max(0, ...per.map(x => x.pm));
-  const head = t("stQuery", R.q);
-  const line = t("sumHit", fmt(R.rows.length), fmt(hitTok), pct(hitTok, R.N));
-  const docTbl = '<div><h3>' + esc(t("byDoc")) + '</h3><table class="st"><thead><tr><th>' + esc(t("hWit")) + '</th><th class="num">' + esc(t("hHit")) +
-    '</th><th class="num">' + esc(t("hTok")) + '</th><th class="num" title="' + esc(t("cRelT")) + '">' + esc(t("hPer")) + '</th><th></th></tr></thead><tbody>' +
-    per.map(x => '<tr><td>' + esc(witName(x.w)) + '</td><td class="num">' + fmt(x.n) + '</td><td class="num">' + fmt(x.w.ntok) +
-      '</td><td class="num">' + x.pm.toFixed(1) + '</td><td class="barc">' + bar(x.pm, max) + '</td></tr>').join("") +
-    (per.length > 1 ? '</tbody><tfoot><tr><td>' + esc(t("total")) + '</td><td class="num">' + fmt(hitTok) + '</td><td class="num">' + fmt(R.N) +
-      '</td><td class="num">' + perMille(hitTok, R.N) + '</td><td></td></tr></tfoot>' : '</tbody>') + '</table></div>';
+  let head, line, docTbl;
+  if(!R.q){
+    // 概要：証本ごとの延べ語数・異なりレンマ・hapax
+    const lemmasPer = {}, hapaxAll = R.rows.filter(r => r.n === 1).length;
+    R.rows.forEach(r => Object.keys(r.byWit).forEach(w => { lemmasPer[w] = (lemmasPer[w] || 0) + 1; }));
+    const hapaxPer = {};
+    R.rows.forEach(r => Object.entries(r.byWit).forEach(([w, n]) => { if(n === 1) hapaxPer[w] = (hapaxPer[w] || 0) + 1; }));
+    const max = Math.max(...R.wits.map(w => w.ntok));
+    head = t("stOver");
+    line = t("sumAll", fmt(hitTok), fmt(R.rows.length), fmt(hapaxAll), hitTok ? (R.rows.length / hitTok).toFixed(3) : "—");
+    docTbl = '<div><h3>' + esc(t("byDoc")) + '</h3><table class="st"><thead><tr><th>' + esc(t("hWit")) + '</th><th class="num">' + esc(t("hTok")) +
+      '</th><th class="num">' + esc(t("hLem")) + '</th><th class="num">' + esc(t("hHapax")) + '</th><th></th></tr></thead><tbody>' +
+      R.wits.map(w => '<tr><td>' + esc(witName(w)) + '</td><td class="num">' + fmt(w.ntok) + '</td><td class="num">' + fmt(lemmasPer[w.id] || 0) +
+        '</td><td class="num">' + fmt(hapaxPer[w.id] || 0) + '</td><td class="barc">' + bar(w.ntok, max) + '</td></tr>').join("") +
+      '</tbody></table></div>';
+  } else {
+    const per = R.wits.map(w => { const n = R.rows.reduce((a, r) => a + (r.byWit[w.id] || 0), 0); return {w, n, pm: w.ntok ? n / w.ntok * 1000 : 0}; });
+    const max = Math.max(0, ...per.map(x => x.pm));
+    head = t("stQuery", R.q);
+    line = t("sumHit", fmt(R.rows.length), fmt(hitTok), pct(hitTok, R.N));
+    docTbl = '<div><h3>' + esc(t("byDoc")) + '</h3><table class="st"><thead><tr><th>' + esc(t("hWit")) + '</th><th class="num">' + esc(t("hHit")) +
+      '</th><th class="num">' + esc(t("hTok")) + '</th><th class="num" title="' + esc(t("cRelT")) + '">' + esc(t("hPer")) + '</th><th></th></tr></thead><tbody>' +
+      per.map(x => '<tr><td>' + esc(witName(x.w)) + '</td><td class="num">' + fmt(x.n) + '</td><td class="num">' + fmt(x.w.ntok) +
+        '</td><td class="num">' + x.pm.toFixed(1) + '</td><td class="barc">' + bar(x.pm, max) + '</td></tr>').join("") +
+      (per.length > 1 ? '</tbody><tfoot><tr><td>' + esc(t("total")) + '</td><td class="num">' + fmt(hitTok) + '</td><td class="num">' + fmt(R.N) +
+        '</td><td class="num">' + perMille(hitTok, R.N) + '</td><td></td></tr></tfoot>' : '</tbody>') + '</table></div>';
+  }
   sec.innerHTML = '<h2 class="sec">' + esc(head) + '</h2><p class="sumline">' + line + '</p><div class="statgrid">' + docTbl + posTbl + '</div>';
 }
 function witName(w){
@@ -890,236 +785,9 @@ function detail(r, R){
     '</div></div>';
 }
 
-/* ══════════════════════════════════════════════════════════════════════════
-   〈統計〉ビュー（旧 stats.html を統合）
-   左で選択した証本・品詞の範囲を、読み込み済みの本文（ST.toks）から集計します（検索語には依存しません）。
-   数値の定義は旧 stats.html と同じです（「異なりレンマ」「1回のみ」は @lemma の文字列単位、
-   辞書カバー率は「語義が1つ以上あるレンマ」）。
-
-   ▼ 拡張のしかた
-   1) 新しい数値が要るときは computeStats() の返り値にフィールドを足す。
-   2) 表示を足すときは SECTIONS 配列に
-        { id:"…", ja:"見出し", en:"Heading", fr:"Titre", sub:st=>"…", render:st=>"HTML文字列" }
-      を push するだけ。目次（#toc）と本体は SECTIONS から自動生成されます。
-      文中の三言語の出し分けは L3("日本語", "English", "Français") を使います。
-   3) 特定の文書だけに出したいセクションは docs:["republic"] を添える（その文書が集計対象にあるときだけ表示）。
-   ══════════════════════════════════════════════════════════════════════════ */
-const L3 = (ja, en, fr) => { const l = UL(); return l === "en" ? en : l === "fr" ? fr : ja; };
-const pc1 = (a, b) => b ? (a / b * 100).toFixed(1) : "0.0";
-const sumMap = m => { let n = 0; m.forEach(v => { n += v; }); return n; };
-
-/* ---------- 集計 ---------- */
-function computeStats(){
-  const sel = ST.wits.filter(w => ST.sel.has(w.id));
-  const live = sel.filter(w => w.ntok);
-  const wits = live.length ? live : sel;      // 本文のある証本を集計する。1つもないときは選択中の証本（語数はすべて 0）
-  const idOf = new Map(wits.map(w => [ST.wits.indexOf(w), w.id]));
-  const per = new Map(wits.map(w => [w.id, {tokens: 0, grc: 0, lem: new Map()}]));
-  const typeCount = new Map(), lemmaCount = new Map(), grcLemma = new Map(), unknown = new Map(), items = new Set();
-  let tokens = 0, grcTokens = 0, glossed = 0;
-  ST.toks.forEach(tk => {
-    const id = idOf.get(tk.w);
-    if(id === undefined || ST.posOff.has(tk.pos)) return;
-    const p = per.get(id);
-    tokens++; p.tokens++;
-    inc(typeCount, tk.pos); inc(lemmaCount, tk.lemma); inc(p.lem, tk.lemma); items.add(tk.key);
-    if(tk.grc){ grcTokens++; p.grc++; inc(grcLemma, tk.lemma); }
-    if(ST.sense.has(tk.lemma)) glossed++;
-    else if(!tk.lemma.includes("…")) inc(unknown, tk.lemma);
-  });
-  const once = m => { let n = 0; m.forEach(c => { if(c === 1) n++; }); return n; };
-  const gapByReason = new Map();
-  let segments = 0, pages = 0, lines = 0;
-  wits.forEach(w => { segments += w.nseg; pages += w.pages; lines += w.lines; w.gaps.forEach((n, r) => inc(gapByReason, r, n)); });
-  return {
-    wits, skipped: live.length ? sel.filter(w => !w.ntok) : [],
-    label: wits.length === 1 ? wits[0].label : t("nWit", fmt(wits.length)),
-    files: [...new Set(wits.map(w => w.doc.xml))],
-    all: wits.reduce((a, w) => a + w.ntok, 0),          // 品詞で絞り込む前の延べ語数
-    tokens, segments, typeCount, lemmaCount, grcLemma, gapByReason,
-    distinctTypes: typeCount.size, distinctLemmas: lemmaCount.size, items: items.size, hapax: once(lemmaCount),
-    grcTokens, grcLemmaCount: grcLemma.size, glossed, unknown, pages, lines, gaps: sumMap(gapByReason),
-    per: wits.map(w => { const p = per.get(w.id); return {w, tokens: p.tokens, lemmas: p.lem.size, hapax: once(p.lem), grc: p.grc}; })
-  };
-}
-
-/* ---------- 部品 ---------- */
-function svCards(list){
-  return '<div class="sv-cards">' + list.map(c =>
-    '<div class="sv-card' + (c.cls ? " " + c.cls : "") + '"><div class="v">' + c.v + (c.sub ? ' <small>' + c.sub + '</small>' : "") +
-    '</div><div class="k">' + c.k + '</div></div>').join("") + '</div>';
-}
-function svBars(rows){
-  const max = rows.length ? Math.max(...rows.map(r => r.n)) : 1;
-  const pc = rows.some(r => r.pc != null);
-  return '<div class="sv-bars' + (pc ? " pc" : "") + '">' + rows.map(r =>
-    '<div class="sv-bar' + (r.loan ? " loan" : "") + '"><div class="lab">' + r.lab + '</div>' +
-    '<div class="track"><i style="width:' + (r.n / max * 100).toFixed(1) + '%"></i></div>' +
-    '<div class="ct">' + fmt(r.n) + '</div>' + (pc ? '<div class="pc">' + r.pc + '</div>' : "") + '</div>').join("") + '</div>';
-}
-/* レンマ → 〈検索〉でそのレンマを開くリンク（クリックはページ内で処理。下の「操作」を参照） */
-const lemmaLink = (lemma, inner, cls) => '<a' + (cls ? ' class="' + cls + '"' : "") + ' href="' + esc(lemmaHref(lemma)) +
-  '" data-q="' + esc(lemma) + '" title="' + esc(t("svOpen")) + '">' + inner + '</a>';
-
-/* ══════════ セクション定義（ここに足すだけで拡張できます） ══════════ */
-const SECTIONS = [
-{
-  id:"overview", ja:"概観", en:"Overview", fr:"Vue d’ensemble",
-  sub: st => t("svFrom", st.label),
-  render: st => {
-    const files = st.files.map(f => '<code>' + esc(f) + '</code>').join(L3("、", ", ", ", "));
-    return svCards([
-      {v:fmt(st.tokens),         k:L3("延べ語数（&lt;w&gt;）", "tokens (&lt;w&gt;)", "occurrences (&lt;w&gt;)")},
-      {v:fmt(st.segments),       k:L3("セグメント（&lt;s&gt;）", "segments (&lt;s&gt;)", "segments (&lt;s&gt;)")},
-      {v:fmt(st.distinctLemmas), k:L3("異なりレンマ", "distinct lemmas", "lemmes distincts")},
-      {v:fmt(st.items),          k:L3("語彙項目（レンマ＋品詞）", "lexical items (lemma + POS)", "entrées lexicales (lemme + PdD)")},
-      {v:fmt(st.distinctTypes),  k:L3("品詞タイプ数", "distinct POS types", "catégories distinctes (PdD)")},
-      {v:pc1(st.distinctLemmas, st.tokens), sub:"%", k:L3("異なり語数比 (TTR)", "type–token ratio", "rapport types/occurrences")},
-      {v:fmt(st.hapax),          k:L3("1回のみ出現のレンマ", "hapax legomena", "hapax")},
-      {v:fmt(st.grcTokens), sub:"/ " + fmt(st.grcLemmaCount), cls:"loan", k:L3("借用語 語数 / レンマ", "loanword tokens / lemmas", "emprunts : occurrences / lemmes")},
-      {v:pc1(st.grcTokens, st.tokens), sub:"%", cls:"loan", k:L3("借用語の割合", "loanword share", "part des emprunts")}
-    ]) +
-    '<p class="sv-note">' + L3(
-      '数値はすべて ' + files + ' から直接集計しています（各 <code>&lt;w&gt;</code> トークンとその <code>@type</code>・<code>@lemma</code>、<code>xml:lang="grc"</code> を持つトークン）。「異なりレンマ」は <code>@lemma</code> の異なり数、「語彙項目」は〈検索〉の一覧と同じくレンマ＋品詞の組の数です。',
-      'All figures are counted directly from ' + files + ': every <code>&lt;w&gt;</code> token with its <code>@type</code> and <code>@lemma</code>, and tokens carrying <code>xml:lang="grc"</code>. “Distinct lemmas” counts distinct <code>@lemma</code> values; “lexical items” counts lemma + POS pairs, as in the Search list.',
-      'Tous les chiffres sont calculés directement à partir de ' + files + ' : chaque <code>&lt;w&gt;</code> avec ses <code>@type</code> et <code>@lemma</code>, et les mots portant <code>xml:lang="grc"</code>. « Lemmes distincts » compte les valeurs distinctes de <code>@lemma</code> ; « entrées lexicales » compte les paires lemme + PdD, comme dans la liste de l’onglet Recherche.') + '</p>';
-  }
-},
-{
-  id:"wits", ja:"文書別", en:"By witness", fr:"Par témoin",
-  sub: st => t("nWit", fmt(st.wits.length)),
-  render: st => {
-    const max = Math.max(1, ...st.per.map(p => p.tokens));
-    const th = (k, tip) => '<th class="num"' + (tip ? ' title="' + esc(t(tip)) + '"' : "") + '>' + esc(t(k)) + '</th>';
-    const row = (name, p, b) => '<tr><td>' + name + '</td><td class="num">' + fmt(p.tokens) + '</td><td class="num">' + fmt(p.lemmas) +
-      '</td><td class="num">' + fmt(p.hapax) + '</td><td class="num">' + pc1(p.lemmas, p.tokens) + '</td><td class="num">' + fmt(p.grc) +
-      '</td><td class="num">' + pc1(p.grc, p.tokens) + '</td><td class="barc">' + b + '</td></tr>';
-    return '<div class="sv-tbl"><table class="st"><thead><tr><th>' + esc(t("hWit")) + '</th>' + th("hTok") + th("hLem") + th("hHapax") +
-      th("hTtr", "hTtrT") + th("hLoan") + th("hLoanP") + '<th></th></tr></thead><tbody>' +
-      st.per.map(p => row(esc(witName(p.w)), p, bar(p.tokens, max))).join("") + '</tbody>' +
-      (st.per.length > 1 ? '<tfoot>' + row(esc(t("total")), {tokens: st.tokens, lemmas: st.distinctLemmas, hapax: st.hapax, grc: st.grcTokens}, "") + '</tfoot>' : "") +
-      '</table></div>' +
-      (st.skipped.length ? '<p class="sv-note">' + esc(st.skipped.map(witName).join(L3("、", ", ", ", "))) +
-        L3(" は本文未入力のため、集計に含めていません。", ": text not yet entered, so not counted.", " : texte non encore saisi, non pris en compte.") + '</p>' : "");
-  }
-},
-{
-  id:"pos", ja:"品詞 (@type) 分布", en:"Part of speech", fr:"Parties du discours",
-  sub: st => L3(st.distinctTypes + " 種", st.distinctTypes + " types", st.distinctTypes + " catégories"),
-  render: st => svBars([...st.typeCount.entries()].sort((a, b) => b[1] - a[1]).map(([ty, n]) => ({
-    lab: esc(posName(ty)) + (POS[ty] ? ' <code>' + esc(ty) + '</code>' : ""), n, pc: pc1(n, st.tokens) + "%"
-  })))
-},
-{
-  id:"loan", ja:"ギリシア語借用語", en:"Greek loanwords", fr:"Emprunts grecs",
-  sub: st => 'xml:lang="grc" · ' + fmt(st.grcTokens) + " / " + fmt(st.grcLemmaCount),
-  render: st => {
-    const gl = [...st.grcLemma.entries()].sort((a, b) => b[1] - a[1]);
-    if(!gl.length) return '<p class="sv-note">' + L3("該当なし。", "None recorded.", "Aucun.") + '</p>';
-    return '<div class="sv-chips">' + gl.map(([le, n]) => lemmaLink(le, esc(le) + '<b>' + fmt(n) + '</b>', "sv-chip")).join("") + '</div>' +
-      '<p class="sv-note">' + L3(
-        '判定は <code>&lt;w&gt;</code> の <code>xml:lang="grc"</code> のみに基づきます（辞書からの推定は行いません）。',
-        'Detected strictly by <code>xml:lang="grc"</code> on the <code>&lt;w&gt;</code> token — never inferred from the lexicon.',
-        'Repérés uniquement par <code>xml:lang="grc"</code> sur le <code>&lt;w&gt;</code> — jamais déduits du lexique.') + '</p>';
-  }
-},
-{
-  id:"lemma", ja:"頻出レンマ", en:"Most frequent lemmas", fr:"Lemmes les plus fréquents",
-  sub: st => { const k = Math.min(30, st.distinctLemmas), n = fmt(st.distinctLemmas);
-    return L3("上位" + k + " / " + n, "top " + k + " of " + n, "les " + k + " premiers sur " + n); },
-  render: st => svBars([...st.lemmaCount.entries()].sort((a, b) => b[1] - a[1]).slice(0, 30).map(([le, n]) => ({
-    lab: lemmaLink(le, '<span class="cop">' + esc(le) + '</span>'), n, loan: st.grcLemma.has(le)
-  })))
-},
-{
-  id:"lexicon", ja:"辞書カバー率", en:"Lexicon coverage", fr:"Couverture du lexique",
-  sub: () => LEXICON,
-  render: st => {
-    const un = [...st.unknown.entries()].sort((a, b) => b[1] - a[1]);
-    return svCards([
-      {v:pc1(st.glossed, st.tokens), sub:"%", k:L3("語釈のあるトークン", "tokens with a sense", "occurrences avec un sens")},
-      {v:fmt(st.glossed), sub:"/ " + fmt(st.tokens), k:L3("語釈あり / 延べ語数", "glossed / total tokens", "avec sens / total")},
-      {v:fmt(un.length), k:L3("語釈のないレンマ", "lemmas without a sense", "lemmes sans sens")}
-    ]) +
-    (un.length
-      ? '<div class="sv-chips">' + un.slice(0, 60).map(([le, n]) => lemmaLink(le, esc(le) + '<b>' + fmt(n) + '</b>', "sv-chip warn")).join("") +
-        (un.length > 60 ? '<span class="sv-more">+' + fmt(un.length - 60) + '</span>' : "") + '</div>'
-      : "") +
-    '<p class="sv-note">' + L3(
-      '共有辞書に語義が1つ以上ある <code>@lemma</code>（<code>@type</code> 一致・レンマ一致のいずれか）をカバー済みとみなします。上のチップは語義が未登録のレンマです（頻度の高い順に60件まで）。',
-      'A token counts as covered when its <code>@lemma</code> (with or without <code>@type</code>) has at least one sense in the shared lexicon. The chips above list the lemmas still to be added (the 60 most frequent).',
-      'Une occurrence est couverte lorsque son <code>@lemma</code> (avec ou sans <code>@type</code>) possède au moins un sens dans le lexique commun. Les étiquettes ci-dessus signalent les lemmes à ajouter (les 60 plus fréquents).') + '</p>';
-  }
-},
-{
-  id:"structure", ja:"写本の構造", en:"Manuscript structure", fr:"Structure du manuscrit",
-  sub: () => L3("ページ・行・欠損", "pages, lines, lacunae", "pages, lignes, lacunes"),
-  render: st => svCards([
-      {v:fmt(st.pages), k:L3("写本ページ", "codex pages", "pages du codex")},
-      {v:fmt(st.lines), k:L3("写本行", "manuscript lines", "lignes du manuscrit")},
-      {v:fmt(st.gaps),  k:L3("欠損・不明 箇所", "gaps / lacunae", "lacunes et passages incertains")}
-    ]) +
-    (st.wits.length > 1
-      ? '<div class="sv-tbl"><table class="st"><thead><tr><th>' + esc(t("hWit")) + '</th>' +
-        ["hSeg", "hPage", "hLine", "hGap"].map(k => '<th class="num">' + esc(t(k)) + '</th>').join("") + '</tr></thead><tbody>' +
-        st.wits.map(w => '<tr><td>' + esc(witName(w)) + '</td><td class="num">' + fmt(w.nseg) + '</td><td class="num">' + fmt(w.pages) +
-          '</td><td class="num">' + fmt(w.lines) + '</td><td class="num">' + fmt(sumMap(w.gaps)) + '</td></tr>').join("") +
-        '</tbody><tfoot><tr><td>' + esc(t("total")) + '</td><td class="num">' + fmt(st.segments) + '</td><td class="num">' + fmt(st.pages) +
-        '</td><td class="num">' + fmt(st.lines) + '</td><td class="num">' + fmt(st.gaps) + '</td></tr></tfoot></table></div>'
-      : "") +
-    (st.gapByReason.size
-      ? '<div class="sv-tbl narrow"><table class="st"><thead><tr><th>' + L3("欠損の理由 (@reason)", "gap @reason", "@reason des lacunes") +
-        '</th><th class="num">' + L3("件数", "count", "nombre") + '</th></tr></thead><tbody>' +
-        [...st.gapByReason.entries()].sort((a, b) => b[1] - a[1]).map(([r, n]) =>
-          '<tr><td><code>' + esc(r) + '</code></td><td class="num">' + fmt(n) + '</td></tr>').join("") + '</tbody></table></div>'
-      : '<p class="sv-note">' + L3("欠損の記録はありません。", "No gaps recorded.", "Aucune lacune enregistrée.") + '</p>')
-}
-];
-
-/* ---------- 描画 ---------- */
-function renderStatsView(){
-  const st = computeStats();
-  const box = $("#sections"), toc = $("#toc"), scope = $("#scopeStats"), L = UL();
-  if(!st.wits.length){
-    scope.textContent = ""; toc.innerHTML = "";
-    box.innerHTML = '<p class="empty">' + esc(t("noSel")) + '</p>';
-    return;
-  }
-  scope.textContent = t("scope", fmt(st.wits.filter(w => w.ntok).length), fmt(st.all)) +
-    (ST.posOff.size ? t("scopePos", fmt(st.tokens)) : "");
-  const keys = new Set(st.wits.map(w => w.doc.key));
-  const secs = SECTIONS.filter(s => !s.docs || s.docs.some(k => keys.has(k)));
-  toc.innerHTML = secs.map(s => '<a href="#sec-' + s.id + '">' + esc(s[L] || s.ja) + '</a>').join("");
-  const empty = st.all === 0
-    ? '<div class="notice">' + L3(
-        "この証本にはまだ <code>&lt;w&gt;</code> が符号化されていません（<code>@corresp</code> で対応づけた並行証本の枠のみ）。",
-        "This witness carries no encoded <code>&lt;w&gt;</code> tokens yet — it is held as a parallel frame linked by <code>@corresp</code>.",
-        "Ce témoin ne contient pas encore de <code>&lt;w&gt;</code> encodés — il sert de cadre parallèle relié par <code>@corresp</code>.") + '</div>'
-    : "";
-  box.innerHTML = empty + secs.map(s => {
-    const sub = s.sub ? s.sub(st) : "";
-    return '<section class="sv-sec" id="sec-' + s.id + '"><h2 class="sec">' + esc(s[L] || s.ja) +
-      (sub ? ' <small>' + esc(sub) + '</small>' : "") + '</h2>' + s.render(st) + '</section>';
-  }).join("");
-}
-
-/* ---------- 表示切替（検索 / 統計） ---------- */
-function applyView(){
-  const s = ST.view === "stats";
-  $("#viewSearch").hidden = s; $("#viewStats").hidden = !s;
-  $("#tabSearch").setAttribute("aria-selected", String(!s)); $("#tabStats").setAttribute("aria-selected", String(s));
-  $("#tabSearch").tabIndex = s ? -1 : 0; $("#tabStats").tabIndex = s ? 0 : -1;
-}
-function setView(v){
-  ST.view = v === "stats" ? "stats" : "search";
-  applyView();
-  render();
-}
-
 let LAST = null;
 function render(){
   if(!ST.ready) return;
-  if(ST.view === "stats"){ renderSide(); renderStatsView(); writeURL(); return; }
   const R = compute();
   sortRows(R);
   LAST = R;
@@ -1223,36 +891,12 @@ document.addEventListener("click", e => {
   if(e.target.closest("#csvBtn")) csv();
 });
 
-/* 表示切替（検索 / 統計）：クリックと左右の矢印キー */
-$(".views").addEventListener("click", e => { const b = e.target.closest("button[data-view]"); if(b) setView(b.dataset.view); });
-$(".views").addEventListener("keydown", e => {
-  if(e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
-  e.preventDefault();
-  setView(ST.view === "stats" ? "search" : "stats");
-  $(ST.view === "stats" ? "#tabStats" : "#tabSearch").focus();
-});
-/* 〈統計〉のレンマをクリック → 〈検索〉でそのレンマ（完全一致・対象はレンマのみ）を開く。
-   修飾キーつきのクリックは通常のリンクとして新しいタブなどで開ける */
-$("#sections").addEventListener("click", e => {
-  const a = e.target.closest("a[data-q]");
-  if(!a || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-  e.preventDefault();
-  $("#q").value = a.dataset.q; $("#mode").value = "ex";
-  $("#fLemma").checked = true; $("#fForm").checked = false; $("#fGloss").checked = false;
-  ST.limit = 200;
-  setView("search");
-  scrollTo(0, 0);
-});
-
 /* 上部ナビの高さ（固定見出し・左欄の位置合わせ） */
 function measureBar(){ const sb = $("#sitebar"); if(sb) H.style.setProperty("--sbh", sb.offsetHeight + "px"); }
 document.addEventListener("nhc:sitebar", () => { measureBar(); applyLang(); });
 addEventListener("resize", measureBar);
 document.addEventListener("nhc:lang", applyLang);
 
-/* ?view=stats なら読み込みの前から〈統計〉を開いておく（旧 stats.html からの転送もここへ来る） */
-ST.view = new URLSearchParams(location.search).get("view") === "stats" ? "stats" : "search";
-applyView();
 applyLang();
 load();
 </script>

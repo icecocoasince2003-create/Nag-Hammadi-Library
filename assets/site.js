@@ -5,7 +5,7 @@
    - 表示言語（日本語 / English / Français）を localStorage に保存し、
      ページ間で引き継ぎます。
        * 三言語対応ページ（<html data-i18n="full">）: html[data-lang] を ja/en/fr に切替
-       * 既存のビュワー（日英のみ）: ページ内の #langBtn / #tlBtn を操作して同期
+       * 既存のビュワー・検索・統計（日英のみ）: ページ内の #langBtn / #tlBtn を操作して同期
          （French を選ぶと UI は英語、語釈・対訳はフランス語になります）
    - ナビ右端の〈ログイン〉は assets/community.js が制御します。
    ============================================================ */
@@ -19,7 +19,8 @@
   var NAV = [
     { id: "home",   href: "index.html",          ja: "HOME",            en: "Home",            fr: "Accueil" },
     { id: "corpus", href: "index.html#corpus",   ja: "文書一覧",         en: "Texts",           fr: "Textes" },
-    { id: "search", href: "search.html",         ja: "コーパス検索・統計", en: "Search & statistics", fr: "Recherche et statistiques" },
+    { id: "search", href: "search.html",         ja: "コーパス検索",     en: "Corpus search",   fr: "Recherche" },
+    { id: "stats",  href: "stats.html",          ja: "コーパス統計",     en: "Statistics",      fr: "Statistiques" },
     { id: "gnosis", href: "gnosticism.html",     ja: "グノーシス主義とは", en: "Gnosticism",      fr: "Le gnosticisme" },
     { id: "project",href: "project.html",        ja: "プロジェクト",     en: "About",           fr: "Le projet" },
     { id: "news",   href: "index.html#news",     ja: "NEWS",            en: "News",            fr: "Actualités" }
@@ -57,7 +58,7 @@
     var p = (location.pathname.split("/").pop() || "index.html").toLowerCase();
     if (p === "" || p === "index.html") return "home";
     if (p.indexOf("search") === 0) return "search";
-    if (p.indexOf("stats") === 0) return "search";   // 旧 stats.html（search.html?view=stats への転送）
+    if (p.indexOf("stats") === 0) return "stats";
     if (p.indexOf("gnosticism") === 0) return "gnosis";
     if (p.indexOf("project") === 0) return "project";
     return "";

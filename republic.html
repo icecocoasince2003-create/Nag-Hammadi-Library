@@ -119,6 +119,9 @@ main{grid-area:main; overflow-y:auto; padding:34px clamp(18px,4vw,60px) 120px; s
 [hidden]{display:none!important}
 .notice b{color:var(--ink)}
 .notice label{color:var(--lapis); cursor:pointer; text-decoration:underline; font-weight:600}
+.notice .fail{display:flex; gap:14px; align-items:center; flex:1 1 100%; min-width:0}
+.notice .fail img{flex:none; width:92px; height:92px}
+.notice .fail>div{min-width:0}
 .col{max-width:760px; margin:0 auto}
 .seg{position:relative; padding:14px 14px 16px 52px; border-radius:10px; margin:2px 0; transition:background .25s}
 .seg .no{position:absolute; left:8px; top:15px; width:34px; text-align:right; font-family:var(--disp);
@@ -402,7 +405,7 @@ html[data-tl="en"] .endnotes .note p.ja{display:none}
         <button class="chip" id="langBtn" title="Language / 言語">English</button>
       </div>
       <div class="nav-ctl">
-        <a class="chip statslink" href="search.html?doc=republic&amp;view=stats" title="コーパス統計 / Corpus statistics">∑ <span class="l-ja">統計</span><span class="l-en">Stats</span></a>
+        <a class="chip statslink" href="stats.html?doc=republic" title="コーパス統計 / Corpus statistics">∑ <span class="l-ja">統計</span><span class="l-en">Stats</span></a>
         <a class="chip searchlink" href="search.html?doc=republic" title="コーパス検索 / Corpus search">⌕ <span class="l-ja">コーパス検索</span><span class="l-en">Corpus search</span></a>
         <button class="chip" id="relBtn" title="関連文書・リソース / Related documents &amp; resources"><span class="l-ja">⇄ 関連</span><span class="l-en">⇄ Related</span></button>
         <button class="chip" id="modeBtn" aria-pressed="false" title="表示モード / Display mode">◐ アイオーン</button>
@@ -595,11 +598,13 @@ function showLoadError(base, diag){
   const url=base+"data/republic_tei.xml";
   const n=$("#loadwarn"); if(!n) return; n.hidden=false;
   n.innerHTML =
+    `<div class="fail"><img src="image/web/gengen_cry.svg" alt="" width="92" height="92"><div>`+
     `⬥ <b>データを取得できませんでした。</b> 本文 <code>data/republic_tei.xml</code> と辞書 <code>data/lexicon.xml</code>`+
     `（任意でギリシア語 <code>data/republic_greek.xml</code>）を <b>Webサーバ経由</b>で配信してください（file:// では取得不可）。`+
     `右上の〈⤓ XML〉メニューの「手元の XML を読み込んで表示」から手動で読み込むこともできます。<br>`+
     `想定URL → <a href="${url}" target="_blank" rel="noopener" style="color:var(--lapis);font-weight:600">${escapeHTML(url)}</a><br>`+
-    `<small style="color:var(--ink-faint)">試行: ${escapeHTML(diag.join("  /  "))}</small>`;
+    `<small style="color:var(--ink-faint)">試行: ${escapeHTML(diag.join("  /  "))}</small>`+
+    `</div></div>`;
 }
 
 /* ---------- parse the three documents ---------- */
@@ -1014,8 +1019,8 @@ function loanCount(){ return SEGS_III.reduce((a,s)=>a+s.words.filter(w=>w.grc).l
 function relabelLoan(){ const e=$("#loanN"); if(e){ const n=loanCount(); e.textContent=n?(" "+n):""; } }
 
 /* ---------- statistics ---------- */
-/* コーパス統計は search.html（コーパス検索・統計）の〈統計〉ビューに統合（ヘッダの〈統計〉リンク → search.html?doc=…&view=stats）。
-   集計ロジックは search.html 側で TEI を直接読み込んで再実装しています。 */
+/* コーパス統計は stats.html?doc=… に移設（ヘッダの〈統計〉リンク）。
+   集計ロジックは stats.html 側で TEI を直接読み込んで再実装しています。 */
 
 /* ---------- related panel (data/catalog.xml) ---------- */
 function catTitle(b, lang){
