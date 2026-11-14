@@ -27,6 +27,7 @@ body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
 <link rel="stylesheet" href="assets/community.css">
 <script defer src="assets/cosmos.js"></script>
 <script defer src="assets/site.js"></script>
+<script defer src="assets/analytics.js"></script>
 <script defer src="assets/community-config.js"></script>
 <script defer src="assets/community.js"></script>
 </head>
@@ -39,6 +40,7 @@ body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
   <div class="eyebrow">Privacy policy</div>
   <h1><span class="jp">プライバシーポリシー</span></h1>
   <p class="meta-date">制定: 2026年11月7日</p>
+  <p class="meta-date">改定: 2026年11月14日</p>
   <p>「Sheneset」（以下「本サイト」）の運営者（生田目心愛）は、本サイトの利用者の個人情報を以下のとおり取り扱います。</p>
 
   <h2>1. 取得する情報</h2>
@@ -67,12 +69,17 @@ body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
     <li><b>Supabase</b> — ログイン（認証）と投稿データの保存</li>
     <li><b>Google</b> — Google アカウントによるログイン</li>
     <li><b>Vercel</b> — 本サイトの配信（通常のアクセスログを含む）</li>
+    <li><b>Google アナリティクス</b> — アクセス解析（第5節）</li>
     <li>Google Fonts、jsDelivr、cdnjs — フォントやプログラムの配信</li>
   </ul>
   <p>これらのサービスのサーバーは日本国外にある場合があります。</p>
 
-  <h2>5. ブラウザへの保存とアクセス解析</h2>
-  <p>本サイトは、表示言語の設定とログイン状態を保持するために、ブラウザの保存領域（localStorage）を使用します。広告やアクセス解析のためのツールは使用していません。</p>
+  <h2 id="analytics" style="scroll-margin-top:70px">5. ブラウザへの保存とアクセス解析</h2>
+  <p>本サイトは、表示言語の設定とログイン状態を保持するために、ブラウザの保存領域（localStorage）を使用します。</p>
+  <p>また、利用状況を把握してサイトの改善に役立てるため、Google LLC が提供するアクセス解析サービス「Google アナリティクス」を使用します。Google アナリティクスは Cookie を使用して、閲覧したページ、参照元、おおよその地域、端末やブラウザの種類などの情報を収集します。個人を特定する情報（氏名やメールアドレスなど）は送信しません。</p>
+  <p>計測は、同意いただいた場合にのみ行います。同意するかどうかの選択はブラウザの保存領域に記録され、いつでも変更できます。</p>
+  <p><button type="button" class="cm-primary" onclick="window.NHC.analyticsSettings()">Cookie の設定を変更する</button></p>
+  <p>Google によるデータの取り扱いについては、<a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">「Google のサービスを使用するサイトやアプリから収集した情報の Google による使用」</a>をご覧ください。広告のためのツールは使用していません。</p>
 
   <h2>6. 保存期間と削除</h2>
   <p>アカウントと投稿の情報は、利用者から削除の申し出があるまで保存します。承認前の投稿は利用者自身がいつでも取り消せます。アカウントの削除、承認済み投稿の削除、保有する情報の開示・訂正を希望する場合は、下記の窓口からご連絡ください。</p>
@@ -88,6 +95,7 @@ body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
   <div class="eyebrow">Privacy policy</div>
   <h1>Privacy policy</h1>
   <p class="meta-date">Effective: 7 November 2026</p>
+  <p class="meta-date">Revised: 14 November 2026</p>
   <p>The operator of “Sheneset” (Kokoa Nabatame; “the site”) handles users’ personal information as follows.</p>
   <h2>1. Information we collect</h2>
   <p>Browsing the site does not give the operator any personally identifying information. Only when you sign in to post comments, annotations or corrections do we collect:</p>
@@ -102,9 +110,13 @@ body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
   <h2>3. What is made public</h2>
   <p>For contributions approved by the editors, the <b>text, suggested correction, display name and date</b> are published on the site. <b>Your e-mail address is never published.</b> You can change your display name at any time under “Account”.</p>
   <h2>4. Third parties and external services</h2>
-  <p>We do not share personal information with third parties except as required by law. The site relies on the following services, which process and store data on our behalf: <b>Supabase</b> (authentication and contribution storage), <b>Google</b> (sign-in with Google), <b>Vercel</b> (hosting, including standard access logs), and Google Fonts, jsDelivr and cdnjs (fonts and scripts). Their servers may be located outside Japan.</p>
-  <h2>5. Browser storage and analytics</h2>
-  <p>The site uses your browser’s local storage to remember your language and sign-in state. We use no advertising or analytics tools.</p>
+  <p>We do not share personal information with third parties except as required by law. The site relies on the following services, which process and store data on our behalf: <b>Supabase</b> (authentication and contribution storage), <b>Google</b> (sign-in with Google), <b>Vercel</b> (hosting, including standard access logs), <b>Google Analytics</b> (usage analytics; see section 5), and Google Fonts, jsDelivr and cdnjs (fonts and scripts). Their servers may be located outside Japan.</p>
+  <h2 id="analytics-en" style="scroll-margin-top:70px">5. Browser storage and analytics</h2>
+  <p>The site uses your browser’s local storage to remember your language and sign-in state.</p>
+  <p>To understand how the site is used and to improve it, we use Google Analytics, a service provided by Google LLC. Google Analytics uses cookies to collect information such as the pages you view, the referring site, your approximate region, and the type of device and browser you use. We send no personally identifying information (such as your name or e-mail address).</p>
+  <p>We measure only if you agree. Your choice is stored in your browser, and you can change it at any time.</p>
+  <p><button type="button" class="cm-primary" onclick="window.NHC.analyticsSettings()">Change cookie settings</button></p>
+  <p>For how Google handles this data, see <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">“How Google uses information from sites or apps that use our services”</a>. We use no advertising tools.</p>
   <h2>6. Retention and deletion</h2>
   <p>Account and contribution data are kept until you ask us to delete them. You can withdraw a contribution yourself while it is pending. To delete your account or a published contribution, or to request access to or correction of your data, contact us as below.</p>
   <h2>7. Contact</h2>
@@ -117,6 +129,7 @@ body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
   <div class="eyebrow">Confidentialité</div>
   <h1>Politique de confidentialité</h1>
   <p class="meta-date">En vigueur : 7 novembre 2026</p>
+  <p class="meta-date">Mise à jour : 14 novembre 2026</p>
   <p>L’éditrice de « Sheneset » (Kokoa Nabatame ; « le site ») traite les données personnelles des utilisateurs comme suit.</p>
   <h2>1. Données collectées</h2>
   <p>La simple consultation du site ne transmet à l’éditrice aucune donnée permettant de vous identifier. Ce n’est que si vous vous connectez pour publier des commentaires, annotations ou corrections que nous collectons : votre adresse e-mail, le nom de votre compte Google (nom affiché par défaut) et son identifiant, ou, en cas d’inscription par e-mail, votre adresse, votre mot de passe (stocké sous forme hachée et illisible pour l’éditrice) et votre nom affiché ; ainsi que le texte, la correction proposée, le passage visé et la date de vos contributions. Nous n’accédons à aucune autre donnée de votre compte Google.</p>
@@ -125,9 +138,13 @@ body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
   <h2>3. Données publiées</h2>
   <p>Pour les contributions approuvées, le <b>texte, la correction proposée, le nom affiché et la date</b> sont publiés. <b>Votre adresse e-mail n’est jamais publiée.</b> Vous pouvez modifier votre nom affiché à tout moment (« Compte »).</p>
   <h2>4. Tiers et services externes</h2>
-  <p>Nous ne communiquons aucune donnée à des tiers, sauf obligation légale. Le site utilise <b>Supabase</b> (authentification et stockage), <b>Google</b> (connexion), <b>Vercel</b> (hébergement, journaux d’accès) ainsi que Google Fonts, jsDelivr et cdnjs. Leurs serveurs peuvent se trouver hors du Japon.</p>
-  <h2>5. Stockage local et mesure d’audience</h2>
-  <p>Le site utilise le stockage local du navigateur pour mémoriser la langue et l’état de connexion. Aucun outil publicitaire ou de mesure d’audience n’est utilisé.</p>
+  <p>Nous ne communiquons aucune donnée à des tiers, sauf obligation légale. Le site utilise <b>Supabase</b> (authentification et stockage), <b>Google</b> (connexion), <b>Vercel</b> (hébergement, journaux d’accès), <b>Google Analytics</b> (mesure d’audience ; voir la section 5) ainsi que Google Fonts, jsDelivr et cdnjs. Leurs serveurs peuvent se trouver hors du Japon.</p>
+  <h2 id="analytics-fr" style="scroll-margin-top:70px">5. Stockage local et mesure d’audience</h2>
+  <p>Le site utilise le stockage local du navigateur pour mémoriser la langue et l’état de connexion.</p>
+  <p>Afin de comprendre l’utilisation du site et de l’améliorer, nous utilisons Google Analytics, un service fourni par Google LLC. Google Analytics utilise des cookies pour collecter des informations telles que les pages consultées, le site de provenance, votre région approximative ainsi que le type d’appareil et de navigateur. Aucune donnée permettant de vous identifier (nom, adresse e-mail, etc.) n’est transmise.</p>
+  <p>La mesure n’a lieu qu’avec votre accord. Votre choix est enregistré dans votre navigateur et vous pouvez le modifier à tout moment.</p>
+  <p><button type="button" class="cm-primary" onclick="window.NHC.analyticsSettings()">Modifier les paramètres des cookies</button></p>
+  <p>Pour le traitement de ces données par Google, voir <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">« Comment Google utilise les informations provenant de sites ou d’applications qui utilisent nos services »</a>. Nous n’utilisons aucun outil publicitaire.</p>
   <h2>6. Conservation et suppression</h2>
   <p>Les données sont conservées jusqu’à votre demande de suppression. Vous pouvez retirer vous-même une contribution en attente. Pour supprimer votre compte ou une contribution publiée, ou pour accéder à vos données ou les rectifier, contactez-nous.</p>
   <h2>7. Contact</h2>

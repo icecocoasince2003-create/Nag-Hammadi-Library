@@ -172,6 +172,7 @@ FONTS = (_icon_links() +
  '<link rel="stylesheet" href="assets/community.css">'
  '<script defer src="assets/cosmos.js"></script>'
  '<script defer src="assets/site.js"></script>'
+ '<script defer src="assets/analytics.js"></script>'
  '<script defer src="assets/community-config.js"></script>'
  '<script defer src="assets/community.js"></script>')
 
