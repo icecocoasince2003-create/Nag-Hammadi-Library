@@ -1,7 +1,7 @@
 /* ============================================================
    site.css — サイト共通レイヤー（全ページで cosmos.css の後に読み込む）
    1) 上部ナビ（#sitebar）: 文字のみ・ホバーで下線
-   2) 既存ページのヘッダー内チップ／タブも文字のみの表示に統一
+   2) ビュワーの文書パネル（.app > header）: 左のパネル／狭い画面ではドロワー
    3) 三言語表示 (.l-ja / .l-en / .l-fr)
    4) 広い画面でのビュワー本文幅の拡張
    5) 解説ページ（gnosticism / project / admin）の共通部品
@@ -67,52 +67,198 @@ html[data-lang="fr"] .l-en { display: none; }
   .sb-tools { margin-left: auto; }
 }
 
-/* ビュワー（.app グリッド）にナビ行を追加 */
-.app { grid-template-rows: auto auto 1fr !important; grid-template-areas: "site" "head" "main" !important; }
+/* ---------- 2) ビュワーの文書パネル（.app > header） ----------
+   上部のヘッダーは共通ナビ（#sitebar）の1段だけにし、ビュワー専用の操作（一覧へ・文書名・写本タブ・
+   表示の切替・ツール）は左の「文書パネル」にまとめる。
+     - 幅 1100px 以上: 本文の左に常時表示。ナビ左端の ☰ で折りたたみ（html[data-panel="off"]）。
+       状態は localStorage "nhc-panel" に保存し、各ビュワーの <head> の1行スクリプトが描画前に反映する
+     - 幅 1100px 未満: ☰ で左から開くドロワー（html[data-drawer="open"]）。背景・Esc・移動系の操作で閉じる
+   ☰ ボタンの描画と開閉は assets/site.js。境界の 1100px は site.js の PANEL_WIDE と揃えること。
+   各ページ内の <style> にある横並びヘッダー用の指定は、ここで上書きする。 */
+.app {
+  grid-template-columns: minmax(0, 1fr) !important;
+  grid-template-rows: auto minmax(0, 1fr) !important;
+  grid-template-areas: "site" "main" !important;
+}
+/* ビュワーのナビは左右の余白を詰め、☰ を足しても折り返しが増えないようにする（☰ はパネルの文字と左端をそろえる） */
+.app > .sitebar { padding-left: clamp(14px, 2vw, 20px); padding-right: clamp(14px, 2vw, 20px); }
+@media (max-width: 359px) { .app > .sitebar .sb-brand img { display: none; } }
 
-/* ---------- 2) 既存ヘッダー内のチップ・タブを文字のみに ---------- */
-body header .chip, body header a.chip, body header button.chip,
-body header .tab, body header .tabs {
-  background: none !important; border: 0 !important; border-radius: 0 !important;
-  box-shadow: none !important;
+/* ナビ左端の開閉ボタン（ビュワーのみ。site.js が描画） */
+.sb-panel {
+  appearance: none; flex: none; position: relative; display: inline-flex; align-items: center; justify-content: center;
+  width: 34px; height: 28px; margin: 0 -18px 0 -8px; padding: 0;
+  background: none; border: 1px solid transparent; border-radius: 8px;
+  color: var(--chrome-ink, #ede8dc); cursor: pointer;
 }
-body header .tabs { padding: 0 !important; gap: 14px !important; }
-body header .chip, body header .tab {
-  padding: 4px 0 !important;
-  color: var(--chrome-ink, var(--ink)) !important;
-  text-decoration: none; text-underline-offset: 6px; text-decoration-thickness: 1px;
-  font-weight: 400;
+.sb-panel::after { content: ""; position: absolute; inset: -8px -4px -6px -6px; }   /* 押せる範囲を広げる */
+.sb-panel svg { display: block; width: 18px; height: 18px; }
+.sb-panel:hover, .sb-panel:focus-visible {
+  border-color: rgba(212, 175, 106, .45); color: var(--gold-bright, #e7c885); outline: none;
 }
-body header .chip:hover, body header .tab:hover,
-body header .chip:focus-visible, body header .tab:focus-visible {
-  background: none !important; text-decoration: underline !important;
-  text-decoration-color: var(--gold) !important; outline: none !important;
-}
-/* 選択中・オンの状態は金色の文字で示す（囲みなし） */
-body header .chip[aria-pressed="true"], body header .tab[aria-selected="true"] {
-  color: var(--gold-bright, var(--gold)) !important; font-weight: 600 !important;
-}
-body header .seg-ctl, body header .nav-ctl { gap: 14px !important; }
-body header .chip.searchlink { color: var(--gold-bright) !important; }
 
-/* XML ダウンロードメニュー（ビュワー） */
-.xmlmenu { position: relative; }
+/* パネル本体。既定（狭い画面）は本文の上に重なるドロワーで、閉じている間は画面の左外に置く */
+body > .app > header {
+  grid-area: main; justify-self: start; z-index: 35;
+  width: min(300px, 86vw); min-height: 0;
+  display: flex; flex-direction: column; align-items: stretch; gap: 0;
+  padding: 16px 18px 40px 20px;
+  background: rgba(8, 7, 20, .97); color: var(--chrome-ink, #ede8dc);
+  border-bottom: 0 !important; border-right: 1px solid rgba(212, 175, 106, .22);
+  overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain;
+  scrollbar-width: thin; scrollbar-color: rgba(190, 180, 230, .3) transparent;
+  font-family: var(--ui, "Inter", "Noto Sans JP", system-ui, sans-serif); font-size: .84rem; line-height: 1.45;
+  outline: none;
+  transform: translateX(-102%); visibility: hidden;
+  transition: transform .22s ease, visibility 0s linear .22s;
+}
+html[data-drawer="open"] body > .app > header {
+  transform: none; visibility: visible; transition-delay: 0s;
+  box-shadow: 16px 0 48px rgba(0, 0, 0, .5);
+}
+/* ドロワーの背景（site.js が挿入。押すと閉じる） */
+.app > .panel-back {
+  grid-area: main; z-index: 34; background: rgba(4, 3, 12, .6);
+  opacity: 0; visibility: hidden; transition: opacity .22s ease, visibility 0s linear .22s;
+}
+html[data-drawer="open"] .app > .panel-back { opacity: 1; visibility: visible; transition-delay: 0s; }
+
+@media (min-width: 1100px) {
+  .app {
+    grid-template-columns: 232px minmax(0, 1fr) !important;
+    grid-template-areas: "site site" "head main" !important;
+  }
+  body > .app > header {
+    grid-area: head; justify-self: stretch; width: auto;
+    background: rgba(8, 7, 20, .5); box-shadow: none !important;
+    transform: none !important; visibility: visible !important; transition: none;
+  }
+  .app > .panel-back { display: none; }
+  html[data-panel="off"] .app {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-areas: "site" "main" !important;
+  }
+  html[data-panel="off"] body > .app > header { display: none; }
+}
+
+/* 行（リンク・ボタン・タブ）: 文字のみ・ホバーで下線（上部ナビと同じ流儀） */
+body > .app > header .chip, body > .app > header .tab {
+  appearance: none; display: flex; align-items: center; gap: 8px; width: 100%;
+  margin: 0; padding: 5px 0;
+  background: none !important; border: 0 !important; border-radius: 0; box-shadow: none;
+  font: inherit; font-size: .84rem; font-weight: 400; letter-spacing: 0; line-height: 1.4;
+  color: var(--chrome-ink, #ede8dc); text-align: left; white-space: normal; cursor: pointer;
+  text-decoration: none; text-underline-offset: 5px; text-decoration-thickness: 1px;
+}
+body > .app > header .chip:hover, body > .app > header .tab:hover,
+body > .app > header .chip:focus-visible, body > .app > header .tab:focus-visible {
+  background: none !important; outline: none;
+  text-decoration: underline; text-decoration-color: var(--gold, #d4af6a);
+}
+
+@media (pointer: coarse) {   /* タッチ操作では行を高くする */
+  body > .app > header .chip, body > .app > header .tab { padding-top: 8px; padding-bottom: 8px; }
+}
+
+/* 並び: ← 一覧 / 文書名 / 注解へ / 写本 / 表示 / ツール */
+body > .app > header > .homelink {
+  order: 0; align-self: flex-start; width: auto; padding: 2px 0;
+  font-size: .78rem; color: var(--chrome-faint, #8a85a6);
+}
+body > .app > header > .homelink:hover, body > .app > header > .homelink:focus-visible { color: var(--chrome-ink, #ede8dc); }
+body > .app > header > .brand { order: 1; display: block; margin: 10px 0 0; }
+body > .app > header .brand .brandlogo { display: none; }   /* サイトのロゴは上部ナビにあるので省く */
+body > .app > header .brand .brandtext { display: block; }
+body > .app > header .brand .t { font-size: 1.06rem; line-height: 1.4; }
+body > .app > header .brand .t .cop { display: block; font-size: 1.12rem; line-height: 1.3; }
+body > .app > header .brand .s { margin-top: 6px; font-size: .62rem; line-height: 1.6; letter-spacing: .12em; }
+body > .app > header > #notesJump { order: 2; margin-top: 8px; }
+body > .app > header > .tabs { order: 3; }
+body > .app > header > .controls {
+  order: 4; display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start;
+  flex-wrap: nowrap; gap: 0; margin: 0;
+}
+
+/* グループ（写本・表示・ツール）と見出し。見出しの文言は CSS で付ける（日英は html[data-lang] で切替） */
+body > .app > header > .tabs, body > .app > header .seg-ctl, body > .app > header .nav-ctl {
+  display: flex; flex-direction: column; align-items: stretch; gap: 0;
+  margin: 16px 0 0; padding: 14px 0 0;
+  background: none; border: 0; border-top: 1px solid var(--line, rgba(190, 180, 230, .16)); border-radius: 0;
+}
+body > .app > header > .tabs::before, body > .app > header .seg-ctl::before, body > .app > header .nav-ctl::before {
+  margin: 0 0 6px; font-size: .72rem; font-weight: 700; letter-spacing: .06em; line-height: 1.5;
+  color: var(--ink-soft, #bdb7d2);
+}
+body > .app > header > .tabs::before { content: "写本"; }
+body > .app > header .seg-ctl::before { content: "表示"; }
+body > .app > header .nav-ctl::before { content: "ツール"; }
+html[data-lang="en"] body > .app > header > .tabs::before { content: "Witness"; }
+html[data-lang="en"] body > .app > header .seg-ctl::before { content: "Display"; }
+html[data-lang="en"] body > .app > header .nav-ctl::before { content: "Tools"; }
+
+/* 写本タブ: 選択中を丸印と金色の文字で示す */
+body > .app > header .tab::before {
+  content: ""; flex: none; box-sizing: border-box; width: 14px; height: 14px; border-radius: 50%;
+  border: 1px solid rgba(190, 180, 230, .5); background: rgba(255, 255, 255, .04);
+}
+body > .app > header .tab[aria-selected="true"] { color: var(--gold-bright, #e7c885); }
+body > .app > header .tab[aria-selected="true"]::before {
+  border-color: var(--gold, #d4af6a);
+  background: radial-gradient(circle, var(--gold-bright, #e7c885) 0 3px, transparent 3.6px);
+}
+
+/* 表示の切替（語釈・借用語・ページ・行）: オン／オフをチェック印で示す */
+body > .app > header .seg-ctl > .chip[aria-pressed]:not(#tlBtn)::before {
+  content: ""; flex: none; box-sizing: border-box; width: 14px; height: 14px; border-radius: 3px;
+  border: 1px solid rgba(190, 180, 230, .5);
+  background: rgba(255, 255, 255, .04) center / 10px 10px no-repeat;
+}
+body > .app > header .seg-ctl > .chip[aria-pressed="true"]:not(#tlBtn)::before {
+  border-color: var(--gold, #d4af6a); background-color: var(--gold, #d4af6a);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.4 6.3l2.4 2.4 4.8-5.2' fill='none' stroke='%231a140a' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+body > .app > header .loann, body > .app > header .cm-n {
+  margin-left: auto; opacity: 1; font-size: .74rem; font-variant-numeric: tabular-nums;
+  color: var(--chrome-faint, #8a85a6);
+}
+/* 〈訳〉は日→英→仏の順送り。右端に切替の印を添える */
+body > .app > header #tlBtn { padding-left: 22px; }
+body > .app > header #tlBtn::after {
+  content: ""; flex: none; width: 14px; height: 14px; margin-left: auto; opacity: .8;
+  background: center / 14px 14px no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%238a85a6' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M13.3 6.4A5.5 5.5 0 0 0 3.4 4.9M2.7 9.6a5.5 5.5 0 0 0 9.9 1.5'/%3E%3Cpath d='M3.3 2.3v2.8h2.8M12.7 13.7v-2.8H9.9'/%3E%3C/svg%3E");
+}
+/* 画面の言語は上部ナビ（日本語 / EN / FR）に一本化。#langBtn は site.js が内部で押すので DOM には残す */
+body > .app > header #langBtn { display: none; }
+
+/* ツール: 行頭の記号（.ic）を同じ幅にそろえる */
+body > .app > header .chip .ic { flex: none; width: 14px; text-align: center; }
+body > .app > header .chip.searchlink { color: var(--gold-bright, #e7c885) !important; }
+
+/* XML ダウンロードメニュー: パネル内にその場で開く */
+.xmlmenu-btn::after {
+  content: ""; flex: none; box-sizing: border-box; width: 7px; height: 7px; margin: -3px 3px 0 auto;
+  border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg); opacity: .6;
+}
+.xmlmenu-btn[aria-expanded="true"]::after { margin-top: 4px; transform: rotate(-135deg); }
 .xmlmenu-pop {
-  position: absolute; right: 0; top: calc(100% + 10px); z-index: 70; min-width: 300px;
-  background: var(--chrome, #0c0d14); border: 1px solid var(--line-2); border-radius: 10px;
-  box-shadow: 0 14px 40px rgba(0,0,0,.55); padding: 10px 0; font-size: .8rem;
+  margin: 4px 0 6px 6px; padding: 4px 0 4px 15px;
+  border-left: 1px solid var(--line-2, rgba(190, 180, 230, .22)); font-size: .78rem;
 }
 .xmlmenu-pop[hidden] { display: none; }
-.xmlmenu-pop .xm-h { padding: 4px 16px 8px; font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; color: var(--chrome-faint); }
+.xmlmenu-pop .xm-h { padding: 3px 0 5px; font-size: .62rem; letter-spacing: .08em; line-height: 1.6; color: var(--chrome-faint, #8a85a6); }
 .xmlmenu-pop a, .xmlmenu-pop button {
-  display: flex; align-items: baseline; gap: 10px; width: 100%; text-align: left;
-  padding: 7px 16px; color: var(--chrome-ink); text-decoration: none; background: none; border: 0;
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 8px; width: 100%; text-align: left;
+  padding: 5px 0; color: var(--chrome-ink, #ede8dc); text-decoration: none; background: none; border: 0;
   font: inherit; cursor: pointer;
 }
-.xmlmenu-pop a:hover, .xmlmenu-pop button:hover { text-decoration: underline; text-decoration-color: var(--gold); }
-.xmlmenu-pop code { font-size: .74rem; color: var(--gold-bright); }
-.xmlmenu-pop small { color: var(--chrome-faint); font-size: .68rem; margin-left: auto; white-space: nowrap; }
-.xmlmenu-pop hr { border: 0; border-top: 1px solid var(--line); margin: 6px 0; }
+.xmlmenu-pop a:hover, .xmlmenu-pop button:hover,
+.xmlmenu-pop a:focus-visible, .xmlmenu-pop button:focus-visible {
+  text-decoration: underline; text-decoration-color: var(--gold, #d4af6a); outline: none;
+}
+.xmlmenu-pop code { flex-basis: 100%; font-size: .74rem; color: var(--gold-bright, #e7c885); overflow-wrap: anywhere; }
+.xmlmenu-pop small { margin-left: auto; font-size: .68rem; color: var(--chrome-faint, #8a85a6); white-space: nowrap; }
+.xmlmenu-pop hr { border: 0; border-top: 1px solid var(--line, rgba(190, 180, 230, .16)); margin: 6px 0; }
 
 /* ---------- 4) 広い画面では本文の幅も広げる ---------- */
 @media (min-width: 1240px) {
@@ -192,13 +338,6 @@ html[data-lang="en"] .prose li, html[data-lang="fr"] .prose li { line-height: 1.
   body > header .brand .bt small { display: none; }
 }
 @media (max-width: 900px) {
-  .app > header { flex-wrap: wrap; gap: 8px 16px !important; }
-  .app > header .controls { margin-left: 0 !important; justify-content: flex-start !important; }
-  .app > header .chip, .app > header .tab { white-space: nowrap; }
-  .app > header .nav-ctl { border-left: 0 !important; padding-left: 0 !important; flex-wrap: wrap; }
-  .app > header .seg-ctl { flex-wrap: wrap; }
   .app > .sitebar { min-width: 0; }
   .app { max-width: 100vw; overflow-x: hidden; }
 }
-.xmlmenu-pop { max-width: calc(100vw - 24px); }
-@media (max-width: 600px) { .xmlmenu-pop { right: auto; left: 0; min-width: 0; width: calc(100vw - 40px); } }

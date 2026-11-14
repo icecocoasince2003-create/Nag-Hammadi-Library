@@ -487,7 +487,7 @@
     // ツールバーのボタン
     var nav = document.querySelector("header .nav-ctl");
     if (nav && !document.getElementById("cmBtn")) {
-      var b = el('<button type="button" class="chip" id="cmBtn" title=""><span class="cm-lbl"></span> <span class="cm-n"></span></button>');
+      var b = el('<button type="button" class="chip" id="cmBtn" title=""><span class="ic" aria-hidden="true">✎</span><span class="cm-lbl"></span> <span class="cm-n"></span></button>');
       b.onclick = function () { openDrawer(null); };
       nav.insertBefore(b, nav.firstChild);
     }
@@ -515,7 +515,7 @@
   }
   function relabel() {
     var b = document.getElementById("cmBtn");
-    if (b) { b.querySelector(".cm-lbl").textContent = "✎ " + t("cm"); b.title = t("cmTitle"); }
+    if (b) { b.querySelector(".cm-lbl").textContent = t("cm"); b.title = t("cmTitle"); }
   }
 
   /* =========================================================

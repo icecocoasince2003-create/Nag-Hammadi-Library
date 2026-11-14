@@ -373,6 +373,7 @@ html[data-tl="en"] .endnotes .note p.ja{display:none}
 <link rel="stylesheet" href="assets/cosmos.css">
 <link rel="stylesheet" href="assets/site.css">
 <link rel="stylesheet" href="assets/community.css">
+<script>/* 左の文書パネルを折りたたんだ状態（assets/site.js が保存）を描画前に反映 */try{if(localStorage.getItem("nhc-panel")==="off")document.documentElement.setAttribute("data-panel","off")}catch(e){}</script>
 <script defer src="assets/cosmos.js"></script>
 <script defer src="assets/site.js"></script>
 <script defer src="assets/community-config.js"></script>
@@ -402,12 +403,12 @@ html[data-tl="en"] .endnotes .note p.ja{display:none}
         <button class="chip" id="langBtn" title="Language / 言語">English</button>
       </div>
       <div class="nav-ctl">
-        <a class="chip statslink" href="search.html?doc=republic&amp;view=stats" title="コーパス統計 / Corpus statistics">∑ <span class="l-ja">統計</span><span class="l-en">Stats</span></a>
-        <a class="chip searchlink" href="search.html?doc=republic" title="コーパス検索 / Corpus search">⌕ <span class="l-ja">コーパス検索</span><span class="l-en">Corpus search</span></a>
-        <button class="chip" id="relBtn" title="関連文書・リソース / Related documents &amp; resources"><span class="l-ja">⇄ 関連</span><span class="l-en">⇄ Related</span></button>
+        <a class="chip statslink" href="search.html?doc=republic&amp;view=stats" title="コーパス統計 / Corpus statistics"><span class="ic" aria-hidden="true">∑</span><span class="l-ja">統計</span><span class="l-en">Stats</span></a>
+        <a class="chip searchlink" href="search.html?doc=republic" title="コーパス検索 / Corpus search"><span class="ic" aria-hidden="true">⌕</span><span class="l-ja">コーパス検索</span><span class="l-en">Corpus search</span></a>
+        <button class="chip" id="relBtn" title="関連文書・リソース / Related documents &amp; resources"><span class="ic" aria-hidden="true">⇄</span><span class="l-ja">関連</span><span class="l-en">Related</span></button>
         <button class="chip" id="modeBtn" aria-pressed="false" title="表示モード / Display mode">◐ アイオーン</button>
         <div class="xmlmenu">
-          <button class="chip xmlmenu-btn" id="xmlBtn" aria-haspopup="true" aria-expanded="false" title="このページが参照している XML をダウンロード / Download the XML used by this page">⤓ XML</button>
+          <button class="chip xmlmenu-btn" id="xmlBtn" aria-haspopup="true" aria-expanded="false" title="このページが参照している XML をダウンロード / Download the XML used by this page"><span class="ic" aria-hidden="true">⤓</span>XML</button>
           <div class="xmlmenu-pop" id="xmlMenu" hidden>
             <div class="xm-h"><span class="l-ja">このページが参照している XML</span><span class="l-en">XML used by this page</span></div>
             <a href="data/republic_tei.xml" download><code>republic_tei.xml</code><span class="l-ja">コプト語本文</span><span class="l-en">Coptic text</span><small data-size></small></a>

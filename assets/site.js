@@ -8,6 +8,8 @@
        * 既存のビュワー（日英のみ）: ページ内の #langBtn / #tlBtn を操作して同期
          （French を選ぶと UI は英語、語釈・対訳はフランス語になります）
    - ナビ右端の〈ログイン〉は assets/community.js が制御します。
+   - ビュワー（.app > header を持つページ）では、ナビ左端に ☰ を出して
+     左の「文書パネル」を開閉します（見た目は assets/site.css の 2)）。
    ============================================================ */
 (function () {
   "use strict";
@@ -25,9 +27,9 @@
     { id: "news",   href: "index.html#news",     ja: "NEWS",            en: "News",            fr: "Actualités" }
   ];
   var SITE = {
-    ja: { name: "Sheneset", sub: "ナグ・ハマディ写本コーパス", nav: "サイト内ナビゲーション" },
-    en: { name: "Sheneset", sub: "Digital TEI edition of the Nag Hammadi Codices", nav: "Site navigation" },
-    fr: { name: "Sheneset", sub: "Édition numérique TEI des codices de Nag Hammadi", nav: "Navigation du site" }
+    ja: { name: "Sheneset", sub: "ナグ・ハマディ写本コーパス", nav: "サイト内ナビゲーション", panel: "文書メニュー（表示・ツール）" },
+    en: { name: "Sheneset", sub: "Digital TEI edition of the Nag Hammadi Codices", nav: "Site navigation", panel: "Document menu (display and tools)" },
+    fr: { name: "Sheneset", sub: "Édition numérique TEI des codices de Nag Hammadi", nav: "Navigation du site", panel: "Menu du document (affichage et outils)" }
   };
 
   function stored() {
@@ -67,6 +69,9 @@
     var L = lang(), S = SITE[L] || SITE.ja, cur = pageId();
     nav.setAttribute("aria-label", S.nav);
     nav.innerHTML =
+      (panel ? '<button type="button" class="sb-panel" id="sbPanel" aria-controls="' + esc(panel.id) + '" aria-expanded="' + panelShown() +
+        '" aria-label="' + esc(S.panel) + '" title="' + esc(S.panel) + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" ' +
+        'stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>' : "") +
       '<a class="sb-brand" href="index.html"><img src="image/icon.svg" alt="" width="26" height="26" onerror="this.style.display=\'none\'">' +
       '<span class="sb-name"><b><span class="cop">ϣⲉⲛⲉⲥⲏⲧ</span>' + esc(S.name) + '</b><small>' + esc(S.sub) + '</small></span></a>' +
       '<div class="sb-links">' + NAV.map(function (n) {
@@ -83,7 +88,65 @@
     Array.prototype.forEach.call(nav.querySelectorAll(".sb-lang"), function (b) {
       b.addEventListener("click", function () { setLang(b.getAttribute("data-lang")); });
     });
+    if (panel) {
+      panel.setAttribute("aria-label", S.panel);
+      nav.querySelector(".sb-panel").addEventListener("click", togglePanel);
+    }
     document.dispatchEvent(new CustomEvent("nhc:sitebar"));
+  }
+
+  /* ---- ビュワーの文書パネル（.app > header）の開閉 ----
+     幅 1100px 以上: 本文の左に常時表示。☰ で折りたたみ（html[data-panel="off"]、localStorage に保存）
+     それより狭い画面: ☰ で左から開くドロワー（html[data-drawer="open"]）。背景・Esc・移動系の操作で閉じる
+     見た目は assets/site.css の 2)。PANEL_WIDE は site.css の @media と揃えること。 */
+  var PANEL_KEY = "nhc-panel", PANEL_WIDE = "(min-width: 1100px)";
+  var panel = null;
+  function panelWide() { return !!(window.matchMedia && window.matchMedia(PANEL_WIDE).matches); }
+  function panelShown() {
+    return panelWide() ? H.getAttribute("data-panel") !== "off" : H.getAttribute("data-drawer") === "open";
+  }
+  function syncPanelBtn() {
+    var b = document.getElementById("sbPanel");
+    if (b) b.setAttribute("aria-expanded", String(panelShown()));
+  }
+  function setDrawer(open, moveFocus) {
+    if (open) H.setAttribute("data-drawer", "open"); else H.removeAttribute("data-drawer");
+    syncPanelBtn();
+    if (!moveFocus) return;
+    var t = open ? panel : document.getElementById("sbPanel");
+    if (t) { try { t.focus({ preventScroll: true }); } catch (e) { t.focus(); } }
+  }
+  function togglePanel() {
+    if (!panelWide()) { setDrawer(!panelShown(), true); return; }
+    var off = panelShown();
+    if (off) H.setAttribute("data-panel", "off"); else H.removeAttribute("data-panel");
+    try { if (off) localStorage.setItem(PANEL_KEY, "off"); else localStorage.removeItem(PANEL_KEY); } catch (e) {}
+    syncPanelBtn();
+  }
+  function wirePanel() {
+    panel = document.querySelector("body > .app > header");
+    if (!panel) return;
+    if (!panel.id) panel.id = "docpanel";
+    panel.setAttribute("tabindex", "-1");
+    try { if (localStorage.getItem(PANEL_KEY) === "off") H.setAttribute("data-panel", "off"); } catch (e) {}
+    var back = document.createElement("div");
+    back.className = "panel-back";
+    panel.parentNode.insertBefore(back, panel);
+    back.addEventListener("click", function () { setDrawer(false, false); });
+    // ドロワー内で移動系の操作（リンク・写本タブ・関連など）をしたら閉じる。表示の切替と XML メニューでは開いたまま
+    panel.addEventListener("click", function (e) {
+      if (panelWide() || H.getAttribute("data-drawer") !== "open") return;
+      var t = e.target.closest ? e.target.closest("a, button") : null;
+      if (!t || t.matches("[aria-pressed], .xmlmenu-btn, a[download]")) return;
+      setDrawer(false, false);
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && H.getAttribute("data-drawer") === "open") setDrawer(false, true);
+    });
+    window.addEventListener("resize", function () {
+      if (panelWide()) H.removeAttribute("data-drawer");
+      syncPanelBtn();
+    });
   }
 
   /* ---- 既存（日英）ページとの同期 ---- */
@@ -128,6 +191,7 @@
     // 他に固定ヘッダーを持たないページではナビを上部に固定
     var otherHeader = document.querySelector("body > header, body > .app > header");
     if (!otherHeader) nav.classList.add("sticky");
+    wirePanel();
 
     var s = stored();
     if (fullI18n()) {
