@@ -346,7 +346,7 @@ def build_index():
      <a href="#corpus">{tri("文書一覧へ ↓", "Browse the codices ↓", "Parcourir les codices ↓")}</a>
    </div>
   </div>
-  <img class="hero-fig" src="image/web/gengen.svg" alt="" loading="lazy">
+  <img class="hero-fig" src="image/web/gengen_guide.svg" alt="" loading="lazy">
  </section>
 
  <div class="sec-h"><h2>{tri("公開中のテキスト", "Published texts", "Textes publiés")}</h2><span class="rule"></span></div>
@@ -531,7 +531,7 @@ if(!t){
    <div class="soon"><span class="dot"></span> ${tri('このテキストは整備予定です（準備中）','This text is in preparation','Ce texte est en préparation')}</div>
    <div class="rail"><i></i><i></i><i></i><i></i><i></i></div>
    <div class="card">
-     <img src="image/web/gengen_sleep.svg" alt="" loading="lazy"
+     <img src="image/web/gengen_roost.svg" alt="" loading="lazy"
        style="float:right; width:110px; aspect-ratio:1; border-radius:50%; object-fit:cover; object-position:center 22%; border:1px solid rgba(212,175,106,.45); margin:0 0 10px 14px">
      <h2>${tri('完成時に備わる構成','What the finished edition will offer','Ce que l’édition offrira')}</h2>
      <p>${tri('本文書は本コーパスの拡張対象です。完成時には<b>エウグノストスと同一の構成</b>で公開され、同じビュワーで形態素クリック・三言語切替・注釈の併読ができるようになります。',

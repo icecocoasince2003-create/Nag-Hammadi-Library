@@ -180,6 +180,9 @@ table.kw td.rc{color:var(--s-mut); white-space:nowrap; overflow:hidden; max-widt
 .empty{padding:28px 0; color:var(--s-mut); font-size:.9rem}
 .notice{border-left:3px solid var(--s-warn); border-radius:0 8px 8px 0; background:var(--s-bg2); padding:10px 14px; font-size:.84rem; margin:16px 0}
 .notice code{font-size:.8rem}
+.notice .fail{display:flex; gap:14px; align-items:center; flex:1 1 100%; min-width:0}
+.notice .fail img{flex:none; width:92px; height:92px}
+.notice .fail>div{min-width:0}
 .foot{margin-top:46px; padding-top:12px; border-top:1px solid var(--s-rule); font-size:.74rem; color:var(--s-mut); line-height:1.8}
 .foot code{font-size:.72rem}
 .vh{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
@@ -598,7 +601,7 @@ async function load(){
     gotoHash();
   }catch(e){
     const w = $("#loadwarn"); w.hidden = false;
-    w.innerHTML = esc(t("loadErr")) + "<br><small>" + esc(e.message) + "</small>";
+    w.innerHTML = '<div class="fail"><img src="image/web/gengen_cry.svg" alt="" width="92" height="92"><div>' + esc(t("loadErr")) + "<br><small>" + esc(e.message) + "</small></div></div>";
     $("#listHead").textContent = "";
     $("#sections").innerHTML = "";
   }

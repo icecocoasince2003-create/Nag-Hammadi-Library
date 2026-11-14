@@ -60,12 +60,14 @@
 
 サイト名を「Sheneset」（ϣⲉⲛⲉⲥⲏⲧ）に変更し、サイトの画像をマスコットのゲンゲン（エジプトガン配色のガチョウ、SVG）に差し替えました。
 
-- サイト名: ヘッダーのロゴ（`assets/site.js`）、各ページの `<title>`・`data-title-*`、トップの見出し、フッター、プライバシーポリシー・利用規約、引用表記を変更。GitHub のリポジトリ名と公開 URL は従来のまま
+- サイト名: ヘッダーのロゴ（`assets/site.js`）、各ページの `<title>`・`data-title-*`、トップの見出し、フッター、プライバシーポリシー・利用規約、引用表記を変更。GitHub のリポジトリ名は従来のまま。公開 URL は `sheneset.vercel.app` に変更（`project.html` の予備の URL と `docs/COMMUNITY_SETUP.md`）
 - 「プロジェクトについて」（`project.html`）に「サイト名とマスコット」の節を追加
-- `image/web/gengen.svg`（基本ポーズ）: トップのヒーロー画像（旧アイオーン）
+- `image/web/gengen_guide.svg`（ご案内）: トップのヒーロー画像（旧アイオーン）。文章の右に置かれるので、文章のほうを指す左向き。丸い枠に全体が収まるよう viewBox に余白を取ってある
+- `image/web/gengen.svg`（基本ポーズ）: 「プロジェクトについて」のマスコット紹介
 - `image/web/gengen_smile.svg`: 「グノーシス主義とは」冒頭の画像（旧アイオーン、日英仏3か所）
 - `image/web/gengen_honk.svg`: 同ページの神話の図（旧デーミウルゴス、日英仏3か所）
-- `image/web/gengen_sleep.svg`: 準備中ページの画像（旧ウロボロス）
+- `image/web/gengen_roost.svg`（写本をあたためる）: 準備中ページの画像（旧ウロボロス）。丸い枠用に余白を取ってある。それまで使っていた `gengen_sleep.svg` は現在どこからも参照されていません
+- `image/web/gengen_cry.svg`（しくしく）: ビュワー4ページ（eugnostos / republic / search / stats）の読み込み失敗の表示（`#loadwarn`）。画像を左、文章を右に並べるため、文章を `.fail` の枠で包んだ
 - `image/icon.svg`: サイトアイコン（ファビコン・ヘッダーのロゴ）はマスコットにせず、以前のアイコン（`image/web/icon.svg`）をもとに描き直したもの（尾をくわえたウロボロスの環と八芒星）。`update_icon.py` で反映済み
 - トップ「公開中のテキスト」のカード左の画像は削除し、カードは文字だけの1カラムに変更
 - `scripts/update_icon.py` の埋め込み更新対象に `stats.html` を追加（手作業管理4ページ）
