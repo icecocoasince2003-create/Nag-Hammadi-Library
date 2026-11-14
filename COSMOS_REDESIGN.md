@@ -67,7 +67,7 @@
 - `image/web/gengen_smile.svg`: 「グノーシス主義とは」冒頭の画像（旧アイオーン、日英仏3か所）
 - `image/web/gengen_honk.svg`: 同ページの神話の図（旧デーミウルゴス、日英仏3か所）
 - `image/web/gengen_roost.svg`（写本をあたためる）: 準備中ページの画像（旧ウロボロス）。丸い枠用に余白を取ってある。それまで使っていた `gengen_sleep.svg` は現在どこからも参照されていません
-- `image/web/gengen_cry.svg`（しくしく）: ビュワー4ページ（eugnostos / republic / search / stats）の読み込み失敗の表示（`#loadwarn`）。画像を左、文章を右に並べるため、文章を `.fail` の枠で包んだ
+- `image/web/gengen_cry.svg`（しくしく）: ビュワー3ページ（eugnostos / republic / search）の読み込み失敗の表示（`#loadwarn`）。統計は `search.html` に統合済みなので、統計の表示でも同じものが出る。画像を左、文章を右に並べるため、文章を `.fail` の枠で包んだ
 - `image/icon.svg`: サイトアイコン（ファビコン・ヘッダーのロゴ）はマスコットにせず、以前のアイコン（`image/web/icon.svg`）をもとに描き直したもの（尾をくわえたウロボロスの環と八芒星）。`update_icon.py` で反映済み
 - トップ「公開中のテキスト」のカード左の画像は削除し、カードは文字だけの1カラムに変更
 - `scripts/update_icon.py` の埋め込み更新対象に `stats.html` を追加（手作業管理4ページ）
