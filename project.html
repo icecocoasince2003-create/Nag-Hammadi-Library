@@ -1,5 +1,7 @@
 <!-- プロジェクト紹介ページ（手作業管理）。メンバーと資金協力は data/project.json から描画します
-     （public: true の項目のみ表示。資金協力の欄は表示する項目が 1 つもなければ見出しごと非表示）。 -->
+     （public: true の項目のみ表示。資金協力の欄は表示する項目が 1 つもなければ見出しごと非表示）。
+     〈メンバー募集〉の連絡先は、迷惑メール対策のため @ を置き換えた表記で 1 か所（.mb-a）にだけ書いています。
+     mailto: リンクにはしないでください（アドレスが機械的に収集されやすくなります）。 -->
 <!DOCTYPE html>
 <html lang="ja" data-lang="ja" data-i18n="full" data-mode="aeon" data-title-en="About the project — Sheneset" data-title-fr="À propos du projet — Sheneset">
 <head>
@@ -39,6 +41,14 @@ html[data-lang="ja"] .member .nm{font-family:"Noto Serif JP",serif}
 .funders a{color:inherit; text-underline-offset:4px}
 .cite{font-family:'Spectral',Georgia,serif; font-size:.92rem; background:rgba(0,0,0,.25); border:1px solid var(--line); border-radius:10px; padding:12px 14px; color:var(--ink-soft); line-height:1.7}
 .feat-list{display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:12px; margin:14px 0}
+.prose ul.roles{padding-left:1.3em; max-width:74ch}
+.prose ul.roles li{margin-bottom:.2em}
+.mailbox{max-width:74ch; margin:18px 0; padding:14px 18px; border:1px solid var(--line); border-left:3px solid var(--gold);
+  border-radius:0 12px 12px 0; background:rgba(212,175,106,.07)}
+.mailbox .mb-k{font-size:.74rem; letter-spacing:.06em; color:var(--gold)}
+.mailbox .mb-a{margin:4px 0 6px; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:1.06rem;
+  color:var(--gold-bright); overflow-wrap:anywhere; user-select:all; -webkit-user-select:all}
+.mailbox .mb-n{font-size:.78rem; line-height:1.7; color:var(--ink-faint)}
 </style>
 <link rel="stylesheet" href="assets/cosmos.css">
 <link rel="stylesheet" href="assets/site.css">
@@ -64,6 +74,7 @@ html[data-lang="ja"] .member .nm{font-family:"Noto Serif JP",serif}
     <a href="#aims"><span class="l-ja">目的と特色</span><span class="l-en">Aims</span><span class="l-fr">Objectifs</span></a>
     <a href="#data"><span class="l-ja">データ</span><span class="l-en">Data</span><span class="l-fr">Données</span></a>
     <a href="#members"><span class="l-ja">メンバー</span><span class="l-en">Team</span><span class="l-fr">Équipe</span></a>
+    <a href="#recruit"><span class="l-ja">メンバー募集</span><span class="l-en">Join the team</span><span class="l-fr">Rejoindre l’équipe</span></a>
     <a href="#funding" id="tocFunding" hidden><span class="l-ja">資金協力</span><span class="l-en">Funding</span><span class="l-fr">Financement</span></a>
     <a href="#join"><span class="l-ja">参加・協力</span><span class="l-en">Contribute</span><span class="l-fr">Contribuer</span></a>
     <a href="#cite"><span class="l-ja">引用・ライセンス</span><span class="l-en">Citation &amp; licence</span><span class="l-fr">Citation et licence</span></a>
@@ -95,24 +106,43 @@ html[data-lang="ja"] .member .nm{font-family:"Noto Serif JP",serif}
   <h2 id="members"><span class="num">III</span><span class="l-ja">メンバー</span><span class="l-en">Team</span><span class="l-fr">Équipe</span></h2>
   <div class="members" id="memberList"></div>
 
+  <h2 id="recruit"><span class="num">IV</span><span class="l-ja">メンバー募集</span><span class="l-en">Join the team</span><span class="l-fr">Rejoindre l’équipe</span></h2>
+  <p><span class="l-ja">Sheneset では、ナグ・ハマディ写本のデジタル版を一緒に作っていくメンバーを募集しています。たとえば、次のような作業に関心のある方を歓迎します。</span>
+  <span class="l-en">Sheneset is looking for people to help build this digital edition of the Nag Hammadi Codices. We would be glad to hear from anyone interested in work such as the following.</span>
+  <span class="l-fr">Sheneset recherche des personnes souhaitant participer à cette édition numérique des codices de Nag Hammadi. Nous serions heureux d’échanger avec toute personne intéressée par des tâches telles que les suivantes.</span></p>
+  <ul class="roles">
+    <li><span class="l-ja"><b>本文の符号化と校正</b> — コプト語本文の TEI 符号化、レンマ・品詞の付与とその点検</span><span class="l-en"><b>Encoding and proofreading</b> — TEI encoding of the Coptic text; assigning and checking lemmas and parts of speech</span><span class="l-fr"><b>Encodage et relecture</b> — encodage TEI du texte copte ; attribution et vérification des lemmes et des catégories grammaticales</span></li>
+    <li><span class="l-ja"><b>翻訳と語釈</b> — 日本語・英語・フランス語の対訳、コプト語辞書の語義</span><span class="l-en"><b>Translation and glossing</b> — Japanese, English and French translations; senses for the Coptic lexicon</span><span class="l-fr"><b>Traduction et gloses</b> — traductions japonaise, anglaise et française ; sens du lexique copte</span></li>
+    <li><span class="l-ja"><b>注釈と解説</b> — グノーシス主義、初期キリスト教、古代哲学などに関する注釈や解説ページの執筆</span><span class="l-en"><b>Notes and essays</b> — notes and introductory pages on Gnosticism, early Christianity and ancient philosophy</span><span class="l-fr"><b>Notes et présentations</b> — notes et pages d’introduction sur le gnosticisme, le christianisme ancien et la philosophie antique</span></li>
+    <li><span class="l-ja"><b>サイトの開発とデザイン</b> — ビュワーや検索機能の改善、写本画像（IIIF）の整備</span><span class="l-en"><b>Development and design</b> — improving the viewers and the search, preparing manuscript images (IIIF)</span><span class="l-fr"><b>Développement et design</b> — amélioration des visionneuses et de la recherche, préparation des images des manuscrits (IIIF)</span></li>
+  </ul>
+  <p><span class="l-ja">参加してみたい方、まずは話を聞いてみたいという方は、下記のメールアドレスまでご連絡ください。お名前と、関心のある分野や取り組んでみたい作業を添えていただけると助かります。</span>
+  <span class="l-en">If you would like to take part, or simply to hear more, please write to the address below. It helps if you tell us your name and the areas or tasks that interest you.</span>
+  <span class="l-fr">Si vous souhaitez participer, ou simplement en savoir plus, écrivez-nous à l’adresse ci-dessous, en indiquant votre nom ainsi que les domaines ou les tâches qui vous intéressent.</span></p>
+  <div class="mailbox">
+    <div class="mb-k"><span class="l-ja">連絡先（代表：生田目 心愛）</span><span class="l-en">Contact (project lead: Kokoa Nabatame)</span><span class="l-fr">Contact (responsable du projet : Kokoa Nabatame)</span></div>
+    <div class="mb-a" translate="no">icecocoa.since2003[@}gmail.com</div>
+    <div class="mb-n"><span class="l-ja">迷惑メール対策のため、@ を [@} と表記しています。送信の際は @ に置き換えてください。</span><span class="l-en">To deter spam, the @ is written as [@}. Please replace it with @ when you write.</span><span class="l-fr">Pour limiter le spam, le @ est noté [@}. Remplacez-le par @ dans votre message.</span></div>
+  </div>
+
   <section id="funding" hidden>
-    <h2><span class="num">IV</span><span class="l-ja">資金協力</span><span class="l-en">Funding</span><span class="l-fr">Financement</span></h2>
+    <h2><span class="num">V</span><span class="l-ja">資金協力</span><span class="l-en">Funding</span><span class="l-fr">Financement</span></h2>
     <p><span class="l-ja">本プロジェクトは以下の支援を受けています。</span><span class="l-en">This project is supported by:</span><span class="l-fr">Ce projet bénéficie du soutien de :</span></p>
     <ul class="funders" id="fundList"></ul>
   </section>
 
-  <h2 id="join"><span class="num">V</span><span class="l-ja">参加・協力</span><span class="l-en">How to contribute</span><span class="l-fr">Contribuer</span></h2>
-  <p><span class="l-ja">本文の読みや語釈・訳についての<b>注釈、誤りの指摘、コメント</b>を歓迎します。ビュワーでログイン（Google アカウントまたはメールアドレス）すると、各セグメントや語ごとに投稿できます。投稿は運営が確認したのちに公開されます。データの直接の修正は GitHub の Pull Request でも受け付けています。</span>
-  <span class="l-en"><b>Annotations, corrections and comments</b> on readings, glosses and translations are welcome. Sign in from a viewer (with a Google account or e-mail) to post on any segment or word; contributions are published after review. Direct data corrections are also welcome as GitHub pull requests.</span>
-  <span class="l-fr"><b>Annotations, corrections et commentaires</b> sur les lectures, les gloses et les traductions sont bienvenus. Connectez-vous depuis une visionneuse (compte Google ou e-mail) pour contribuer sur un segment ou un mot ; les contributions sont publiées après relecture. Les corrections directes sont aussi possibles par pull request sur GitHub.</span></p>
+  <h2 id="join"><span class="num">VI</span><span class="l-ja">参加・協力</span><span class="l-en">How to contribute</span><span class="l-fr">Contribuer</span></h2>
+  <p><span class="l-ja">本文の読みや語釈・訳についての<b>注釈、誤りの指摘、コメント</b>を歓迎します。ビュワーでログイン（Google アカウントまたはメールアドレス）すると、各セグメントや語ごとに投稿できます。投稿は運営が確認したのちに公開されます。データの直接の修正は GitHub の Pull Request でも受け付けています。サイトの不具合の報告や応援メッセージは、ログイン後の<a href="profile.html">プロフィールページ</a>から運営に送ることができます。メンバーとして継続的に関わりたい方は、<a href="#recruit">メンバー募集</a>をご覧ください。</span>
+  <span class="l-en"><b>Annotations, corrections and comments</b> on readings, glosses and translations are welcome. Sign in from a viewer (with a Google account or e-mail) to post on any segment or word; contributions are published after review. Direct data corrections are also welcome as GitHub pull requests. Once signed in, you can send bug reports and messages of support to the editors from your <a href="profile.html">profile page</a>. If you would like to be involved as a member of the team, see <a href="#recruit">Join the team</a>.</span>
+  <span class="l-fr"><b>Annotations, corrections et commentaires</b> sur les lectures, les gloses et les traductions sont bienvenus. Connectez-vous depuis une visionneuse (compte Google ou e-mail) pour contribuer sur un segment ou un mot ; les contributions sont publiées après relecture. Les corrections directes sont aussi possibles par pull request sur GitHub. Une fois connecté·e, vous pouvez envoyer à l’équipe un signalement de bogue ou un message d’encouragement depuis votre <a href="profile.html">page de profil</a>. Pour participer comme membre de l’équipe, voir <a href="#recruit">Rejoindre l’équipe</a>.</span></p>
 
-  <h2 id="cite"><span class="num">VI</span><span class="l-ja">引用・ライセンス</span><span class="l-en">Citation and licence</span><span class="l-fr">Citation et licence</span></h2>
+  <h2 id="cite"><span class="num">VII</span><span class="l-ja">引用・ライセンス</span><span class="l-en">Citation and licence</span><span class="l-fr">Citation et licence</span></h2>
   <p><span class="l-ja">コプト語本文（およびプラトン『国家』のギリシア語本文、OCT/Burnet）はパブリックドメインです。注釈・辞書・対訳・解説は本プロジェクトによるもので、<a href="https://creativecommons.org/licenses/by/4.0/deed.ja" target="_blank" rel="noopener">CC BY 4.0</a> で公開しています。サイトのソースコード（HTML・CSS・JavaScript、Python スクリプト）には <a href="https://github.com/icecocoasince2003-create/Nag-Hammadi-Library/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a> を適用しています。引用の際は次のように記載してください。</span>
   <span class="l-en">The Coptic texts (and the Greek of Plato’s Republic, OCT/Burnet) are in the public domain. Notes, lexicon, translations and essays are this project’s own work, published under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>. The site’s source code (HTML, CSS, JavaScript and Python scripts) is released under the <a href="https://github.com/icecocoasince2003-create/Nag-Hammadi-Library/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>. Please cite as:</span>
   <span class="l-fr">Les textes coptes (et le grec de la République de Platon, OCT/Burnet) sont dans le domaine public. Notes, lexique, traductions et essais sont l’œuvre du projet, publiés sous <a href="https://creativecommons.org/licenses/by/4.0/deed.fr" target="_blank" rel="noopener">CC BY 4.0</a>. Le code source du site (HTML, CSS, JavaScript et scripts Python) est publié sous <a href="https://github.com/icecocoasince2003-create/Nag-Hammadi-Library/blob/main/LICENSE" target="_blank" rel="noopener">licence MIT</a>. Citation proposée :</span></p>
   <div class="cite" id="citeBox"></div>
 
-  <h2 id="sheneset"><span class="num">VII</span><span class="l-ja">サイト名とマスコット</span><span class="l-en">The name and the mascot</span><span class="l-fr">Le nom et la mascotte</span></h2>
+  <h2 id="sheneset"><span class="num">VIII</span><span class="l-ja">サイト名とマスコット</span><span class="l-en">The name and the mascot</span><span class="l-fr">Le nom et la mascotte</span></h2>
   <p><span class="l-ja">サイト名の「Sheneset（シェネセト）」は、ナグ・ハマディ写本が見つかったジャバル・アッ＝ターリフの崖に近い古代の町の、コプト語の名前 <span class="cop">ϣⲉⲛⲉⲥⲏⲧ</span> に由来します。この町はギリシア語でケノボスキオン（「ガチョウの牧場」）と呼ばれ、初期の研究では写本も「ケノボスキオン写本」と呼ばれていました。<span class="cop">ϣⲉⲛⲉⲥⲏⲧ</span> の原義は「セトの木（々）」です。このセトはエジプトの神ですが、写本に多く含まれるセツ派の文書とも響き合う名前です。</span>
   <span class="l-en">The name “Sheneset” comes from <span class="cop">ϣⲉⲛⲉⲥⲏⲧ</span>, the Coptic name of the ancient town near the cliff of Jabal al-Ṭārif where the Nag Hammadi Codices were found. In Greek the town was called Chenoboskion, “goose pasture”, and early scholarship sometimes spoke of the “Chenoboskion manuscripts”. <span class="cop">ϣⲉⲛⲉⲥⲏⲧ</span> means “tree(s) of Seth”: this Seth is the Egyptian god, but the name also echoes the many Sethian texts in the codices.</span>
   <span class="l-fr">Le nom « Sheneset » vient de <span class="cop">ϣⲉⲛⲉⲥⲏⲧ</span>, nom copte de la ville antique proche de la falaise du Djebel el-Tarif, où les codices de Nag Hammadi ont été découverts. En grec, la ville s’appelait Chénoboskion, « le pâturage des oies », et les premières études parlaient parfois des « manuscrits de Chénoboskion ». <span class="cop">ϣⲉⲛⲉⲥⲏⲧ</span> signifie « arbre(s) de Seth » : ce Seth est le dieu égyptien, mais le nom fait aussi écho aux nombreux textes séthiens des codices.</span></p>
