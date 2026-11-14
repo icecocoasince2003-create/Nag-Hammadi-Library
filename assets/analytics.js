@@ -12,7 +12,7 @@
    ============================================================ */
 (function () {
   "use strict";
-  var ID = "G-BRKBFW8EKN";
+  var ID = "G-2MQ5KPE69K";
   var HOST = "sheneset.vercel.app";
   var KEY = "nhc-analytics-consent";
 
