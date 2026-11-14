@@ -1,5 +1,7 @@
 <!-- 解説ページ「グノーシス主義とは」（手作業管理）。日・英・仏の本文は <article class="prose l-ja|l-en|l-fr"> に分けて記述しています。
-     本文はプロジェクトによる書き下ろし（CC BY 4.0）。挿絵はプロジェクトのオリジナル・アートワークです。 -->
+     本文はプロジェクトによる書き下ろし（CC BY 4.0）。挿絵はプロジェクトのオリジナル・アートワークです。
+     第VII節「推薦参考文献」の書誌（著者・書名・出版社・刊行年・叢書番号）は、2026年11月に図書館の目録（NDL・CiNii・BnF など）と
+     出版社のページで確認して記載しています。項目を足すときも、同じように確認してから書いてください。 -->
 <!DOCTYPE html>
 <html lang="ja" data-lang="ja" data-i18n="full" data-mode="aeon" data-title-en="What is Gnosticism? — Sheneset" data-title-fr="Qu’est-ce que le gnosticisme ? — Sheneset">
 <head>
@@ -34,6 +36,10 @@ body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
 .timeline li{position:relative; padding:0 0 14px 22px; font-size:.9rem; line-height:1.75; color:var(--ink-soft)}
 .timeline li::before{content:""; position:absolute; left:-5px; top:.55em; width:9px; height:9px; border-radius:50%; background:var(--gold)}
 .timeline b{color:var(--gold-bright); font-family:'Spectral',serif; margin-right:.5em}
+/* 推薦参考文献: 書誌の下に一言の紹介（.an）を添える */
+.reflist .an{display:block; font-family:var(--ui); font-size:.8rem; line-height:1.7; color:var(--ink-faint)}
+.reflist li{margin-bottom:.55em}
+.prose .reflist a{text-underline-offset:3px}
 </style>
 <link rel="stylesheet" href="assets/cosmos.css">
 <link rel="stylesheet" href="assets/site.css">
@@ -61,7 +67,7 @@ body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
   </div>
   <nav class="toc" aria-label="目次">
     <a href="#ja-word">1. 言葉と概念</a><a href="#ja-myth">2. 典型的な神話</a><a href="#ja-schools">3. 主な潮流</a>
-    <a href="#ja-sources">4. 資料</a><a href="#ja-nh">5. ナグ・ハマディ写本</a><a href="#ja-site">6. 本サイトの文書</a><a href="#ja-books">7. 読書案内</a>
+    <a href="#ja-sources">4. 資料</a><a href="#ja-nh">5. ナグ・ハマディ写本</a><a href="#ja-site">6. 本サイトの文書</a><a href="#ja-books">7. 推薦参考文献</a>
   </nav>
 
   <h2 id="ja-word"><span class="num">I</span>「グノーシス」という言葉と概念</h2>
@@ -112,15 +118,78 @@ body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
     <div class="card"><div class="k">NHC VI,5</div><h4>プラトン『国家』588b–589b</h4><p>魂を多頭の怪物・獅子・人間の合成像にたとえる一節のコプト語訳。原文とは大きく異なる訳になっており、プラトンがどのように読まれ、取り込まれたかを考える手がかりになります。<br><a class="btnlink" href="republic.html">読む →</a></p></div>
   </div>
 
-  <h2 id="ja-books"><span class="num">VII</span>読書案内</h2>
+  <h2 id="ja-books"><span class="num">VII</span>推薦参考文献</h2>
+  <p>グノーシス主義とナグ・ハマディ写本について、さらに読み進めるための文献を、目的別にまとめました。日本語で読めるものを先に挙げています。</p>
+
+  <h3>まず読むなら</h3>
   <ul class="reflist">
-    <li>荒井献・大貫隆・小林稔・筒井賢治 編訳『ナグ・ハマディ文書』全4巻、岩波書店、1997–98年。</li>
-    <li>大貫隆『グノーシスの神話』岩波書店、1999年（講談社学術文庫、2014年）。</li>
-    <li>筒井賢治『グノーシス — 古代キリスト教の〈異端思想〉』講談社選書メチエ、2004年。</li>
-    <li>ハンス・ヨナス『グノーシスの宗教』秋山さと子・入江良平訳、人文書院、1986年。</li>
-    <li>B. Layton, <i>The Gnostic Scriptures</i>, 1987（2nd ed. with D. Brakke, 2021）.</li>
-    <li>M. Meyer (ed.), <i>The Nag Hammadi Scriptures</i>, HarperOne, 2007.</li>
-    <li>M. A. Williams, <i>Rethinking “Gnosticism”</i>, Princeton UP, 1996. / K. L. King, <i>What Is Gnosticism?</i>, Harvard UP, 2003. / D. Brakke, <i>The Gnostics</i>, Harvard UP, 2010.</li>
+    <li>筒井賢治『グノーシス — 古代キリスト教の〈異端思想〉』講談社選書メチエ、2004年。<span class="an">2世紀のキリスト教グノーシスを、主要な教師たちの教説に即して解説する入門書。</span></li>
+    <li>大貫隆 訳・著『グノーシスの神話』岩波書店、1999年（講談社学術文庫、2014年）。<span class="an">原典からの抜粋に解説を付した読本。神話の筋を、文書そのものの言葉でたどれる。</span></li>
+    <li>マドレーヌ・スコペロ『グノーシスとはなにか』入江良平・中野千恵美訳、せりか書房、1997年。<span class="an">フランスの研究者による簡潔な概説。</span></li>
+    <li>エレーヌ・ペイゲルス『ナグ・ハマディ写本 — 初期キリスト教の正統と異端』荒井献・湯本和子訳、白水社、1982年（新装版 1996年）。<span class="an">写本の発見を広く知らせた一冊。正統教会との対立という観点から文書を読む。</span></li>
+  </ul>
+
+  <h3>原典の日本語訳</h3>
+  <ul class="reflist">
+    <li>荒井献・大貫隆・小林稔・筒井賢治 訳『ナグ・ハマディ文書』全4巻（I 救済神話／II 福音書／III 説教・書簡／IV 黙示録）、岩波書店、1997–98年。<span class="an">コプト語からの翻訳に、解説と注を付す。本サイトで公開している『エウグノストス』の邦訳は第III巻に収録。</span></li>
+    <li>荒井献・大貫隆 編訳『グノーシスの変容 — ナグ・ハマディ文書・チャコス文書』岩波書店、2010年。<span class="an">上の全4巻の姉妹編。新プラトン主義やヘルメス主義との交わりを示す文書の翻訳と注解に、『ユダの福音書』の新訳を付す。</span></li>
+    <li>荒井献『トマスによる福音書』講談社学術文庫、1994年。<span class="an">翻訳と注解。</span></li>
+    <li>荒井献・柴田有 訳『ヘルメス文書』朝日出版社、1980年。<span class="an">ヘルメス・トリスメギストスの名で伝わる文書群の翻訳。</span></li>
+  </ul>
+
+  <h3>概説と研究</h3>
+  <ul class="reflist">
+    <li>ハンス・ヨナス『グノーシスの宗教 — 異邦の神の福音とキリスト教の端緒』秋山さと子・入江良平訳、人文書院、1986年（増補版 2020年）。<span class="an">グノーシスを人間の実存的な態度として読み解いた古典。</span></li>
+    <li>クルト・ルドルフ『グノーシス — 古代末期の一宗教の本質と歴史』大貫隆・入江良平・筒井賢治訳、岩波書店、2001年。<span class="an">資料・教説・歴史を広く扱う標準的な概説。</span></li>
+    <li>荒井献『原始キリスト教とグノーシス主義』岩波書店、1971年。<span class="an">日本におけるグノーシス研究を切り開いた研究書。</span></li>
+    <li>大貫隆『グノーシス考』岩波書店、2000年。</li>
+    <li>大貫隆・島薗進・高橋義人・村上陽一郎 編『グノーシス 陰の精神史』『グノーシス 異端と近代』岩波書店、2001年。<span class="an">古代から近現代まで、グノーシス的な思想の広がりを扱う論集（2冊）。</span></li>
+  </ul>
+
+  <h3>「グノーシス主義」という範疇をめぐって</h3>
+  <ul class="reflist">
+    <li>M. A. Williams, <i>Rethinking “Gnosticism”: An Argument for Dismantling a Dubious Category</i>, Princeton University Press, 1996.</li>
+    <li>K. L. King, <i>What Is Gnosticism?</i>, Belknap Press of Harvard University Press, 2003.</li>
+    <li>D. Brakke, <i>The Gnostics: Myth, Ritual, and Diversity in Early Christianity</i>, Harvard University Press, 2010.<span class="an">以上の3点は、第I節の「研究上の論点」で触れた議論の原著（英語）。</span></li>
+  </ul>
+
+  <h3>古代の証言</h3>
+  <ul class="reflist">
+    <li>エイレナイオス『異端反駁』全5巻（キリスト教教父著作集 2/I–3/III）、大貫隆・小林稔訳、教文館、1999–2017年。</li>
+    <li>ヒッポリュトス『全異端反駁』（キリスト教教父著作集 19）、大貫隆訳、教文館、2018年。</li>
+    <li>プロティノス「グノーシス派に対して」（『エネアデス』II 9）。『プロティノス全集』第2巻（中央公論社、1987年）、『エネアデス（抄）II』（中公クラシックス、2007年）所収。</li>
+  </ul>
+
+  <h3>校訂本・写真版・外国語訳</h3>
+  <ul class="reflist">
+    <li>J. M. Robinson (gen. ed.), <i>The Coptic Gnostic Library: A Complete Edition of the Nag Hammadi Codices</i>, 5 vols., Brill, 2000.<span class="an">コプト語本文と英訳・注からなる校訂版。</span></li>
+    <li><i>Bibliothèque copte de Nag Hammadi</i> (BCNH), Presses de l’Université Laval / Peeters, 1977–.<span class="an">校訂・フランス語訳・注解の叢書。</span></li>
+    <li><i>The Facsimile Edition of the Nag Hammadi Codices</i>, 12 vols., Brill, 1972–1984.<span class="an">写本の写真版。</span></li>
+    <li>M. Meyer (ed.), <i>The Nag Hammadi Scriptures: The International Edition</i>, HarperOne, 2007.<span class="an">全文書の英訳。文書ごとに解説が付く。</span></li>
+    <li>B. Layton, <i>The Gnostic Scriptures</i>, Doubleday, 1987（第2版、D. Brakke による増補改訂、Yale University Press、2021年）。<span class="an">潮流ごとに文書を配列した、注つきの英訳。</span></li>
+    <li>J.-P. Mahé et P.-H. Poirier (dir.), <i>Écrits gnostiques : La bibliothèque de Nag Hammadi</i>, Gallimard, « Bibliothèque de la Pléiade », 2007.<span class="an">全文書のフランス語訳。</span></li>
+  </ul>
+
+  <h3>本サイトの文書について</h3>
+  <ul class="reflist">
+    <li>D. M. Parrott (ed.), <i>Nag Hammadi Codices III,3–4 and V,1 with Papyrus Berolinensis 8502,3 and Oxyrhynchus Papyrus 1081: Eugnostos and the Sophia of Jesus Christ</i> (Nag Hammadi Studies 27), Brill, 1991.<span class="an">『エウグノストス』と『イエス・キリストの知恵』の校訂と英訳。</span></li>
+    <li>A. Pasquier, <i>Eugnoste (NH III,3 et V,1) : Lettre sur le Dieu transcendant</i> (BCNH, « Textes » 26), 2000；同 <i>Commentaire</i> (BCNH, « Textes » 33), 2010.<span class="an">『エウグノストス』の校訂・フランス語訳と注解。</span></li>
+    <li>J. Brashler, “Plato, Republic 588b–589b”, in D. M. Parrott (ed.), <i>Nag Hammadi Codices V,2–5 and VI with Papyrus Berolinensis 8502,1 and 4</i> (Nag Hammadi Studies 11), Brill, 1979.<span class="an">『国家』の抜粋（NHC VI,5）の校訂と英訳。</span></li>
+    <li>L. Painchaud, <i>Fragment de la République de Platon (NH VI,5)</i>, in P.-H. Poirier, <i>Les Sentences de Sextus (NH XII,1) ; Fragments (NH XII,3)</i> (BCNH, « Textes » 11), Presses de l’Université Laval, 1983.<span class="an">同じ抜粋の校訂・フランス語訳と注解。</span></li>
+  </ul>
+
+  <h3>写本の発見と成立</h3>
+  <ul class="reflist">
+    <li>J. M. Robinson, <i>The Nag Hammadi Story</i>, 2 vols. (Nag Hammadi and Manichaean Studies 86), Brill, 2014.<span class="an">発見から公刊までの経緯の詳しい記録。</span></li>
+    <li>H. Lundhaug &amp; L. Jenott, <i>The Monastic Origins of the Nag Hammadi Codices</i> (Studien und Texte zu Antike und Christentum 97), Mohr Siebeck, 2015.<span class="an">写本を作り、読んだのは修道士たちだったと論じる。</span></li>
+  </ul>
+
+  <h3>オンライン資料</h3>
+  <ul class="reflist">
+    <li><a href="https://ccdl.claremont.edu/digital/collection/nha" target="_blank" rel="noopener">Nag Hammadi Archive ↗</a> (Claremont Colleges Digital Library)<span class="an">写本と発見地の写真。</span></li>
+    <li><a href="https://www.naghammadi.org/" target="_blank" rel="noopener">Bibliothèque copte de Nag Hammadi ↗</a> (ラヴァル大学)<span class="an">BCNH 叢書を刊行している校訂・翻訳プロジェクトのサイト。</span></li>
+    <li><a href="https://copticscriptorium.org/" target="_blank" rel="noopener">Coptic SCRIPTORIUM ↗</a><span class="an">言語学的な注釈を付けたコプト語文献のコーパス。</span></li>
+    <li><a href="https://coptic-dictionary.org/" target="_blank" rel="noopener">Coptic Dictionary Online ↗</a><span class="an">オンラインのコプト語辞書。本サイトのビュワーからも各語にリンクしています。</span></li>
   </ul>
   <p style="font-size:.78rem;color:var(--ink-faint)">本ページの文章は本プロジェクトによる書き下ろしです（CC BY 4.0）。挿絵はプロジェクトのオリジナル・アートワークです。誤りのご指摘は<a href="project.html">プロジェクト</a>までお寄せください。</p>
 </article>
@@ -137,7 +206,7 @@ body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
   </div>
   <nav class="toc" aria-label="Contents">
     <a href="#en-word">1. Word and concept</a><a href="#en-myth">2. A typical myth</a><a href="#en-schools">3. Main currents</a>
-    <a href="#en-sources">4. Sources</a><a href="#en-nh">5. The Nag Hammadi Codices</a><a href="#en-site">6. Texts on this site</a><a href="#en-books">7. Further reading</a>
+    <a href="#en-sources">4. Sources</a><a href="#en-nh">5. The Nag Hammadi Codices</a><a href="#en-site">6. Texts on this site</a><a href="#en-books">7. Recommended reading</a>
   </nav>
 
   <h2 id="en-word"><span class="num">I</span>The word and the concept</h2>
@@ -188,14 +257,69 @@ body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
     <div class="card"><div class="k">NHC VI,5</div><h4>Plato, Republic 588b–589b</h4><p>A Coptic version of the passage likening the soul to a composite of a many-headed beast, a lion and a human. It departs considerably from the Greek and shows how Plato was read and appropriated.<br><a class="btnlink" href="republic.html">Read →</a></p></div>
   </div>
 
-  <h2 id="en-books"><span class="num">VII</span>Further reading</h2>
+  <h2 id="en-books"><span class="num">VII</span>Recommended reading</h2>
+  <p>Suggestions for reading further on Gnosticism and the Nag Hammadi Codices, grouped by purpose.</p>
+
+  <h3>Where to start</h3>
   <ul class="reflist">
-    <li>B. Layton, <i>The Gnostic Scriptures</i>, 1987 (2nd ed. with D. Brakke, 2021).</li>
-    <li>M. Meyer (ed.), <i>The Nag Hammadi Scriptures</i>, HarperOne, 2007.</li>
-    <li>J. M. Robinson (ed.), <i>The Nag Hammadi Library in English</i>, 3rd ed., 1988.</li>
-    <li>M. A. Williams, <i>Rethinking “Gnosticism”</i>, Princeton UP, 1996.</li>
-    <li>K. L. King, <i>What Is Gnosticism?</i>, Harvard UP, 2003.</li>
-    <li>D. Brakke, <i>The Gnostics: Myth, Ritual, and Diversity in Early Christianity</i>, Harvard UP, 2010.</li>
+    <li>N. Denzey Lewis, <i>Introduction to “Gnosticism”: Ancient Voices, Christian Worlds</i>, Oxford University Press, 2013.<span class="an">A textbook that introduces the Nag Hammadi texts and the questions they raise.</span></li>
+    <li>C. Markschies, <i>Gnosis: An Introduction</i>, trans. J. Bowden, T&amp;T Clark, 2003.<span class="an">A short historical survey.</span></li>
+    <li>E. Pagels, <i>The Gnostic Gospels</i>, Random House, 1979.<span class="an">The book that brought the find to a wide readership.</span></li>
+    <li>D. Brakke, <i>The Gnostics: Myth, Ritual, and Diversity in Early Christianity</i>, Harvard University Press, 2010.<span class="an">A concise account that also takes a position in the debate over the category (see section I).</span></li>
+  </ul>
+
+  <h3>Translations</h3>
+  <ul class="reflist">
+    <li>M. Meyer (ed.), <i>The Nag Hammadi Scriptures: The International Edition</i>, HarperOne, 2007.<span class="an">All the texts in English, each with an introduction.</span></li>
+    <li>B. Layton, <i>The Gnostic Scriptures</i>, Doubleday, 1987; 2nd ed., with additions and revisions by D. Brakke, Yale University Press, 2021.<span class="an">Annotated translations arranged by school.</span></li>
+    <li>J. M. Robinson (ed.), <i>The Nag Hammadi Library in English</i>, 3rd, completely revised ed., Brill / Harper &amp; Row, 1988.<span class="an">The first complete English translation, still widely cited.</span></li>
+  </ul>
+
+  <h3>Surveys and studies</h3>
+  <ul class="reflist">
+    <li>H. Jonas, <i>The Gnostic Religion: The Message of the Alien God and the Beginnings of Christianity</i>, Beacon Press, 1958; 2nd ed. 1963.<span class="an">The classic existentialist reading.</span></li>
+    <li>K. Rudolph, <i>Gnosis: The Nature and History of Gnosticism</i>, trans. ed. R. McL. Wilson, Harper &amp; Row, 1983.<span class="an">A comprehensive handbook of sources, teachings and history.</span></li>
+    <li>B. A. Pearson, <i>Ancient Gnosticism: Traditions and Literature</i>, Fortress Press, 2007.</li>
+    <li>J. D. Turner, <i>Sethian Gnosticism and the Platonic Tradition</i> (Bibliothèque copte de Nag Hammadi, « Études » 6), Presses de l’Université Laval / Peeters, 2001.</li>
+    <li>E. Thomassen, <i>The Spiritual Seed: The Church of the “Valentinians”</i> (Nag Hammadi and Manichaean Studies 60), Brill, 2006.</li>
+    <li>D. M. Burns, <i>Apocalypse of the Alien God: Platonism and the Exile of Sethian Gnosticism</i>, University of Pennsylvania Press, 2014.</li>
+  </ul>
+
+  <h3>The category “Gnosticism”</h3>
+  <ul class="reflist">
+    <li>M. A. Williams, <i>Rethinking “Gnosticism”: An Argument for Dismantling a Dubious Category</i>, Princeton University Press, 1996.</li>
+    <li>K. L. King, <i>What Is Gnosticism?</i>, Belknap Press of Harvard University Press, 2003.</li>
+  </ul>
+
+  <h3>Editions, facsimiles and other translations</h3>
+  <ul class="reflist">
+    <li>J. M. Robinson (gen. ed.), <i>The Coptic Gnostic Library: A Complete Edition of the Nag Hammadi Codices</i>, 5 vols., Brill, 2000.<span class="an">Critical editions with English translation and notes.</span></li>
+    <li><i>The Facsimile Edition of the Nag Hammadi Codices</i>, 12 vols., Brill, 1972–1984.<span class="an">Photographs of the codices.</span></li>
+    <li><i>Bibliothèque copte de Nag Hammadi</i> (BCNH), Presses de l’Université Laval / Peeters, 1977–.<span class="an">Critical editions with French translation and commentary.</span></li>
+    <li>J.-P. Mahé &amp; P.-H. Poirier (eds), <i>Écrits gnostiques : La bibliothèque de Nag Hammadi</i>, Gallimard, « Bibliothèque de la Pléiade », 2007.<span class="an">The complete French translation.</span></li>
+    <li>H.-M. Schenke, H.-G. Bethge &amp; U. U. Kaiser (eds), <i>Nag Hammadi Deutsch</i>, 2 vols. (GCS, Neue Folge 8 and 12), de Gruyter, 2001–2003.<span class="an">The complete German translation.</span></li>
+  </ul>
+
+  <h3>The discovery and the making of the codices</h3>
+  <ul class="reflist">
+    <li>J. M. Robinson, <i>The Nag Hammadi Story</i>, 2 vols. (Nag Hammadi and Manichaean Studies 86), Brill, 2014.<span class="an">A detailed record, from the discovery to the publication.</span></li>
+    <li>H. Lundhaug &amp; L. Jenott, <i>The Monastic Origins of the Nag Hammadi Codices</i> (Studien und Texte zu Antike und Christentum 97), Mohr Siebeck, 2015.<span class="an">Argues that the codices were produced and read by monks.</span></li>
+  </ul>
+
+  <h3>On the texts published here</h3>
+  <ul class="reflist">
+    <li>D. M. Parrott (ed.), <i>Nag Hammadi Codices III,3–4 and V,1 with Papyrus Berolinensis 8502,3 and Oxyrhynchus Papyrus 1081: Eugnostos and the Sophia of Jesus Christ</i> (Nag Hammadi Studies 27), Brill, 1991.<span class="an">Critical edition and English translation of <i>Eugnostos</i> and the <i>Sophia of Jesus Christ</i>.</span></li>
+    <li>A. Pasquier, <i>Eugnoste (NH III,3 et V,1) : Lettre sur le Dieu transcendant</i> (BCNH, « Textes » 26), 2000; and its <i>Commentaire</i> (BCNH, « Textes » 33), 2010.<span class="an">Critical edition, French translation and commentary of <i>Eugnostos</i>.</span></li>
+    <li>J. Brashler, “Plato, Republic 588b–589b”, in D. M. Parrott (ed.), <i>Nag Hammadi Codices V,2–5 and VI with Papyrus Berolinensis 8502,1 and 4</i> (Nag Hammadi Studies 11), Brill, 1979.<span class="an">Critical edition and English translation of the <i>Republic</i> excerpt (NHC VI,5).</span></li>
+    <li>L. Painchaud, <i>Fragment de la République de Platon (NH VI,5)</i>, in P.-H. Poirier, <i>Les Sentences de Sextus (NH XII,1) ; Fragments (NH XII,3)</i> (BCNH, « Textes » 11), Presses de l’Université Laval, 1983.<span class="an">Critical edition, French translation and commentary of the same excerpt.</span></li>
+  </ul>
+
+  <h3>Online</h3>
+  <ul class="reflist">
+    <li><a href="https://ccdl.claremont.edu/digital/collection/nha" target="_blank" rel="noopener">Nag Hammadi Archive ↗</a> (Claremont Colleges Digital Library)<span class="an">Photographs of the codices and of the site of the discovery.</span></li>
+    <li><a href="https://www.naghammadi.org/" target="_blank" rel="noopener">Bibliothèque copte de Nag Hammadi ↗</a> (Université Laval)<span class="an">Site of the project that publishes the BCNH editions and translations.</span></li>
+    <li><a href="https://copticscriptorium.org/" target="_blank" rel="noopener">Coptic SCRIPTORIUM ↗</a><span class="an">A linguistically annotated corpus of Coptic literature.</span></li>
+    <li><a href="https://coptic-dictionary.org/" target="_blank" rel="noopener">Coptic Dictionary Online ↗</a><span class="an">An online Coptic dictionary; the viewers on this site link each word to it.</span></li>
   </ul>
   <p style="font-size:.78rem;color:var(--ink-faint)">Text written by this project (CC BY 4.0). Illustrations are original project artwork.</p>
 </article>
@@ -212,7 +336,7 @@ body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
   </div>
   <nav class="toc" aria-label="Sommaire">
     <a href="#fr-word">1. Le mot et la notion</a><a href="#fr-myth">2. Un mythe type</a><a href="#fr-schools">3. Courants</a>
-    <a href="#fr-sources">4. Sources</a><a href="#fr-nh">5. Les codices de Nag Hammadi</a><a href="#fr-site">6. Textes du site</a><a href="#fr-books">7. Bibliographie</a>
+    <a href="#fr-sources">4. Sources</a><a href="#fr-nh">5. Les codices de Nag Hammadi</a><a href="#fr-site">6. Textes du site</a><a href="#fr-books">7. Lectures recommandées</a>
   </nav>
 
   <h2 id="fr-word"><span class="num">I</span>Le mot et la notion</h2>
@@ -263,12 +387,55 @@ body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
     <div class="card"><div class="k">NHC VI,5</div><h4>Platon, République 588b–589b</h4><p>Une version copte du passage qui compare l’âme à un composé de bête polycéphale, de lion et d’homme. Elle s’écarte beaucoup du grec et montre comment Platon fut lu et approprié.<br><a class="btnlink" href="republic.html">Lire →</a></p></div>
   </div>
 
-  <h2 id="fr-books"><span class="num">VII</span>Bibliographie</h2>
+  <h2 id="fr-books"><span class="num">VII</span>Lectures recommandées</h2>
+  <p>Quelques pistes pour aller plus loin sur le gnosticisme et les codices de Nag Hammadi, classées par usage.</p>
+
+  <h3>Pour commencer</h3>
   <ul class="reflist">
-    <li>J.-P. Mahé et P.-H. Poirier (dir.), <i>Écrits gnostiques. La bibliothèque de Nag Hammadi</i>, Gallimard, « Bibliothèque de la Pléiade », 2007.</li>
-    <li><i>Bibliothèque copte de Nag Hammadi</i> (BCNH), Presses de l’Université Laval / Peeters.</li>
-    <li>B. Layton, <i>The Gnostic Scriptures</i>, 1987 (2e éd. avec D. Brakke, 2021).</li>
-    <li>M. A. Williams, <i>Rethinking “Gnosticism”</i>, 1996 ; K. L. King, <i>What Is Gnosticism?</i>, 2003 ; D. Brakke, <i>The Gnostics</i>, 2010.</li>
+    <li>M. Scopello, <i>Les Gnostiques</i>, Cerf, 1991.<span class="an">Une présentation brève et accessible.</span></li>
+    <li>M. Tardieu et J.-D. Dubois, <i>Introduction à la littérature gnostique, I : Histoire du mot « gnostique » ; Instruments de travail ; Collections retrouvées avant 1945</i>, Cerf / CNRS, 1986.<span class="an">Le mot, les instruments de travail et les sources connues avant Nag Hammadi.</span></li>
+  </ul>
+
+  <h3>Traductions</h3>
+  <ul class="reflist">
+    <li>J.-P. Mahé et P.-H. Poirier (dir.), <i>Écrits gnostiques : La bibliothèque de Nag Hammadi</i>, Gallimard, « Bibliothèque de la Pléiade », 2007.<span class="an">La traduction française intégrale.</span></li>
+    <li><i>Bibliothèque copte de Nag Hammadi</i> (BCNH), Presses de l’Université Laval / Peeters, 1977–.<span class="an">Éditions critiques, traductions françaises et commentaires (sections « Textes », « Études » et « Concordances »).</span></li>
+    <li>M. Tardieu, <i>Écrits gnostiques : Codex de Berlin</i>, Cerf, 1984.<span class="an">Traduction et commentaire du Codex de Berlin (BG 8502).</span></li>
+    <li>J.-P. Mahé, <i>Hermès en Haute-Égypte</i>, 2 t. (BCNH, « Textes » 3 et 7), Presses de l’Université Laval, 1978–1982.<span class="an">Les textes hermétiques du Codex VI.</span></li>
+    <li>Irénée de Lyon, <i>Contre les hérésies : Dénonciation et réfutation de la gnose au nom menteur</i>, trad. A. Rousseau, Cerf, 1984.<span class="an">Le principal témoignage des adversaires, en un volume.</span></li>
+  </ul>
+
+  <h3>Études</h3>
+  <ul class="reflist">
+    <li>H.-Ch. Puech, <i>En quête de la Gnose</i>, 2 vol., Gallimard, 1978.</li>
+    <li>S. Pétrement, <i>Le Dieu séparé : Les origines du gnosticisme</i>, Cerf, 1984.</li>
+    <li>J. D. Turner, <i>Sethian Gnosticism and the Platonic Tradition</i> (BCNH, « Études » 6), Presses de l’Université Laval / Peeters, 2001.</li>
+    <li>E. Thomassen, <i>The Spiritual Seed: The Church of the “Valentinians”</i> (Nag Hammadi and Manichaean Studies 60), Brill, 2006.</li>
+    <li>M. A. Williams, <i>Rethinking “Gnosticism”: An Argument for Dismantling a Dubious Category</i>, Princeton University Press, 1996 ; K. L. King, <i>What Is Gnosticism?</i>, Belknap Press of Harvard University Press, 2003 ; D. Brakke, <i>The Gnostics: Myth, Ritual, and Diversity in Early Christianity</i>, Harvard University Press, 2010.<span class="an">Le débat sur la catégorie de « gnosticisme » (voir la section I).</span></li>
+  </ul>
+
+  <h3>Éditions, fac-similés et histoire de la découverte</h3>
+  <ul class="reflist">
+    <li>J. M. Robinson (dir.), <i>The Coptic Gnostic Library: A Complete Edition of the Nag Hammadi Codices</i>, 5 vol., Brill, 2000.<span class="an">Éditions critiques avec traduction anglaise et notes.</span></li>
+    <li><i>The Facsimile Edition of the Nag Hammadi Codices</i>, 12 vol., Brill, 1972–1984.<span class="an">Les photographies des codices.</span></li>
+    <li>J. M. Robinson, <i>The Nag Hammadi Story</i>, 2 vol. (Nag Hammadi and Manichaean Studies 86), Brill, 2014.<span class="an">Le récit détaillé, de la découverte à la publication.</span></li>
+    <li>H. Lundhaug et L. Jenott, <i>The Monastic Origins of the Nag Hammadi Codices</i> (Studien und Texte zu Antike und Christentum 97), Mohr Siebeck, 2015.<span class="an">Soutient que les codices ont été produits et lus par des moines.</span></li>
+  </ul>
+
+  <h3>Sur les textes de ce site</h3>
+  <ul class="reflist">
+    <li>A. Pasquier, <i>Eugnoste (NH III,3 et V,1) : Lettre sur le Dieu transcendant</i> (BCNH, « Textes » 26), 2000 ; et son <i>Commentaire</i> (BCNH, « Textes » 33), 2010.<span class="an">Édition critique, traduction française et commentaire d’<i>Eugnoste</i>.</span></li>
+    <li>D. M. Parrott (éd.), <i>Nag Hammadi Codices III,3–4 and V,1 with Papyrus Berolinensis 8502,3 and Oxyrhynchus Papyrus 1081: Eugnostos and the Sophia of Jesus Christ</i> (Nag Hammadi Studies 27), Brill, 1991.<span class="an">Édition critique et traduction anglaise d’<i>Eugnoste</i> et de la <i>Sagesse de Jésus-Christ</i>.</span></li>
+    <li>L. Painchaud, <i>Fragment de la République de Platon (NH VI,5)</i>, dans P.-H. Poirier, <i>Les Sentences de Sextus (NH XII,1) ; Fragments (NH XII,3)</i> (BCNH, « Textes » 11), Presses de l’Université Laval, 1983.<span class="an">Édition critique, traduction française et commentaire de l’extrait de la <i>République</i> (NH VI,5).</span></li>
+    <li>J. Brashler, « Plato, Republic 588b–589b », dans D. M. Parrott (éd.), <i>Nag Hammadi Codices V,2–5 and VI with Papyrus Berolinensis 8502,1 and 4</i> (Nag Hammadi Studies 11), Brill, 1979.<span class="an">Édition critique et traduction anglaise du même extrait.</span></li>
+  </ul>
+
+  <h3>En ligne</h3>
+  <ul class="reflist">
+    <li><a href="https://ccdl.claremont.edu/digital/collection/nha" target="_blank" rel="noopener">Nag Hammadi Archive ↗</a> (Claremont Colleges Digital Library)<span class="an">Photographies des codices et du site de la découverte.</span></li>
+    <li><a href="https://www.naghammadi.org/" target="_blank" rel="noopener">Bibliothèque copte de Nag Hammadi ↗</a> (Université Laval)<span class="an">Site du projet qui publie les éditions et traductions de la BCNH.</span></li>
+    <li><a href="https://copticscriptorium.org/" target="_blank" rel="noopener">Coptic SCRIPTORIUM ↗</a><span class="an">Un corpus annoté de littérature copte.</span></li>
+    <li><a href="https://coptic-dictionary.org/" target="_blank" rel="noopener">Coptic Dictionary Online ↗</a><span class="an">Un dictionnaire copte en ligne ; les visionneuses de ce site y renvoient pour chaque mot.</span></li>
   </ul>
   <p style="font-size:.78rem;color:var(--ink-faint)">Texte rédigé par le projet (CC BY 4.0). Les illustrations sont des créations originales du projet.</p>
 </article>
