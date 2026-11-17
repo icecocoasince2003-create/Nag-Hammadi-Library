@@ -5,7 +5,8 @@
   * 既存エントリの xml:id は絶対に変更しない(本文の @ana="#lex-…" ピンを守るため)
   * (lemma, n) をキーに CSV と XML を突き合わせ、内容が変わった行だけ
     <entry> ブロックを丸ごと文字列置換する(git diff 最小化)
-  * CSV にだけある lemma は </list> 直前に新規 <entry> として追加
+  * CSV にだけある lemma は、辞書の <div type="lexicon"> の末尾（</div> の直前）に新規 <entry> として追加
+    （<entry> は <div> の直下に置く。<list> の中には置けない＝TEI として妥当でなくなる）
     (ID は既存最大 lex-NNNN の続番)
   * XML にだけあるエントリは削除せず報告のみ(ピン破壊防止)
   * 既存の単独エントリが CSV 側で同形異義語化した場合は自動変換せず報告のみ
@@ -142,9 +143,9 @@ def main():
         for r in added:
             max_id += 1
             buf.append("        " + build_entry(r, "lex-%04d" % max_id))
-        anchor = "      </list>"
+        anchor = "    </div>\n  </body></text>"          # 辞書の <div type="lexicon"> の閉じタグ
         if xml.count(anchor) != 1:
-            print("!! </list> アンカーが一意でない — 追加を中止"); sys.exit(1)
+            print("!! 辞書の </div> アンカーが一意でない — 追加を中止"); sys.exit(1)
         xml = xml.replace(anchor, "\n".join(buf) + "\n" + anchor)
 
     # --- 報告 ---

@@ -442,7 +442,7 @@ function buildFlow(sEl){
   const flow=[]; let wi=0;
   const addMark=el=>{ const ln=el.localName;
     if(ln==="lb") flow.push({k:"lb", n:el.getAttribute("n")||""});
-    else if(ln==="pd"||(ln==="p"&&el.hasAttribute("n"))) flow.push({k:"pd", n:el.getAttribute("n")||""});
+    else if(ln==="pb"||ln==="pd"||(ln==="p"&&el.hasAttribute("n"))) flow.push({k:"pd", n:el.getAttribute("n")||""});   // 改頁は TEI の <pb>（以前の書き方 <pd>・<p n> も読む）
     else if(ln==="gap") flow.push({k:"gap", reason:el.getAttribute("reason")||"", unit:el.getAttribute("unit")||"", extent:el.getAttribute("extent")||""});
   };
   (function walk(node){
@@ -452,7 +452,7 @@ function buildFlow(sEl){
       if(ln==="phy"){ flow.push({k:"phyo"}); walk(c); flow.push({k:"phyc"}); }
       else if(ln==="w"){ flow.push({k:"w", i:wi}); wi++;
         Array.from(c.children).forEach(ch=>addMark(ch)); } // lb/pd that split this word
-      else if(ln==="lb"||ln==="pd"||ln==="p"||ln==="gap"){ addMark(c); }
+      else if(ln==="lb"||ln==="pb"||ln==="pd"||ln==="p"||ln==="gap"){ addMark(c); }
       else walk(c);
     });
   })(sEl);

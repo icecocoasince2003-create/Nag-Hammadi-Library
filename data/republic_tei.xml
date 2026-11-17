@@ -42,8 +42,9 @@
     <body>
       <div type="tractate" n="Republic" subtype="codexVI">
         <head xml:lang="en">Plato, Republic 588b–589b — Nag Hammadi Codex VI,5</head>
+        <ab>
         <s xml:id="rep-1" n="1" transJa="さて、議論がこの段階に至ったからには、" transEn="Now, since our argument has reached this stage,">
-          <p n="48"/>
+          <pb n="48"/>
           <lb n="16"/>
           <phy>
             <w type="CONJ" lemma="ⲉⲡⲉⲓⲇⲏ" gloss="since" xml:lang="grc">ⲉⲡⲓⲇⲏ</w>
@@ -364,7 +365,7 @@
           <phy>
             <w type="ART" lemma="ⲡⲉ" gloss="the">ⲡⲉ</w>
             <w type="PREP" lemma="ⲛ">ⲛ</w>
-            <pd n="49"/>
+            <pb n="49"/>
             <lb n="1"/>
             <w type="ART" lemma="ⲧ" gloss="the">ⲧ</w>
             <w type="APST" lemma="ⲁ">ⲁ</w>
@@ -893,7 +894,7 @@
             <w type="ART" lemma="ⲡ">ⲡ</w>
             <w type="N" lemma="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</w>
           </phy>
-          <pd n="50"/>
+          <pb n="50"/>
           <lb n="1"/>
           <phy>
           <gap reason="lacuna" unit="line" extent="unknown"/>
@@ -1059,7 +1060,7 @@
           </phy>
           <phy>
             <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
-            <w type="N" lemma="ⲉⲓⲛⲉ">ⲉⲓ<lb n="11" breal="no"/>ⲛⲉ</w>
+            <w type="N" lemma="ⲉⲓⲛⲉ">ⲉⲓ<lb n="11" break="no"/>ⲛⲉ</w>
           </phy>
           <phy>
             <w type="N" lemma="ⲟⲩⲱⲧ">ⲟⲩⲱⲧ</w>
@@ -1345,7 +1346,7 @@
             <w type="N" lemma="ⲑⲏⲣⲓⲟⲛ" xml:lang="grc">ⲑⲏ<lb n="27" break="no"/>ⲣⲓⲟⲛ</w>
           </phy>
           <phy>
-            <W type="CREL" lemma="ⲉⲧ">ⲉⲧ</W>
+            <w type="CREL" lemma="ⲉⲧ">ⲉⲧ</w>
             <w type="VSTAT" lemma="ϩⲟⲟⲩ">ⲑⲟⲟⲩ</w>
           </phy>
         </s>
@@ -1456,7 +1457,7 @@
           </phy>
           <phy>
             <w type="PREP" lemma="ⲛ">ⲛ</w>
-            <w type="N" lemma="ϣⲟⲣⲡ">ϣⲟ<pd n="51" break="no"/><lb n="1" break="no"/>ⲣⲡ</w>
+            <w type="N" lemma="ϣⲟⲣⲡ">ϣⲟ<pb n="51" break="no"/><lb n="1" break="no"/>ⲣⲡ</w>
           </phy>
           <phy>
             <w type="CONJ" lemma="ⲁⲩⲱ" gloss="and">ⲁⲩⲱ</w>
@@ -1763,6 +1764,7 @@
             <w type="V" lemma="ⲣⲱⲧ" gloss="grow">ⲣⲱⲧ</w>
           </phy>
         </s>
+        </ab>
       </div>
     </body>
   </text>

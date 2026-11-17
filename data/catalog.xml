@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- コーパスカタログ（data/catalog.xml）。文書レベルのメタデータと関連リソースを一元管理します。
      - 各文書は <bibl type="document" xml:id="doc-…"> で記述
-     - 文書間の関連は <relatedItem type="corpus" target="#doc-…">（コーパス内）
+     - 文書間の関連は <relatedItem type="corpus" target="#doc-…"/>（コーパス内。説明を付けるときは
+       <relatedItem type="corpus"><bibl><ref target="#doc-…"/><note xml:lang="…">説明</note></bibl></relatedItem>。
+       TEI では @target を持つ relatedItem は空でなければならないため）
      - 外部リソースは <relatedItem type="external"> 内の <bibl>（<ref target="URL"/> 必須）
      - 公開前の文書は <bibl subtype="planned">（ビュワーには「準備中」として表示されます）
      - 未注釈の本文は <bibl subtype="unannotated">（検索ページの〈未注釈の本文〉に並び、選んだときだけ読み込まれます）。
@@ -44,13 +46,19 @@
         <ref type="search" target="search.html?doc=republic"/>
         <ref type="stats" target="search.html?doc=republic&amp;view=stats"/>
         <ref type="xml" target="data/republic_tei.xml"/>
-        <relatedItem type="corpus" target="#doc-eugnostos">
-          <note xml:lang="ja">同じビュワー・エンジンと共通辞書で公開中の姉妹文書</note>
-          <note xml:lang="en">Companion document, published with the same viewer engine and shared lexicon</note>
+        <relatedItem type="corpus">
+          <bibl>
+            <ref target="#doc-eugnostos"/>
+            <note xml:lang="ja">同じビュワー・エンジンと共通辞書で公開中の姉妹文書</note>
+            <note xml:lang="en">Companion document, published with the same viewer engine and shared lexicon</note>
+          </bibl>
         </relatedItem>
-        <relatedItem type="corpus" target="#doc-thomas">
-          <note xml:lang="ja">次の比較対象（同一パイプラインでの計測を予定）</note>
-          <note xml:lang="en">Next comparandum (same measurement pipeline planned)</note>
+        <relatedItem type="corpus">
+          <bibl>
+            <ref target="#doc-thomas"/>
+            <note xml:lang="ja">次の比較対象（同一パイプラインでの計測を予定）</note>
+            <note xml:lang="en">Next comparandum (same measurement pipeline planned)</note>
+          </bibl>
         </relatedItem>
         <relatedItem type="external">
           <bibl>
@@ -98,9 +106,12 @@
         <ref type="search" target="search.html?doc=eugnostos"/>
         <ref type="stats" target="search.html?doc=eugnostos&amp;view=stats"/>
         <ref type="xml" target="data/eugnostos_tei.xml"/>
-        <relatedItem type="corpus" target="#doc-republic">
-          <note xml:lang="ja">同じビュワー・エンジンと共通辞書で公開中の姉妹文書</note>
-          <note xml:lang="en">Companion document, published with the same viewer engine and shared lexicon</note>
+        <relatedItem type="corpus">
+          <bibl>
+            <ref target="#doc-republic"/>
+            <note xml:lang="ja">同じビュワー・エンジンと共通辞書で公開中の姉妹文書</note>
+            <note xml:lang="en">Companion document, published with the same viewer engine and shared lexicon</note>
+          </bibl>
         </relatedItem>
         <relatedItem type="external">
           <bibl>

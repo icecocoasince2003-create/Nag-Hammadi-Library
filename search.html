@@ -706,7 +706,7 @@ function parseText(xml, doc){
     const wit = {id: xmlId(tx) || doc.key, label, short: label.replace(/^NHC\s*/, ""), doc, segs: [], groups: [], ntok: 0};
     // 写本の構造（〈統計〉用）：セグメント・ページ・行・欠損を証本ごとに数えておく
     wit.nseg = T(tx, "s").length;
-    wit.pages = T(tx, "pd").length + T(tx, "p").filter(p => p.hasAttribute("n")).length;
+    wit.pages = T(tx, "pb").length + T(tx, "pd").length + T(tx, "p").filter(p => p.hasAttribute("n")).length;   // 改頁は <pb>（以前の書き方 <pd>・<p n> も数える）
     wit.lines = T(tx, "lb").length;
     wit.gaps = new Map();
     T(tx, "gap").forEach(g => inc(wit.gaps, g.getAttribute("reason") || "∅"));

@@ -22,11 +22,13 @@
           <bibl xml:id="bib-brashler">J. Brashler, “Plato, Republic 588b–589b. VI,5: 48,16–51,23,” in <title>The Coptic Gnostic Library</title> (NHS XI), Leiden: Brill, 1979, 325–339.（校訂本・英訳。Schenke を承けて「翻訳として破綻」と評価。）</bibl>
           <bibl xml:id="bib-painchaud">L. Painchaud &amp; P.-H. Poirier (eds.), <title>Fragment de la République de Platon (NH VI,5)</title>, Québec: PUL, 1983.（ヴァレンティノス派環境を想定する仏語校訂。）</bibl>
         </listBibl>
-        <p xml:lang="ja">注釈データ(釈義・学説整理)。各 &lt;note&gt; は @target で本文 &lt;ref target="republic_tei.xml"&gt;republic_tei.xml&lt;/ref&gt; の文セグメントへ、@ana で下の主題分類へリンクする。@target の識別子は写本ページ・行(コデックス VI のページ.行、例 rep-49-6 = 49,6)を基準に暫定設定してある。コーパス側の文 xml:id が連番形式(rep-NN 等)であれば、本文ファイル受領後に対応づけ直すこと。本文と並行のギリシア語底本は Burnet OCT(Perseus ではない)。注は ja/en の二言語。学説は確定した本文事実(欠損・付加・字形)と解釈仮説(意図性の有無)とを別の層として扱う方針による。</p>
-        <p xml:lang="en">Exegetical/standOff layer. Each &lt;note&gt; links by @target to a text segment in republic_tei.xml and by @ana to the subject taxonomy below. @target ids are provisionally keyed to codex page.line (NHC VI, e.g. rep-49-6 = 49,6) and should be re-pointed to the corpus’s sentence xml:ids on receipt of the text file. Greek base text is Burnet OCT. Notes keep confirmed textual facts and interpretive hypotheses as distinct layers.</p>
       </sourceDesc>
     </fileDesc>
     <encodingDesc>
+      <editorialDecl>
+        <p xml:lang="ja">注釈データ(釈義・学説整理)。各 &lt;note&gt; は @target で本文 &lt;ref target="republic_tei.xml"&gt;republic_tei.xml&lt;/ref&gt; の文セグメントへ、@ana で下の主題分類へリンクする。@target の識別子は写本ページ・行(コデックス VI のページ.行、例 rep-49-6 = 49,6)を基準に暫定設定してある。コーパス側の文 xml:id が連番形式(rep-NN 等)であれば、本文ファイル受領後に対応づけ直すこと。本文と並行のギリシア語底本は Burnet OCT(Perseus ではない)。注は ja/en の二言語。学説は確定した本文事実(欠損・付加・字形)と解釈仮説(意図性の有無)とを別の層として扱う方針による。</p>
+        <p xml:lang="en">Exegetical/standOff layer. Each &lt;note&gt; links by @target to a text segment in republic_tei.xml and by @ana to the subject taxonomy below. @target ids are provisionally keyed to codex page.line (NHC VI, e.g. rep-49-6 = 49,6) and should be re-pointed to the corpus’s sentence xml:ids on receipt of the text file. Greek base text is Burnet OCT. Notes keep confirmed textual facts and interpretive hypotheses as distinct layers.</p>
+      </editorialDecl>
       <classDecl>
         <taxonomy xml:id="commentary-taxonomy">
           <desc xml:lang="ja">主題分類。本文 &lt;s&gt; の @ana と各注の @ana から参照される。</desc>

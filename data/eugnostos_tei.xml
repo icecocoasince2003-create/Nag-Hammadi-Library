@@ -34,12 +34,6 @@
             <idno>NHC III</idno>
             <msName>Nag Hammadi Codex III</msName>
           </msIdentifier>
-          <history>
-            <origin>
-              <origDate notBefore="0300" notAfter="0400">4th c. CE</origDate>
-              <origPlace>Egypt</origPlace>
-            </origin>
-          </history>
           <msContents>
             <msItem n="3">
               <locus from="70" to="90">pp. 70,1–90,11</locus>
@@ -47,6 +41,12 @@
               <title>Eugnostos</title>
             </msItem>
           </msContents>
+          <history>
+            <origin>
+              <origDate notBefore="0300" notAfter="0400">4th c. CE</origDate>
+              <origPlace>Egypt</origPlace>
+            </origin>
+          </history>
         </msDesc>
         <msDesc>
           <msIdentifier>
@@ -195,6 +195,7 @@
         <body>
           <div type="tractate" n="Eugnostos" subtype="codexIII">
             <head xml:lang="en">Eugnostos the Blessed — Nag Hammadi Codex III,3 (pp. 70–90)</head>
+            <ab>
             <s xml:id="III-INCIPIT" n="1" transJa="祝福されたエウグノストス、彼に属する者たち、これらの中で喜べ" transEn="Eugnostos the blessed, to those who are his: rejoice in this —" transFr="Eugnostos le bienheureux, à ceux qui sont siens : réjouissez-vous de ceci —" ana="#th-dispositio #th-frame #th-sjc #th-witness" corresp="#wit-V" subtype="incipit">
             <phy>
               <w type="NPROP" lemma="ⲉⲩⲅⲛⲱⲥⲧⲟⲥ" xml:lang="grc">ⲉⲩⲅⲛⲱⲥⲧⲟⲥ</w>
@@ -4061,6 +4062,7 @@
               <w type="N" lemma="ⲙⲁ">ⲙⲁ</w>
               <w type="X" lemma="ⲕⲁⲣⲓⲟⲥ" xml:lang="grc">ⲕⲁⲣⲓⲟⲥ</w>
             </s>
+            </ab>
           </div>
         </body>
       </text>
@@ -4069,9 +4071,11 @@
           <div type="tractate" n="Eugnostos" subtype="codexV">
             <head xml:lang="en">Eugnostos the Blessed — Nag Hammadi Codex V,1 (pp. 1–17, parallel witness)</head>
             <note type="editorial" xml:lang="ja">この証本(V,1)は III,3 と対応づけられた並行版の枠組みです。V,1 の本文(コプト語形態素・グロス)は校訂版(Parrott, NHS 27, Brill 1991)に拠って補充してください。各 &lt;s&gt; は III,3 の対応セグメントへ @corresp で結ばれます。</note>
+            <ab>
             <s xml:id="V-INCIPIT" n="1" corresp="#III-INCIPIT" subtype="incipit" transJa="（V,1 冒頭は大きく欠損。標題のみ「エウグノストス」と末尾に残る）" transEn="(The opening of V,1 is largely lacunose; only the title 'Eugnostos' survives at the end.)">
               <gap reason="lacuna" unit="line" extent="unknown"/>
             </s>
+            </ab>
           </div>
         </body>
       </text>

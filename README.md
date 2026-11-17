@@ -220,6 +220,9 @@ index.html(目次:全53文書)
 - `wit-III`(NHC III,3, 70–90)= **全文を符号化**。
 - `wit-V`(NHC V,1, 1–17)= `@corresp` で対応づけた**並行証本の枠**(本文は欠損のため `<gap>`＋編集注)。
 
+各証本の `<s>` は、`<div type="tractate">` の中の `<ab>` にまとめて入れてあります（TEI では `<s>` を `<div>` の直下に置けないため）。
+ビュワーと検索は `<text type="witness">` の子孫として `<s>` を探すので、`<ab>` の有無で動作は変わりません。
+
 各形態素は次の形(語義は持たず、辞書を `@lemma` で参照):
 ```xml
 <w type="N" lemma="ⲥⲟⲫⲓⲁ" xml:lang="grc">ⲥⲟⲫⲓⲁ</w>
@@ -248,6 +251,31 @@ index.html(目次:全53文書)
 **15主題**)を `@ana` で、本文セグメントを `@target="eugnostos_tei.xml#III-…"` で参照します。
 うち2件は Painchaud(JBL 1995)に基づく「修辞的四部構成(序論・叙述・論証・結語)」と
 「『世界の起源について』(NHC II,5/XIII,2)との相補関係」の注で、いずれも要約・参照(原文転記ではない)です。
+
+### TEI スキーマとの適合（2026-11-18 時点）
+
+TEI P5 の汎用スキーマ `tei_all.rng`（P5 4.3.0）で確かめた状態です。
+
+| ファイル | 状態 |
+|---|---|
+| `data/lexicon.xml`、`data/catalog.xml`、`data/eugnostos_theology.xml`、`data/republic_commentary.xml`、`source/nhc_fulltext_split/tei/*.xml`（56 ファイル） | 妥当 |
+| `data/eugnostos_tei.xml`、`data/republic_tei.xml` | 下の「独自の書き方」を除けば妥当（独自の要素・属性を取り除いた写しで確認） |
+| `data/republic_greek.xml` | 未対応（独自の要素 `<grc>`・`<ja>`・`<en>`、`cert="prov"`、`<div>` 直下の `<s>`） |
+
+**独自の書き方。** 次の 3 つは TEI に無い要素・属性です。ビュワーと検索がこの形で読むので、そのままにしてあります。
+
+- 対訳を `<s>` の属性に持つ: `@transJa`・`@transEn`・`@transFr`
+- 形態素を正書法上の語にまとめる `<phy>`
+- 文脈上の語釈を持つ `<w>` の `@gloss`
+
+確かめ方（スキーマはリポジトリに入れていません。TEI のサイトから取得します。約 1 MB）:
+
+```
+curl -O https://tei-c.org/Vault/P5/4.3.0/xml/tei/custom/schema/relaxng/tei_all.rng
+xmllint --noout --relaxng tei_all.rng data/lexicon.xml data/catalog.xml data/eugnostos_theology.xml data/republic_commentary.xml
+```
+
+TEI のデータを直したら、直す前と後の両方で検証して、メッセージを見比べてください。
 
 ## データの性質(重要)
 
@@ -337,6 +365,8 @@ Code is released under the MIT License (see `LICENSE`). Data and texts created b
 - **ギリシア語層を追加**: `transGrc` に Plato, *Republic* 588b–589b（OCT/Burnet, パブリックドメイン）を一次整列で付与（象徴的な21/55セグメント）。**校訂版での検証・残りの整列はこれから**。
 - `republic.html` は **2カラム対訳**: 左にコプト語本文（形態素クリックで品詞・語義・辞書リンク）＋日英訳、**右にギリシア語**。ヘッダの「ギリシア語」ボタンで右ウィンドウの表示/非表示、「訳: 日/英」「語釈を重ねる」「アイオーン/アルコーン」対応。
 - **著作権**: コプト語＝PD、日本語・英語＝本プロジェクト（CC BY 4.0）、ギリシア語＝PD。
+- **2026-11-18 の修正**: `<s>` を `<ab>` で包み（`<div>` の直下には置けないため）、改頁を TEI の `<pb n="…"/>` に統一しました（以前は `<p n>` と `<pd>`）。
+  誤記も 2 か所直しています: 大文字の `<W>`（この形態素 `ⲉⲧ` はビュワーにも検索にも出ていませんでした）と、`<lb>` の `breal`（正しくは `break`）。
 
 
 ## Republic: 辞書リンクを lexicon に分離（改訂）
