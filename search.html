@@ -15,7 +15,9 @@
      - 同形異義語の参照はビュワーと同じ規則（@ana による固定 → レンマ＋品詞 → レンマのみ）。
      - UI言語は site.js の三言語切替（html[data-i18n="full"]）に従います。
      - 配色はサイト共通の宇宙テーマ（assets/cosmos.css）に合わせています。色はページ内 <style> 冒頭の CSS 変数でまとめて管理します。
-     URL パラメータ: view=stats（統計を開く）, q=検索語, m=part|pre|ex（一致方法）, f=flg（対象: f語形 lレンマ g語義）,
+     - 品詞列・詳細式は assets/corpus-query.js を Worker 内で実行し、形態素の並びをセグメント単位で検索します。
+       対応する式と制限: docs/CORPUS_SEARCH.md。ANNIS/AQL の全機能への対応ではありません。
+     URL パラメータ: view=stats（統計を開く）, q=検索語, kind=word|pos|aql（検索方式）, m=part|pre|ex（一致方法）, f=flg（対象: f語形 lレンマ g語義）,
                      w=証本ID（カンマ区切り）, xpos=除外する品詞 -->
 <html lang="ja" data-lang="ja" data-i18n="full" data-mode="dark" data-modes="light dark"
   data-title-en="Corpus search and statistics — Sheneset"
@@ -95,6 +97,7 @@ body{margin:0; color:var(--s-ink); font-family:var(--ui);
 .opt.nodata .nm{color:var(--s-faint)}
 
 /* ---- 右：検索と結果 ---- */
+[hidden]{display:none!important}
 main{min-width:0; padding:26px clamp(16px,3vw,40px) 90px}
 h1{font-size:1.45rem; font-weight:700; margin:0 0 4px; letter-spacing:.01em}
 .lede{color:var(--s-mut); margin:0 0 18px; font-size:.9rem}
@@ -103,6 +106,7 @@ h1{font-size:1.45rem; font-weight:700; margin:0 0 4px; letter-spacing:.01em}
   background:var(--s-field); border:1px solid var(--s-edge); border-radius:8px; outline:none}
 .qrow input::placeholder{color:var(--s-faint)}
 .qrow input:focus{border-color:var(--s-gold); box-shadow:0 0 0 1px var(--s-gold)}
+.qrow .btn{flex:none; white-space:nowrap}
 .opts{display:flex; flex-wrap:wrap; gap:6px 22px; margin:10px 0 0; font-size:.82rem; color:var(--s-mut)}
 .opts fieldset{border:0; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:4px 14px; align-items:center}
 .opts legend{float:left; margin-right:6px; color:var(--s-mut)}
@@ -110,6 +114,22 @@ h1{font-size:1.45rem; font-weight:700; margin:0 0 4px; letter-spacing:.01em}
 .opts input{margin:0; accent-color:var(--s-gold)}
 .opts select{font:inherit; font-size:.82rem; padding:2px 4px; border:1px solid var(--s-edge); border-radius:6px; background:var(--s-field); color:var(--s-ink)}
 .scope{margin:14px 0 0; font-size:.8rem; color:var(--s-mut)}
+.query-kind{display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin:0 0 10px; font-size:.84rem}
+.query-kind select{font:inherit; color:var(--s-ink); background:var(--s-field); border:1px solid var(--s-edge); border-radius:6px; padding:5px 9px}
+.query-hint,.query-help{font-size:.8rem; color:var(--s-mut); max-width:860px; line-height:1.8; overflow-wrap:anywhere}
+.query-hint{margin:8px 0}
+.query-help summary{cursor:pointer; color:var(--s-link)}
+.query-help p{margin:8px 0}
+.query-examples{display:flex; flex-wrap:wrap; gap:8px; margin:10px 0}
+.query-examples .btn{border-radius:6px; font-family:ui-monospace,monospace; overflow-wrap:anywhere; text-align:left}
+.query-error{margin:14px 0; padding:10px 14px; border-left:3px solid var(--s-warn); background:var(--s-bg2); font-size:.86rem; overflow-wrap:anywhere}
+.sequence-list{list-style:none; padding:0; margin:0}
+.sequence-hit{padding:15px 0; border-bottom:1px solid var(--s-rule)}
+.sequence-hit a{font-size:.8rem; color:var(--s-link); text-underline-offset:3px}
+.sequence-context{margin:8px 0; line-height:2; overflow-wrap:anywhere; color:var(--s-mut)}
+.sequence-context mark{color:var(--s-ink)}
+.sequence-annotations{display:flex; flex-wrap:wrap; gap:6px 16px; font-size:.8rem; color:var(--s-mut)}
+.sequence-annotations code{color:var(--s-ink)}
 
 h2.sec{font-size:1rem; font-weight:700; color:var(--s-gold); margin:34px 0 10px; padding-bottom:6px; border-bottom:1px solid var(--s-rule);
   display:flex; align-items:baseline; gap:12px; flex-wrap:wrap}
@@ -292,16 +312,34 @@ table.kw td.rc{color:var(--s-mut); white-space:nowrap; overflow:hidden; max-widt
     <!-- ═══════ 検索 ═══════ -->
     <div id="viewSearch" role="tabpanel" aria-labelledby="tabSearch">
     <p class="lede">
-      <span class="l-ja">公開中の全文書を横断して、レンマ・語形・語義から検索します。結果はレンマごとに集計されます。</span>
-      <span class="l-en">Search all published texts at once by lemma, word form or meaning. Results are grouped by lemma.</span>
-      <span class="l-fr">Recherche dans tous les textes publiés par lemme, forme ou sens. Les résultats sont regroupés par lemme.</span>
+      <span class="l-ja">公開中の全文書を横断して、単語・形態素の品詞列・正規表現で検索します。単語の結果はレンマごとに、品詞列と詳細式の結果は文脈付きの用例で表示します。</span>
+      <span class="l-en">Search all published texts by word, morpheme POS sequence or regular expression. Word results are grouped by lemma; sequence and query results show occurrences in context.</span>
+      <span class="l-fr">Recherchez des mots, des suites morphologiques ou des expressions régulières dans tous les textes publiés. Les mots sont regroupés par lemme ; les suites et requêtes affichent les occurrences en contexte.</span>
     </p>
 
-    <form class="qrow" id="qform" role="search" onsubmit="return false">
+    <div class="query-kind">
+      <label for="queryKind"><span class="l-ja">検索方式</span><span class="l-en">Search type</span><span class="l-fr">Type de recherche</span></label>
+      <select id="queryKind"><option value="word"></option><option value="pos"></option><option value="aql"></option></select>
+    </div>
+    <form class="qrow" id="qform" role="search">
       <label class="vh" for="q">検索語 / Query</label>
-      <input id="q" type="search" autocomplete="off" spellcheck="false">
+      <input id="q" type="search" autocomplete="off" spellcheck="false" maxlength="4096" aria-describedby="queryHint queryError">
+      <button type="submit" class="btn"><span class="l-ja">検索</span><span class="l-en">Search</span><span class="l-fr">Rechercher</span></button>
     </form>
-    <div class="opts">
+    <p class="query-hint" id="queryHint"></p>
+    <details class="query-help" id="queryHelp" hidden>
+      <summary><span class="l-ja">検索式の書き方・例</span><span class="l-en">Query syntax and examples</span><span class="l-fr">Syntaxe et exemples</span></summary>
+      <p><span class="l-ja">品詞列は <code>ART N V</code> のようにタグを空白で区切ります。詳細式はANNISのAQLを参考にした一部の構文に対応します。<code>tok</code>（語形）、<code>lemma</code>、<code>pos</code>（品詞）、<code>msd</code>（形態情報）を指定できます。</span><span class="l-en">Separate POS tags with spaces, e.g. <code>ART N V</code>. Detailed queries support a subset inspired by ANNIS AQL: <code>tok</code> (form), <code>lemma</code>, <code>pos</code> and <code>msd</code>.</span><span class="l-fr">Séparez les étiquettes par des espaces : <code>ART N V</code>. Les requêtes prennent en charge un sous-ensemble inspiré d’AQL (ANNIS) : <code>tok</code> (forme), <code>lemma</code>, <code>pos</code> et <code>msd</code>.</span></p>
+      <div class="query-examples">
+        <button type="button" class="btn" data-query-kind="pos" data-query="ART N">ART N</button>
+        <button type="button" class="btn" data-query-kind="aql" data-query='pos="ART" . pos="N"'>pos="ART" . pos="N"</button>
+        <button type="button" class="btn" data-query-kind="aql" data-query='pos="ART" .1,3 pos=/N.*/'>pos="ART" .1,3 pos=/N.*/</button>
+        <button type="button" class="btn" data-query-kind="aql" data-query="lemma=/.*ⲛⲟⲩⲧ.*/">lemma=/.*ⲛⲟⲩⲧ.*/</button>
+      </div>
+      <p><span class="l-ja"><code>.</code> は隣接、<code>.1,3</code> は距離1〜3（間に0〜2形態素）。各形態素の順序を保ち、証本・セグメントをまたいで照合しません。左の品詞フィルターは一致する形態素に適用し、間の形態素を取り除くことはありません。</span><span class="l-en"><code>.</code> means adjacent; <code>.1,3</code> means a distance of 1–3 (0–2 intervening morphemes). Searches preserve morpheme order within each witness and segment. POS filters apply to matched morphemes without removing intervening tokens.</span><span class="l-fr"><code>.</code> signifie adjacent ; <code>.1,3</code> une distance de 1 à 3 (0 à 2 morphèmes intercalés). L’ordre est conservé, sans dépasser le témoin ni le segment. Le filtre de PdD s’applique aux morphèmes trouvés sans supprimer les morphèmes intermédiaires.</span></p>
+      <p><span class="l-ja">正規表現は <code>/…/</code> で囲み、注釈値全体に照合します。部分一致には <code>.*</code> を使用します。JavaScriptのUnicode正規表現で、大文字・小文字と上線などの合成記号を区別します。<code>"…"</code> の語形・レンマは従来の単語検索と同じく合成記号・大文字小文字を無視し、品詞はタグを完全一致で指定します。</span><span class="l-en">Write regex as <code>/…/</code>; it matches the entire annotation value. Use <code>.*</code> for substrings. JavaScript Unicode regex preserves case and combining marks. Literal <code>"…"</code> forms and lemmas ignore case and combining marks like word search; POS tags match exactly.</span><span class="l-fr">Écrivez les expressions régulières entre <code>/…/</code> : elles couvrent la valeur entière. Utilisez <code>.*</code> pour une sous-chaîne. La syntaxe Unicode JavaScript distingue casse et diacritiques. Les formes et lemmes entre <code>"…"</code> ignorent casse et diacritiques ; les étiquettes de PdD correspondent exactement.</span></p>
+    </details>
+    <div class="opts" id="lexicalOptions">
       <fieldset>
         <legend><span class="l-ja">対象</span><span class="l-en">Match in</span><span class="l-fr">Chercher dans</span></legend>
         <label><input type="checkbox" id="fLemma" checked><span class="l-ja">レンマ</span><span class="l-en">lemma</span><span class="l-fr">lemme</span></label>
@@ -315,12 +353,15 @@ table.kw td.rc{color:var(--s-mut); white-space:nowrap; overflow:hidden; max-widt
         </select>
       </fieldset>
     </div>
+    <p class="query-error" id="queryError" role="status" hidden></p>
     <p class="scope" id="scope"></p>
 
     <section id="statSec" aria-live="polite"></section>
 
     <h2 class="sec" id="listHead"></h2>
     <div class="tblwrap"><table class="lx" id="lx"><thead></thead><tbody></tbody></table></div>
+    <p class="vh" id="sequenceStatus" role="status"></p>
+    <div id="sequenceResults" hidden></div>
     <div class="morebar" id="more"></div>
     </div>
 
@@ -364,6 +405,20 @@ const xmlId = el => el.getAttributeNS(XMLNS, "id") || el.getAttribute("xml:id") 
 /* ---------- UI 言語 ---------- */
 const UL = () => { const l = H.getAttribute("data-lang"); return l === "en" || l === "fr" ? l : "ja"; };
 const I18N = {
+  kindWord: {ja:"単語", en:"Word", fr:"Mot"},
+  kindPos:  {ja:"品詞列", en:"POS sequence", fr:"Suite de PdD"},
+  kindAql:  {ja:"詳細式（ANNIS参考）", en:"Query (ANNIS-inspired)", fr:"Requête (inspirée d’ANNIS)"},
+  phPos:    {ja:"品詞を順番に入力（例: ART N / PREP ART N）", en:"POS tags in order (e.g. ART N / PREP ART N)", fr:"Étiquettes dans l’ordre (ex. ART N / PREP ART N)"},
+  phAql:    {ja:'例: pos="ART" . pos="N" / lemma=/.*ⲛⲟⲩⲧ.*/', en:'e.g. pos="ART" . pos="N" / lemma=/.*ⲛⲟⲩⲧ.*/', fr:'ex. pos="ART" . pos="N" / lemma=/.*ⲛⲟⲩⲧ.*/'},
+  hintWord: {ja:"品詞の順序や正規表現を使う場合は、検索方式を「品詞列」または「詳細式」に切り替えてください。", en:"For ordered POS tags or regex, choose POS sequence or Query.", fr:"Pour les suites de PdD ou les expressions régulières, choisissez Suite de PdD ou Requête."},
+  hintPos:  {ja:"形態素の品詞タグを空白で区切ります。例: ART N は冠詞の直後に名詞が続く用例。", en:"Separate morpheme POS tags with spaces. ART N finds an article immediately followed by a noun.", fr:"Séparez les étiquettes par des espaces. ART N trouve un article immédiatement suivi d’un nom."},
+  hintAql:  {ja:'例: pos="ART" .1,3 pos=/N.*/。記号やタグの書き方は下の「検索式の書き方・例」を参照してください。', en:'e.g. pos="ART" .1,3 pos=/N.*/. Open the syntax help below for operators and examples.', fr:'Ex. pos="ART" .1,3 pos=/N.*/. Consultez les exemples et la syntaxe ci-dessous.'},
+  seqPrompt:{ja:"品詞列または詳細式を入力してください。下の例をクリックして検索することもできます。", en:"Enter a POS sequence or query, or click an example in the syntax help.", fr:"Saisissez une suite ou une requête, ou cliquez sur un exemple dans l’aide."},
+  seqBusy:  {ja:"形態素の並びを検索中…", en:"Searching morpheme sequences…", fr:"Recherche des suites morphologiques…"},
+  seqNone:  {ja:"一致する用例はありません。品詞タグ・順序・文書の選択を確認してください。", en:"No occurrences match. Check POS tags, order and selected texts.", fr:"Aucune occurrence. Vérifiez les étiquettes, l’ordre et les textes sélectionnés."},
+  nSeq:     {ja:n=>n+" 用例", en:n=>n+" occurrence"+(n==="1"?"":"s"), fr:n=>n+" occurrence"+(n==="1"?"":"s")},
+  seqCap:   {ja:"先頭2,000用例までを表示・CSV出力します。条件や文書を絞り込んでください。", en:"Showing and exporting the first 2,000 occurrences. Narrow the query or select fewer texts.", fr:"Affichage et export des 2 000 premières occurrences. Précisez la requête ou sélectionnez moins de textes."},
+  ePos:     {ja:n=>n+"文字目: ", en:n=>"Character "+n+": ", fr:n=>"Caractère "+n+" : "},
   ph:       {ja:"レンマ・語形・語義で検索（例: ⲛⲟⲩⲧⲉ / ⲯⲩⲭⲏ / soul / 魂）", en:"Search by lemma, form or meaning (e.g. ⲛⲟⲩⲧⲉ / ⲯⲩⲭⲏ / soul / 魂)", fr:"Lemme, forme ou sens (ex. ⲛⲟⲩⲧⲉ / ⲯⲩⲭⲏ / âme / 魂)"},
   part:     {ja:"部分一致", en:"contains", fr:"contient"},
   pre:      {ja:"前方一致", en:"begins with", fr:"commence par"},
@@ -437,6 +492,47 @@ const I18N = {
   loading:  {ja:"読み込み中…", en:"Loading…", fr:"Chargement…"}
 };
 function t(k, ...a){ const e = I18N[k]; if(!e) return k; const v = e[UL()] ?? e.ja; return typeof v === "function" ? v(...a) : v; }
+
+/* 品詞列・詳細式のエラー文。キーは assets/corpus-query.js の QueryError が返す detail（式のどこが問題か）、
+   それ以外は code（TIMEOUT・WORKER_ERROR はこのページが付ける）。文中の上限値は corpus-query.js の LIMITS と揃えること */
+const QERR = {
+  empty:            {ja:"検索式を入力してください。", en:"Enter a query.", fr:"Saisissez une requête."},
+  tooLong:          {ja:"検索式が長すぎます（4,096文字まで）。", en:"The query is too long (4,096 characters at most).", fr:"La requête est trop longue (4 096 caractères au plus)."},
+  tooManyNodes:     {ja:"形態素の数が多すぎます（1つの式に16個まで）。", en:"Too many morphemes (16 per query at most).", fr:"Trop de morphèmes (16 par requête au plus)."},
+  tooFar:           {ja:"距離が大きすぎます（1,000まで）。", en:"The distance is too large (1,000 at most).", fr:"La distance est trop grande (1 000 au plus)."},
+  posTags:          {ja:"品詞タグだけを空白で区切って入力してください（例: ART N V）。引用符や記号を使う式は、検索方式を「詳細式」にすると検索できます。",
+                     en:"Enter POS tags only, separated by spaces (e.g. ART N V). For expressions with quotes or operators, choose Query as the search type.",
+                     fr:"Saisissez uniquement des étiquettes séparées par des espaces (ex. ART N V). Pour une expression avec guillemets ou opérateurs, choisissez le type Requête."},
+  badString:        {ja:'"…" の中の書き方が正しくありません。バックスラッシュは \\\\、引用符は \\" と書きます。',
+                     en:'The text inside "…" is not valid. Write \\\\ for a backslash and \\" for a quotation mark.',
+                     fr:'Le texte entre "…" n’est pas valide. Écrivez \\\\ pour une barre oblique inverse et \\" pour un guillemet.'},
+  openString:       {ja:'" で始めた値を " で閉じてください。', en:'Close the value that starts with ".', fr:'Fermez la valeur commencée par ".'},
+  openRegex:        {ja:"/ で始めた正規表現を / で閉じてください。", en:"Close the regular expression that starts with /.", fr:"Fermez l’expression régulière commencée par /."},
+  expectedNode:     {ja:'ここには注釈の条件が必要です（例: pos="N"）。', en:'An annotation is expected here (e.g. pos="N").', fr:'Une annotation est attendue ici (ex. pos="N").'},
+  unknownAnnotation:{ja:"使える注釈名は tok・form・lemma・pos・type・msd です。", en:"Supported annotations: tok, form, lemma, pos, type, msd.", fr:"Annotations prises en charge : tok, form, lemma, pos, type, msd."},
+  expectedEquals:   {ja:'注釈名のあとに ="値" または =/正規表現/ を続けてください。', en:'Follow the annotation name with ="value" or =/regex/.', fr:'Faites suivre le nom de l’annotation de ="valeur" ou =/regex/.'},
+  expectedValue:    {ja:'= のあとには "値" または /正規表現/ を書きます。', en:'After =, write "value" or /regex/.', fr:'Après =, écrivez "valeur" ou /regex/.'},
+  expectedOperator: {ja:"形態素どうしは . または .最小,最大 でつなぎます。& や | などの演算子には対応していません。",
+                     en:"Join morphemes with . or .min,max. Operators such as & and | are not supported.",
+                     fr:"Reliez les morphèmes par . ou .min,max. Les opérateurs tels que & et | ne sont pas pris en charge."},
+  unboundedDistance:{ja:"上限のない距離（.*）には対応していません。.1,1000 のように範囲を指定してください。",
+                     en:"Unbounded distance (.*) is not supported. Give a range such as .1,1000.",
+                     fr:"La distance illimitée (.*) n’est pas prise en charge. Indiquez un intervalle, par exemple .1,1000."},
+  expectedMax:      {ja:"カンマのあとに距離の最大値を書いてください（例: .1,3）。", en:"Give the maximum distance after the comma (e.g. .1,3).", fr:"Indiquez la distance maximale après la virgule (ex. .1,3)."},
+  badDistance:      {ja:"距離は 1 以上で、最小 ≦ 最大 になるように指定してください。", en:"Distances start at 1, and the minimum cannot exceed the maximum.", fr:"Les distances commencent à 1 et le minimum ne peut pas dépasser le maximum."},
+  badRegex:         {ja:"正規表現が正しくありません。", en:"The regular expression is not valid.", fr:"L’expression régulière n’est pas valide."},
+  tooBroad:         {ja:"一致の候補が多すぎるため中断しました。条件を増やすか、距離を狭めるか、文書を絞り込んでください。",
+                     en:"Stopped: too many candidate matches. Add conditions, narrow the distances or select fewer texts.",
+                     fr:"Recherche interrompue : trop de correspondances possibles. Ajoutez des conditions, réduisez les distances ou sélectionnez moins de textes."},
+  TIMEOUT:          {ja:"検索が3秒を超えたため中断しました。正規表現を簡単にするか、文書を絞り込んでください。",
+                     en:"Search stopped after 3 seconds. Simplify the regular expression or select fewer texts.",
+                     fr:"Recherche interrompue après 3 secondes. Simplifiez l’expression régulière ou sélectionnez moins de textes."},
+  WORKER_ERROR:     {ja:"検索を開始できませんでした。ページを再読み込みしてください（file:// では動きません。Web サーバ経由で開いてください）。",
+                     en:"Could not start the search. Reload the page (it does not run from file://; open it through a web server).",
+                     fr:"Impossible de lancer la recherche. Rechargez la page (elle ne fonctionne pas en file:// ; ouvrez-la via un serveur web)."},
+  other:            {ja:"検索式を確認してください。", en:"Check the query.", fr:"Vérifiez la requête."}
+};
+QERR.NOT_READY = QERR.SEARCH_ERROR = QERR.WORKER_ERROR;
 
 /* 品詞ラベル（検索・統計で共通。Coptic Scriptorium 系のタグを含む） */
 const POS = {ART:["冠詞","article","article"],N:["名詞","noun","nom"],NPROP:["固有名詞","proper noun","nom propre"],
@@ -545,7 +641,7 @@ function parseText(xml, doc){
     T(tx, "s").forEach(s => {
       const sid = xmlId(s); if(!sid) return;
       const si = wit.segs.length;
-      wit.segs.push({id: sid, n: s.getAttribute("n") || ""});
+      wit.segs.push({id: sid, n: s.getAttribute("n") || "", tokens: []});
       let lastPhy = null;
       T(s, "w").forEach(w => {
         const phy = w.closest("phy");
@@ -558,6 +654,7 @@ function parseText(xml, doc){
           ana: (w.getAttribute("ana") || "").split("#").pop(), gl: w.getAttribute("gloss") || "",
           key: lemma + "\t" + pos};
         wit.groups[wit.groups.length - 1].push(ST.toks.length);
+        wit.segs[si].tokens.push(ST.toks.length);
         ST.toks.push(tk);
         wit.ntok++;
       });
@@ -627,19 +724,22 @@ function readURL(){
   const ids = new Set(ST.wits.map(w => w.id));
   const w = (p.get("w") || "").split(",").filter(x => ids.has(x));
   const d = ST.docs.find(x => x.key === p.get("doc") && x.wits.length);
-  if(w.length) w.forEach(x => ST.sel.add(x));
+  // ?w=（空）は「どの証本も選んでいない」状態の復元。知らない ID だけが並ぶ古いリンクは、既定（全文書）に戻す
+  if(p.has("w") && (w.length || !p.get("w"))) w.forEach(x => ST.sel.add(x));
   else if(d) d.wits.forEach(x => ST.sel.add(x.id));       // 旧URL ?doc=… との互換
   else ST.wits.forEach(x => ST.sel.add(x.id));            // 既定: 全文書
   (p.get("xpos") || "").split(",").filter(Boolean).forEach(x => ST.posOff.add(x));
   if(p.get("q")) $("#q").value = p.get("q");
+  if(["word","pos","aql"].includes(p.get("kind"))) $("#queryKind").value = p.get("kind");
   if(["part","pre","ex"].includes(p.get("m"))) $("#mode").value = p.get("m");
   const f = p.get("f");
-  if(f){ $("#fForm").checked = f.includes("f"); $("#fLemma").checked = f.includes("l"); $("#fGloss").checked = f.includes("g"); }
+  if(f !== null){ $("#fForm").checked = f.includes("f"); $("#fLemma").checked = f.includes("l"); $("#fGloss").checked = f.includes("g"); }
 }
 function writeURL(){
   const p = new URLSearchParams();
   if(ST.view === "stats") p.set("view", "stats");
   const q = $("#q").value.trim(); if(q) p.set("q", q);
+  if($("#queryKind").value !== "word") p.set("kind", $("#queryKind").value);
   if($("#mode").value !== "part") p.set("m", $("#mode").value);
   const f = ($("#fForm").checked ? "f" : "") + ($("#fLemma").checked ? "l" : "") + ($("#fGloss").checked ? "g" : "");
   if(f !== "flg") p.set("f", f);
@@ -696,6 +796,179 @@ function compute(){
     rows.push({g, hits, all: st.length, n: hits.length, byWit, forms, partial, nWit: Object.keys(byWit).length, byForm});
   });
   return {q, mode, m, wits, N, rows};
+}
+
+/* ---------- 形態素列検索（正規表現は必ず Worker 内で実行） ----------
+   Worker は1つを使い回します（本文を渡すのは起動時の1回だけ）。検索は Worker 内の同期処理で途中では止められないため、
+   実行中に別の検索を始めるとき・制限時間を超えたときは Worker ごと止め、次の検索で作り直します。
+   制限時間（SEARCH_MS）は Worker が本文を受け取ってから数えます。スクリプトの取得と本文の受け渡しは別枠（STARTUP_MS）。 */
+const SEARCH_MS = 3000, STARTUP_MS = 20000;
+const QS = {worker:null, ready:false, timer:null, id:0, key:"", status:"idle", result:null, error:null};
+function dropWorker(){
+  if(QS.worker) QS.worker.terminate();
+  QS.worker = null; QS.ready = false;
+}
+function cancelSequenceSearch(){
+  clearTimeout(QS.timer); QS.timer = null;
+  if(QS.status === "pending") dropWorker();          // 実行中の検索を止める手段は Worker の終了だけ
+  QS.id++;
+}
+function resetSequenceSearch(){
+  cancelSequenceSearch(); QS.key = ""; QS.status = "idle"; QS.result = null; QS.error = null;
+}
+function settleSequenceSearch(id, outcome){
+  if(id !== QS.id || QS.status !== "pending") return;  // 古い検索の応答は捨てる
+  clearTimeout(QS.timer); QS.timer = null;
+  QS.status = outcome.error ? "error" : "ready";
+  QS.error = outcome.error || null; QS.result = outcome.result || null;
+  render();
+}
+function armSequenceTimer(){
+  clearTimeout(QS.timer);
+  const id = QS.id, ready = QS.ready;
+  QS.timer = setTimeout(() => {
+    if(id !== QS.id || QS.status !== "pending") return;
+    dropWorker();                                      // 応答しない Worker は捨てる
+    settleSequenceSearch(id, {error:{code: ready ? "TIMEOUT" : "WORKER_ERROR"}});
+  }, ready ? SEARCH_MS : STARTUP_MS);
+}
+function sequenceWorker(){
+  if(QS.worker) return QS.worker;
+  const worker = new Worker("assets/corpus-search-worker.js");
+  QS.worker = worker; QS.ready = false;
+  worker.onmessage = e => {
+    if(worker !== QS.worker) return;
+    const data = e.data || {};
+    if(data.type === "ready"){ QS.ready = true; if(QS.status === "pending") armSequenceTimer(); return; }
+    settleSequenceSearch(data.id, data.error ? {error:data.error} : {result:data.result});
+  };
+  worker.onerror = e => {
+    e.preventDefault();
+    if(worker !== QS.worker) return;
+    dropWorker();
+    settleSequenceSearch(QS.id, {error:{code:"WORKER_ERROR"}});
+  };
+  worker.postMessage({type:"init", segments:ST.wits.flatMap((wit, w) => wit.segs.map(seg => ({w,
+    tokens:seg.tokens.map(index => { const tk = ST.toks[index];
+      return {index, form:tk.form, lemma:tk.lemma, pos:tk.pos, msd:tk.msd}; })
+  })))});
+  return worker;
+}
+function startSequenceSearch(key, query, mode){
+  cancelSequenceSearch();
+  QS.key = key; QS.status = "pending"; QS.result = null; QS.error = null;
+  const id = QS.id;
+  try{
+    sequenceWorker().postMessage({type:"search", id, query, mode, options:{
+      selectedWitnesses:ST.wits.map((w, i) => ST.sel.has(w.id) ? i : -1).filter(i => i >= 0),
+      excludedPos:[...ST.posOff], limit:2000
+    }});
+    armSequenceTimer();
+  }catch(e){ dropWorker(); settleSequenceSearch(id, {error:{code:"WORKER_ERROR"}}); }
+}
+/* エラー文：error.detail（式のどこが問題か）→ error.code の順に QERR を引く。位置が分かるときは「N文字目」を前に付ける */
+function queryErrorText(error){
+  const own = k => Object.prototype.hasOwnProperty.call(QERR, k) ? QERR[k] : null;
+  const entry = own(error.detail) || own(error.code) || QERR.other;
+  let text = entry[UL()] || entry.ja;
+  if(error.detail === "badRegex" && error.reason) text += " [" + error.reason + "]";   // 処理系（ブラウザー）による説明。英語のまま
+  return (error.position != null ? t("ePos", fmt(error.position + 1)) : "") + text;
+}
+function applyQueryControls(){
+  const kind = $("#queryKind").value, advanced = kind !== "word";
+  const q = $("#q");
+  q.placeholder = t(kind === "pos" ? "phPos" : kind === "aql" ? "phAql" : "ph");
+  q.setAttribute("aria-label", q.placeholder);
+  $("#queryHint").textContent = t(kind === "pos" ? "hintPos" : kind === "aql" ? "hintAql" : "hintWord");
+  $("#lexicalOptions").hidden = advanced;
+  $("#queryHelp").hidden = !advanced;
+  $("#lx").parentElement.hidden = advanced;
+  $("#sequenceResults").hidden = !advanced;
+  $("#queryError").hidden = true;
+  q.removeAttribute("aria-invalid");
+}
+/* セグメント内の <w> は ST.toks 上で連続して並ぶ（parseText）。セグメント内の位置（0始まり）は 通し番号 − 先頭の通し番号 */
+const segPos = (seg, i) => i - seg.tokens[0];
+/* 用例の文脈：一致した形態素それぞれの前後 PAD 個。範囲が重なる・隣り合うものはつなぎ、
+   離れているもの（距離を大きく取った式）は間を「…」で省く。1用例の表示量は式の長さだけで決まる */
+function sequenceContext(match){
+  const PAD = 6;
+  const tk = ST.toks[match.tokens[0]], wit = ST.wits[tk.w], seg = wit.segs[tk.s], n = seg.tokens.length;
+  const marked = new Set(match.tokens), spans = [];
+  match.tokens.forEach(i => {                              // match.tokens は本文の順
+    const p = segPos(seg, i), from = Math.max(0, p - PAD), to = Math.min(n, p + PAD + 1);
+    const last = spans[spans.length - 1];
+    if(last && from <= last[1]) last[1] = Math.max(last[1], to); else spans.push([from, to]);
+  });
+  const html = spans.map(([from, to]) => {
+    let previous = null;
+    return seg.tokens.slice(from, to).map(i => {
+      const token = ST.toks[i];
+      const separator = previous === null ? "" : previous.g === token.g ? "" : " ";
+      previous = token;
+      const form = esc(token.form);
+      return separator + (marked.has(i) ? "<mark>" + form + "</mark>" : form);
+    }).join("");
+  }).join(" … ");
+  return {wit, seg, html:(spans[0][0] ? "… " : "") + html + (spans[spans.length - 1][1] < n ? " …" : "")};
+}
+function renderSequences(){
+  LAST = null;
+  const query = $("#q").value.trim(), kind = $("#queryKind").value;
+  const wits = ST.wits.filter(w => ST.sel.has(w.id) && w.ntok);
+  $("#scope").textContent = wits.length ? t("scope", fmt(wits.length), fmt(wits.reduce((n,w) => n + w.ntok, 0))) : "";
+  $("#statSec").innerHTML = ""; $("#more").innerHTML = "";
+  const box = $("#sequenceResults"), head = $("#listHead");
+  const say = text => { const el = $("#sequenceStatus"); if(el.textContent !== text) el.textContent = text; };   // 読み上げ用の一行（件数・状態）
+  head.textContent = t("listHit");
+  box.setAttribute("aria-busy", "false");
+  if(wits.length && !QS.worker){ try{ sequenceWorker(); }catch(e){} }   // 最初の検索を待たせないよう、Worker を先に起こして本文を渡しておく
+  if(!query || !wits.length){
+    if(QS.status === "pending") resetSequenceSearch();
+    box.innerHTML = '<p class="empty">' + esc(t(wits.length ? "seqPrompt" : "noSel")) + '</p>';
+    say(""); return;
+  }
+  const key = JSON.stringify([kind, query, [...ST.sel].sort(), [...ST.posOff].sort()]);
+  if(QS.key !== key) startSequenceSearch(key, query, kind);
+  if(QS.status === "pending"){
+    box.setAttribute("aria-busy", "true");
+    box.innerHTML = '<p class="empty">' + esc(t("seqBusy")) + '</p>'; return;
+  }
+  if(QS.status === "error"){
+    $("#queryError").textContent = queryErrorText(QS.error); $("#queryError").hidden = false;
+    $("#q").setAttribute("aria-invalid", "true"); box.innerHTML = ""; say(""); return;
+  }
+  if(!QS.result) return;
+  const {matches, truncated} = QS.result;
+  const count = t("nSeq", fmt(matches.length) + (truncated ? "+" : ""));
+  say(matches.length ? count : t("seqNone"));
+  head.innerHTML = esc(t("listHit")) + ' <small>' + esc(count) + '</small>' +
+    (matches.length ? '<span class="right"><button type="button" class="lnk" id="csvBtn">' + esc(t("csv")) + '</button></span>' : "");
+  box.innerHTML = (truncated ? '<p class="notice">' + esc(t("seqCap")) + '</p>' : "") +
+    (matches.length ? '<ol class="sequence-list">' + matches.slice(0, ST.limit).map(match => {
+      const ctx = sequenceContext(match);
+      return '<li class="sequence-hit"><a href="' + esc(readerHref(ctx.wit, ctx.seg)) + '" title="' + esc(t("dToText")) + '">' +
+        esc(witName(ctx.wit)) + ' §' + esc(ctx.seg.n || ctx.seg.id) + '</a><p class="sequence-context cop">' + ctx.html +
+        '</p><div class="sequence-annotations">' + match.tokens.map(i => { const tk = ST.toks[i];
+          return '<span><span class="cop">' + esc(tk.form) + '</span> · <code>' + esc(tk.pos) + '</code> · <span class="cop">' + esc(tk.lemma) + '</span></span>';
+        }).join("") + '</div></li>';
+    }).join("") + '</ol>' : '<p class="empty">' + esc(t("seqNone")) + '</p>');
+  if(matches.length > ST.limit) $("#more").innerHTML = '<button type="button" class="btn" id="moreBtn">' + esc(t("showMore", fmt(matches.length - ST.limit))) + '</button>';
+}
+function sequenceCSV(){
+  if(QS.status !== "ready" || !QS.result) return;
+  const cell = v => '"' + String(v).replace(/"/g, '""') + '"';
+  const lines = [["witness","segment","forms","lemmas","pos","morpheme_positions","reader"]];
+  QS.result.matches.forEach(match => {
+    const tokens = match.tokens.map(i => ST.toks[i]), tk = tokens[0], wit = ST.wits[tk.w], seg = wit.segs[tk.s];
+    lines.push([wit.id, seg.id, tokens.map(x => x.form).join(" "), tokens.map(x => x.lemma).join(" "),
+      tokens.map(x => x.pos).join(" "), match.tokens.map(i => segPos(seg, i) + 1).join(" "),
+      new URL(readerHref(wit, seg), location.href).href]);     // CSV だけで開けるよう、本文リンクは絶対 URL で出す
+  });
+  const blob = new Blob(["\ufeff" + lines.map(line => line.map(cell).join(",")).join("\r\n")], {type:"text/csv;charset=utf-8"});
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "sheneset-morphemes.csv";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 }
 
 /* ---------- 表示 ---------- */
@@ -1131,7 +1404,15 @@ function setView(v){
 let LAST = null;
 function render(){
   if(!ST.ready) return;
-  if(ST.view === "stats"){ renderSide(); renderStatsView(); writeURL(); return; }
+  applyQueryControls();
+  if(ST.view === "stats"){
+    if(QS.status === "pending") resetSequenceSearch();
+    renderSide(); renderStatsView(); writeURL(); return;
+  }
+  if($("#queryKind").value !== "word"){
+    renderSide(); renderSequences(); writeURL(); return;
+  }
+  if(QS.status === "pending") resetSequenceSearch();
   const R = compute();
   sortRows(R);
   LAST = R;
@@ -1153,9 +1434,8 @@ function render(){
   writeURL();
 }
 function applyLang(){
-  const q = $("#q");
-  q.placeholder = t("ph");
-  q.setAttribute("aria-label", t("ph"));
+  applyQueryControls();
+  ["kindWord","kindPos","kindAql"].forEach((v, i) => { $("#queryKind").options[i].textContent = t(v); });
   const sel = $("#mode");
   ["part","pre","ex"].forEach((v, i) => { sel.options[i].textContent = t(v); });
   render();
@@ -1163,6 +1443,7 @@ function applyLang(){
 
 /* ---------- CSV ---------- */
 function csv(){
+  if($("#queryKind").value !== "word"){ sequenceCSV(); return; }
   if(!LAST) return;
   const R = LAST, cell = v => '"' + String(v).replace(/"/g, '""') + '"';
   const head = ["lemma","pos","gloss_ja","gloss_en","gloss_fr","inflection","forms","freq","per_1000", ...R.wits.map(w => w.label)];
@@ -1180,7 +1461,19 @@ function csv(){
 
 /* ---------- 操作 ---------- */
 let qt = null;
-$("#q").addEventListener("input", () => { clearTimeout(qt); qt = setTimeout(() => { ST.limit = 200; render(); }, 160); });
+/* 入力のたびに検索する。品詞列・詳細式は書きかけの式がエラーになるので、単語検索より長く待ってから実行（Enter・検索ボタンは即時） */
+$("#q").addEventListener("input", () => { clearTimeout(qt);
+  qt = setTimeout(() => { ST.limit = 200; render(); }, $("#queryKind").value === "word" ? 160 : 500); });
+$("#qform").addEventListener("submit", e => {
+  e.preventDefault(); clearTimeout(qt); resetSequenceSearch(); ST.limit = 200; render();
+});
+$("#queryKind").addEventListener("change", () => { clearTimeout(qt); resetSequenceSearch(); ST.limit = 200; applyQueryControls(); render(); });
+$("#queryHelp").addEventListener("click", e => {
+  const b = e.target.closest("button[data-query]"); if(!b) return;
+  clearTimeout(qt); resetSequenceSearch();
+  $("#queryKind").value = b.dataset.queryKind; $("#q").value = b.dataset.query;
+  ST.limit = 200; render(); $("#q").focus();
+});
 ["fForm","fLemma","fGloss","mode"].forEach(id => $("#" + id).addEventListener("change", () => { ST.limit = 200; render(); }));
 
 $("#docList").addEventListener("change", e => {
@@ -1249,6 +1542,7 @@ $("#sections").addEventListener("click", e => {
   const a = e.target.closest("a[data-q]");
   if(!a || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
   e.preventDefault();
+  resetSequenceSearch(); $("#queryKind").value = "word";
   $("#q").value = a.dataset.q; $("#mode").value = "ex";
   $("#fLemma").checked = true; $("#fForm").checked = false; $("#fGloss").checked = false;
   ST.limit = 200;
