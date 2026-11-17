@@ -295,7 +295,7 @@ python3 scripts/verify_tei.py 出力フォルダ [tei_all.rng]
 4. `<s>` と証本の `xml:id` が、全ファイルを通じて重複しないこと。
 5. ヘッダーの件数、本文の実数、`catalog.tsv` の件数が一致すること。
 6. TEI P5 の RELAX NG スキーマ（tei_all.rng、P5 4.3.0）で、56 ファイルすべてが妥当であること。
-   （この検証は `<publicationStmt>` を書き換える前のファイルで行ったもの。書き換えたあとは 1〜5 だけをやり直し、スキーマでの検証はやり直していない。新しい `<publicationStmt>` の構造は、TEI ガイドラインの内容モデル（`publicationStmt`・`availability`・`licence`）と、そこに載っている例に合わせてある。スキーマが手元にあれば `python3 scripts/verify_tei.py 出力フォルダ tei_all.rng` で確かめられる。）
+   （`<publicationStmt>` を書き換えたあとの 56 ファイルも、2026-11-17 に同じスキーマ（tei_all.rng、P5 4.3.0）で検証し直し、すべて妥当だった。このときは lxml がない環境だったので、`verify_tei.py` ではなく `xmllint --noout --relaxng tei_all.rng tei/*.xml`（libxml2 2.9.13）を使った。検証が効いていることは、書き換え前の 56 ファイルも妥当と出ること、ヘッダーなどをわざと壊した複製 7 通り（`<authority>` の横に `<p>` を置く、`<availability>` の `status` を不正な値にする、`<licence>` を `<availability>` の外に出す、`<licence>` の中に未知の要素を入れる、日付の書式を崩す、`<w>` を `<s>` の外に置く、`<revisionDesc>` に `<p>` を入れる）がどれも不適合と出ることで確かめた。検証したファイルは、サイトで配信しているものと 1 バイトも違わない。）
 
 このほか、サイトの `search.html` の読み込み関数（`parseText`）と、ビュワー（`republic.html`）の `buildFlow`・`phyGroups` をそのまま取り出して jsdom 上で実行し、56 ファイルのセグメント数・トークン数・欠損の数が `catalog.tsv` と合うことを確かめた。TEI をわざと 1 か所書き換えた複製 20 通り（`<w>` を消す・足す・つなぐ、復元の印を外す、`<gap>` を消す、ID を重複させる、など）で、`verify_tei.py` の検証が失敗することも確かめた。
 
