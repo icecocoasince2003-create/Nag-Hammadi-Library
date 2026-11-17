@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="cop">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title xml:lang="en">On the Origin of the World (excerpt)</title>
+        <title xml:lang="ja">世界の起源について(冒頭部)</title>
+        <title xml:lang="fr">Écrit sans titre (extrait)</title>
+        <title type="sub" xml:lang="en">Nag Hammadi Codex XIII,2 — segmented Coptic text without linguistic annotation (working file)</title>
+        <respStmt>
+          <resp>TEI encoding; division of the corpus into tractates; removal of conversion residue</resp>
+          <name>Sheneset project</name>
+        </respStmt>
+        <respStmt xml:id="zp">
+          <resp>restoration of the letters ⲍ and ⲯ lost in the source file (see editorialDecl/correction)</resp>
+          <name>Sheneset project</name>
+        </respStmt>
+        <respStmt>
+          <resp>source text (tokenised Coptic)</resp>
+          <name>supplied corpus (Marcion segment ids)</name>
+        </respStmt>
+      </titleStmt>
+      <extent>
+        <measure unit="segment" quantity="2">2 segments</measure>
+        <measure unit="token" quantity="99">99 tokens</measure>
+        <measure unit="gap" quantity="0">0 gap markers</measure>
+      </extent>
+      <publicationStmt>
+        <p xml:lang="en">Working file, not yet published. Prepared for Sheneset, a TEI corpus of the Nag Hammadi Codices.</p>
+        <p xml:lang="ja">作業用ファイル（未公開）。Sheneset（ナグ・ハマディ写本 TEI コーパス）への掲載に向けて用意したもの。</p>
+      </publicationStmt>
+      <sourceDesc>
+        <bibl xml:id="src">
+          <title>Nag_Hammadi.txt</title>
+          <note xml:lang="en">Supplied plain-text file of the Nag Hammadi Codices: one segment per row (row ids 7500001–7513228), the Coptic text divided into tokens by spaces. This file contains rows 7513227–7513228.</note>
+          <note xml:lang="ja">提供されたナグ・ハマディ写本全文のテキストファイル。1 行が 1 セグメント（行 ID 7500001–7513228）で、コプト語本文は空白でトークンに区切られている。この文書は行 7513227–7513228 にあたる。</note>
+        </bibl>
+        <msDesc>
+          <msIdentifier>
+            <settlement>Cairo</settlement>
+            <repository>Coptic Museum</repository>
+            <idno>NHC XIII</idno>
+            <msName>Nag Hammadi Codex XIII</msName>
+          </msIdentifier>
+          <msContents>
+            <msItem n="2">
+              <locus from="50" to="50">pp. 50,25–34</locus>
+              <title xml:lang="en">On the Origin of the World (excerpt)</title>
+              <textLang mainLang="cop">Coptic (Sahidic)</textLang>
+              <note xml:lang="en">Page and line numbers are those in common use (as in The Nag Hammadi Library in English); they were not taken from the source file.</note>
+            </msItem>
+          </msContents>
+          <history>
+            <origin>
+              <origDate notBefore="0300" notAfter="0400">4th c. CE</origDate>
+              <origPlace>Egypt</origPlace>
+            </origin>
+          </history>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc>
+        <p xml:lang="ja">提供されたナグ・ハマディ写本全文のテキストファイルを文書ごとに分け、サイト掲載に向けて下処理したものの TEI 版。訳、語釈、品詞、レンマはまだ付けていない。下処理（文書の分割、変換の残骸の除去、ⲍ・ⲯ の復元）と TEI 化には生成 AI（Claude）を使い、結果が元ファイルと対応することを検証スクリプト（scripts/verify.py、scripts/verify_tei.py）で確かめた。</p>
+        <p xml:lang="en">TEI version of the supplied full text of the Nag Hammadi Codices, divided into tractates and preprocessed for publication on the site. No translation, gloss, part of speech or lemma has been added yet. The preprocessing (division into tractates, removal of conversion residue, restoration of ⲍ and ⲯ) and the TEI conversion were carried out with a generative AI model (Claude); the result was checked against the source file with the verification scripts (scripts/verify.py, scripts/verify_tei.py).</p>
+      </projectDesc>
+      <editorialDecl>
+        <segmentation>
+          <p xml:lang="ja"><gi>s</gi> は元ファイルの 1 行（1 セグメント）。行が文書の境目や表題の境目をまたぐときだけ分けた。<att>xml:id</att> は「写本番号-行 ID」で、分けた行には「_開始トークン位置」（元ファイルの行の中での位置、0 始まり）を付けた。<att>n</att> は文書内の通し番号。<gi>w</gi> は元ファイルの空白区切り（形態素解析器の出力とみられる）のままで、切り直していない。ⲍ・ⲯ を戻した語が途中で切れていたときだけ 1 つにつないだ。<gi>ab</gi> の <att>type</att> は <val>title</val>（冒頭表題）、<val>text</val>（本文）、<val>subscript</val>（奥書表題）、<val>colophon</val>（写字生の奥書・覚え書き）、<val>fragment</val>（未配置断片）。</p>
+          <p xml:lang="en">Each <gi>s</gi> is one row (segment) of the source file; a row is split only where it straddles the boundary of a tractate or of a title. <att>xml:id</att> is the codex number followed by the row id; for split rows the position of the first token within the source row (counted from 0) is added after an underscore. <att>n</att> numbers the segments within the tractate. Each <gi>w</gi> is a token of the source file (apparently the output of a morphological segmenter) and has not been re-segmented, except that tokens were joined where a restored ⲍ or ⲯ fell inside a word that the segmenter had split. The <att>type</att> of <gi>ab</gi> is <val>title</val> (opening title), <val>text</val>, <val>subscript</val> (subscript title), <val>colophon</val> (scribal colophon or note) or <val>fragment</val> (unplaced fragments).</p>
+        </segmentation>
+        <correction method="markup">
+          <p xml:lang="ja">元ファイルでは ⲝ がすべて ⲯ になっていたので、ⲝ に戻した（この文書では 1 字）。元ファイルで落ちていた ⲍ と ⲯ は、語形と文脈から語が決まる箇所で戻したが、この文書には該当する語がなかった。英語の編集注記が文字化けして残っていた箇所は、欠損の注記なので <gi>gap</gi> に置き換えた。変更は 1 か所ずつ、同梱の changes.tsv と restored_letters.tsv に記録してある。</p>
+          <p xml:lang="en">In the source file every ⲝ had been converted to ⲯ; these were changed back to ⲝ (1 letters in this file). The letters ⲍ and ⲯ, lost throughout the source file, were restored where the word could be identified from its form and context; no such word occurs in this file. Garbled residue of English editorial notes, which reported lost text, was replaced by <gi>gap</gi>. Every change is listed in the accompanying files changes.tsv and restored_letters.tsv.</p>
+        </correction>
+        <interpretation>
+          <p xml:lang="ja">品詞（<att>type</att>）、レンマ（<att>lemma</att>）、語釈、訳、ギリシア語借用語の印（<att>xml:lang</att>="grc"）はまだ付けていない。<gi>gap</gi>（<att>reason</att>="lacuna"）は、元ファイルに行・頁単位の欠損の注記があった位置を示す（この文書では 0 箇所）。それ以外の欠損と校訂者による復元の区別、下点、上線、句読点、頁と行の区切りは元ファイルになく、符号化していない。</p>
+          <p xml:lang="en">No part of speech (<att>type</att>), lemma (<att>lemma</att>), gloss, translation or loanword marking (<att>xml:lang</att>="grc") has been added yet. <gi>gap</gi> with <att>reason</att>="lacuna" marks the places where the source file had an editorial note reporting lost lines or pages (0 in this file). The source file does not distinguish other lacunae from editorial restorations and has no sublinear dots, supralinear strokes, punctuation, or page and line breaks; none of these is encoded.</p>
+        </interpretation>
+      </editorialDecl>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="cop">Coptic (Sahidic)</language>
+        <language ident="en">English (header)</language>
+        <language ident="ja">Japanese (header)</language>
+        <language ident="fr">French (title)</language>
+      </langUsage>
+    </profileDesc>
+    <revisionDesc>
+      <change when="2026-11-17">TEI file generated from the preprocessed text (scripts/make_tei.py).</change>
+    </revisionDesc>
+  </teiHeader>
+  <text type="witness" xml:id="wit-XIII-2" n="NHC XIII,2" xml:lang="cop">
+    <body>
+      <div type="tractate" n="On the Origin of the World (excerpt)" subtype="codexXIII">
+        <head xml:lang="en">On the Origin of the World (excerpt) — Nag Hammadi Codex XIII,2 (pp. 50,25–34)</head>
+        <ab type="text">
+          <s xml:id="XIII-7513227" n="1">
+            <w>ⲉⲡⲓⲇⲏ</w>
+            <w>ⲟⲩⲟⲛ</w>
+            <w>ⲛⲓⲙ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲟⲩⲧⲉ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲕⲟⲥⲙⲟⲥ</w>
+            <w>ⲟⲩⲱ</w>
+            <w>ⲣ</w>
+            <w>ⲣⲱⲙⲉ</w>
+            <w>ⲥⲉ</w>
+            <w>ϫⲱ</w>
+            <w>ⲙⲙⲟ</w>
+            <w>ⲥ</w>
+            <w>ϫⲉ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲗⲁⲁⲩ</w>
+            <w>ϣⲟⲟⲡ</w>
+            <w>ϩⲁ</w>
+            <w>ⲧ</w>
+            <w>ϩⲏ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲭⲁⲟⲥ</w>
+            <w>ⲁⲛⲟⲕ</w>
+            <w>ⲛ</w>
+            <w>ⲇⲉ</w>
+            <w>ϯⲛⲁ</w>
+            <w>ⲣⲁⲡⲟⲇⲓⲕⲛⲩⲉ</w>
+            <w>ϫⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲩⲣⲡⲗⲁⲛⲁ</w>
+            <w>ⲧⲏⲣ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲥⲉ</w>
+            <w>ⲥⲟⲟⲩⲛ</w>
+            <w>ϯ</w>
+            <w>ⲁⲛ</w>
+            <w>ⲛⲧ</w>
+            <w>ⲥⲩⲥⲧⲟⲥⲓⲥ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲭⲁⲟⲥ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲧⲉϥ</w>
+            <w>ⲛⲟⲩⲛⲉ</w>
+            <w>ⲧⲁ</w>
+            <w>ⲉⲓ</w>
+            <w>ⲇⲉ</w>
+            <w>ⲧⲉ</w>
+            <w>ⲧⲁⲡⲟⲇⲓⲝⲓⲥ</w>
+            <w>ⲉϣϫⲉ</w>
+            <w>ⲥⲣⲥⲩⲙⲫⲱⲛⲉⲓ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲣ</w>
+            <w>ⲣⲱⲙⲉ</w>
+            <w>ⲧⲏⲣ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲉⲧⲃⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲭⲁⲟⲥ</w>
+            <w>ϫⲉ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲕⲁⲕⲉ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲇⲉ</w>
+            <w>ⲡⲉ</w>
+            <w>ϩⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ϩⲁⲓⲃⲉⲥ</w>
+            <w>ⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲙⲟⲩⲧⲉ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ϥ</w>
+            <w>ϫⲉ</w>
+            <w>ⲕⲁⲕⲉ</w>
+            <w>ⲑ</w>
+            <w>ϩⲁⲓⲃⲉⲥ</w>
+            <w>ⲇⲉ</w>
+            <w>ⲟⲩⲉⲓ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲧⲉ</w>
+            <w>ϩⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲉⲣ</w>
+            <w>ⲧ</w>
+            <w>ⲟ</w>
+            <w>ⲛ</w>
+            <w>ⲉϥ</w>
+            <w>ϣⲟⲟⲡ</w>
+          </s>
+          <s xml:id="XIII-7513228" n="2">
+            <w>ϩϫⲓⲛ</w>
+            <w>ⲡ</w>
+            <w>ϣⲟⲣⲡ</w>
+          </s>
+        </ab>
+      </div>
+    </body>
+  </text>
+</TEI>

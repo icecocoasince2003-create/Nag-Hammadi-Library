@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="cop">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title xml:lang="en">On Baptism A</title>
+        <title xml:lang="ja">洗礼について A</title>
+        <title xml:lang="fr">Sur le baptême A</title>
+        <title type="sub" xml:lang="en">Nag Hammadi Codex XI,2b — segmented Coptic text without linguistic annotation (working file)</title>
+        <respStmt>
+          <resp>TEI encoding; division of the corpus into tractates; removal of conversion residue</resp>
+          <name>Sheneset project</name>
+        </respStmt>
+        <respStmt xml:id="zp">
+          <resp>restoration of the letters ⲍ and ⲯ lost in the source file (see editorialDecl/correction)</resp>
+          <name>Sheneset project</name>
+        </respStmt>
+        <respStmt>
+          <resp>source text (tokenised Coptic)</resp>
+          <name>supplied corpus (Marcion segment ids)</name>
+        </respStmt>
+      </titleStmt>
+      <extent>
+        <measure unit="segment" quantity="1">1 segments</measure>
+        <measure unit="token" quantity="229">229 tokens</measure>
+        <measure unit="gap" quantity="1">1 gap markers</measure>
+      </extent>
+      <publicationStmt>
+        <p xml:lang="en">Working file, not yet published. Prepared for Sheneset, a TEI corpus of the Nag Hammadi Codices.</p>
+        <p xml:lang="ja">作業用ファイル（未公開）。Sheneset（ナグ・ハマディ写本 TEI コーパス）への掲載に向けて用意したもの。</p>
+      </publicationStmt>
+      <sourceDesc>
+        <bibl xml:id="src">
+          <title>Nag_Hammadi.txt</title>
+          <note xml:lang="en">Supplied plain-text file of the Nag Hammadi Codices: one segment per row (row ids 7500001–7513228), the Coptic text divided into tokens by spaces. This file contains rows 7512572–7512572.</note>
+          <note xml:lang="ja">提供されたナグ・ハマディ写本全文のテキストファイル。1 行が 1 セグメント（行 ID 7500001–7513228）で、コプト語本文は空白でトークンに区切られている。この文書は行 7512572–7512572 にあたる。</note>
+        </bibl>
+        <msDesc>
+          <msIdentifier>
+            <settlement>Cairo</settlement>
+            <repository>Coptic Museum</repository>
+            <idno>NHC XI</idno>
+            <msName>Nag Hammadi Codex XI</msName>
+          </msIdentifier>
+          <msContents>
+            <msItem n="2b">
+              <locus from="40" to="41">pp. 40,30–41,38</locus>
+              <title xml:lang="en">On Baptism A</title>
+              <textLang mainLang="cop">Coptic (Lycopolitan / Subachmimic)</textLang>
+              <note xml:lang="en">Page and line numbers are those in common use (as in The Nag Hammadi Library in English); they were not taken from the source file.</note>
+            </msItem>
+          </msContents>
+          <history>
+            <origin>
+              <origDate notBefore="0300" notAfter="0400">4th c. CE</origDate>
+              <origPlace>Egypt</origPlace>
+            </origin>
+          </history>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc>
+        <p xml:lang="ja">提供されたナグ・ハマディ写本全文のテキストファイルを文書ごとに分け、サイト掲載に向けて下処理したものの TEI 版。訳、語釈、品詞、レンマはまだ付けていない。下処理（文書の分割、変換の残骸の除去、ⲍ・ⲯ の復元）と TEI 化には生成 AI（Claude）を使い、結果が元ファイルと対応することを検証スクリプト（scripts/verify.py、scripts/verify_tei.py）で確かめた。</p>
+        <p xml:lang="en">TEI version of the supplied full text of the Nag Hammadi Codices, divided into tractates and preprocessed for publication on the site. No translation, gloss, part of speech or lemma has been added yet. The preprocessing (division into tractates, removal of conversion residue, restoration of ⲍ and ⲯ) and the TEI conversion were carried out with a generative AI model (Claude); the result was checked against the source file with the verification scripts (scripts/verify.py, scripts/verify_tei.py).</p>
+      </projectDesc>
+      <editorialDecl>
+        <segmentation>
+          <p xml:lang="ja"><gi>s</gi> は元ファイルの 1 行（1 セグメント）。行が文書の境目や表題の境目をまたぐときだけ分けた。<att>xml:id</att> は「写本番号-行 ID」で、分けた行には「_開始トークン位置」（元ファイルの行の中での位置、0 始まり）を付けた。<att>n</att> は文書内の通し番号。<gi>w</gi> は元ファイルの空白区切り（形態素解析器の出力とみられる）のままで、切り直していない。ⲍ・ⲯ を戻した語が途中で切れていたときだけ 1 つにつないだ。<gi>ab</gi> の <att>type</att> は <val>title</val>（冒頭表題）、<val>text</val>（本文）、<val>subscript</val>（奥書表題）、<val>colophon</val>（写字生の奥書・覚え書き）、<val>fragment</val>（未配置断片）。</p>
+          <p xml:lang="en">Each <gi>s</gi> is one row (segment) of the source file; a row is split only where it straddles the boundary of a tractate or of a title. <att>xml:id</att> is the codex number followed by the row id; for split rows the position of the first token within the source row (counted from 0) is added after an underscore. <att>n</att> numbers the segments within the tractate. Each <gi>w</gi> is a token of the source file (apparently the output of a morphological segmenter) and has not been re-segmented, except that tokens were joined where a restored ⲍ or ⲯ fell inside a word that the segmenter had split. The <att>type</att> of <gi>ab</gi> is <val>title</val> (opening title), <val>text</val>, <val>subscript</val> (subscript title), <val>colophon</val> (scribal colophon or note) or <val>fragment</val> (unplaced fragments).</p>
+        </segmentation>
+        <correction method="markup">
+          <p xml:lang="ja">元ファイルでは ⲝ がすべて ⲯ になっていたので、ⲝ に戻した（この文書では 0 字）。元ファイルで落ちていた ⲍ と ⲯ は、語形と文脈から語が決まる箇所で戻したが、この文書には該当する語がなかった。英語の編集注記が文字化けして残っていた箇所は、欠損の注記なので <gi>gap</gi> に置き換えた。変更は 1 か所ずつ、同梱の changes.tsv と restored_letters.tsv に記録してある。</p>
+          <p xml:lang="en">In the source file every ⲝ had been converted to ⲯ; these were changed back to ⲝ (0 letters in this file). The letters ⲍ and ⲯ, lost throughout the source file, were restored where the word could be identified from its form and context; no such word occurs in this file. Garbled residue of English editorial notes, which reported lost text, was replaced by <gi>gap</gi>. Every change is listed in the accompanying files changes.tsv and restored_letters.tsv.</p>
+        </correction>
+        <interpretation>
+          <p xml:lang="ja">品詞（<att>type</att>）、レンマ（<att>lemma</att>）、語釈、訳、ギリシア語借用語の印（<att>xml:lang</att>="grc"）はまだ付けていない。<gi>gap</gi>（<att>reason</att>="lacuna"）は、元ファイルに行・頁単位の欠損の注記があった位置を示す（この文書では 1 箇所）。それ以外の欠損と校訂者による復元の区別、下点、上線、句読点、頁と行の区切りは元ファイルになく、符号化していない。</p>
+          <p xml:lang="en">No part of speech (<att>type</att>), lemma (<att>lemma</att>), gloss, translation or loanword marking (<att>xml:lang</att>="grc") has been added yet. <gi>gap</gi> with <att>reason</att>="lacuna" marks the places where the source file had an editorial note reporting lost lines or pages (1 in this file). The source file does not distinguish other lacunae from editorial restorations and has no sublinear dots, supralinear strokes, punctuation, or page and line breaks; none of these is encoded.</p>
+        </interpretation>
+      </editorialDecl>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="cop">Coptic (Lycopolitan / Subachmimic)</language>
+        <language ident="en">English (header)</language>
+        <language ident="ja">Japanese (header)</language>
+        <language ident="fr">French (title)</language>
+      </langUsage>
+    </profileDesc>
+    <revisionDesc>
+      <change when="2026-11-17">TEI file generated from the preprocessed text (scripts/make_tei.py).</change>
+    </revisionDesc>
+  </teiHeader>
+  <text type="witness" xml:id="wit-XI-2b" n="NHC XI,2b" xml:lang="cop">
+    <body>
+      <div type="tractate" n="On Baptism A" subtype="codexXI">
+        <head xml:lang="en">On Baptism A — Nag Hammadi Codex XI,2b (pp. 40,30–41,38)</head>
+        <ab type="text">
+          <s xml:id="XI-7512572_258" n="1">
+            <w>ⲡⲉ</w>
+            <w>ⲉⲓ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲡⲗⲏⲣⲱⲙⲁ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲕⲉ</w>
+            <w>ⲫⲁⲗⲁⲓⲟⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲧ</w>
+            <w>ⲅⲛⲱⲥⲓⲥ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲓ</w>
+            <w>ⲛⲧⲁ</w>
+            <w>ϩⲟⲩⲁⲛϩϥ</w>
+            <w>ⲛⲉⲛ</w>
+            <w>ⲁ</w>
+            <w>ⲃⲁⲗ</w>
+            <w>ϩⲓ</w>
+            <w>ⲧⲛ</w>
+            <w>ⲡⲛϫⲁⲉⲓⲥ</w>
+            <w>ⲓⲏⲥ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲭⲣⲏⲥⲧⲟⲥ</w>
+            <w>ⲡⲓ</w>
+            <w>ⲙⲟⲛⲟⲅⲉⲛⲏⲥ</w>
+            <w>ⲛⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲓ</w>
+            <w>ⲛⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲃⲉⲃⲁⲓⲟⲛ</w>
+            <w>ⲁⲩⲱ</w>
+            <w>ⲛⲁⲛⲁⲅⲕⲁⲓ</w>
+            <w>ⲟⲛ</w>
+            <w>ϫⲉⲕⲁⲥⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲙⲁϩⲉ</w>
+            <w>ⲛϩ</w>
+            <w>ⲣ</w>
+            <w>ⲏ</w>
+            <w>ⲓ</w>
+            <w>ⲛϩⲏⲧ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲛⲉ</w>
+            <w>ⲉⲓ</w>
+            <w>ⲛ</w>
+            <w>ⲇⲉ</w>
+            <w>ⲛⲉ</w>
+            <w>ⲛⲁⲡϣⲁⲁⲣⲡ</w>
+            <w>ⲛ</w>
+            <w>ⲃⲁⲡⲧⲓⲥⲙⲁ</w>
+            <gap reason="lacuna" unit="line" extent="unknown"/>
+            <w>ⲡ</w>
+            <w>ⲧ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ϣⲁⲣⲡ</w>
+            <w>ⲛ</w>
+            <w>ⲃⲁⲡⲧⲓⲥⲙⲁ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲉⲓ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡⲕⲱⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲃⲁⲗ</w>
+            <w>ⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲃ</w>
+            <w>ⲓ</w>
+            <w>ⲛ</w>
+            <w>ⲧⲁϩϫⲟⲟ</w>
+            <w>ⲥ</w>
+            <w>ϫⲉ</w>
+            <w>ⲙⲙⲱ</w>
+            <w>ⲧⲛ</w>
+            <w>ⲁ</w>
+            <w>ⲡ</w>
+            <w>ⲛⲉ</w>
+            <w>ⲧⲛ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲃ</w>
+            <w>ⲓ</w>
+            <w>ⲡ</w>
+            <w>ⲓ</w>
+            <w>ⲁ</w>
+            <w>ϣⲟ</w>
+            <w>ⲟⲡ</w>
+            <w>ⲛ</w>
+            <w>ⲧⲩⲡⲟⲥ</w>
+            <w>ⲙⲡ</w>
+            <w>ⲅⲟⲥ</w>
+            <w>ⲛ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲭⲣⲏⲥⲧⲟⲥ</w>
+            <w>ⲉⲧⲉ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲉⲓ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡ</w>
+            <w>ϣⲱϣ</w>
+            <w>ⲛⲛ</w>
+            <w>ⲛϩⲣⲏ</w>
+            <w>ⲓ</w>
+            <w>ⲛϩⲏⲧ</w>
+            <w>ϥ</w>
+            <w>ⲙⲡ</w>
+            <w>ⲫ</w>
+            <w>ⲛ</w>
+            <w>ⲅⲁⲣ</w>
+            <w>ⲛ</w>
+            <w>ⲓⲏⲥ</w>
+            <w>ⲉ</w>
+            <w>ⲡ</w>
+            <w>ϣⲁⲣⲡ</w>
+            <w>ϭⲉ</w>
+            <w>ⲛⲃⲁⲡⲧⲓⲥ</w>
+            <w>ⲙⲁ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲉⲓ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡⲕⲱⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲃⲁⲗ</w>
+            <w>ⲛⲛ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲃ</w>
+            <w>ⲓ</w>
+            <w>ⲥ</w>
+            <w>ⲉⲓⲛⲉ</w>
+            <w>ⲙⲙⲁ</w>
+            <w>ⲛ</w>
+            <w>ⲁ</w>
+            <w>ⲃⲁⲗ</w>
+            <w>ϩⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲙ</w>
+            <w>ⲙⲉⲩ</w>
+            <w>ⲁ</w>
+            <w>ⲃⲁⲗ</w>
+            <w>ϩⲓⲧⲟⲟⲧ</w>
+            <w>ϥ</w>
+            <w>ⲁϩⲟⲩ</w>
+            <w>ⲛ</w>
+            <w>ⲁ</w>
+            <w>ⲛⲁⲩⲛⲉⲙ</w>
+            <w>ⲉⲧⲉ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲉⲓ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲁϩⲟⲩ</w>
+            <w>ⲛ</w>
+            <w>ⲁⲧⲙⲛⲧⲁ</w>
+            <w>ⲧⲧⲉⲕⲟ</w>
+            <w>ⲉⲧⲉ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲉⲓ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲓⲟⲣⲇⲁⲛⲏⲥ</w>
+            <w>ⲁⲗⲗⲁ</w>
+            <w>ⲡⲓ</w>
+            <w>ⲧⲟⲡⲟⲥ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡⲏ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲕⲟⲥⲙⲟⲥ</w>
+            <w>ⲛⲧⲁⲩ</w>
+            <w>ⲧⲛ</w>
+            <w>ⲛⲁⲩ</w>
+            <w>ϭⲉ</w>
+            <w>ⲙⲙⲁ</w>
+            <w>ⲛ</w>
+            <w>ⲁ</w>
+            <w>ⲃⲁⲗ</w>
+            <w>ϩⲙ</w>
+            <w>ⲡⲕⲟⲥ</w>
+            <w>ⲙⲟⲥ</w>
+            <w>ⲁϩⲟⲩ</w>
+            <w>ⲛ</w>
+            <w>ⲁ</w>
+            <w>ⲡ</w>
+            <w>ⲁⲓⲱⲛ</w>
+            <w>ⲑⲉⲣ</w>
+            <w>ⲙⲏⲛⲓⲁ</w>
+            <w>ⲅⲁⲣ</w>
+            <w>ⲛ</w>
+            <w>ⲓⲱϩⲁⲛⲛⲏⲥ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲁⲓⲱⲛ</w>
+            <w>ⲑ</w>
+            <w>ⲉⲣⲙⲏⲛⲓⲁ</w>
+            <w>ⲛ</w>
+            <w>ⲇⲉ</w>
+            <w>ⲙ</w>
+            <w>ⲡⲏ</w>
+            <w>ⲉⲧⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲓⲟⲣⲇⲁⲛⲏⲥ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲧ</w>
+            <w>ⲕⲁⲧⲁⲃⲁⲥⲓⲥ</w>
+            <w>ⲉⲧⲉ</w>
+            <w>ⲡⲁⲛⲁⲃⲁⲥ</w>
+            <w>ⲙⲟⲥ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲉⲧⲉ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲉⲓ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲛⲉⲓ</w>
+            <w>ⲁ</w>
+            <w>ⲃⲁⲗ</w>
+            <w>ϩⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲕⲟⲥⲙⲟⲥ</w>
+            <w>ⲁϩⲟⲩ</w>
+            <w>ⲛ</w>
+            <w>ⲁ</w>
+            <w>ⲡ</w>
+            <w>ⲁⲓⲱⲛ</w>
+          </s>
+        </ab>
+      </div>
+    </body>
+  </text>
+</TEI>

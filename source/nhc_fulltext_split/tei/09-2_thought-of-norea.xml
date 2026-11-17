@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="cop">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title xml:lang="en">The Thought of Norea</title>
+        <title xml:lang="ja">ノレアの思想</title>
+        <title xml:lang="fr">Noréa</title>
+        <title type="sub" xml:lang="en">Nag Hammadi Codex IX,2 — segmented Coptic text without linguistic annotation (working file)</title>
+        <respStmt>
+          <resp>TEI encoding; division of the corpus into tractates; removal of conversion residue</resp>
+          <name>Sheneset project</name>
+        </respStmt>
+        <respStmt xml:id="zp">
+          <resp>restoration of the letters ⲍ and ⲯ lost in the source file (see editorialDecl/correction)</resp>
+          <name>Sheneset project</name>
+        </respStmt>
+        <respStmt>
+          <resp>source text (tokenised Coptic)</resp>
+          <name>supplied corpus (Marcion segment ids)</name>
+        </respStmt>
+      </titleStmt>
+      <extent>
+        <measure unit="segment" quantity="14">14 segments</measure>
+        <measure unit="token" quantity="329">329 tokens</measure>
+        <measure unit="gap" quantity="0">0 gap markers</measure>
+      </extent>
+      <publicationStmt>
+        <p xml:lang="en">Working file, not yet published. Prepared for Sheneset, a TEI corpus of the Nag Hammadi Codices.</p>
+        <p xml:lang="ja">作業用ファイル（未公開）。Sheneset（ナグ・ハマディ写本 TEI コーパス）への掲載に向けて用意したもの。</p>
+      </publicationStmt>
+      <sourceDesc>
+        <bibl xml:id="src">
+          <title>Nag_Hammadi.txt</title>
+          <note xml:lang="en">Supplied plain-text file of the Nag Hammadi Codices: one segment per row (row ids 7500001–7513228), the Coptic text divided into tokens by spaces. This file contains rows 7511863–7511876.</note>
+          <note xml:lang="ja">提供されたナグ・ハマディ写本全文のテキストファイル。1 行が 1 セグメント（行 ID 7500001–7513228）で、コプト語本文は空白でトークンに区切られている。この文書は行 7511863–7511876 にあたる。</note>
+        </bibl>
+        <msDesc>
+          <msIdentifier>
+            <settlement>Cairo</settlement>
+            <repository>Coptic Museum</repository>
+            <idno>NHC IX</idno>
+            <msName>Nag Hammadi Codex IX</msName>
+          </msIdentifier>
+          <msContents>
+            <msItem n="2">
+              <locus from="27" to="29">pp. 27,11–29,5</locus>
+              <title xml:lang="en">The Thought of Norea</title>
+              <textLang mainLang="cop">Coptic (Sahidic)</textLang>
+              <note xml:lang="en">Page and line numbers are those in common use (as in The Nag Hammadi Library in English); they were not taken from the source file.</note>
+            </msItem>
+          </msContents>
+          <history>
+            <origin>
+              <origDate notBefore="0300" notAfter="0400">4th c. CE</origDate>
+              <origPlace>Egypt</origPlace>
+            </origin>
+          </history>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc>
+        <p xml:lang="ja">提供されたナグ・ハマディ写本全文のテキストファイルを文書ごとに分け、サイト掲載に向けて下処理したものの TEI 版。訳、語釈、品詞、レンマはまだ付けていない。下処理（文書の分割、変換の残骸の除去、ⲍ・ⲯ の復元）と TEI 化には生成 AI（Claude）を使い、結果が元ファイルと対応することを検証スクリプト（scripts/verify.py、scripts/verify_tei.py）で確かめた。</p>
+        <p xml:lang="en">TEI version of the supplied full text of the Nag Hammadi Codices, divided into tractates and preprocessed for publication on the site. No translation, gloss, part of speech or lemma has been added yet. The preprocessing (division into tractates, removal of conversion residue, restoration of ⲍ and ⲯ) and the TEI conversion were carried out with a generative AI model (Claude); the result was checked against the source file with the verification scripts (scripts/verify.py, scripts/verify_tei.py).</p>
+      </projectDesc>
+      <editorialDecl>
+        <segmentation>
+          <p xml:lang="ja"><gi>s</gi> は元ファイルの 1 行（1 セグメント）。行が文書の境目や表題の境目をまたぐときだけ分けた。<att>xml:id</att> は「写本番号-行 ID」で、分けた行には「_開始トークン位置」（元ファイルの行の中での位置、0 始まり）を付けた。<att>n</att> は文書内の通し番号。<gi>w</gi> は元ファイルの空白区切り（形態素解析器の出力とみられる）のままで、切り直していない。ⲍ・ⲯ を戻した語が途中で切れていたときだけ 1 つにつないだ。<gi>ab</gi> の <att>type</att> は <val>title</val>（冒頭表題）、<val>text</val>（本文）、<val>subscript</val>（奥書表題）、<val>colophon</val>（写字生の奥書・覚え書き）、<val>fragment</val>（未配置断片）。</p>
+          <p xml:lang="en">Each <gi>s</gi> is one row (segment) of the source file; a row is split only where it straddles the boundary of a tractate or of a title. <att>xml:id</att> is the codex number followed by the row id; for split rows the position of the first token within the source row (counted from 0) is added after an underscore. <att>n</att> numbers the segments within the tractate. Each <gi>w</gi> is a token of the source file (apparently the output of a morphological segmenter) and has not been re-segmented, except that tokens were joined where a restored ⲍ or ⲯ fell inside a word that the segmenter had split. The <att>type</att> of <gi>ab</gi> is <val>title</val> (opening title), <val>text</val>, <val>subscript</val> (subscript title), <val>colophon</val> (scribal colophon or note) or <val>fragment</val> (unplaced fragments).</p>
+        </segmentation>
+        <correction method="markup">
+          <p xml:lang="ja">元ファイルでは ⲝ がすべて ⲯ になっていたので、ⲝ に戻した（この文書では 0 字）。元ファイルで落ちていた ⲍ と ⲯ は、語形と文脈から語が決まる箇所で戻したが、この文書には該当する語がなかった。英語の編集注記が文字化けして残っていた箇所は、欠損の注記なので <gi>gap</gi> に置き換えた。変更は 1 か所ずつ、同梱の changes.tsv と restored_letters.tsv に記録してある。</p>
+          <p xml:lang="en">In the source file every ⲝ had been converted to ⲯ; these were changed back to ⲝ (0 letters in this file). The letters ⲍ and ⲯ, lost throughout the source file, were restored where the word could be identified from its form and context; no such word occurs in this file. Garbled residue of English editorial notes, which reported lost text, was replaced by <gi>gap</gi>. Every change is listed in the accompanying files changes.tsv and restored_letters.tsv.</p>
+        </correction>
+        <interpretation>
+          <p xml:lang="ja">品詞（<att>type</att>）、レンマ（<att>lemma</att>）、語釈、訳、ギリシア語借用語の印（<att>xml:lang</att>="grc"）はまだ付けていない。<gi>gap</gi>（<att>reason</att>="lacuna"）は、元ファイルに行・頁単位の欠損の注記があった位置を示す（この文書では 0 箇所）。それ以外の欠損と校訂者による復元の区別、下点、上線、句読点、頁と行の区切りは元ファイルになく、符号化していない。</p>
+          <p xml:lang="en">No part of speech (<att>type</att>), lemma (<att>lemma</att>), gloss, translation or loanword marking (<att>xml:lang</att>="grc") has been added yet. <gi>gap</gi> with <att>reason</att>="lacuna" marks the places where the source file had an editorial note reporting lost lines or pages (0 in this file). The source file does not distinguish other lacunae from editorial restorations and has no sublinear dots, supralinear strokes, punctuation, or page and line breaks; none of these is encoded.</p>
+        </interpretation>
+      </editorialDecl>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="cop">Coptic (Sahidic)</language>
+        <language ident="en">English (header)</language>
+        <language ident="ja">Japanese (header)</language>
+        <language ident="fr">French (title)</language>
+      </langUsage>
+    </profileDesc>
+    <revisionDesc>
+      <change when="2026-11-17">TEI file generated from the preprocessed text (scripts/make_tei.py).</change>
+    </revisionDesc>
+  </teiHeader>
+  <text type="witness" xml:id="wit-IX-2" n="NHC IX,2" xml:lang="cop">
+    <body>
+      <div type="tractate" n="The Thought of Norea" subtype="codexIX">
+        <head xml:lang="en">The Thought of Norea — Nag Hammadi Codex IX,2 (pp. 27,11–29,5)</head>
+        <ab type="text">
+          <s xml:id="IX-7511863" n="1">
+            <w>ⲡⲓⲱⲧ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲧⲏⲣ</w>
+            <w>ϥ</w>
+            <w>ⲧ</w>
+            <w>ⲉⲛⲛⲟⲓⲁ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲟⲩⲟⲉⲓⲛ</w>
+            <w>ⲡ</w>
+            <w>ⲛⲟⲩⲥ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲏϩ</w>
+            <w>ϩⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲉⲧ</w>
+            <w>ϫⲟⲥⲉ</w>
+            <w>ⲉϩⲣⲁⲓ</w>
+            <w>ⲉϫⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲉⲧⲙⲡ</w>
+            <w>ⲥⲁ</w>
+            <w>ⲙⲡ</w>
+            <w>ⲓ</w>
+            <w>ⲧ</w>
+            <w>ⲛ</w>
+            <w>ⲡ</w>
+            <w>ⲟⲩⲟⲉⲓⲛ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲟⲩⲏϩ</w>
+            <w>ϩⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲉⲧ</w>
+            <w>ϫⲟⲥⲉ</w>
+          </s>
+          <s xml:id="IX-7511864" n="2">
+            <w>ⲧ</w>
+            <w>ⲥⲙⲏ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲧ</w>
+            <w>ⲙⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲛⲟⲩⲥ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲥⲟⲩⲧⲱⲛ</w>
+            <w>ⲡ</w>
+            <w>ⲗⲟⲅⲟⲥ</w>
+            <w>ⲛⲁⲧϭⲙϭⲱⲙ</w>
+            <w>ϥ</w>
+            <w>ⲁⲩⲱ</w>
+            <w>ⲧ</w>
+            <w>ⲥⲙⲏ</w>
+            <w>ⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲁⲧϣⲁϫⲉ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ⲥ</w>
+            <w>ⲡ</w>
+            <w>ⲓⲱⲧ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲧ</w>
+            <w>ⲧⲁ</w>
+            <w>ϩⲟϥ</w>
+            <w>ⲛⲱⲣⲉⲁ</w>
+            <w>ⲧⲁⲓ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲁ</w>
+            <w>ϣⲕⲁⲕ</w>
+            <w>ⲉ</w>
+            <w>ϩⲣⲁⲓ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲥⲱⲧⲙ</w>
+            <w>ⲁ</w>
+            <w>ⲩ</w>
+            <w>ϫⲓⲧ</w>
+            <w>ⲥ</w>
+            <w>ⲉϩⲟⲩⲛ</w>
+            <w>ⲉ</w>
+            <w>ⲡⲉⲥ</w>
+            <w>ⲧⲟ</w>
+            <w>ⲡⲟⲥ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩⲟⲉⲓϣ</w>
+            <w>ⲛⲓⲙ</w>
+            <w>ⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲧⲁ</w>
+            <w>ⲁϥ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲥ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲓⲱⲧ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲛⲟⲩⲥ</w>
+            <w>ⲛⲁⲇⲁⲙⲁ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲧ</w>
+            <w>ⲕⲉ</w>
+            <w>ⲥⲙⲏ</w>
+            <w>ⲛ</w>
+            <w>ⲧⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲧ</w>
+            <w>ⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲟⲩⲁⲁⲃ</w>
+            <w>ϫⲉⲕⲁⲁⲥ</w>
+            <w>ⲉ</w>
+            <w>ⲥ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲙⲧⲟⲛ</w>
+            <w>ⲙⲙⲟ</w>
+            <w>ⲥ</w>
+            <w>ϩⲛ</w>
+            <w>ⲧⲉⲡⲓⲛⲛⲟⲓⲁ</w>
+            <w>ⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲁⲧϣⲁϫⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲣⲟⲥ</w>
+          </s>
+          <s xml:id="IX-7511865" n="3">
+            <w>ϫⲉⲕⲁⲁⲥ</w>
+            <w>ⲉ</w>
+            <w>ⲥⲛⲁⲣⲕⲗⲏ</w>
+            <w>ⲣⲟⲛⲟⲙⲓ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ϣⲟⲣⲡ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲟⲩⲥ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲁⲥϫⲓⲧϥ</w>
+          </s>
+          <s xml:id="IX-7511866" n="4">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲛ</w>
+            <w>ⲥ</w>
+            <w>ⲙⲧⲟⲛ</w>
+            <w>ⲙⲙⲟ</w>
+            <w>ⲥ</w>
+            <w>ϩⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲁⲩⲧⲟⲅⲉⲛⲏⲥ</w>
+            <w>ⲛⲛⲟⲩⲧⲉ</w>
+          </s>
+          <s xml:id="IX-7511867" n="5">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲛⲥϫⲡⲟⲥ</w>
+            <w>ⲟⲩⲁⲁ</w>
+            <w>ⲥ</w>
+            <w>ⲛ</w>
+            <w>ⲑ</w>
+            <w>ⲉ</w>
+            <w>ϩⲱⲱ</w>
+            <w>ϥ</w>
+            <w>ⲟⲛ</w>
+            <w>ⲛⲧ</w>
+            <w>ⲁ</w>
+            <w>ⲥ</w>
+            <w>ⲣ</w>
+            <w>ⲕⲗⲏⲣⲟⲛⲟⲙⲓ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲗⲟⲅⲟⲥ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲟ</w>
+            <w>ⲛϩ</w>
+            <w>ⲁⲩⲱ</w>
+            <w>ⲛ</w>
+            <w>ⲥ</w>
+            <w>ϩⲱⲧⲡ</w>
+            <w>ⲁ</w>
+            <w>ⲛ</w>
+            <w>ⲁⲧ</w>
+            <w>ⲧⲁⲕⲟ</w>
+            <w>ⲧⲏⲣⲟⲩ</w>
+          </s>
+          <s xml:id="IX-7511868" n="6">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲛ</w>
+            <w>ⲥ</w>
+            <w>ϣⲁ</w>
+            <w>ϫⲉ</w>
+            <w>ϩⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲛⲟⲩⲥ</w>
+            <w>ⲙⲡⲓⲱⲧ</w>
+          </s>
+          <s xml:id="IX-7511869" n="7">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁ</w>
+            <w>ⲥⲓ</w>
+            <w>ⲉ</w>
+            <w>ⲥ</w>
+            <w>ϣⲁϫⲉ</w>
+            <w>ϩⲛ</w>
+            <w>ⲛ</w>
+            <w>ϣⲁϫⲉ</w>
+            <w>ⲙ</w>
+            <w>ⲡⲱⲛϩ</w>
+          </s>
+          <s xml:id="IX-7511870" n="8">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁ</w>
+            <w>ⲥ</w>
+            <w>ϭⲱ</w>
+            <w>ⲙⲡⲉ</w>
+            <w>ⲙ</w>
+            <w>ⲧⲟ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲉⲧ</w>
+            <w>ϫⲟⲥⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲥⲁⲙⲁ</w>
+            <w>ϩⲧⲉ</w>
+            <w>ⲙⲡⲉⲛⲧⲁ</w>
+            <w>ⲥϫⲓⲧ</w>
+            <w>ϥ</w>
+            <w>ϩⲁ</w>
+            <w>ⲑ</w>
+            <w>ⲏ</w>
+            <w>ⲙⲫⲟ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲛ</w>
+            <w>ⲧⲁ</w>
+            <w>ⲡ</w>
+            <w>ⲕⲟⲥⲙⲟⲥ</w>
+            <w>ϣⲱⲡⲉ</w>
+            <w>ⲟⲩⲛⲧⲁ</w>
+            <w>ⲥ</w>
+            <w>ⲙⲙⲁⲩ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲛⲟϭ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲟⲩ</w>
+            <w>ⲥ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲁϩⲟⲣⲁⲧⲟⲥ</w>
+            <w>ⲁⲩⲱ</w>
+            <w>ⲥ</w>
+            <w>ϯ</w>
+            <w>ⲉ</w>
+            <w>ⲟⲟⲩ</w>
+            <w>ⲙ</w>
+            <w>ⲡⲉⲥ</w>
+            <w>ⲉⲓⲱⲧ</w>
+            <w>ⲁⲩⲱ</w>
+            <w>ⲉ</w>
+            <w>ⲥ</w>
+            <w>ϣⲟⲟⲡ</w>
+            <w>ⲛϩⲣⲁⲓ</w>
+            <w>ϩⲛ</w>
+            <w>ⲛⲉⲧ</w>
+            <w>ⲛϩⲣⲁⲓ</w>
+            <w>ϩⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲡⲗⲏⲣⲱⲙⲁ</w>
+            <w>ⲁⲩⲱ</w>
+            <w>ⲛ</w>
+            <w>ⲥ</w>
+            <w>ⲛⲁⲩ</w>
+            <w>ⲁ</w>
+            <w>ⲡⲡⲗⲏⲣⲱⲙⲁ</w>
+          </s>
+          <s xml:id="IX-7511871" n="9">
+            <w>ⲟⲩⲛ</w>
+            <w>ϩⲉⲛ</w>
+            <w>ϩⲟⲟⲩ</w>
+            <w>ⲛⲁ</w>
+            <w>ϣⲱⲡⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲥ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲁⲡⲡⲗⲏⲣⲱⲙⲁ</w>
+          </s>
+          <s xml:id="IX-7511872" n="10">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲛⲥⲁ</w>
+            <w>ϣⲱⲡⲉ</w>
+            <w>ⲁⲛ</w>
+            <w>ϩⲙ</w>
+            <w>ⲡϣⲧⲁ</w>
+          </s>
+          <s xml:id="IX-7511873" n="11">
+            <w>ⲟⲩⲛⲧⲁ</w>
+            <w>ⲥ</w>
+            <w>ⲇⲉ</w>
+            <w>ⲙⲙⲁⲩ</w>
+            <w>ⲙⲡϥⲧⲁⲩ</w>
+            <w>ⲛ</w>
+            <w>ⲃⲟⲏⲑⲟⲥ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲟⲩⲁⲁⲃ</w>
+            <w>ⲉ</w>
+            <w>ⲩⲣⲡⲣⲉ</w>
+            <w>ⲥⲃⲉⲩⲉ</w>
+            <w>ϩⲁⲣⲟ</w>
+            <w>ⲥ</w>
+            <w>ϩⲁⲧⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲓⲱⲧ</w>
+            <w>ⲙ</w>
+            <w>ⲡⲧⲏⲣϥ</w>
+          </s>
+          <s xml:id="IX-7511874" n="12">
+            <w>ⲁⲇⲁⲙⲁ</w>
+            <w>ⲡⲁⲓ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲥⲁⲛϩⲟⲩⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲁⲇⲁⲙⲁⲥ</w>
+            <w>ⲧⲏⲣ</w>
+            <w>ⲟⲩ</w>
+          </s>
+          <s xml:id="IX-7511875" n="13">
+            <w>ⲉⲩⲛⲧⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲙⲙⲁⲩ</w>
+            <w>ⲛ</w>
+            <w>ⲧ</w>
+            <w>ⲛⲟⲏⲥⲓⲥ</w>
+            <w>ⲛⲛⲟⲣⲉⲁ</w>
+          </s>
+          <s xml:id="IX-7511876" n="14">
+            <w>ⲉⲥϣⲁϫⲉ</w>
+            <w>ⲉⲧⲃⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲣⲁⲛ</w>
+            <w>ⲥⲛⲁⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲩ</w>
+            <w>ⲣ</w>
+            <w>ϩⲱⲃ</w>
+            <w>ⲁ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲣⲁⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩⲱⲧ</w>
+          </s>
+        </ab>
+      </div>
+    </body>
+  </text>
+</TEI>

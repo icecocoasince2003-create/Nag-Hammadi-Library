@@ -1,0 +1,2652 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="cop">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title xml:lang="en">The Three Steles of Seth</title>
+        <title xml:lang="ja">セツの三つの碑</title>
+        <title xml:lang="fr">Les Trois Stèles de Seth</title>
+        <title type="sub" xml:lang="en">Nag Hammadi Codex VII,5 — segmented Coptic text without linguistic annotation (working file)</title>
+        <respStmt>
+          <resp>TEI encoding; division of the corpus into tractates; removal of conversion residue</resp>
+          <name>Sheneset project</name>
+        </respStmt>
+        <respStmt xml:id="zp">
+          <resp>restoration of the letters ⲍ and ⲯ lost in the source file (see editorialDecl/correction)</resp>
+          <name>Sheneset project</name>
+        </respStmt>
+        <respStmt>
+          <resp>source text (tokenised Coptic)</resp>
+          <name>supplied corpus (Marcion segment ids)</name>
+        </respStmt>
+      </titleStmt>
+      <extent>
+        <measure unit="segment" quantity="219">219 segments</measure>
+        <measure unit="token" quantity="2107">2107 tokens</measure>
+        <measure unit="gap" quantity="0">0 gap markers</measure>
+      </extent>
+      <publicationStmt>
+        <p xml:lang="en">Working file, not yet published. Prepared for Sheneset, a TEI corpus of the Nag Hammadi Codices.</p>
+        <p xml:lang="ja">作業用ファイル（未公開）。Sheneset（ナグ・ハマディ写本 TEI コーパス）への掲載に向けて用意したもの。</p>
+      </publicationStmt>
+      <sourceDesc>
+        <bibl xml:id="src">
+          <title>Nag_Hammadi.txt</title>
+          <note xml:lang="en">Supplied plain-text file of the Nag Hammadi Codices: one segment per row (row ids 7500001–7513228), the Coptic text divided into tokens by spaces. This file contains rows 7510721–7510939.</note>
+          <note xml:lang="ja">提供されたナグ・ハマディ写本全文のテキストファイル。1 行が 1 セグメント（行 ID 7500001–7513228）で、コプト語本文は空白でトークンに区切られている。この文書は行 7510721–7510939 にあたる。</note>
+        </bibl>
+        <msDesc>
+          <msIdentifier>
+            <settlement>Cairo</settlement>
+            <repository>Coptic Museum</repository>
+            <idno>NHC VII</idno>
+            <msName>Nag Hammadi Codex VII</msName>
+          </msIdentifier>
+          <msContents>
+            <msItem n="5">
+              <locus from="118" to="127">pp. 118,10–127,27 (+ colophon 127,28–32)</locus>
+              <title xml:lang="en">The Three Steles of Seth</title>
+              <textLang mainLang="cop">Coptic (Sahidic)</textLang>
+              <note xml:lang="en">Page and line numbers are those in common use (as in The Nag Hammadi Library in English); they were not taken from the source file.</note>
+            </msItem>
+          </msContents>
+          <history>
+            <origin>
+              <origDate notBefore="0300" notAfter="0400">4th c. CE</origDate>
+              <origPlace>Egypt</origPlace>
+            </origin>
+          </history>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc>
+        <p xml:lang="ja">提供されたナグ・ハマディ写本全文のテキストファイルを文書ごとに分け、サイト掲載に向けて下処理したものの TEI 版。訳、語釈、品詞、レンマはまだ付けていない。下処理（文書の分割、変換の残骸の除去、ⲍ・ⲯ の復元）と TEI 化には生成 AI（Claude）を使い、結果が元ファイルと対応することを検証スクリプト（scripts/verify.py、scripts/verify_tei.py）で確かめた。</p>
+        <p xml:lang="en">TEI version of the supplied full text of the Nag Hammadi Codices, divided into tractates and preprocessed for publication on the site. No translation, gloss, part of speech or lemma has been added yet. The preprocessing (division into tractates, removal of conversion residue, restoration of ⲍ and ⲯ) and the TEI conversion were carried out with a generative AI model (Claude); the result was checked against the source file with the verification scripts (scripts/verify.py, scripts/verify_tei.py).</p>
+      </projectDesc>
+      <editorialDecl>
+        <segmentation>
+          <p xml:lang="ja"><gi>s</gi> は元ファイルの 1 行（1 セグメント）。行が文書の境目や表題の境目をまたぐときだけ分けた。<att>xml:id</att> は「写本番号-行 ID」で、分けた行には「_開始トークン位置」（元ファイルの行の中での位置、0 始まり）を付けた。<att>n</att> は文書内の通し番号。<gi>w</gi> は元ファイルの空白区切り（形態素解析器の出力とみられる）のままで、切り直していない。ⲍ・ⲯ を戻した語が途中で切れていたときだけ 1 つにつないだ。<gi>ab</gi> の <att>type</att> は <val>title</val>（冒頭表題）、<val>text</val>（本文）、<val>subscript</val>（奥書表題）、<val>colophon</val>（写字生の奥書・覚え書き）、<val>fragment</val>（未配置断片）。</p>
+          <p xml:lang="en">Each <gi>s</gi> is one row (segment) of the source file; a row is split only where it straddles the boundary of a tractate or of a title. <att>xml:id</att> is the codex number followed by the row id; for split rows the position of the first token within the source row (counted from 0) is added after an underscore. <att>n</att> numbers the segments within the tractate. Each <gi>w</gi> is a token of the source file (apparently the output of a morphological segmenter) and has not been re-segmented, except that tokens were joined where a restored ⲍ or ⲯ fell inside a word that the segmenter had split. The <att>type</att> of <gi>ab</gi> is <val>title</val> (opening title), <val>text</val>, <val>subscript</val> (subscript title), <val>colophon</val> (scribal colophon or note) or <val>fragment</val> (unplaced fragments).</p>
+        </segmentation>
+        <correction method="markup">
+          <p xml:lang="ja">元ファイルでは ⲝ がすべて ⲯ になっていたので、ⲝ に戻した（この文書では 3 字）。元ファイルで落ちていた ⲍ と ⲯ は、語形と文脈から語が決まる箇所で戻したが、この文書には該当する語がなかった。英語の編集注記が文字化けして残っていた箇所は、欠損の注記なので <gi>gap</gi> に置き換えた。変更は 1 か所ずつ、同梱の changes.tsv と restored_letters.tsv に記録してある。</p>
+          <p xml:lang="en">In the source file every ⲝ had been converted to ⲯ; these were changed back to ⲝ (3 letters in this file). The letters ⲍ and ⲯ, lost throughout the source file, were restored where the word could be identified from its form and context; no such word occurs in this file. Garbled residue of English editorial notes, which reported lost text, was replaced by <gi>gap</gi>. Every change is listed in the accompanying files changes.tsv and restored_letters.tsv.</p>
+        </correction>
+        <interpretation>
+          <p xml:lang="ja">品詞（<att>type</att>）、レンマ（<att>lemma</att>）、語釈、訳、ギリシア語借用語の印（<att>xml:lang</att>="grc"）はまだ付けていない。<gi>gap</gi>（<att>reason</att>="lacuna"）は、元ファイルに行・頁単位の欠損の注記があった位置を示す（この文書では 0 箇所）。それ以外の欠損と校訂者による復元の区別、下点、上線、句読点、頁と行の区切りは元ファイルになく、符号化していない。</p>
+          <p xml:lang="en">No part of speech (<att>type</att>), lemma (<att>lemma</att>), gloss, translation or loanword marking (<att>xml:lang</att>="grc") has been added yet. <gi>gap</gi> with <att>reason</att>="lacuna" marks the places where the source file had an editorial note reporting lost lines or pages (0 in this file). The source file does not distinguish other lacunae from editorial restorations and has no sublinear dots, supralinear strokes, punctuation, or page and line breaks; none of these is encoded.</p>
+        </interpretation>
+      </editorialDecl>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="cop">Coptic (Sahidic)</language>
+        <language ident="en">English (header)</language>
+        <language ident="ja">Japanese (header)</language>
+        <language ident="fr">French (title)</language>
+      </langUsage>
+    </profileDesc>
+    <revisionDesc>
+      <change when="2026-11-17">TEI file generated from the preprocessed text (scripts/make_tei.py).</change>
+    </revisionDesc>
+  </teiHeader>
+  <text type="witness" xml:id="wit-VII-5" n="NHC VII,5" xml:lang="cop">
+    <body>
+      <div type="tractate" n="The Three Steles of Seth" subtype="codexVII">
+        <head xml:lang="en">The Three Steles of Seth — Nag Hammadi Codex VII,5 (pp. 118,10–127,27; colophon 127,28–32)</head>
+        <ab type="text">
+          <s xml:id="VII-7510721_6" n="1">
+            <w>ⲡ</w>
+            <w>ⲟⲩⲱⲛϩ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲇⲱⲥⲓⲑⲉ</w>
+            <w>ⲟ</w>
+            <w>ⲥ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ϯ</w>
+            <w>ϣⲟⲙⲧⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲥⲧⲏⲗⲏ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲥⲏⲑ</w>
+          </s>
+          <s xml:id="VII-7510722" n="2">
+            <w>ⲡⲓⲱⲧ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ϯ</w>
+            <w>ⲅⲉⲛⲉⲁ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲟⲛϩ</w>
+            <w>ⲁⲩⲱ</w>
+            <w>ⲛⲁⲧⲕⲓⲙ</w>
+          </s>
+          <s xml:id="VII-7510723" n="3">
+            <w>ⲛⲁⲓ</w>
+            <w>ⲛ</w>
+            <w>ⲧⲁ</w>
+            <w>ϥ</w>
+            <w>ⲛⲁⲩ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁϥⲥⲟⲩⲱ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩ</w>
+          </s>
+          <s xml:id="VII-7510724" n="4">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲉ</w>
+            <w>ⲧ</w>
+            <w>ⲁϥ</w>
+            <w>ⲟϣⲟⲩ</w>
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ⲣ</w>
+            <w>ⲡⲉⲩⲙⲉⲉⲩⲉ</w>
+          </s>
+          <s xml:id="VII-7510725" n="5">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ⲧⲁⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲓ</w>
+            <w>ⲥⲱⲧⲡ</w>
+            <w>ⲉ</w>
+            <w>ⲩ</w>
+            <w>ϣⲟⲟⲡ</w>
+            <w>ⲙ</w>
+            <w>ⲡⲓ</w>
+            <w>ⲣⲏ</w>
+            <w>ⲧⲉ</w>
+          </s>
+          <s xml:id="VII-7510726" n="6">
+            <w>ⲕⲁⲧⲁ</w>
+            <w>ⲑ</w>
+            <w>ⲉ</w>
+            <w>ⲉⲧⲉ</w>
+            <w>ⲛⲉ</w>
+            <w>ⲩⲥϩⲏ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲧ</w>
+            <w>ⲙ</w>
+            <w>ⲡⲓ</w>
+            <w>ⲙⲁ</w>
+            <w>ⲉⲧⲙⲙⲁⲩ</w>
+          </s>
+          <s xml:id="VII-7510727" n="7">
+            <w>ⲟⲩ</w>
+            <w>ⲙⲏⲏϣⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲥⲟⲡ</w>
+            <w>ⲁⲉⲓⲣ</w>
+            <w>ϣⲃⲏⲣ</w>
+            <w>ⲛ</w>
+            <w>ϯ</w>
+            <w>ⲉ</w>
+            <w>ⲟⲟⲩ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲛⲓϭⲟⲙ</w>
+          </s>
+          <s xml:id="VII-7510728" n="8">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁ</w>
+            <w>ⲓ</w>
+            <w>ⲣ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ϣⲁ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲓⲧⲟⲟⲧ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲓ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲧ</w>
+            <w>ⲛⲟϭ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲧ</w>
+            <w>ϯ</w>
+            <w>ϣⲓ</w>
+            <w>ⲉ</w>
+            <w>ⲣⲟⲟⲩ</w>
+          </s>
+          <s xml:id="VII-7510729" n="9">
+            <w>ⲉⲩ</w>
+            <w>ϣⲟⲟⲡ</w>
+            <w>ⲇⲉ</w>
+            <w>ⲛϯϩⲉ</w>
+          </s>
+          <s xml:id="VII-7510730" n="10">
+            <w>ϯ</w>
+            <w>ϣⲟ</w>
+            <w>ⲣ</w>
+            <w>ⲡ</w>
+            <w>ⲛ</w>
+            <w>ⲥⲧⲏⲗⲏ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲥⲏⲑ</w>
+          </s>
+          <s xml:id="VII-7510731" n="11">
+            <w>ϯⲥⲙⲟⲩ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ⲕ</w>
+            <w>ⲡ</w>
+            <w>ⲓⲱⲧ</w>
+            <w>ⲡⲓⲅⲉⲣⲁⲇⲁⲙⲁ</w>
+          </s>
+          <s xml:id="VII-7510732" n="12">
+            <w>ⲁ</w>
+            <w>ⲛⲟⲕ</w>
+            <w>ϩⲁ</w>
+            <w>ⲡ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲱ</w>
+            <w>ⲕ</w>
+            <w>ⲛϣⲏⲣⲉ</w>
+          </s>
+          <s xml:id="VII-7510733" n="13">
+            <w>ⲉⲙⲙⲁⲭⲁ</w>
+            <w>ⲥⲏⲑ</w>
+          </s>
+          <s xml:id="VII-7510734" n="14">
+            <w>ⲡⲁⲓ</w>
+            <w>ⲛⲧ</w>
+            <w>ⲁ</w>
+            <w>ⲕ</w>
+            <w>ϫⲡⲟ</w>
+            <w>ϥ</w>
+            <w>ϩⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲙⲛⲧ</w>
+            <w>ⲁⲧ</w>
+            <w>ⲙⲓⲥⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲩ</w>
+            <w>ⲥⲙⲟⲩ</w>
+            <w>ⲛ</w>
+            <w>ⲧⲉ</w>
+            <w>ⲡⲉⲛ</w>
+            <w>ⲛⲟⲩⲧⲉ</w>
+            <w>ϫⲉ</w>
+            <w>ⲁⲛⲟⲕ</w>
+            <w>ⲡ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲱ</w>
+            <w>ⲕ</w>
+            <w>ⲛ</w>
+            <w>ϣⲏⲣⲉ</w>
+            <w>ⲁⲩⲱ</w>
+            <w>ⲛ</w>
+            <w>ⲧⲟⲕ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡⲁ</w>
+            <w>ⲛⲟⲩⲥ</w>
+            <w>ⲡⲁⲓⲱⲧ</w>
+          </s>
+          <s xml:id="VII-7510735" n="15">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁⲛⲟⲕ</w>
+            <w>ⲙⲉⲛ</w>
+            <w>ⲁⲉⲓϫⲟ</w>
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁ</w>
+            <w>ⲉⲓϫⲡⲟ</w>
+            <w>ⲛⲧⲟⲕ</w>
+            <w>ⲇⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲕ</w>
+            <w>ⲛⲁⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲓ</w>
+            <w>ⲙⲛⲧ</w>
+            <w>ⲛⲟϭ</w>
+            <w>ⲁ</w>
+            <w>ⲕ</w>
+            <w>ⲁϩⲉ</w>
+            <w>ⲣⲁⲧ</w>
+            <w>ⲕ</w>
+            <w>ⲉ</w>
+            <w>ⲕⲉ</w>
+            <w>ⲛⲁⲧⲱϫⲛ</w>
+          </s>
+          <s xml:id="VII-7510736" n="16">
+            <w>ϯ</w>
+            <w>ⲥⲙⲟⲩ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ⲕ</w>
+            <w>ⲡⲓⲱⲧ</w>
+          </s>
+          <s xml:id="VII-7510737" n="17">
+            <w>ⲥⲙⲟⲩ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ⲓ</w>
+            <w>ⲡⲓⲱⲧ</w>
+          </s>
+          <s xml:id="VII-7510738" n="18">
+            <w>ⲉⲓ</w>
+            <w>ϣⲟⲟⲡ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲃⲏⲏⲧⲕ</w>
+          </s>
+          <s xml:id="VII-7510739" n="19">
+            <w>ⲉⲕ</w>
+            <w>ϣⲟⲟⲡ</w>
+            <w>ⲉⲧⲃⲉ</w>
+            <w>ⲡⲛⲟⲩⲧⲉ</w>
+          </s>
+          <s xml:id="VII-7510740" n="20">
+            <w>ⲉ</w>
+            <w>ⲧⲃⲏⲏⲧⲕ</w>
+            <w>ϯ</w>
+            <w>ϣⲟⲟⲡ</w>
+            <w>ϩⲁⲧⲟⲟⲧ</w>
+            <w>ϥ</w>
+            <w>ⲙ</w>
+            <w>ⲡⲏ</w>
+            <w>ⲉⲧⲙⲙⲁⲩ</w>
+          </s>
+          <s xml:id="VII-7510741" n="21">
+            <w>ⲛⲧ</w>
+            <w>ⲕ</w>
+            <w>ⲟⲩⲟⲉⲓⲛ</w>
+            <w>ⲉ</w>
+            <w>ⲕ</w>
+            <w>ⲛⲁⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲩⲟⲩⲟⲉⲓⲛ</w>
+          </s>
+          <s xml:id="VII-7510742" n="22">
+            <w>ⲁⲕⲟⲩⲱ</w>
+            <w>ⲛϩ</w>
+            <w>ⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩⲟⲉⲓⲛ</w>
+            <w>ⲉ</w>
+            <w>ⲃⲟⲗ</w>
+          </s>
+          <s xml:id="VII-7510743" n="23">
+            <w>ⲛⲧⲕ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲙⲓⲣⲱⲑⲉⲁⲥ</w>
+          </s>
+          <s xml:id="VII-7510744" n="24">
+            <w>ⲛⲧⲟⲕ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡⲁⲙⲓⲣⲱ</w>
+            <w>ⲑⲉⲟⲥ</w>
+          </s>
+          <s xml:id="VII-7510745" n="25">
+            <w>ϯ</w>
+            <w>ⲥⲙⲟⲩ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ⲕ</w>
+            <w>ⲛ</w>
+            <w>ⲑ</w>
+            <w>ⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲧⲉ</w>
+          </s>
+          <s xml:id="VII-7510746" n="26">
+            <w>ϯ</w>
+            <w>ⲥⲙⲟⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲧ</w>
+            <w>ⲉ</w>
+            <w>ⲕ</w>
+            <w>ⲙⲛⲧ</w>
+            <w>ⲛⲟⲩⲧⲉ</w>
+          </s>
+          <s xml:id="VII-7510747" n="27">
+            <w>ⲟⲩ</w>
+            <w>ⲛⲟϭ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲓ</w>
+            <w>ⲁ</w>
+            <w>ⲅⲁⲑⲟⲥ</w>
+            <w>ⲛ</w>
+            <w>ⲁⲩⲧⲟⲅⲉⲛⲏⲥ</w>
+            <w>ⲉ</w>
+            <w>ⲧ</w>
+            <w>ⲁϥ</w>
+            <w>ⲁ</w>
+            <w>ϩⲉ</w>
+            <w>ⲣⲁⲧ</w>
+            <w>ϥ</w>
+            <w>ⲡ</w>
+            <w>ⲛⲟⲩⲧⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲧ</w>
+            <w>ⲁϥ</w>
+            <w>ⲣ</w>
+            <w>ϣⲟⲣⲡ</w>
+            <w>ⲛⲁ</w>
+            <w>ϩⲉ</w>
+            <w>ⲣⲁⲧϥ</w>
+          </s>
+          <s xml:id="VII-7510748" n="28">
+            <w>ⲁⲕⲉⲓ</w>
+            <w>ϩⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲁⲅⲁⲑⲟⲛ</w>
+            <w>ⲁ</w>
+            <w>ⲕ</w>
+            <w>ⲟⲩⲱⲛϩ</w>
+            <w>ⲉ</w>
+            <w>ⲃⲟⲗ</w>
+          </s>
+          <s xml:id="VII-7510749" n="29">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁ</w>
+            <w>ⲕ</w>
+            <w>ⲟⲩⲱ</w>
+            <w>ⲛϩ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲟⲩ</w>
+            <w>ⲁⲅⲁⲑⲟⲛ</w>
+            <w>ⲉ</w>
+            <w>ⲃⲟⲗ</w>
+          </s>
+          <s xml:id="VII-7510750" n="30">
+            <w>ϯ</w>
+            <w>ⲛⲁ</w>
+            <w>ϫⲱ</w>
+            <w>ⲙ</w>
+            <w>ⲡⲉⲕ</w>
+            <w>ⲣⲁⲛ</w>
+            <w>ϫⲉ</w>
+            <w>ⲛⲧⲕ</w>
+            <w>ⲟⲩ</w>
+            <w>ϣⲟⲣⲡ</w>
+            <w>ⲛⲣⲁⲛ</w>
+          </s>
+          <s xml:id="VII-7510751" n="31">
+            <w>ⲛⲧⲕ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲁⲧⲙⲓⲥⲉ</w>
+            <w>ⲛⲧⲟⲕ</w>
+            <w>ⲁ</w>
+            <w>ⲕ</w>
+            <w>ⲟⲩⲱⲛϩ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲓ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲕ</w>
+            <w>ⲟⲩⲱⲛϩ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲓ</w>
+            <w>ϣⲁ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲉϩ</w>
+          </s>
+          <s xml:id="VII-7510752" n="32">
+            <w>ⲛⲧⲟⲕ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡⲏ</w>
+            <w>ⲉⲧ</w>
+            <w>ϣⲟⲟⲡ</w>
+          </s>
+          <s xml:id="VII-7510753" n="33">
+            <w>ⲉⲧⲃⲉ</w>
+            <w>ⲡⲁⲓ</w>
+            <w>ⲁ</w>
+            <w>ⲕ</w>
+            <w>ⲟⲩⲱⲛϩ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲛⲛⲓⲟⲛⲧⲱⲥ</w>
+            <w>ⲉⲧ</w>
+            <w>ϣⲟⲟⲡ</w>
+          </s>
+          <s xml:id="VII-7510754" n="34">
+            <w>ⲛⲧⲟⲕ</w>
+            <w>ⲡ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲟⲩϣⲁ</w>
+            <w>ϫⲉ</w>
+            <w>ⲙⲙⲟ</w>
+            <w>ϥ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲓⲧⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲛⲟⲩⲥ</w>
+            <w>ⲥⲉ</w>
+            <w>ϯ</w>
+            <w>ⲉ</w>
+            <w>ⲟⲟⲩ</w>
+            <w>ⲛⲁⲕ</w>
+          </s>
+          <s xml:id="VII-7510755" n="35">
+            <w>ⲛⲧⲟⲕ</w>
+            <w>ⲉⲧⲉ</w>
+            <w>ⲟⲩⲛ</w>
+            <w>ϭⲟⲙ</w>
+            <w>ⲙⲙⲟ</w>
+            <w>ⲕ</w>
+            <w>ϩⲙ</w>
+            <w>ⲙⲁ</w>
+            <w>ⲛⲓ</w>
+            <w>ⲙ</w>
+          </s>
+          <s xml:id="VII-7510756" n="36">
+            <w>ⲉ</w>
+            <w>ⲧⲃⲉ</w>
+            <w>ⲡⲁⲓ</w>
+            <w>ⲡⲓⲕⲉⲉⲥⲑⲏⲧⲟⲥ</w>
+            <w>ⲛⲕⲟⲥ</w>
+            <w>ⲙⲟⲥ</w>
+            <w>ϥ</w>
+            <w>ⲥⲟⲟⲩⲛ</w>
+            <w>ⲙⲙⲟ</w>
+            <w>ⲕ</w>
+            <w>ⲉⲧⲃⲏ</w>
+            <w>ⲏⲧⲕ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲧⲉⲕⲥⲡⲟⲣⲁ</w>
+          </s>
+          <s xml:id="VII-7510757" n="37">
+            <w>ⲛⲧ</w>
+            <w>ⲕ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲁⲩⲱ</w>
+            <w>ⲛⲧⲕ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲛ</w>
+            <w>ⲕⲉ</w>
+            <w>ⲅⲉⲛⲟⲥ</w>
+            <w>ⲁⲩⲱ</w>
+            <w>ϥ</w>
+            <w>ⲕⲏ</w>
+            <w>ⲉϩⲣⲁⲓ</w>
+            <w>ⲉϫⲛ</w>
+            <w>ⲕⲉⲅⲉⲛⲟⲥ</w>
+          </s>
+          <s xml:id="VII-7510758" n="38">
+            <w>ϯⲛⲟⲩ</w>
+            <w>ⲇⲉ</w>
+            <w>ⲛⲧⲕ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲛ</w>
+            <w>ⲕⲉ</w>
+            <w>ⲅⲉⲛⲟⲥ</w>
+          </s>
+          <s xml:id="VII-7510759" n="39">
+            <w>ⲁⲩⲱ</w>
+            <w>ϥ</w>
+            <w>ⲕⲏ</w>
+            <w>ⲉϩⲣⲁⲓ</w>
+            <w>ⲉϫⲛ</w>
+            <w>ⲕⲉ</w>
+            <w>ⲅⲉⲛⲟⲥ</w>
+          </s>
+          <s xml:id="VII-7510760" n="40">
+            <w>ⲛⲧ</w>
+            <w>ⲕ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲛ</w>
+            <w>ⲕⲉ</w>
+            <w>ⲅⲉⲛⲟⲥ</w>
+            <w>ϫⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲅ</w>
+            <w>ⲉⲓⲛⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲛ</w>
+          </s>
+          <s xml:id="VII-7510761" n="41">
+            <w>ⲛⲧ</w>
+            <w>ⲕ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲇⲉ</w>
+            <w>ϫⲉ</w>
+            <w>ⲛⲧⲕ</w>
+            <w>ⲟⲩ</w>
+            <w>ϣⲁ</w>
+            <w>ⲉⲛⲉϩ</w>
+            <w>ⲉ</w>
+            <w>ⲕ</w>
+            <w>ⲕⲏ</w>
+            <w>ⲇⲉ</w>
+            <w>ⲉϩⲣⲁⲓ</w>
+            <w>ⲉϫⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲅⲉⲛⲟⲥ</w>
+            <w>ϫⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲕⲧⲣⲉ</w>
+            <w>ⲛⲁⲓ</w>
+            <w>ⲧⲏⲣ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲁ</w>
+            <w>ⲓⲁⲉⲓ</w>
+            <w>ⲉⲧⲃⲉ</w>
+            <w>ⲧⲁ</w>
+            <w>ⲥⲡⲟⲣⲁ</w>
+            <w>ⲇⲉ</w>
+            <w>ϫⲉ</w>
+            <w>ⲛⲧⲟⲕ</w>
+            <w>ⲉ</w>
+            <w>ⲧ</w>
+            <w>ⲥⲟⲟⲩⲛ</w>
+            <w>ⲙⲙⲟ</w>
+            <w>ⲥ</w>
+            <w>ϫⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲥ</w>
+            <w>ⲕⲏ</w>
+            <w>ϩⲛ</w>
+            <w>ⲟⲩϫⲡⲟ</w>
+          </s>
+          <s xml:id="VII-7510762" n="42">
+            <w>ϩⲉⲛ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲇⲉ</w>
+            <w>ϩⲛ</w>
+            <w>ϩⲉⲛ</w>
+            <w>ⲕⲉ</w>
+            <w>ⲅⲉⲛⲟⲥ</w>
+            <w>ⲛⲉ</w>
+          </s>
+          <s xml:id="VII-7510763" n="43">
+            <w>ϫ</w>
+            <w>ⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲥⲉ</w>
+            <w>ⲉⲓⲛⲉ</w>
+            <w>ⲁⲛ</w>
+          </s>
+          <s xml:id="VII-7510764" n="44">
+            <w>ⲉⲩ</w>
+            <w>ⲕⲏ</w>
+            <w>ⲇⲉ</w>
+            <w>ⲉϩⲣⲁⲓ</w>
+            <w>ⲉ</w>
+            <w>ϫⲛ</w>
+            <w>ϩⲉⲛ</w>
+            <w>ⲕⲉ</w>
+            <w>ⲅⲉⲛⲟⲥ</w>
+            <w>ϫⲉ</w>
+            <w>ⲥⲉ</w>
+            <w>ⲕⲏ</w>
+            <w>ϩⲛ</w>
+            <w>ⲟⲩⲱⲛϩ</w>
+          </s>
+          <s xml:id="VII-7510765" n="45">
+            <w>ⲛⲧⲟⲕ</w>
+            <w>ⲟⲩⲙⲓⲣⲟⲑⲉⲟⲥ</w>
+            <w>ϯ</w>
+            <w>ⲥⲙⲟⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲉϥ</w>
+            <w>ϭⲟⲙ</w>
+            <w>ⲧⲏ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲁⲩⲧⲁ</w>
+            <w>ⲁⲥ</w>
+            <w>ⲛⲁⲓ</w>
+          </s>
+          <s xml:id="VII-7510766" n="46">
+            <w>ⲡⲏ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲁϥ</w>
+            <w>ⲧⲣⲉⲛⲓⲙⲛⲧ</w>
+            <w>ϩⲟⲟⲩⲧ</w>
+            <w>ⲉⲧ</w>
+            <w>ϣⲟⲟⲡ</w>
+            <w>ⲟⲛⲧⲱⲥ</w>
+            <w>ⲣ</w>
+            <w>ϩⲟⲟⲩⲧ</w>
+            <w>ⲛ</w>
+            <w>ϣⲟⲙⲉⲧ</w>
+            <w>ⲛⲥⲟⲡ</w>
+          </s>
+          <s xml:id="VII-7510767" n="47">
+            <w>ⲡⲏ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲁⲩⲡⲟϣϥ</w>
+            <w>ⲉ</w>
+            <w>ϯ</w>
+            <w>ⲡⲉⲛⲧⲁⲥ</w>
+          </s>
+          <s xml:id="VII-7510768" n="48">
+            <w>ⲡⲁⲓ</w>
+            <w>ⲛⲧ</w>
+            <w>ⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲧⲁⲁ</w>
+            <w>ϥ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲛ</w>
+            <w>ϩⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲙⲛⲧ</w>
+            <w>ϣⲙⲛⲧ</w>
+            <w>ϭⲟⲙ</w>
+          </s>
+          <s xml:id="VII-7510769" n="49">
+            <w>ⲡⲁⲓ</w>
+            <w>ⲛⲧ</w>
+            <w>ⲁ</w>
+            <w>ⲩ</w>
+            <w>ϫⲡⲟ</w>
+            <w>ϥ</w>
+            <w>ϩⲛ</w>
+            <w>ⲟⲩⲙⲛⲧⲁ</w>
+            <w>ⲧⲙⲓⲥⲉ</w>
+          </s>
+          <s xml:id="VII-7510770" n="50">
+            <w>ⲡⲁⲓ</w>
+            <w>ⲛⲧ</w>
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ⲉⲓ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲉⲧⲥⲟⲧⲡ</w>
+          </s>
+          <s xml:id="VII-7510771" n="51">
+            <w>ⲉⲧⲃⲉ</w>
+            <w>ⲡⲏ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲑⲉⲃⲓⲏⲟⲩⲧ</w>
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ⲙⲟⲟϣⲉ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲛ</w>
+            <w>ⲧⲙⲏⲧⲉ</w>
+          </s>
+          <s xml:id="VII-7510772" n="52">
+            <w>ⲛⲧ</w>
+            <w>ⲕ</w>
+            <w>ⲟⲩⲉⲓ</w>
+            <w>ⲱ</w>
+            <w>ⲧ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲓⲧⲛ</w>
+            <w>ⲟⲩⲉⲓⲱⲧ</w>
+          </s>
+          <s xml:id="VII-7510773" n="53">
+            <w>ⲟⲩ</w>
+            <w>ϣⲁϫⲉ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲛ</w>
+            <w>ⲟⲩⲁϩ</w>
+            <w>ⲥⲁϩⲛⲉ</w>
+          </s>
+          <s xml:id="VII-7510774" n="54">
+            <w>ⲧⲛ</w>
+            <w>ⲥⲙⲟⲩ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ⲕ</w>
+            <w>ⲡⲓϣⲙⲧ</w>
+            <w>ϩⲟ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲧ</w>
+            <w>ϫⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲕ</w>
+            <w>ϩⲱⲧⲡ</w>
+            <w>ⲡ</w>
+            <w>ⲧⲏⲣ</w>
+            <w>ϥ</w>
+            <w>ⲉ</w>
+            <w>ⲃⲟⲗ</w>
+            <w>ϩⲓⲧⲟⲟⲧ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲧⲏⲣ</w>
+            <w>ⲟⲩ</w>
+            <w>ϫⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲕ</w>
+            <w>ϯ</w>
+            <w>ϭⲟⲙ</w>
+            <w>ⲛⲁⲛ</w>
+          </s>
+          <s xml:id="VII-7510775" n="55">
+            <w>ⲁⲕ</w>
+            <w>ϣⲱⲡⲉ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲛ</w>
+            <w>ⲟⲩⲁ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲓⲧⲛ</w>
+            <w>ⲟⲩⲁ</w>
+          </s>
+          <s xml:id="VII-7510776" n="56">
+            <w>ⲁⲕⲙⲟ</w>
+            <w>ⲟϣⲉ</w>
+            <w>ⲁⲕⲓ</w>
+            <w>ⲉ</w>
+            <w>ⲟⲩⲁ</w>
+          </s>
+          <s xml:id="VII-7510777" n="57">
+            <w>ⲁⲕⲛⲟⲩϩⲙ</w>
+            <w>ⲁ</w>
+            <w>ⲕ</w>
+            <w>ⲛⲟⲩϩⲙ</w>
+            <w>ⲁⲕⲛⲁϩⲙⲛ</w>
+          </s>
+          <s xml:id="VII-7510778" n="58">
+            <w>ⲡⲓⲣⲉ</w>
+            <w>ϥ</w>
+            <w>ϫⲓ</w>
+            <w>ⲕⲗⲟⲙ</w>
+          </s>
+          <s xml:id="VII-7510779" n="59">
+            <w>ⲡⲓⲣⲉϥϯ</w>
+            <w>ⲕⲗⲟⲙ</w>
+          </s>
+          <s xml:id="VII-7510780" n="60">
+            <w>ⲧⲛ</w>
+            <w>ⲥⲙⲟⲩ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ⲕ</w>
+            <w>ϩⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲙⲛⲧϣⲁ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲉϩ</w>
+          </s>
+          <s xml:id="VII-7510781" n="61">
+            <w>ⲧⲛ</w>
+            <w>ⲥⲙⲟⲩ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ⲕ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲁ</w>
+            <w>ⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ϩⲙ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲁ</w>
+            <w>ⲛⲓ</w>
+            <w>ⲕⲁⲧⲁ</w>
+            <w>ⲟⲩⲁ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲗⲓⲟⲥ</w>
+          </s>
+          <s xml:id="VII-7510782" n="62">
+            <w>ⲛⲓⲧⲉⲗⲓⲟⲥ</w>
+            <w>ⲉⲧⲃⲏⲏ</w>
+            <w>ⲧⲕ</w>
+          </s>
+          <s xml:id="VII-7510783" n="63">
+            <w>ⲛⲏ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲣ</w>
+            <w>ⲧⲉⲗⲓⲟⲥ</w>
+            <w>ⲛⲙⲙⲁⲕ</w>
+          </s>
+          <s xml:id="VII-7510784" n="64">
+            <w>ⲡⲏ</w>
+            <w>ⲉⲧ</w>
+            <w>ϫⲏⲕ</w>
+            <w>ⲡⲏ</w>
+            <w>ⲉⲧⲉ</w>
+            <w>ϣⲁ</w>
+            <w>ϥ</w>
+            <w>ϫⲱⲕ</w>
+            <w>ⲡⲓⲧⲉⲗⲓⲟⲥ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲓⲧⲛ</w>
+            <w>ⲛⲁⲓ</w>
+            <w>ⲧⲏⲣⲟⲩ</w>
+          </s>
+          <s xml:id="VII-7510785" n="65">
+            <w>ⲡⲁⲓ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲉⲓⲛⲉ</w>
+            <w>ϩⲙ</w>
+            <w>ⲙⲁ</w>
+            <w>ⲛⲓⲙ</w>
+          </s>
+          <s xml:id="VII-7510786" n="66">
+            <w>ⲡⲓϣⲙⲛⲧ</w>
+            <w>ϩⲟⲟⲩⲧ</w>
+          </s>
+          <s xml:id="VII-7510787" n="67">
+            <w>ⲁⲕⲁϩⲉ</w>
+            <w>ⲣⲁⲧⲕ</w>
+          </s>
+          <s xml:id="VII-7510788" n="68">
+            <w>ⲁⲕⲣ</w>
+            <w>ϣⲟ</w>
+            <w>ⲣ</w>
+            <w>ⲡ</w>
+            <w>ⲛⲁ</w>
+            <w>ϩⲉ</w>
+            <w>ⲣⲁⲧⲕ</w>
+          </s>
+          <s xml:id="VII-7510789" n="69">
+            <w>ⲁⲕⲡⲱϣ</w>
+            <w>ϩⲙ</w>
+            <w>ⲙⲁ</w>
+            <w>ⲛⲓⲙ</w>
+            <w>ⲁ</w>
+            <w>ⲕ</w>
+            <w>ϭⲱ</w>
+            <w>ⲉ</w>
+            <w>ⲕⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩⲁ</w>
+          </s>
+          <s xml:id="VII-7510790" n="70">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲛⲏ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲁⲕⲟⲩⲁϣ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲁⲕⲛⲁϩⲙⲟⲩ</w>
+          </s>
+          <s xml:id="VII-7510791" n="71">
+            <w>ⲕⲟⲩⲱϣ</w>
+            <w>ⲇⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲣⲉ</w>
+            <w>ⲩ</w>
+            <w>ⲛⲟⲩϩⲙ</w>
+            <w>ⲛϭⲓ</w>
+            <w>ⲛⲏ</w>
+            <w>ⲧⲏⲣ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲉⲧⲙⲡϣⲁ</w>
+          </s>
+          <s xml:id="VII-7510792" n="72">
+            <w>ⲛⲧ</w>
+            <w>ⲕ</w>
+            <w>ⲟⲩⲧⲉⲗⲓⲟⲥ</w>
+            <w>ⲛⲧⲕ</w>
+            <w>ⲟⲩⲧⲉⲗⲓⲟⲥ</w>
+            <w>ⲛⲧⲕ</w>
+            <w>ⲟⲩⲧⲉⲗⲓⲟⲥ</w>
+          </s>
+          <s xml:id="VII-7510793" n="73">
+            <w>ϯϣⲟⲣⲡ</w>
+            <w>ⲛ</w>
+            <w>ⲥⲧⲏⲗⲏ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲥⲏⲑ</w>
+            <w>ϯ</w>
+            <w>ⲙⲉϩ</w>
+            <w>ⲥⲛⲧⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲥⲧⲏⲗⲏ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲥⲏⲑ</w>
+          </s>
+          <s xml:id="VII-7510794" n="74">
+            <w>ⲟⲩ</w>
+            <w>ⲛⲟϭ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡⲓ</w>
+            <w>ϣⲟⲣⲡ</w>
+            <w>ⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲉⲱⲛ</w>
+            <w>ⲙⲃⲁⲣⲃⲏⲗⲱ</w>
+            <w>ⲛ</w>
+            <w>ϩⲟⲟⲩⲧ</w>
+            <w>ⲙ</w>
+            <w>ⲡⲁ</w>
+            <w>ⲣ</w>
+            <w>ⲑⲉⲛⲟⲥ</w>
+          </s>
+          <s xml:id="VII-7510795" n="75">
+            <w>ⲡⲓ</w>
+            <w>ϣⲟⲣⲡ</w>
+            <w>ⲛ</w>
+            <w>ⲉⲟⲟⲩ</w>
+            <w>ⲛ</w>
+            <w>ⲧⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲓⲱⲧ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲧ</w>
+            <w>ⲛⲁⲩ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ϥ</w>
+            <w>ⲧⲏ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲙⲟⲩⲧⲉ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ⲥ</w>
+            <w>ϫⲉ</w>
+            <w>ⲧⲉ</w>
+            <w>ⲗⲓⲟⲥ</w>
+          </s>
+          <s xml:id="VII-7510796" n="76">
+            <w>ⲛⲧⲟ</w>
+            <w>ⲁⲛⲁⲩ</w>
+            <w>ⲛ</w>
+            <w>ϣⲟⲣⲡ</w>
+            <w>ⲉ</w>
+            <w>ⲡⲓⲟⲛⲧⲱⲥ</w>
+            <w>ⲉⲧ</w>
+            <w>ϣⲟⲟⲡ</w>
+            <w>ⲛ</w>
+            <w>ϣⲟ</w>
+            <w>ⲣ</w>
+            <w>ⲡ</w>
+            <w>ϫⲉ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲁⲧⲟⲩⲥⲓⲁ</w>
+            <w>ⲡⲉ</w>
+          </s>
+          <s xml:id="VII-7510797" n="77">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲙⲙⲟ</w>
+            <w>ϥ</w>
+            <w>ⲁⲩⲱ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲓ</w>
+            <w>ⲧⲟ</w>
+            <w>ⲟⲧϥ</w>
+          </s>
+          <s xml:id="VII-7510798" n="78">
+            <w>ⲁⲣⲉϣⲱⲡⲉ</w>
+            <w>ⲛ</w>
+            <w>ϣⲟⲣⲡ</w>
+            <w>ϩⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲙⲛⲧϣⲁ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲉϩ</w>
+          </s>
+          <s xml:id="VII-7510799" n="79">
+            <w>ϯⲁⲧⲟⲩ</w>
+            <w>ⲥ</w>
+            <w>ⲓⲁ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲛ</w>
+            <w>ⲟⲩⲁ</w>
+            <w>ⲛ</w>
+            <w>ⲁⲧⲡⲱϣ</w>
+            <w>ⲛ</w>
+            <w>ϣⲙⲧ</w>
+            <w>ϭⲟⲙ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲟⲩ</w>
+            <w>ϣⲙⲧ</w>
+            <w>ϭⲟⲙ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲙⲟⲛⲁⲥ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲁⲁ</w>
+            <w>ⲥ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲙⲟⲛⲁⲥ</w>
+            <w>ⲉ</w>
+            <w>ⲥ</w>
+            <w>ⲧⲃⲃⲟ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲙⲟⲛⲁⲥ</w>
+            <w>ⲉ</w>
+            <w>ⲥ</w>
+            <w>ⲥⲟⲧ</w>
+            <w>ⲡ</w>
+          </s>
+          <s xml:id="VII-7510800" n="80">
+            <w>ϯ</w>
+            <w>ϣⲟⲣⲡ</w>
+            <w>ⲛ</w>
+            <w>ϩⲁⲉⲓⲃⲉⲥ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲓⲱⲧ</w>
+            <w>ⲉ</w>
+            <w>ⲧ</w>
+            <w>ⲟⲩⲁⲁⲃ</w>
+          </s>
+          <s xml:id="VII-7510801" n="81">
+            <w>ⲟⲩⲟⲉⲓⲛ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲛ</w>
+            <w>ⲟⲩⲟⲉⲓⲛ</w>
+          </s>
+          <s xml:id="VII-7510802" n="82">
+            <w>ⲧⲛ</w>
+            <w>ⲥⲙⲟⲩ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ϯ</w>
+            <w>ⲣⲉϥ</w>
+            <w>ϫⲡⲉ</w>
+            <w>ⲧⲉⲗⲓⲟⲥ</w>
+          </s>
+          <s xml:id="VII-7510803" n="83">
+            <w>ϯⲣⲉϥϯ</w>
+            <w>ⲉ</w>
+            <w>ⲱⲛ</w>
+          </s>
+          <s xml:id="VII-7510804" n="84">
+            <w>ⲛ</w>
+            <w>ⲧⲟ</w>
+            <w>ⲁ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲁⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲓ</w>
+            <w>ϣⲁ</w>
+            <w>ⲉⲛⲉϩ</w>
+            <w>ϫⲉ</w>
+            <w>ϩⲉⲛ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ϩⲁⲉⲓ</w>
+            <w>ⲃⲉ</w>
+            <w>ⲛⲉ</w>
+          </s>
+          <s xml:id="VII-7510805" n="85">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁ</w>
+            <w>ⲣⲉ</w>
+            <w>ϯ</w>
+            <w>ⲏⲡⲉ</w>
+          </s>
+          <s xml:id="VII-7510806" n="86">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁ</w>
+            <w>ⲣⲉϭⲓⲛⲉ</w>
+            <w>ⲙⲉⲛ</w>
+          </s>
+          <s xml:id="VII-7510807" n="87">
+            <w>ⲁⲣⲉϭⲱ</w>
+            <w>ⲉ</w>
+            <w>ⲣⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩⲉⲓ</w>
+          </s>
+          <s xml:id="VII-7510808" n="88">
+            <w>ⲉⲣⲉ</w>
+            <w>ϯ</w>
+            <w>ⲏⲡⲉ</w>
+            <w>ⲇⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲡⲱϣⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲧⲟ</w>
+            <w>ⲟⲩ</w>
+            <w>ϣⲙⲧ</w>
+            <w>ⲕⲱⲃ</w>
+          </s>
+          <s xml:id="VII-7510809" n="89">
+            <w>ⲧⲉⲕⲏⲃ</w>
+            <w>ⲛⲁⲙⲉ</w>
+            <w>ⲛϣⲙⲛⲧ</w>
+            <w>ⲥⲟⲡ</w>
+          </s>
+          <s xml:id="VII-7510810" n="90">
+            <w>ⲛⲧⲉ</w>
+            <w>ⲟⲩⲉⲓ</w>
+            <w>ⲙⲉⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲧⲉ</w>
+            <w>ⲡⲓⲟⲩⲁ</w>
+          </s>
+          <s xml:id="VII-7510811" n="91">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲛⲧⲟ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ϩⲁⲉⲓⲃⲉⲥ</w>
+            <w>ⲛⲧⲁ</w>
+            <w>ϥ</w>
+          </s>
+          <s xml:id="VII-7510812" n="92">
+            <w>ⲛⲧⲉ</w>
+            <w>ⲟⲩⲕⲗⲥ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲕⲟⲥⲙⲟⲥ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲡⲥⲟⲟⲩⲛ</w>
+          </s>
+          <s xml:id="VII-7510813" n="93">
+            <w>ⲉⲣⲉ</w>
+            <w>ⲉⲓⲙⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲁ</w>
+            <w>ⲡⲓⲟⲩⲁ</w>
+          </s>
+          <s xml:id="VII-7510814" n="94">
+            <w>ϫⲉ</w>
+            <w>ϩⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲉ</w>
+            <w>ⲃⲟⲗ</w>
+            <w>ϩⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ϩⲁⲉⲓⲃⲉⲥ</w>
+            <w>ⲛⲉ</w>
+          </s>
+          <s xml:id="VII-7510815" n="95">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲛⲁⲓ</w>
+            <w>ⲥⲉⲛⲧⲉ</w>
+            <w>ⲙⲙⲁⲩ</w>
+            <w>ϩⲙ</w>
+            <w>ⲡϩⲏⲧ</w>
+          </s>
+          <s xml:id="VII-7510816" n="96">
+            <w>ⲉⲧⲃⲉ</w>
+            <w>ⲛⲁⲓ</w>
+            <w>ⲁ</w>
+            <w>ⲣⲉ</w>
+            <w>ϯ</w>
+            <w>ϭⲟⲙ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲓ</w>
+            <w>ϣⲁ</w>
+            <w>ⲉⲛⲉϩ</w>
+            <w>ϩⲛ</w>
+            <w>ϯⲙⲛⲧⲟⲩⲥⲓⲁ</w>
+          </s>
+          <s xml:id="VII-7510817" n="97">
+            <w>ⲁ</w>
+            <w>ϯ</w>
+            <w>ϭⲟⲙ</w>
+            <w>ⲛ</w>
+            <w>ϯ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲧ</w>
+            <w>ⲛⲟⲩⲧⲉ</w>
+            <w>ϩⲛ</w>
+            <w>ϯ</w>
+            <w>ⲙⲛⲧ</w>
+            <w>ⲱⲛϩ</w>
+            <w>ⲁ</w>
+            <w>ⲣⲉ</w>
+            <w>ϯ</w>
+            <w>ϭⲟⲙ</w>
+            <w>ⲛ</w>
+            <w>ϯ</w>
+            <w>ⲙⲛⲧ</w>
+            <w>ⲉⲓⲙⲉ</w>
+            <w>ϩⲛ</w>
+            <w>ϯⲙⲛⲧⲁ</w>
+            <w>ⲅⲁⲑⲟⲥ</w>
+          </s>
+          <s xml:id="VII-7510818" n="98">
+            <w>ϩⲛ</w>
+            <w>ϯ</w>
+            <w>ⲙⲛⲧ</w>
+            <w>ⲙⲁⲕⲁⲣⲓⲟⲥ</w>
+            <w>ⲁ</w>
+            <w>ⲣⲉ</w>
+            <w>ϯ</w>
+            <w>ϭⲟⲙ</w>
+            <w>ⲛⲛⲓϩⲁ</w>
+            <w>ⲉ</w>
+            <w>ⲓⲃⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲱⲧϩ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲙ</w>
+            <w>ⲡⲓⲟⲩⲁ</w>
+          </s>
+          <s xml:id="VII-7510819" n="99">
+            <w>ⲁ</w>
+            <w>ϯ</w>
+            <w>ϭⲟⲙ</w>
+            <w>ⲙ</w>
+            <w>ⲡⲁⲓ</w>
+            <w>ϩⲛ</w>
+            <w>ϯⲙⲛⲧⲉⲓⲙⲉ</w>
+          </s>
+          <s xml:id="VII-7510820" n="100">
+            <w>ⲁϯ</w>
+            <w>ϭⲟⲙ</w>
+            <w>ⲛ</w>
+            <w>ⲕⲉ</w>
+            <w>ⲟⲩⲁ</w>
+            <w>ϩⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲧⲁ</w>
+            <w>ⲙⲓⲟ</w>
+          </s>
+          <s xml:id="VII-7510821" n="101">
+            <w>ⲁϯ</w>
+            <w>ϭⲟⲙ</w>
+            <w>ⲙ</w>
+            <w>ⲡⲏ</w>
+            <w>ⲉⲧ</w>
+            <w>ϣⲏϣ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲡⲏ</w>
+            <w>ⲉⲧⲉ</w>
+            <w>ⲛ</w>
+            <w>ϥ</w>
+            <w>ϣⲏϣ</w>
+            <w>ⲁ</w>
+            <w>ⲛ</w>
+          </s>
+          <s xml:id="VII-7510822" n="102">
+            <w>ⲡⲏ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲉⲓⲛⲉ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲡⲏ</w>
+            <w>ⲉⲧⲉ</w>
+            <w>ⲛϥⲓ</w>
+            <w>ⲛⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲛ</w>
+          </s>
+          <s xml:id="VII-7510823" n="103">
+            <w>ⲁ</w>
+            <w>ϯ</w>
+            <w>ϭⲟⲙ</w>
+            <w>ϩⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ϫⲡⲟ</w>
+            <w>ⲙⲛ</w>
+            <w>ϩⲉⲛ</w>
+            <w>ⲉⲓⲇⲟⲥ</w>
+            <w>ϩⲙ</w>
+            <w>ⲡⲏ</w>
+            <w>ⲉⲧ</w>
+            <w>ϣⲟⲟⲡ</w>
+            <w>ϣⲁ</w>
+            <w>ϩⲉⲛ</w>
+            <w>ⲕⲟⲟⲩⲉ</w>
+            <w>ⲩ</w>
+            <w>ⲱ</w>
+            <w>ⲉ</w>
+            <w>ⲁⲓ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲟⲩϫⲡⲟ</w>
+          </s>
+          <s xml:id="VII-7510824" n="104">
+            <w>ⲁϯ</w>
+            <w>ϭⲟⲙ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲁⲓ</w>
+          </s>
+          <s xml:id="VII-7510825" n="105">
+            <w>ⲡⲁⲓ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡⲓⲕⲗⲥ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲙⲙⲁⲩ</w>
+            <w>ϩⲙ</w>
+            <w>ⲫⲏⲧ</w>
+          </s>
+          <s xml:id="VII-7510826" n="106">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁ</w>
+            <w>ⲣⲉⲉⲓ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϣⲁ</w>
+            <w>ⲛⲁⲓ</w>
+            <w>ⲁⲩⲱ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲛ</w>
+            <w>ⲛⲁⲓ</w>
+            <w>ϣⲁⲣⲉ</w>
+            <w>ⲡⲱϣ</w>
+            <w>ⲉϩⲣⲁⲓ</w>
+            <w>ⲉ</w>
+            <w>ϫⲱ</w>
+            <w>ⲟⲩ</w>
+          </s>
+          <s xml:id="VII-7510827" n="107">
+            <w>ⲁⲩⲱ</w>
+            <w>ϣⲁⲣⲉ</w>
+            <w>ϣⲱ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲡⲣⲱⲧⲟⲫⲁⲛⲏⲥ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲟϭ</w>
+            <w>ⲛ</w>
+            <w>ϩⲟⲟⲩⲧ</w>
+            <w>ⲛⲛⲟⲩⲥ</w>
+          </s>
+          <s xml:id="VII-7510828" n="108">
+            <w>ⲡⲓⲛⲟⲩⲧⲉ</w>
+            <w>ⲛⲉ</w>
+            <w>ⲓⲱⲧ</w>
+          </s>
+          <s xml:id="VII-7510829" n="109">
+            <w>ⲡⲓ</w>
+            <w>ⲁⲗⲟⲩ</w>
+            <w>ⲛⲛⲟⲩⲧⲉ</w>
+          </s>
+          <s xml:id="VII-7510830" n="110">
+            <w>ⲡⲓ</w>
+            <w>ⲣⲉϥ</w>
+            <w>ϫⲡⲉ</w>
+            <w>ⲏⲡⲉ</w>
+          </s>
+          <s xml:id="VII-7510831" n="111">
+            <w>ⲕⲁⲧⲁ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲡⲱϣ</w>
+            <w>ⲛⲛⲓⲟⲛⲧⲱⲥ</w>
+            <w>ⲉⲧ</w>
+            <w>ϣⲟⲟⲡ</w>
+            <w>ⲧⲏⲣ</w>
+            <w>ⲟⲩ</w>
+          </s>
+          <s xml:id="VII-7510832" n="112">
+            <w>ⲁⲕⲟⲩⲱⲛϩ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲧⲏⲣ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩϣⲁϫⲉ</w>
+          </s>
+          <s xml:id="VII-7510833" n="113">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲟⲩⲛⲧⲁ</w>
+            <w>ⲕ</w>
+            <w>ⲙⲙⲁⲩ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲁⲓ</w>
+            <w>ⲧⲏⲣ</w>
+            <w>ⲟⲩ</w>
+            <w>ϩⲛ</w>
+            <w>ⲟⲩⲙⲛⲧⲁⲧⲙⲓ</w>
+            <w>ⲥⲉ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲙⲛⲧϣⲁ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲉ</w>
+            <w>ϩ</w>
+          </s>
+          <s xml:id="VII-7510834" n="114">
+            <w>ⲁⲧ</w>
+            <w>ϫⲛⲉ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲧⲁⲕⲟ</w>
+            <w>ⲉⲧⲃⲏⲏⲧⲉ</w>
+          </s>
+          <s xml:id="VII-7510835" n="115">
+            <w>ⲁϥⲓ</w>
+            <w>ϣⲁⲣⲟ</w>
+            <w>ⲛ</w>
+            <w>ⲛϭⲓ</w>
+            <w>ⲡⲓⲟⲩϫⲁⲓ</w>
+          </s>
+          <s xml:id="VII-7510836" n="116">
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲙ</w>
+            <w>ⲙ</w>
+            <w>ⲟ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡⲓⲟⲩϫⲁⲓ</w>
+          </s>
+          <s xml:id="VII-7510837" n="117">
+            <w>ⲛⲧⲟ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲥⲟ</w>
+            <w>ⲫⲓⲁ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲟⲩⲅⲛⲱⲥⲓⲥ</w>
+          </s>
+          <s xml:id="VII-7510838" n="118">
+            <w>ⲛⲧⲟ</w>
+            <w>ⲡⲉ</w>
+            <w>ϯⲙⲛⲧⲙⲉ</w>
+          </s>
+          <s xml:id="VII-7510839" n="119">
+            <w>ⲉⲧⲃⲏⲧⲉ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡⲓ</w>
+            <w>ⲱⲛϩ</w>
+          </s>
+          <s xml:id="VII-7510840" n="120">
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲙⲙⲟ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡⲓ</w>
+            <w>ⲱⲛϩ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲃⲏⲧⲉ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡⲓ</w>
+            <w>ⲛⲟⲩⲥ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲙ</w>
+            <w>ⲙ</w>
+            <w>ⲟ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡⲓⲛⲟⲩⲥ</w>
+          </s>
+          <s xml:id="VII-7510841" n="121">
+            <w>ⲛⲧⲟ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲛⲟⲩⲥ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲕⲟⲥⲙⲟⲥ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ϯⲙⲛⲧⲙⲉ</w>
+          </s>
+          <s xml:id="VII-7510842" n="122">
+            <w>ⲛⲧⲉ</w>
+            <w>ⲟⲩ</w>
+            <w>ϣⲙⲧ</w>
+            <w>ϭⲟⲙ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲟⲩ</w>
+            <w>ϣⲙⲛⲧ</w>
+            <w>ⲕⲱⲃ</w>
+          </s>
+          <s xml:id="VII-7510843" n="123">
+            <w>ⲉⲛⲁⲙⲉ</w>
+            <w>ⲧⲉ</w>
+            <w>ⲕⲏⲃ</w>
+            <w>ⲛ</w>
+            <w>ϣⲟⲙⲉⲧ</w>
+            <w>ⲛⲥⲟⲡ</w>
+          </s>
+          <s xml:id="VII-7510844" n="124">
+            <w>ⲡⲉⲱⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲧⲉ</w>
+            <w>ϩⲉⲛⲉⲱⲛ</w>
+          </s>
+          <s xml:id="VII-7510845" n="125">
+            <w>ⲛⲧⲟ</w>
+            <w>ⲙⲙⲁⲧⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲧ</w>
+            <w>ⲛⲁⲩ</w>
+            <w>ϩⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲧⲃⲃⲟ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲓ</w>
+            <w>ϣⲟ</w>
+            <w>ⲣ</w>
+            <w>ⲡ</w>
+            <w>ϣⲁ</w>
+            <w>ⲉⲛⲉϩ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲛⲓ</w>
+            <w>ⲁⲧⲙⲓⲥⲉ</w>
+            <w>ⲛ</w>
+            <w>ϣⲟⲣⲡ</w>
+            <w>ⲇⲉ</w>
+            <w>ⲙⲡⲱϣⲉ</w>
+            <w>ⲕⲁⲧⲁ</w>
+            <w>ⲑ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲧⲁⲩ</w>
+            <w>ⲡⲟϣⲉ</w>
+          </s>
+          <s xml:id="VII-7510846" n="126">
+            <w>ϩⲟⲧⲡⲛ</w>
+            <w>ⲕⲁⲧⲁ</w>
+            <w>ⲑ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲧⲁⲩ</w>
+            <w>ϩⲟⲧⲡⲉ</w>
+          </s>
+          <s xml:id="VII-7510847" n="127">
+            <w>ⲙⲁ</w>
+            <w>ⲧⲁⲙⲟ</w>
+            <w>ⲛ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲏ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲉ</w>
+            <w>ⲛⲁⲩ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ⲟⲩ</w>
+          </s>
+          <s xml:id="VII-7510848" n="128">
+            <w>ϯ</w>
+            <w>ϭⲟⲙ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲛ</w>
+            <w>ϩⲓ</w>
+            <w>ⲛⲁ</w>
+            <w>ϫⲉ</w>
+            <w>ⲉⲛⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ϩⲙ</w>
+            <w>ⲉϩⲣⲁⲓ</w>
+            <w>ⲉ</w>
+            <w>ⲩ</w>
+            <w>ⲱⲛϩ</w>
+            <w>ⲛ</w>
+            <w>ϣⲁ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲉϩ</w>
+          </s>
+          <s xml:id="VII-7510849" n="129">
+            <w>ϫⲉ</w>
+            <w>ⲁⲛⲟⲛ</w>
+            <w>ⲁⲛⲟⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ϩⲁⲉⲓ</w>
+            <w>ⲃⲉⲥ</w>
+            <w>ⲛⲧⲉ</w>
+          </s>
+          <s xml:id="VII-7510850" n="130">
+            <w>ⲕⲁⲧⲁ</w>
+            <w>ⲙⲁ</w>
+            <w>ⲙⲁ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲉ</w>
+            <w>ⲥ</w>
+            <w>ⲧⲉ</w>
+            <w>ⲟⲩ</w>
+            <w>ϩⲁⲉⲓⲃⲉⲥ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲡⲏ</w>
+            <w>ⲉ</w>
+            <w>ⲧ</w>
+            <w>ⲣ</w>
+            <w>ϣⲣⲡ</w>
+            <w>ⲛ</w>
+            <w>ϣⲟⲟⲡ</w>
+            <w>ⲛϣⲟⲣⲡ</w>
+          </s>
+          <s xml:id="VII-7510851" n="131">
+            <w>ⲥⲱⲧⲙ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ⲛ</w>
+            <w>ⲛ</w>
+            <w>ϣⲟⲣⲡ</w>
+            <w>ⲁⲛⲟⲛ</w>
+            <w>ϩⲉⲛ</w>
+            <w>ϣⲁ</w>
+            <w>ⲉⲛⲉϩ</w>
+            <w>ⲥⲱⲧⲙ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ⲛ</w>
+            <w>ϩⲁ</w>
+            <w>ⲛⲓ</w>
+            <w>ⲕⲁⲧⲁ</w>
+            <w>ⲟⲩⲁ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲗⲓⲟⲥ</w>
+          </s>
+          <s xml:id="VII-7510852" n="132">
+            <w>ⲛⲧⲟ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡⲓⲁⲓ</w>
+            <w>ⲱ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ϩⲉⲛⲁⲓⲱⲛ</w>
+          </s>
+          <s xml:id="VII-7510853" n="133">
+            <w>ϯⲡⲁⲛⲧⲉ</w>
+            <w>ⲗⲕⲓⲟⲥ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲕⲏ</w>
+            <w>ϩⲓ</w>
+            <w>ⲟⲩⲙⲁ</w>
+          </s>
+          <s xml:id="VII-7510854" n="134">
+            <w>ⲁⲥⲱⲧⲙ</w>
+            <w>ⲁ</w>
+            <w>ⲥⲱⲧⲙ</w>
+            <w>ⲁ</w>
+            <w>ⲛⲟⲩ</w>
+            <w>ϩⲙ</w>
+            <w>ⲁⲛⲟⲩϩⲙ</w>
+          </s>
+          <s xml:id="VII-7510855" n="135">
+            <w>ⲧⲛϣⲡ</w>
+            <w>ϩⲙⲟⲧ</w>
+          </s>
+          <s xml:id="VII-7510856" n="136">
+            <w>ⲧⲛ</w>
+            <w>ⲥⲙⲟⲩ</w>
+            <w>ⲛⲟⲩⲟ</w>
+            <w>ⲉ</w>
+            <w>ⲓ</w>
+            <w>ϣ</w>
+            <w>ⲛⲓⲙ</w>
+          </s>
+          <s xml:id="VII-7510857" n="137">
+            <w>ⲉⲛⲉ</w>
+            <w>ϯ</w>
+            <w>ⲉ</w>
+            <w>ⲟⲟⲩ</w>
+            <w>ⲛⲉ</w>
+          </s>
+          <s xml:id="VII-7510858" n="138">
+            <w>ϯ</w>
+            <w>ⲙⲉϩ</w>
+            <w>ⲥⲛⲧⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲥⲧⲏⲗⲏ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲥⲏⲑ</w>
+          </s>
+          <s xml:id="VII-7510859" n="139">
+            <w>ⲧ</w>
+            <w>ⲙⲉϩ</w>
+            <w>ϣⲟⲙⲧⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲥⲧⲏⲗⲏ</w>
+            <w>ⲧⲛ</w>
+            <w>ⲣⲁϣⲉ</w>
+            <w>ⲧⲛ</w>
+            <w>ⲣⲁϣⲉ</w>
+            <w>ⲧⲛ</w>
+            <w>ⲣⲁϣⲉ</w>
+            <w>ⲁⲛⲛⲁⲩ</w>
+          </s>
+          <s xml:id="VII-7510860" n="140">
+            <w>ⲁⲛⲛⲁⲩ</w>
+          </s>
+          <s xml:id="VII-7510861" n="141">
+            <w>ⲁⲛⲛⲁⲩ</w>
+          </s>
+          <s xml:id="VII-7510862" n="142">
+            <w>ⲉⲡⲏ</w>
+            <w>ⲉ</w>
+            <w>ⲧ</w>
+            <w>ⲣ</w>
+            <w>ϣⲣⲡ</w>
+            <w>ⲛ</w>
+            <w>ϣⲟⲟⲡ</w>
+            <w>ⲟⲛⲧⲱⲥ</w>
+            <w>ⲉϥ</w>
+            <w>ϣⲟⲟⲡ</w>
+            <w>ⲟⲛⲧⲱⲥ</w>
+          </s>
+          <s xml:id="VII-7510863" n="143">
+            <w>ⲉϥ</w>
+            <w>ϣⲟⲟⲡ</w>
+            <w>ⲡⲓ</w>
+            <w>ϣⲟⲣⲡ</w>
+            <w>ⲛ</w>
+            <w>ϣⲁ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲉϩ</w>
+          </s>
+          <s xml:id="VII-7510864" n="144">
+            <w>ⲡⲓⲁⲧⲙⲓ</w>
+            <w>ⲥⲉ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲙⲙⲟ</w>
+            <w>ⲕ</w>
+            <w>ⲛⲉ</w>
+            <w>ⲛⲓ</w>
+            <w>ϣⲁ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲉ</w>
+            <w>ϩ</w>
+          </s>
+          <s xml:id="VII-7510865" n="145">
+            <w>ⲙ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲓ</w>
+            <w>ⲁⲓⲱⲛ</w>
+            <w>ⲛⲓ</w>
+            <w>ⲡⲁⲛⲧⲉⲗⲓⲟⲥ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲕⲏ</w>
+            <w>ϩⲓⲟⲩⲙⲁ</w>
+          </s>
+          <s xml:id="VII-7510866" n="146">
+            <w>ⲙⲛ</w>
+            <w>ⲛⲓ</w>
+            <w>ⲕⲁⲧⲁ</w>
+            <w>ⲟⲩⲁ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲗⲓⲟⲥ</w>
+          </s>
+          <s xml:id="VII-7510867" n="147">
+            <w>ⲧⲛ</w>
+            <w>ⲥⲙⲟⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲣⲟ</w>
+            <w>ⲕ</w>
+            <w>ⲡⲓⲁⲧⲟⲩⲥⲓⲁ</w>
+          </s>
+          <s xml:id="VII-7510868" n="148">
+            <w>ϯϩⲩⲡⲁⲣⲝⲓⲥ</w>
+            <w>ⲉ</w>
+            <w>ⲧϩⲁⲑⲏ</w>
+            <w>ⲛϩⲉⲛ</w>
+            <w>ϩⲩⲡⲁⲣⲝⲓⲥ</w>
+          </s>
+          <s xml:id="VII-7510869" n="149">
+            <w>ϯϣⲟⲣⲡ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩⲥⲓⲁ</w>
+            <w>ⲉ</w>
+            <w>ⲧϩⲁⲑⲏ</w>
+            <w>ⲛϩⲉⲛ</w>
+            <w>ⲟⲩⲥⲓⲁ</w>
+          </s>
+          <s xml:id="VII-7510870" n="150">
+            <w>ⲡⲓⲱⲧ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ϯ</w>
+            <w>ⲙⲛⲧ</w>
+            <w>ⲛⲟⲩⲧⲉ</w>
+            <w>ⲙⲛ</w>
+            <w>ϯ</w>
+            <w>ⲙⲛⲧ</w>
+            <w>ⲱⲛϩ</w>
+          </s>
+          <s xml:id="VII-7510871" n="151">
+            <w>ⲡⲓⲣⲉϥⲧⲁⲙⲓⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩⲥ</w>
+          </s>
+          <s xml:id="VII-7510872" n="152">
+            <w>ⲡⲓⲣⲉϥϯ</w>
+            <w>ⲁⲅⲁⲑⲟⲛ</w>
+          </s>
+          <s xml:id="VII-7510873" n="153">
+            <w>ⲡⲓⲣⲉϥϯ</w>
+            <w>ⲙⲛⲧ</w>
+            <w>ⲙⲁⲕⲁⲣⲓⲟⲥ</w>
+          </s>
+          <s xml:id="VII-7510874" n="154">
+            <w>ⲧⲛ</w>
+            <w>ⲥⲙⲟⲩ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ⲕ</w>
+            <w>ⲧⲏⲣ</w>
+            <w>ⲛ</w>
+            <w>ⲡⲓ</w>
+            <w>ⲣⲉϥ</w>
+            <w>ⲉⲓⲙⲉ</w>
+            <w>ϩⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲥⲙⲟⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲩ</w>
+          </s>
+          <s xml:id="VII-7510875" n="155">
+            <w>ⲡⲁⲓ</w>
+            <w>ⲉ</w>
+            <w>ⲏⲧ</w>
+            <w>ϥ</w>
+            <w>ⲧ</w>
+            <w>ⲧⲏⲣⲟⲩ</w>
+          </s>
+          <s xml:id="VII-7510876" n="156">
+            <w>ⲛⲙ</w>
+            <w>ⲟⲛⲧⲱⲥ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲉⲓ</w>
+            <w>ⲙⲉ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ⲕ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲓⲧⲟⲟⲧ</w>
+            <w>ⲕ</w>
+            <w>ⲟⲩⲁⲁⲕ</w>
+          </s>
+          <s xml:id="VII-7510877" n="157">
+            <w>ⲙⲙⲛ</w>
+            <w>ⲗⲁⲁⲩ</w>
+            <w>ⲅⲁⲣ</w>
+            <w>ⲉ</w>
+            <w>ⲧ</w>
+            <w>ⲁϥ</w>
+            <w>ⲉⲛⲉⲣⲅⲉⲓ</w>
+            <w>ϩⲁⲧⲉ</w>
+            <w>ⲕ</w>
+            <w>ⲉ</w>
+            <w>ϩⲏ</w>
+          </s>
+          <s xml:id="VII-7510878" n="158">
+            <w>ⲛⲧ</w>
+            <w>ⲕ</w>
+            <w>ⲟⲩⲡ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲟⲩⲁⲁ</w>
+            <w>ϥ</w>
+            <w>ⲁⲩⲱ</w>
+            <w>ⲉ</w>
+            <w>ϥⲟⲛϩ</w>
+          </s>
+          <s xml:id="VII-7510879" n="159">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲕ</w>
+            <w>ⲥⲟⲟⲩⲛ</w>
+            <w>ⲉ</w>
+            <w>ⲟⲩⲁ</w>
+          </s>
+          <s xml:id="VII-7510880" n="160">
+            <w>ϫⲉ</w>
+            <w>ⲡⲓ</w>
+            <w>ⲟⲩⲁ</w>
+            <w>ⲉⲧⲛ</w>
+            <w>ⲧⲁ</w>
+            <w>ⲕ</w>
+            <w>ⲛⲥⲁ</w>
+            <w>ⲥⲁ</w>
+            <w>ⲛⲓⲙ</w>
+            <w>ⲙⲙⲛ</w>
+            <w>ϭⲟⲙ</w>
+            <w>ⲙⲙⲟ</w>
+            <w>ⲛ</w>
+            <w>ⲉ</w>
+            <w>ϫⲟⲟϥ</w>
+          </s>
+          <s xml:id="VII-7510881" n="161">
+            <w>ϥⲣ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲟⲉⲓⲛ</w>
+            <w>ⲅⲁⲣ</w>
+            <w>ⲉϩⲣⲁⲓ</w>
+            <w>ⲉϫⲱ</w>
+            <w>ⲛ</w>
+            <w>ⲛϭⲓ</w>
+            <w>ⲡⲉⲕ</w>
+            <w>ⲟⲩⲟⲉⲓⲛ</w>
+          </s>
+          <s xml:id="VII-7510882" n="162">
+            <w>ⲟⲩⲉϩ</w>
+            <w>ⲥⲁϩⲛⲉ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲛ</w>
+            <w>ϫⲉ</w>
+            <w>ⲕⲁⲁ</w>
+            <w>ⲥ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲛⲁⲩ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ⲕ</w>
+            <w>ϫⲉⲕⲁⲁⲥ</w>
+            <w>ⲉⲛⲉ</w>
+            <w>ⲛⲟⲩϩⲙ</w>
+          </s>
+          <s xml:id="VII-7510883" n="163">
+            <w>ⲧⲉⲕ</w>
+            <w>ⲅⲛⲱⲥⲓⲥ</w>
+            <w>ⲛ</w>
+            <w>ⲧⲟ</w>
+            <w>ⲥ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡⲉⲛ</w>
+            <w>ⲟⲩϫⲁⲓ</w>
+            <w>ⲧⲏⲣ</w>
+            <w>ⲛ</w>
+          </s>
+          <s xml:id="VII-7510884" n="164">
+            <w>ⲟⲩ</w>
+            <w>ⲉϩ</w>
+            <w>ⲥⲁϩⲛⲉ</w>
+            <w>ⲉⲕϣⲁⲛ</w>
+            <w>ⲟⲩⲉϩ</w>
+            <w>ⲥⲁϩ</w>
+            <w>ⲛⲉ</w>
+            <w>ⲁⲛⲛⲟⲩϩⲙ</w>
+          </s>
+          <s xml:id="VII-7510885" n="165">
+            <w>ⲉⲛⲁⲙⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲟⲩ</w>
+            <w>ϩⲙ</w>
+            <w>ⲁ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲁⲩ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ⲕ</w>
+            <w>ϩⲛ</w>
+            <w>ⲟⲩⲛ</w>
+            <w>ⲟⲩⲥ</w>
+          </s>
+          <s xml:id="VII-7510886" n="166">
+            <w>ⲛⲧⲟⲕ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲛⲁⲓ</w>
+            <w>ⲧⲏⲣ</w>
+            <w>ⲟⲩ</w>
+          </s>
+          <s xml:id="VII-7510887" n="167">
+            <w>ϣⲁⲕⲛⲟⲩ</w>
+            <w>ϩⲙ</w>
+            <w>ⲅⲁⲣ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲁⲓ</w>
+            <w>ⲧⲏⲣⲟⲩ</w>
+          </s>
+          <s xml:id="VII-7510888" n="168">
+            <w>ⲡⲏ</w>
+            <w>ⲉⲧⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲁⲩⲛⲁϩⲙ</w>
+            <w>ⲉϥ</w>
+            <w>ⲁⲛ</w>
+          </s>
+          <s xml:id="VII-7510889" n="169">
+            <w>ⲟⲩⲇⲉ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲉϥ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ϩⲙ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲓⲧⲟⲟⲧ</w>
+            <w>ⲟⲩ</w>
+          </s>
+          <s xml:id="VII-7510890" n="170">
+            <w>ⲛ</w>
+            <w>ⲧⲟⲕ</w>
+            <w>ⲅⲁⲣ</w>
+            <w>ⲁ</w>
+            <w>ⲕ</w>
+            <w>ⲟⲩⲉϩ</w>
+            <w>ⲥⲁϩⲛⲉ</w>
+            <w>ⲛⲁⲛ</w>
+          </s>
+          <s xml:id="VII-7510891" n="171">
+            <w>ⲛⲧⲕ</w>
+            <w>ⲟⲩⲁ</w>
+            <w>ⲛⲧⲕ</w>
+            <w>ⲟⲩⲁ</w>
+            <w>ⲕⲁⲧⲁ</w>
+            <w>ⲡ</w>
+            <w>ⲣⲏ</w>
+            <w>ⲧⲉ</w>
+            <w>ⲉⲧⲉ</w>
+            <w>ⲟⲩⲛ</w>
+            <w>ⲟⲩⲁ</w>
+            <w>ⲛⲁ</w>
+            <w>ϫⲟⲟ</w>
+            <w>ⲥ</w>
+            <w>ⲉ</w>
+            <w>ⲣⲟ</w>
+            <w>ⲕ</w>
+            <w>ϫϭ</w>
+            <w>ⲛⲧⲕ</w>
+            <w>ⲟⲩⲁ</w>
+            <w>ⲛⲧⲕ</w>
+            <w>ⲟⲩⲡ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩⲱⲧ</w>
+            <w>ⲉ</w>
+            <w>ϥⲟⲛϩ</w>
+          </s>
+          <s xml:id="VII-7510892" n="172">
+            <w>ⲉⲛ</w>
+            <w>ⲛⲁ</w>
+            <w>ϯ</w>
+            <w>ⲣⲁⲛ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ⲕ</w>
+            <w>ⲛ</w>
+            <w>ⲁϣ</w>
+            <w>ⲛϩⲉ</w>
+          </s>
+          <s xml:id="VII-7510893" n="173">
+            <w>ⲛϥⲛⲧⲁⲛ</w>
+            <w>ⲙ</w>
+            <w>ⲙⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲁⲛ</w>
+          </s>
+          <s xml:id="VII-7510894" n="174">
+            <w>ⲛⲧⲟⲕ</w>
+            <w>ⲅⲁⲣ</w>
+            <w>ⲡⲉ</w>
+            <w>ϯϩⲩ</w>
+            <w>ⲡⲁⲣⲝⲓⲥ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲛⲁⲓ</w>
+            <w>ⲧⲏⲣⲟⲩ</w>
+          </s>
+          <s xml:id="VII-7510895" n="175">
+            <w>ⲛⲧⲟⲕ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲱⲛϩ</w>
+            <w>ⲛ</w>
+            <w>ⲧ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲁⲓ</w>
+            <w>ⲧⲏⲣⲟⲩ</w>
+          </s>
+          <s xml:id="VII-7510896" n="176">
+            <w>ⲛⲧⲟⲕ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲛⲟⲩⲥ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲛⲁⲓ</w>
+            <w>ⲧⲏⲣ</w>
+            <w>ⲟⲩ</w>
+          </s>
+          <s xml:id="VII-7510897" n="177">
+            <w>ⲛⲧⲟⲕ</w>
+            <w>ⲅⲁⲣ</w>
+            <w>ⲛⲁⲓ</w>
+            <w>ⲧⲏⲣ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲧⲉⲗⲏⲗ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲕ</w>
+            <w>ⲛⲧⲟⲕ</w>
+            <w>ⲁ</w>
+            <w>ⲕ</w>
+            <w>ⲟⲩⲉϩ</w>
+            <w>ⲥⲁϩⲛⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲁⲓ</w>
+            <w>ⲧⲏⲣ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲟⲩ</w>
+            <w>ϩⲙ</w>
+            <w>ⲡⲉⲕ</w>
+            <w>ϣⲁϫⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲙ</w>
+            <w>ⲙⲙⲟⲟⲩ</w>
+          </s>
+          <s xml:id="VII-7510898" n="178">
+            <w>ⲡⲓⲉⲱⲧ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩⲱⲧ</w>
+            <w>ⲉⲧ</w>
+            <w>ϩⲁϫⲱ</w>
+            <w>ϥ</w>
+            <w>ⲟⲩⲁⲁ</w>
+            <w>ϥ</w>
+            <w>ⲡⲓⲙⲁⲕⲁⲣⲓ</w>
+            <w>ⲟ</w>
+            <w>ⲥ</w>
+            <w>ⲥⲏⲛⲁⲱⲛ</w>
+            <w>ⲉ</w>
+            <w>ⲧ</w>
+            <w>ϫⲡⲟ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲙⲙⲟ</w>
+            <w>ϥ</w>
+            <w>ⲟⲩⲁⲁ</w>
+            <w>ϥ</w>
+            <w>ⲛ</w>
+            <w>ⲉ</w>
+            <w>ⲩ</w>
+          </s>
+          <s xml:id="VII-7510899" n="179">
+            <w>ⲉ</w>
+            <w>ⲫⲛⲉⲩ</w>
+          </s>
+          <s xml:id="VII-7510900" n="180">
+            <w>ⲟⲡⲧⲁⲱⲛ</w>
+          </s>
+          <s xml:id="VII-7510901" n="181">
+            <w>ⲉⲗⲉⲙⲁⲱⲛ</w>
+            <w>ⲡⲓ</w>
+            <w>ⲛⲟϭ</w>
+            <w>ⲛϭⲟⲙ</w>
+          </s>
+          <s xml:id="VII-7510902" n="182">
+            <w>ⲉⲙⲟⲩⲛⲓ</w>
+            <w>ⲁⲣ</w>
+            <w>ⲛⲓⲃⲁⲣⲉⲩ</w>
+          </s>
+          <s xml:id="VII-7510903" n="183">
+            <w>ⲕⲁⲛⲇⲏⲫⲟⲣⲉ</w>
+          </s>
+          <s xml:id="VII-7510904" n="184">
+            <w>ⲁⲫ</w>
+            <w>ⲣⲏ</w>
+            <w>ⲇⲱⲛ</w>
+          </s>
+          <s xml:id="VII-7510905" n="185">
+            <w>ⲇⲏⲓⲫⲁⲛⲉⲩⲥ</w>
+          </s>
+          <s xml:id="VII-7510906" n="186">
+            <w>ⲛⲧⲟⲕ</w>
+            <w>ⲉⲧⲉ</w>
+            <w>ⲛⲁⲣⲙⲏⲇⲱⲛ</w>
+            <w>ⲛⲁⲓ</w>
+            <w>ⲡⲓ</w>
+            <w>ⲣⲉϥ</w>
+            <w>ϫⲡⲉ</w>
+            <w>ϭⲟⲙ</w>
+          </s>
+          <s xml:id="VII-7510907" n="187">
+            <w>ⲑⲁⲗⲁⲛⲁⲑⲉⲩ</w>
+          </s>
+          <s xml:id="VII-7510908" n="188">
+            <w>ⲁⲛⲧⲓⲑⲉⲩⲥ</w>
+          </s>
+          <s xml:id="VII-7510909" n="189">
+            <w>ⲛⲧⲟⲕ</w>
+            <w>ⲉⲧ</w>
+            <w>ϣⲟⲟⲡ</w>
+            <w>ⲛϩⲣⲁⲓ</w>
+            <w>ⲛ</w>
+            <w>ϩⲏ</w>
+            <w>ⲧ</w>
+            <w>ⲕ</w>
+            <w>ⲙⲁⲩⲁⲁⲕ</w>
+          </s>
+          <s xml:id="VII-7510910" n="190">
+            <w>ⲛⲧⲟⲕ</w>
+            <w>ⲉⲧ</w>
+            <w>ϩⲁϫⲱⲕ</w>
+            <w>ⲙⲁⲩⲁⲁⲕ</w>
+          </s>
+          <s xml:id="VII-7510911" n="191">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲙⲙⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲥⲱⲕ</w>
+            <w>ⲙⲡⲉ</w>
+            <w>ⲗⲁⲁⲩ</w>
+            <w>ⲉⲓ</w>
+            <w>ⲉ</w>
+            <w>ⲩⲉ</w>
+            <w>ⲛⲉⲣⲅⲉⲓ</w>
+          </s>
+          <s xml:id="VII-7510912" n="192">
+            <w>ⲉⲛ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲥⲙⲟⲩ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ⲕ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩ</w>
+          </s>
+          <s xml:id="VII-7510913" n="193">
+            <w>ⲙⲙⲛ</w>
+            <w>ϭⲟⲙ</w>
+            <w>ⲙⲙⲟⲛ</w>
+          </s>
+          <s xml:id="VII-7510914" n="194">
+            <w>ⲁⲗⲗⲁ</w>
+            <w>ⲧⲛ</w>
+            <w>ϣⲡ</w>
+            <w>ϩⲙⲟⲧ</w>
+            <w>ϩⲱⲥ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲑⲉⲃⲓⲏⲩ</w>
+            <w>ⲛⲁⲕ</w>
+          </s>
+          <s xml:id="VII-7510915" n="195">
+            <w>ϫⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲕ</w>
+            <w>ⲟⲩⲉϩ</w>
+            <w>ⲥⲁϩⲛⲉ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲛ</w>
+            <w>ϩⲁ</w>
+            <w>ⲡⲏ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲥⲟⲧⲡ</w>
+            <w>ⲉ</w>
+            <w>ϯ</w>
+            <w>ⲉ</w>
+            <w>ⲟⲟⲩ</w>
+            <w>ⲛⲁⲕ</w>
+          </s>
+          <s xml:id="VII-7510916" n="196">
+            <w>ⲕⲁⲧⲁ</w>
+            <w>ⲑ</w>
+            <w>ⲉ</w>
+            <w>ⲉⲧⲉ</w>
+            <w>ⲟⲩⲛ</w>
+            <w>ϣ</w>
+            <w>ϭⲟⲙ</w>
+            <w>ⲙⲙⲟⲛ</w>
+          </s>
+          <s xml:id="VII-7510917" n="197">
+            <w>ⲧⲛ</w>
+            <w>ⲥⲙⲟⲩ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ⲕ</w>
+            <w>ϫⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲟⲩ</w>
+            <w>ϩⲙ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩⲟⲉⲓϣ</w>
+            <w>ⲛⲓⲙ</w>
+            <w>ⲉ</w>
+            <w>ⲛ</w>
+            <w>ϯ</w>
+            <w>ⲉ</w>
+            <w>ⲟ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲛⲁⲕ</w>
+          </s>
+          <s xml:id="VII-7510918" n="198">
+            <w>ⲉⲧⲃⲉ</w>
+            <w>ⲡⲁⲓ</w>
+            <w>ⲉⲛⲉ</w>
+            <w>ϯ</w>
+            <w>ⲉ</w>
+            <w>ⲟⲟⲩ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲕ</w>
+            <w>ϫⲉⲕⲁⲁⲥ</w>
+            <w>ⲉⲛⲉ</w>
+            <w>ⲛⲟⲩ</w>
+            <w>ϩⲙ</w>
+            <w>ⲉ</w>
+            <w>ⲩ</w>
+            <w>ⲟⲩϫⲁⲓ</w>
+            <w>ⲛ</w>
+            <w>ϣⲁ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲉ</w>
+            <w>ϩ</w>
+          </s>
+          <s xml:id="VII-7510919" n="199">
+            <w>ⲁⲛ</w>
+            <w>ⲥⲙⲟⲩ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ⲕ</w>
+            <w>ϫⲉ</w>
+            <w>ⲟⲩⲛ</w>
+            <w>ϣ</w>
+            <w>ϭⲟⲙ</w>
+            <w>ⲙⲙⲟⲛ</w>
+          </s>
+          <s xml:id="VII-7510920" n="200">
+            <w>ⲁⲛⲛⲟⲩϩⲙ</w>
+            <w>ϫⲉ</w>
+            <w>ⲛⲧⲟⲕ</w>
+            <w>ⲁ</w>
+            <w>ⲕ</w>
+            <w>ⲟⲩⲱϣ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩⲟⲉⲓϣ</w>
+            <w>ⲛⲓⲙ</w>
+          </s>
+          <s xml:id="VII-7510921" n="201">
+            <w>ⲉⲛ</w>
+            <w>ⲉⲓⲣⲉ</w>
+            <w>ⲙ</w>
+            <w>ⲡⲁⲓ</w>
+            <w>ⲧⲏⲣ</w>
+            <w>ⲛ</w>
+            <w>ⲁ</w>
+            <w>ⲛ</w>
+            <w>ⲉⲓⲣⲉ</w>
+            <w>ⲙ</w>
+            <w>ⲡⲁⲓ</w>
+            <w>ⲧⲏⲣⲛ</w>
+          </s>
+          <s xml:id="VII-7510922" n="202">
+            <w>ⲛⲉⲛ</w>
+            <w>ⲁⲛ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲓⲧⲛ</w>
+            <w>ⲕ</w>
+            <w>ⲗ</w>
+            <w>ⲁ</w>
+            <w>ⲓⲱⲛ</w>
+          </s>
+          <s xml:id="VII-7510923" n="203">
+            <w>ⲉⲛⲁⲛⲙ</w>
+            <w>ⲓⲁ</w>
+          </s>
+          <s xml:id="VII-7510924" n="204">
+            <w>ⲡⲏⲉⲧⲁϥ</w>
+            <w>ϩⲙ</w>
+            <w>ⲁⲛⲟⲛ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲛⲏ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲁⲩⲛⲟⲩϩⲙ</w>
+          </s>
+          <s xml:id="VII-7510925" n="205">
+            <w>ⲡⲏ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲉⲓⲣⲉ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲙⲉⲉⲩⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲁⲓ</w>
+            <w>ⲁⲩⲱ</w>
+            <w>ⲛ</w>
+            <w>ϥ</w>
+            <w>ⲉ</w>
+            <w>ⲟⲟⲩ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩⲟⲉⲓϣ</w>
+            <w>ⲛⲓⲙ</w>
+          </s>
+          <s xml:id="VII-7510926" n="206">
+            <w>ⲉϥⲉ</w>
+            <w>ϣⲱⲡⲉ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲗⲓⲟⲥ</w>
+            <w>ϩⲛ</w>
+            <w>ⲛⲓⲧⲉⲗⲓⲟⲥ</w>
+            <w>ⲁⲩⲱ</w>
+            <w>ⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲁⲧϣⲡ</w>
+            <w>ⲙⲕⲁϩ</w>
+            <w>ⲥⲁⲃⲟⲗ</w>
+            <w>ⲛ</w>
+            <w>ϩⲱⲃ</w>
+            <w>ⲛⲓⲙ</w>
+          </s>
+          <s xml:id="VII-7510927" n="207">
+            <w>ϫⲉ</w>
+            <w>ⲥⲉ</w>
+            <w>ⲥⲙⲟⲩ</w>
+            <w>ⲧⲏ</w>
+            <w>ⲣ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲁⲓ</w>
+            <w>ⲕⲁⲧⲁ</w>
+            <w>ⲟⲩⲁ</w>
+          </s>
+          <s xml:id="VII-7510928" n="208">
+            <w>ⲁⲩⲱ</w>
+            <w>ϩⲓ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲙⲁ</w>
+          </s>
+          <s xml:id="VII-7510929" n="209">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲙⲙⲛⲛⲥⲁ</w>
+            <w>ⲛⲁⲓ</w>
+            <w>ⲉⲩⲉ</w>
+            <w>ⲕⲁ</w>
+            <w>ⲣⲱⲟⲩ</w>
+          </s>
+          <s xml:id="VII-7510930" n="210">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲕⲁⲧⲁ</w>
+            <w>ⲑ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲧ</w>
+            <w>ⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲧⲟϣ</w>
+            <w>ⲟⲩ</w>
+            <w>ϣⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲃⲱⲕ</w>
+            <w>ⲉ</w>
+            <w>ϩⲣⲁⲓ</w>
+          </s>
+          <s xml:id="VII-7510931" n="211">
+            <w>ⲙ</w>
+            <w>ⲙⲛⲛⲥⲁ</w>
+            <w>ⲡⲓ</w>
+            <w>ⲕⲁ</w>
+            <w>ⲣⲱ</w>
+            <w>ϥ</w>
+            <w>ϣⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲉⲓ</w>
+            <w>ⲉ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲥⲏⲧ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲛ</w>
+            <w>ϯ</w>
+            <w>ⲙⲉϩ</w>
+            <w>ϣⲟⲙⲧⲉ</w>
+            <w>ϣⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲥⲙⲟⲩ</w>
+            <w>ⲉ</w>
+            <w>ϯ</w>
+            <w>ⲙⲁϩⲥⲛⲧⲉ</w>
+          </s>
+          <s xml:id="VII-7510932" n="212">
+            <w>ⲙⲙⲛⲛⲥⲁ</w>
+            <w>ⲛⲁⲓ</w>
+            <w>ϯϩⲟⲩⲉⲓⲧⲉ</w>
+          </s>
+          <s xml:id="VII-7510933" n="213">
+            <w>ϯ</w>
+            <w>ϩⲓⲏ</w>
+            <w>ⲛ</w>
+            <w>ⲃⲱⲕ</w>
+            <w>ⲉϩⲣⲁⲓ</w>
+            <w>ⲡⲉ</w>
+            <w>ϯ</w>
+            <w>ϩⲓⲏ</w>
+            <w>ⲛ</w>
+            <w>ⲉⲓ</w>
+            <w>ⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲉⲥⲏⲧ</w>
+          </s>
+          <s xml:id="VII-7510934" n="214">
+            <w>ⲉⲓⲙⲉ</w>
+            <w>ⲟⲩⲛ</w>
+            <w>ϩⲁ</w>
+            <w>ⲛⲏ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲟⲛϩ</w>
+            <w>ϫⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲧⲉⲧⲛ</w>
+            <w>ϯ</w>
+            <w>ⲙⲉ</w>
+            <w>ⲧⲉ</w>
+          </s>
+          <s xml:id="VII-7510935" n="215">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁ</w>
+            <w>ⲧⲉⲧⲛ</w>
+            <w>ⲧⲥⲁⲃⲉ</w>
+            <w>ⲧⲏ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲧⲛ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲓⲁⲧⲁⲣⲏϫⲛⲟⲩ</w>
+          </s>
+          <s xml:id="VII-7510936" n="216">
+            <w>ⲁⲣⲓ</w>
+            <w>ϣⲡⲏⲣⲉ</w>
+            <w>ⲛ</w>
+            <w>ϯ</w>
+            <w>ⲙⲛⲧ</w>
+            <w>ⲙⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲧ</w>
+            <w>ⲛ</w>
+            <w>ϩⲣⲁⲓ</w>
+            <w>ⲛϩⲏⲧ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲡⲓ</w>
+            <w>ⲟⲩⲱⲛϩ</w>
+            <w>ⲉ</w>
+            <w>ⲃⲟⲗ</w>
+          </s>
+        </ab>
+        <ab type="subscript">
+          <s xml:id="VII-7510937" n="217">
+            <w>ϯ</w>
+            <w>ϣⲟⲙⲧⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲥⲧⲏⲗⲏ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲥⲏⲑ</w>
+          </s>
+        </ab>
+        <ab type="colophon">
+          <s xml:id="VII-7510938" n="218">
+            <w>ⲡⲉⲓ</w>
+            <w>ϫⲱⲱⲙⲉ</w>
+            <w>ⲡⲁ</w>
+            <w>ϯ</w>
+            <w>ⲙⲛⲧ</w>
+            <w>ⲉⲓⲱⲧ</w>
+            <w>ϫⲡⲉ</w>
+            <w>ⲡ</w>
+            <w>ϣⲏⲣⲉ</w>
+            <w>ⲡⲉⲛⲧⲁ</w>
+            <w>ϥ</w>
+            <w>ⲥⲁϩϥ</w>
+          </s>
+          <s xml:id="VII-7510939_0" n="219">
+            <w>ⲥⲙⲟⲩ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ⲓ</w>
+            <w>ⲡ</w>
+            <w>ⲓⲱⲧ</w>
+            <w>ϯ</w>
+            <w>ⲥⲙⲟⲩ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ⲕ</w>
+            <w>ⲡ</w>
+            <w>ⲓⲱⲧ</w>
+            <w>ϩⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲉⲓⲣⲏⲛⲏ</w>
+            <w>ϩⲁⲙⲏⲛ</w>
+          </s>
+        </ab>
+      </div>
+    </body>
+  </text>
+</TEI>

@@ -26,3 +26,12 @@ CSV は Excel・Numbers・Google スプレッドシート・テキストエデ�
 - 保存は必ず **UTF-8**（Excel なら「CSV UTF-8」形式）。
 - カンマや改行を含むセルは引用符 `"..."` で囲む（表計算ソフトなら自動）。
 - 編集後は必ず `python3 scripts/build_tei.py` を実行し、エラーが出ないこと・末尾の統計（segments / tokens / lemmas）が想定どおりであることを確認してから commit する。
+
+## nhc_fulltext_split/ — ナグ・ハマディ写本 全文テキスト（別系統）
+
+`nhc_fulltext_split/` は、写本 I–XIII の本文を 56 の文書単位に分けて下処理した一式で、上の CSV とは別系統です
+（`scripts/build_tei.py` は読みません。サイトの画面にもまだつないでいません）。
+
+- 中身と使い方は [`nhc_fulltext_split/README_ja.md`](nhc_fulltext_split/README_ja.md) を参照してください。
+- `tsv/`・`txt/`・`tei/`・`nhc_all.tsv`・`catalog.tsv` は生成物です。手で直さず、`nhc_fulltext_split/scripts/restore.py` の規則などを直して
+  `build.py` → `make_tei.py` を実行し直します（元ファイル `Nag_Hammadi.txt` はこのリポジトリには入っていません）。

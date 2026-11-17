@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="cop">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title xml:lang="en">The Prayer of Thanksgiving</title>
+        <title xml:lang="ja">感謝の祈り</title>
+        <title xml:lang="fr">Prière d'action de grâces</title>
+        <title type="sub" xml:lang="en">Nag Hammadi Codex VI,7 — segmented Coptic text without linguistic annotation (working file)</title>
+        <respStmt>
+          <resp>TEI encoding; division of the corpus into tractates; removal of conversion residue</resp>
+          <name>Sheneset project</name>
+        </respStmt>
+        <respStmt xml:id="zp">
+          <resp>restoration of the letters ⲍ and ⲯ lost in the source file (see editorialDecl/correction)</resp>
+          <name>Sheneset project</name>
+        </respStmt>
+        <respStmt>
+          <resp>source text (tokenised Coptic)</resp>
+          <name>supplied corpus (Marcion segment ids)</name>
+        </respStmt>
+      </titleStmt>
+      <extent>
+        <measure unit="segment" quantity="27">27 segments</measure>
+        <measure unit="token" quantity="352">352 tokens</measure>
+        <measure unit="gap" quantity="0">0 gap markers</measure>
+      </extent>
+      <publicationStmt>
+        <p xml:lang="en">Working file, not yet published. Prepared for Sheneset, a TEI corpus of the Nag Hammadi Codices.</p>
+        <p xml:lang="ja">作業用ファイル（未公開）。Sheneset（ナグ・ハマディ写本 TEI コーパス）への掲載に向けて用意したもの。</p>
+      </publicationStmt>
+      <notesStmt>
+        <note xml:lang="ja">末尾に写字生の覚え書き（VI,7a）を type=colophon で含む。</note>
+      </notesStmt>
+      <sourceDesc>
+        <bibl xml:id="src">
+          <title>Nag_Hammadi.txt</title>
+          <note xml:lang="en">Supplied plain-text file of the Nag Hammadi Codices: one segment per row (row ids 7500001–7513228), the Coptic text divided into tokens by spaces. This file contains rows 7508284–7508310.</note>
+          <note xml:lang="ja">提供されたナグ・ハマディ写本全文のテキストファイル。1 行が 1 セグメント（行 ID 7500001–7513228）で、コプト語本文は空白でトークンに区切られている。この文書は行 7508284–7508310 にあたる。</note>
+        </bibl>
+        <msDesc>
+          <msIdentifier>
+            <settlement>Cairo</settlement>
+            <repository>Coptic Museum</repository>
+            <idno>NHC VI</idno>
+            <msName>Nag Hammadi Codex VI</msName>
+          </msIdentifier>
+          <msContents>
+            <msItem n="7">
+              <locus from="63" to="65">pp. 63,33–65,7 (+ scribal note 65,8–14)</locus>
+              <title xml:lang="en">The Prayer of Thanksgiving</title>
+              <textLang mainLang="cop">Coptic (Sahidic)</textLang>
+              <note xml:lang="en">Page and line numbers are those in common use (as in The Nag Hammadi Library in English); they were not taken from the source file.</note>
+            </msItem>
+          </msContents>
+          <history>
+            <origin>
+              <origDate notBefore="0300" notAfter="0400">4th c. CE</origDate>
+              <origPlace>Egypt</origPlace>
+            </origin>
+          </history>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc>
+        <p xml:lang="ja">提供されたナグ・ハマディ写本全文のテキストファイルを文書ごとに分け、サイト掲載に向けて下処理したものの TEI 版。訳、語釈、品詞、レンマはまだ付けていない。下処理（文書の分割、変換の残骸の除去、ⲍ・ⲯ の復元）と TEI 化には生成 AI（Claude）を使い、結果が元ファイルと対応することを検証スクリプト（scripts/verify.py、scripts/verify_tei.py）で確かめた。</p>
+        <p xml:lang="en">TEI version of the supplied full text of the Nag Hammadi Codices, divided into tractates and preprocessed for publication on the site. No translation, gloss, part of speech or lemma has been added yet. The preprocessing (division into tractates, removal of conversion residue, restoration of ⲍ and ⲯ) and the TEI conversion were carried out with a generative AI model (Claude); the result was checked against the source file with the verification scripts (scripts/verify.py, scripts/verify_tei.py).</p>
+      </projectDesc>
+      <editorialDecl>
+        <segmentation>
+          <p xml:lang="ja"><gi>s</gi> は元ファイルの 1 行（1 セグメント）。行が文書の境目や表題の境目をまたぐときだけ分けた。<att>xml:id</att> は「写本番号-行 ID」で、分けた行には「_開始トークン位置」（元ファイルの行の中での位置、0 始まり）を付けた。<att>n</att> は文書内の通し番号。<gi>w</gi> は元ファイルの空白区切り（形態素解析器の出力とみられる）のままで、切り直していない。ⲍ・ⲯ を戻した語が途中で切れていたときだけ 1 つにつないだ。<gi>ab</gi> の <att>type</att> は <val>title</val>（冒頭表題）、<val>text</val>（本文）、<val>subscript</val>（奥書表題）、<val>colophon</val>（写字生の奥書・覚え書き）、<val>fragment</val>（未配置断片）。</p>
+          <p xml:lang="en">Each <gi>s</gi> is one row (segment) of the source file; a row is split only where it straddles the boundary of a tractate or of a title. <att>xml:id</att> is the codex number followed by the row id; for split rows the position of the first token within the source row (counted from 0) is added after an underscore. <att>n</att> numbers the segments within the tractate. Each <gi>w</gi> is a token of the source file (apparently the output of a morphological segmenter) and has not been re-segmented, except that tokens were joined where a restored ⲍ or ⲯ fell inside a word that the segmenter had split. The <att>type</att> of <gi>ab</gi> is <val>title</val> (opening title), <val>text</val>, <val>subscript</val> (subscript title), <val>colophon</val> (scribal colophon or note) or <val>fragment</val> (unplaced fragments).</p>
+        </segmentation>
+        <correction method="markup">
+          <p xml:lang="ja">元ファイルでは ⲝ がすべて ⲯ になっていたので、ⲝ に戻した（この文書では 0 字）。元ファイルで落ちていた ⲍ と ⲯ は、語形と文脈から語が決まる箇所で戻した（この文書では 4 語）。戻した語の <gi>w</gi> には <att>resp</att>="#zp" と <att>cert</att> を付けた。<val>high</val>（4 語）は語形と文脈から決まるもの、<val>medium</val>（0 語）は固有名など、校訂本や翻訳で知られている読みを当てたもの。どちらも校訂本とは照合していない。英語の編集注記が文字化けして残っていた箇所は、欠損の注記なので <gi>gap</gi> に置き換えた。変更は 1 か所ずつ、同梱の changes.tsv と restored_letters.tsv に記録してある。</p>
+          <p xml:lang="en">In the source file every ⲝ had been converted to ⲯ; these were changed back to ⲝ (0 letters in this file). The letters ⲍ and ⲯ, lost throughout the source file, were restored where the word could be identified from its form and context (4 words in this file). These words carry <att>resp</att>="#zp" and <att>cert</att> on <gi>w</gi>: <val>high</val> (4) = determined by word form and context; <val>medium</val> (0) = proper names and similar words, restored following readings known from editions and translations. None has been collated with the printed editions. Garbled residue of English editorial notes, which reported lost text, was replaced by <gi>gap</gi>. Every change is listed in the accompanying files changes.tsv and restored_letters.tsv.</p>
+        </correction>
+        <interpretation>
+          <p xml:lang="ja">品詞（<att>type</att>）、レンマ（<att>lemma</att>）、語釈、訳、ギリシア語借用語の印（<att>xml:lang</att>="grc"）はまだ付けていない。<gi>gap</gi>（<att>reason</att>="lacuna"）は、元ファイルに行・頁単位の欠損の注記があった位置を示す（この文書では 0 箇所）。それ以外の欠損と校訂者による復元の区別、下点、上線、句読点、頁と行の区切りは元ファイルになく、符号化していない。</p>
+          <p xml:lang="en">No part of speech (<att>type</att>), lemma (<att>lemma</att>), gloss, translation or loanword marking (<att>xml:lang</att>="grc") has been added yet. <gi>gap</gi> with <att>reason</att>="lacuna" marks the places where the source file had an editorial note reporting lost lines or pages (0 in this file). The source file does not distinguish other lacunae from editorial restorations and has no sublinear dots, supralinear strokes, punctuation, or page and line breaks; none of these is encoded.</p>
+        </interpretation>
+      </editorialDecl>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="cop">Coptic (Sahidic)</language>
+        <language ident="en">English (header)</language>
+        <language ident="ja">Japanese (header)</language>
+        <language ident="fr">French (title)</language>
+      </langUsage>
+    </profileDesc>
+    <revisionDesc>
+      <change when="2026-11-17">TEI file generated from the preprocessed text (scripts/make_tei.py).</change>
+    </revisionDesc>
+  </teiHeader>
+  <text type="witness" xml:id="wit-VI-7" n="NHC VI,7" xml:lang="cop">
+    <body>
+      <div type="tractate" n="The Prayer of Thanksgiving" subtype="codexVI">
+        <head xml:lang="en">The Prayer of Thanksgiving — Nag Hammadi Codex VI,7 (pp. 63,33–65,7; scribal note 65,8–14)</head>
+        <ab type="text">
+          <s xml:id="VI-7508284" n="1">
+            <w>ⲡⲁⲓ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡ</w>
+            <w>ϣⲗⲏⲗ</w>
+            <w>ⲛⲧⲁⲩ</w>
+            <w>ϫⲟⲟϥ</w>
+          </s>
+          <s xml:id="VI-7508285" n="2">
+            <w>ⲧⲛϣⲡ</w>
+            <w>ϩⲙⲟⲧ</w>
+            <w>ⲛⲧⲟⲟⲧ</w>
+            <w>ⲕ</w>
+            <w cert="high" resp="#zp">ⲯⲩⲭⲏ</w>
+            <w>ⲛⲓⲙ</w>
+          </s>
+          <s xml:id="VI-7508286" n="3">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲫⲏⲧ</w>
+            <w>ⲡⲟⲣϣ</w>
+            <w>ϣⲁⲣⲟ</w>
+            <w>ⲕ</w>
+            <w>ⲱ</w>
+            <w>ⲡⲓ</w>
+            <w>ⲣⲁⲛ</w>
+            <w>ⲉ</w>
+            <w>ⲩ</w>
+            <w>ⲣ</w>
+            <w>ⲉⲛⲱⲭⲗⲉⲓ</w>
+            <w>ⲛⲁ</w>
+            <w>ϥ</w>
+            <w>ⲁⲛ</w>
+          </s>
+          <s xml:id="VI-7508287" n="4">
+            <w>ⲉϥ</w>
+            <w>ⲧⲁⲉⲓⲁⲉⲓⲧ</w>
+            <w>ϩⲛ</w>
+            <w>ⲧ</w>
+            <w>ⲟⲛⲟⲙⲁⲥⲓⲁ</w>
+            <w>ⲙⲡ</w>
+            <w>ⲛⲟⲩⲧⲉ</w>
+          </s>
+          <s xml:id="VI-7508288" n="5">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲉ</w>
+            <w>ⲩ</w>
+            <w>ⲥⲙⲟⲩ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ϥ</w>
+            <w>ϩⲛ</w>
+            <w>ⲧ</w>
+            <w>ⲟⲛⲟⲙⲁⲥⲓⲁ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲓⲱⲧ</w>
+            <w>ϫⲉ</w>
+            <w>ϣⲁ</w>
+            <w>ⲟⲩⲟⲛ</w>
+            <w>ⲛⲓⲙ</w>
+          </s>
+          <s xml:id="VI-7508289" n="6">
+            <w>ⲁⲩⲱ</w>
+            <w>ϣⲁ</w>
+            <w>ⲡ</w>
+            <w>ⲧⲏ</w>
+            <w>ⲣϥ</w>
+          </s>
+          <s xml:id="VI-7508290" n="7">
+            <w>ⲧⲉⲩⲛⲟⲓⲁ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲉⲓⲱⲧ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲡ</w>
+            <w>ⲙⲉ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲡ</w>
+            <w>ⲟⲩⲟⲩⲱϣ</w>
+          </s>
+          <s xml:id="VI-7508291" n="8">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲉϣϫⲉ</w>
+            <w>ⲟⲩⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲥⲃⲱ</w>
+            <w>ⲉ</w>
+            <w>ⲥϩⲁⲗⲉϭ</w>
+            <w>ⲉ</w>
+            <w>ⲥ</w>
+            <w>ⲟ</w>
+            <w>ⲛϩⲁⲡⲗⲟⲩⲥ</w>
+          </s>
+          <s xml:id="VI-7508292" n="9">
+            <w cert="high" resp="#zp">ⲉⲥⲣⲭⲁⲣⲓⲍⲉ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲛ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲛⲟⲩⲥ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲗⲟⲅⲟⲥ</w>
+            <w>ⲛ</w>
+            <w>ⲧⲅⲛⲱⲥⲓⲥ</w>
+          </s>
+          <s xml:id="VI-7508293" n="10">
+            <w>ⲡ</w>
+            <w>ⲛⲟⲩⲥ</w>
+            <w>ⲙⲉⲛ</w>
+            <w>ϫⲉ</w>
+            <w>ⲕⲁⲁ</w>
+            <w>ⲥ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲣ</w>
+            <w>ⲛⲟⲉⲓ</w>
+            <w>ⲙⲙⲟⲕ</w>
+          </s>
+          <s xml:id="VI-7508294" n="11">
+            <w>ⲡⲗⲟ</w>
+            <w>ⲅⲟⲥ</w>
+            <w>ⲇⲉ</w>
+            <w>ϫⲉⲕⲁⲁⲥ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲁ</w>
+            <w>ϩⲉ</w>
+            <w>ⲣ</w>
+            <w>ⲙⲏ</w>
+            <w>ⲛ</w>
+            <w>ⲉ</w>
+            <w>ⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲙⲙⲟⲕ</w>
+          </s>
+          <s xml:id="VI-7508295" n="12">
+            <w>ⲧ</w>
+            <w>ⲅⲛⲱⲥⲓⲥ</w>
+            <w>ⲇⲉ</w>
+            <w>ϫⲉⲕⲁⲁⲥ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲛⲁⲥⲟⲩⲱⲛⲕ</w>
+          </s>
+          <s xml:id="VI-7508296" n="13">
+            <w>ⲧⲛ</w>
+            <w>ⲣⲁϣⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲧⲁ</w>
+            <w>ⲣ</w>
+            <w>ⲛ</w>
+            <w>ϫⲓ</w>
+            <w>ⲟⲩⲟⲉⲓⲛ</w>
+            <w>ϩⲛ</w>
+            <w>ⲧⲉⲕⲅⲛⲱⲥⲓⲥ</w>
+          </s>
+          <s xml:id="VI-7508297" n="14">
+            <w>ⲧⲛ</w>
+            <w>ⲣⲁϣⲉ</w>
+            <w>ϫⲉ</w>
+            <w>ⲁⲕⲧⲥⲉⲃⲟⲛ</w>
+            <w>ⲉ</w>
+            <w>ⲣⲟⲕ</w>
+          </s>
+          <s xml:id="VI-7508298" n="15">
+            <w>ⲧⲛⲣⲁ</w>
+            <w>ϣⲉ</w>
+            <w>ϫⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲛ</w>
+            <w>ϩⲛ</w>
+            <w>ⲥⲱⲙⲁ</w>
+            <w>ⲁ</w>
+            <w>ⲕ</w>
+            <w>ⲁⲁ</w>
+            <w>ⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲟⲩⲧⲉ</w>
+            <w>ϩⲛ</w>
+            <w>ⲧⲉⲕⲅⲛⲱⲥⲓⲥ</w>
+          </s>
+          <s xml:id="VI-7508299" n="16">
+            <w>ⲡϣⲡ</w>
+            <w>ϩⲙⲁⲧ</w>
+            <w>ⲛ</w>
+            <w>ⲡ</w>
+            <w>ⲣⲱⲙⲉ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲡⲏϩ</w>
+            <w>ϣⲁⲣⲟⲕ</w>
+          </s>
+          <s xml:id="VI-7508300" n="17">
+            <w>ⲟⲩⲁ</w>
+            <w>ⲡⲉ</w>
+            <w>ϫⲉⲕⲁⲥ</w>
+            <w>ⲁⲧⲣⲛ</w>
+            <w>ⲥⲟⲩⲱⲛⲕ</w>
+          </s>
+          <s xml:id="VI-7508301" n="18">
+            <w>ⲁⲛⲥⲟⲩⲱⲛ</w>
+            <w>ⲕ</w>
+            <w>ⲱ</w>
+            <w>ⲡ</w>
+            <w>ⲟⲩⲟⲉⲓⲛ</w>
+            <w>ⲛⲛⲟⲏⲧⲟⲛ</w>
+          </s>
+          <s xml:id="VI-7508302" n="19">
+            <w>ⲱ</w>
+            <w>ⲡ</w>
+            <w>ⲱⲛϩ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲱⲛϩ</w>
+            <w>ⲁ</w>
+            <w>ⲛ</w>
+            <w>ⲥⲟⲩⲱⲛ</w>
+            <w>ⲕ</w>
+            <w>ⲱ</w>
+            <w>ⲧ</w>
+            <w>ⲙⲏⲧⲣⲁ</w>
+            <w>ⲛ</w>
+            <w>ϫⲟ</w>
+            <w>ⲛⲓⲙ</w>
+            <w>ⲁ</w>
+            <w>ⲛ</w>
+            <w>ⲥⲟⲩ</w>
+            <w>ⲱⲛⲉ</w>
+            <w>ⲱ</w>
+            <w>ⲧ</w>
+            <w>ⲙⲏⲧⲣⲁ</w>
+            <w>ⲉ</w>
+            <w>ⲧ</w>
+            <w>ϫⲡⲟ</w>
+            <w>ϩⲛ</w>
+            <w>ⲧ</w>
+            <w>ⲫⲩⲥⲓⲥ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲓⲱⲧ</w>
+            <w>ⲁⲛⲥⲟⲩⲱ</w>
+            <w>ⲛⲉ</w>
+            <w>ⲱ</w>
+            <w>ⲡ</w>
+            <w>ⲙⲟⲩⲛ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϣⲁ</w>
+            <w>ⲉⲛⲉϩ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲉⲓⲱⲧ</w>
+            <w>ⲉ</w>
+            <w>ⲧ</w>
+            <w>ϫⲡⲟ</w>
+            <w>ⲧⲉⲓ</w>
+            <w>ϩⲉ</w>
+            <w>ⲁⲛ</w>
+            <w>ⲟⲩⲱϣⲧ</w>
+            <w>ⲙⲡⲉⲕⲁⲅⲁⲑⲟⲛ</w>
+          </s>
+          <s xml:id="VI-7508303" n="20">
+            <w>ⲟⲩ</w>
+            <w>ⲟⲩⲱϣ</w>
+            <w>ⲉ</w>
+            <w>ⲟⲩⲱⲧ</w>
+            <w>ⲡ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲛ</w>
+            <w>ⲣⲁⲓⲧⲉⲓ</w>
+            <w>ⲙⲙⲟϥ</w>
+          </s>
+          <s xml:id="VI-7508304" n="21">
+            <w>ⲉⲛⲟⲩⲱϣ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲣⲉ</w>
+            <w>ⲩ</w>
+            <w>ⲣ</w>
+            <w>ⲧⲏⲣ</w>
+            <w>ⲉⲓ</w>
+            <w>ⲙⲙⲟ</w>
+            <w>ⲛ</w>
+            <w>ϩⲛ</w>
+            <w>ⲧⲅⲛⲱⲥⲓⲥ</w>
+          </s>
+          <s xml:id="VI-7508305" n="22">
+            <w>ⲟⲩⲁⲣⲉϩ</w>
+            <w>ⲇⲉ</w>
+            <w>ⲟⲩⲱⲧ</w>
+            <w>ⲡ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲉⲛ</w>
+            <w>ⲟⲩⲟϣϥ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲙ</w>
+            <w>ⲧⲣⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲥⲗⲁⲁⲧⲉ</w>
+            <w>ϩⲙ</w>
+            <w>ⲡⲉⲉⲓ</w>
+            <w>ⲃⲓⲟⲥ</w>
+            <w>ⲛϯ</w>
+            <w>ⲙⲓⲛⲉ</w>
+          </s>
+          <s xml:id="VI-7508306" n="23">
+            <w>ⲛ</w>
+            <w>ⲧⲁⲣⲟⲩϫⲉ</w>
+            <w>ⲛⲁⲓ</w>
+            <w>ⲉ</w>
+            <w>ⲩ</w>
+            <w>ϣⲗⲏⲗ</w>
+            <w>ⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲣ</w>
+            <w cert="high" resp="#zp">ⲁⲥⲡⲁⲍⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲉⲩⲉⲣⲏⲟⲩ</w>
+          </s>
+          <s xml:id="VI-7508307" n="24">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲃⲱⲕ</w>
+            <w>ⲉ</w>
+            <w>ⲩ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲟⲩⲱⲙ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲩ</w>
+            <w>ⲧⲣⲟⲫⲏ</w>
+            <w>ⲉ</w>
+            <w>ⲥⲟⲩⲁⲁⲃ</w>
+          </s>
+          <s xml:id="VI-7508308" n="25">
+            <w>ⲉⲙⲛ</w>
+            <w>ⲥⲛⲟϥ</w>
+            <w>ⲛϩⲏⲧⲥ</w>
+          </s>
+        </ab>
+        <ab type="colophon">
+          <s xml:id="VI-7508309" n="26">
+            <w>ⲡⲓⲟⲩⲁ</w>
+            <w>ⲙⲉⲛ</w>
+            <w>ⲗⲟⲅⲟⲥ</w>
+            <w>ⲛⲧⲁⲉⲓⲥⲁϩ</w>
+            <w>ϥ</w>
+            <w>ⲛⲧ</w>
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ⲁ</w>
+            <w>ϩⲁϩ</w>
+            <w>ⲅⲁⲣ</w>
+            <w>ⲧⲟⲛⲱ</w>
+            <w>ⲛⲧ</w>
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ⲉⲓ</w>
+            <w>ⲉⲧⲟⲟⲧ</w>
+            <w>ⲙⲡ</w>
+            <w>ⲓ</w>
+            <w>ⲥ</w>
+            <w>ⲁϩⲟⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲓ</w>
+            <w>ⲙⲉⲉⲩⲉ</w>
+            <w>ϫⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲉⲓ</w>
+            <w>ⲉⲧⲛ</w>
+            <w>ⲧⲏⲛⲉ</w>
+            <w>ⲕⲁⲓ</w>
+            <w>ⲅⲁⲣ</w>
+            <w cert="high" resp="#zp">ϯⲇⲓⲥⲧⲁⲍⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲓ</w>
+            <w>ⲥϩⲁⲓ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲁⲓ</w>
+            <w>ⲛⲏ</w>
+            <w>ⲧⲛ</w>
+            <w>ϫⲉ</w>
+            <w>ⲙⲉϣⲁⲕ</w>
+            <w>ⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲉⲓ</w>
+            <w>ⲉⲧⲛ</w>
+            <w>ⲧⲏⲛⲉ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲡ</w>
+            <w>ϩⲱⲃ</w>
+            <w>ⲣ</w>
+            <w>ϩⲓ</w>
+            <w>ⲥⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲏⲧⲛ</w>
+          </s>
+          <s xml:id="VI-7508310_0" n="27">
+            <w>ⲉⲡⲓ</w>
+            <w>ⲛⲁϣⲱ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲅⲁⲣ</w>
+            <w>ⲛϭⲓ</w>
+            <w>ⲛ</w>
+            <w>ⲗⲟⲅⲟⲥ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲁⲩⲉ</w>
+            <w>ⲓ</w>
+            <w>ⲉⲧⲟⲟⲧ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲡⲏ</w>
+          </s>
+        </ab>
+      </div>
+    </body>
+  </text>
+</TEI>

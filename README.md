@@ -36,6 +36,22 @@
 **同形異義語の参照**: 本文の `<w>` は `@lemma` と `@type`（品詞）の組で `lexicon.xml` を引きます。
 `@ana="#lex-…"` があればそれが最優先、品詞が一致する項目がない場合だけレンマ一致の全項目を候補として表示します。
 
+## ナグ・ハマディ写本 全文テキスト（下処理済み・未注釈）
+
+`source/nhc_fulltext_split/` に、写本 I–XIII のコプト語本文を 56 の文書単位に分けたテキスト一式があります
+（13,301 セグメント・236,617 語。文書ごとの TSV・TXT・TEI P5 と、再実行用のスクリプト、加えた変更の全記録）。
+内容、加えた変更、直していない点、要確認の箇所、検証の方法は
+[`source/nhc_fulltext_split/README_ja.md`](source/nhc_fulltext_split/README_ja.md) にまとめてあります。
+
+- **作業用のファイルです。** 品詞・レンマ・訳・語釈はまだ付いておらず、校訂本との照合も済んでいません
+  （元ファイルで落ちていた ⲍ・ⲯ を戻した 744 語のうち 42 語は確度 B。同 README の §4・§7）。
+  TEI のヘッダーも「作業用ファイル（未公開）」のままで、ライセンスの表記は入っていません。
+- **サイトの画面にはまだつないでいません**（検索・統計・文書一覧のどこにも出ません）。
+  検索・統計に出すには、`data/catalog.xml` に文書ごとの `<bibl type="document">` と
+  `<ref type="xml" target="source/nhc_fulltext_split/tei/….xml"/>` を足します（同 README の §9）。
+  検索ページの読み込み処理で 56 ファイルすべてを読めること、この規模（約24万語）で品詞列・詳細式の検索が動くことは確かめてあります。
+  ただし品詞が未注のため統計の数値が大きく変わること、読み込む XML が 7.9 MB 増えること、本文を表示するビュワーがまだないことへの対応が要ります。
+
 ## フォルダ構成
 
 ```
@@ -60,7 +76,8 @@ nag_hammadi_library/
 │   ├─ translations.csv    対訳(seg_id, ja, en, fr)
 │   ├─ notes.csv           注釈
 │   ├─ themes.csv          主題ラベル
-│   └─ eugnostos_source.tsv  本文ソース(通常編集不要)
+│   ├─ eugnostos_source.tsv  本文ソース(通常編集不要)
+│   └─ nhc_fulltext_split/   NHC 全文テキスト(56文書・未注釈の作業用ファイル。同フォルダの README_ja.md)
 └─ scripts/            ← ビルドスクリプト(通常触らない)
     ├─ build_tei.py        source/ の CSV → data/ の XML を生成
     ├─ build_site.py       index.html / tractate.html を生成

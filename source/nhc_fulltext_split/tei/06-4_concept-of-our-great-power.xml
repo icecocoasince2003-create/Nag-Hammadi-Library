@@ -1,0 +1,3158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="cop">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title xml:lang="en">The Concept of Our Great Power</title>
+        <title xml:lang="ja">われらの大いなる力の概念</title>
+        <title xml:lang="fr">Le Concept de notre grande puissance</title>
+        <title type="sub" xml:lang="en">Nag Hammadi Codex VI,4 — segmented Coptic text without linguistic annotation (working file)</title>
+        <respStmt>
+          <resp>TEI encoding; division of the corpus into tractates; removal of conversion residue</resp>
+          <name>Sheneset project</name>
+        </respStmt>
+        <respStmt xml:id="zp">
+          <resp>restoration of the letters ⲍ and ⲯ lost in the source file (see editorialDecl/correction)</resp>
+          <name>Sheneset project</name>
+        </respStmt>
+        <respStmt>
+          <resp>source text (tokenised Coptic)</resp>
+          <name>supplied corpus (Marcion segment ids)</name>
+        </respStmt>
+      </titleStmt>
+      <extent>
+        <measure unit="segment" quantity="257">257 segments</measure>
+        <measure unit="token" quantity="2537">2537 tokens</measure>
+        <measure unit="gap" quantity="0">0 gap markers</measure>
+      </extent>
+      <publicationStmt>
+        <p xml:lang="en">Working file, not yet published. Prepared for Sheneset, a TEI corpus of the Nag Hammadi Codices.</p>
+        <p xml:lang="ja">作業用ファイル（未公開）。Sheneset（ナグ・ハマディ写本 TEI コーパス）への掲載に向けて用意したもの。</p>
+      </publicationStmt>
+      <sourceDesc>
+        <bibl xml:id="src">
+          <title>Nag_Hammadi.txt</title>
+          <note xml:lang="en">Supplied plain-text file of the Nag Hammadi Codices: one segment per row (row ids 7500001–7513228), the Coptic text divided into tokens by spaces. This file contains rows 7507791–7508047.</note>
+          <note xml:lang="ja">提供されたナグ・ハマディ写本全文のテキストファイル。1 行が 1 セグメント（行 ID 7500001–7513228）で、コプト語本文は空白でトークンに区切られている。この文書は行 7507791–7508047 にあたる。</note>
+        </bibl>
+        <msDesc>
+          <msIdentifier>
+            <settlement>Cairo</settlement>
+            <repository>Coptic Museum</repository>
+            <idno>NHC VI</idno>
+            <msName>Nag Hammadi Codex VI</msName>
+          </msIdentifier>
+          <msContents>
+            <msItem n="4">
+              <locus from="36" to="48">pp. 36,1–48,15</locus>
+              <title xml:lang="en">The Concept of Our Great Power</title>
+              <textLang mainLang="cop">Coptic (Sahidic)</textLang>
+              <note xml:lang="en">Page and line numbers are those in common use (as in The Nag Hammadi Library in English); they were not taken from the source file.</note>
+            </msItem>
+          </msContents>
+          <history>
+            <origin>
+              <origDate notBefore="0300" notAfter="0400">4th c. CE</origDate>
+              <origPlace>Egypt</origPlace>
+            </origin>
+          </history>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc>
+        <p xml:lang="ja">提供されたナグ・ハマディ写本全文のテキストファイルを文書ごとに分け、サイト掲載に向けて下処理したものの TEI 版。訳、語釈、品詞、レンマはまだ付けていない。下処理（文書の分割、変換の残骸の除去、ⲍ・ⲯ の復元）と TEI 化には生成 AI（Claude）を使い、結果が元ファイルと対応することを検証スクリプト（scripts/verify.py、scripts/verify_tei.py）で確かめた。</p>
+        <p xml:lang="en">TEI version of the supplied full text of the Nag Hammadi Codices, divided into tractates and preprocessed for publication on the site. No translation, gloss, part of speech or lemma has been added yet. The preprocessing (division into tractates, removal of conversion residue, restoration of ⲍ and ⲯ) and the TEI conversion were carried out with a generative AI model (Claude); the result was checked against the source file with the verification scripts (scripts/verify.py, scripts/verify_tei.py).</p>
+      </projectDesc>
+      <editorialDecl>
+        <segmentation>
+          <p xml:lang="ja"><gi>s</gi> は元ファイルの 1 行（1 セグメント）。行が文書の境目や表題の境目をまたぐときだけ分けた。<att>xml:id</att> は「写本番号-行 ID」で、分けた行には「_開始トークン位置」（元ファイルの行の中での位置、0 始まり）を付けた。<att>n</att> は文書内の通し番号。<gi>w</gi> は元ファイルの空白区切り（形態素解析器の出力とみられる）のままで、切り直していない。ⲍ・ⲯ を戻した語が途中で切れていたときだけ 1 つにつないだ。<gi>ab</gi> の <att>type</att> は <val>title</val>（冒頭表題）、<val>text</val>（本文）、<val>subscript</val>（奥書表題）、<val>colophon</val>（写字生の奥書・覚え書き）、<val>fragment</val>（未配置断片）。</p>
+          <p xml:lang="en">Each <gi>s</gi> is one row (segment) of the source file; a row is split only where it straddles the boundary of a tractate or of a title. <att>xml:id</att> is the codex number followed by the row id; for split rows the position of the first token within the source row (counted from 0) is added after an underscore. <att>n</att> numbers the segments within the tractate. Each <gi>w</gi> is a token of the source file (apparently the output of a morphological segmenter) and has not been re-segmented, except that tokens were joined where a restored ⲍ or ⲯ fell inside a word that the segmenter had split. The <att>type</att> of <gi>ab</gi> is <val>title</val> (opening title), <val>text</val>, <val>subscript</val> (subscript title), <val>colophon</val> (scribal colophon or note) or <val>fragment</val> (unplaced fragments).</p>
+        </segmentation>
+        <correction method="markup">
+          <p xml:lang="ja">元ファイルでは ⲝ がすべて ⲯ になっていたので、ⲝ に戻した（この文書では 11 字）。元ファイルで落ちていた ⲍ と ⲯ は、語形と文脈から語が決まる箇所で戻した（この文書では 13 語）。戻した語の <gi>w</gi> には <att>resp</att>="#zp" と <att>cert</att> を付けた。<val>high</val>（13 語）は語形と文脈から決まるもの、<val>medium</val>（0 語）は固有名など、校訂本や翻訳で知られている読みを当てたもの。どちらも校訂本とは照合していない。英語の編集注記が文字化けして残っていた箇所は、欠損の注記なので <gi>gap</gi> に置き換えた。変更は 1 か所ずつ、同梱の changes.tsv と restored_letters.tsv に記録してある。</p>
+          <p xml:lang="en">In the source file every ⲝ had been converted to ⲯ; these were changed back to ⲝ (11 letters in this file). The letters ⲍ and ⲯ, lost throughout the source file, were restored where the word could be identified from its form and context (13 words in this file). These words carry <att>resp</att>="#zp" and <att>cert</att> on <gi>w</gi>: <val>high</val> (13) = determined by word form and context; <val>medium</val> (0) = proper names and similar words, restored following readings known from editions and translations. None has been collated with the printed editions. Garbled residue of English editorial notes, which reported lost text, was replaced by <gi>gap</gi>. Every change is listed in the accompanying files changes.tsv and restored_letters.tsv.</p>
+        </correction>
+        <interpretation>
+          <p xml:lang="ja">品詞（<att>type</att>）、レンマ（<att>lemma</att>）、語釈、訳、ギリシア語借用語の印（<att>xml:lang</att>="grc"）はまだ付けていない。<gi>gap</gi>（<att>reason</att>="lacuna"）は、元ファイルに行・頁単位の欠損の注記があった位置を示す（この文書では 0 箇所）。それ以外の欠損と校訂者による復元の区別、下点、上線、句読点、頁と行の区切りは元ファイルになく、符号化していない。</p>
+          <p xml:lang="en">No part of speech (<att>type</att>), lemma (<att>lemma</att>), gloss, translation or loanword marking (<att>xml:lang</att>="grc") has been added yet. <gi>gap</gi> with <att>reason</att>="lacuna" marks the places where the source file had an editorial note reporting lost lines or pages (0 in this file). The source file does not distinguish other lacunae from editorial restorations and has no sublinear dots, supralinear strokes, punctuation, or page and line breaks; none of these is encoded.</p>
+        </interpretation>
+      </editorialDecl>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="cop">Coptic (Sahidic)</language>
+        <language ident="en">English (header)</language>
+        <language ident="ja">Japanese (header)</language>
+        <language ident="fr">French (title)</language>
+      </langUsage>
+    </profileDesc>
+    <revisionDesc>
+      <change when="2026-11-17">TEI file generated from the preprocessed text (scripts/make_tei.py).</change>
+    </revisionDesc>
+  </teiHeader>
+  <text type="witness" xml:id="wit-VI-4" n="NHC VI,4" xml:lang="cop">
+    <body>
+      <div type="tractate" n="The Concept of Our Great Power" subtype="codexVI">
+        <head xml:lang="en">The Concept of Our Great Power — Nag Hammadi Codex VI,4 (pp. 36,1–48,15)</head>
+        <ab type="title">
+          <s xml:id="VI-7507791" n="1">
+            <w>ⲧⲉⲥⲑⲏⲥⲓⲥ</w>
+            <w>ⲛⲇⲓⲁⲛⲟⲓⲁ</w>
+          </s>
+          <s xml:id="VI-7507792" n="2">
+            <w>ⲡⲛⲟⲏⲙⲁ</w>
+            <w>ⲛⲧ</w>
+            <w>ⲛⲁϭ</w>
+            <w>ⲛϭⲁⲙ</w>
+          </s>
+        </ab>
+        <ab type="text">
+          <s xml:id="VI-7507793" n="3">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲡ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲥⲟⲩⲱⲛ</w>
+            <w>ⲧⲛ</w>
+            <w>ⲛⲟϭ</w>
+            <w>ⲛ</w>
+            <w>ϭⲟⲙ</w>
+            <w>ϥ</w>
+            <w>ⲛⲁ</w>
+            <w>ϣⲱⲡⲉ</w>
+            <w>ⲛⲁϩⲟⲣⲁ</w>
+            <w>ⲧⲟⲛ</w>
+          </s>
+          <s xml:id="VI-7507794" n="4">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲙⲙⲛ</w>
+            <w>ⲕ</w>
+            <w>ⲱϩⲧ</w>
+            <w>ⲛⲁϣ</w>
+            <w>ⲣⲟⲕϩϥ</w>
+          </s>
+          <s xml:id="VI-7507795" n="5">
+            <w>ⲁⲩⲱ</w>
+            <w>ϥ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲧⲃⲃⲟ</w>
+          </s>
+          <s xml:id="VI-7507796" n="6">
+            <w>ⲁⲩⲱ</w>
+            <w>ϥ</w>
+            <w>ⲛⲁ</w>
+            <w>ϥⲱⲧⲉ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲛ</w>
+            <w>ⲁⲙⲁϩⲧⲉ</w>
+            <w>ⲛⲓⲙ</w>
+            <w>ⲛⲧⲏⲧⲛ</w>
+          </s>
+          <s xml:id="VI-7507797" n="7">
+            <w>ϫⲉ</w>
+            <w>ⲟⲩⲟⲛ</w>
+            <w>ⲛⲓⲙ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲉⲣⲉ</w>
+            <w>ⲧⲁⲙⲟⲣⲫⲏ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲱⲛϩ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲛϩⲏⲧ</w>
+            <w>ϥ</w>
+            <w>ϥ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲟⲩϫⲁⲓ</w>
+          </s>
+          <s xml:id="VI-7507798" n="8">
+            <w>ϫⲓⲛ</w>
+            <w>ⲥⲁϣϥ</w>
+            <w>ⲛ</w>
+            <w>ϩⲟⲟⲩ</w>
+            <w>ϣⲁ</w>
+            <w>ϣⲉ</w>
+            <w>ϫⲟⲩⲱⲧⲉ</w>
+            <w>ⲛⲣⲟⲙⲡⲉ</w>
+          </s>
+          <s xml:id="VI-7507799" n="9">
+            <w>ⲉⲧⲉ</w>
+            <w>ⲛⲉ</w>
+            <w>ⲉⲓⲣ</w>
+            <w>ϩⲧⲟⲣ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲧ</w>
+            <w>ⲣ</w>
+            <w>ⲉⲩ</w>
+            <w>ⲥⲉⲩϩ</w>
+            <w>ⲡϩⲁⲉⲓⲉ</w>
+            <w>ⲧⲏⲣ</w>
+            <w>ϥ</w>
+          </s>
+          <s xml:id="VI-7507800" n="10">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲛ</w>
+            <w>ⲥϩⲁⲓ</w>
+            <w>ⲛⲧⲛ</w>
+            <w>ⲛⲁϭ</w>
+            <w>ⲛϭⲁⲙ</w>
+          </s>
+          <s xml:id="VI-7507801" n="11">
+            <w>ϩⲓⲛⲁ</w>
+            <w>ϫⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲥⲁⲥϩⲁⲉⲓ</w>
+            <w>ⲙ</w>
+            <w>ⲡⲉⲕ</w>
+            <w>ⲣⲁⲛ</w>
+            <w>ϩⲣⲁⲓ</w>
+            <w>ϩⲙ</w>
+            <w>ⲡⲛ</w>
+            <w>ⲛⲟϭ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩⲟⲉⲓⲛ</w>
+            <w>ⲁⲩⲱ</w>
+            <w>ⲛⲥϫⲟⲕ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲛϭⲓ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩⲉ</w>
+            <w>ⲡⲓⲛⲟⲓⲁ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩϩⲃⲏⲩⲉ</w>
+          </s>
+          <s xml:id="VI-7507802" n="12">
+            <w>ϫⲉⲕⲁⲁⲥ</w>
+            <w>ⲉ</w>
+            <w>ⲩⲛⲁⲧⲟⲩⲃⲁⲟⲩ</w>
+            <w>ⲥⲉϫⲟⲣⲟⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲃⲟⲗ</w>
+          </s>
+          <s xml:id="VI-7507803" n="13">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲥⲉ</w>
+            <w>ⲟ</w>
+            <w>ϫⲛ</w>
+            <w>ⲟⲩ</w>
+          </s>
+          <s xml:id="VI-7507804" n="14">
+            <w>ⲛⲥⲉⲥⲟⲟⲩϩ</w>
+            <w>ⲟⲩ</w>
+            <w>ϩⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲧⲟⲡⲟⲥ</w>
+            <w>ⲉⲧⲉ</w>
+            <w>ⲙⲙⲛ</w>
+            <w>ⲗⲁⲁⲩ</w>
+            <w>ⲛϩⲏⲧ</w>
+            <w>ϥ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲣⲟⲓ</w>
+          </s>
+          <s xml:id="VI-7507805" n="15">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲧⲉ</w>
+            <w>ⲧⲛ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲛⲁⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲣⲟⲓ</w>
+          </s>
+          <s xml:id="VI-7507806" n="16">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲧⲛ</w>
+            <w>ⲥⲟⲃⲧⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲉⲧⲛ</w>
+            <w>ⲙⲁ</w>
+            <w>ⲛ</w>
+            <w>ϣⲱ</w>
+            <w>ⲡⲉ</w>
+            <w>ϩⲛ</w>
+            <w>ⲧⲛ</w>
+            <w>ⲛⲟϭ</w>
+            <w>ⲛϭⲟⲙ</w>
+          </s>
+          <s xml:id="VI-7507807" n="17">
+            <w>ⲥⲟⲩ</w>
+            <w>ⲱ</w>
+            <w>ⲛ</w>
+            <w>ⲡ</w>
+            <w>ⲉⲛⲧ</w>
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ⲃⲱⲕ</w>
+            <w>ϫⲉ</w>
+            <w>ⲡⲱⲥ</w>
+            <w>ⲁϥϣⲱⲡⲉ</w>
+          </s>
+          <s xml:id="VI-7507808" n="18">
+            <w>ϩⲓⲛⲁ</w>
+            <w>ϫⲉ</w>
+            <w>ⲉⲧⲉ</w>
+            <w>ⲧⲛⲁⲥⲟⲩⲱⲛ</w>
+            <w>ⲡ</w>
+            <w>ⲉⲧⲁⲛϩ</w>
+            <w>ⲁϣⲱ</w>
+            <w>ⲡⲉ</w>
+          </s>
+          <s xml:id="VI-7507809" n="19">
+            <w>ϫⲉ</w>
+            <w>ⲁϣ</w>
+            <w>ⲧⲉ</w>
+            <w>ⲑ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲣⲛⲟⲉⲓ</w>
+            <w>ⲙⲙⲟ</w>
+            <w>ϥ</w>
+            <w>ϫⲉ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲁϣ</w>
+            <w>ⲛⲉ</w>
+            <w>ⲟⲩⲁⲛ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲁⲓⲱⲛ</w>
+            <w>ⲉⲧⲙⲙⲁⲩ</w>
+          </s>
+          <s xml:id="VI-7507810" n="20">
+            <w>ⲏ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲁϣ</w>
+            <w>ⲙ</w>
+            <w>ⲙⲓⲛⲉ</w>
+            <w>ⲡⲉ</w>
+          </s>
+          <s xml:id="VI-7507811" n="21">
+            <w>ⲏ</w>
+            <w>ϫⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲧⲁϥ</w>
+            <w>ϣⲱⲡⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲁϣ</w>
+            <w>ⲛϩⲉ</w>
+          </s>
+          <s xml:id="VI-7507812" n="22">
+            <w>ⲉⲧⲃⲉ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲧⲉⲧⲛ</w>
+            <w>ϣⲓⲛⲉ</w>
+            <w>ⲁⲛ</w>
+            <w>ϫⲉ</w>
+            <w>ⲁϣ</w>
+            <w>ⲙ</w>
+            <w>ⲙⲓⲛⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲧ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲛⲁ</w>
+            <w>ϣⲱⲡⲉ</w>
+            <w>ⲙⲙⲟⲥ</w>
+          </s>
+          <s xml:id="VI-7507813" n="23">
+            <w>ⲁϣ</w>
+            <w>ⲛ</w>
+            <w>ϩⲉ</w>
+            <w>ⲛⲧⲟϥ</w>
+            <w>ⲁ</w>
+            <w>ⲧⲉⲧⲛ</w>
+            <w>ϣⲱⲡⲉ</w>
+          </s>
+          <s xml:id="VI-7507814" n="24">
+            <w>ⲁⲣⲓⲛⲟⲉⲓ</w>
+            <w>ϫⲉ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲁϣ</w>
+            <w>ⲛⲁⲉⲓⲏ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡⲓ</w>
+            <w>ⲙⲟⲟⲩ</w>
+            <w>ϫⲉ</w>
+            <w>ⲟⲩⲁⲧϣⲓⲧ</w>
+            <w>ϥ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲛⲁⲧⲧⲉϩⲁϥ</w>
+          </s>
+          <s xml:id="VI-7507815" n="25">
+            <w>ⲙⲛ</w>
+            <w>ⲧⲉϥ</w>
+            <w>ⲁⲣⲭⲏ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲧⲉϥ</w>
+            <w>ϩⲁⲏ</w>
+            <w>ⲉ</w>
+            <w>ϥ</w>
+            <w>ϥⲓ</w>
+            <w>ϩⲁ</w>
+            <w>ⲡⲕⲁϩ</w>
+          </s>
+          <s xml:id="VI-7507816" n="26">
+            <w>ⲉϥ</w>
+            <w>ⲛⲓϥⲉ</w>
+            <w>ϩⲙ</w>
+            <w>ⲡⲁⲏⲣ</w>
+          </s>
+          <s xml:id="VI-7507817" n="27">
+            <w>ⲡⲁⲓ</w>
+            <w>ⲉ</w>
+            <w>ⲧ</w>
+            <w>ⲟⲩⲛ</w>
+            <w>ϩⲏⲧ</w>
+            <w>ϥ</w>
+            <w>ⲛϭⲓ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲟⲩⲧⲉ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲅ</w>
+            <w>ⲅⲉⲗⲟⲥ</w>
+          </s>
+          <s xml:id="VI-7507818" n="28">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲡ</w>
+            <w>ⲉⲧ</w>
+            <w>ϫⲟⲥⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲁⲓ</w>
+            <w>ⲧⲏⲣ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲣⲉ</w>
+            <w>ⲑⲣⲧⲉ</w>
+            <w>ⲛ</w>
+            <w>ϩⲏ</w>
+            <w>ⲧ</w>
+            <w>ϥ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲡ</w>
+            <w>ⲟⲩⲁⲉⲓⲛ</w>
+          </s>
+          <s xml:id="VI-7507819" n="29">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲥϩⲁⲓ</w>
+            <w>ⲉ</w>
+            <w>ⲩ</w>
+            <w>ⲟⲩⲟⲛϩ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲛϩⲏⲧ</w>
+            <w>ϥ</w>
+            <w>ⲁ</w>
+            <w>ⲉⲓⲧⲁⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲩ</w>
+            <w>ⲇⲓⲁⲕⲟⲛⲓⲁ</w>
+            <w>ⲛ</w>
+            <w>ⲧ</w>
+            <w>ⲕⲧⲓⲥⲓⲥ</w>
+            <w>ⲛⲛⲥⲁⲣⲁⲝ</w>
+          </s>
+          <s xml:id="VI-7507820" n="30">
+            <w>ϫⲉ</w>
+            <w>ⲙⲙⲛ</w>
+            <w>ϭⲟⲙ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲗⲁⲁⲩ</w>
+            <w>ⲱϩⲉ</w>
+            <w>ⲉⲣⲁ</w>
+            <w>ⲧ</w>
+            <w>ϥ</w>
+            <w>ⲟⲩⲉϣ</w>
+            <w>ⲛⲡ</w>
+            <w>ⲉⲧⲙⲙⲁⲩ</w>
+          </s>
+          <s xml:id="VI-7507821" n="31">
+            <w>ⲟⲩ</w>
+            <w>ⲧⲉ</w>
+            <w>ⲙⲙⲛ</w>
+            <w>ϭⲟⲙ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲁⲓⲱⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲱⲛϩ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩⲉϣ</w>
+            <w>ⲛⲃⲗⲗⲁϥ</w>
+          </s>
+          <s xml:id="VI-7507822" n="32">
+            <w>ⲉⲩⲛⲧⲁ</w>
+            <w>ϥ</w>
+            <w>ⲙⲙⲁⲩ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲛϩⲏⲧ</w>
+            <w>ϥ</w>
+            <w>ⲉ</w>
+            <w>ϥⲣⲛⲟ</w>
+            <w>ⲉⲓ</w>
+            <w>ϩⲛ</w>
+            <w>ⲟⲩⲡ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲟⲩⲁⲁⲃ</w>
+          </s>
+          <s xml:id="VI-7507823" n="33">
+            <w>ⲧⲟⲧⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲁⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲛⲧⲉⲧⲛ</w>
+            <w>ⲙ</w>
+            <w>ⲙⲉ</w>
+            <w>ϫⲉ</w>
+            <w>ⲟⲩⲉⲓ</w>
+            <w>ⲧⲟ</w>
+            <w>ⲡⲉ</w>
+          </s>
+          <s xml:id="VI-7507824" n="34">
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ⲧⲁⲁ</w>
+            <w>ϥ</w>
+            <w>ⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲣⲱⲙⲉ</w>
+            <w>ϫⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲩ</w>
+            <w>ⲛⲁ</w>
+            <w>ϫⲓ</w>
+            <w>ⲱⲛϩ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲛϩⲏⲧ</w>
+            <w>ϥ</w>
+            <w>ⲛ</w>
+            <w>ϩⲟⲟⲩ</w>
+            <w>ⲛⲓⲙ</w>
+            <w>ⲉ</w>
+            <w>ⲩⲛⲧⲁ</w>
+            <w>ϥ</w>
+            <w>ⲙ</w>
+            <w>ⲡⲉϥ</w>
+            <w>ⲱⲛϩ</w>
+            <w>ⲛ</w>
+            <w>ϩⲏ</w>
+            <w>ⲧϥ</w>
+          </s>
+          <s xml:id="VI-7507825" n="35">
+            <w>ⲉϥ</w>
+            <w>ϯ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲧⲏⲣⲟⲩ</w>
+          </s>
+          <s xml:id="VI-7507826" n="36">
+            <w>ⲧⲟ</w>
+            <w>ⲧⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲕⲁⲕⲉ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲉ</w>
+            <w>ⲙⲛⲧ</w>
+            <w>ⲉ</w>
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ϫⲉ</w>
+            <w>ⲡⲕⲱϩⲧ</w>
+          </s>
+          <s xml:id="VI-7507827" n="37">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲧⲉ</w>
+            <w>ⲡⲱⲉⲓ</w>
+            <w>ⲉ</w>
+            <w>ϥ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲃⲟⲗ</w>
+            <w>ϥ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲛϩⲏⲧϥ</w>
+          </s>
+          <s xml:id="VI-7507828" n="38">
+            <w>ⲙⲡⲉⲛⲉϥ</w>
+            <w>ⲃⲁⲗ</w>
+            <w>ⲉ</w>
+            <w>ϣ</w>
+            <w>ϥⲓ</w>
+            <w>ϩⲁ</w>
+            <w>ⲡⲁ</w>
+            <w>ⲟⲩⲟⲉⲓⲛ</w>
+          </s>
+          <s xml:id="VI-7507829" n="39">
+            <w>ⲉⲁⲩ</w>
+            <w>ⲕⲓⲙ</w>
+            <w>ⲛϭⲓ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲙ</w>
+            <w>ⲙⲟⲩⲉⲓⲟⲟⲩⲉ</w>
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁ</w>
+            <w>ⲡⲕⲉϣⲱϫⲡ</w>
+            <w>ϣⲱⲡⲉ</w>
+          </s>
+          <s xml:id="VI-7507830" n="40">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲡ</w>
+            <w>ⲁⲓⲱⲛ</w>
+            <w>ⲧⲏⲣ</w>
+            <w>ϥ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲧⲕ</w>
+            <w>ⲧⲓ</w>
+            <w>ⲥⲓ</w>
+            <w>ⲥ</w>
+            <w>ⲁⲩⲱ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ϭⲟⲙ</w>
+            <w>ⲛ</w>
+            <w>ⲧⲁ</w>
+            <w>ⲡ</w>
+            <w>ⲕⲱϩⲧ</w>
+            <w>ϣⲱⲡⲉ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲙ</w>
+            <w>ⲙⲟⲟⲩ</w>
+          </s>
+          <s xml:id="VI-7507831" n="41">
+            <w>ⲁⲧ</w>
+            <w>ϭⲟⲙ</w>
+            <w>ϣⲱⲡⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲧ</w>
+            <w>ⲙⲏⲧⲉ</w>
+            <w>ⲛⲛ</w>
+            <w>ϭⲟⲙ</w>
+          </s>
+          <s xml:id="VI-7507832" n="42">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁⲛ</w>
+            <w>ϭⲟⲙ</w>
+            <w>ⲣⲉⲡⲓⲑⲩⲙⲉⲓ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲁⲩ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲁ</w>
+            <w>ϩⲓⲕⲱⲛ</w>
+          </s>
+          <s xml:id="VI-7507833" n="43">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁ</w>
+            <w cert="high" resp="#zp">ⲧⲯⲩⲭⲏ</w>
+            <w>ϣⲱ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲙⲡⲉⲥⲧⲩⲡⲟⲥ</w>
+          </s>
+          <s xml:id="VI-7507834" n="44">
+            <w>ⲡⲁⲓ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡ</w>
+            <w>ϩⲱⲃ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲁϩϣⲱⲡⲉ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲩ</w>
+            <w>ϫⲉ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲁϣ</w>
+            <w>ⲙ</w>
+            <w>ⲙⲓⲛⲉ</w>
+            <w>ⲡⲉ</w>
+          </s>
+          <s xml:id="VI-7507835" n="45">
+            <w>ϫⲉ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲁⲧⲉϥ</w>
+            <w>ϣⲱⲡⲉ</w>
+            <w>ϥ</w>
+            <w>ⲛⲁⲩ</w>
+            <w>ⲁⲛ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϫⲉ</w>
+            <w>ⲛⲁ</w>
+            <w>ϥ</w>
+            <w>ϣⲱⲡⲉ</w>
+            <w>ⲛϭⲓ</w>
+            <w>ⲡ</w>
+            <w>ⲁⲓⲱⲛ</w>
+            <w>ⲛⲧⲥⲁⲣⲁⲝ</w>
+            <w>ϩⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲟϭ</w>
+            <w>ⲛ</w>
+            <w>ⲥⲱⲙⲁ</w>
+          </s>
+          <s xml:id="VI-7507836" n="46">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲛⲉϣⲁⲩⲱⲡ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲛ</w>
+            <w>ϩⲉⲛ</w>
+            <w>ⲛⲟϭ</w>
+            <w>ⲛ</w>
+            <w>ϩⲟⲟⲩ</w>
+            <w>ϩⲛ</w>
+            <w>ⲧⲕⲧⲓⲥⲓⲥ</w>
+          </s>
+          <s xml:id="VI-7507837" n="47">
+            <w>ϩⲟⲧⲁⲛ</w>
+            <w>ⲅⲁⲣ</w>
+            <w>ⲛⲧⲁ</w>
+            <w>ⲣⲟⲩϫⲁϩⲙ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲛⲧⲁ</w>
+            <w>ⲣ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲃⲱⲕ</w>
+            <w>ⲉϩⲟⲩⲛ</w>
+            <w>ⲉ</w>
+            <w>ⲧ</w>
+            <w>ⲥⲁ</w>
+            <w>ⲣⲁⲝ</w>
+          </s>
+          <s xml:id="VI-7507838" n="48">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲡ</w>
+            <w>ⲉⲓⲱⲧ</w>
+            <w>ⲛ</w>
+            <w>ⲧ</w>
+            <w>ⲥⲁ</w>
+            <w>ⲣⲁⲝ</w>
+            <w>ⲡ</w>
+            <w>ⲙⲟⲟⲩ</w>
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ⲉⲓⲣⲉ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲉϥ</w>
+            <w>ϩⲁ</w>
+            <w>ⲡ</w>
+            <w>ⲙⲙⲓⲛ</w>
+            <w>ⲙⲙⲟϥ</w>
+          </s>
+          <s xml:id="VI-7507839" n="49">
+            <w>ϩⲟⲧⲁⲛ</w>
+            <w>ⲅⲁⲣ</w>
+            <w>ⲛ</w>
+            <w>ⲧⲁ</w>
+            <w>ⲣⲉϥ</w>
+            <w>ϭⲛ</w>
+            <w>ⲛⲱϩⲉ</w>
+            <w>ⲉ</w>
+            <w>ϥ</w>
+            <w>ⲟ</w>
+            <w>ⲛⲉⲩ</w>
+            <w>ⲥⲉⲃⲏⲥ</w>
+            <w>ⲉ</w>
+            <w>ϥⲙⲡϣⲁ</w>
+          </s>
+          <s xml:id="VI-7507840" n="50">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲡ</w>
+            <w>ⲉⲓⲱⲧ</w>
+            <w>ⲛⲧⲥⲁⲣⲁⲝ</w>
+            <w>ⲉ</w>
+            <w>ϥⲣϩⲩ</w>
+            <w>ⲡⲟⲧⲁⲥⲥⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲁⲅⲅⲉⲗⲟⲥ</w>
+          </s>
+          <s xml:id="VI-7507841" n="51">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ⲧⲁϣⲉ</w>
+            <w>ⲟⲉⲓϣ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲩ</w>
+            <w>ⲥⲉⲃⲉⲓⲁ</w>
+            <w>ⲛ</w>
+            <w>ϣⲉ</w>
+            <w>ϫⲟⲩⲱⲧⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲣⲟⲙⲡⲉ</w>
+          </s>
+          <s xml:id="VI-7507842" n="52">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲙⲡⲉ</w>
+            <w>ⲗⲁⲁⲩ</w>
+            <w>ⲥⲱⲧⲙ</w>
+            <w>ⲛⲁϥ</w>
+          </s>
+          <s xml:id="VI-7507843" n="53">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁϥ</w>
+            <w>ⲧⲁ</w>
+            <w>ⲙⲓⲟ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲟⲩ</w>
+            <w>ϭⲓⲃⲱⲧⲟⲥ</w>
+            <w>ⲛϣⲉ</w>
+          </s>
+          <s xml:id="VI-7507844" n="54">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲡ</w>
+            <w>ⲉⲛⲧ</w>
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ϭⲛⲧ</w>
+            <w>ϥ</w>
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ⲃⲱⲕ</w>
+            <w>ⲉϩⲟⲩⲛ</w>
+            <w>ⲉ</w>
+            <w>ⲣⲟⲥ</w>
+          </s>
+          <s xml:id="VI-7507845" n="55">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁ</w>
+            <w>ⲡ</w>
+            <w>ⲕⲁ</w>
+            <w>ⲧⲁⲕⲗⲩⲥⲙⲟⲥ</w>
+            <w>ϣⲱⲡⲉ</w>
+          </s>
+          <s xml:id="VI-7507846" n="56">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲛ</w>
+            <w>ⲧⲉⲓ</w>
+            <w>ϩⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲛ</w>
+            <w>ⲱϩⲉ</w>
+            <w>ⲟⲩϫⲁⲉⲓ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲛⲉϥ</w>
+            <w>ϣⲏⲣⲉ</w>
+          </s>
+          <s xml:id="VI-7507847" n="57">
+            <w>ϫⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲉⲣⲉ</w>
+            <w>ⲙⲡⲉ</w>
+            <w>ⲧ</w>
+            <w>ϭⲓⲃⲱⲧⲟⲥ</w>
+            <w>ϣⲱⲡⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲣⲉ</w>
+            <w>ⲣⲱⲙⲉ</w>
+            <w>ⲃⲱⲕ</w>
+            <w>ⲉϩⲟⲩⲛ</w>
+            <w>ⲉⲣⲟⲥ</w>
+          </s>
+          <s xml:id="VI-7507848" n="58">
+            <w>ⲛⲉⲡⲙⲟ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲕⲁⲧⲁⲕⲗⲩⲥⲙⲟⲥ</w>
+            <w>ⲛⲁ</w>
+            <w>ϣⲱⲡⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲛ</w>
+          </s>
+          <s xml:id="VI-7507849" n="59">
+            <w>ⲛ</w>
+            <w>ϯ</w>
+            <w>ϩⲉ</w>
+            <w>ⲁ</w>
+            <w>ϥⲣⲛⲟⲉⲓ</w>
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ⲙⲉⲉⲩⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲟⲩ</w>
+            <w>ϩⲙ</w>
+            <w>ⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲧⲉ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲛⲁⲅⲅⲉⲗⲟⲥ</w>
+          </s>
+          <s xml:id="VI-7507850" n="60">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲛ</w>
+            <w>ϭⲟⲙ</w>
+            <w>ⲛ</w>
+            <w>ⲧ</w>
+            <w>ⲙⲛⲧ</w>
+            <w>ⲛⲟϭ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲁⲓ</w>
+            <w>ⲧⲏⲣⲟⲩ</w>
+          </s>
+          <s xml:id="VI-7507851" n="61">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲧⲣⲩⲫⲏ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲡⲧⲣⲟⲡⲟⲥ</w>
+          </s>
+          <s xml:id="VI-7507852" n="62">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲉ</w>
+            <w>ϥⲡⲱⲛⲉ</w>
+            <w>ⲙⲙⲟ</w>
+            <w>ⲟⲩ</w>
+            <w>ϩⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲁⲓⲱⲛ</w>
+            <w>ⲉ</w>
+            <w>ϥ</w>
+            <w>ⲥⲁⲛⲉϣ</w>
+            <w>ⲙⲙⲟ</w>
+            <w>ⲟⲩ</w>
+            <w>ϩⲛ</w>
+            <w>ⲛⲇⲓⲁⲙⲟⲛⲏ</w>
+          </s>
+          <s xml:id="VI-7507853" n="63">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲫⲁⲡ</w>
+            <w>ⲛⲧ</w>
+            <w>ⲥⲁⲣⲁⲝ</w>
+          </s>
+          <s xml:id="VI-7507854" n="64">
+            <w>ⲁϥⲃⲱⲗ</w>
+          </s>
+          <s xml:id="VI-7507855" n="65">
+            <w>ⲁⲫⲱⲃ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩⲱⲧ</w>
+            <w>ⲛⲧ</w>
+            <w>ϭⲁⲙ</w>
+            <w>ⲱϩⲉⲣⲁⲧϥ</w>
+          </s>
+          <s xml:id="VI-7507856" n="66">
+            <w>ⲧⲟⲧⲉ</w>
+            <w>ϯ</w>
+            <w>ⲛⲟⲩ</w>
+            <w cert="high" resp="#zp">ⲡⲯⲩⲭⲓⲕⲟⲥ</w>
+            <w>ⲛ</w>
+            <w>ⲁⲓⲱⲛ</w>
+            <w>ϩⲱⲱϥ</w>
+          </s>
+          <s xml:id="VI-7507857" n="67">
+            <w>ⲟⲩⲕⲟⲩⲉⲓ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲉ</w>
+            <w>ϥ</w>
+            <w>ⲧⲏϩ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲛⲥⲱⲙⲁ</w>
+          </s>
+          <s xml:id="VI-7507858" n="68">
+            <w>ⲉϥ</w>
+            <w>ϫⲡⲟ</w>
+            <w>ϩⲛ</w>
+            <w cert="high" resp="#zp">ⲛⲯⲩⲭⲏ</w>
+            <w>ⲉϥ</w>
+            <w>ϫⲱϩⲙ</w>
+          </s>
+          <s xml:id="VI-7507859" n="69">
+            <w>ϫⲉ</w>
+            <w>ⲡ</w>
+            <w>ϫⲱϩⲙ</w>
+            <w>ⲛ</w>
+            <w>ϣⲟⲣⲡ</w>
+            <w>ⲛⲧⲕ</w>
+            <w>ⲧⲓ</w>
+            <w>ⲥⲓ</w>
+            <w>ⲥ</w>
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ϭⲛ</w>
+            <w>ϫⲓⲛ</w>
+          </s>
+          <s xml:id="VI-7507860" n="70">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ϫⲡⲉ</w>
+            <w>ⲉⲛⲉⲣⲅⲉⲓⲁ</w>
+            <w>ⲛⲓⲙ</w>
+          </s>
+          <s xml:id="VI-7507861" n="71">
+            <w>ϩⲁϩ</w>
+            <w>ⲛⲛⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲉⲣ</w>
+            <w>ⲅⲉⲓⲁ</w>
+            <w>ⲛⲟⲣⲅⲏ</w>
+          </s>
+          <s xml:id="VI-7507862" n="72">
+            <w>ⲧⲃⲗⲕⲉ</w>
+          </s>
+          <s xml:id="VI-7507863" n="73">
+            <w>ⲡ</w>
+            <w>ⲕⲱϩ</w>
+          </s>
+          <s xml:id="VI-7507864" n="74">
+            <w>ⲡⲫⲑⲟⲛⲟⲥ</w>
+          </s>
+          <s xml:id="VI-7507865" n="75">
+            <w>ⲟⲩⲙⲁⲥ</w>
+            <w>ⲧⲉ</w>
+          </s>
+          <s xml:id="VI-7507866" n="76">
+            <w>ⲟⲩⲙⲛⲧⲇⲓⲁⲃⲟⲗⲟⲥ</w>
+          </s>
+          <s xml:id="VI-7507867" n="77">
+            <w>ϣⲱⲥ</w>
+          </s>
+          <s xml:id="VI-7507868" n="78">
+            <w>ϩⲓ</w>
+            <w>ⲡⲟⲗⲉⲙⲟⲥ</w>
+          </s>
+          <s xml:id="VI-7507869" n="79">
+            <w>ⲡϭⲁⲗ</w>
+            <w>ⲙⲛ</w>
+            <w>ϩⲉⲛ</w>
+            <w>ϣⲟϫⲛⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲩϩⲟⲟⲩ</w>
+          </s>
+          <s xml:id="VI-7507870" n="80">
+            <w>ϩⲉⲛⲗⲩ</w>
+            <w>ⲡⲏ</w>
+            <w>ⲙⲛ</w>
+            <w>ϩⲉⲛ</w>
+            <w>ϩⲏⲇⲟⲛⲏ</w>
+          </s>
+          <s xml:id="VI-7507871" n="81">
+            <w>ϩⲉⲛ</w>
+            <w>ⲙⲛⲧ</w>
+            <w>ⲉⲥⲭⲣⲟⲥ</w>
+          </s>
+          <s xml:id="VI-7507872" n="82">
+            <w>ⲙⲛ</w>
+            <w>ϩⲉⲛ</w>
+            <w>ⲧⲱ</w>
+            <w>ⲗⲙ</w>
+          </s>
+          <s xml:id="VI-7507873" n="83">
+            <w>ϩⲉⲛ</w>
+            <w>ⲕⲣⲟϥ</w>
+            <w>ⲙⲛ</w>
+            <w>ϩⲉⲛ</w>
+            <w>ϣⲱ</w>
+            <w>ⲛⲉ</w>
+          </s>
+          <s xml:id="VI-7507874" n="84">
+            <w>ϩⲉⲛ</w>
+            <w>ϩⲁⲡ</w>
+            <w>ⲛ</w>
+            <w>ϫⲓ</w>
+            <w>ⲛϭⲟⲛⲥ</w>
+          </s>
+          <s xml:id="VI-7507875" n="85">
+            <w>ⲉⲩ</w>
+            <w>ⲕⲱ</w>
+            <w>ⲉϩⲣⲁⲓ</w>
+            <w>ⲕⲁⲧⲁ</w>
+            <w>ⲛⲉⲩ</w>
+            <w>ⲟⲩⲱϣⲉ</w>
+          </s>
+          <s xml:id="VI-7507876" n="86">
+            <w>ⲉⲧⲓ</w>
+            <w>ⲧ</w>
+            <w>ⲉⲧⲛ</w>
+            <w>ⲛⲕⲟⲧⲕ</w>
+          </s>
+          <s xml:id="VI-7507877" n="87">
+            <w>ⲉⲧⲉⲧⲛ</w>
+            <w>ⲡⲉⲣⲉ</w>
+            <w>ⲣⲁⲥⲟⲩ</w>
+          </s>
+          <s xml:id="VI-7507878" n="88">
+            <w>ⲛⲉϩⲥⲉ</w>
+            <w>ⲛⲧⲉⲧⲛ</w>
+            <w>ⲛⲟⲩⲟⲩϩ</w>
+            <w>ⲧⲏⲛⲉ</w>
+          </s>
+          <s xml:id="VI-7507879" n="89">
+            <w>ⲛⲧⲉ</w>
+            <w>ⲧⲛ</w>
+            <w>ϫⲓ</w>
+            <w>ϯ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲧⲉⲧⲛ</w>
+            <w>ⲟⲩⲱⲙ</w>
+            <w>ⲛ</w>
+            <w>ⲑ</w>
+            <w>ⲣⲉ</w>
+            <w>ⲙⲙⲉ</w>
+          </s>
+          <s xml:id="VI-7507880" n="90">
+            <w>ϯ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲗⲟⲅⲟⲥ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲡ</w>
+            <w>ⲙⲟⲟⲩ</w>
+            <w>ⲙⲡⲱⲛϩ</w>
+          </s>
+          <s xml:id="VI-7507881" n="91">
+            <w>ⲁⲗⲱⲧⲛ</w>
+            <w>ϩⲛ</w>
+            <w>ⲛⲓ</w>
+            <w>ⲉⲡⲓⲑⲩⲙⲓⲁ</w>
+            <w>ⲉⲑ</w>
+            <w>ⲟⲟⲩ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲛⲓⲟⲩⲱϣⲉ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲛⲓⲁⲛϩⲟⲙⲟⲓⲟⲛ</w>
+          </s>
+          <s xml:id="VI-7507882" n="92">
+            <w>ϩⲉⲛ</w>
+            <w>ⲙⲛⲧ</w>
+            <w>ϩⲉⲣⲉⲥⲓⲥ</w>
+            <w>ⲉ</w>
+            <w>ⲩ</w>
+            <w>ϩⲟⲟⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲙⲛⲧⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲣⲁⲧ</w>
+            <w>ⲟⲩ</w>
+          </s>
+          <s xml:id="VI-7507883" n="93">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲙ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲥ</w>
+            <w>ϭⲙϭⲁⲙ</w>
+            <w>ⲛϭⲓ</w>
+            <w>ⲧ</w>
+            <w>ⲙⲁⲁⲩ</w>
+            <w>ⲛ</w>
+            <w>ⲧ</w>
+            <w>ⲥⲁⲧⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲥ</w>
+            <w>ⲛ</w>
+            <w>ⲡ</w>
+            <w>ⲕⲱϩⲧ</w>
+            <w>ⲉϫⲛ</w>
+            <w cert="high" resp="#zp">ⲧⲯⲩⲭⲏ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲡⲕⲁϩ</w>
+          </s>
+          <s xml:id="VI-7507884" n="94">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁ</w>
+            <w>ⲥ</w>
+            <w>ⲣⲱⲕϩ</w>
+            <w>ⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲏⲉⲓ</w>
+            <w>ⲧⲏⲣ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲉⲧ</w>
+            <w>ϣⲟⲟⲡ</w>
+            <w>ⲛϩⲏⲧ</w>
+            <w>ⲥ</w>
+          </s>
+          <s xml:id="VI-7507885" n="95">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁ</w>
+            <w>ⲡⲉⲥⲙⲁⲛⲉ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲱϫⲛ</w>
+            <w>ⲉⲃⲟⲗ</w>
+          </s>
+          <s xml:id="VI-7507886" n="96">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲟⲛ</w>
+            <w>ⲉ</w>
+            <w>ⲥ</w>
+            <w>ⲧⲙ</w>
+            <w>ϭⲓⲛⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲣⲱⲕϩ</w>
+          </s>
+          <s xml:id="VI-7507887" n="97">
+            <w>ⲥⲛⲁⲧⲁⲕⲟⲥ</w>
+            <w>ⲟⲩⲁⲁⲥ</w>
+          </s>
+          <s xml:id="VI-7507888" n="98">
+            <w>ⲁⲩⲱ</w>
+            <w>ϥ</w>
+            <w>ⲛⲁ</w>
+            <w>ϣⲱⲡⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲁⲥⲱⲙⲁⲧⲟⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲁⲧⲥⲱⲙⲁ</w>
+          </s>
+          <s xml:id="VI-7507889" n="99">
+            <w>ⲛϥⲣⲱⲕϩ</w>
+            <w>ⲛⲑⲩ</w>
+            <w>ⲗⲏ</w>
+            <w>ϣⲁⲛⲧⲉ</w>
+            <w>ϥ</w>
+            <w cert="high" resp="#zp">ⲣⲕⲁⲑⲁⲣⲓⲍⲉ</w>
+            <w>ⲙ</w>
+            <w>ⲡⲧⲏⲣϥ</w>
+          </s>
+          <s xml:id="VI-7507890" n="100">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲧⲕⲁϭⲓⲁ</w>
+            <w>ⲧⲏⲣⲥ</w>
+          </s>
+          <s xml:id="VI-7507891" n="101">
+            <w>ϩⲟⲧⲁⲛ</w>
+            <w>ⲅⲁⲣ</w>
+            <w>ⲉ</w>
+            <w>ϥ</w>
+            <w>ϣⲁⲛ</w>
+            <w>ⲧⲛⲧⲙ</w>
+            <w>ϭⲛ</w>
+            <w>ⲗⲁⲁⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲣⲱⲕϩ</w>
+          </s>
+          <s xml:id="VI-7507892" n="102">
+            <w>ϥⲛⲁⲛⲟⲟⲩϩ</w>
+            <w>ϥ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ϥ</w>
+            <w>ⲟⲩⲁⲁ</w>
+            <w>ϥ</w>
+            <w>ϣⲁⲛⲧⲉ</w>
+            <w>ϥⲟϫⲛϥ</w>
+          </s>
+          <s xml:id="VI-7507893" n="103">
+            <w>ⲧⲟⲧⲉ</w>
+            <w>ϩⲙ</w>
+            <w>ⲡⲉⲓ</w>
+            <w>ⲁⲓⲱⲛ</w>
+            <w>ⲉⲧⲉ</w>
+            <w>ⲡⲁⲓ</w>
+            <w>ⲡⲉ</w>
+            <w cert="high" resp="#zp">ⲙⲯⲩⲭⲓⲕⲟⲛ</w>
+          </s>
+          <s xml:id="VI-7507894" n="104">
+            <w>ϥ</w>
+            <w>ⲛⲁϣⲱ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲛϭⲓ</w>
+            <w>ⲡ</w>
+            <w>ⲣⲱⲙⲉ</w>
+            <w>ⲉⲧⲉ</w>
+            <w>ⲡⲉⲧ</w>
+            <w>ⲥⲟⲟⲩⲛ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲧ</w>
+            <w>ⲛⲟϭ</w>
+            <w>ⲛϭⲟⲙ</w>
+          </s>
+          <s xml:id="VI-7507895" n="105">
+            <w>ϥⲁϫⲉⲓ</w>
+            <w>ⲁⲩⲱ</w>
+            <w>ϥⲁⲥⲟⲩⲱⲛⲧ</w>
+          </s>
+          <s xml:id="VI-7507896" n="106">
+            <w>ϥⲁⲥⲱ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲉⲣⲱⲧⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲧ</w>
+            <w>ⲙⲁⲁⲩ</w>
+            <w>ⲙⲫⲱⲃ</w>
+          </s>
+          <s xml:id="VI-7507897" n="107">
+            <w>ϥⲁϣⲁϫⲉ</w>
+            <w>ϩⲛ</w>
+            <w>ϩⲉⲛ</w>
+            <w>ⲡⲁⲣⲁⲃⲟⲗⲏ</w>
+          </s>
+          <s xml:id="VI-7507898" n="108">
+            <w>ϥⲁⲧⲁ</w>
+            <w>ϣⲉ</w>
+            <w>ⲟⲉⲓϣ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲁⲓⲱⲛ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲏ</w>
+            <w>ⲟⲩ</w>
+          </s>
+          <s xml:id="VI-7507899" n="109">
+            <w>ⲛ</w>
+            <w>ⲑⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲧ</w>
+            <w>ⲁϥ</w>
+            <w>ϣⲁϫⲉ</w>
+            <w>ϩⲙ</w>
+            <w>ⲡ</w>
+            <w>ϣⲟⲣⲡ</w>
+            <w>ⲛ</w>
+            <w>ⲁⲓⲱⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲧⲉ</w>
+            <w>ⲧ</w>
+            <w>ⲥⲁ</w>
+            <w>ⲣⲁⲝ</w>
+            <w>ⲛⲛⲱϩⲉ</w>
+          </s>
+          <s xml:id="VI-7507900" n="110">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲉⲧⲃⲉ</w>
+            <w>ⲛⲉϥ</w>
+            <w>ϣⲁϫⲉ</w>
+            <w>ⲉⲧⲉ</w>
+            <w>ϥ</w>
+            <w>ϫⲱ</w>
+            <w>ⲙⲙⲟⲟⲩ</w>
+          </s>
+          <s xml:id="VI-7507901" n="111">
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ϣⲁϫⲉ</w>
+            <w>ⲛϩⲏⲧ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲧⲏⲣ</w>
+            <w>ⲟⲩ</w>
+            <w>ϩⲛ</w>
+            <w>ϣⲃⲉ</w>
+            <w>ⲥⲛⲟⲟⲩⲥ</w>
+            <w>ⲛⲗⲁⲥ</w>
+          </s>
+          <s xml:id="VI-7507902" n="112">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ⲟⲩⲱⲛ</w>
+            <w>ⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲡⲩⲗⲏ</w>
+            <w>ⲛⲛ</w>
+            <w>ⲙ</w>
+            <w>ⲡⲏⲟⲩⲉ</w>
+            <w>ϩⲛ</w>
+            <w>ⲛⲉ</w>
+            <w>ϥ</w>
+            <w>ϣⲁ</w>
+            <w>ϫⲉ</w>
+          </s>
+          <s xml:id="VI-7507903" n="113">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ϯ</w>
+            <w>ϣⲓⲡⲉ</w>
+            <w>ⲙ</w>
+            <w>ⲡⲁⲓ</w>
+            <w>ⲉⲧ</w>
+            <w>ϩⲓϫⲛ</w>
+            <w>ⲉ</w>
+            <w>ⲙⲛⲧ</w>
+            <w>ⲉ</w>
+          </s>
+          <s xml:id="VI-7507904" n="114">
+            <w>ⲁϥⲧⲟⲩ</w>
+            <w>ⲛⲟⲥ</w>
+            <w>ⲛ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲙⲟⲟⲩⲧ</w>
+          </s>
+          <s xml:id="VI-7507905" n="115">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲧⲉϥ</w>
+            <w>ⲙⲛⲧ</w>
+            <w>ϫⲟⲉⲓⲥ</w>
+            <w>ⲁϥⲃⲁⲗⲉⲥ</w>
+            <w>ⲉ</w>
+            <w>ⲃⲟⲗ</w>
+          </s>
+          <s xml:id="VI-7507906" n="116">
+            <w>ⲧⲟⲧⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲛⲟϭ</w>
+            <w>ⲛϣⲧⲟⲣ</w>
+            <w>ⲧⲣ</w>
+            <w>ϣⲱⲡⲉ</w>
+          </s>
+          <s xml:id="VI-7507907" n="117">
+            <w>ⲁⲩⲧⲱⲱⲛ</w>
+            <w>ⲉϩⲣⲁⲓ</w>
+            <w>ⲉϫⲱ</w>
+            <w>ϥ</w>
+            <w>ⲛϭⲓ</w>
+            <w>ⲛ</w>
+            <w>ⲁⲣⲭⲱⲛ</w>
+            <w>ⲛⲧ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲃⲗⲕⲉ</w>
+          </s>
+          <s xml:id="VI-7507908" n="118">
+            <w>ⲁⲩⲟⲩⲱϣⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲁⲁ</w>
+            <w>ϥ</w>
+            <w>ⲉⲧⲟⲟⲧ</w>
+            <w>ϥ</w>
+            <w>ⲙⲡⲉⲧ</w>
+            <w>ϩⲓϫⲛ</w>
+            <w>ⲉ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲧⲉ</w>
+          </s>
+          <s xml:id="VI-7507909" n="119">
+            <w>ⲧⲟⲧⲉ</w>
+            <w>ⲟⲩⲁ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲟⲩⲏϩ</w>
+            <w>ⲛⲥⲱ</w>
+            <w>ϥ</w>
+            <w>ⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲥⲟⲩ</w>
+            <w>ⲱⲛϥ</w>
+          </s>
+          <s xml:id="VI-7507910" n="120">
+            <w>ⲁⲩⲕⲱϩⲧ</w>
+            <w>ϫⲓ</w>
+            <w>ⲉ</w>
+            <w>ⲧ</w>
+            <w>ⲉϥ</w>
+            <w cert="high" resp="#zp">ⲯⲩⲭⲏ</w>
+            <w>ⲁϥⲣ</w>
+            <w>ⲡⲁⲣⲁⲇⲓⲇⲟⲩ</w>
+            <w>ⲙⲙⲟϥ</w>
+          </s>
+          <s xml:id="VI-7507911" n="121">
+            <w>ⲉ</w>
+            <w>ⲙⲡⲉ</w>
+            <w>ⲗⲁⲁⲩ</w>
+            <w>ⲥⲟⲩ</w>
+            <w>ⲱⲛϥ</w>
+          </s>
+          <s xml:id="VI-7507912" n="122">
+            <w>ⲁⲩⲉⲓⲣⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲁⲙⲁϩⲧⲉ</w>
+            <w>ⲙⲙⲟϥ</w>
+          </s>
+          <s xml:id="VI-7507913" n="123">
+            <w>ⲁⲩⲉⲓⲛⲉ</w>
+            <w>ⲉϩⲣⲁⲓ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ϩⲁⲡ</w>
+            <w>ⲟⲩⲁⲁⲩ</w>
+          </s>
+          <s xml:id="VI-7507914" n="124">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁ</w>
+            <w>ⲩⲣⲡⲁⲣⲁⲇⲓⲇⲟⲩ</w>
+            <w>ⲙ</w>
+            <w>ⲙⲟϥ</w>
+            <w>ⲉϩⲣⲁⲓ</w>
+            <w>ⲉⲧⲟⲟⲧ</w>
+            <w>ϥ</w>
+            <w>ⲙⲡⲉ</w>
+            <w>ⲧ</w>
+            <w>ϩⲓϫⲛ</w>
+            <w>ⲉ</w>
+            <w>ⲙⲛⲧ</w>
+            <w>ⲉ</w>
+          </s>
+          <s xml:id="VI-7507915" n="125">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲧⲁ</w>
+            <w>ⲁϥ</w>
+            <w>ⲉⲧⲟⲟⲧ</w>
+            <w>ϥ</w>
+            <w>ⲛⲥⲁ</w>
+            <w>ⲥⲁⲃⲉⲕ</w>
+            <w>ⲁϩⲉⲛ</w>
+            <w>ⲃⲉⲣⲱⲧ</w>
+            <w>ⲑ</w>
+          </s>
+          <s xml:id="VI-7507916" n="126">
+            <w>ⲁϥⲥⲃ</w>
+            <w>ⲧⲱ</w>
+            <w>ⲧ</w>
+            <w>ϥ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲣⲉ</w>
+            <w>ϥ</w>
+            <w>ⲃⲱⲕ</w>
+            <w>ⲉ</w>
+            <w>ⲡⲓⲧⲛ</w>
+            <w>ⲛ</w>
+            <w>ϥ</w>
+            <w>ⲣⲉⲗⲉⲅⲭⲉ</w>
+            <w>ⲙⲙⲟⲟⲩ</w>
+          </s>
+          <s xml:id="VI-7507917" n="127">
+            <w>ⲧⲟⲧⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲉⲧ</w>
+            <w>ϩⲓϫⲛ</w>
+            <w>ⲉ</w>
+            <w>ⲙⲛⲧ</w>
+            <w>ⲉ</w>
+            <w>ⲁϥϫⲓⲧϥ</w>
+          </s>
+          <s xml:id="VI-7507918" n="128">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲡ</w>
+            <w>ⲧⲣⲟⲡⲟⲥ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ϥ</w>
+            <w>ⲥⲁⲣⲁⲝ</w>
+            <w>ⲙⲡⲉ</w>
+            <w>ϥ</w>
+            <w>ϭⲛⲧ</w>
+            <w>ϥ</w>
+            <w>ⲁ</w>
+            <w>ⲉⲙⲁϩⲧⲉ</w>
+            <w>ⲙⲙⲟ</w>
+            <w>ϥ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲣⲉ</w>
+            <w>ϥ</w>
+            <w>ⲟⲩⲟⲛϩ</w>
+            <w>ϥ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲁⲣⲭⲱ</w>
+          </s>
+          <s xml:id="VI-7507919" n="129">
+            <w>ⲁⲗⲗⲁ</w>
+            <w>ⲛⲉ</w>
+            <w>ϥ</w>
+            <w>ϫⲱ</w>
+            <w>ⲙⲙⲟ</w>
+            <w>ⲥ</w>
+            <w>ϫⲉ</w>
+            <w>ⲛⲓⲙ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡⲁⲓ</w>
+          </s>
+          <s xml:id="VI-7507920" n="130">
+            <w>ⲟⲩ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲡⲉ</w>
+          </s>
+          <s xml:id="VI-7507921" n="131">
+            <w>ⲁⲡⲉϥ</w>
+            <w>ⲗⲟⲅⲟⲥ</w>
+            <w>ⲃⲱⲗ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲛⲟⲙⲟⲥ</w>
+            <w>ⲙⲡⲁⲓⲱⲛ</w>
+          </s>
+          <s xml:id="VI-7507922" n="132">
+            <w>ⲟⲩ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲗⲟⲅⲟⲥ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲧ</w>
+            <w>ϭⲟⲙ</w>
+            <w>ⲙⲡⲱⲛϩ</w>
+          </s>
+          <s xml:id="VI-7507923" n="133">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ϫⲣⲟ</w>
+            <w>ⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲁϩ</w>
+            <w>ⲥⲁϩⲛⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲁⲣⲭⲱⲛ</w>
+          </s>
+          <s xml:id="VI-7507924" n="134">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲙ</w>
+            <w>ⲡⲟⲩ</w>
+            <w>ϣϭⲙϭⲟⲙ</w>
+            <w>ⲉ</w>
+            <w>ⲡⲟⲩ</w>
+            <w>ϩⲱⲃ</w>
+            <w>ⲉ</w>
+            <w>ⲣ</w>
+            <w>ϫⲟⲉⲓⲥ</w>
+            <w>ⲉ</w>
+            <w>ϫⲱ</w>
+            <w>ϥ</w>
+          </s>
+          <s xml:id="VI-7507925" n="135">
+            <w>ⲁⲛⲁⲣⲭⲱⲛ</w>
+            <w>ⲕⲱⲧⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲥⲁ</w>
+            <w>ⲡ</w>
+            <w>ⲉⲛⲧ</w>
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ϣⲱⲡⲉ</w>
+            <w>ⲙⲡⲟⲩ</w>
+            <w>ⲙⲙⲉ</w>
+            <w>ϫⲉ</w>
+            <w>ⲡⲁⲓ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡⲥⲏ</w>
+            <w>ⲙⲉⲓⲟⲛ</w>
+            <w>ⲙⲡ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲃⲱⲗ</w>
+            <w>ⲉ</w>
+            <w>ⲃⲟⲗ</w>
+          </s>
+          <s xml:id="VI-7507926" n="136">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲡ</w>
+            <w>ϣⲓⲃⲉ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲁⲓⲱⲛ</w>
+            <w>ⲡⲉ</w>
+          </s>
+          <s xml:id="VI-7507927" n="137">
+            <w>ⲁ</w>
+            <w>ⲡ</w>
+            <w>ⲣⲏ</w>
+            <w>ϩⲱⲧⲡ</w>
+            <w>ⲙⲫⲟⲟⲩ</w>
+          </s>
+          <s xml:id="VI-7507928" n="138">
+            <w>ⲁⲡ</w>
+            <w>ϩⲟⲟⲩ</w>
+            <w>ⲣ</w>
+            <w>ⲕⲁⲕⲉ</w>
+          </s>
+          <s xml:id="VI-7507929" n="139">
+            <w>ⲁⲛ</w>
+            <w>ⲇⲁⲓⲙⲟⲛⲓⲟⲛ</w>
+            <w>ϣⲧⲟⲣ</w>
+            <w>ⲧⲣ</w>
+          </s>
+          <s xml:id="VI-7507930" n="140">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲙⲛⲛⲥⲁ</w>
+            <w>ⲛⲁⲓ</w>
+            <w>ϥⲛⲁ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲱⲛϩ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲉ</w>
+            <w>ϥ</w>
+            <w>ⲙⲟⲟϣⲉ</w>
+            <w>ⲉ</w>
+            <w>ϩⲣⲁⲓ</w>
+          </s>
+          <s xml:id="VI-7507931" n="141">
+            <w>ⲁⲩⲱ</w>
+            <w>ϥ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲟⲩⲱⲛϩ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲛϭⲓ</w>
+            <w>ⲡ</w>
+            <w>ⲥⲏⲙⲉⲓⲟⲛ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲁⲓⲱⲛ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲛⲏ</w>
+            <w>ⲟⲩ</w>
+          </s>
+          <s xml:id="VI-7507932" n="142">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲥⲉⲛⲁ</w>
+            <w>ⲟⲩⲱⲧϩ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲛϭⲓ</w>
+            <w>ⲛⲁⲓⲱⲛ</w>
+          </s>
+          <s xml:id="VI-7507933" n="143">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲥⲉ</w>
+            <w>ⲛⲁϣⲱ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲙ</w>
+            <w>ⲙⲁⲕⲁⲣⲓⲟⲥ</w>
+            <w>ⲛϭⲓ</w>
+            <w>ⲛⲁⲓ</w>
+            <w>ⲉ</w>
+            <w>ⲧ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲣ</w>
+            <w>ⲛⲟⲉⲓ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲁⲓ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲟⲩ</w>
+            <w>ϣⲁϫⲉ</w>
+            <w>ⲛⲙⲙⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲣⲟⲟⲩ</w>
+          </s>
+          <s xml:id="VI-7507934" n="144">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲥⲉ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲟⲩⲟⲛϩ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲃⲟⲗ</w>
+          </s>
+          <s xml:id="VI-7507935" n="145">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲛ</w>
+            <w>ⲥⲉ</w>
+            <w>ϣⲱⲡⲉ</w>
+            <w>ⲙⲙⲁⲕⲁⲣⲓⲟⲥ</w>
+          </s>
+          <s xml:id="VI-7507936" n="146">
+            <w>ϫⲉ</w>
+            <w>ⲥⲉ</w>
+            <w>ⲛⲁ</w>
+            <w>ϣⲱⲡⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲩ</w>
+            <w>ⲣ</w>
+            <w>ⲛⲟⲉⲓ</w>
+            <w>ⲛⲧⲙⲉ</w>
+          </s>
+          <s xml:id="VI-7507937" n="147">
+            <w>ϫⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲧⲉⲧ</w>
+            <w>ⲛⲁⲛⲁⲡⲁⲩⲣⲉ</w>
+            <w>ⲉϩⲣⲁⲓ</w>
+            <w>ⲁⲛⲡⲏⲟⲩⲉ</w>
+          </s>
+          <s xml:id="VI-7507938" n="148">
+            <w>ⲧⲟⲧⲉ</w>
+            <w>ⲟⲩⲛ</w>
+            <w>ϩⲁϩ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲟⲩⲱϩ</w>
+            <w>ⲛⲥⲱϥ</w>
+          </s>
+          <s xml:id="VI-7507939" n="149">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲉ</w>
+            <w>ⲩ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲣⲉⲛⲉⲣⲅⲉⲓ</w>
+            <w>ϩⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲧⲟⲡⲟⲥ</w>
+            <w>ⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ϫⲡⲟ</w>
+          </s>
+          <s xml:id="VI-7507940" n="150">
+            <w>ⲥⲉ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲙⲟⲟϣⲉ</w>
+            <w>ⲥⲉ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲕⲱ</w>
+            <w>ⲉϩⲣⲁⲓ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲉϥ</w>
+            <w>ϣⲁϫⲉ</w>
+            <w>ⲕⲁⲧⲁ</w>
+            <w>ⲡ</w>
+            <w>ⲟⲩⲟⲩⲱϣⲉ</w>
+            <w>ⲁⲛⲁⲩ</w>
+            <w>ϫⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲟⲩⲉⲓⲛⲉ</w>
+            <w>ⲛϭⲓ</w>
+            <w>ⲛⲓ</w>
+            <w>ⲁⲓ</w>
+            <w>ⲱ</w>
+            <w>ⲛ</w>
+            <w>ⲉⲧⲉ</w>
+            <w>ⲛⲁⲓ</w>
+            <w>ⲛⲉ</w>
+          </s>
+          <s xml:id="VI-7507941" n="151">
+            <w>ϫ</w>
+            <w>ⲉ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲁϣ</w>
+            <w>ⲛⲁⲙⲁⲉⲓⲏ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡⲉϥ</w>
+            <w>ⲙⲟⲟⲩ</w>
+            <w>ⲛ</w>
+            <w>ⲧⲉ</w>
+            <w>ⲡⲓ</w>
+            <w>ⲁⲓⲱⲛ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲙⲙⲁⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲁϩ</w>
+            <w>ⲟⲩⲱⲧϩ</w>
+            <w>ⲉ</w>
+            <w>ⲃⲟⲗ</w>
+          </s>
+          <s xml:id="VI-7507942" n="152">
+            <w>ϫⲉ</w>
+            <w>ϩⲉⲛ</w>
+            <w>ⲁⲓⲱⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲁϣ</w>
+            <w>ⲛⲁⲉⲓⲏ</w>
+            <w>ⲛⲉ</w>
+          </s>
+          <s xml:id="VI-7507943" n="153">
+            <w>ϫ</w>
+            <w>ⲉ</w>
+            <w>ⲁϣ</w>
+            <w>ⲧⲉ</w>
+            <w>ⲑ</w>
+            <w>ⲉ</w>
+            <w>ⲉⲧⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲣⲱⲙⲉ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲥⲃⲧⲱⲧ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲛⲥⲉⲁϩⲉⲣⲁⲧⲟⲩ</w>
+          </s>
+          <s xml:id="VI-7507944" n="154">
+            <w>ⲛ</w>
+            <w>ⲥⲉ</w>
+            <w>ϣⲱⲡⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲁⲓⲱⲛ</w>
+            <w>ⲛⲁⲧⲱϫⲛ</w>
+          </s>
+          <s xml:id="VI-7507945" n="155">
+            <w>ϣⲟⲣⲡ</w>
+            <w>ⲇⲉ</w>
+            <w>ⲙⲛⲛⲥⲁ</w>
+            <w>ⲡⲉϥ</w>
+            <w>ⲧⲁϣⲉ</w>
+            <w>ⲟⲉⲓϣ</w>
+          </s>
+          <s xml:id="VI-7507946" n="156">
+            <w>ⲉϥ</w>
+            <w>ⲧⲁϣⲉ</w>
+            <w>ⲟⲉⲓϣ</w>
+            <w>ⲙⲡ</w>
+            <w>ⲙⲁϩ</w>
+            <w>ⲛⲁⲓ</w>
+            <w>ⲱ</w>
+            <w>ⲛ</w>
+            <w>ⲥⲛⲁⲩ</w>
+          </s>
+          <s xml:id="VI-7507947" n="157">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲡϣⲟⲣⲡ</w>
+          </s>
+          <s xml:id="VI-7507948" n="158">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲡ</w>
+            <w>ϣⲟⲣⲡ</w>
+            <w>ⲛ</w>
+            <w>ⲁⲓⲱⲛ</w>
+            <w>ϣⲁ</w>
+            <w>ⲣⲉϥ</w>
+            <w>ⲱϫⲛ</w>
+            <w>ϩⲓⲧⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲟⲩⲁⲉⲓϣ</w>
+          </s>
+          <s xml:id="VI-7507949" n="159">
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ⲣ</w>
+            <w>ⲡ</w>
+            <w>ϣⲟⲣⲡ</w>
+            <w>ⲛ</w>
+            <w>ⲁⲓⲱⲛ</w>
+            <w>ⲉ</w>
+            <w>ϥⲙⲟ</w>
+            <w>ⲟϣⲉ</w>
+            <w>ⲛϩⲏⲧϥ</w>
+          </s>
+          <s xml:id="VI-7507950" n="160">
+            <w>ϣⲁⲛⲧⲉϥ</w>
+            <w>ⲱϫⲛ</w>
+            <w>ⲉ</w>
+            <w>ϥ</w>
+            <w>ⲧⲁϣⲉ</w>
+            <w>ⲟⲉⲓϣ</w>
+            <w>ⲛ</w>
+            <w>ϣⲉ</w>
+            <w>ϫⲟⲩⲱ</w>
+            <w>ⲧⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲣⲟⲙⲡⲉ</w>
+            <w>ⲛⲏⲡⲉ</w>
+          </s>
+          <s xml:id="VI-7507951" n="161">
+            <w>ⲉⲧⲉ</w>
+            <w>ⲡⲁ</w>
+            <w>ⲉⲓ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲁⲣⲓⲑⲙⲟⲥ</w>
+            <w>ⲛ</w>
+            <w>ⲧⲉⲗⲉⲓⲟⲥ</w>
+            <w>ⲉⲧ</w>
+            <w>ϫⲟⲥⲉ</w>
+            <w>ⲙⲡ</w>
+            <w>ϣⲁ</w>
+          </s>
+          <s xml:id="VI-7507952" n="162">
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ⲉⲓⲣⲉ</w>
+            <w>ⲙⲡⲧⲁⲡ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲥⲁ</w>
+            <w>ⲛ</w>
+            <w>ϩⲱⲧⲡ</w>
+            <w>ⲛϫⲁⲉⲓⲉ</w>
+          </s>
+          <s xml:id="VI-7507953" n="163">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁϥ</w>
+            <w>ⲧⲁⲕⲟ</w>
+            <w>ⲛⲧⲁ</w>
+            <w>ⲛⲁⲧⲟⲗⲏ</w>
+          </s>
+          <s xml:id="VI-7507954" n="164">
+            <w>ⲧⲟⲧⲉ</w>
+            <w>ⲡⲉⲕ</w>
+            <w>ⲥⲡⲉⲣⲙⲁ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲉ</w>
+            <w>ⲧ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲱ</w>
+            <w>ϣ</w>
+            <w>ⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲙⲟⲟϣⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲥⲁ</w>
+            <w>ⲡⲉⲛ</w>
+            <w>ⲛⲟϭ</w>
+            <w>ⲛ</w>
+            <w>ⲗⲟⲅⲟⲥ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲡⲉϥ</w>
+            <w>ⲧⲁϣⲉ</w>
+            <w>ⲟⲉⲓϣ</w>
+          </s>
+          <s xml:id="VI-7507955" n="165">
+            <w>ⲧⲟⲧⲉ</w>
+            <w>ⲁⲧⲃⲗⲕⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲣ</w>
+            <w>ⲭⲱⲛ</w>
+            <w>ϫⲉ</w>
+            <w>ⲣⲟ</w>
+          </s>
+          <s xml:id="VI-7507956" n="166">
+            <w>ⲁⲩ</w>
+            <w>ϫⲓ</w>
+            <w>ϣⲓⲡⲉ</w>
+            <w>ⲉ</w>
+            <w>ϩⲣⲁⲓ</w>
+            <w>ⲉϫⲙ</w>
+            <w>ⲡⲟⲩⲃⲱⲗ</w>
+            <w>ⲉ</w>
+            <w>ⲃⲟⲗ</w>
+          </s>
+          <s xml:id="VI-7507957" n="167">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁ</w>
+            <w>ⲩⲟⲩⲱϣⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲃⲱⲗ</w>
+            <w>ⲕ</w>
+            <w>ⲉ</w>
+            <w>ⲡⲱⲛϩ</w>
+          </s>
+          <s xml:id="VI-7507958" n="168">
+            <w>ⲁⲛⲡⲟⲗⲓⲥ</w>
+            <w>ϣⲟⲣϣⲣ</w>
+            <w>ⲁ</w>
+            <w>ⲛⲧⲟⲟⲩ</w>
+            <w>ⲃⲱⲗ</w>
+            <w>ⲉ</w>
+            <w>ⲃⲟⲗ</w>
+          </s>
+          <s xml:id="VI-7507959" n="169">
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ⲉⲓ</w>
+            <w>ⲉϩⲣⲁⲓ</w>
+            <w>ⲛϭⲓ</w>
+            <w>ⲡ</w>
+            <w>ⲁⲣⲭⲱⲛ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲁⲣⲭⲱⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲙⲁ</w>
+            <w>ⲛ</w>
+            <w>ϩⲱⲧⲡ</w>
+            <w>ϣⲁ</w>
+            <w>ⲧⲁⲛⲁⲧⲟⲗⲏ</w>
+          </s>
+          <s xml:id="VI-7507960" n="170">
+            <w>ϫⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲧⲟⲡⲟⲥ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲙ</w>
+            <w>ⲙⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲁ</w>
+            <w>ⲡ</w>
+            <w>ⲗⲟⲅⲟⲥ</w>
+            <w>ⲟⲩⲱⲛϩ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲛϩⲏⲧ</w>
+            <w>ϥ</w>
+            <w>ⲛϣⲟⲣⲡ</w>
+          </s>
+          <s xml:id="VI-7507961" n="171">
+            <w>ⲧⲟⲧⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲡ</w>
+            <w>ⲕⲁϩ</w>
+            <w>ⲕⲓⲙ</w>
+          </s>
+          <s xml:id="VI-7507962" n="172">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁ</w>
+            <w>ⲛ</w>
+            <w>ⲡⲟⲗⲓⲥ</w>
+            <w>ϣⲧⲟⲣⲧⲣ</w>
+          </s>
+          <s xml:id="VI-7507963" n="173">
+            <w>ⲧⲟⲧⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲛ</w>
+            <w>ϩⲁⲗⲁⲧⲉ</w>
+            <w>ⲟⲩⲱⲙ</w>
+          </s>
+          <s xml:id="VI-7507964" n="174">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲥⲉⲓ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲡ</w>
+            <w>ⲉⲧⲙⲟⲟⲩⲧ</w>
+          </s>
+          <s xml:id="VI-7507965" n="175">
+            <w>ⲁ</w>
+            <w>ⲡ</w>
+            <w>ⲕⲁϩ</w>
+            <w>ⲣⲡⲉⲛ</w>
+            <w>ⲑⲉⲓ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲧ</w>
+            <w>ⲟⲓⲕⲟⲩⲙⲉⲛⲏ</w>
+            <w>ⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲣ</w>
+            <w>ϫⲁⲉⲓⲉ</w>
+          </s>
+          <s xml:id="VI-7507966" n="176">
+            <w>ⲧⲟⲧⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲧⲁ</w>
+            <w>ⲣⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲭⲣⲟⲛⲟⲥ</w>
+            <w>ϫⲱⲕ</w>
+          </s>
+          <s xml:id="VI-7507967" n="177">
+            <w>ⲧⲟⲧⲉ</w>
+            <w>ⲁⲧⲕⲁϭⲓⲁ</w>
+            <w>ϫⲓⲥⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲙⲁⲧⲉ</w>
+          </s>
+          <s xml:id="VI-7507968" n="178">
+            <w>ⲁⲩⲱ</w>
+            <w>ϣⲁ</w>
+            <w>ⲑ</w>
+            <w>ⲁⲏ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲧⲉⲗⲟⲥ</w>
+            <w>ⲙⲡ</w>
+            <w>ⲗⲟⲅⲟⲥ</w>
+          </s>
+          <s xml:id="VI-7507969" n="179">
+            <w>ⲧⲟⲧⲉ</w>
+            <w>ⲁϥⲧⲱⲱⲛ</w>
+            <w>ⲛϭⲓ</w>
+            <w>ⲡ</w>
+            <w>ⲁⲣⲭⲱⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲥⲁ</w>
+            <w>ⲛϩⲱⲧⲡ</w>
+          </s>
+          <s xml:id="VI-7507970" n="180">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲛ</w>
+            <w>ⲧⲁ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲧⲟⲗⲏ</w>
+            <w>ⲉ</w>
+            <w>ϥ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲣ</w>
+            <w>ⲟⲩ</w>
+            <w>ϩⲱⲃ</w>
+            <w>ⲛ</w>
+            <w>ϥ</w>
+            <w>ϯ</w>
+            <w>ⲥⲃⲱ</w>
+            <w>ⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲣⲱⲙⲉ</w>
+            <w>ⲉϩⲟⲩⲛ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲉϥ</w>
+            <w>ⲕⲁϭⲓⲁ</w>
+          </s>
+          <s xml:id="VI-7507971" n="181">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲉ</w>
+            <w>ϥ</w>
+            <w>ⲟⲩⲱϣ</w>
+            <w>ⲉ</w>
+            <w>ⲃⲱⲗ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲛ</w>
+            <w>ⲥⲃⲱ</w>
+            <w>ⲛⲓⲙ</w>
+            <w>ⲛ</w>
+            <w>ⲗⲟⲅⲟⲥ</w>
+            <w>ⲛ</w>
+            <w>ⲥⲟⲫⲓⲁ</w>
+            <w>ⲛ</w>
+            <w>ⲧⲉ</w>
+            <w>ⲧⲙⲉ</w>
+          </s>
+          <s xml:id="VI-7507972" n="182">
+            <w>ⲉ</w>
+            <w>ϥ</w>
+            <w>ⲙⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲧ</w>
+            <w>ⲥⲟⲫⲓⲁ</w>
+            <w>ⲛϭⲟⲗ</w>
+          </s>
+          <s xml:id="VI-7507973" n="183">
+            <w>ⲁϥϩⲟⲩ</w>
+            <w>ⲧⲟⲟⲧ</w>
+            <w>ϥ</w>
+            <w>ⲅⲁⲣ</w>
+            <w>ⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲁⲣⲭⲁⲓⲟⲛ</w>
+            <w>ⲉ</w>
+            <w>ϥⲟ</w>
+            <w>ⲩ</w>
+            <w>ⲱ</w>
+            <w>ϣ</w>
+            <w>ⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲉⲓⲛⲉ</w>
+            <w>ⲉϩⲟⲩⲛ</w>
+            <w>ⲛⲧ</w>
+            <w>ⲕ</w>
+            <w>ⲁ</w>
+            <w>ϭⲓⲁ</w>
+            <w>ⲛ</w>
+            <w>ϥ</w>
+            <w>ϯ</w>
+            <w>ϩⲓⲱⲱ</w>
+            <w>ϥ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲙⲛⲧ</w>
+            <w>ⲥⲉⲙⲛⲟⲥ</w>
+          </s>
+          <s xml:id="VI-7507974" n="184">
+            <w>ⲙⲡⲉϥ</w>
+            <w>ϭⲙϭⲟⲙ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϫⲉ</w>
+            <w>ⲛⲁ</w>
+            <w>ϣⲉ</w>
+            <w>ⲡⲉϥ</w>
+            <w>ϫⲱϩⲙ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲛⲉϥⲉⲛⲇⲩⲙⲁ</w>
+          </s>
+          <s xml:id="VI-7507975" n="185">
+            <w>ⲧⲟⲧⲉ</w>
+            <w>ⲁϥ</w>
+            <w>ⲃⲱⲗ</w>
+            <w>ⲕ</w>
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ⲟⲩⲱⲛϩ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲁϥ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲱ</w>
+            <w>ϣ</w>
+            <w>ⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲧ</w>
+            <w>ⲁⲗ</w>
+            <w>ⲟ</w>
+            <w>ⲛ</w>
+            <w>ϥ</w>
+            <w>ⲟⲩⲱⲧⲃ</w>
+            <w>ⲉϩⲣⲁⲓ</w>
+            <w>ⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲧⲟⲡⲟⲥ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲙⲙⲁⲩ</w>
+          </s>
+          <s xml:id="VI-7507976" n="186">
+            <w>ⲧⲟⲧⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲡ</w>
+            <w>ⲕⲁⲓⲣⲟⲥ</w>
+            <w>ⲉⲓ</w>
+            <w>ⲁϥϩⲛⲁ</w>
+            <w>ⲛ</w>
+            <w>ⲁⲩⲱ</w>
+            <w>ϥ</w>
+            <w>ϣⲓⲃⲉ</w>
+            <w>ⲛⲛ</w>
+            <w>ⲇⲓⲁⲧⲁⲅⲏ</w>
+          </s>
+          <s xml:id="VI-7507977" n="187">
+            <w>ⲧⲟⲧⲉ</w>
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ⲉⲓ</w>
+            <w>ⲛϭⲓ</w>
+            <w>ⲡ</w>
+            <w>ⲟⲩⲟⲉⲓϣ</w>
+          </s>
+          <s xml:id="VI-7507978" n="188">
+            <w>ϩⲉⲱⲥ</w>
+            <w>ϣⲁⲛⲧⲉ</w>
+            <w>ⲡ</w>
+            <w>ϣⲏⲣⲉ</w>
+            <w>ϣⲏⲙ</w>
+          </s>
+          <s xml:id="VI-7507979" n="189">
+            <w>ⲁⲉⲓ</w>
+            <w>ⲁ</w>
+            <w>ⲉⲓ</w>
+          </s>
+          <s xml:id="VI-7507980" n="190">
+            <w>ⲛⲧⲁⲣⲉ</w>
+            <w>ϥ</w>
+            <w>ⲉⲓ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲉϥ</w>
+            <w>ⲁⲕⲙⲏ</w>
+          </s>
+          <s xml:id="VI-7507981" n="191">
+            <w>ⲧⲟⲧⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲛ</w>
+            <w>ⲁⲣⲭⲱⲛ</w>
+            <w>ⲧⲛⲛⲟⲟⲩ</w>
+            <w>ⲙⲡⲁⲛⲧⲓⲙⲉⲓⲙⲟⲛ</w>
+            <w>ϣⲁ</w>
+            <w>ⲡ</w>
+            <w>ⲣⲱ</w>
+            <w>ⲙⲉ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲙⲙⲁⲩ</w>
+            <w>ⲛ</w>
+            <w>ⲥⲉ</w>
+            <w>ⲥⲟⲩⲱⲛ</w>
+            <w>ⲛⲧ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲟϭ</w>
+            <w>ⲛϭⲟⲙ</w>
+          </s>
+          <s xml:id="VI-7507982" n="192">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲛ</w>
+            <w>ⲧ</w>
+            <w>ⲟⲟⲩ</w>
+            <w>ⲛⲉ</w>
+            <w>ⲩ</w>
+            <w>ⲥⲟⲛⲧ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲏ</w>
+            <w>ⲧ</w>
+            <w>ϥ</w>
+            <w>ϫⲉ</w>
+            <w>ϥ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲉⲓⲣⲉ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲥⲏⲙⲉⲓⲟⲛ</w>
+          </s>
+          <s xml:id="VI-7507983" n="193">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ϥⲓ</w>
+            <w>ⲛ</w>
+            <w>ϩⲉⲛ</w>
+            <w>ⲛⲟϭ</w>
+            <w>ⲛⲥⲏⲙⲉⲓⲟⲛ</w>
+          </s>
+          <s xml:id="VI-7507984" n="194">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ⲣ</w>
+            <w>ⲣⲣⲟ</w>
+            <w>ⲉϫⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲕⲁϩ</w>
+            <w>ⲧⲏⲣ</w>
+            <w>ϥ</w>
+          </s>
+          <s xml:id="VI-7507985" n="195">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁϫⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲉⲧ</w>
+            <w>ϩⲁ</w>
+            <w>ⲧ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲧⲏⲣ</w>
+            <w>ⲟⲩ</w>
+          </s>
+          <s xml:id="VI-7507986" n="196">
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ⲕⲁ</w>
+            <w>ⲡⲉϥ</w>
+            <w>ⲑⲣⲟⲛⲟⲥ</w>
+            <w>ϩⲓϫⲛ</w>
+            <w>ⲑⲁ</w>
+            <w>ⲏ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲡⲕⲁϩ</w>
+          </s>
+          <s xml:id="VI-7507987" n="197">
+            <w>ϫⲉ</w>
+            <w>ⲛⲧⲟⲕ</w>
+            <w>ϯ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲧⲁⲁ</w>
+            <w>ⲕ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲟⲩⲧⲉ</w>
+            <w>ⲙⲡ</w>
+            <w>ⲕⲟⲥⲙⲟⲥ</w>
+          </s>
+          <s xml:id="VI-7507988" n="198">
+            <w>ϥ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲉⲓⲣⲉ</w>
+            <w>ⲛ</w>
+            <w>ϩⲉⲛ</w>
+            <w>ⲥⲏⲙⲉⲓⲟⲛ</w>
+            <w>ⲙⲛ</w>
+            <w>ϩⲉⲛ</w>
+            <w>ϣⲡⲏⲣⲉ</w>
+          </s>
+          <s xml:id="VI-7507989" n="199">
+            <w>ⲧⲟⲧⲉ</w>
+            <w>ⲥⲉ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲡ</w>
+            <w>ⲱⲛⲉ</w>
+            <w>ⲛ</w>
+            <w>ϩⲏⲧ</w>
+            <w>ⲛⲥⲉⲣⲡⲗⲁ</w>
+            <w>ⲛⲁ</w>
+          </s>
+          <s xml:id="VI-7507990" n="200">
+            <w>ⲧⲟⲧⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲣⲱⲙⲉ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲙⲙⲁⲩ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲟⲩⲁϩ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲛⲥⲱ</w>
+            <w>ϥ</w>
+            <w>ⲥⲉ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲉⲓⲛⲉ</w>
+            <w>ⲉϩⲟⲩⲛ</w>
+            <w>ⲙⲡⲥⲃⲃⲉ</w>
+          </s>
+          <s xml:id="VI-7507991" n="201">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲛ</w>
+            <w>ϥ</w>
+            <w>ϯ</w>
+            <w>ϩⲁ</w>
+            <w>ⲡ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲉⲧ</w>
+            <w>ϩⲛ</w>
+            <w>ⲧ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲧ</w>
+            <w>ⲁⲧ</w>
+            <w>ⲥⲃⲃⲉ</w>
+            <w>ⲉⲧⲉ</w>
+            <w>ⲡⲁⲓ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡⲗⲁⲟⲥ</w>
+          </s>
+          <s xml:id="VI-7507992" n="202">
+            <w>ⲕⲁⲓ</w>
+            <w>ⲅⲁⲣ</w>
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ϫⲟⲟⲩ</w>
+            <w>ϩⲁϩ</w>
+            <w>ⲛⲕⲏⲣⲩⲝ</w>
+            <w>ⲛ</w>
+            <w>ϣⲟⲣⲡ</w>
+            <w>ⲉ</w>
+            <w>ⲩ</w>
+            <w>ⲧⲁ</w>
+            <w>ϣⲉ</w>
+            <w>ⲟⲉⲓϣ</w>
+            <w>ϩⲁⲣⲟϥ</w>
+          </s>
+          <s xml:id="VI-7507993" n="203">
+            <w>ϩⲟⲧⲁⲛ</w>
+            <w>ⲉϥϣⲁⲛ</w>
+            <w>ϫⲱⲕ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲙⲡⲭ</w>
+            <w>ⲣⲟ</w>
+            <w>ⲛⲟⲥ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲁⲩⲥⲙⲛⲧ</w>
+            <w>ϥ</w>
+            <w>ⲛⲧ</w>
+            <w>ⲙ</w>
+            <w>ⲛ</w>
+            <w>ⲧ</w>
+            <w>ⲣⲣⲟ</w>
+            <w>ⲙⲡ</w>
+            <w>ⲕⲁϩ</w>
+          </s>
+          <s xml:id="VI-7507994" n="204">
+            <w>ⲧⲟⲧⲉ</w>
+            <w>ϥ</w>
+            <w>ⲛⲏⲩ</w>
+            <w>ⲛϭⲓ</w>
+            <w>ⲡ</w>
+            <w>ⲕⲁⲑⲁⲣⲓⲥⲙⲟⲥ</w>
+            <w>ⲛⲛ</w>
+            <w cert="high" resp="#zp">ⲯⲩⲭⲏ</w>
+          </s>
+          <s xml:id="VI-7507995" n="205">
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϫⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲥ</w>
+            <w>ⲣ</w>
+            <w>ϩⲟⲩⲉⲣⲱ</w>
+            <w>ⲧⲛ</w>
+            <w>ⲛϭⲓ</w>
+            <w>ⲧⲕⲁϭⲓⲁ</w>
+          </s>
+          <s xml:id="VI-7507996" n="206">
+            <w>ⲥⲉⲛⲁⲛⲟⲉⲓⲛ</w>
+            <w>ⲛϭⲓ</w>
+            <w>ⲛϭⲁⲙ</w>
+            <w>ⲛ</w>
+            <w>ⲑ</w>
+            <w>ⲁⲗⲁⲥⲥⲁ</w>
+            <w>ⲧⲏⲣ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲛⲥⲉ</w>
+            <w>ϣⲟⲟⲩⲉ</w>
+          </s>
+          <s xml:id="VI-7507997" n="207">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲡⲉⲥ</w>
+            <w>ⲧⲉ</w>
+            <w>ⲣⲉⲱⲙⲁ</w>
+            <w>ϥⲁϣⲟⲩⲉ</w>
+            <w>ⲉⲓⲱⲧ</w>
+            <w>ⲉ</w>
+            <w>ⲁⲛ</w>
+            <w>ⲉϩⲣⲁⲓ</w>
+          </s>
+          <s xml:id="VI-7507998" n="208">
+            <w>ⲙ</w>
+            <w>ⲡⲏⲅⲏ</w>
+            <w>ⲥⲉⲛⲁⲱ</w>
+            <w>ϫⲛ</w>
+          </s>
+          <s xml:id="VI-7507999" n="209">
+            <w>ⲛⲓⲉⲣⲱⲟⲩ</w>
+            <w>ⲥⲉⲛⲉϩⲉ</w>
+            <w>ϯ</w>
+            <w>ⲁⲛ</w>
+            <w>ⲉϩⲣⲁⲓ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲟⲩⲡⲏⲅⲏ</w>
+          </s>
+          <s xml:id="VI-7508000" n="210">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲙ</w>
+            <w>ⲙ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲉⲓⲟⲟⲩⲉ</w>
+            <w>ⲛⲛ</w>
+            <w>ⲙ</w>
+            <w>ⲡⲏⲅⲏ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲕⲁϩ</w>
+            <w>ⲥⲉⲛⲁⲱϫⲛ</w>
+          </s>
+          <s xml:id="VI-7508001" n="211">
+            <w>ⲧⲟⲧⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩⲛ</w>
+            <w>ⲥⲉⲛⲁⲥⲱⲗⲉϫ</w>
+            <w>ⲛ</w>
+            <w>ⲥⲉ</w>
+            <w>ⲟⲩⲱⲛ</w>
+          </s>
+          <s xml:id="VI-7508002" n="212">
+            <w>ⲛ</w>
+            <w>ⲥⲓⲟⲩ</w>
+            <w>ⲥⲉⲛⲁⲁⲉⲓⲁⲉⲓ</w>
+          </s>
+          <s xml:id="VI-7508003" n="213">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲡ</w>
+            <w>ⲣⲏ</w>
+            <w>ϥⲛⲁⲱ</w>
+            <w>ϫⲛ</w>
+          </s>
+          <s xml:id="VI-7508004" n="214">
+            <w>ⲁⲩⲱ</w>
+            <w>ϯ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲣⲁⲛⲁⲭⲱⲣⲉⲓ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲟⲩⲟⲛ</w>
+            <w>ⲛⲓⲙ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲛⲁⲥⲟⲩⲱⲛ</w>
+            <w>ⲧ</w>
+          </s>
+          <s xml:id="VI-7508005" n="215">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲥⲉ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲃⲱⲕ</w>
+            <w>ⲉϩⲟⲩⲛ</w>
+            <w>ⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲟⲉⲓⲛ</w>
+            <w>ⲛⲁⲙⲉⲧⲣⲏⲧⲟⲛ</w>
+          </s>
+          <s xml:id="VI-7508006" n="216">
+            <w>ⲉⲙⲛ</w>
+            <w>ⲗⲁⲁⲩ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲧⲥⲁⲣⲁⲝ</w>
+            <w>ⲁⲙⲁϩⲧⲉ</w>
+            <w>ⲙⲙⲟⲟⲩ</w>
+          </s>
+          <s xml:id="VI-7508007" n="217">
+            <w>ⲟⲩⲧⲉ</w>
+            <w>ⲧⲣⲩⲫⲏ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲕⲱϩⲧ</w>
+            <w>ⲥⲉ</w>
+            <w>ⲛⲁ</w>
+            <w>ϣⲱⲡⲉ</w>
+            <w>ⲉⲩⲉ</w>
+            <w>ⲥⲓ</w>
+            <w>ⲱ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲩⲟⲩⲁⲁⲃ</w>
+          </s>
+          <s xml:id="VI-7508008" n="218">
+            <w>ⲉⲙⲛ</w>
+            <w>ⲗⲁⲁⲩ</w>
+            <w>ⲥ</w>
+            <w>ⲱⲕ</w>
+            <w>ⲙⲙⲟ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲡⲓⲧⲛ</w>
+          </s>
+          <s xml:id="VI-7508009" n="219">
+            <w>ⲉⲉⲓⲣ</w>
+            <w cert="high" resp="#zp">ⲥⲕⲉⲡⲁⲍⲉ</w>
+            <w>ⲙⲙⲟ</w>
+            <w>ⲟⲩ</w>
+            <w>ϩⲓⲧⲟⲟⲧ</w>
+          </s>
+          <s xml:id="VI-7508010" n="220">
+            <w>ⲉⲩⲛⲧⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲙⲙⲁⲩ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲉⲛⲇⲩ</w>
+            <w>ⲙⲁ</w>
+            <w>ⲉ</w>
+            <w>ⲧ</w>
+            <w>ⲟⲩⲁⲁⲃ</w>
+          </s>
+          <s xml:id="VI-7508011" n="221">
+            <w>ⲛⲁⲓ</w>
+            <w>ⲉⲧⲉ</w>
+            <w>ⲙⲙⲛ</w>
+            <w>ϣ</w>
+            <w>ϭⲟⲙ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲕⲱϩⲧ</w>
+            <w>ϫⲱϩ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ⲟⲩ</w>
+          </s>
+          <s xml:id="VI-7508012" n="222">
+            <w>ⲉⲓⲧⲁ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲕⲁⲕⲉ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲧⲏ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲟⲩⲥⲧⲓⲅⲙⲏ</w>
+          </s>
+          <s xml:id="VI-7508013" n="223">
+            <w>ϩⲱⲥ</w>
+            <w>ⲧⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲧⲉϥ</w>
+            <w>ⲧⲱⲙ</w>
+            <w>ⲛⲛ</w>
+            <w>ⲃⲉⲗ</w>
+          </s>
+          <s xml:id="VI-7508014" n="224">
+            <w>ⲧⲟⲧⲉ</w>
+            <w>ϥⲛⲏⲟⲩ</w>
+            <w>ⲉ</w>
+            <w>ϥⲟⲧ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲧⲏⲣ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲃⲟⲗ</w>
+          </s>
+          <s xml:id="VI-7508015" n="225">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲥⲉ</w>
+            <w>ⲛⲁ</w>
+            <w>ϣⲱⲡⲉ</w>
+            <w>ⲉ</w>
+            <w cert="high" resp="#zp">ⲩⲣⲕⲟⲗⲁⲍⲉ</w>
+            <w>ⲙⲙⲟ</w>
+            <w>ⲟⲩ</w>
+            <w>ϣⲁⲛⲧⲟⲩⲧⲃⲃⲟ</w>
+          </s>
+          <s xml:id="VI-7508016" n="226">
+            <w>ⲧⲟⲧⲉ</w>
+            <w>ⲡⲟⲩ</w>
+            <w>ⲭⲣⲟⲛⲟⲥ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲁⲩⲧⲁ</w>
+            <w>ⲁϥ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲁ</w>
+            <w>ⲧⲣⲉ</w>
+            <w>ⲩⲉⲙⲁϩⲧⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲁⲩⲟⲡ</w>
+            <w>ϥ</w>
+            <w>ⲉ</w>
+            <w>ⲣⲟⲟⲩ</w>
+          </s>
+          <s xml:id="VI-7508017" n="227">
+            <w>ⲙⲙⲛⲧⲁ</w>
+            <w>ϥ</w>
+            <w>ⲧⲉ</w>
+            <w>ⲛ</w>
+            <w>ϣⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲣⲟⲙⲡⲉ</w>
+            <w>ⲥⲉ</w>
+            <w>ⲙⲛ</w>
+            <w>ϣ</w>
+            <w>ⲙⲟⲩ</w>
+            <w>ⲛⲉ</w>
+          </s>
+          <s xml:id="VI-7508018" n="228">
+            <w>ϩⲟⲧⲁⲛ</w>
+            <w>ⲉⲣϣⲁⲛ</w>
+            <w>ⲡ</w>
+            <w>ⲕⲱϩⲧ</w>
+            <w>ⲣⲁⲕϩⲟⲩ</w>
+            <w>ⲧⲏⲣⲟⲩ</w>
+          </s>
+          <s xml:id="VI-7508019" n="229">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲉ</w>
+            <w>ϣⲁϥⲧⲛⲧⲙ</w>
+            <w>ϭⲛ</w>
+            <w>ⲗⲁⲁⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲣⲱⲕϩ</w>
+          </s>
+          <s xml:id="VI-7508020" n="230">
+            <w>ⲧⲟⲧⲉ</w>
+            <w>ϥ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲱϫⲛ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲓⲧⲟⲟⲧ</w>
+            <w>ϥ</w>
+            <w>ⲟⲩⲁⲁϥ</w>
+          </s>
+          <s xml:id="VI-7508021" n="231">
+            <w>ⲧⲟⲧⲉ</w>
+            <w>ϥ</w>
+            <w>ⲛⲁ</w>
+            <w>ϫⲱⲕ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲛϭⲓ</w>
+            <w>ⲡϩ</w>
+            <w>ⲧⲉ</w>
+            <w>ⲧ</w>
+            <w>ⲙⲁϩ</w>
+            <w>ϭⲁⲙ</w>
+            <w>ⲥⲛⲧⲉ</w>
+            <w>ⲧⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲏ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲓⲧⲛ</w>
+            <w>ⲧ</w>
+            <w>ⲥⲟⲫⲓⲁ</w>
+            <w>ⲉⲓ</w>
+            <w>ⲧⲟⲧⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲥⲧⲉⲣⲉⲱⲙⲁ</w>
+            <w>ⲛⲁ</w>
+            <w>ϩⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲡⲓⲧⲛ</w>
+            <w>ⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲛⲟⲩⲛ</w>
+          </s>
+          <s xml:id="VI-7508022" n="232">
+            <w>ⲧⲟⲧⲉ</w>
+            <w>ⲛ</w>
+            <w>ϣⲏⲣⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲑ</w>
+            <w>ⲩⲗⲏ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲱϫⲛ</w>
+          </s>
+          <s xml:id="VI-7508023" n="233">
+            <w>ⲛ</w>
+            <w>ⲥⲉ</w>
+            <w>ⲛⲁ</w>
+            <w>ϣⲱⲡⲉ</w>
+            <w>ⲁⲛ</w>
+            <w>ϫⲓⲛ</w>
+            <w>ⲙⲡⲉⲓⲛⲁⲩ</w>
+          </s>
+          <s xml:id="VI-7508024" n="234">
+            <w>ⲧⲟⲧⲉ</w>
+            <w cert="high" resp="#zp">ⲙⲯⲩⲭⲏ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲱⲛϩ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲉ</w>
+            <w>ⲩⲟⲩⲁⲁⲃⲉ</w>
+            <w>ϩⲓⲧⲙ</w>
+            <w>ⲡⲟⲩ</w>
+            <w>ⲟⲉⲓⲛ</w>
+            <w>ⲛⲧ</w>
+            <w>ϭⲟⲙ</w>
+          </s>
+          <s xml:id="VI-7508025" n="235">
+            <w>ⲧⲁⲓ</w>
+            <w>ⲉⲧ</w>
+            <w>ϫⲟⲥⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲛ</w>
+            <w>ϭⲟⲙ</w>
+            <w>ⲧⲏⲣ</w>
+            <w>ⲟⲩ</w>
+          </s>
+          <s xml:id="VI-7508026" n="236">
+            <w>ϯⲁⲧϣⲓⲧ</w>
+            <w>ⲥ</w>
+            <w>ϯⲕⲁⲑⲟⲗⲓⲕⲏ</w>
+          </s>
+          <s xml:id="VI-7508027" n="237">
+            <w>ⲁⲛⲟⲕ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲛⲁⲥⲟⲩⲱⲛ</w>
+            <w>ⲧ</w>
+            <w>ⲧⲏⲣⲟⲩ</w>
+          </s>
+          <s xml:id="VI-7508028" n="238">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲥⲉ</w>
+            <w>ⲛⲁ</w>
+            <w>ϣⲱⲡⲉ</w>
+            <w>ϩⲙ</w>
+            <w>ⲡⲁⲓ</w>
+            <w>ⲱ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲧ</w>
+            <w>ⲙⲛⲧ</w>
+            <w>ⲥⲁⲉⲓⲉ</w>
+          </s>
+          <s xml:id="VI-7508029" n="239">
+            <w>ⲛⲧⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲁⲓⲱⲛ</w>
+            <w>ⲙⲫⲁⲡ</w>
+            <w>ⲉ</w>
+            <w>ⲩⲥⲃⲧⲁⲧ</w>
+            <w>ϩⲛ</w>
+            <w>ⲧⲥⲟⲫⲓⲁ</w>
+          </s>
+          <s xml:id="VI-7508030" n="240">
+            <w>ⲉⲁⲩ</w>
+            <w>ϯ</w>
+            <w>ⲉ</w>
+            <w>ⲟⲟⲩ</w>
+            <w>ⲙⲡⲉⲧ</w>
+            <w>ϩⲛ</w>
+            <w>ⲧⲙⲛⲧ</w>
+            <w>ⲟⲩⲁ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲱ</w>
+            <w>ⲧ</w>
+            <w>ⲛⲁⲧⲧⲉϩⲟϥ</w>
+          </s>
+          <s xml:id="VI-7508031" n="241">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲉ</w>
+            <w>ⲩ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ϥ</w>
+            <w>ⲉⲧⲃⲉ</w>
+            <w>ⲡⲉϥ</w>
+            <w>ⲟⲩⲱ</w>
+            <w>ϣⲉ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲛ</w>
+            <w>ϩⲏⲧⲟⲩ</w>
+          </s>
+          <s xml:id="VI-7508032" n="242">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁ</w>
+            <w>ⲩ</w>
+            <w>ϣⲱⲡⲉ</w>
+            <w>ⲧⲏⲣ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲛ</w>
+            <w>ϩⲓ</w>
+            <w>ⲕⲱ</w>
+            <w>ⲛ</w>
+            <w>ϩⲙ</w>
+            <w>ⲡⲉϥⲟⲩⲟⲉⲓ</w>
+            <w>ⲛ</w>
+          </s>
+          <s xml:id="VI-7508033" n="243">
+            <w>ⲁⲩ</w>
+            <w>ⲣ</w>
+            <w>ⲟⲩⲟⲉⲓⲛ</w>
+            <w>ⲧⲏⲣ</w>
+            <w>ⲟⲩ</w>
+          </s>
+          <s xml:id="VI-7508034" n="244">
+            <w>ⲁⲩⲙⲧⲟⲛ</w>
+            <w>ⲙⲙⲟ</w>
+            <w>ⲟⲩ</w>
+            <w>ϩⲛ</w>
+            <w>ⲧⲉϥⲁⲛⲁⲡⲁⲩⲥⲓⲥ</w>
+          </s>
+          <s xml:id="VI-7508035" n="245">
+            <w>ⲁⲩⲱ</w>
+            <w cert="high" resp="#zp">ⲙⲯⲩⲭⲏ</w>
+            <w>ⲉ</w>
+            <w>ⲧ</w>
+            <w cert="high" resp="#zp">ⲟⲩⲣⲕⲟⲗⲁⲍⲉ</w>
+            <w>ⲙⲙⲟ</w>
+            <w>ⲟⲩ</w>
+            <w>ϥ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲃⲟⲗ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲃⲟⲗ</w>
+          </s>
+          <s xml:id="VI-7508036" n="246">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲛ</w>
+            <w>ⲥⲉ</w>
+            <w>ϣⲱⲡⲉ</w>
+            <w>ϩⲙ</w>
+            <w>ⲡⲧⲟⲩⲃⲟ</w>
+          </s>
+          <s xml:id="VI-7508037" n="247">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲥⲉ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲟⲩⲁⲁⲃ</w>
+          </s>
+          <s xml:id="VI-7508038" n="248">
+            <w>ⲥⲉⲛⲁ</w>
+            <w>ϫⲓ</w>
+            <w>ϣⲕⲁⲕ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ⲟⲩ</w>
+            <w>ϫⲉ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲛ</w>
+            <w>ⲧϭⲟⲙ</w>
+          </s>
+          <s xml:id="VI-7508039" n="249">
+            <w>ⲧⲁⲓ</w>
+            <w>ⲉ</w>
+            <w>ⲧ</w>
+            <w>ⲛ</w>
+            <w>ⲧⲡⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲛ</w>
+            <w>ϭⲟⲙ</w>
+            <w>ⲧⲏⲣⲟⲩ</w>
+          </s>
+          <s xml:id="VI-7508040" n="250">
+            <w>ϩⲟⲧⲓ</w>
+            <w>ϫⲉ</w>
+            <w>ⲁⲩⲱ</w>
+            <w>ϩⲙ</w>
+            <w>ⲡ</w>
+            <w>ϣⲏ</w>
+            <w>ⲛ</w>
+            <w>ⲙⲛⲧ</w>
+            <w>ϫⲓ</w>
+            <w>ⲛ</w>
+            <w>ϭⲟⲛⲥ</w>
+            <w>ⲉⲧ</w>
+            <w>ϣⲟⲟⲡ</w>
+            <w>ⲉ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ϥ</w>
+            <w>ⲛⲛⲟⲩⲃⲁⲗ</w>
+          </s>
+          <s xml:id="VI-7508041" n="251">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲥⲉ</w>
+            <w>ⲕⲱⲧⲉ</w>
+            <w>ⲛⲥⲱ</w>
+            <w>ϥ</w>
+            <w>ⲁ</w>
+            <w>ⲛ</w>
+          </s>
+          <s xml:id="VI-7508042" n="252">
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϫⲉ</w>
+            <w>ⲥⲉ</w>
+            <w>ⲕⲱⲧⲉ</w>
+            <w>ⲛⲥⲱ</w>
+            <w>ⲛ</w>
+            <w>ⲁⲛ</w>
+          </s>
+          <s xml:id="VI-7508043" n="253">
+            <w>ⲟⲩⲇⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲥⲉ</w>
+            <w>ⲡⲓⲥⲧⲉⲩⲉ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ⲛ</w>
+            <w>ⲁ</w>
+            <w>ⲛ</w>
+          </s>
+          <s xml:id="VI-7508044" n="254">
+            <w>ⲁⲗⲗⲁ</w>
+            <w>ⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲉⲓⲣⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲧ</w>
+            <w>ⲕⲧⲓⲥⲓⲥ</w>
+            <w>ⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲁⲣⲭⲱⲛ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲛⲉⲥ</w>
+            <w>ⲕⲉⲁⲣⲭⲱⲛ</w>
+          </s>
+          <s xml:id="VI-7508045" n="255">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁⲛⲣ</w>
+            <w>ⲡⲣⲁⲥⲥⲁ</w>
+            <w>ⲕⲁⲧⲁ</w>
+            <w>ⲧⲛ</w>
+            <w>ⲅⲉⲛⲉⲥⲓⲥ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲧⲥⲁⲣⲁⲝ</w>
+            <w>ⲛⲧⲕ</w>
+            <w>ⲧⲓ</w>
+            <w>ⲥⲓ</w>
+            <w>ⲥ</w>
+            <w>ⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲁⲣⲭⲱⲛ</w>
+            <w>ⲉ</w>
+            <w>ⲥ</w>
+            <w>ϯ</w>
+            <w>ⲛⲟⲙⲟⲥ</w>
+          </s>
+          <s xml:id="VI-7508046" n="256">
+            <w>ⲁⲛⲟⲛ</w>
+            <w>ϩⲱⲱ</w>
+            <w>ⲛ</w>
+            <w>ⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲛ</w>
+            <w>ϣⲱⲡⲉ</w>
+            <w>ϩⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲁⲓⲱⲛ</w>
+            <w>ⲛⲁⲧⲣⲉⲡⲧⲟⲥ</w>
+          </s>
+        </ab>
+        <ab type="subscript">
+          <s xml:id="VI-7508047" n="257">
+            <w>ⲡ</w>
+            <w>ⲛⲟⲏⲙⲁ</w>
+            <w>ⲛⲧ</w>
+            <w>ⲛ</w>
+            <w>ⲛⲟϭ</w>
+            <w>ⲛϭⲟⲙ</w>
+          </s>
+        </ab>
+      </div>
+    </body>
+  </text>
+</TEI>

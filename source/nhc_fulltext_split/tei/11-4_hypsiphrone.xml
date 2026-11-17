@@ -1,0 +1,653 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="cop">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title xml:lang="en">Hypsiphrone</title>
+        <title xml:lang="ja">ヒュプシフロネ</title>
+        <title xml:lang="fr">Hypsiphroné</title>
+        <title type="sub" xml:lang="en">Nag Hammadi Codex XI,4 — segmented Coptic text without linguistic annotation (working file)</title>
+        <respStmt>
+          <resp>TEI encoding; division of the corpus into tractates; removal of conversion residue</resp>
+          <name>Sheneset project</name>
+        </respStmt>
+        <respStmt xml:id="zp">
+          <resp>restoration of the letters ⲍ and ⲯ lost in the source file (see editorialDecl/correction)</resp>
+          <name>Sheneset project</name>
+        </respStmt>
+        <respStmt>
+          <resp>source text (tokenised Coptic)</resp>
+          <name>supplied corpus (Marcion segment ids)</name>
+        </respStmt>
+      </titleStmt>
+      <extent>
+        <measure unit="segment" quantity="18">18 segments</measure>
+        <measure unit="token" quantity="506">506 tokens</measure>
+        <measure unit="gap" quantity="3">3 gap markers</measure>
+      </extent>
+      <publicationStmt>
+        <p xml:lang="en">Working file, not yet published. Prepared for Sheneset, a TEI corpus of the Nag Hammadi Codices.</p>
+        <p xml:lang="ja">作業用ファイル（未公開）。Sheneset（ナグ・ハマディ写本 TEI コーパス）への掲載に向けて用意したもの。</p>
+      </publicationStmt>
+      <notesStmt>
+        <note xml:lang="ja">最終行（ID 7512953）は数文字ずつの断片の連続。</note>
+      </notesStmt>
+      <sourceDesc>
+        <bibl xml:id="src">
+          <title>Nag_Hammadi.txt</title>
+          <note xml:lang="en">Supplied plain-text file of the Nag Hammadi Codices: one segment per row (row ids 7500001–7513228), the Coptic text divided into tokens by spaces. This file contains rows 7512937–7512953.</note>
+          <note xml:lang="ja">提供されたナグ・ハマディ写本全文のテキストファイル。1 行が 1 セグメント（行 ID 7500001–7513228）で、コプト語本文は空白でトークンに区切られている。この文書は行 7512937–7512953 にあたる。</note>
+        </bibl>
+        <msDesc>
+          <msIdentifier>
+            <settlement>Cairo</settlement>
+            <repository>Coptic Museum</repository>
+            <idno>NHC XI</idno>
+            <msName>Nag Hammadi Codex XI</msName>
+          </msIdentifier>
+          <msContents>
+            <msItem n="4">
+              <locus from="69" to="72">pp. 69,21–72,33</locus>
+              <title xml:lang="en">Hypsiphrone</title>
+              <textLang mainLang="cop">Coptic (Sahidic)</textLang>
+              <note xml:lang="en">Page and line numbers are those in common use (as in The Nag Hammadi Library in English); they were not taken from the source file.</note>
+            </msItem>
+          </msContents>
+          <history>
+            <origin>
+              <origDate notBefore="0300" notAfter="0400">4th c. CE</origDate>
+              <origPlace>Egypt</origPlace>
+            </origin>
+          </history>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc>
+        <p xml:lang="ja">提供されたナグ・ハマディ写本全文のテキストファイルを文書ごとに分け、サイト掲載に向けて下処理したものの TEI 版。訳、語釈、品詞、レンマはまだ付けていない。下処理（文書の分割、変換の残骸の除去、ⲍ・ⲯ の復元）と TEI 化には生成 AI（Claude）を使い、結果が元ファイルと対応することを検証スクリプト（scripts/verify.py、scripts/verify_tei.py）で確かめた。</p>
+        <p xml:lang="en">TEI version of the supplied full text of the Nag Hammadi Codices, divided into tractates and preprocessed for publication on the site. No translation, gloss, part of speech or lemma has been added yet. The preprocessing (division into tractates, removal of conversion residue, restoration of ⲍ and ⲯ) and the TEI conversion were carried out with a generative AI model (Claude); the result was checked against the source file with the verification scripts (scripts/verify.py, scripts/verify_tei.py).</p>
+      </projectDesc>
+      <editorialDecl>
+        <segmentation>
+          <p xml:lang="ja"><gi>s</gi> は元ファイルの 1 行（1 セグメント）。行が文書の境目や表題の境目をまたぐときだけ分けた。<att>xml:id</att> は「写本番号-行 ID」で、分けた行には「_開始トークン位置」（元ファイルの行の中での位置、0 始まり）を付けた。<att>n</att> は文書内の通し番号。<gi>w</gi> は元ファイルの空白区切り（形態素解析器の出力とみられる）のままで、切り直していない。ⲍ・ⲯ を戻した語が途中で切れていたときだけ 1 つにつないだ。<gi>ab</gi> の <att>type</att> は <val>title</val>（冒頭表題）、<val>text</val>（本文）、<val>subscript</val>（奥書表題）、<val>colophon</val>（写字生の奥書・覚え書き）、<val>fragment</val>（未配置断片）。</p>
+          <p xml:lang="en">Each <gi>s</gi> is one row (segment) of the source file; a row is split only where it straddles the boundary of a tractate or of a title. <att>xml:id</att> is the codex number followed by the row id; for split rows the position of the first token within the source row (counted from 0) is added after an underscore. <att>n</att> numbers the segments within the tractate. Each <gi>w</gi> is a token of the source file (apparently the output of a morphological segmenter) and has not been re-segmented, except that tokens were joined where a restored ⲍ or ⲯ fell inside a word that the segmenter had split. The <att>type</att> of <gi>ab</gi> is <val>title</val> (opening title), <val>text</val>, <val>subscript</val> (subscript title), <val>colophon</val> (scribal colophon or note) or <val>fragment</val> (unplaced fragments).</p>
+        </segmentation>
+        <correction method="markup">
+          <p xml:lang="ja">元ファイルでは ⲝ がすべて ⲯ になっていたので、ⲝ に戻した（この文書では 0 字）。元ファイルで落ちていた ⲍ と ⲯ は、語形と文脈から語が決まる箇所で戻した（この文書では 9 語）。戻した語の <gi>w</gi> には <att>resp</att>="#zp" と <att>cert</att> を付けた。<val>high</val>（4 語）は語形と文脈から決まるもの、<val>medium</val>（5 語）は固有名など、校訂本や翻訳で知られている読みを当てたもの。どちらも校訂本とは照合していない。英語の編集注記が文字化けして残っていた箇所は、欠損の注記なので <gi>gap</gi> に置き換えた。変更は 1 か所ずつ、同梱の changes.tsv と restored_letters.tsv に記録してある。</p>
+          <p xml:lang="en">In the source file every ⲝ had been converted to ⲯ; these were changed back to ⲝ (0 letters in this file). The letters ⲍ and ⲯ, lost throughout the source file, were restored where the word could be identified from its form and context (9 words in this file). These words carry <att>resp</att>="#zp" and <att>cert</att> on <gi>w</gi>: <val>high</val> (4) = determined by word form and context; <val>medium</val> (5) = proper names and similar words, restored following readings known from editions and translations. None has been collated with the printed editions. Garbled residue of English editorial notes, which reported lost text, was replaced by <gi>gap</gi>. Every change is listed in the accompanying files changes.tsv and restored_letters.tsv.</p>
+        </correction>
+        <interpretation>
+          <p xml:lang="ja">品詞（<att>type</att>）、レンマ（<att>lemma</att>）、語釈、訳、ギリシア語借用語の印（<att>xml:lang</att>="grc"）はまだ付けていない。<gi>gap</gi>（<att>reason</att>="lacuna"）は、元ファイルに行・頁単位の欠損の注記があった位置を示す（この文書では 3 箇所）。それ以外の欠損と校訂者による復元の区別、下点、上線、句読点、頁と行の区切りは元ファイルになく、符号化していない。</p>
+          <p xml:lang="en">No part of speech (<att>type</att>), lemma (<att>lemma</att>), gloss, translation or loanword marking (<att>xml:lang</att>="grc") has been added yet. <gi>gap</gi> with <att>reason</att>="lacuna" marks the places where the source file had an editorial note reporting lost lines or pages (3 in this file). The source file does not distinguish other lacunae from editorial restorations and has no sublinear dots, supralinear strokes, punctuation, or page and line breaks; none of these is encoded.</p>
+        </interpretation>
+      </editorialDecl>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="cop">Coptic (Sahidic)</language>
+        <language ident="en">English (header)</language>
+        <language ident="ja">Japanese (header)</language>
+        <language ident="fr">French (title)</language>
+      </langUsage>
+    </profileDesc>
+    <revisionDesc>
+      <change when="2026-11-17">TEI file generated from the preprocessed text (scripts/make_tei.py).</change>
+    </revisionDesc>
+  </teiHeader>
+  <text type="witness" xml:id="wit-XI-4" n="NHC XI,4" xml:lang="cop">
+    <body>
+      <div type="tractate" n="Hypsiphrone" subtype="codexXI">
+        <head xml:lang="en">Hypsiphrone — Nag Hammadi Codex XI,4 (pp. 69,21–72,33)</head>
+        <ab type="title">
+          <s xml:id="XI-7512937_40" n="1">
+            <w cert="high" resp="#zp">ⲩⲯⲓⲫⲣⲟⲛⲏ</w>
+          </s>
+        </ab>
+        <ab type="text">
+          <s xml:id="XI-7512937_41" n="2">
+            <w>ⲡ</w>
+            <w>ϫⲱⲱⲙⲉ</w>
+            <w>ⲉⲧⲃⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲁⲩ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲛⲧⲛ</w>
+            <w cert="high" resp="#zp">ⲩⲯⲓⲫⲣⲟⲛⲏ</w>
+          </s>
+          <s xml:id="XI-7512938" n="3">
+            <w>ⲉⲩⲟⲩⲱⲛϩ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ϩⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲧⲟⲡⲟⲥ</w>
+            <w>ⲛⲧⲉⲥⲙⲛⲧⲡⲁⲣ</w>
+            <w>ⲑⲉⲛⲟⲥ</w>
+          </s>
+          <s xml:id="XI-7512939" n="4">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲥ</w>
+            <w>ⲥⲱⲧⲙ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲉⲥ</w>
+            <w>ⲥⲛⲏⲩ</w>
+            <w cert="medium" resp="#zp">ⲫⲁⲓⲛⲱⲯ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲥ</w>
+            <w>ⲁⲩⲱ</w>
+            <w>ⲉ</w>
+            <w>ⲩ</w>
+            <w>ϣⲁϫⲉ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲉⲣⲏⲩ</w>
+            <w>ϩⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲙⲩⲥⲧⲏⲣⲓⲟⲛ</w>
+            <w>ⲁⲛⲟⲕ</w>
+            <w>ⲇⲉ</w>
+            <w>ⲛⲉⲩ</w>
+            <w>ϣⲟⲣⲡ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲱⲡ</w>
+            <w>ⲛ</w>
+            <w>ⲥⲁⲟⲩⲥⲁ</w>
+            <w>ⲡⲉ</w>
+            <gap reason="lacuna" unit="line" extent="unknown"/>
+            <w>ⲟⲓ</w>
+            <w>ⲁ</w>
+            <w>ⲓ</w>
+            <w>ⲉⲓ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲉ</w>
+            <w>ⲡⲓ</w>
+            <w>ⲧⲟⲡⲟⲥ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲧⲁⲙⲛⲧⲡⲁⲣ</w>
+            <w>ⲑⲉⲛⲟⲥ</w>
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁ</w>
+            <w>ⲉⲓⲃⲱⲕ</w>
+            <w>ⲉϩⲣⲁⲓ</w>
+            <w>ⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲕⲟⲥⲙⲟⲥ</w>
+          </s>
+          <s xml:id="XI-7512940" n="5">
+            <w>ⲧⲟⲧⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲧⲁ</w>
+            <w>ⲙ</w>
+            <w>ⲟⲓ</w>
+            <w>ⲉⲧⲃⲉ</w>
+            <w>ⲛⲏ</w>
+          </s>
+          <s xml:id="XI-7512941" n="6">
+            <w>ⲛϭⲓ</w>
+            <w>ⲛⲏ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲙⲏⲛ</w>
+            <w>ⲉ</w>
+            <w>ⲡⲓ</w>
+            <w>ⲧⲟⲡⲟⲥ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲧⲁ</w>
+            <w>ⲙⲛⲧ</w>
+            <w>ⲡⲁⲣⲑⲉⲛⲟⲥ</w>
+          </s>
+          <s xml:id="XI-7512942" n="7">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁ</w>
+            <w>ⲓ</w>
+            <w>ⲃⲱⲕ</w>
+            <w>ⲉϩⲣⲁⲓ</w>
+            <w>ⲉ</w>
+            <w>ⲡⲕⲟⲥⲙⲟⲥ</w>
+          </s>
+          <s xml:id="XI-7512943" n="8">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲡⲉ</w>
+            <w>ϫⲁⲩ</w>
+            <w>ⲛⲁⲓ</w>
+            <w>ϫⲉ</w>
+            <w>ⲕⲉ</w>
+            <w>ⲥⲟⲡ</w>
+            <w>ⲁ</w>
+            <w>ⲩⲫⲣⲟ</w>
+            <w>ⲛⲏ</w>
+            <w>ⲣⲁⲛⲁⲭⲱⲣⲓ</w>
+            <w>ⲛⲥⲁ</w>
+            <w>ⲛ</w>
+            <w>ⲃⲟⲗ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲙⲁ</w>
+            <w>ⲛⲧⲉ</w>
+            <w>ⲥⲙⲛⲧ</w>
+            <w>ⲡⲁⲣⲑⲉⲛⲟⲥ</w>
+          </s>
+          <s xml:id="XI-7512944" n="9">
+            <w>ⲧⲟⲧⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲡ</w>
+            <w>ⲉⲧⲁ</w>
+            <w>ϥ</w>
+            <w>ⲥⲱⲧⲙ</w>
+            <w>ⲛϭⲓ</w>
+            <w cert="medium" resp="#zp">ⲫⲁⲓⲛⲱⲯ</w>
+            <w>ⲡ</w>
+            <w>ⲉⲧ</w>
+            <w>ⲛⲓϥⲉ</w>
+            <w>ⲉϩⲟⲩⲛ</w>
+            <w>ϩⲛ</w>
+            <w>ⲧⲥ</w>
+            <w>ⲡⲏⲅⲏ</w>
+            <w>ⲛ</w>
+            <w>ⲥⲛⲟϥ</w>
+            <w>ⲡⲱⲣϣ</w>
+            <w>ⲛⲉⲥ</w>
+            <w>ⲉⲃⲟⲗ</w>
+          </s>
+          <s xml:id="XI-7512945" n="10">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲡⲉϫⲁ</w>
+            <w>ϥ</w>
+            <w>ϫⲉ</w>
+            <w>ⲁⲛⲟⲕ</w>
+            <w>ⲡⲉ</w>
+            <w cert="medium" resp="#zp">ⲫⲁⲓⲛⲱⲯ</w>
+            <w>ⲟⲛ</w>
+            <w>ⲁⲛ</w>
+            <w>ⲩ</w>
+            <w>ⲁ</w>
+            <w>ⲓ</w>
+            <w>ⲧⲉ</w>
+            <w>ⲁϥ</w>
+            <gap reason="lacuna" unit="line" extent="unknown"/>
+            <w>ⲛ</w>
+            <w>ⲥ</w>
+            <w>ⲱⲣⲙ</w>
+            <w>ⲙ</w>
+            <w>ⲁϥⲁⲧⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲉⲡⲓⲑⲩⲙⲓⲁ</w>
+            <w>ⲧⲏ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲛⲛⲓⲕⲉϣⲱϫⲡ</w>
+            <w>ⲛ</w>
+            <w>ⲣⲱⲙⲉ</w>
+            <w>ⲏ</w>
+            <w>ⲛ</w>
+            <w>ⲧⲁ</w>
+            <w>ⲛⲁⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲩ</w>
+            <w>ⲣⲱⲙⲉ</w>
+            <w>ⲡⲉⲓ</w>
+            <w>ⲛⲉ</w>
+            <w>ⲛⲥⲛⲟϥⲏ</w>
+            <w>ⲉ</w>
+            <w>ϩⲟ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲧⲉ</w>
+            <w>ⲛⲛⲟⲩⲗ</w>
+            <w>ⲕ</w>
+            <w>ⲱϩⲧ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲟ</w>
+            <w>ϩⲛ</w>
+            <w>ⲛⲉϥ</w>
+            <w>ϭⲓϫ</w>
+          </s>
+          <s xml:id="XI-7512946" n="11">
+            <w>ⲧⲟⲧⲉ</w>
+            <w>ⲁⲛⲟⲕ</w>
+            <w>ⲡⲉϫⲁ</w>
+            <w>ⲓ</w>
+            <w>ⲛⲁ</w>
+            <w>ϥ</w>
+            <w>ϫⲉ</w>
+            <w>ⲙ</w>
+            <w>ⲡⲉϥ</w>
+            <w>ϣⲉ</w>
+            <w>ⲉϩⲣⲁⲓ</w>
+            <w>ⲉ</w>
+            <w>ϫⲱ</w>
+            <w>ⲓ</w>
+            <w>ⲛϭⲓ</w>
+            <w cert="medium" resp="#zp">ⲫⲁⲓⲛⲱⲯ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲉϥ</w>
+            <w>ⲥⲱⲣⲙ</w>
+          </s>
+          <s xml:id="XI-7512947" n="12">
+            <w>ⲛⲁⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲩ</w>
+            <w>ⲣⲱⲙⲉ</w>
+            <w>ⲛ</w>
+            <w>ϥ</w>
+          </s>
+          <s xml:id="XI-7512948" n="13">
+            <w>ⲩ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲁⲩ</w>
+            <w>ⲛⲁ</w>
+            <gap reason="lacuna" unit="line" extent="unknown"/>
+            <w>ⲛ</w>
+            <w>ⲟ</w>
+            <w>ⲅⲁⲣ</w>
+            <w>ⲉ</w>
+            <w>ⲧ</w>
+            <w>ⲁϥ</w>
+            <w>ϫⲟⲟ</w>
+            <w>ϥ</w>
+            <w>ⲛ</w>
+            <w cert="medium" resp="#zp">ⲫⲁⲓⲛⲱⲯ</w>
+            <w>ⲡⲁⲓ</w>
+            <w>ⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲓ</w>
+            <w>ⲛⲁⲩ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ϥ</w>
+            <w>ⲁⲩⲱ</w>
+            <w>ⲡⲉϫⲁ</w>
+            <w>ϥ</w>
+            <w>ⲛⲁⲓ</w>
+            <w>ϫⲉ</w>
+            <w cert="high" resp="#zp">ⲩⲯⲓⲫⲣⲟⲛⲏ</w>
+            <w>ⲉⲧⲃⲉ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲕ</w>
+            <w>ϣⲟⲟⲡ</w>
+            <w>ⲛⲥⲁ</w>
+            <w>ⲃⲟⲗ</w>
+            <w>ⲙⲙⲟ</w>
+            <w>ⲓ</w>
+            <w>ⲟⲩⲱϩ</w>
+            <w>ⲙⲙⲟ</w>
+            <w>ⲕ</w>
+            <w>ⲛⲥⲱⲓ</w>
+          </s>
+          <s xml:id="XI-7512949" n="14">
+            <w>ⲁⲩⲱ</w>
+            <w>ϯ</w>
+            <w>ⲛⲁ</w>
+            <w>ⲧⲁⲙⲟ</w>
+            <w>ⲕ</w>
+            <w>ⲉ</w>
+            <w>ⲣⲟⲟⲩ</w>
+          </s>
+          <s xml:id="XI-7512950" n="15">
+            <w>ⲁⲛⲟⲕ</w>
+            <w>ⲇⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲉⲓ</w>
+            <w>ⲟⲩⲁϩ</w>
+            <w>ⲧ</w>
+            <w>ⲛⲥⲱϥ</w>
+          </s>
+          <s xml:id="XI-7512951" n="16">
+            <w>ⲛⲉⲓ</w>
+            <w>ϣⲟⲟⲡ</w>
+            <w>ⲅⲁⲣ</w>
+            <w>ⲛϩⲣⲁⲓ</w>
+            <w>ϩⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲛⲟϭ</w>
+            <w>ⲛϩⲟⲧⲉ</w>
+          </s>
+          <s xml:id="XI-7512952" n="17">
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁϥⲧⲁⲙⲟ</w>
+            <w>ⲉⲓ</w>
+            <w>ⲉ</w>
+            <w>ⲩ</w>
+            <w>ⲡⲏⲅⲏ</w>
+            <w>ⲛ</w>
+            <w>ⲥⲛⲟϥ</w>
+            <w>ⲉ</w>
+            <w>ⲥ</w>
+            <w>ϭⲟⲗⲡ</w>
+            <w>ⲉ</w>
+            <w>ⲃⲟⲗ</w>
+          </s>
+          <s xml:id="XI-7512953" n="18">
+            <w>ⲉⲥ</w>
+            <w>ϯ</w>
+            <w>ⲕ</w>
+            <w>ⲱϩⲧ</w>
+            <w>ⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲡⲉϫⲁ</w>
+            <w>ϥ</w>
+            <w>ⲉ</w>
+            <w>ⲁ</w>
+            <w>ⲱⲕ</w>
+            <w>ⲙ</w>
+            <w>ⲩⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲡ</w>
+            <w>ϥ</w>
+            <w>ⲛⲉⲥ</w>
+            <w>ⲛⲉ</w>
+            <w>ⲱ</w>
+            <w>ⲙⲉⲛ</w>
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁⲥ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲁⲣ</w>
+            <w>ⲉ</w>
+            <w>ⲛ</w>
+            <w>ϥ</w>
+            <w>ⲧ</w>
+            <w>ϥ</w>
+            <w>ⲇ</w>
+            <w>ⲧⲁ</w>
+            <w>ⲉ</w>
+            <w>ⲁϩ</w>
+            <w>ⲛ</w>
+            <w>ⲛ</w>
+            <w>ϯ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲙ</w>
+            <w>ⲙⲉ</w>
+            <w>ⲩ</w>
+            <w>ⲛ</w>
+            <w>ⲧⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲡ</w>
+            <w>ϥ</w>
+            <w>ϩ</w>
+            <w>ⲱⲡ</w>
+            <w>ⲧⲃ</w>
+            <w>ϥ</w>
+            <w>ⲁϫⲛ</w>
+            <w>ⲱ</w>
+            <w>ⲙ</w>
+            <w>ⲛ</w>
+            <w>ⲡ</w>
+            <w>ⲏ</w>
+            <w>ⲣⲉ</w>
+            <w>ⲏ</w>
+            <w>ⲣⲓ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲉ</w>
+            <w>ⲁⲣⲁ</w>
+            <w>ⲡ</w>
+            <w>ⲓⲁ</w>
+            <w>ⲉⲥ</w>
+            <w>ⲛ</w>
+            <w>ⲥ</w>
+            <w>ⲛⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲙ</w>
+            <w>ⲡ</w>
+            <w>ⲗⲟⲅⲟⲥ</w>
+            <w>ⲡ</w>
+            <w>ⲧⲟⲡⲟⲥ</w>
+            <w>ⲙⲉ</w>
+            <w>ⲩⲭ</w>
+            <w>ⲙⲡⲇ</w>
+            <w>ⲱ</w>
+            <w>ⲉϥ</w>
+            <w>ⲁ</w>
+            <w>ⲧⲁ</w>
+            <w>ⲛ</w>
+            <w>ⲅⲁⲣ</w>
+            <w>ⲉⲓ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲡ</w>
+            <w>ⲉⲓ</w>
+            <w>ⲛ</w>
+            <w>ⲉⲓ</w>
+            <w>ⲛ</w>
+            <w>ϣ</w>
+            <w>ⲛⲛ</w>
+            <w>ⲁⲩⲱ</w>
+            <w>ⲕ</w>
+            <w>ⲧⲛ</w>
+            <w>ⲧⲙ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲡ</w>
+            <w>ⲁⲩⲱ</w>
+            <w>ⲣⲱ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲩ</w>
+            <w>ⲱ</w>
+            <w>ⲁ</w>
+            <w>ⲡ</w>
+            <w>ⲧ</w>
+            <w>ϩⲉ</w>
+            <w>ⲛⲙ</w>
+            <w>ⲉϥ</w>
+            <w>ⲛ</w>
+            <w>ⲩ</w>
+            <w>ⲙⲡ</w>
+            <w>ⲗⲟ</w>
+            <w>ⲱ</w>
+            <w>ⲕ</w>
+            <w>ⲁ</w>
+            <w>ⲙ</w>
+            <w>ⲟ</w>
+            <w>ⲱ</w>
+            <w>ⲙ</w>
+            <w>ⲓ</w>
+            <w>ⲁ</w>
+            <w>ⲱ</w>
+            <w>ⲁϩ</w>
+            <w>ⲉ</w>
+            <w>ⲱ</w>
+            <w>ⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲉⲭ</w>
+            <w>ⲁⲩ</w>
+            <w>ⲩ</w>
+            <w>ⲧ</w>
+            <w>ⲛⲁⲓ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲁⲓ</w>
+            <w>ϫⲉ</w>
+            <w>ⲁⲩⲱ</w>
+            <w>ⲁ</w>
+            <w>ⲉⲓⲛⲁⲩ</w>
+            <w>ⲥ</w>
+            <w>ⲛⲏⲩ</w>
+            <w>ⲙⲛ</w>
+            <w>ⲛ</w>
+            <w>ⲣ</w>
+            <w>ⲛ</w>
+            <w>ⲟ</w>
+            <w>ⲉ</w>
+            <w>ⲩ</w>
+            <w>ⲩ</w>
+            <w>ϩⲣⲁⲓ</w>
+            <w>ϩⲛ</w>
+            <w>ⲛⲉ</w>
+            <w>ⲓ</w>
+            <w>ⲥⲧⲟ</w>
+            <w>ⲗⲏⲁⲩⲱ</w>
+            <w>ⲁ</w>
+            <w>ⲉⲓⲧⲁⲙⲟ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲉ</w>
+            <w>ⲛⲁⲓ</w>
+            <w>ⲛⲧⲁⲉⲓⲛⲁⲩ</w>
+            <w>ⲉⲣⲟ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲛ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲛⲟϭ</w>
+            <w>ⲧ</w>
+            <w>ⲟ</w>
+            <w>ⲛ</w>
+            <w>ⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲟ</w>
+            <w>ϣⲟϫⲛⲉ</w>
+            <w>ⲃⲁⲃϩ</w>
+            <w>ⲕⲗⲟⲟⲗⲉ</w>
+            <w>ϯ</w>
+            <w>ⲕⲗⲟⲟⲗⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲁ</w>
+            <w>ⲓ</w>
+            <w>ⲣⲁϣⲉ</w>
+            <w>ⲉ</w>
+            <w>ϩⲉⲛ</w>
+            <w>ⲁ</w>
+            <w>ⲩ</w>
+            <w>ϫⲓⲧ</w>
+            <w>ⲉϩⲣⲁⲓ</w>
+            <w>ⲉ</w>
+            <w>ⲁⲩⲱ</w>
+            <w>ⲡⲉϫⲁ</w>
+            <w>ⲩ</w>
+            <w cert="high" resp="#zp">ⲩⲯⲓⲫⲣⲟⲛⲏ</w>
+            <w>ⲉⲓⲥ</w>
+            <w>ϩⲏⲏⲧⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲁⲩⲱ</w>
+            <w>ϣⲟⲣⲡ</w>
+            <w>ⲛ</w>
+            <w>ⲡⲱⲧ</w>
+            <w>ⲉⲃⲟⲗ</w>
+            <w>ⲙⲙⲟ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲁⲛⲟⲕ</w>
+            <w>ⲇⲉ</w>
+            <w>ⲙⲙⲟ</w>
+            <w>ⲟⲩ</w>
+            <w>ⲁ</w>
+            <w>ⲉ</w>
+            <w>ϣⲓⲛⲉ</w>
+            <w>ⲁⲓⲧⲓⲟⲛ</w>
+            <w>ⲛ</w>
+            <w>ϭ</w>
+            <w>ϣ</w>
+            <w>ⲉ</w>
+            <w>ⲓ</w>
+            <w>ⲧ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲛⲧ</w>
+            <w>ⲙⲛⲧ</w>
+            <w>ⲧⲁⲧⲥⲟ</w>
+            <w>ⲟⲩⲛ</w>
+          </s>
+        </ab>
+      </div>
+    </body>
+  </text>
+</TEI>
