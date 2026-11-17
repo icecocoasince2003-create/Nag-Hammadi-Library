@@ -9,7 +9,7 @@
 
 | ページ | 内容 | 管理方法 |
 |---|---|---|
-| `index.html` | HOME（日・英・仏、NEWS、関連サイト、文書一覧） | `python3 scripts/build_site.py` で生成。NEWS は `data/news.json`、関連サイトは `data/links.json` を編集 |
+| `index.html` | HOME（日・英・仏、NEWS、関連サイト、文書一覧）。上部ナビの ☀／☾ でライト／ダークの表示モードを切替 | `python3 scripts/build_site.py` で生成。NEWS は `data/news.json`、関連サイトは `data/links.json` を編集 |
 | `gnosticism.html` | 解説「グノーシス主義とは」（日・英・仏） | 手作業 |
 | `project.html` | プロジェクト紹介。メンバー・資金協力は `data/project.json`（`public: true` のみ表示） | 手作業＋JSON |
 | `eugnostos.html` | エウグノストス。`?wit=III`（祝福されたエウグノストス）/ `?wit=V`（エウグノストス）/ `?wit=SYN`（対照） | 手作業 |
@@ -19,10 +19,12 @@
 | `profile.html` | プロフィール（ログイン中の利用者用）。表示名の変更、自分の投稿の確認と修正、ブックマーク、運営へのバグの報告・応援メッセージ | 手作業 |
 | `admin.html` | 投稿（コメント・注釈・誤りの指摘）の承認、公開済みの投稿への修正の申請の承認、運営へのメッセージの確認（運営用） | 手作業 |
 
-共通部品: `assets/site.css`・`assets/site.js`（上部ナビ・言語切替・XML ダウンロードメニュー・ワイド表示）、
+共通部品: `assets/cosmos.css`・`assets/cosmos.js`（配色と背景。ダーク＝宇宙テーマが既定、ライトモードの配色もここ）、
+`assets/site.css`・`assets/site.js`（上部ナビ・言語切替・表示モード切替・XML ダウンロードメニュー・ワイド表示）、
 `assets/community.*`（ログイン、承認制の投稿、ブックマーク。設定は `assets/community-config.js`、手順は `docs/COMMUNITY_SETUP.md`。
 データベースの定義は `supabase/schema.sql` で、更新したときは Supabase の SQL Editor で全体を再実行します）。
 上部ナビの項目は `assets/site.js` の `NAV` を編集すれば全ページに反映されます。
+表示モード（ライト／ダーク）に対応しているのは今のところ HOME だけです。仕組みと、ほかのページを対応させる手順は `COSMOS_REDESIGN.md` の末尾にあります。
 
 **同形異義語の参照**: 本文の `<w>` は `@lemma` と `@type`（品詞）の組で `lexicon.xml` を引きます。
 `@ana="#lex-…"` があればそれが最優先、品詞が一致する項目がない場合だけレンマ一致の全項目を候補として表示します。

@@ -32,6 +32,10 @@
     var ctx = canvas.getContext("2d");
     var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     var stars = [];
+    var frame = 0;   // 予約中の requestAnimationFrame（0 = 予約なし）
+
+    /* ライトモード（html[data-mode="light"]。切替は assets/site.js）では星を描かない */
+    function light() { return document.documentElement.getAttribute("data-mode") === "light"; }
 
     function resize() {
       canvas.width = window.innerWidth;
@@ -51,7 +55,9 @@
     }
 
     function draw(t) {
+      frame = 0;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (light()) return;
       for (var i = 0; i < stars.length; i++) {
         var st = stars[i];
         var a = reduced ? 0.5 : 0.32 + 0.34 * Math.sin(st.p + t * 0.001 * st.s);
@@ -62,16 +68,20 @@
         ctx.fill();
       }
       ctx.globalAlpha = 1;
-      if (!reduced) requestAnimationFrame(draw);
+      if (!reduced) frame = requestAnimationFrame(draw);
     }
 
     window.addEventListener("resize", function () {
       resize();
       if (reduced) draw(0);
     });
+    /* 表示モードが切り替わったら描き直す（ダークに戻ったときは、止まっていたループを再開） */
+    document.addEventListener("nhc:mode", function () {
+      if (!frame) draw(reduced ? 0 : performance.now());
+    });
     resize();
     if (reduced) draw(0);
-    else requestAnimationFrame(draw);
+    else frame = requestAnimationFrame(draw);
   }
 
   if (document.body) mount();

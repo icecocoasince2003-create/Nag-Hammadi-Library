@@ -20,6 +20,8 @@
   * NEWS（更新情報）は data/news.json、関連サイトは data/links.json を編集します
     （HTML の再生成は不要。ページ表示時に読み込まれます）。
   * 上部ナビの項目は assets/site.js の NAV で全ページ共通に管理しています。
+  * HOME は表示モード（ライト／ダーク）に対応しています。上部ナビの ☀／☾ で切り替わり、
+    配色は assets/cosmos.css の「ライトモード」、HOME 固有の調整は下の INDEX_CSS の末尾にあります。
 
 【新しい文書を「公開」に切り替える手順】
   1. ビュワー HTML（例: eugnostos.html）をルートに用意する
@@ -176,6 +178,13 @@ FONTS = (_icon_links() +
  '<script defer src="assets/community-config.js"></script>'
  '<script defer src="assets/community.js"></script>')
 
+# 表示モード（ライト／ダーク）に対応するページの <head> に入れる1行スクリプト。
+# 保存値（localStorage "nhc-mode"。保存するのは assets/site.js）を描画前に反映して、ちらつきを防ぐ。
+# 対応ページは <html data-mode="dark" data-modes="light dark"> とする（切替ボタンは site.js がナビに出す）。
+MODE_BOOT = ('<script>/* 表示モード（ライト／ダーク）の保存値を描画前に反映（保存は assets/site.js） */'
+             'try{if(localStorage.getItem("nhc-mode")==="light")'
+             'document.documentElement.setAttribute("data-mode","light")}catch(e){}</script>')
+
 THEME = """
 :root{
  --bg:#f3eede; --panel:#fbf8f1; --panel-2:#f6f1e6;
@@ -247,7 +256,7 @@ html[data-lang="ja"] .hero h1 .l-ja{font-family:'Noto Serif JP',serif; letter-sp
 .sec-h small{color:var(--ink-faint); font-size:.78rem}
 .sec-h .rule{flex:1; height:1px; background:linear-gradient(90deg,var(--line),transparent)}
 
-.features{display:grid; grid-template-columns:repeat(auto-fit,minmax(340px,1fr)); gap:14px}
+.features{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr)); gap:14px}
 .feat{display:grid; grid-template-columns:minmax(0,1fr); gap:18px; align-items:center;
  background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:16px 20px}
 .feat .k{font-size:.66rem; letter-spacing:.16em; text-transform:uppercase; color:var(--gold)}
@@ -286,10 +295,10 @@ html[data-lang="ja"] .hero h1 .l-ja{font-family:'Noto Serif JP',serif; letter-sp
 .ctool{display:flex; align-items:center; gap:10px; margin:0 0 16px; padding:8px 0;
  border-bottom:1px solid var(--line)}
 .ctool svg{width:16px; height:16px; color:var(--ink-faint); flex:none}
-.ctool input{flex:1; background:none; border:0; outline:0; color:var(--ink); font-family:var(--ui); font-size:.92rem}
+.ctool input{flex:1; min-width:0; background:none; border:0; outline:0; color:var(--ink); font-family:var(--ui); font-size:.92rem}
 .ctool input::placeholder{color:var(--ink-faint)}
 .ctool .cnt{font-size:.74rem; color:var(--ink-faint); white-space:nowrap}
-.grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(370px,1fr)); gap:18px; padding-bottom:30px}
+.grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(min(370px,100%),1fr)); gap:18px; padding-bottom:30px}
 .codex{background:var(--panel); border:1px solid var(--line); border-radius:16px; overflow:hidden;
  display:flex; flex-direction:column}
 .chead{display:flex; align-items:center; gap:12px; padding:14px 16px 10px}
@@ -324,6 +333,14 @@ footer a{color:var(--ink-soft); text-decoration:none; text-underline-offset:4px}
 footer a:hover{text-decoration:underline}
 @media(max-width:520px){ .trow{grid-template-columns:auto 1fr auto; } .trow .loc,.trow .arr{display:none} }
 section[id]{scroll-margin-top:70px}
+
+/* ---- ライトモード（html[data-mode="light"]）での調整。配色そのものは assets/cosmos.css ---- */
+html[data-mode="light"] .hero-fig{background:radial-gradient(circle at 50% 38%,#2b2856,#17152f 72%);
+ border-color:rgba(127,93,22,.5); box-shadow:0 10px 34px rgba(60,45,20,.18)}
+html[data-mode="light"] .pill.on{color:#fffdf6}
+html[data-mode="light"] .chead .rn{opacity:.75}
+html[data-mode="light"] .feat, html[data-mode="light"] .codex, html[data-mode="light"] .relsite{
+ box-shadow:0 1px 2px rgba(60,45,20,.05)}
 """
 
 def build_index():
@@ -464,10 +481,11 @@ fetch('data/links.json',{{cache:'no-store'}}).then(r=>r.ok?r.json():Promise.reje
 }})();
 </script>
 """
-    return ("<!doctype html><html lang=\"ja\" data-lang=\"ja\" data-i18n=\"full\" data-mode=\"aeon\""
+    return ("<!doctype html><html lang=\"ja\" data-lang=\"ja\" data-i18n=\"full\" data-mode=\"dark\" data-modes=\"light dark\""
             " data-title-en=\"Sheneset — a digital TEI edition of the Nag Hammadi Codices\""
             " data-title-fr=\"Sheneset — édition numérique TEI des codices de Nag Hammadi\"><head><meta charset=\"utf-8\">"
             "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
+            f"{MODE_BOOT}"
             "<title>Sheneset — ナグ・ハマディ写本コーパス</title>"
             "<meta name=\"description\" content=\"ナグ・ハマディ写本のTEI P5デジタル版（コプト語本文・形態素グロス・辞書・注釈・日英仏訳）/ A digital TEI edition of the Nag Hammadi Codices.\">"
             f"{FONTS}<style>{THEME}{INDEX_CSS}</style></head><body>{body}</body></html>")

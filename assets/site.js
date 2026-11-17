@@ -7,6 +7,8 @@
        * 三言語対応ページ（<html data-i18n="full">）: html[data-lang] を ja/en/fr に切替
        * 既存のビュワー（日英のみ）: ページ内の #langBtn / #tlBtn を操作して同期
          （French を選ぶと UI は英語、語釈・対訳はフランス語になります）
+   - 表示モード（ライト／ダーク）に対応したページ（<html data-modes="light dark">）では、
+     ナビ右側に切替ボタンを出し、選択を localStorage に保存します（配色は assets/cosmos.css）。
    - ナビ右端の〈ログイン〉は assets/community.js が制御します。
    - ビュワー（.app > header を持つページ）では、ナビ左端に ☰ を出して
      左の「文書パネル」を開閉します（見た目は assets/site.css の 2)）。
@@ -55,6 +57,60 @@
 
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
 
+  /* ---- 表示モード（ライト／ダーク）----
+     対応しているページ（<html data-modes="light dark">）にだけ、ナビ右側に切替ボタンを出す。
+     html[data-mode] を light / dark に切り替え、選択を localStorage "nhc-mode" に保存する（保存がなければダーク）。
+     配色は assets/cosmos.css の「ライトモード」。対応ページは <head> の1行スクリプトで保存値を描画前に反映する
+     （ちらつき防止）。切り替えたときは document に "nhc:mode" を送る（assets/cosmos.js が星野を止める／再開する）。 */
+  var MODE_KEY = "nhc-mode";
+  var MODE_TEXT = {
+    ja: { light: "ライトモードに切り替え", dark: "ダークモードに切り替え" },
+    en: { light: "Switch to light mode", dark: "Switch to dark mode" },
+    fr: { light: "Passer en mode clair", dark: "Passer en mode sombre" }
+  };
+  /* ボタンの絵は「押すと切り替わる先」: ダーク表示中は太陽、ライト表示中は月（出し分けは site.css） */
+  var MODE_ICONS =
+    '<svg class="sb-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">' +
+      '<circle cx="12" cy="12" r="4"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4l1.5 1.5M17.1 17.1l1.5 1.5M5.4 18.6l1.5-1.5M17.1 6.9l1.5-1.5"/></svg>' +
+    '<svg class="sb-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      '<path d="M20.5 13.4A8.6 8.6 0 1 1 10.6 3.5a7.2 7.2 0 0 0 9.9 9.9z"/></svg>';
+  function hasModes() {
+    var m = (H.getAttribute("data-modes") || "").split(/\s+/);
+    return m.indexOf("light") >= 0 && m.indexOf("dark") >= 0;
+  }
+  function mode() { return H.getAttribute("data-mode") === "light" ? "light" : "dark"; }
+  function storedMode() {
+    try { var v = localStorage.getItem(MODE_KEY); return v === "light" || v === "dark" ? v : null; } catch (e) { return null; }
+  }
+  var curMode = mode();   // 選択中のモード（切替のフェード中は html[data-mode] より先に変わる）
+  function modeLabel() { return (MODE_TEXT[lang()] || MODE_TEXT.ja)[curMode === "light" ? "dark" : "light"]; }
+  /* 選択中のモード（curMode）を画面に反映する。何度呼んでも、どの順で呼ばれても結果は同じ */
+  function applyMode() {
+    H.setAttribute("data-mode", curMode);
+    var b = document.getElementById("sbMode");
+    if (b) { b.setAttribute("aria-label", modeLabel()); b.title = modeLabel(); }
+    document.dispatchEvent(new CustomEvent("nhc:mode", { detail: { mode: curMode } }));
+  }
+  function setMode(v) {
+    if (!hasModes() || (v !== "light" && v !== "dark")) return;
+    try { localStorage.setItem(MODE_KEY, v); } catch (e) {}
+    if (v === curMode) return;
+    curMode = v;
+    // 対応ブラウザでは画面全体をクロスフェードで切り替える。「視差効果を減らす」設定のときと、
+    // 画面が表示されていないとき（フェードが中断され、反映も遅れる）は即時に切り替える
+    var still = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (document.startViewTransition && !still && document.visibilityState === "visible") {
+      try {
+        var vt = document.startViewTransition(applyMode);
+        // フェードが途中で打ち切られても（タブを切り替えた等）切替そのものは済むので、その通知は無視する
+        if (vt && vt.ready) vt.ready.catch(function () {});
+        if (vt && vt.finished) vt.finished.catch(function () {});
+        return;
+      } catch (e) {}
+    }
+    applyMode();
+  }
+
   function pageId() {
     var p = (location.pathname.split("/").pop() || "index.html").toLowerCase();
     if (p === "" || p === "index.html") return "home";
@@ -83,11 +139,15 @@
           return '<button type="button" class="sb-lang" data-lang="' + v + '" aria-pressed="' + (v === L) + '" lang="' + v + '">' + lab + '</button>';
         }).join("") +
         '<span class="sb-sep" aria-hidden="true"></span>' +
+        (hasModes() ? '<button type="button" class="sb-mode" id="sbMode" aria-label="' + esc(modeLabel()) + '" title="' + esc(modeLabel()) + '">' +
+          MODE_ICONS + '</button><span class="sb-sep" aria-hidden="true"></span>' : "") +
         '<a class="sb-auth" id="sbAuth" href="#" hidden></a>' +
       '</div>';
     Array.prototype.forEach.call(nav.querySelectorAll(".sb-lang"), function (b) {
       b.addEventListener("click", function () { setLang(b.getAttribute("data-lang")); });
     });
+    var mb = nav.querySelector(".sb-mode");
+    if (mb) mb.addEventListener("click", function () { setMode(curMode === "light" ? "dark" : "light"); });
     if (panel) {
       panel.setAttribute("aria-label", S.panel);
       nav.querySelector(".sb-panel").addEventListener("click", togglePanel);
@@ -193,6 +253,12 @@
     if (!otherHeader) nav.classList.add("sticky");
     wirePanel();
 
+    // 表示モード: 保存値を反映（通常は <head> の1行スクリプトが描画前に済ませている）
+    if (hasModes()) {
+      curMode = storedMode() || mode();
+      if (curMode !== mode()) applyMode();
+    }
+
     var s = stored();
     if (fullI18n()) {
       var v = s || H.getAttribute("data-lang") || "ja";
@@ -273,6 +339,8 @@
   window.NHC = window.NHC || {};
   window.NHC.lang = lang;
   window.NHC.setLang = setLang;
+  window.NHC.mode = function () { return curMode; };
+  window.NHC.setMode = setMode;
   window.NHC.esc = esc;
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", mount);

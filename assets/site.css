@@ -58,6 +58,26 @@ html[data-lang="fr"] .l-en { display: none; }
 .sb-lang { font-size: .74rem; color: var(--chrome-faint, #8a85a6); }
 .sb-lang[aria-pressed="true"] { color: var(--gold-bright, #e7c885); }
 .sb-auth { color: var(--gold-bright, #e7c885); }
+/* 表示モード（ライト／ダーク）の切替ボタン。対応ページ（<html data-modes="light dark">）でだけ site.js が描画する。
+   絵は「押すと切り替わる先」: ダーク表示中は太陽、ライト表示中は月 */
+.sb-mode {
+  appearance: none; flex: none; position: relative; display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; margin: 0 -4px; padding: 0;
+  background: none; border: 1px solid transparent; border-radius: 8px;
+  color: var(--chrome-ink, #ede8dc); cursor: pointer;
+}
+.sb-mode::after { content: ""; position: absolute; inset: -9px -5px; }   /* 押せる範囲を広げる */
+.sb-mode svg { display: block; width: 16px; height: 16px; }
+.sb-mode .sb-moon, html[data-mode="light"] .sb-mode .sb-sun { display: none; }
+html[data-mode="light"] .sb-mode .sb-moon { display: block; }
+.sb-mode:hover, .sb-mode:focus-visible {
+  border-color: rgba(212, 175, 106, .45); color: var(--gold-bright, #e7c885); outline: none;
+}
+/* ごく狭い画面では、切替ボタンの分だけ区切り線を省いて間隔を詰め、ロゴと同じ行に収める */
+@media (max-width: 359px) {
+  .sitebar .sb-tools:has(.sb-mode) { gap: 4px 8px; }
+  .sb-tools:has(.sb-mode) .sb-sep { display: none; }
+}
 /* ログイン中は表示名（プロフィールへのリンク）。長い名前は省略して1行に収める */
 .sb-auth { display: inline-block; max-width: 14em; overflow: hidden; text-overflow: ellipsis; vertical-align: middle; }
 .sb-auth[hidden] { display: none; }

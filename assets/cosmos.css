@@ -4,8 +4,13 @@
    パレット: 虚空(void)・星雲(nebula)・プレーローマの金・バルベーローの紫
    ============================================================ */
 
-/* ---- パレット定義（両方の変数体系を全モードで上書き） ---- */
-html, html[data-mode="light"], html[data-mode="dark"], html[data-mode="aeon"] {
+/* ---- パレット定義（両方の変数体系を上書き）----
+   既定はダーク（宇宙）。ライトモードは下の「ライトモード」の節で上書きする。
+   2行目以降のセレクタは、ライトモードでも藍色のままにする「クローム」（上部ナビ・ダイアログ・通知）。
+   その内側ではダークの変数に戻す。 */
+html, html[data-mode="dark"], html[data-mode="aeon"],
+html[data-mode="light"] .sitebar, html[data-mode="light"] .cm-modal,
+html[data-mode="light"] .cm-toast, html[data-mode="light"] .cm-drawer {
   /* ビュワー系 (republic.html / eugnostos.html) */
   --paper: rgba(13, 11, 30, .82);
   --paper-2: rgba(23, 20, 46, .92);
@@ -59,18 +64,21 @@ body > .app, body > .wrap, body > header, body > main, body > footer, body > .sh
 /* ---- 星野キャンバス & アイオーンの環 (cosmos.jsが挿入) ---- */
 #cosmos-starfield {
   position: fixed; inset: 0;
-  width: 100vw; height: 100vh;
+  width: 100%; height: 100vh;   /* 幅は 100vw にしない（縦スクロールバーの分だけはみ出し、横スクロールが出る） */
   z-index: 0;
   pointer-events: none;
 }
 #cosmos-rings {
   position: fixed;
-  top: -140px; left: 50%;
-  transform: translateX(-50%);
+  top: -140px; left: 0; right: 0;
+  /* 画面幅いっぱいの枠の中央に環（720px）を置き、狭い画面ではみ出す分は切り落とす（横スクロールを作らない） */
+  display: flex; justify-content: center;
+  overflow: hidden;
   z-index: 0;
   pointer-events: none;
   opacity: .8;
 }
+#cosmos-rings svg { flex: none; }
 #cosmos-rings circle {
   fill: none;
   stroke: #d4af6a;
@@ -82,8 +90,52 @@ body > .app, body > .wrap, body > header, body > main, body > footer, body > .sh
 }
 @keyframes cosmosRing { to { transform: rotate(360deg); } }
 
+/* ---- ライトモード（html[data-mode="light"]）----
+   対応しているページ（<html data-modes="light dark">。いまはトップページのみ）で、
+   上部ナビの切替ボタンから選ぶ（描画と保存は assets/site.js、保存先は localStorage "nhc-mode"）。
+   紙面はパピルスの地色・文字は墨・金は濃いめ。文字色は地色に対して 4.5:1 以上を保つこと。
+   上部ナビ・ダイアログ・通知（クローム）は藍色のまま（冒頭のパレット定義を参照）。 */
+html[data-mode="light"] {
+  /* ビュワー系（まだどのページでも使っていない仮の値。ビュワーを対応させるときに実際の画面で調整すること） */
+  --paper: rgba(251, 248, 241, .86);
+  --paper-2: rgba(246, 241, 230, .94);
+  --raise: #fffdf8;
+  --ink: #2a2620;
+  --ink-soft: #4c4338;
+  --ink-faint: #6b6050;
+  --chrome: rgba(8, 7, 20, .92);
+  --chrome-ink: #ede8dc;
+  --chrome-faint: #8a85a6;
+  --gold: #7f5d16;
+  --gold-bright: #73500a;
+  --gold-soft: #7f5d16;
+  --lapis: #33529a;
+  --rose: #9c4a63;
+  --line: #e2d8c3;
+  --line-2: rgba(74, 58, 30, .26);
+  --hi: rgba(154, 114, 32, .13);
+  --sel: rgba(51, 82, 154, .12);
+  --shadow: 0 1px 2px rgba(60, 45, 20, .06), 0 12px 32px rgba(60, 45, 20, .1);
+
+  /* index / tractate 系 */
+  --bg: transparent;
+  --panel: #fbf8f1;
+  --panel-2: #f5efe2;
+
+  background: #f3eede;
+  color-scheme: light;
+}
+/* 星は描かず（cosmos.js も描画を止める）、アイオーンの環だけを淡い光とともに残す */
+html[data-mode="light"] #cosmos-starfield { display: none; }
+html[data-mode="light"] #cosmos-rings { opacity: 1; }
+html[data-mode="light"] #cosmos-rings svg {
+  background: radial-gradient(closest-side, rgba(226, 190, 110, .34), rgba(226, 190, 110, .12) 55%, rgba(226, 190, 110, 0));
+}
+html[data-mode="light"] #cosmos-rings circle { stroke: #9a7220; }
+html[data-mode="light"] .sitebar { background: rgba(18, 16, 42, .96); }
+
 /* ---- 共通の微調整 ---- */
-/* 表示モード切替は宇宙テーマ固定のため非表示 */
+/* ビュワーの旧・表示モード切替（アイオーン／アルコーン）は使わない。ビュワーは宇宙テーマ固定 */
 #modeBtn { display: none !important; }
 
 /* ビュワー: ページ内検索は search.html に移設したため隠す */
