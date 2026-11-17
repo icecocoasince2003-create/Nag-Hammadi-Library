@@ -299,3 +299,5 @@ python3 scripts/verify_tei.py 出力フォルダ [tei_all.rng]
 このほか、サイトの `search.html` の読み込み関数（`parseText`）と、ビュワー（`republic.html`）の `buildFlow`・`phyGroups` をそのまま取り出して jsdom 上で実行し、56 ファイルのセグメント数・トークン数・欠損の数が `catalog.tsv` と合うことを確かめた。TEI をわざと 1 か所書き換えた複製 20 通り（`<w>` を消す・足す・つなぐ、復元の印を外す、`<gap>` を消す、ID を重複させる、など）で、`verify_tei.py` の検証が失敗することも確かめた。
 
 **サイトで使うとき。** 検索ページは、`data/catalog.xml` の `<bibl type="document">` のうち `<ref type="xml" target="…"/>` を持つ文書を読み込む。TEI をリポジトリに置いて、文書ごとにこの項目を足せば、検索と統計に出る（全部足すと、読み込む XML が 7.9 MB 増える）。本文を表示するには、文書ごとのビュワー（HTML）が別に要る。
+
+> **追記（2026-11-17、リポジトリに置いたあと）。** 56 文書は `data/catalog.xml` に `<bibl type="document" subtype="unannotated">` として登録済み。検索ページでは左欄の〈未注釈の本文〉に並び、既定では読み込まれず、選んだ文書の TEI だけが取得される。カタログの項目は、リポジトリ直下で `python3 scripts/sync_nhc_catalog.py --write` を実行すると、この `tei/` と `catalog.tsv` から作り直せる（`tei/` を作り直したら実行する）。このフォルダの中身は、この追記のほかは受け取ったときのまま。

@@ -2,11 +2,15 @@
 <!-- コーパス検索・統計ページ（手作業管理）
      - 見出し下のタブで〈検索〉と〈統計〉を切り替えます（旧 stats.html をこのページに統合。統計は ?view=stats で直接開けます）。
        左の〈文書〉〈品詞〉の絞り込みは、検索と統計の両方に共通です。
-     - 既定で全文書を横断します。左の〈文書〉一覧で証本ごとに絞り込めます。
+     - 既定で注釈つきの全文書を横断します。左の〈文書〉一覧で証本ごとに絞り込めます。
        旧URL（?doc=republic / ?doc=eugnostos）は、その文書だけを選択した状態で開きます。
      - 文書一覧は data/catalog.xml から生成します。<bibl type="document"> のうち <ref type="xml"> を持つものを読み込み、
        本文 XML 内の <text type="witness"> を証本として並べます（subtype="planned" は「準備中」として表示のみ）。
        新しい文書は catalog.xml に1件足せば、この画面にも自動で加わります。
+     - 未注釈の本文（<bibl subtype="unannotated">。ナグ・ハマディ写本 全文テキスト＝source/nhc_fulltext_split/）は、
+       左の〈未注釈の本文〉に写本ごとに並べます。既定では選択も読み込みもせず、選んだ文書の XML だけを取得します
+       （URL の w=wit-II-6 や doc=II-6 が指している文書は、開いたときに読み込みます）。品詞は「未注」、レンマは語形のままです。
+       カタログの項目は scripts/sync_nhc_catalog.py が書き出します。本文ビュワーがないので、用例に本文へのリンクは付きません。
      - 〈検索〉の結果はレンマ単位（<w @lemma> + @type）で集計し、語義（data/lexicon.xml）・品詞・活用型・語形・頻度・文書別分布を表示します。
        行をクリックすると語義の詳細と用例（KWIC）を開き、用例から全文表示の該当箇所 (#seg-ID) へ移動できます。
      - 〈統計〉は、選択中の証本・品詞の範囲を TEI から直接集計します（検索語には依存しません）。
@@ -15,7 +19,8 @@
      - 同形異義語の参照はビュワーと同じ規則（@ana による固定 → レンマ＋品詞 → レンマのみ）。
      - UI言語は site.js の三言語切替（html[data-i18n="full"]）に従います。
      - 配色はサイト共通の宇宙テーマ（assets/cosmos.css）に合わせています。色はページ内 <style> 冒頭の CSS 変数でまとめて管理します。
-     - 品詞列・詳細式は assets/corpus-query.js を Worker 内で実行し、形態素の並びをセグメント単位で検索します。
+     - 品詞列・詳細式は assets/corpus-query.js を Worker 内で実行し、形態素の並びをセグメント単位で検索します
+       （<s> と証本の境界、<s> の中の欠損 <gap> をまたぐ一致は返しません）。
        対応する式と制限: docs/CORPUS_SEARCH.md。ANNIS/AQL の全機能への対応ではありません。
      URL パラメータ: view=stats（統計を開く）, q=検索語, kind=word|pos|aql（検索方式）, m=part|pre|ex（一致方法）, f=flg（対象: f語形 lレンマ g語義）,
                      w=証本ID（カンマ区切り）, xpos=除外する品詞 -->
@@ -95,6 +100,28 @@ body{margin:0; color:var(--s-ink); font-family:var(--ui);
   color:var(--s-acc); cursor:pointer; text-decoration:underline; text-underline-offset:3px}
 .side .doctitle small .cop{margin-right:.4em}
 .opt.nodata .nm{color:var(--s-faint)}
+/* 未注釈の本文（選んだ文書だけ読み込む一覧）。既定では閉じている */
+.raw{margin:16px 0 0; padding-top:12px; border-top:1px solid var(--s-rule2)}
+.raw summary{cursor:pointer; font-size:.74rem; font-weight:700; color:var(--s-mut)}
+.raw summary small{display:block; margin:1px 0 0 1.15em; font-weight:400; color:var(--s-faint)}
+.rawnote{margin:8px 0 6px; font-size:.74rem; line-height:1.65; color:var(--s-mut)}
+.rawnote a{color:var(--s-link); text-underline-offset:3px}
+.rawacts{display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 14px; margin:0 0 6px; font-size:.74rem; color:var(--s-mut)}
+/* 56文書を開いても下の〈品詞〉へ届くよう、一覧は自分の枠の中でスクロールさせる（狭い画面では左欄ごとスクロール） */
+#rawList{max-height:min(46vh,440px); overflow-y:auto; scrollbar-width:thin; scrollbar-color:rgba(190,180,230,.3) transparent;
+  padding-right:6px; border-top:1px solid var(--s-rule2); border-bottom:1px solid var(--s-rule2)}
+html[data-mode="light"] #rawList{scrollbar-color:rgba(74,58,30,.3) transparent}
+#rawList .doctitle .nm small, #rawList .sig{display:inline; margin-right:.5em; color:var(--s-faint); font-size:.74rem}
+#rawList .doctitle .nm small{margin:0 0 0 .5em}
+/* 幅を題名に回す：字下げを詰め、「のみ」は場所を取らずに語数の上へ重ねて出す */
+#rawList ul.sub{padding-left:4px}
+#rawList ul.sub .opt{position:relative; font-size:.8rem}
+#rawList ul.sub .only{position:absolute; right:0; top:3px; padding:1px 0 1px 8px; background:var(--s-bg)}
+.opt input:disabled ~ .nm{color:var(--s-faint)}
+.only:disabled{display:none}
+.gapmark{color:var(--s-faint)}
+.noreader{color:var(--s-mut)}
+.sequence-hit .noreader{font-size:.8rem}
 
 /* ---- 右：検索と結果 ---- */
 [hidden]{display:none!important}
@@ -271,6 +298,7 @@ table.kw td.rc{color:var(--s-mut); white-space:nowrap; overflow:hidden; max-widt
 @media (max-width: 860px){
   .layout{grid-template-columns:1fr}
   .side{position:static; height:auto; max-height:42vh; border-right:0; border-bottom:1px solid var(--s-rule); padding:16px}
+  #rawList{max-height:none; overflow:visible; padding-right:0}
   .dgrid{grid-template-columns:1fr}
   td.gl{max-width:16em}
   .tblwrap, .sv-tbl{overflow-x:auto}
@@ -290,6 +318,21 @@ table.kw td.rc{color:var(--s-mut); white-space:nowrap; overflow:hidden; max-widt
       <h2><span class="l-ja">文書</span><span class="l-en">Texts</span><span class="l-fr">Textes</span>
         <button type="button" class="lnk" id="allDocs" style="margin-left:auto"><span class="l-ja">すべて選択</span><span class="l-en">Select all</span><span class="l-fr">Tout sélectionner</span></button></h2>
       <ul id="docList"><li class="planned">…</li></ul>
+      <!-- 未注釈の本文（catalog.xml の <bibl subtype="unannotated">）。既定では選択も読み込みもしない。一覧は renderRaw() が書く -->
+      <details class="raw" id="rawBox" hidden>
+        <summary><span class="l-ja">未注釈の本文</span><span class="l-en">Unannotated texts</span><span class="l-fr">Textes non annotés</span><small id="rawSum"></small></summary>
+        <p class="rawnote">
+          <span class="l-ja">ナグ・ハマディ写本の本文です。校訂本と照合する前の作業用テキストで、品詞・レンマ・訳は付いていません（<a href="https://github.com/icecocoasince2003-create/Nag-Hammadi-Library/blob/main/source/nhc_fulltext_split/README_ja.md" target="_blank" rel="noopener">詳細</a>）。選んだ文書だけを読み込みます。</span>
+          <span class="l-en">The Coptic text of the Nag Hammadi codices: a working text, not yet collated with the critical editions, without part of speech, lemma or translation (<a href="https://github.com/icecocoasince2003-create/Nag-Hammadi-Library/blob/main/source/nhc_fulltext_split/README_ja.md" target="_blank" rel="noopener">details, in Japanese</a>). Only the texts you select are loaded.</span>
+          <span class="l-fr">Texte copte des codex de Nag Hammadi : texte de travail, non encore collationné avec les éditions critiques, sans partie du discours, lemme ni traduction (<a href="https://github.com/icecocoasince2003-create/Nag-Hammadi-Library/blob/main/source/nhc_fulltext_split/README_ja.md" target="_blank" rel="noopener">détails, en japonais</a>). Seuls les textes sélectionnés sont chargés.</span>
+        </p>
+        <p class="rawacts">
+          <button type="button" class="lnk" id="rawAll"><span class="l-ja">すべて選択</span><span class="l-en">Select all</span><span class="l-fr">Tout sélectionner</span></button>
+          <button type="button" class="lnk" id="rawNone"><span class="l-ja">解除</span><span class="l-en">Clear</span><span class="l-fr">Effacer</span></button>
+          <span id="rawBusy" role="status"></span>
+        </p>
+        <ul id="rawList"></ul>
+      </details>
     </section>
     <section>
       <h2><span class="l-ja">品詞</span><span class="l-en">Part of speech</span><span class="l-fr">Partie du discours</span>
@@ -312,9 +355,9 @@ table.kw td.rc{color:var(--s-mut); white-space:nowrap; overflow:hidden; max-widt
     <!-- ═══════ 検索 ═══════ -->
     <div id="viewSearch" role="tabpanel" aria-labelledby="tabSearch">
     <p class="lede">
-      <span class="l-ja">公開中の全文書を横断して、単語・形態素の品詞列・正規表現で検索します。単語の結果はレンマごとに、品詞列と詳細式の結果は文脈付きの用例で表示します。</span>
-      <span class="l-en">Search all published texts by word, morpheme POS sequence or regular expression. Word results are grouped by lemma; sequence and query results show occurrences in context.</span>
-      <span class="l-fr">Recherchez des mots, des suites morphologiques ou des expressions régulières dans tous les textes publiés. Les mots sont regroupés par lemme ; les suites et requêtes affichent les occurrences en contexte.</span>
+      <span class="l-ja">公開中の全文書を横断して、単語・形態素の品詞列・正規表現で検索します。単語の結果はレンマごとに、品詞列と詳細式の結果は文脈付きの用例で表示します。左の〈未注釈の本文〉を開くと、ナグ・ハマディ写本の全文（品詞・レンマなし）も検索に加えられます。</span>
+      <span class="l-en">Search all published texts by word, morpheme POS sequence or regular expression. Word results are grouped by lemma; sequence and query results show occurrences in context. Open “Unannotated texts” on the left to add the full text of the Nag Hammadi codices (no part of speech or lemma) to the search.</span>
+      <span class="l-fr">Recherchez des mots, des suites morphologiques ou des expressions régulières dans tous les textes publiés. Les mots sont regroupés par lemme ; les suites et requêtes affichent les occurrences en contexte. Ouvrez « Textes non annotés » à gauche pour ajouter à la recherche le texte intégral des codex de Nag Hammadi (sans partie du discours ni lemme).</span>
     </p>
 
     <div class="query-kind">
@@ -355,6 +398,7 @@ table.kw td.rc{color:var(--s-mut); white-space:nowrap; overflow:hidden; max-widt
     </div>
     <p class="query-error" id="queryError" role="status" hidden></p>
     <p class="scope" id="scope"></p>
+    <p class="notice" id="rawWarn" role="note" hidden></p>
 
     <section id="statSec" aria-live="polite"></section>
 
@@ -373,14 +417,15 @@ table.kw td.rc{color:var(--s-mut); white-space:nowrap; overflow:hidden; max-widt
       <span class="l-fr">Chiffres calculés directement à partir de la source TEI pour les textes et les parties du discours sélectionnés à gauche. Cliquez sur un lemme pour ouvrir ses résultats de recherche.</span>
     </p>
     <p class="scope" id="scopeStats"></p>
+    <p class="notice" id="rawWarnStats" role="note" hidden></p>
     <nav class="sv-toc" id="toc" aria-label="セクション / Sections"></nav>
     <div id="sections"></div>
     </div>
 
     <p class="foot">
-      <span class="l-ja">本文: <code>data/*_tei.xml</code>（各 <code>&lt;w&gt;</code> の <code>@lemma</code>・<code>@type</code>）／ 語義: <code>data/lexicon.xml</code>（レンマ＋品詞で参照、<code>@ana</code> による語義の固定を優先）／ 文書: <code>data/catalog.xml</code>。上線などの合成記号は無視して照合します。ギリシア語借用語の印（grc）は <code>xml:lang="grc"</code> を持つ語のみ。活用型は辞書の <code>&lt;iType&gt;</code> または本文の <code>@msd</code> が付与されると表示されます。</span>
-      <span class="l-en">Text: <code>data/*_tei.xml</code> (<code>@lemma</code> and <code>@type</code> of each <code>&lt;w&gt;</code>) · meanings: <code>data/lexicon.xml</code> (looked up by lemma + POS; senses pinned with <code>@ana</code> take priority) · texts: <code>data/catalog.xml</code>. Combining marks such as supralinear strokes are ignored in matching. The “grc” mark appears only on words bearing <code>xml:lang="grc"</code>. Inflection class is shown once <code>&lt;iType&gt;</code> (lexicon) or <code>@msd</code> (text) is supplied.</span>
-      <span class="l-fr">Texte : <code>data/*_tei.xml</code> (<code>@lemma</code> et <code>@type</code> de chaque <code>&lt;w&gt;</code>) · sens : <code>data/lexicon.xml</code> (lemme + partie du discours ; les sens fixés par <code>@ana</code> sont prioritaires) · textes : <code>data/catalog.xml</code>. Les signes diacritiques (traits suscrits, etc.) sont ignorés. La marque « grc » ne concerne que les mots portant <code>xml:lang="grc"</code>. La classe flexionnelle s’affiche dès que <code>&lt;iType&gt;</code> (lexique) ou <code>@msd</code> (texte) est renseigné.</span>
+      <span class="l-ja">本文: <code>data/*_tei.xml</code>（各 <code>&lt;w&gt;</code> の <code>@lemma</code>・<code>@type</code>）／ 語義: <code>data/lexicon.xml</code>（レンマ＋品詞で参照、<code>@ana</code> による語義の固定を優先）／ 文書: <code>data/catalog.xml</code> ／ 未注釈の本文: <code>source/nhc_fulltext_split/tei/*.xml</code>（<code>@lemma</code>・<code>@type</code> なし。選んだ文書だけ読み込み）。上線などの合成記号は無視して照合します。ギリシア語借用語の印（grc）は <code>xml:lang="grc"</code> を持つ語のみ。活用型は辞書の <code>&lt;iType&gt;</code> または本文の <code>@msd</code> が付与されると表示されます。</span>
+      <span class="l-en">Text: <code>data/*_tei.xml</code> (<code>@lemma</code> and <code>@type</code> of each <code>&lt;w&gt;</code>) · meanings: <code>data/lexicon.xml</code> (looked up by lemma + POS; senses pinned with <code>@ana</code> take priority) · texts: <code>data/catalog.xml</code> · unannotated texts: <code>source/nhc_fulltext_split/tei/*.xml</code> (no <code>@lemma</code> or <code>@type</code>; loaded only when selected). Combining marks such as supralinear strokes are ignored in matching. The “grc” mark appears only on words bearing <code>xml:lang="grc"</code>. Inflection class is shown once <code>&lt;iType&gt;</code> (lexicon) or <code>@msd</code> (text) is supplied.</span>
+      <span class="l-fr">Texte : <code>data/*_tei.xml</code> (<code>@lemma</code> et <code>@type</code> de chaque <code>&lt;w&gt;</code>) · sens : <code>data/lexicon.xml</code> (lemme + partie du discours ; les sens fixés par <code>@ana</code> sont prioritaires) · textes : <code>data/catalog.xml</code> · textes non annotés : <code>source/nhc_fulltext_split/tei/*.xml</code> (sans <code>@lemma</code> ni <code>@type</code> ; chargés seulement s’ils sont sélectionnés). Les signes diacritiques (traits suscrits, etc.) sont ignorés. La marque « grc » ne concerne que les mots portant <code>xml:lang="grc"</code>. La classe flexionnelle s’affiche dès que <code>&lt;iType&gt;</code> (lexique) ou <code>@msd</code> (texte) est renseigné.</span>
     </p>
   </main>
 </div>
@@ -419,6 +464,23 @@ const I18N = {
   nSeq:     {ja:n=>n+" 用例", en:n=>n+" occurrence"+(n==="1"?"":"s"), fr:n=>n+" occurrence"+(n==="1"?"":"s")},
   seqCap:   {ja:"先頭2,000用例までを表示・CSV出力します。条件や文書を絞り込んでください。", en:"Showing and exporting the first 2,000 occurrences. Narrow the query or select fewer texts.", fr:"Affichage et export des 2 000 premières occurrences. Précisez la requête ou sélectionnez moins de textes."},
   ePos:     {ja:n=>n+"文字目: ", en:n=>"Character "+n+": ", fr:n=>"Caractère "+n+" : "},
+  /* 未注釈の本文（左の一覧と注意書き） */
+  rawTotal: {ja:(d,n)=>d+" 文書 · "+n+" 語", en:(d,n)=>d+" texts · "+n+" tokens", fr:(d,n)=>d+" textes · "+n+" occurrences"},
+  rawOn:    {ja:(a,d)=>d+" 文書中 "+a+" 文書を選択中", en:(a,d)=>a+" of "+d+" texts selected", fr:(a,d)=>a+" texte"+(a==="1"?"":"s")+" sur "+d+" sélectionné"+(a==="1"?"":"s")},
+  rawBusy:  {ja:n=>n+" 文書を読み込み中…", en:n=>"Loading "+n+" text"+(n==="1"?"":"s")+"…", fr:n=>"Chargement de "+n+" texte"+(n==="1"?"":"s")+"…"},
+  rawFail:  {ja:"読み込めませんでした（選び直すと再試行）", en:"could not be loaded (select again to retry)", fr:"chargement impossible (resélectionnez pour réessayer)"},
+  rawDup:   {ja:"注釈つきの版が上にあります", en:"annotated edition listed above", fr:"édition annotée ci-dessus"},
+  rawTag:   {ja:"（未注釈）", en:" (unannotated)", fr:" (non annoté)"},
+  codex:    {ja:c=>"写本 "+c, en:c=>"Codex "+c, fr:c=>"Codex "+c},
+  nDocs:    {ja:n=>n+" 文書", en:n=>n+" text"+(n==="1"?"":"s"), fr:n=>n+" texte"+(n==="1"?"":"s")},
+  rawNote:  {ja:n=>"未注釈の本文（"+n+" 証本）を含みます。これらの文書では品詞がすべて「未注」、レンマは語形のままです。語形で検索してください（単語検索の「語形」、詳細式の tok）。",
+             en:n=>"Includes unannotated text ("+n+" witness"+(n==="1"?"":"es")+"). In these texts every part of speech is “unannotated” and the lemma is simply the word form: search by form (“form” in word search, tok in a query).",
+             fr:n=>"Comprend du texte non annoté ("+n+" témoin"+(n==="1"?"":"s")+"). Dans ces textes, la partie du discours est toujours « non annoté » et le lemme est la forme elle-même : cherchez par forme (« forme » en recherche par mot, tok dans une requête)."},
+  rawDupNote:{ja:s=>s+" は、注釈つきの版と未注釈の版の両方が選ばれています。同じ本文を二重に数えます。",
+             en:s=>s+": both the annotated and the unannotated version are selected, so the same text is counted twice.",
+             fr:s=>s+" : la version annotée et la version non annotée sont toutes deux sélectionnées ; le même texte est compté deux fois."},
+  noReader: {ja:"この文書を表示するビュワーはまだありません", en:"There is no reader for this text yet", fr:"Pas encore de visionneuse pour ce texte"},
+  gapT:     {ja:"欠損", en:"lacuna", fr:"lacune"},
   ph:       {ja:"レンマ・語形・語義で検索（例: ⲛⲟⲩⲧⲉ / ⲯⲩⲭⲏ / soul / 魂）", en:"Search by lemma, form or meaning (e.g. ⲛⲟⲩⲧⲉ / ⲯⲩⲭⲏ / soul / 魂)", fr:"Lemme, forme ou sens (ex. ⲛⲟⲩⲧⲉ / ⲯⲩⲭⲏ / âme / 魂)"},
   part:     {ja:"部分一致", en:"contains", fr:"contient"},
   pre:      {ja:"前方一致", en:"begins with", fr:"commence par"},
@@ -569,8 +631,11 @@ const ckey = s => [...norm(s)].map(c => RANK.has(c) ? String.fromCharCode(0x4e00
 /* ---------- 状態 ---------- */
 const ST = {
   view: "search",      // "search"（検索）| "stats"（統計）
-  docs: [],            // {key, ja, en, fr, cop, siglum, reader, xml, planned, wits:[]}
-  wits: [],            // {id, label, short, doc, segs:[], groups:[[tokIdx]], ntok, nseg, pages, lines, gaps:Map(reason → 件数)}
+  docs: [],            // {key, ja, en, fr, cop, siglum, reader, xml, planned, wits:[],
+                       //  lazy（未注釈の本文：選んだときだけ読み込む）, state（""|"idle"|"loading"|"loaded"|"error"）, ntok0（カタログ上の語数）, codex}
+  wits: [],            // {i, id, label, short, doc, segs:[{id, n, tokens:[tokIdx], breaks:[欠損の位置]}], groups:[[tokIdx] | GAP], ntok, nseg, pages, lines, gaps:Map(reason → 件数)}
+                       //  読み込んだ順に並ぶ（i はこの配列での番号）。表示の順はカタログの順＝witOrder()
+  lazyQueue: Promise.resolve(),   // 未注釈の本文の読み込みと、それに続く選択の変更を、押した順に1つずつ処理する
   toks: [],            // {w, s, g, form, lemma, pos, grc, msd, ana, gl, key}
   groups: new Map(),   // key(lemma\tpos) → {key, lemma, pos, toks:[], ents:[], amb, wgl:Map, grc, itypes:[], gsearch:[]}
   lex: new Map(),      // lemma → [entry]
@@ -587,8 +652,8 @@ const ST = {
 };
 
 /* ---------- 読み込み ---------- */
-async function fetchXML(url){
-  const r = await fetch(url, {cache:"no-store"});
+async function fetchXML(url, cache = "no-store"){
+  const r = await fetch(url, {cache});
   if(!r.ok) throw new Error(url + " → HTTP " + r.status);
   const x = new DOMParser().parseFromString(await r.text(), "application/xml");
   if(x.querySelector("parsererror")) throw new Error(url + " → XML not well-formed");
@@ -601,11 +666,18 @@ function parseCatalog(xml){
     const ref = {};
     kids(b, "ref").forEach(r => { ref[r.getAttribute("type")] = r.getAttribute("target"); });
     const sig = kids(b, "idno").find(i => i.getAttribute("type") === "siglum");
+    const siglum = sig ? sig.textContent.trim() : "";
+    // 未注釈の本文（subtype="unannotated"）：既定では選択せず、選んだときだけ読み込む。語数は <extent> から先に表示する
+    const lazy = b.getAttribute("subtype") === "unannotated" && !!ref.xml;
+    const ext = kids(b, "extent")[0];
+    const tokens = ext && kids(ext, "measure").find(m => m.getAttribute("unit") === "token");
     ST.docs.push({
       key: xmlId(b).replace(/^doc-/, ""), ja: title.ja || title.en || "", en: title.en || title.ja || "",
-      fr: title.fr || title.en || title.ja || "", cop: title.cop || "", siglum: sig ? sig.textContent.trim() : "",
+      fr: title.fr || title.en || title.ja || "", cop: title.cop || "", siglum,
       reader: ref.reader || "", xml: ref.xml || "",
-      planned: b.getAttribute("subtype") === "planned" || !ref.xml, wits: []
+      planned: b.getAttribute("subtype") === "planned" || !ref.xml, wits: [],
+      lazy, state: lazy ? "idle" : "", ntok0: tokens ? +tokens.getAttribute("quantity") || 0 : 0,
+      codex: (/^NHC\s+([IVXLC]+),/.exec(siglum) || [])[1] || ""
     });
   });
 }
@@ -627,6 +699,7 @@ function parseLex(xml){
     if(T(e, "quote").some(q => q.textContent.trim())) ST.sense.add(lemma);   // 語義が1つでも登録されているレンマ
   });
 }
+const GAP = Object.freeze({gap: true});   // wit.groups の中で欠損（<gap>）の位置を表す印
 function parseText(xml, doc){
   T(xml, "text").filter(x => x.getAttribute("type") === "witness").forEach(tx => {
     const label = tx.getAttribute("n") || doc.siglum;
@@ -637,13 +710,21 @@ function parseText(xml, doc){
     wit.lines = T(tx, "lb").length;
     wit.gaps = new Map();
     T(tx, "gap").forEach(g => inc(wit.gaps, g.getAttribute("reason") || "∅"));
-    const wi = ST.wits.length;
+    const wi = wit.i = ST.wits.length;
     T(tx, "s").forEach(s => {
       const sid = xmlId(s); if(!sid) return;
       const si = wit.segs.length;
-      wit.segs.push({id: sid, n: s.getAttribute("n") || "", tokens: []});
+      const seg = {id: sid, n: s.getAttribute("n") || "", tokens: [], breaks: []};
+      wit.segs.push(seg);
       let lastPhy = null;
-      T(s, "w").forEach(w => {
+      Array.from(s.getElementsByTagNameNS(TEI, "*")).forEach(w => {      // <w> と <gap> を本文の順にたどる
+        if(w.localName === "gap"){
+          // 欠損：前後の語が隣り合っていたとは限らない。<s> 内の位置を覚えておき（形態素列の検索はここをまたがない）、文脈には […] を出す
+          if(seg.breaks[seg.breaks.length - 1] !== seg.tokens.length) seg.breaks.push(seg.tokens.length);
+          wit.groups.push(GAP); lastPhy = GAP;                              // 次の語は必ず新しい語群から始める
+          return;
+        }
+        if(w.localName !== "w") return;
         const phy = w.closest("phy");
         if(!phy || phy !== lastPhy){ wit.groups.push([]); lastPhy = phy; }
         const form = w.textContent.trim();
@@ -663,9 +744,12 @@ function parseText(xml, doc){
     ST.wits.push(wit);
   });
 }
-/* 同形異義語の参照：① @ana による固定 → ② レンマ＋品詞 → ③ レンマ一致の全項目 */
-function buildGroups(){
-  ST.toks.forEach((tk, i) => {
+/* 同形異義語の参照：① @ana による固定 → ② レンマ＋品詞 → ③ レンマ一致の全項目
+   from: すでにまとめ終えたトークンの数（未注釈の本文をあとから読み込んだときは、増えた分だけをまとめる） */
+function buildGroups(from = 0){
+  const touched = new Set();
+  for(let i = from; i < ST.toks.length; i++){
+    const tk = ST.toks[i];
     let g = ST.groups.get(tk.key);
     if(!g){
       const all = ST.lex.get(tk.lemma) || [];
@@ -682,12 +766,62 @@ function buildGroups(){
     if(tk.grc) g.grc = true;
     if(tk.gl) g.wgl.set(tk.gl, (g.wgl.get(tk.gl) || 0) + 1);
     if(tk.msd) g.msd.set(tk.msd, (g.msd.get(tk.msd) || 0) + 1);
-  });
-  ST.groups.forEach(g => {
+    touched.add(g);
+  }
+  touched.forEach(g => {
     g.itypes = [...new Set(g.ents.flatMap(e => e.itype))];
     g.gsearch = [...g.ents.flatMap(e => [...e.ja, ...e.en, ...e.fr]), ...g.wgl.keys()];
     g.ck = ckey(g.lemma);
   });
+}
+
+/* ---------- 未注釈の本文（<bibl subtype="unannotated">）：選んだときだけ読み込む ----------
+   既定の選択は注釈つきの証本だけ（eagerWits）。未注釈の文書は、左の一覧で選ぶか、URL（w=wit-… / doc=…）が指しているときに読み込む。
+   証本 ID は「wit-」＋文書のキー（カタログの doc-II-6 → 証本 wit-II-6。scripts/sync_nhc_catalog.py が保証する）。 */
+const lazyDocs = () => ST.docs.filter(d => d.lazy);
+const eagerWits = () => ST.docs.filter(d => !d.lazy).flatMap(d => d.wits);
+const witOrder = () => ST.docs.flatMap(d => d.wits);              // カタログの順（ST.wits は読み込んだ順）
+function lazyDocsInURL(){
+  const p = new URLSearchParams(location.search);
+  const byWit = new Map(lazyDocs().map(d => ["wit-" + d.key, d]));
+  const out = new Set((p.get("w") || "").split(",").map(id => byWit.get(id)).filter(Boolean));
+  const d = !p.has("w") && lazyDocs().find(x => x.key === p.get("doc"));
+  if(d) out.add(d);
+  return [...out];
+}
+/* 取得（並行）。失敗した文書は state="error" にして先へ進む（ほかの文書や画面全体は止めない） */
+function fetchLazy(docs){
+  return Promise.all(docs.map(d => {
+    d.state = "loading";
+    return fetchXML(d.xml, "no-cache").then(x => { d.fetched = x; }, e => { d.state = "error"; console.warn("search: " + e.message); });
+  }));
+}
+/* 取得できた本文をカタログの順に取り込む。1つでも取り込んだら true */
+function takeLazy(docs){
+  const from = ST.toks.length;
+  let taken = 0;
+  ST.docs.forEach(d => {
+    if(!docs.includes(d) || !d.fetched) return;
+    parseText(d.fetched, d); d.fetched = null; d.state = "loaded"; taken++;
+  });
+  if(taken) buildGroups(from);
+  return taken > 0;
+}
+/* 未注釈の文書 docs を（必要なら読み込んでから）apply(読み込めた文書) で選択に反映する。
+   読み込み中に次の操作をしても、押した順に1つずつ処理する。選択を外すだけの操作も、順番を保つためにここを通す（docs=[]） */
+function useLazy(docs, apply){
+  docs.forEach(d => { if(d.state !== "loaded") d.state = "loading"; });
+  renderSide();
+  ST.lazyQueue = ST.lazyQueue.then(async () => {
+    const need = docs.filter(d => d.state !== "loaded");
+    if(need.length){
+      await fetchLazy(need);
+      if(takeLazy(need)){ resetSequenceSearch(); dropWorker(); }     // 本文が増えたので、Worker は次の検索で作り直す
+    }
+    apply(docs.filter(d => d.state === "loaded"));
+    ST.limit = 200;
+    render();
+  }).catch(e => { console.error(e); render(); });
 }
 
 async function load(){
@@ -696,11 +830,14 @@ async function load(){
   try{
     const [cat, lex] = await Promise.all([fetchXML(CATALOG), fetchXML(LEXICON)]);
     parseCatalog(cat); parseLex(lex);
-    const live = ST.docs.filter(d => !d.planned);
-    const texts = await Promise.all(live.map(d => fetchXML(d.xml)));
+    const live = ST.docs.filter(d => !d.planned && !d.lazy);
+    const asked = lazyDocsInURL();
+    const [texts] = await Promise.all([Promise.all(live.map(d => fetchXML(d.xml))), fetchLazy(asked)]);
     texts.forEach((x, i) => parseText(x, live[i]));
     buildGroups();
+    takeLazy(asked);
     readURL();
+    if(lazyDocs().some(d => d.wits.some(w => ST.sel.has(w.id)))) $("#rawBox").open = true;
     ST.ready = true;
     render();
     gotoHash();
@@ -727,13 +864,18 @@ function readURL(){
   // ?w=（空）は「どの証本も選んでいない」状態の復元。知らない ID だけが並ぶ古いリンクは、既定（全文書）に戻す
   if(p.has("w") && (w.length || !p.get("w"))) w.forEach(x => ST.sel.add(x));
   else if(d) d.wits.forEach(x => ST.sel.add(x.id));       // 旧URL ?doc=… との互換
-  else ST.wits.forEach(x => ST.sel.add(x.id));            // 既定: 全文書
+  else eagerWits().forEach(x => ST.sel.add(x.id));        // 既定: 注釈つきの全文書（未注釈の本文は選んだときだけ）
   (p.get("xpos") || "").split(",").filter(Boolean).forEach(x => ST.posOff.add(x));
   if(p.get("q")) $("#q").value = p.get("q");
   if(["word","pos","aql"].includes(p.get("kind"))) $("#queryKind").value = p.get("kind");
   if(["part","pre","ex"].includes(p.get("m"))) $("#mode").value = p.get("m");
   const f = p.get("f");
   if(f !== null){ $("#fForm").checked = f.includes("f"); $("#fLemma").checked = f.includes("l"); $("#fGloss").checked = f.includes("g"); }
+}
+/* URL の w=：選択が既定（注釈つきの全証本）と同じなら書かない（null） */
+function selParam(){
+  const def = eagerWits();
+  return ST.sel.size === def.length && def.every(w => ST.sel.has(w.id)) ? null : [...ST.sel].join(",");
 }
 function writeURL(){
   const p = new URLSearchParams();
@@ -743,7 +885,7 @@ function writeURL(){
   if($("#mode").value !== "part") p.set("m", $("#mode").value);
   const f = ($("#fForm").checked ? "f" : "") + ($("#fLemma").checked ? "l" : "") + ($("#fGloss").checked ? "g" : "");
   if(f !== "flg") p.set("f", f);
-  if(ST.sel.size !== ST.wits.length) p.set("w", [...ST.sel].join(","));
+  const w = selParam(); if(w !== null) p.set("w", w);
   if(ST.posOff.size) p.set("xpos", [...ST.posOff].join(","));
   const s = p.toString();
   history.replaceState(null, "", location.pathname + (s ? "?" + s : "") + (ST.view === "stats" ? location.hash : ""));
@@ -751,7 +893,7 @@ function writeURL(){
 /* 〈統計〉のレンマから〈検索〉へ：そのレンマの完全一致（対象はレンマのみ）を、いまの絞り込みのまま開くリンク */
 function lemmaHref(lemma){
   const p = new URLSearchParams({q: lemma, m: "ex", f: "l"});
-  if(ST.sel.size !== ST.wits.length) p.set("w", [...ST.sel].join(","));
+  const w = selParam(); if(w !== null) p.set("w", w);
   if(ST.posOff.size) p.set("xpos", [...ST.posOff].join(","));
   return "?" + p.toString();
 }
@@ -771,9 +913,9 @@ function matcher(q, mode){
 function compute(){
   const q = $("#q").value.trim(), mode = $("#mode").value;
   const fF = $("#fForm").checked, fL = $("#fLemma").checked, fG = $("#fGloss").checked;
-  const wits = ST.wits.filter(w => ST.sel.has(w.id) && w.ntok);
+  const wits = witOrder().filter(w => ST.sel.has(w.id) && w.ntok);
   const N = wits.reduce((a, w) => a + w.ntok, 0);
-  const inWit = new Set(wits.map(w => ST.wits.indexOf(w)));
+  const inWit = new Set(wits.map(w => w.i));
   const m = q ? matcher(q, mode) : null;
   const rows = [];
   ST.groups.forEach(g => {
@@ -848,11 +990,24 @@ function sequenceWorker(){
     dropWorker();
     settleSequenceSearch(QS.id, {error:{code:"WORKER_ERROR"}});
   };
-  worker.postMessage({type:"init", segments:ST.wits.flatMap((wit, w) => wit.segs.map(seg => ({w,
-    tokens:seg.tokens.map(index => { const tk = ST.toks[index];
-      return {index, form:tk.form, lemma:tk.lemma, pos:tk.pos, msd:tk.msd}; })
-  })))});
+  worker.postMessage({type:"init", segments:sequenceSegments()});
   return worker;
+}
+/* Worker に渡す本文（カタログの順）。検索は「区間」をまたがない。区間は <s> を、その中の欠損（<gap>）でさらに区切ったもの：
+   欠損の前後の語は隣り合っていたとは限らず、失われた量も分からないので、距離を数えられない */
+function sequenceSegments(){
+  const out = [];
+  witOrder().forEach(wit => wit.segs.forEach(seg => {
+    let run = [], b = 0;
+    seg.tokens.forEach((index, k) => {
+      while(b < seg.breaks.length && seg.breaks[b] < k) b++;
+      if(seg.breaks[b] === k && run.length){ out.push({w:wit.i, tokens:run}); run = []; }
+      const tk = ST.toks[index];
+      run.push({index, form:tk.form, lemma:tk.lemma, pos:tk.pos, msd:tk.msd});
+    });
+    if(run.length) out.push({w:wit.i, tokens:run});
+  }));
+  return out;
 }
 function startSequenceSearch(key, query, mode){
   cancelSequenceSearch();
@@ -894,7 +1049,8 @@ const segPos = (seg, i) => i - seg.tokens[0];
 function sequenceContext(match){
   const PAD = 6;
   const tk = ST.toks[match.tokens[0]], wit = ST.wits[tk.w], seg = wit.segs[tk.s], n = seg.tokens.length;
-  const marked = new Set(match.tokens), spans = [];
+  const marked = new Set(match.tokens), spans = [], gaps = new Set(seg.breaks);
+  const gap = '<span class="gapmark" title="' + esc(t("gapT")) + '">[…]</span>';      // 欠損（<gap>）のある位置
   match.tokens.forEach(i => {                              // match.tokens は本文の順
     const p = segPos(seg, i), from = Math.max(0, p - PAD), to = Math.min(n, p + PAD + 1);
     const last = spans[spans.length - 1];
@@ -902,20 +1058,20 @@ function sequenceContext(match){
   });
   const html = spans.map(([from, to]) => {
     let previous = null;
-    return seg.tokens.slice(from, to).map(i => {
+    return seg.tokens.slice(from, to).map((i, k) => {
       const token = ST.toks[i];
       const separator = previous === null ? "" : previous.g === token.g ? "" : " ";
       previous = token;
       const form = esc(token.form);
-      return separator + (marked.has(i) ? "<mark>" + form + "</mark>" : form);
-    }).join("");
+      return separator + (gaps.has(from + k) ? gap + " " : "") + (marked.has(i) ? "<mark>" + form + "</mark>" : form);
+    }).join("") + (to === n && gaps.has(n) ? " " + gap : "");
   }).join(" … ");
   return {wit, seg, html:(spans[0][0] ? "… " : "") + html + (spans[spans.length - 1][1] < n ? " …" : "")};
 }
 function renderSequences(){
   LAST = null;
   const query = $("#q").value.trim(), kind = $("#queryKind").value;
-  const wits = ST.wits.filter(w => ST.sel.has(w.id) && w.ntok);
+  const wits = witOrder().filter(w => ST.sel.has(w.id) && w.ntok);
   $("#scope").textContent = wits.length ? t("scope", fmt(wits.length), fmt(wits.reduce((n,w) => n + w.ntok, 0))) : "";
   $("#statSec").innerHTML = ""; $("#more").innerHTML = "";
   const box = $("#sequenceResults"), head = $("#listHead");
@@ -947,8 +1103,8 @@ function renderSequences(){
   box.innerHTML = (truncated ? '<p class="notice">' + esc(t("seqCap")) + '</p>' : "") +
     (matches.length ? '<ol class="sequence-list">' + matches.slice(0, ST.limit).map(match => {
       const ctx = sequenceContext(match);
-      return '<li class="sequence-hit"><a href="' + esc(readerHref(ctx.wit, ctx.seg)) + '" title="' + esc(t("dToText")) + '">' +
-        esc(witName(ctx.wit)) + ' §' + esc(ctx.seg.n || ctx.seg.id) + '</a><p class="sequence-context cop">' + ctx.html +
+      return '<li class="sequence-hit">' + locLink(ctx.wit, ctx.seg, esc(witName(ctx.wit)) + ' §' + esc(ctx.seg.n || ctx.seg.id)) +
+        '<p class="sequence-context cop">' + ctx.html +
         '</p><div class="sequence-annotations">' + match.tokens.map(i => { const tk = ST.toks[i];
           return '<span><span class="cop">' + esc(tk.form) + '</span> · <code>' + esc(tk.pos) + '</code> · <span class="cop">' + esc(tk.lemma) + '</span></span>';
         }).join("") + '</div></li>';
@@ -963,7 +1119,8 @@ function sequenceCSV(){
     const tokens = match.tokens.map(i => ST.toks[i]), tk = tokens[0], wit = ST.wits[tk.w], seg = wit.segs[tk.s];
     lines.push([wit.id, seg.id, tokens.map(x => x.form).join(" "), tokens.map(x => x.lemma).join(" "),
       tokens.map(x => x.pos).join(" "), match.tokens.map(i => segPos(seg, i) + 1).join(" "),
-      new URL(readerHref(wit, seg), location.href).href]);     // CSV だけで開けるよう、本文リンクは絶対 URL で出す
+      // CSV だけで開けるよう、本文リンクは絶対 URL で出す（ビュワーのない未注釈の本文は空欄）
+      readerHref(wit, seg) ? new URL(readerHref(wit, seg), location.href).href : ""]);
   });
   const blob = new Blob(["\ufeff" + lines.map(line => line.map(cell).join(",")).join("\r\n")], {type:"text/csv;charset=utf-8"});
   const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "sheneset-morphemes.csv";
@@ -995,10 +1152,55 @@ const perMille = (n, N) => N ? (n / N * 1000).toFixed(1) : "0.0";
 const pct = (n, N) => { if(!N) return "0.0"; const v = n / N * 100; return v > 0 && v < 1 ? v.toFixed(2) : v.toFixed(1); };
 const bar = (v, max) => '<span class="bar"><i style="width:' + (max ? Math.max(1, v / max * 100) : 0).toFixed(1) + '%"></i></span>';
 
+/* ---------- 未注釈の本文の一覧（#rawList）と、選択中であることの注意書き ---------- */
+/* 同じ証本の注釈つきの版（NHC III,3・VI,5）。あれば、未注釈の版と両方を選ぶと同じ本文を二重に数える */
+const overlapOf = d => ST.wits.find(w => !w.doc.lazy && w.ntok && w.label === d.siglum) || null;
+const lazySelected = d => d.state === "loaded" && d.wits.length > 0 && d.wits.every(w => ST.sel.has(w.id));
+/* 「すべて選択」・写本ごとの選択の対象。注釈つきの版が選ばれている証本は、二重に数えないよう対象から外す（個別には選べる） */
+const lazyBulk = d => { const o = overlapOf(d); return !(o && ST.sel.has(o.id)); };
+const lazyOn = docs => docs.forEach(d => d.wits.forEach(w => ST.sel.add(w.id)));
+const lazyOff = docs => docs.forEach(d => d.wits.forEach(w => ST.sel.delete(w.id)));
+function renderRaw(){
+  const docs = lazyDocs(), box = $("#rawBox");
+  box.hidden = !docs.length;
+  if(!docs.length) return;
+  const L = UL(), name = d => d[L] || d.ja;
+  const ntok = d => d.state === "loaded" ? d.wits.reduce((a, w) => a + w.ntok, 0) : d.ntok0;
+  const sum = list => list.reduce((a, d) => a + ntok(d), 0);
+  const on = docs.filter(lazySelected), busy = docs.filter(d => d.state === "loading").length;
+  $("#rawSum").textContent = on.length ? t("rawOn", fmt(on.length), fmt(docs.length)) : t("rawTotal", fmt(docs.length), fmt(sum(docs)));
+  $("#rawBusy").textContent = busy ? t("rawBusy", fmt(busy)) : "";
+  $("#rawList").innerHTML = [...new Set(docs.map(d => d.codex))].map(codex => {
+    const ds = docs.filter(d => d.codex === codex), bulk = ds.filter(lazyBulk);
+    const all = bulk.length > 0 && bulk.every(lazySelected), some = ds.some(lazySelected);
+    return '<li><label class="opt doctitle"><input type="checkbox" data-codex="' + esc(codex) + '"' +
+      (all ? " checked" : "") + (!all && some ? ' data-ind="1"' : "") + '>' +
+      '<span class="nm">' + esc(t("codex", codex)) + '<small>' + esc(t("nDocs", fmt(ds.length))) + '</small></span>' +
+      '<span class="ct">' + fmt(sum(ds)) + '</span></label><ul class="sub">' + ds.map(d => {
+        const loading = d.state === "loading";
+        const note = loading ? t("loading") : d.state === "error" ? t("rawFail") : overlapOf(d) ? t("rawDup") : "";
+        return '<li><label class="opt' + (d.state === "error" ? " nodata" : "") + '"><input type="checkbox" data-raw="' + esc(d.key) + '"' +
+          (lazySelected(d) ? " checked" : "") + (loading ? " disabled" : "") + '>' +
+          '<span class="nm"><span class="sig">' + esc(d.siglum.replace(/^NHC\s*/, "")) + '</span>' + esc(name(d)) + (note ? '<small>' + esc(note) + '</small>' : "") + '</span>' +
+          '<button type="button" class="only" data-only-raw="' + esc(d.key) + '"' + (loading ? " disabled" : "") + '>' + esc(t("only")) + '</button>' +
+          '<span class="ct">' + fmt(ntok(d)) + '</span></label></li>';
+      }).join("") + '</ul></li>';
+  }).join("");
+  document.querySelectorAll('#rawList input[data-ind]').forEach(i => { i.indeterminate = true; });
+}
+/* 未注釈の本文が検索・集計の範囲に入っているときの注意書き（〈検索〉〈統計〉の両方に出す）。入っていなければ "" */
+function rawWarning(){
+  const raw = witOrder().filter(w => w.doc.lazy && ST.sel.has(w.id));
+  if(!raw.length) return "";
+  const dup = raw.filter(w => { const o = overlapOf(w.doc); return o && ST.sel.has(o.id); });
+  return t("rawNote", fmt(raw.length)) + (dup.length ? " " + t("rawDupNote", dup.map(w => w.label).join(L3("・", ", ", ", "))) : "");
+}
+
 function renderSide(){
   const L = UL();
   const name = d => d[L] || d.ja;
-  $("#docList").innerHTML = ST.docs.map(d => {
+  renderRaw();                                              // 未注釈の本文は別の一覧（#rawList）に出す
+  $("#docList").innerHTML = ST.docs.filter(d => !d.lazy).map(d => {
     if(d.planned || !d.wits.length){
       return '<li class="planned">' + esc(name(d).replace(/[（(][^（()）]*[)）]\s*$/, "")) +
         '<small>' + esc(d.siglum) + ' · ' + esc(t("planned")) + '</small></li>';
@@ -1021,7 +1223,7 @@ function renderSide(){
   document.querySelectorAll('#docList input[data-ind]').forEach(i => { i.indeterminate = true; });
 
   // 品詞：選択中の文書に現れる品詞と語数
-  const inWit = new Set(ST.wits.filter(w => ST.sel.has(w.id)).map(w => ST.wits.indexOf(w)));
+  const inWit = new Set(ST.wits.filter(w => ST.sel.has(w.id)).map(w => w.i));
   const cnt = new Map();
   ST.toks.forEach(tk => { if(inWit.has(tk.w)) cnt.set(tk.pos, (cnt.get(tk.pos) || 0) + 1); });
   ST.posOff.forEach(p => { if(!cnt.has(p)) cnt.set(p, 0); });
@@ -1062,6 +1264,9 @@ function renderStats(R){
 }
 function witName(w){
   const d = w.doc, L = UL();
+  // 未注釈の本文には同じ題の文書がある（ヨハネのアポクリュフォン II,1 / III,1 / IV,1 など）ので、必ず略号を添える。
+  // 注釈つきの版がある証本（III,3・VI,5）は、表の中で見分けがつくよう「未注釈」と明記する
+  if(d.lazy) return (d[L] || d.ja) + " " + w.short + (overlapOf(d) ? t("rawTag") : "");
   return d.wits.length > 1 ? (d[L] || d.ja) + " " + w.short : (d[L] || d.ja);
 }
 
@@ -1128,10 +1333,21 @@ function renderTable(R){
   $("#more").innerHTML = left > 0 ? '<button type="button" class="btn" id="moreBtn">' + esc(t("showMore", fmt(left))) + '</button>' : "";
 }
 
-function groupText(wit, gi){ return wit.groups[gi] ? wit.groups[gi].map(i => ST.toks[i].form).join("") : ""; }
+function groupText(wit, gi){
+  const g = wit.groups[gi];
+  return !g ? "" : g === GAP ? "[…]" : g.map(i => ST.toks[i].form).join("");     // 欠損（<gap>）は […] と出す
+}
+/* 本文ビュワーの該当箇所。ビュワーのない文書（未注釈の本文）は "" */
 function readerHref(wit, seg){
   const d = wit.doc;
+  if(!d.reader) return "";
   return d.reader + (d.wits.length > 1 ? "?wit=" + encodeURIComponent(wit.id.replace(/^wit-/, "")) : "") + "#seg-" + encodeURIComponent(seg.id);
+}
+/* 用例の所在（証本と § 番号）。ビュワーがあればリンク、なければ文字だけ。label は HTML として渡す */
+function locLink(wit, seg, label){
+  const href = readerHref(wit, seg);
+  return href ? '<a href="' + esc(href) + '" title="' + esc(t("dToText")) + '">' + label + '</a>'
+    : '<span class="noreader" title="' + esc(t("noReader")) + '">' + label + '</span>';
 }
 function detail(r, R){
   const g = r.g, L = UL();
@@ -1161,8 +1377,7 @@ function detail(r, R){
     for(let k = tk.g - 1; k >= 0 && left.length < 5; k--) left.unshift(groupText(wit, k));
     for(let k = tk.g + 1; k < wit.groups.length && right.length < 5; k++) right.push(groupText(wit, k));
     const mid = wit.groups[tk.g].map(j => j === i ? "<b>" + esc(ST.toks[j].form) + "</b>" : esc(ST.toks[j].form)).join("");
-    return '<tr><td class="loc"><a href="' + esc(readerHref(wit, seg)) + '" title="' + esc(t("dToText")) + '">' +
-      esc(wit.short) + ' §' + esc(seg.n) + '</a></td>' +
+    return '<tr><td class="loc">' + locLink(wit, seg, esc(wit.short) + ' §' + esc(seg.n)) + '</td>' +
       '<td class="lc"><span class="cop">' + esc(left.join(" ")) + '</span></td>' +
       '<td class="kc cop">' + mid + '</td>' +
       '<td class="rc cop">' + esc(right.join(" ")) + '</td></tr>';
@@ -1195,10 +1410,10 @@ const sumMap = m => { let n = 0; m.forEach(v => { n += v; }); return n; };
 
 /* ---------- 集計 ---------- */
 function computeStats(){
-  const sel = ST.wits.filter(w => ST.sel.has(w.id));
+  const sel = witOrder().filter(w => ST.sel.has(w.id));
   const live = sel.filter(w => w.ntok);
   const wits = live.length ? live : sel;      // 本文のある証本を集計する。1つもないときは選択中の証本（語数はすべて 0）
-  const idOf = new Map(wits.map(w => [ST.wits.indexOf(w), w.id]));
+  const idOf = new Map(wits.map(w => [w.i, w.id]));
   const per = new Map(wits.map(w => [w.id, {tokens: 0, grc: 0, lem: new Map()}]));
   const typeCount = new Map(), lemmaCount = new Map(), grcLemma = new Map(), unknown = new Map(), items = new Set();
   let tokens = 0, grcTokens = 0, glossed = 0;
@@ -1405,6 +1620,8 @@ let LAST = null;
 function render(){
   if(!ST.ready) return;
   applyQueryControls();
+  const warn = rawWarning();
+  ["#rawWarn", "#rawWarnStats"].forEach(s => { const el = $(s); el.textContent = warn; el.hidden = !warn; });
   if(ST.view === "stats"){
     if(QS.status === "pending") resetSequenceSearch();
     renderSide(); renderStatsView(); writeURL(); return;
@@ -1491,7 +1708,28 @@ $("#docList").addEventListener("click", e => {
   else ST.sel.add(b.dataset.onlyWit);
   ST.limit = 200; render();
 });
-$("#allDocs").addEventListener("click", () => { ST.wits.forEach(w => ST.sel.add(w.id)); render(); });
+$("#allDocs").addEventListener("click", () => { eagerWits().forEach(w => ST.sel.add(w.id)); render(); });
+
+/* 未注釈の本文：文書・写本ごと・全体の選択。選ぶ操作は必要なら本文を読み込む（useLazy）。外す操作も同じ列に並べて、押した順を保つ */
+const rawDoc = key => lazyDocs().find(d => d.key === key);
+$("#rawList").addEventListener("change", e => {
+  const i = e.target;
+  if(i.dataset.raw !== undefined){
+    const d = rawDoc(i.dataset.raw); if(!d) return;
+    if(i.checked) useLazy([d], lazyOn); else useLazy([], () => lazyOff([d]));
+  } else if(i.dataset.codex !== undefined){
+    const ds = lazyDocs().filter(d => d.codex === i.dataset.codex);
+    if(i.checked) useLazy(ds.filter(lazyBulk), lazyOn); else useLazy([], () => lazyOff(ds));
+  }
+});
+$("#rawList").addEventListener("click", e => {
+  const b = e.target.closest(".only"); if(!b) return;
+  e.preventDefault();
+  const d = rawDoc(b.dataset.onlyRaw); if(!d) return;
+  useLazy([d], docs => { if(docs.length){ ST.sel.clear(); lazyOn(docs); } });
+});
+$("#rawAll").addEventListener("click", () => useLazy(lazyDocs().filter(lazyBulk), lazyOn));
+$("#rawNone").addEventListener("click", () => useLazy([], () => lazyOff(lazyDocs())));
 $("#posList").addEventListener("change", e => {
   const p = e.target.dataset.pos; if(!p) return;
   e.target.checked ? ST.posOff.delete(p) : ST.posOff.add(p);
