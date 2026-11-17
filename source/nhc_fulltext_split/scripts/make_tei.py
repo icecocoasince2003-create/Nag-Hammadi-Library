@@ -25,9 +25,15 @@ build.py の出力（nhc_all.tsv / catalog.tsv / changes.tsv / restored_letters.
   * 既存の 2 文書と違うのは、<s> を <ab> で包んでいる点だけ（<div> の直下に <s> を置くと TEI P5 として
     妥当でなくなるため）。サイトのビュワーと検索は <text type="witness"> の子孫の <s>・<w> を読むので影響しない。
   * 日付を省くと実行日を使う（ヘッダーの <change when> に入る）。標準ライブラリだけで動く。
+  * <publicationStmt> には公開元・ライセンス・公開日を入れる（サイトの既存の TEI と同じ並び）。
+    公開日は PUBLISHED（リポジトリに置いて公開した日）で、作り直しても変わらない。
+    ライセンスはリポジトリの README.md の「ライセンス」に合わせてある: コプト語本文はパブリックドメイン、
+    TEI 符号化と下処理は CC BY 4.0。方針を変えるときは README.md とここの両方を直す。
 """
 import sys, os, re, html, datetime, collections
 
+PUBLISHED = '2026-11-17'      # 公開日（リポジトリに置き、コーパス検索につないだ日）
+LICENCE = 'https://creativecommons.org/licenses/by/4.0/'
 GAP = '[...]'
 KINDS = ('title', 'text', 'subscript', 'colophon', 'fragment')
 CERT = {'A': 'high', 'B': 'medium'}
@@ -253,8 +259,16 @@ def header(c, st, today, fixed):
         <measure unit="gap" quantity="{st['gaps']}">{st['gaps']} gap markers</measure>
       </extent>
       <publicationStmt>
-        <p xml:lang="en">Working file, not yet published. Prepared for Sheneset, a TEI corpus of the Nag Hammadi Codices.</p>
-        <p xml:lang="ja">作業用ファイル（未公開）。Sheneset（ナグ・ハマディ写本 TEI コーパス）への掲載に向けて用意したもの。</p>
+        <authority>Sheneset — TEI corpus of the Nag Hammadi Codices</authority>
+        <availability status="free">
+          <licence target="{LICENCE}">
+            <p xml:lang="en">The Coptic text is in the public domain. The TEI encoding and the preparation of the text ({steps_en}) are the work of the Sheneset project and are released under the Creative Commons Attribution 4.0 International licence (CC BY 4.0).</p>
+            <p xml:lang="ja">コプト語本文はパブリックドメイン。TEI 符号化と本文の下処理（{steps_ja}）は Sheneset プロジェクトによるもので、クリエイティブ・コモンズ 表示 4.0 国際（CC BY 4.0）で提供する。</p>
+          </licence>
+          <p xml:lang="en">Published as a working text. It has not been collated with the critical editions and carries no linguistic annotation yet; see projectDesc and editorialDecl for what was changed and what is missing.</p>
+          <p xml:lang="ja">作業用の本文として公開している。校訂本との照合は済んでおらず、言語注釈もまだ付けていない。加えた変更と欠けている情報は projectDesc と editorialDecl を参照。</p>
+        </availability>
+        <date when="{PUBLISHED}">{PUBLISHED}</date>
       </publicationStmt>
 {notes}      <sourceDesc>
         <bibl xml:id="src">
@@ -314,6 +328,7 @@ def header(c, st, today, fixed):
     </profileDesc>
     <revisionDesc>
       <change when="{today}">TEI file generated from the preprocessed text (scripts/make_tei.py).</change>
+      <change when="{PUBLISHED}">Published in the Sheneset repository and made searchable in the corpus search; publisher, licence and date stated in publicationStmt.</change>
     </revisionDesc>
   </teiHeader>
 '''

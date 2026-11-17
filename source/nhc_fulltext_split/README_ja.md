@@ -17,7 +17,7 @@
 |---|---|
 | `tsv/<写本>-<番号>_<名前>.tsv` | 文書ごとのテキスト（56 ファイル）。列は下の表 |
 | `txt/<同名>.txt` | 同じ内容の本文だけ。1 レコード 1 行 |
-| `tei/<同名>.xml` | 同じ内容の TEI P5（56 ファイル、計 7.9 MB）。§9 |
+| `tei/<同名>.xml` | 同じ内容の TEI P5（56 ファイル、計 8.0 MB）。§9 |
 | `nhc_all.tsv` | 全文書を 1 つにまとめたもの（先頭に `unit` 列が付く） |
 | `catalog.tsv` | 文書一覧。ファイル名、英題、略号、頁・行（参考）、元 ID の範囲、件数（`restored` は ⲍ・ⲯ を戻した語数）、注記 |
 | `changes.tsv` | 削除・置換・挿入の全記録（種類、文書、元 ID、トークン位置、元の文字列、変更後、理由） |
@@ -240,7 +240,7 @@ python3 scripts/verify_tei.py 出力フォルダ [tei_all.rng]
 
 ## 9. TEI ファイル
 
-`tei/` に、文書ごとの TEI P5 ファイルが 56 個ある（計 7.9 MB。最大は `01-5_tripartite-tractate.xml` の 0.8 MB）。ファイル名は `tsv/`・`txt/` と同じで、中身は `nhc_all.tsv` と 1 対 1 に対応する。訳、語釈、品詞、レンマはまだ入っていない。
+`tei/` に、文書ごとの TEI P5 ファイルが 56 個ある（計 8.0 MB。最大は `01-5_tripartite-tractate.xml` の 0.8 MB）。ファイル名は `tsv/`・`txt/` と同じで、中身は `nhc_all.tsv` と 1 対 1 に対応する。訳、語釈、品詞、レンマはまだ入っていない。
 
 ```xml
 <text type="witness" xml:id="wit-II-6" n="NHC II,6" xml:lang="cop">
@@ -274,7 +274,7 @@ python3 scripts/verify_tei.py 出力フォルダ [tei_all.rng]
 - 題名はサイトの文書一覧（`scripts/build_site.py` の `CODICES`）と `data/catalog.xml` に合わせた。`catalog.tsv` の英題と違うものが 3 つある（V,1 Eugnostos、VI,2 The Thunder, Perfect Mind、XIII,2 On the Origin of the World (excerpt)）。
 - 方言は、写本 I、X と XI,1–2 をリコポリス方言（準アクミーム方言）、ほかをサヒド方言とした。
 - 下処理と TEI 化に生成 AI（Claude）を使ったことを `<projectDesc>` に書いてある。
-- `<publicationStmt>` は「作業用ファイル（未公開）」とだけしてある。公開するときにライセンスの表記を入れてほしい。
+- `<publicationStmt>` には、公開元（Sheneset）、利用条件、公開日（2026-11-17）を入れた。並びはサイトの既存の TEI と同じ（`<authority>`・`<availability>`・`<date>`）。ライセンスはリポジトリの `README.md` の「ライセンス」に合わせてある: コプト語本文はパブリックドメイン、TEI 符号化と下処理は CC BY 4.0（`<licence target="https://creativecommons.org/licenses/by/4.0/">`）。校訂本と照合していない作業用の本文であることは、`<availability>` の中の注記と `<projectDesc>` に書いてある。受け取ったときは「作業用ファイル（未公開）」とだけ書いてあり、公開にあたって 2026-11-17 に書き換えた（`<revisionDesc>` にも 1 行ある）。文面と公開日は `scripts/make_tei.py` の雛形と `PUBLISHED` にある。
 
 **サイトの既存の本文ファイルとの関係。**
 
@@ -295,9 +295,12 @@ python3 scripts/verify_tei.py 出力フォルダ [tei_all.rng]
 4. `<s>` と証本の `xml:id` が、全ファイルを通じて重複しないこと。
 5. ヘッダーの件数、本文の実数、`catalog.tsv` の件数が一致すること。
 6. TEI P5 の RELAX NG スキーマ（tei_all.rng、P5 4.3.0）で、56 ファイルすべてが妥当であること。
+   （この検証は `<publicationStmt>` を書き換える前のファイルで行ったもの。書き換えたあとは 1〜5 だけをやり直し、スキーマでの検証はやり直していない。新しい `<publicationStmt>` の構造は、TEI ガイドラインの内容モデル（`publicationStmt`・`availability`・`licence`）と、そこに載っている例に合わせてある。スキーマが手元にあれば `python3 scripts/verify_tei.py 出力フォルダ tei_all.rng` で確かめられる。）
 
 このほか、サイトの `search.html` の読み込み関数（`parseText`）と、ビュワー（`republic.html`）の `buildFlow`・`phyGroups` をそのまま取り出して jsdom 上で実行し、56 ファイルのセグメント数・トークン数・欠損の数が `catalog.tsv` と合うことを確かめた。TEI をわざと 1 か所書き換えた複製 20 通り（`<w>` を消す・足す・つなぐ、復元の印を外す、`<gap>` を消す、ID を重複させる、など）で、`verify_tei.py` の検証が失敗することも確かめた。
 
-**サイトで使うとき。** 検索ページは、`data/catalog.xml` の `<bibl type="document">` のうち `<ref type="xml" target="…"/>` を持つ文書を読み込む。TEI をリポジトリに置いて、文書ごとにこの項目を足せば、検索と統計に出る（全部足すと、読み込む XML が 7.9 MB 増える）。本文を表示するには、文書ごとのビュワー（HTML）が別に要る。
+**サイトで使うとき。** 検索ページは、`data/catalog.xml` の `<bibl type="document">` のうち `<ref type="xml" target="…"/>` を持つ文書を読み込む。TEI をリポジトリに置いて、文書ごとにこの項目を足せば、検索と統計に出る（全部足すと、読み込む XML が 8.0 MB 増える）。本文を表示するには、文書ごとのビュワー（HTML）が別に要る。
 
-> **追記（2026-11-17、リポジトリに置いたあと）。** 56 文書は `data/catalog.xml` に `<bibl type="document" subtype="unannotated">` として登録済み。検索ページでは左欄の〈未注釈の本文〉に並び、既定では読み込まれず、選んだ文書の TEI だけが取得される。カタログの項目は、リポジトリ直下で `python3 scripts/sync_nhc_catalog.py --write` を実行すると、この `tei/` と `catalog.tsv` から作り直せる（`tei/` を作り直したら実行する）。このフォルダの中身は、この追記のほかは受け取ったときのまま。
+> **追記（2026-11-17、リポジトリに置いたあと）。** 56 文書は `data/catalog.xml` に `<bibl type="document" subtype="unannotated">` として登録済み。検索ページでは左欄の〈未注釈の本文〉に並び、既定では読み込まれず、選んだ文書の TEI だけが取得される。カタログの項目は、リポジトリ直下で `python3 scripts/sync_nhc_catalog.py --write` を実行すると、この `tei/` と `catalog.tsv` から作り直せる（`tei/` を作り直したら実行する）。
+>
+> リポジトリに置いたあとに変えたのは次の 3 点で、ほかは受け取ったときのまま: (1) この README への追記と、ヘッダー・検証・容量の記述の更新、(2) `scripts/make_tei.py` のヘッダーの雛形（`<publicationStmt>` と `<revisionDesc>`）、(3) それで作り直した `tei/` の 56 ファイル。(3) で変わったのはヘッダーのこの 2 か所だけで、本文と ID は 1 字も変わっていない（作り直す前後を比べて確かめた）。容量は 1 ファイルあたり約 1.3 KB 増え、計 8.0 MB になった。

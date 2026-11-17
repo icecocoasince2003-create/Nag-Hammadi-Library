@@ -26,8 +26,16 @@
         <measure unit="gap" quantity="1">1 gap markers</measure>
       </extent>
       <publicationStmt>
-        <p xml:lang="en">Working file, not yet published. Prepared for Sheneset, a TEI corpus of the Nag Hammadi Codices.</p>
-        <p xml:lang="ja">作業用ファイル（未公開）。Sheneset（ナグ・ハマディ写本 TEI コーパス）への掲載に向けて用意したもの。</p>
+        <authority>Sheneset — TEI corpus of the Nag Hammadi Codices</authority>
+        <availability status="free">
+          <licence target="https://creativecommons.org/licenses/by/4.0/">
+            <p xml:lang="en">The Coptic text is in the public domain. The TEI encoding and the preparation of the text (division into tractates, removal of conversion residue, restoration of ⲍ and ⲯ) are the work of the Sheneset project and are released under the Creative Commons Attribution 4.0 International licence (CC BY 4.0).</p>
+            <p xml:lang="ja">コプト語本文はパブリックドメイン。TEI 符号化と本文の下処理（文書の分割、変換の残骸の除去、ⲍ・ⲯ の復元）は Sheneset プロジェクトによるもので、クリエイティブ・コモンズ 表示 4.0 国際（CC BY 4.0）で提供する。</p>
+          </licence>
+          <p xml:lang="en">Published as a working text. It has not been collated with the critical editions and carries no linguistic annotation yet; see projectDesc and editorialDecl for what was changed and what is missing.</p>
+          <p xml:lang="ja">作業用の本文として公開している。校訂本との照合は済んでおらず、言語注釈もまだ付けていない。加えた変更と欠けている情報は projectDesc と editorialDecl を参照。</p>
+        </availability>
+        <date when="2026-11-17">2026-11-17</date>
       </publicationStmt>
       <sourceDesc>
         <bibl xml:id="src">
@@ -89,6 +97,7 @@
     </profileDesc>
     <revisionDesc>
       <change when="2026-11-17">TEI file generated from the preprocessed text (scripts/make_tei.py).</change>
+      <change when="2026-11-17">Published in the Sheneset repository and made searchable in the corpus search; publisher, licence and date stated in publicationStmt.</change>
     </revisionDesc>
   </teiHeader>
   <text type="witness" xml:id="wit-XI-2e" n="NHC XI,2e" xml:lang="cop">
