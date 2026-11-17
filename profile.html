@@ -4,10 +4,11 @@
      権限はサーバ側の行レベルセキュリティ（supabase/schema.sql）で判定します。
      確認だけしたいときは profile.html?community=demo（ブラウザ内だけで動くデモ）。 -->
 <!DOCTYPE html>
-<html lang="ja" data-lang="ja" data-i18n="full" data-mode="aeon" data-title-en="Profile — Sheneset" data-title-fr="Profil — Sheneset">
+<html lang="ja" data-lang="ja" data-i18n="full" data-mode="dark" data-modes="light dark" data-title-en="Profile — Sheneset" data-title-fr="Profil — Sheneset">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>/* 表示モード（ライト／ダーク）の保存値を描画前に反映（保存は assets/site.js） */try{if(localStorage.getItem("nhc-mode")==="light")document.documentElement.setAttribute("data-mode","light")}catch(e){}</script>
 <meta name="robots" content="noindex, nofollow">
 <title>プロフィール — Sheneset</title>
 <link rel="icon" type="image/svg+xml" href="image/icon.svg">
@@ -45,6 +46,9 @@ body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
   padding:9px 11px; font:inherit; font-size:.9rem; line-height:1.6}
 .pf-form textarea{resize:vertical; min-height:6.5em}
 .pf-form input:focus, .pf-form textarea:focus, .pf-memoform input:focus{outline:2px solid var(--lapis); outline-offset:0}
+/* ライトモード（配色は assets/cosmos.css）: 入力欄の地を紙の色に */
+html[data-mode="light"] .pf-form input:not([type=checkbox]):not([type=radio]), html[data-mode="light"] .pf-form textarea,
+html[data-mode="light"] .pf-memoform input{background:#fffdf8}
 .pf-row{display:flex; flex-wrap:wrap; gap:10px 14px; align-items:center}
 .pf-row > input{flex:1 1 240px; width:auto !important}
 .pf-form label.pf-check{flex-direction:row; align-items:baseline; gap:8px; line-height:1.6; cursor:pointer}

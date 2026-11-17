@@ -138,9 +138,10 @@
           var lab = { ja: "日本語", en: "EN", fr: "FR" }[v];
           return '<button type="button" class="sb-lang" data-lang="' + v + '" aria-pressed="' + (v === L) + '" lang="' + v + '">' + lab + '</button>';
         }).join("") +
-        '<span class="sb-sep" aria-hidden="true"></span>' +
+        // 表示モードの切替は言語と同じ「表示の設定」なので、言語の隣に区切り線なしで置く（ナビの幅も節約できる）
         (hasModes() ? '<button type="button" class="sb-mode" id="sbMode" aria-label="' + esc(modeLabel()) + '" title="' + esc(modeLabel()) + '">' +
-          MODE_ICONS + '</button><span class="sb-sep" aria-hidden="true"></span>' : "") +
+          MODE_ICONS + '</button>' : "") +
+        '<span class="sb-sep" aria-hidden="true"></span>' +
         '<a class="sb-auth" id="sbAuth" href="#" hidden></a>' +
       '</div>';
     Array.prototype.forEach.call(nav.querySelectorAll(".sb-lang"), function (b) {

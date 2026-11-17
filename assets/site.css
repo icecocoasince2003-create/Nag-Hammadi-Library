@@ -73,7 +73,15 @@ html[data-mode="light"] .sb-mode .sb-moon { display: block; }
 .sb-mode:hover, .sb-mode:focus-visible {
   border-color: rgba(212, 175, 106, .45); color: var(--gold-bright, #e7c885); outline: none;
 }
-/* ごく狭い画面では、切替ボタンの分だけ区切り線を省いて間隔を詰め、ロゴと同じ行に収める */
+/* 切替ボタンの分だけナビが2段に折り返しやすくなるので、その分を詰める:
+   中くらいの幅ではリンクの間隔を少し狭め、ごく狭い画面では区切り線を省いて、ロゴと同じ行に収める */
+@media (min-width: 761px) and (max-width: 1100px) {
+  .sitebar:has(.sb-mode) .sb-links { column-gap: 14px; }
+}
+/* フランス語はリンクの文字が長く、もっと広い幅から折り返すので、その幅まで同じように詰める */
+@media (min-width: 1101px) and (max-width: 1260px) {
+  .sitebar:has(.sb-mode):has(.sb-lang[data-lang="fr"][aria-pressed="true"]) .sb-links { column-gap: 14px; }
+}
 @media (max-width: 359px) {
   .sitebar .sb-tools:has(.sb-mode) { gap: 4px 8px; }
   .sb-tools:has(.sb-mode) .sb-sep { display: none; }
@@ -351,6 +359,7 @@ html[data-lang="en"] .prose li, html[data-lang="fr"] .prose li { line-height: 1.
 .sb-sep:has(+ .sb-auth[hidden]) { display: none; }
 /* 固定見出し（コプト語｜ギリシア語、対照表示）は背景を不透明に */
 .app main .corpus-head, .app main .syn .colhead { background: #0d0b1e; }
+html[data-mode="light"] .app main .corpus-head, html[data-mode="light"] .app main .syn .colhead { background: #f3eede; }
 @media (max-width: 600px) {
   .sitebar { gap: 6px 12px; padding: 8px 14px; }
   .sb-brand .cop { display: none; }

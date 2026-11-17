@@ -3,10 +3,11 @@
      〈メンバー募集〉の連絡先は、迷惑メール対策のため @ を置き換えた表記で 1 か所（.mb-a）にだけ書いています。
      mailto: リンクにはしないでください（アドレスが機械的に収集されやすくなります）。 -->
 <!DOCTYPE html>
-<html lang="ja" data-lang="ja" data-i18n="full" data-mode="aeon" data-title-en="About the project — Sheneset" data-title-fr="À propos du projet — Sheneset">
+<html lang="ja" data-lang="ja" data-i18n="full" data-mode="dark" data-modes="light dark" data-title-en="About the project — Sheneset" data-title-fr="À propos du projet — Sheneset">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>/* 表示モード（ライト／ダーク）の保存値を描画前に反映（保存は assets/site.js） */try{if(localStorage.getItem("nhc-mode")==="light")document.documentElement.setAttribute("data-mode","light")}catch(e){}</script>
 <title>プロジェクトについて — Sheneset</title>
 <meta name="description" content="Sheneset（ナグ・ハマディ写本コーパス）の目的、データ、メンバー、参加方法 / About Sheneset, a digital edition of the Nag Hammadi Codices.">
 <link rel="icon" type="image/svg+xml" href="image/icon.svg">
@@ -49,6 +50,9 @@ html[data-lang="ja"] .member .nm{font-family:"Noto Serif JP",serif}
 .mailbox .mb-a{margin:4px 0 6px; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:1.06rem;
   color:var(--gold-bright); overflow-wrap:anywhere; user-select:all; -webkit-user-select:all}
 .mailbox .mb-n{font-size:.78rem; line-height:1.7; color:var(--ink-faint)}
+/* ライトモード（配色は assets/cosmos.css）: 暗い地を前提にした部分 */
+html[data-mode="light"] .cite{background:rgba(74,58,30,.05)}
+html[data-mode="light"] .member .mono{background:radial-gradient(circle at 50% 40%, rgba(157,139,224,.16), rgba(154,114,32,.1))}
 </style>
 <link rel="stylesheet" href="assets/cosmos.css">
 <link rel="stylesheet" href="assets/site.css">

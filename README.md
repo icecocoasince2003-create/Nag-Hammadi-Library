@@ -9,7 +9,7 @@
 
 | ページ | 内容 | 管理方法 |
 |---|---|---|
-| `index.html` | HOME（日・英・仏、NEWS、関連サイト、文書一覧）。上部ナビの ☀／☾ でライト／ダークの表示モードを切替 | `python3 scripts/build_site.py` で生成。NEWS は `data/news.json`、関連サイトは `data/links.json` を編集 |
+| `index.html` | HOME（日・英・仏、NEWS、関連サイト、文書一覧） | `python3 scripts/build_site.py` で生成。NEWS は `data/news.json`、関連サイトは `data/links.json` を編集 |
 | `gnosticism.html` | 解説「グノーシス主義とは」（日・英・仏） | 手作業 |
 | `project.html` | プロジェクト紹介。メンバー・資金協力は `data/project.json`（`public: true` のみ表示） | 手作業＋JSON |
 | `eugnostos.html` | エウグノストス。`?wit=III`（祝福されたエウグノストス）/ `?wit=V`（エウグノストス）/ `?wit=SYN`（対照） | 手作業 |
@@ -24,7 +24,8 @@
 `assets/community.*`（ログイン、承認制の投稿、ブックマーク。設定は `assets/community-config.js`、手順は `docs/COMMUNITY_SETUP.md`。
 データベースの定義は `supabase/schema.sql` で、更新したときは Supabase の SQL Editor で全体を再実行します）。
 上部ナビの項目は `assets/site.js` の `NAV` を編集すれば全ページに反映されます。
-表示モード（ライト／ダーク）に対応しているのは今のところ HOME だけです。仕組みと、ほかのページを対応させる手順は `COSMOS_REDESIGN.md` の末尾にあります。
+全ページで、上部ナビの ☀／☾ からライト／ダークの表示モードを選べます（既定はダーク、選択は全ページ共通）。
+仕組みと、新しいページを対応させる手順は `COSMOS_REDESIGN.md` の末尾にあります。
 
 **同形異義語の参照**: 本文の `<w>` は `@lemma` と `@type`（品詞）の組で `lexicon.xml` を引きます。
 `@ana="#lex-…"` があればそれが最優先、品詞が一致する項目がない場合だけレンマ一致の全項目を候補として表示します。
@@ -178,7 +179,7 @@ index.html(目次:全53文書)
   該当主題の本文がハイライトされ、右の注がその主題に絞り込まれます。
 - **右パネル**「神学的解釈」=`<standOff>` の注を表示し「本文へ」で該当節へジャンプ。
 - **検索**=コプト語形・レンマ・英語/日本語語釈・対訳を横断検索。
-- **「☀ アイオーン／☾ アルコーン」**で表示モード切替（アイオーン＝ライト、アルコーン＝ダーク）。
+- **上部ナビの ☀／☾** で表示モード（ライト／ダーク）を切替（全ページ共通）。
 
 ## TEI設計の要点（3ファイル分離）
 

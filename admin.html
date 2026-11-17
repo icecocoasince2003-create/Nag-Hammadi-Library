@@ -2,10 +2,11 @@
      運営へのメッセージ（バグの報告・応援メッセージ）の確認を行うページ（手作業管理）。
      admins テーブルに登録されたアカウントでログインしたときだけ操作できます（権限はサーバ側の行レベルセキュリティで判定）。 -->
 <!DOCTYPE html>
-<html lang="ja" data-lang="ja" data-i18n="full" data-mode="aeon" data-title-en="Moderation — Sheneset" data-title-fr="Modération — Sheneset">
+<html lang="ja" data-lang="ja" data-i18n="full" data-mode="dark" data-modes="light dark" data-title-en="Moderation — Sheneset" data-title-fr="Modération — Sheneset">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>/* 表示モード（ライト／ダーク）の保存値を描画前に反映（保存は assets/site.js） */try{if(localStorage.getItem("nhc-mode")==="light")document.documentElement.setAttribute("data-mode","light")}catch(e){}</script>
 <meta name="robots" content="noindex, nofollow">
 <title>投稿の承認 — Sheneset</title>
 <link rel="icon" type="image/svg+xml" href="image/icon.svg">
@@ -33,7 +34,7 @@ body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
 .q .acts{display:flex; flex-wrap:wrap; align-items:center; gap:10px 16px; margin-top:12px}
 .q textarea{flex:1 1 260px; min-height:38px; background:rgba(0,0,0,.25); color:var(--ink); border:1px solid var(--line-2); border-radius:8px; padding:7px 10px; font:inherit; font-size:.82rem}
 .q .ok,.q .ng{appearance:none; border:0; border-radius:8px; padding:8px 14px; cursor:pointer; font:inherit; font-size:.82rem; font-weight:600}
-.q .ok{background:var(--gold); color:#1a140a} .q .ng{background:rgba(207,147,166,.18); color:var(--rose)}
+.q .ok{background:var(--gold); color:var(--on-gold,#1a140a)} .q .ng{background:rgba(207,147,166,.18); color:var(--rose)}
 .q .open{font-size:.8rem; color:var(--lapis); text-underline-offset:4px}
 .q .st{font-size:.72rem; border:1px solid currentColor; border-radius:999px; padding:0 8px}
 .msg{color:var(--ink-faint); font-size:.9rem; padding:20px 0}
@@ -53,6 +54,9 @@ body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
 .cmp-h b{margin-left:.8em; color:var(--gold); font-weight:600}
 .banner{border-left:3px solid var(--rose); background:rgba(207,147,166,.08); border-radius:0 10px 10px 0; padding:10px 14px; margin:0 0 14px; font-size:.86rem; line-height:1.8; color:var(--ink-soft)}
 .banner code{color:var(--gold-bright)}
+/* ライトモード（配色は assets/cosmos.css）: 暗い地を前提にした入力欄・比較欄の地 */
+html[data-mode="light"] .q textarea{background:#fffdf8}
+html[data-mode="light"] .cmp > div{background:rgba(74,58,30,.05)}
 </style>
 <link rel="stylesheet" href="assets/cosmos.css">
 <link rel="stylesheet" href="assets/site.css">

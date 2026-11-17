@@ -6,11 +6,12 @@
 
 /* ---- パレット定義（両方の変数体系を上書き）----
    既定はダーク（宇宙）。ライトモードは下の「ライトモード」の節で上書きする。
-   2行目以降のセレクタは、ライトモードでも藍色のままにする「クローム」（上部ナビ・ダイアログ・通知）。
-   その内側ではダークの変数に戻す。 */
+   2行目以降のセレクタは、ライトモードでも藍色のままにする「クローム」（上部ナビ、ビュワーの文書パネル・
+   単語のポップアップ、ログインなどのダイアログ、コメント欄、通知）。その内側ではダークの変数に戻す。 */
 html, html[data-mode="dark"], html[data-mode="aeon"],
-html[data-mode="light"] .sitebar, html[data-mode="light"] .cm-modal,
-html[data-mode="light"] .cm-toast, html[data-mode="light"] .cm-drawer {
+html[data-mode="light"] .sitebar, html[data-mode="light"] body > .app > header,
+html[data-mode="light"] .pop, html[data-mode="light"] #drop-hint,
+html[data-mode="light"] .cm-modal, html[data-mode="light"] .cm-toast, html[data-mode="light"] .cm-drawer {
   /* ビュワー系 (republic.html / eugnostos.html) */
   --paper: rgba(13, 11, 30, .82);
   --paper-2: rgba(23, 20, 46, .92);
@@ -31,6 +32,7 @@ html[data-mode="light"] .cm-toast, html[data-mode="light"] .cm-drawer {
   --hi: rgba(212, 175, 106, .14);
   --sel: rgba(157, 139, 224, .18);
   --shadow: 0 1px 2px rgba(0,0,0,.5), 0 14px 40px rgba(2,1,10,.6);
+  --on-gold: #1a140a;   /* 金色で塗ったボタンの上の文字 */
 
   /* index / tractate 系 (build_site.py 生成ページ) */
   --bg: transparent;
@@ -91,14 +93,14 @@ body > .app, body > .wrap, body > header, body > main, body > footer, body > .sh
 @keyframes cosmosRing { to { transform: rotate(360deg); } }
 
 /* ---- ライトモード（html[data-mode="light"]）----
-   対応しているページ（<html data-modes="light dark">。いまはトップページのみ）で、
-   上部ナビの切替ボタンから選ぶ（描画と保存は assets/site.js、保存先は localStorage "nhc-mode"）。
+   全ページ（<html data-modes="light dark">）で、上部ナビの切替ボタンから選ぶ
+   （描画と保存は assets/site.js、保存先は localStorage "nhc-mode"。選んだモードは全ページ共通）。
    紙面はパピルスの地色・文字は墨・金は濃いめ。文字色は地色に対して 4.5:1 以上を保つこと。
    上部ナビ・ダイアログ・通知（クローム）は藍色のまま（冒頭のパレット定義を参照）。 */
 html[data-mode="light"] {
-  /* ビュワー系（まだどのページでも使っていない仮の値。ビュワーを対応させるときに実際の画面で調整すること） */
-  --paper: rgba(251, 248, 241, .86);
-  --paper-2: rgba(246, 241, 230, .94);
+  /* ビュワー系 (republic.html / eugnostos.html)。ダイアログや見出しの地にもなるので不透明にする */
+  --paper: #fbf8f1;
+  --paper-2: #f5efe2;
   --raise: #fffdf8;
   --ink: #2a2620;
   --ink-soft: #4c4338;
@@ -116,6 +118,7 @@ html[data-mode="light"] {
   --hi: rgba(154, 114, 32, .13);
   --sel: rgba(51, 82, 154, .12);
   --shadow: 0 1px 2px rgba(60, 45, 20, .06), 0 12px 32px rgba(60, 45, 20, .1);
+  --on-gold: #fffdf6;
 
   /* index / tractate 系 */
   --bg: transparent;
@@ -133,9 +136,11 @@ html[data-mode="light"] #cosmos-rings svg {
 }
 html[data-mode="light"] #cosmos-rings circle { stroke: #9a7220; }
 html[data-mode="light"] .sitebar { background: rgba(18, 16, 42, .96); }
+/* ビュワーの文書パネルは広い画面では半透明（星野が透ける）なので、ライトモードでは上部ナビと同じ不透明の藍色にする */
+html[data-mode="light"] body > .app > header { background: rgba(18, 16, 42, .96); }
 
 /* ---- 共通の微調整 ---- */
-/* ビュワーの旧・表示モード切替（アイオーン／アルコーン）は使わない。ビュワーは宇宙テーマ固定 */
+/* ビュワーの旧・表示モード切替（アイオーン／アルコーン）は使わない。ライト／ダークは上部ナビの切替（全ページ共通）で選ぶ */
 #modeBtn { display: none !important; }
 
 /* ビュワー: ページ内検索は search.html に移設したため隠す */

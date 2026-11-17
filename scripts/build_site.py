@@ -20,8 +20,9 @@
   * NEWS（更新情報）は data/news.json、関連サイトは data/links.json を編集します
     （HTML の再生成は不要。ページ表示時に読み込まれます）。
   * 上部ナビの項目は assets/site.js の NAV で全ページ共通に管理しています。
-  * HOME は表示モード（ライト／ダーク）に対応しています。上部ナビの ☀／☾ で切り替わり、
-    配色は assets/cosmos.css の「ライトモード」、HOME 固有の調整は下の INDEX_CSS の末尾にあります。
+  * HOME と準備中ページは、ほかのページと同じく表示モード（ライト／ダーク）に対応しています。
+    上部ナビの ☀／☾ で切り替わり、配色は assets/cosmos.css の「ライトモード」、
+    HOME 固有の調整は下の INDEX_CSS の末尾にあります。
 
 【新しい文書を「公開」に切り替える手順】
   1. ビュワー HTML（例: eugnostos.html）をルートに用意する
@@ -570,8 +571,9 @@ if(!t){
 </script>
 """
     body = body.replace("__CATALOG__", json.dumps(cat, ensure_ascii=False))
-    return ("<!doctype html><html lang=\"ja\" data-lang=\"ja\" data-i18n=\"full\" data-mode=\"aeon\"><head><meta charset=\"utf-8\">"
+    return ("<!doctype html><html lang=\"ja\" data-lang=\"ja\" data-i18n=\"full\" data-mode=\"dark\" data-modes=\"light dark\"><head><meta charset=\"utf-8\">"
             "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
+            f"{MODE_BOOT}"
             "<title>準備中 — Sheneset</title>"
             f"{FONTS}<style>{css}</style></head><body>{body}</body></html>")
 
