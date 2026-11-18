@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <!-- コーパス検索・統計ページ（手作業管理）
-     - 見出し下のタブで〈検索〉〈統計〉〈チュートリアル〉を切り替えます（旧 stats.html をこのページに統合。統計は ?view=stats、
-       チュートリアルは ?view=tutorial で直接開けます）。
+     - 見出し下のタブで〈検索〉と〈統計〉を切り替えます（旧 stats.html をこのページに統合。統計は ?view=stats で直接開けます）。
        左の〈文書〉〈品詞〉の絞り込みは、検索と統計の両方に共通です。
      - 既定で注釈つきの全文書を横断します。左の〈文書〉一覧で証本ごとに絞り込めます。
        旧URL（?doc=republic / ?doc=eugnostos）は、その文書だけを選択した状態で開きます。
@@ -18,9 +17,14 @@
        行をクリックすると語義の詳細と用例（KWIC）を開き、用例から全文表示の該当箇所 (#seg-ID) へ移動できます。
      - 〈統計〉は、選択中の証本・品詞の範囲を TEI から直接集計します（検索語には依存しません）。
        セクションを増やすときは JS 内の SECTIONS 配列に1要素 push するだけで、目次と本体が自動生成されます。
-     - 〈チュートリアル〉は検索の使い方の説明（#viewGuide に静的な三言語の HTML で書く）。〈試す〉で例の式を〈検索〉で実行します。
-       節（<section class="tut-sec" id="tut-…">）を足すと目次に自動で加わります。…?view=tutorial#tut-regex のように節へ直接リンクできます。
-       例を足す・変えるときは、実際の本文で1件以上一致することを確かめてください（例の書き方は #viewGuide 冒頭のコメント）。
+     - チュートリアル（検索の使い方の説明）は、タブの右の〈チュートリアル〉で〈検索〉の右に開くパネル（#guidePanel）。× か Esc で閉じます。
+       広い画面（1100px 以上）では本文の右の列で、左端の取っ手で幅を変えられ、狭い画面では右から重なります。
+       説明文は #viewGuide に静的な三言語の HTML で書きます。〈試す〉で例の式を〈検索〉で実行します。
+       節（<section class="tut-sec" id="tut-…">）を足すと目次に自動で加わります。…?view=tutorial#tut-regex で、パネルを開いて節を出せます。
+       例を足す・変えるときは、実際の本文で1件以上一致することを確かめてください（例の書き方は #guidePanel の前のコメント）。
+     - 操作案内（画面の要所を〈次へ〉で順に示す #tour）は、初めて開いたときに出します（このブラウザーで一度閉じたら、
+       localStorage "nhc-search-tour" に覚えて次からは出さない）。チュートリアルの〈画面の操作案内をもう一度見る〉でも出せます。
+       手順は JS の TOUR 配列。
      - 活用型: 辞書の <entry><gramGrp><iType> と、本文の <w @msd> を読み込みます（未付与の間は「—」）。
      - 同形異義語の参照はビュワーと同じ規則（@ana による固定 → レンマ＋品詞 → レンマのみ）。
      - UI言語は site.js の三言語切替（html[data-i18n="full"]）に従います。
@@ -28,7 +32,7 @@
      - 品詞列・詳細式は assets/corpus-query.js を Worker 内で実行し、形態素の並びをセグメント単位で検索します
        （<s> と証本の境界、<s> の中の欠損 <gap> をまたぐ一致は返しません）。
        対応する式と制限: docs/CORPUS_SEARCH.md。ANNIS/AQL の全機能への対応ではありません。
-     URL パラメータ: view=stats|tutorial（統計・チュートリアルを開く）, q=検索語, kind=word|pos|aql（検索方式）, m=part|pre|ex（一致方法）, f=flg（対象: f語形 lレンマ g語義）,
+     URL パラメータ: view=stats（統計を開く）|tutorial（検索とチュートリアルのパネルを開く）, q=検索語, kind=word|pos|aql（検索方式）, m=part|pre|ex（一致方法）, f=flg（対象: f語形 lレンマ g語義）,
                      w=証本ID（カンマ区切り）, xpos=除外する品詞 -->
 <html lang="ja" data-lang="ja" data-i18n="full" data-mode="dark" data-modes="light dark"
   data-title-en="Corpus search and statistics — Sheneset"
@@ -255,9 +259,17 @@ table.kw td.rc{color:var(--s-mut); white-space:nowrap; overflow:hidden; max-widt
 .foot code{font-size:.72rem}
 .vh{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
 
-/* ---- 見出しと表示切替（検索 / 統計） ---- */
+/* ---- 見出しと表示切替（検索 / 統計）。右端はチュートリアルのパネルを開くボタン ---- */
 .eyebrow{font-size:.7rem; letter-spacing:.3em; text-transform:uppercase; color:var(--s-gold); margin:0 0 4px}
-.views{display:flex; gap:0 28px; margin:14px 0 20px; border-bottom:1px solid var(--s-rule)}
+.viewbar{display:flex; align-items:flex-end; gap:8px 16px; margin:14px 0 20px; border-bottom:1px solid var(--s-rule)}
+.views{display:flex; gap:0 28px}
+.gd-btn{display:inline-flex; align-items:center; gap:6px; margin:0 0 6px auto; appearance:none; font:inherit; font-size:.8rem;
+  color:var(--s-acc); background:transparent; border:1px solid var(--s-rule); border-radius:999px; padding:4px 12px 4px 10px;
+  cursor:pointer; white-space:nowrap}
+.gd-btn svg{flex:none}
+.gd-btn:hover{border-color:var(--s-gold)}
+.gd-btn[aria-expanded="true"]{background:var(--s-bg2); border-color:var(--s-gold)}
+.gd-btn:focus-visible{outline:2px solid var(--s-link); outline-offset:2px}
 .views button{appearance:none; border:0; border-bottom:2px solid transparent; margin:0 0 -1px; background:none;
   padding:7px 2px 8px; font:inherit; font-size:.95rem; color:var(--s-mut); cursor:pointer}
 .views button:hover{color:var(--s-ink)}
@@ -308,8 +320,55 @@ table.kw td.rc{color:var(--s-mut); white-space:nowrap; overflow:hidden; max-widt
 .sv-tbl table.st td.barc{width:24%}
 .sv-tbl.narrow{max-width:420px}
 
-/* ---- チュートリアル（#viewGuide。説明文は HTML に静的に書く） ---- */
-.tut-sec{scroll-margin-top:calc(var(--sbh,47px) + 10px); max-width:900px}
+/* ---- チュートリアルのパネル（#guidePanel。右側。eugnostos.html の並行箇所のパネルと同じ作り） ----
+   html[data-guide="open"] のときだけ出す（〈検索〉を表示している間だけ。applyGuide()）。
+   幅 1100px 以上: 本文の右の列。幅は --guide-w（左端の取っ手で利用者が決めた幅）、決めていなければ 30vw（340〜460px）。
+     最小 300px、本文の列が 480px より狭くならないところが最大（JS の GUIDE_W_MIN・GUIDE_MAIN_MIN と同じ）。
+   それより狭い画面: 右から重なるドロワー。 */
+.gd-panel{display:none; flex-direction:column; min-width:0; min-height:0; position:relative; z-index:20;
+  background:var(--s-bg2); border-left:1px solid var(--s-rule); color:var(--s-ink)}
+html[data-guide="open"] .gd-panel{display:flex}
+@media (min-width:1100px){
+  html[data-guide="open"]{--gw:clamp(300px, var(--guide-w, clamp(340px,30vw,460px)), calc(100vw - 250px - 480px))}
+  html[data-guide="open"] .layout{grid-template-columns:250px minmax(0,1fr) var(--gw); max-width:calc(1440px + var(--gw))}
+  .gd-panel{position:sticky; top:var(--sbh,47px); height:calc(100vh - var(--sbh,47px))}
+  /* 本文の列が狭くなるので、レンマの表は（狭い画面と同じく）横にスクロールさせる。見出しの固定はそのあいだ止める */
+  html[data-guide="open"] .tblwrap{overflow-x:auto}
+  html[data-guide="open"] table.lx th{position:static}
+}
+@media (max-width:1099.98px){
+  .gd-panel{position:fixed; inset:0 0 0 auto; width:min(440px,94vw); z-index:49; background:var(--s-bg);
+    box-shadow:0 18px 50px rgba(0,0,0,.35)}   /* 本文に重なるので、透けない色にする */
+}
+.gd-top{display:flex; align-items:center; gap:8px; padding:11px 8px 10px 18px; border-bottom:1px solid var(--s-rule)}
+.gd-title{flex:1; display:flex; align-items:center; gap:7px; font-size:.95rem; font-weight:700; color:var(--s-gold)}
+.gd-x{appearance:none; border:0; background:transparent; cursor:pointer; color:var(--s-mut); font-size:1.5rem; line-height:1;
+  padding:4px 10px; border-radius:8px}
+.gd-x:hover{color:var(--s-ink)}
+.gd-x:focus-visible{outline:2px solid var(--s-link); outline-offset:-2px}
+.gd-body{flex:1; overflow-y:auto; padding:14px 18px 64px; overscroll-behavior:contain; container:guide / inline-size;
+  scrollbar-width:thin; scrollbar-color:rgba(190,180,230,.3) transparent}
+html[data-mode="light"] .gd-body{scrollbar-color:rgba(74,58,30,.3) transparent}
+.gd-body:focus{outline:none}
+.gd-body .lede{font-size:.84rem; margin:0 0 10px}
+.gd-replay{margin:0 0 12px; font-size:.8rem}
+.gd-replay .lnk{font-size:.8rem}
+.gd-toc{display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:2px 18px; margin:0 0 6px; padding:10px 14px;
+  border:1px solid var(--s-rule2); border-radius:10px; font-size:.8rem}
+.gd-toc a{color:var(--s-mut); text-decoration:none; padding:2px 0}
+.gd-toc a:hover{color:var(--s-ink); text-decoration:underline; text-decoration-color:var(--s-gold); text-underline-offset:4px}
+/* 幅を変える取っ手（パネルの左端。広い画面だけ） */
+.gd-grip{display:none; position:absolute; left:0; top:0; bottom:0; width:10px; cursor:col-resize; z-index:3; touch-action:none}
+.gd-grip::after{content:""; position:absolute; left:3px; top:50%; width:3px; height:48px; margin-top:-24px; border-radius:3px;
+  background:var(--s-rule); transition:background .15s}
+.gd-grip:hover::after, html[data-guide-drag] .gd-grip::after{background:var(--s-link)}
+.gd-grip:focus-visible{outline:none}
+.gd-grip:focus-visible::after{background:var(--s-link); box-shadow:0 0 0 2px var(--s-gold)}
+@media (min-width:1100px){ .gd-grip{display:block} }
+html[data-guide-drag], html[data-guide-drag] *{cursor:col-resize !important; user-select:none !important; -webkit-user-select:none !important}
+
+/* ---- チュートリアルの本文（パネルの中。説明文は HTML に静的に書く） ---- */
+.tut-sec{max-width:900px}
 .tut-n{display:inline-grid; place-items:center; min-width:1.75em; height:1.75em; padding:0 .3em; border:1px solid var(--s-gold);
   border-radius:999px; color:var(--s-acc); font-size:.74rem; font-weight:600; font-variant-numeric:tabular-nums; align-self:center}
 .tut-sec h3{font-size:.88rem; font-weight:700; color:var(--s-ink); margin:22px 0 6px}
@@ -374,14 +433,47 @@ table.kw td.rc{color:var(--s-mut); white-space:nowrap; overflow:hidden; max-widt
   .sv-bars.pc .sv-bar{grid-template-columns:minmax(92px,132px) minmax(0,1fr) 44px 38px}
   .sv-tbl:not(.narrow) table.st{min-width:620px}
 }
-/* 狭い画面のチュートリアル：表の見出しも折り返し、余白を詰める */
-@media (max-width: 560px){
+/* 狭いパネルのチュートリアル（パネルの幅で決める）：表の見出しも折り返し、余白を詰める */
+@container guide (max-width: 560px){
   .tut-tbl tbody th{white-space:normal}
   .tut-tbl th, .tut-tbl td{padding-right:10px}
   .tut-morph th{padding-right:8px}
   .tut-morph td{padding:6px 7px}
   .tut-ex{column-gap:10px}
 }
+
+/* ---- 操作案内（初めて開いたときに出す。#tour。startTour()） ----
+   画面全体を暗くし（.tour-dim。説明する部分だけを clip-path で切り抜く）、その部分を金の枠（.tour-hole）で囲む。説明は .tour-pop。
+   （大きな box-shadow で暗くするやり方は、携帯の高解像度の画面で描かれないことがあったので使わない）
+   重なり順: チュートリアルのパネル（49）・投稿のドロワー（65）より上、Cookie の同意バナー（100）より下 */
+.tour{position:fixed; inset:0; z-index:92}
+.tour-dim{position:fixed; inset:0; background:rgba(5,4,14,.66); transition:clip-path .22s ease}
+html[data-mode="light"] .tour-dim{background:rgba(30,24,12,.5)}
+.tour-hole{position:fixed; border-radius:10px; outline:2px solid var(--s-gold); outline-offset:2px; pointer-events:none;
+  transition:top .22s ease, left .22s ease, width .22s ease, height .22s ease}
+.tour-hole.none{outline:0}
+.tour-pop{position:fixed; width:min(380px, calc(100vw - 24px)); box-sizing:border-box; padding:14px 16px 12px;
+  background:var(--s-bg); color:var(--s-ink); border:1px solid var(--s-edge); border-radius:12px;
+  box-shadow:0 18px 50px rgba(0,0,0,.45); font-size:.86rem; line-height:1.75}
+.tour-head{display:flex; align-items:center; gap:10px; min-height:28px}
+.tour-dots{display:flex; gap:5px}
+.tour-dots i{width:7px; height:7px; border-radius:50%; background:var(--s-rule)}
+.tour-dots i.on{background:var(--s-gold)}
+.tour-n{font-size:.72rem; color:var(--s-mut); font-variant-numeric:tabular-nums}
+.tour-x{margin-left:auto; appearance:none; border:0; background:transparent; cursor:pointer; color:var(--s-mut); font-size:1.35rem; line-height:1;
+  padding:2px 6px; border-radius:6px}
+.tour-x:hover{color:var(--s-ink)}
+.tour-pop h2{margin:6px 0 4px; font-size:1rem; font-weight:700; color:var(--s-acc)}
+.tour-pop p{margin:0 0 14px}
+.tour-acts{display:flex; flex-wrap:wrap; align-items:center; gap:8px}
+.tour-acts .sp{flex:1}
+.tour-acts .btn{padding:5px 16px}
+/* 〈次へ〉〈完了〉は金の地。ライトモードの .btn（白い地）より強く指定する */
+.tour .tour-acts .tour-next{background:var(--s-gold); border-color:var(--s-gold); color:#17132e; font-weight:600}
+.tour .tour-acts .tour-next:hover{color:#17132e; filter:brightness(1.08)}
+html[data-mode="light"] .tour .tour-acts .tour-next, html[data-mode="light"] .tour .tour-acts .tour-next:hover{color:#fff}
+.tour button:focus-visible{outline:2px solid var(--s-link); outline-offset:2px}
+@media (prefers-reduced-motion: reduce){ .tour-hole, .tour-dim{transition:none} }
 </style>
 </head>
 <body>
@@ -420,10 +512,15 @@ table.kw td.rc{color:var(--s-mut); white-space:nowrap; overflow:hidden; max-widt
     <div class="eyebrow">Corpus search &amp; statistics</div>
     <h1><span class="l-ja">コーパス検索・統計</span><span class="l-en">Corpus search and statistics</span><span class="l-fr">Recherche et statistiques du corpus</span></h1>
 
-    <div class="views" role="tablist" aria-label="表示の切替 / View">
-      <button type="button" role="tab" id="tabSearch" data-view="search" aria-controls="viewSearch" aria-selected="true"><span class="l-ja">検索</span><span class="l-en">Search</span><span class="l-fr">Recherche</span></button>
-      <button type="button" role="tab" id="tabStats" data-view="stats" aria-controls="viewStats" aria-selected="false" tabindex="-1"><span class="l-ja">統計</span><span class="l-en">Statistics</span><span class="l-fr">Statistiques</span></button>
-      <button type="button" role="tab" id="tabGuide" data-view="tutorial" aria-controls="viewGuide" aria-selected="false" tabindex="-1"><span class="l-ja">チュートリアル</span><span class="l-en">Tutorial</span><span class="l-fr">Tutoriel</span></button>
+    <div class="viewbar">
+      <div class="views" role="tablist" aria-label="表示の切替 / View">
+        <button type="button" role="tab" id="tabSearch" data-view="search" aria-controls="viewSearch" aria-selected="true"><span class="l-ja">検索</span><span class="l-en">Search</span><span class="l-fr">Recherche</span></button>
+        <button type="button" role="tab" id="tabStats" data-view="stats" aria-controls="viewStats" aria-selected="false" tabindex="-1"><span class="l-ja">統計</span><span class="l-en">Statistics</span><span class="l-fr">Statistiques</span></button>
+      </div>
+      <!-- チュートリアルのパネル（右）を開く・閉じる。〈統計〉から押したときは〈検索〉に切り替えて開く -->
+      <button type="button" class="gd-btn" id="guideBtn" aria-controls="guidePanel" aria-expanded="false">
+        <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3.5C6.7 2.6 4.8 2.2 2.5 2.3v9.8c2.3-.1 4.2.3 5.5 1.2m0-9.8c1.3-.9 3.2-1.3 5.5-1.2v9.8c-2.3-.1-4.2.3-5.5 1.2m0-9.8v9.8" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+        <span class="l-ja">チュートリアル</span><span class="l-en">Tutorial</span><span class="l-fr">Tutoriel</span></button>
     </div>
 
     <div class="notice" id="loadwarn" hidden></div>
@@ -498,7 +595,7 @@ table.kw td.rc{color:var(--s-mut); white-space:nowrap; overflow:hidden; max-widt
 
     <section id="statSec" aria-live="polite"></section>
 
-    <h2 class="sec" id="listHead"></h2>
+    <h2 class="sec" id="listHead" tabindex="-1"></h2>
     <div class="tblwrap"><table class="lx" id="lx"><thead></thead><tbody></tbody></table></div>
     <p class="vh" id="sequenceStatus" role="status"></p>
     <div id="sequenceResults" hidden></div>
@@ -518,19 +615,36 @@ table.kw td.rc{color:var(--s-mut); white-space:nowrap; overflow:hidden; max-widt
     <div id="sections"></div>
     </div>
 
-    <!-- ═══════ チュートリアル ═══════
-         説明文は静的な三言語の HTML。例の〈試す〉（.tut-try）は、それを囲む .tut-ex / .tut-run の最初の <code> を式として〈検索〉で実行する。
-         data-kind = word | pos | aql（省略時 aql）。単語検索の例は data-m（一致: part|pre|ex）・data-f（対象: f語形 lレンマ g語義）、
-         data-raw は全文テキスト（作業用）の文書のキー（試すときに読み込んで選択に加える）。
-         目次（#tutToc）と〈試す〉の文字は guideStatic() が、品詞タグの一覧（#tutTags）は読み込んだ本文から renderGuide() が作る。
-         例を足すときは、実際の本文で検索して1件以上一致することを確かめてください。 -->
-    <div id="viewGuide" class="tut" role="tabpanel" aria-labelledby="tabGuide" hidden>
-    <p class="lede">
-      <span class="l-ja">検索のしかたを、実際に検索しながら順に説明します。〈試す〉を押すと〈検索〉タブに切り替わり、その式で検索します。〈チュートリアル〉タブに戻ると、読んでいた位置から続けられます。例は、既定の対象（注釈つきの全文書、品詞はすべて）を前提にしています。</span>
-      <span class="l-en">This tutorial explains corpus search step by step, with examples you can run. “Try” switches to the Search tab and runs the example; the Tutorial tab brings you back to where you were reading. The examples assume the default scope (all annotated texts, all parts of speech).</span>
-      <span class="l-fr">Ce tutoriel présente la recherche pas à pas, avec des exemples à lancer. « Essayer » ouvre l’onglet Recherche et lance l’exemple ; l’onglet Tutoriel vous ramène là où vous lisiez. Les exemples supposent la sélection par défaut (tous les textes annotés, toutes les parties du discours).</span>
+    <p class="foot">
+      <span class="l-ja">本文: <code>data/*_tei.xml</code>（各 <code>&lt;w&gt;</code> の <code>@lemma</code>・<code>@type</code>）／ 語義: <code>data/lexicon.xml</code>（レンマ＋品詞で参照、<code>@ana</code> による語義の固定を優先）／ 文書: <code>data/catalog.xml</code> ／ 全文テキスト: <code>source/nhc_fulltext_split/tei/*.xml</code>（39 文書は <code>@lemma</code>・<code>@type</code> を自動で付けた暫定版、ほかはなし。選んだ文書だけ読み込み）。上線などの合成記号は無視して照合します。ギリシア語借用語の印（grc）は <code>xml:lang="grc"</code> を持つ語のみ。活用型は辞書の <code>&lt;iType&gt;</code> または本文の <code>@msd</code> が付与されると表示されます。</span>
+      <span class="l-en">Text: <code>data/*_tei.xml</code> (<code>@lemma</code> and <code>@type</code> of each <code>&lt;w&gt;</code>) · meanings: <code>data/lexicon.xml</code> (looked up by lemma + POS; senses pinned with <code>@ana</code> take priority) · texts: <code>data/catalog.xml</code> · full text: <code>source/nhc_fulltext_split/tei/*.xml</code> (an automatic draft of <code>@lemma</code> and <code>@type</code> in 39 texts, none in the others; loaded only when selected). Combining marks such as supralinear strokes are ignored in matching. The “grc” mark appears only on words bearing <code>xml:lang="grc"</code>. Inflection class is shown once <code>&lt;iType&gt;</code> (lexicon) or <code>@msd</code> (text) is supplied.</span>
+      <span class="l-fr">Texte : <code>data/*_tei.xml</code> (<code>@lemma</code> et <code>@type</code> de chaque <code>&lt;w&gt;</code>) · sens : <code>data/lexicon.xml</code> (lemme + partie du discours ; les sens fixés par <code>@ana</code> sont prioritaires) · textes : <code>data/catalog.xml</code> · texte intégral : <code>source/nhc_fulltext_split/tei/*.xml</code> (<code>@lemma</code> et <code>@type</code> provisoires et automatiques dans 39 textes, absents des autres ; chargés seulement s’ils sont sélectionnés). Les signes diacritiques (traits suscrits, etc.) sont ignorés. La marque « grc » ne concerne que les mots portant <code>xml:lang="grc"</code>. La classe flexionnelle s’affiche dès que <code>&lt;iType&gt;</code> (lexique) ou <code>@msd</code> (texte) est renseigné.</span>
     </p>
-    <nav class="sv-toc" id="tutToc" aria-label="目次 / Contents"></nav>
+  </main>
+
+  <!-- ═══════ チュートリアルのパネル（右。〈チュートリアル〉ボタン・「使い方」・検索式の早見表のリンクで開き、× か Esc で閉じる） ═══════
+       説明文は静的な三言語の HTML。例の〈試す〉（.tut-try）は、それを囲む .tut-ex / .tut-run の最初の <code> を式として〈検索〉で実行する
+       （広い画面ではパネルを開いたまま、狭い画面ではパネルを閉じて結果を見せる）。
+       data-kind = word | pos | aql（省略時 aql）。単語検索の例は data-m（一致: part|pre|ex）・data-f（対象: f語形 lレンマ g語義）、
+       data-raw は全文テキスト（作業用）の文書のキー（試すときに読み込んで選択に加える）。
+       目次（#tutToc）と〈試す〉の文字は guideStatic() が、品詞タグの一覧（#tutTags）は読み込んだ本文から renderGuide() が作る。
+       例を足すときは、実際の本文で検索して1件以上一致することを確かめてください。 -->
+  <div class="gd-panel" id="guidePanel" role="complementary" aria-labelledby="guideTitle">
+    <div class="gd-grip" id="guideGrip" role="separator" aria-orientation="vertical" aria-controls="guidePanel" tabindex="0"
+      aria-label="チュートリアルのパネルの幅 / Width of the tutorial panel"
+      title="ドラッグで幅を変更（← → キーでも可。ダブルクリックか Enter で元の幅） / Drag to resize (or ← →); double-click or Enter to reset"></div>
+    <div class="gd-top">
+      <h2 class="gd-title" id="guideTitle"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3.5C6.7 2.6 4.8 2.2 2.5 2.3v9.8c2.3-.1 4.2.3 5.5 1.2m0-9.8c1.3-.9 3.2-1.3 5.5-1.2v9.8c-2.3-.1-4.2.3-5.5 1.2m0-9.8v9.8" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg><span class="l-ja">チュートリアル</span><span class="l-en">Tutorial</span><span class="l-fr">Tutoriel</span></h2>
+      <button class="gd-x" id="guideClose" type="button" aria-label="閉じる / Close" title="閉じる / Close">×</button>
+    </div>
+    <div class="gd-body tut" id="viewGuide" tabindex="-1">
+    <p class="lede">
+      <span class="l-ja">検索のしかたを、例を試しながら順に説明します。〈試す〉を押すと、その式で検索します。広い画面ではこのパネルを開いたまま横で結果を見られ、狭い画面ではパネルを閉じて結果を表示します（〈チュートリアル〉でまた開くと、読んでいた位置に戻ります）。例は、既定の対象（注釈つきの全文書、品詞はすべて）を前提にしています。</span>
+      <span class="l-en">This tutorial explains corpus search step by step, with examples you can run. “Try” runs the example: on a wide screen the results appear beside this panel; on a narrow one the panel closes to show them (the Tutorial button brings you back to where you were reading). The examples assume the default scope (all annotated texts, all parts of speech).</span>
+      <span class="l-fr">Ce tutoriel présente la recherche pas à pas, avec des exemples à lancer. « Essayer » lance l’exemple : sur un écran large, les résultats s’affichent à côté de ce panneau ; sur un écran étroit, le panneau se ferme pour les montrer (le bouton Tutoriel vous ramène là où vous lisiez). Les exemples supposent la sélection par défaut (tous les textes annotés, toutes les parties du discours).</span>
+    </p>
+    <p class="gd-replay"><button type="button" class="lnk" id="tourAgain"><span class="l-ja">画面の操作案内をもう一度見る ›</span><span class="l-en">Replay the quick guide to this page ›</span><span class="l-fr">Revoir le guide rapide de la page ›</span></button></p>
+    <nav class="gd-toc" id="tutToc" aria-label="目次 / Contents"></nav>
 
     <section class="tut-sec" id="tut-start">
       <h2 class="sec"><span class="tut-n">1</span><span class="l-ja">検索の流れ</span><span class="l-en">How searching works</span><span class="l-fr">Principe de la recherche</span></h2>
@@ -834,13 +948,21 @@ table.kw td.rc{color:var(--s-mut); white-space:nowrap; overflow:hidden; max-widt
       <p><span class="l-ja">「候補が多すぎる」「3秒を超えた」と出たときは、条件を増やす・距離を狭める・正規表現を簡単にする・文書を絞り込む、のいずれかを試してください。</span><span class="l-en">If the search reports too many candidates or a 3-second timeout, add conditions, narrow the distances, simplify the regular expression or select fewer texts.</span><span class="l-fr">Si la recherche signale trop de combinaisons ou dépasse 3 secondes, ajoutez des conditions, réduisez les distances, simplifiez l’expression régulière ou sélectionnez moins de textes.</span></p>
     </section>
     </div>
+  </div>
+</div>
 
-    <p class="foot">
-      <span class="l-ja">本文: <code>data/*_tei.xml</code>（各 <code>&lt;w&gt;</code> の <code>@lemma</code>・<code>@type</code>）／ 語義: <code>data/lexicon.xml</code>（レンマ＋品詞で参照、<code>@ana</code> による語義の固定を優先）／ 文書: <code>data/catalog.xml</code> ／ 全文テキスト: <code>source/nhc_fulltext_split/tei/*.xml</code>（39 文書は <code>@lemma</code>・<code>@type</code> を自動で付けた暫定版、ほかはなし。選んだ文書だけ読み込み）。上線などの合成記号は無視して照合します。ギリシア語借用語の印（grc）は <code>xml:lang="grc"</code> を持つ語のみ。活用型は辞書の <code>&lt;iType&gt;</code> または本文の <code>@msd</code> が付与されると表示されます。</span>
-      <span class="l-en">Text: <code>data/*_tei.xml</code> (<code>@lemma</code> and <code>@type</code> of each <code>&lt;w&gt;</code>) · meanings: <code>data/lexicon.xml</code> (looked up by lemma + POS; senses pinned with <code>@ana</code> take priority) · texts: <code>data/catalog.xml</code> · full text: <code>source/nhc_fulltext_split/tei/*.xml</code> (an automatic draft of <code>@lemma</code> and <code>@type</code> in 39 texts, none in the others; loaded only when selected). Combining marks such as supralinear strokes are ignored in matching. The “grc” mark appears only on words bearing <code>xml:lang="grc"</code>. Inflection class is shown once <code>&lt;iType&gt;</code> (lexicon) or <code>@msd</code> (text) is supplied.</span>
-      <span class="l-fr">Texte : <code>data/*_tei.xml</code> (<code>@lemma</code> et <code>@type</code> de chaque <code>&lt;w&gt;</code>) · sens : <code>data/lexicon.xml</code> (lemme + partie du discours ; les sens fixés par <code>@ana</code> sont prioritaires) · textes : <code>data/catalog.xml</code> · texte intégral : <code>source/nhc_fulltext_split/tei/*.xml</code> (<code>@lemma</code> et <code>@type</code> provisoires et automatiques dans 39 textes, absents des autres ; chargés seulement s’ils sont sélectionnés). Les signes diacritiques (traits suscrits, etc.) sont ignorés. La marque « grc » ne concerne que les mots portant <code>xml:lang="grc"</code>. La classe flexionnelle s’affiche dès que <code>&lt;iType&gt;</code> (lexique) ou <code>@msd</code> (texte) est renseigné.</span>
-    </p>
-  </main>
+<!-- 操作案内（初めて開いたときと、チュートリアルの〈操作案内をもう一度見る〉から。文面と位置は startTour() / tourShow() が書く） -->
+<div class="tour" id="tour" hidden>
+  <div class="tour-dim" id="tourDim"></div>
+  <div class="tour-hole" id="tourHole"></div>
+  <div class="tour-pop" id="tourPop" role="dialog" aria-modal="true" aria-labelledby="tourTitle" aria-describedby="tourText">
+    <div class="tour-head"><span class="tour-dots" id="tourDots" aria-hidden="true"></span><span class="tour-n" id="tourN"></span>
+      <button type="button" class="tour-x" id="tourX">×</button></div>
+    <h2 id="tourTitle"></h2>
+    <p id="tourText" aria-live="polite"></p>
+    <div class="tour-acts"><button type="button" class="lnk" id="tourSkip"></button><span class="sp"></span>
+      <button type="button" class="btn" id="tourBack"></button><button type="button" class="btn" id="tourOpen" hidden></button><button type="button" class="btn tour-next" id="tourNext"></button></div>
+  </div>
 </div>
 
 <script>
@@ -870,10 +992,16 @@ const I18N = {
   phAql:    {ja:'例: pos="ART" . pos="N" / lemma=/.*ⲛⲟⲩⲧ.*/', en:'e.g. pos="ART" . pos="N" / lemma=/.*ⲛⲟⲩⲧ.*/', fr:'ex. pos="ART" . pos="N" / lemma=/.*ⲛⲟⲩⲧ.*/'},
   hintWord: {ja:"品詞の順序や正規表現を使う場合は、検索方式を「品詞列」または「詳細式」に切り替えてください。", en:"For ordered POS tags or regex, choose POS sequence or Query.", fr:"Pour les suites de PdD ou les expressions régulières, choisissez Suite de PdD ou Requête."},
   hintPos:  {ja:"形態素の品詞タグを空白で区切ります。例: ART N は冠詞の直後に名詞が続く用例。", en:"Separate morpheme POS tags with spaces. ART N finds an article immediately followed by a noun.", fr:"Séparez les étiquettes par des espaces. ART N trouve un article immédiatement suivi d’un nom."},
-  hintAql:  {ja:'例: pos="ART" .1,3 pos="N"（冠詞の1〜3形態素後に名詞）。書き方は下の「検索式の書き方・例」と〈チュートリアル〉にあります。', en:'e.g. pos="ART" .1,3 pos="N" (a noun 1–3 morphemes after an article). See the syntax help below and the Tutorial tab.', fr:'Ex. pos="ART" .1,3 pos="N" (un nom 1 à 3 morphèmes après un article). Voir l’aide ci-dessous et l’onglet Tutoriel.'},
+  hintAql:  {ja:'例: pos="ART" .1,3 pos="N"（冠詞の1〜3形態素後に名詞）。書き方は下の「検索式の書き方・例」と〈チュートリアル〉にあります。', en:'e.g. pos="ART" .1,3 pos="N" (a noun 1–3 morphemes after an article). See the syntax help below and the Tutorial.', fr:'Ex. pos="ART" .1,3 pos="N" (un nom 1 à 3 morphèmes après un article). Voir l’aide ci-dessous et le Tutoriel.'},
   seqPrompt:{ja:"品詞列または詳細式を入力してください。下の例をクリックして検索することもできます。", en:"Enter a POS sequence or query, or click an example in the syntax help.", fr:"Saisissez une suite ou une requête, ou cliquez sur un exemple dans l’aide."},
-  /* チュートリアル（〈チュートリアル〉タブと、検索結果からの案内） */
+  /* チュートリアル（右のパネルと、検索結果からの案内）と操作案内のボタン */
   tryIt:    {ja:"試す", en:"Try", fr:"Essayer"},
+  tourNext: {ja:"次へ", en:"Next", fr:"Suivant"},
+  tourBack: {ja:"戻る", en:"Back", fr:"Retour"},
+  tourSkip: {ja:"スキップ", en:"Skip", fr:"Passer"},
+  tourDone: {ja:"完了", en:"Done", fr:"Terminer"},
+  tourOpen: {ja:"チュートリアルを開く", en:"Open the tutorial", fr:"Ouvrir le tutoriel"},
+  tourClose:{ja:"操作案内を閉じる", en:"Close the guide", fr:"Fermer le guide"},
   tryAria:  {ja:q=>"試す: "+q, en:q=>"Try: "+q, fr:q=>"Essayer : "+q},
   helpLink: {ja:"うまくいかないとき", en:"Troubleshooting", fr:"En cas de problème"},
   tutTagsNote:{ja:"注釈つきの本文に現れるタグと語数です。このほかに、まれなタグもあります。選んだ文書でのタグと語数は、左の〈品詞〉一覧で確かめられます。",
@@ -1057,8 +1185,9 @@ const ckey = s => [...norm(s)].map(c => RANK.has(c) ? String.fromCharCode(0x4e00
 
 /* ---------- 状態 ---------- */
 const ST = {
-  view: "search",      // "search"（検索）| "stats"（統計）| "tutorial"（チュートリアル）
-  tutScroll: null,     // チュートリアルを離れたときの縦位置（タブで戻ったときに、読んでいた位置へ戻す）
+  view: "search",      // "search"（検索）| "stats"（統計）
+  guide: false,        // チュートリアルのパネル（右）を開いているか。出すのは〈検索〉の間だけ（applyGuide）
+  guideScroll: null,   // パネルを閉じたときのパネル内の縦位置（また開いたときに、読んでいた位置へ戻す）
   docs: [],            // {key, ja, en, fr, cop, siglum, reader, xml, planned, wits:[],
                        //  lazy（未注釈の本文：選んだときだけ読み込む）, state（""|"idle"|"loading"|"loaded"|"error"）, ntok0（カタログ上の語数）, codex}
   wits: [],            // {i, id, label, short, doc, segs:[{id, n, tokens:[tokIdx], breaks:[欠損の位置]}], groups:[[tokIdx] | GAP], ntok, nseg, pages, lines, gaps:Map(reason → 件数)}
@@ -1277,6 +1406,7 @@ async function load(){
     ST.ready = true;
     render();
     gotoHash();
+    if(ST.view === "search" && !ST.guide && !tourSeen()) startTour();   // 初めて開いたときは操作案内を出す
   }catch(e){
     const w = $("#loadwarn"); w.hidden = false;
     w.innerHTML = '<div class="fail"><img src="image/web/gengen_cry.svg" alt="" width="92" height="92"><div>' + esc(t("loadErr")) + "<br><small>" + esc(e.message) + "</small></div></div>";
@@ -1284,14 +1414,19 @@ async function load(){
     $("#sections").innerHTML = "";
   }
 }
-/* 〈統計〉のセクション・〈チュートリアル〉の節への直リンク（…?view=stats#sec-loan、…?view=tutorial#tut-regex など）は、
-   描画が終わってから該当箇所へ移動する */
-const HASH_OF = {stats: /^#sec-/, tutorial: /^#tut-/};
-const viewHash = () => HASH_OF[ST.view] && HASH_OF[ST.view].test(location.hash) ? location.hash : "";
+/* 〈統計〉のセクション・チュートリアルの節への直リンク（…?view=stats#sec-loan、…?view=tutorial#tut-regex など）は、
+   描画が終わってから該当箇所へ移動する（チュートリアルの節は、パネルの中をスクロールする） */
+const guideShown = () => ST.guide && ST.view === "search";
+const viewHash = () => {
+  const re = ST.view === "stats" ? /^#sec-/ : guideShown() ? /^#tut-/ : null;
+  return re && re.test(location.hash) ? location.hash : "";
+};
 function gotoHash(){
   const h = viewHash(); if(!h) return;
-  const el = document.getElementById(h.slice(1));
-  if(el) el.scrollIntoView();
+  const el = document.getElementById(h.slice(1)); if(!el) return;
+  if(ST.view === "stats"){ el.scrollIntoView(); return; }
+  guideScrollTo(el);
+  scrollTo(0, 0);       // ブラウザーが #tut-… へ移るときにページ全体も送ってしまうので戻す（呼ぶのは開いたときと読み込み後だけ）
 }
 
 /* ---------- URL ---------- */
@@ -1318,7 +1453,8 @@ function selParam(){
 }
 function writeURL(){
   const p = new URLSearchParams();
-  if(ST.view !== "search") p.set("view", ST.view);
+  if(ST.view === "stats") p.set("view", "stats");
+  else if(ST.guide) p.set("view", "tutorial");          // チュートリアルのパネルを開いた〈検索〉
   const q = $("#q").value.trim(); if(q) p.set("q", q);
   if($("#queryKind").value !== "word") p.set("kind", $("#queryKind").value);
   if($("#mode").value !== "part") p.set("m", $("#mode").value);
@@ -2048,45 +2184,100 @@ function renderStatsView(){
   }).join("");
 }
 
-/* ---------- 表示切替（検索 / 統計 / チュートリアル） ---------- */
-const VIEWS = ["search", "stats", "tutorial"];
-const VIEW_TAB = {search:"#tabSearch", stats:"#tabStats", tutorial:"#tabGuide"};
-const VIEW_PANEL = {search:"#viewSearch", stats:"#viewStats", tutorial:"#viewGuide"};
+/* ---------- 表示切替（検索 / 統計） ---------- */
+const VIEWS = ["search", "stats"];
+const VIEW_TAB = {search:"#tabSearch", stats:"#tabStats"};
+const VIEW_PANEL = {search:"#viewSearch", stats:"#viewStats"};
 function applyView(){
   VIEWS.forEach(v => {
     const on = ST.view === v, tab = $(VIEW_TAB[v]);
     $(VIEW_PANEL[v]).hidden = !on;
     tab.setAttribute("aria-selected", String(on)); tab.tabIndex = on ? 0 : -1;
   });
+  applyGuide();                                            // チュートリアルのパネルは〈検索〉の間だけ
 }
 /* 上部ナビ（固定）の下に、要素 el の上端が来る縦位置 */
 const underBar = el => Math.max(0, el.getBoundingClientRect().top + scrollY - ($("#sitebar").offsetHeight || 0) - 12);
 function setView(v){
   v = VIEWS.includes(v) ? v : "search";
   if(v !== ST.view){
-    if(ST.view === "tutorial") ST.tutScroll = scrollY;     // チュートリアルで読んでいた位置を覚えておく
-    // タブより下にいたら、表示を替える前にタブの位置まで戻す。長い表示（チュートリアル・統計）から短い表示に替えると、
+    // タブより下にいたら、表示を替える前にタブの位置まで戻す。長い表示（統計）から短い表示に替えると、
     // ブラウザーは縮んだ分だけ位置を詰め、あとで結果が出て伸びたときに元の深い位置へ戻してしまうため
-    const top = underBar($(".views"));
+    const top = underBar($(".viewbar"));
     if(scrollY > top) scrollTo(0, top);
   }
   ST.view = v;
   applyView();
   render();
 }
-/* タブで切り替えたとき：チュートリアルは前に読んでいた位置へ戻す */
-function selectTab(v){
-  if(v === ST.view) return;
-  setView(v);
-  if(v === "tutorial" && ST.tutScroll != null) scrollTo(0, ST.tutScroll);
+function selectTab(v){ if(v !== ST.view) setView(v); }
+
+/* ---------- チュートリアルのパネル（右） ----------
+   〈チュートリアル〉ボタン（#guideBtn）・「使い方」・検索式の早見表・結果の「うまくいかないとき」（a[data-tut]）で開き、
+   × か Esc で閉じる。開いている間の URL は ?view=tutorial（節は #tut-…）。広い画面（1100px 以上）では本文の右の列、
+   それより狭い画面では右から重なるドロワー（境界は CSS の @media と同じ）。 */
+const guideWide = () => !!(window.matchMedia && matchMedia("(min-width:1100px)").matches);
+let guideOpener = null;                                    // 狭い画面で閉じたときに、フォーカスを戻す先
+function applyGuide(){
+  const on = guideShown();
+  if(on) H.setAttribute("data-guide", "open"); else H.removeAttribute("data-guide");
+  $("#guideBtn").setAttribute("aria-expanded", String(on));
+  if(on) renderGuide();
+  updateGrip();
 }
-/* チュートリアルの節 id を開く（「使い方」・検索式の早見表・結果の「うまくいかないとき」のリンクから） */
-function openTutorial(id){
-  setView("tutorial");
-  history.replaceState(null, "", location.pathname + location.search + "#" + id);
-  const el = document.getElementById(id);
-  if(el) el.scrollIntoView();
+/* パネルの中で、要素 el が上端に来るようにスクロールする */
+function guideScrollTo(el){
+  const body = $("#viewGuide");
+  body.scrollTop += el.getBoundingClientRect().top - body.getBoundingClientRect().top - 8;
 }
+/* 開く。id: 見せる節（なければ前に読んでいた位置） */
+function openGuide(id){
+  const was = guideShown();
+  if(!was) guideOpener = document.activeElement;
+  ST.guide = true;
+  if(ST.view !== "search") setView("search");
+  else{ applyGuide(); if(ST.ready) writeURL(); }           // 読み込み前に URL を書き直すと、まだ読んでいない w= などを消してしまう
+  const body = $("#viewGuide"), el = id ? document.getElementById(id) : null;
+  if(el){ history.replaceState(null, "", location.pathname + location.search + "#" + id); guideScrollTo(el); }
+  else if(!was && ST.guideScroll != null) body.scrollTop = ST.guideScroll;
+  if(!guideWide()) $("#guideClose").focus({preventScroll:true});
+}
+/* 閉じる。focus=false なら、狭い画面でもフォーカスを開いた元へ戻さない（〈試す〉のとき） */
+function closeGuide(focus = true){
+  if(!guideShown()) return;
+  ST.guideScroll = $("#viewGuide").scrollTop;
+  ST.guide = false;
+  applyGuide(); if(ST.ready) writeURL();
+  const back = guideOpener; guideOpener = null;
+  if(focus && !guideWide() && back && back.isConnected && back.getClientRects().length) back.focus({preventScroll:true});
+}
+/* -- パネルの幅（広い画面だけ。eugnostos.html の並行箇所のパネルと同じ操作）--
+   左端の取っ手（#guideGrip）をドラッグするか、取っ手にフォーカスして ← →（Shift で大きく）、Home / End で最小・最大。
+   ダブルクリックか Enter で既定の幅に戻す。幅は html の --guide-w に入れ、このブラウザーに覚えておく（nhc-guide-w）。
+   上限・下限は CSS の clamp() でも切るので、窓を狭めても本文の列は 480px より狭くならない。 */
+const GUIDE_W_KEY = "nhc-guide-w", GUIDE_W_MIN = 300, GUIDE_MAIN_MIN = 480, GUIDE_LEFT = 250;
+const guideMaxW = () => Math.max(GUIDE_W_MIN, innerWidth - GUIDE_LEFT - GUIDE_MAIN_MIN);
+const guideCurW = () => guideShown() ? Math.round($("#guidePanel").getBoundingClientRect().width) : 0;
+function updateGrip(){
+  const g = $("#guideGrip"), w = guideCurW();
+  g.setAttribute("aria-valuemin", String(GUIDE_W_MIN)); g.setAttribute("aria-valuemax", String(guideMaxW()));
+  if(w){ g.setAttribute("aria-valuenow", String(w)); g.setAttribute("aria-valuetext", L3("幅 ", "width ", "largeur ") + w + "px"); }
+}
+/* w: 幅（px）。null なら既定の幅に戻す。save: このブラウザーに覚えるか（ドラッグ中は覚えない） */
+function setGuideW(w, save){
+  if(w == null){
+    H.style.removeProperty("--guide-w");
+    if(save){ try{ localStorage.removeItem(GUIDE_W_KEY); }catch(e){} }
+  } else {
+    w = Math.round(Math.min(guideMaxW(), Math.max(GUIDE_W_MIN, w)));
+    H.style.setProperty("--guide-w", w + "px");
+    if(save){ try{ localStorage.setItem(GUIDE_W_KEY, String(w)); }catch(e){} }
+  }
+  updateGrip();
+}
+{ let saved = 0; try{ saved = +localStorage.getItem(GUIDE_W_KEY) || 0; }catch(e){}
+  if(saved > 0) H.style.setProperty("--guide-w", Math.max(GUIDE_W_MIN, saved) + "px"); }
+
 /* チュートリアルの例を〈検索〉で実行する。d は例の data-*（kind・m・f・raw）、query は式 */
 function tryExample(d, query){
   const kind = ["word", "pos", "aql"].includes(d.kind) ? d.kind : "aql";
@@ -2100,12 +2291,15 @@ function tryExample(d, query){
   ST.limit = 200;
   const raw = d.raw ? rawDoc(d.raw) : null;               // 全文テキストの文書の例：読み込んで選択に加える（読み込み後に検索し直す）
   if(raw && !lazySelected(raw)){ $("#rawBox").open = true; useLazy([raw], lazyOn); }
+  const narrow = !guideWide() && guideShown();
+  if(narrow) closeGuide(false);                            // 狭い画面では、パネルを閉じて結果を見せる（また開くと読んでいた位置へ）
   setView("search");
-  scrollTo(0, underBar($(".query-kind")));                // 式と結果が見える位置へ
+  scrollTo(0, underBar($(".query-kind")));                // 式と結果が見える位置へ（広い画面ではパネルは開いたまま）
+  if(narrow) $("#listHead").focus({preventScroll:true});   // 押したボタンはパネルごと隠れたので、フォーカスは結果の見出しへ（入力欄だと携帯でキーボードが出る）
 }
 
-/* ---------- チュートリアル ----------
-   本文は HTML（#viewGuide）に静的に書いてある。ここでは表示言語に合わせて目次と〈試す〉の文字を作り（guideStatic）、
+/* ---------- チュートリアルの本文 ----------
+   本文は HTML（パネルの #viewGuide）に静的に書いてある。ここでは表示言語に合わせて目次と〈試す〉の文字を作り（guideStatic）、
    読み込んだ本文から品詞タグの一覧を作る（renderGuide）。 */
 const exampleOf = b => b.closest(".tut-ex, .tut-run");
 const codeText = (code, L) => (code.querySelector(".l-" + L) || code).textContent.trim();   // 言語ごとに例が違う式（<code> の中の .l-ja など）
@@ -2122,10 +2316,14 @@ function guideStatic(){
   });
   $("#tutTagsNote").textContent = t("tutTagsNote");
 }
+let TAG_COUNTS = null;     // 注釈つきの本文の品詞タグと語数。注釈つきの本文は最初に読み込んだきり変わらないので、1回だけ数える
 function renderGuide(){
-  const cnt = new Map();
-  ST.toks.forEach(tk => { if(!ST.wits[tk.w].doc.lazy) inc(cnt, tk.pos); });   // 注釈つきの本文だけを数える
-  $("#tutTags").innerHTML = [...cnt.entries()].filter(([p]) => POS[p]).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+  if(!ST.ready) return;
+  if(!TAG_COUNTS){
+    TAG_COUNTS = new Map();
+    ST.toks.forEach(tk => { if(!ST.wits[tk.w].doc.lazy) inc(TAG_COUNTS, tk.pos); });   // 全文テキスト（作業用）は数えない
+  }
+  $("#tutTags").innerHTML = [...TAG_COUNTS.entries()].filter(([p]) => POS[p]).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
     .map(([p, n]) => '<li><code>' + esc(p) + '</code><span>' + esc(posName(p)) + '</span><span class="ct">' + fmt(n) + '</span></li>').join("");
 }
 
@@ -2139,10 +2337,7 @@ function render(){
     if(QS.status === "pending") resetSequenceSearch();
     renderSide(); renderStatsView(); writeURL(); return;
   }
-  if(ST.view === "tutorial"){
-    if(QS.status === "pending") resetSequenceSearch();
-    renderSide(); renderGuide(); writeURL(); return;
-  }
+  if(guideShown()) renderGuide();                          // 表示言語が変わったときのため（品詞名）
   if($("#queryKind").value !== "word"){
     renderSide(); renderSequences(); writeURL(); return;
   }
@@ -2174,6 +2369,7 @@ function applyLang(){
   ["part","pre","ex"].forEach((v, i) => { sel.options[i].textContent = t(v); });
   guideStatic();
   render();
+  if(tourOpen()) tourShow();                               // 操作案内の文面も表示言語に合わせる
 }
 
 /* ---------- CSV ---------- */
@@ -2284,7 +2480,7 @@ document.addEventListener("click", e => {
   if(e.target.closest("#csvBtn")) csv();
 });
 
-/* 表示切替（検索 / 統計 / チュートリアル）：クリックと、左右の矢印キー・Home・End */
+/* 表示切替（検索 / 統計）：クリックと、左右の矢印キー・Home・End */
 $(".views").addEventListener("click", e => { const b = e.target.closest("button[data-view]"); if(b) selectTab(b.dataset.view); });
 $(".views").addEventListener("keydown", e => {
   const i = VIEWS.indexOf(ST.view), n = VIEWS.length;
@@ -2294,19 +2490,216 @@ $(".views").addEventListener("keydown", e => {
   selectTab(VIEWS[j]);
   $(VIEW_TAB[VIEWS[j]]).focus();
 });
-/* チュートリアルの〈試す〉：その例の式を〈検索〉で実行する */
+/* チュートリアルのパネル：ボタンで開閉、× で閉じる。Esc は、狭い画面（パネルが本文に重なるとき）か、パネルの中にいるときだけ閉じる */
+$("#guideBtn").addEventListener("click", () => { if(guideShown()) closeGuide(); else openGuide(); });
+$("#guideClose").addEventListener("click", () => closeGuide());
+document.addEventListener("keydown", e => {
+  if(e.key !== "Escape" || !guideShown() || !$("#tour").hidden) return;
+  if(!guideWide() || (document.activeElement && document.activeElement.closest("#guidePanel"))) closeGuide();
+});
+/* パネルの中：〈試す〉はその例の式を〈検索〉で実行する。目次と「→ 4」などの節へのリンクは、パネルの中だけをスクロールする */
 $("#viewGuide").addEventListener("click", e => {
+  const a = e.target.closest('a[href^="#tut-"]');
+  if(a){
+    const el = document.getElementById(a.getAttribute("href").slice(1)); if(!el) return;
+    e.preventDefault();
+    history.replaceState(null, "", location.pathname + location.search + a.getAttribute("href"));
+    guideScrollTo(el);
+    return;
+  }
   const b = e.target.closest(".tut-try"); if(!b) return;
   const ex = exampleOf(b), code = ex && ex.querySelector("code"); if(!code) return;
   tryExample(ex.dataset, codeText(code, UL()));
 });
-/* チュートリアルの節へのリンク（data-tut）：ページ内で開く。修飾キーつきのクリックは通常のリンクとして新しいタブなどで開ける */
+$("#tourAgain").addEventListener("click", () => startTour());
+/* チュートリアルの節へのリンク（data-tut）：パネルを開く。修飾キーつきのクリックは通常のリンクとして新しいタブなどで開ける */
 document.addEventListener("click", e => {
   const a = e.target.closest("a[data-tut]");
   if(!a || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
   e.preventDefault();
-  openTutorial(a.dataset.tut);
+  openGuide(a.dataset.tut);
 });
+/* パネルの幅の取っ手：ドラッグ・キー操作・ダブルクリック */
+(function wireGrip(){
+  const g = $("#guideGrip");
+  g.addEventListener("pointerdown", e => {
+    if(!guideWide() || e.button !== 0) return;
+    e.preventDefault(); g.focus({preventScroll:true});
+    try{ g.setPointerCapture(e.pointerId); }catch(err){}
+    const right = $("#guidePanel").getBoundingClientRect().right;
+    let x = e.clientX, raf = 0;
+    H.setAttribute("data-guide-drag", "");
+    const move = ev => { x = ev.clientX; if(!raf) raf = requestAnimationFrame(() => { raf = 0; setGuideW(right - x, false); }); };
+    const end = () => {
+      g.removeEventListener("pointermove", move); g.removeEventListener("pointerup", end); g.removeEventListener("pointercancel", end);
+      if(raf){ cancelAnimationFrame(raf); raf = 0; }
+      H.removeAttribute("data-guide-drag");
+      setGuideW(right - x, true);
+    };
+    g.addEventListener("pointermove", move); g.addEventListener("pointerup", end); g.addEventListener("pointercancel", end);
+  });
+  g.addEventListener("dblclick", () => setGuideW(null, true));
+  g.addEventListener("keydown", e => {
+    if(!guideWide()) return;
+    const step = e.shiftKey ? 80 : 20; let w = guideCurW();
+    if(e.key === "ArrowLeft") w += step;                   // 取っ手を左へ = パネルを広く
+    else if(e.key === "ArrowRight") w -= step;
+    else if(e.key === "Home") w = GUIDE_W_MIN;
+    else if(e.key === "End") w = guideMaxW();
+    else if(e.key === "Enter"){ e.preventDefault(); setGuideW(null, true); return; }
+    else return;
+    e.preventDefault(); setGuideW(w, true);
+  });
+  addEventListener("resize", updateGrip);
+})();
+
+/* ---------- 操作案内（初めて開いたとき。チュートリアルの〈操作案内をもう一度見る〉からも） ----------
+   画面の要所を順に枠で囲み、〈次へ〉で進む。最後まで進むか、スキップ・×・Esc で閉じると、このブラウザーでは次から自動では出さない
+   （localStorage "nhc-search-tour"）。文面は TOUR（三言語は L3）、枠と説明の位置は表示のたびに要素の位置から決める（tourPlace）。
+   手順を足すときは TOUR に1要素を足す（el は囲む要素を返す関数。なければ画面の中央に説明だけを出す）。 */
+const TOUR_KEY = "nhc-search-tour";
+const TOUR = [
+  {title:() => L3("コーパス検索の使い方", "How this page works", "Comment utiliser cette page"),
+   text:() => L3("この画面の使い方を、6つの手順で紹介します。〈次へ〉で進み、〈スキップ〉でいつでも閉じられます。",
+     "Six short steps show how this page works. Press Next to go on, or Skip to close the guide at any time.",
+     "Six courtes étapes présentent cette page. Appuyez sur Suivant pour continuer, ou sur Passer pour fermer le guide à tout moment.")},
+  {el:() => $(".query-kind"),
+   title:() => L3("検索方式を選ぶ", "Choose a search type", "Choisir le type de recherche"),
+   text:() => L3("〈単語〉はレンマ・語形・語義で、〈品詞列〉は品詞タグの並び（例: ART N）で、〈詳細式〉は語形・レンマ・品詞の条件とその並び方や正規表現で探します。",
+     "Word looks up lemmas, forms and meanings; POS sequence a run of tags (e.g. ART N); Query combines conditions on form, lemma and part of speech with their order and regular expressions.",
+     "Mot cherche lemmes, formes et sens ; Suite de PdD une suite d’étiquettes (ex. ART N) ; Requête combine des conditions sur la forme, le lemme et la partie du discours avec leur ordre et des expressions régulières.")},
+  {el:() => $("#qform"),
+   title:() => L3("語や式を入力する", "Type a word or a query", "Saisir un mot ou une requête"),
+   text:() => L3("入力すると自動で検索します。Enter キーを押すと、すぐに検索します。",
+     "The search runs as you type; press Enter to run it at once.",
+     "La recherche se lance pendant la saisie ; appuyez sur Entrée pour la lancer aussitôt.")},
+  {el:() => $(".side section"),
+   title:() => L3("文書と品詞を選ぶ", "Choose texts and parts of speech", "Choisir textes et parties du discours"),
+   text:() => L3("ここで検索する文書を選びます（〈のみ〉でその文書だけ）。その下の〈品詞〉で、結果に含める品詞も絞り込めます。",
+     "Choose the texts to search here (“only” keeps just one). The Part of speech list below narrows the results.",
+     "Choisissez ici les textes à interroger (« seul » n’en garde qu’un). La liste Partie du discours, plus bas, restreint les résultats.")},
+  {el:() => $("#listHead"),
+   title:() => L3("結果を見る", "Read the results", "Lire les résultats"),
+   text:() => L3("結果はこの下に出ます。〈単語〉ではレンマごとの表で、行をクリックすると語義と用例が開きます。〈品詞列〉〈詳細式〉では用例が並び、本文の該当箇所へ移れます。〈CSV で保存〉もできます。",
+     "Results appear below this heading. Word search gives a table by lemma: click a row for senses and occurrences. POS sequences and queries list occurrences that link to the passage. You can also download a CSV.",
+     "Les résultats s’affichent sous ce titre. La recherche par mot donne un tableau par lemme : cliquez sur une ligne pour les sens et les occurrences. Suites et requêtes listent des occurrences liées au passage. Export CSV possible.")},
+  {el:() => $("#tabStats"),
+   title:() => L3("統計を見る", "See the statistics", "Voir les statistiques"),
+   text:() => L3("〈統計〉タブでは、選んだ文書と品詞の範囲の語数や品詞の内訳などを見られます。",
+     "The Statistics tab gives counts and breakdowns for the texts and parts of speech you selected.",
+     "L’onglet Statistiques donne effectifs et répartitions pour les textes et parties du discours sélectionnés.")},
+  {el:() => $("#guideBtn"),
+   title:() => L3("チュートリアルで詳しく", "Learn more in the Tutorial", "En savoir plus avec le Tutoriel"),
+   text:() => L3("詳しい使い方と、すぐ試せる例は〈チュートリアル〉にあります。検索画面の横に開いて読みながら試せ、× で閉じます。この案内も、チュートリアルからもう一度見られます。",
+     "The Tutorial has the details and examples you can run. It opens beside the search, so you can read and try at the same time, and closes with ×. You can replay this guide from there.",
+     "Le Tutoriel donne le détail et des exemples à lancer. Il s’ouvre à côté de la recherche, pour lire et essayer en même temps, et se ferme avec ×. Ce guide peut y être relancé.")}
+];
+const TS = {i:0, back:null};                               // いまの手順と、閉じたときにフォーカスを戻す先
+const tourOpen = () => !$("#tour").hidden;
+function tourSeen(){ try{ return localStorage.getItem(TOUR_KEY) === "1"; }catch(e){ return false; } }
+function startTour(){
+  if(ST.view !== "search") setView("search");
+  if(guideShown() && !guideWide()) closeGuide(false);      // 狭い画面ではパネルが画面に重なるので閉じる
+  TS.back = document.activeElement; TS.i = 0;
+  $("#tour").hidden = false;
+  tourShow();
+}
+function endTour(){
+  if(!tourOpen()) return;
+  $("#tour").hidden = true;
+  try{ localStorage.setItem(TOUR_KEY, "1"); }catch(e){}
+  const b = TS.back; TS.back = null;
+  if(b && b !== document.body && b.isConnected && b.getClientRects().length) b.focus({preventScroll:true});
+}
+function tourGo(i){ TS.i = Math.max(0, Math.min(TOUR.length - 1, i)); tourShow(); }
+/* いまの手順を書き、囲む要素が見えていなければ画面の中ほどへスクロールしてから、枠と説明を置く */
+function tourShow(){
+  const s = TOUR[TS.i], n = TOUR.length, last = TS.i === n - 1;
+  $("#tourTitle").textContent = s.title();
+  $("#tourText").textContent = s.text();
+  $("#tourN").textContent = (TS.i + 1) + " / " + n;
+  $("#tourDots").innerHTML = TOUR.map((x, k) => k === TS.i ? '<i class="on"></i>' : "<i></i>").join("");
+  const set = (id, key, hide) => { const b = $(id); b.textContent = t(key); b.hidden = hide; };
+  set("#tourSkip", "tourSkip", last);
+  set("#tourBack", "tourBack", TS.i === 0);
+  set("#tourOpen", "tourOpen", !last);
+  set("#tourNext", last ? "tourDone" : "tourNext", false);
+  $("#tourX").setAttribute("aria-label", t("tourClose")); $("#tourX").title = t("tourClose");
+  const el = s.el && s.el();
+  if(el && el.getClientRects().length){
+    const r = el.getBoundingClientRect(), top = ($("#sitebar").offsetHeight || 0) + 8;
+    if(r.top < top || r.bottom > tourBottom() - 8) el.scrollIntoView({block:"center"});
+  }
+  tourPlace();
+  $("#tourNext").focus({preventScroll:true});
+}
+/* 画面下の Cookie の同意バナー（assets/analytics.js。本番だけ）が出ていれば、その上までを使う */
+function tourBottom(){
+  const b = document.querySelector(".nhc-consent");
+  return b && b.getClientRects().length ? Math.min(innerHeight, b.getBoundingClientRect().top) : innerHeight;
+}
+/* 要素の見えている範囲（スクロールする親の枠で切った範囲）。見えていなければ null */
+function visibleRect(el){
+  const r = el.getBoundingClientRect();
+  let x1 = r.left, y1 = r.top, x2 = r.right, y2 = r.bottom;
+  for(let p = el.parentElement; p && p !== document.body; p = p.parentElement){
+    const cs = getComputedStyle(p);
+    if(!/(auto|scroll|hidden)/.test(cs.overflowX + cs.overflowY)) continue;
+    const q = p.getBoundingClientRect();
+    x1 = Math.max(x1, q.left); y1 = Math.max(y1, q.top); x2 = Math.min(x2, q.right); y2 = Math.min(y2, q.bottom);
+  }
+  x1 = Math.max(x1, 0); y1 = Math.max(y1, 0); x2 = Math.min(x2, document.documentElement.clientWidth); y2 = Math.min(y2, tourBottom());
+  return x2 > x1 && y2 > y1 ? {left:x1, top:y1, right:x2, bottom:y2} : null;
+}
+/* 暗い層（#tourDim）を、(x, y, w, h) の四角だけ切り抜く。外周を時計回り、切り抜く四角を反時計回りにたどる多角形
+   （点の数がいつも同じなので、手順を移るときに切り抜きも動いて見える） */
+function tourCut(x, y, w, h){
+  const W = innerWidth, V = innerHeight, p = (a, b) => a + "px " + b + "px";
+  $("#tourDim").style.clipPath = "polygon(" + [p(0, 0), p(W, 0), p(W, V), p(0, V), p(0, y), p(x, y), p(x, y + h), p(x + w, y + h), p(x + w, y), p(x, y), p(0, y)].join(", ") + ")";
+}
+function tourPlace(){
+  if(!tourOpen()) return;
+  const s = TOUR[TS.i], el = s.el && s.el(), hole = $("#tourHole"), pop = $("#tourPop");
+  const M = 12, vw = document.documentElement.clientWidth, bottom = tourBottom();
+  const pw = pop.offsetWidth, ph = pop.offsetHeight;
+  const r = el && el.getClientRects().length ? visibleRect(el) : null;
+  if(!r){                                                   // 囲む要素がない手順：画面全体を暗くし、説明だけを中ほどに
+    hole.className = "tour-hole none";
+    Object.assign(hole.style, {left:vw / 2 + "px", top:bottom / 2 + "px", width:"0px", height:"0px"});
+    tourCut(vw / 2, bottom / 2, 0, 0);
+    pop.style.left = Math.max(M, (vw - pw) / 2) + "px";
+    pop.style.top = Math.max(M, (bottom - ph) / 2) + "px";
+    return;
+  }
+  const P = 6, x = Math.max(3, r.left - P), y = Math.max(3, r.top - P);
+  const w = Math.min(vw - 3, r.right + P) - x, h = Math.min(bottom - 3, r.bottom + P) - y;
+  hole.className = "tour-hole";
+  Object.assign(hole.style, {left:x + "px", top:y + "px", width:w + "px", height:h + "px"});
+  tourCut(x, y, w, h);
+  let top = y + h + 10;                                     // 枠の下に置く。入らなければ上、どちらにも入らなければ画面の下端に寄せる
+  if(top + ph > bottom - M){ const above = y - 10 - ph; top = above >= M ? above : Math.max(M, bottom - M - ph); }
+  pop.style.left = Math.min(Math.max(M, x), vw - M - pw) + "px";
+  pop.style.top = top + "px";
+}
+$("#tourNext").addEventListener("click", () => { if(TS.i === TOUR.length - 1) endTour(); else tourGo(TS.i + 1); });
+$("#tourBack").addEventListener("click", () => tourGo(TS.i - 1));
+$("#tourSkip").addEventListener("click", endTour);
+$("#tourX").addEventListener("click", endTour);
+$("#tourOpen").addEventListener("click", () => { endTour(); openGuide(); });
+/* 操作案内の間：Esc で閉じ、Tab は案内の中のボタンだけを回る（後ろの画面は操作できない） */
+document.addEventListener("keydown", e => {
+  if(!tourOpen()) return;
+  if(e.key === "Escape"){ e.preventDefault(); endTour(); return; }
+  if(e.key !== "Tab") return;
+  const f = [...$("#tourPop").querySelectorAll("button")].filter(b => !b.hidden);
+  const i = f.indexOf(document.activeElement);
+  e.preventDefault();
+  f[(i + (e.shiftKey ? -1 : 1) + f.length) % f.length].focus();
+}, true);
+/* 画面のスクロール・大きさの変化に、枠と説明の位置を合わせる */
+{ let raf = 0; const again = () => { if(tourOpen() && !raf) raf = requestAnimationFrame(() => { raf = 0; tourPlace(); }); };
+  addEventListener("scroll", again, {passive:true, capture:true});
+  addEventListener("resize", again); }
 /* 〈統計〉のレンマをクリック → 〈検索〉でそのレンマ（完全一致・対象はレンマのみ）を開く。
    修飾キーつきのクリックは通常のリンクとして新しいタブなどで開ける */
 $("#sections").addEventListener("click", e => {
@@ -2327,10 +2720,11 @@ document.addEventListener("nhc:sitebar", () => { measureBar(); applyLang(); });
 addEventListener("resize", measureBar);
 document.addEventListener("nhc:lang", applyLang);
 
-/* ?view=stats・?view=tutorial なら読み込みの前から〈統計〉〈チュートリアル〉を開いておく（旧 stats.html からの転送もここへ来る）。
-   チュートリアルは静的な文なので、本文の読み込みを待たずに読める */
+/* ?view=stats なら読み込みの前から〈統計〉を開いておく（旧 stats.html からの転送もここへ来る）。
+   ?view=tutorial は〈検索〉とチュートリアルのパネル（静的な文なので、本文の読み込みを待たずに読める） */
 const view0 = new URLSearchParams(location.search).get("view");
-ST.view = VIEWS.includes(view0) ? view0 : "search";
+ST.view = view0 === "stats" ? "stats" : "search";
+ST.guide = view0 === "tutorial";
 applyView();
 applyLang();
 gotoHash();
