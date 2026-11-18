@@ -15,11 +15,11 @@
       <idno type="siglum">NHC II,6</idno>            証本の @n
       <extent>… segment / token / gap の件数 …</extent>
       <ref type="xml" target="source/nhc_fulltext_split/tei/….xml"/>
-      <ref type="reader" target="reader.html?doc=II-6"/>   （subtype="draft" のときだけ）
+      <ref type="reader" target="reader.html?doc=II-6"/>   本文ビュワー
     </bibl>
 
   * subtype は、品詞などを自動で付けた暫定版（<w> に @type がある。README_ja.md の §11）なら "draft"、
-    それ以外は "unannotated"。"draft" の文書には本文ビュワー reader.html へのリンク（<ref type="reader">）を付ける。
+    それ以外は "unannotated"。どちらにも本文ビュワー reader.html へのリンク（<ref type="reader">）を付ける。
   * どちらの文書も、検索ページでは既定で選択されず、選んだときだけ読み込まれる。
   * xml:id は「doc-」＋証本 ID から「wit-」を除いたもの（証本 wit-II-6 → doc-II-6）。
     検索ページは URL の w=wit-II-6 から、この対応で読み込む文書を決める。
@@ -106,11 +106,11 @@ def build_block(docs):
     grouped_only = [d for d in plain if d["grouped"]]
     if drafts:
         out.append(f"{INDENT}     subtype=\"draft\" の {len(drafts)} 文書は、語群・品詞・レンマ・語釈を自動で付けた暫定版で、人の目で確かめていない"
-                   f"（同 README_ja.md の §11）。本文は <ref type=\"reader\"> の reader.html で読める。")
-    out.append(f"{INDENT}     subtype=\"unannotated\" の {len(plain)} 文書は、品詞・レンマ・訳が付いておらず、本文を表示するビュワーもまだ無い"
+                   f"（同 README_ja.md の §11）。")
+    out.append(f"{INDENT}     subtype=\"unannotated\" の {len(plain)} 文書は、品詞・レンマ・訳が付いていない"
                + (f"（うち {len(grouped_only)} 文書は語群だけ付けた暫定版。§10）。" if grouped_only else "。"))
     out += [
-        f"{INDENT}     どちらも、検索ページでは既定で選択されず、選んだときだけ読み込まれる。 -->",
+        f"{INDENT}     どちらも、本文は <ref type=\"reader\"> の reader.html で読め、検索ページでは既定で選択されず、選んだときだけ読み込まれる。 -->",
     ]
     for d in docs:
         sub = "draft" if d["annotated"] else "unannotated"
@@ -122,8 +122,7 @@ def build_block(docs):
                    f'<measure unit="token" quantity="{d["n"]["token"]}"/>'
                    f'<measure unit="gap" quantity="{d["n"]["gap"]}"/></extent>')
         out.append(f'{INDENT}  <ref type="xml" target="{esc(d["target"])}"/>')
-        if d["annotated"]:
-            out.append(f'{INDENT}  <ref type="reader" target="reader.html?doc={esc(d["key"])}"/>')
+        out.append(f'{INDENT}  <ref type="reader" target="reader.html?doc={esc(d["key"])}"/>')
         out.append(f"{INDENT}</bibl>")
     out.append(f"{INDENT}{END}")
     return "\n".join(out)

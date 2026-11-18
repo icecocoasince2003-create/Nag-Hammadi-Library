@@ -160,9 +160,9 @@
       <!-- BEGIN nhc_fulltext_split — 自動生成: scripts/sync_nhc_catalog.py が書き出す範囲（END までは手で編集しない）
            ナグ・ハマディ写本 全文テキスト: 56 文書・13,301 セグメント・237,344 語。
            校訂本との照合が済んでいない作業用の本文（source/nhc_fulltext_split/README_ja.md）。
-           subtype="draft" の 39 文書は、語群・品詞・レンマ・語釈を自動で付けた暫定版で、人の目で確かめていない（同 README_ja.md の §11）。本文は <ref type="reader"> の reader.html で読める。
-           subtype="unannotated" の 17 文書は、品詞・レンマ・訳が付いておらず、本文を表示するビュワーもまだ無い。
-           どちらも、検索ページでは既定で選択されず、選んだときだけ読み込まれる。 -->
+           subtype="draft" の 39 文書は、語群・品詞・レンマ・語釈を自動で付けた暫定版で、人の目で確かめていない（同 README_ja.md の §11）。
+           subtype="unannotated" の 17 文書は、品詞・レンマ・訳が付いていない。
+           どちらも、本文は <ref type="reader"> の reader.html で読め、検索ページでは既定で選択されず、選んだときだけ読み込まれる。 -->
       <bibl type="document" subtype="draft" xml:id="doc-I-2">
         <title xml:lang="ja">ヤコブのアポクリュフォン(秘密の書)</title>
         <title xml:lang="en">The Apocryphon of James</title>
@@ -323,6 +323,7 @@
         <idno type="siglum">NHC IV,2</idno>
         <extent><measure unit="segment" quantity="157"/><measure unit="token" quantity="5282"/><measure unit="gap" quantity="6"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/04-2_gospel-of-the-egyptians.xml"/>
+        <ref type="reader" target="reader.html?doc=IV-2"/>
       </bibl>
       <bibl type="document" subtype="unannotated" xml:id="doc-V-1">
         <title xml:lang="ja">エウグノストス</title>
@@ -331,6 +332,7 @@
         <idno type="siglum">NHC V,1</idno>
         <extent><measure unit="segment" quantity="269"/><measure unit="token" quantity="3463"/><measure unit="gap" quantity="8"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/05-1_eugnostos.xml"/>
+        <ref type="reader" target="reader.html?doc=V-1"/>
       </bibl>
       <bibl type="document" subtype="unannotated" xml:id="doc-V-2">
         <title xml:lang="ja">パウロの黙示録</title>
@@ -339,6 +341,7 @@
         <idno type="siglum">NHC V,2</idno>
         <extent><measure unit="segment" quantity="70"/><measure unit="token" quantity="1374"/><measure unit="gap" quantity="2"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/05-2_apocalypse-of-paul.xml"/>
+        <ref type="reader" target="reader.html?doc=V-2"/>
       </bibl>
       <bibl type="document" subtype="unannotated" xml:id="doc-V-3">
         <title xml:lang="ja">ヤコブの黙示録(第一)</title>
@@ -347,6 +350,7 @@
         <idno type="siglum">NHC V,3</idno>
         <extent><measure unit="segment" quantity="222"/><measure unit="token" quantity="3190"/><measure unit="gap" quantity="9"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/05-3_first-apocalypse-of-james.xml"/>
+        <ref type="reader" target="reader.html?doc=V-3"/>
       </bibl>
       <bibl type="document" subtype="unannotated" xml:id="doc-V-4">
         <title xml:lang="ja">ヤコブの黙示録(第二)</title>
@@ -355,6 +359,7 @@
         <idno type="siglum">NHC V,4</idno>
         <extent><measure unit="segment" quantity="193"/><measure unit="token" quantity="3083"/><measure unit="gap" quantity="9"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/05-4_second-apocalypse-of-james.xml"/>
+        <ref type="reader" target="reader.html?doc=V-4"/>
       </bibl>
       <bibl type="document" subtype="unannotated" xml:id="doc-V-5">
         <title xml:lang="ja">アダムの黙示録</title>
@@ -363,6 +368,7 @@
         <idno type="siglum">NHC V,5</idno>
         <extent><measure unit="segment" quantity="216"/><measure unit="token" quantity="4007"/><measure unit="gap" quantity="5"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/05-5_apocalypse-of-adam.xml"/>
+        <ref type="reader" target="reader.html?doc=V-5"/>
       </bibl>
       <bibl type="document" subtype="unannotated" xml:id="doc-VI-1">
         <title xml:lang="ja">ペテロと十二使徒の行伝</title>
@@ -371,6 +377,7 @@
         <idno type="siglum">NHC VI,1</idno>
         <extent><measure unit="segment" quantity="171"/><measure unit="token" quantity="2853"/><measure unit="gap" quantity="0"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/06-1_acts-of-peter-and-the-twelve-apostles.xml"/>
+        <ref type="reader" target="reader.html?doc=VI-1"/>
       </bibl>
       <bibl type="document" subtype="unannotated" xml:id="doc-VI-2">
         <title xml:lang="ja">雷・全きヌース(完全なる心)</title>
@@ -379,6 +386,7 @@
         <idno type="siglum">NHC VI,2</idno>
         <extent><measure unit="segment" quantity="219"/><measure unit="token" quantity="1896"/><measure unit="gap" quantity="1"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/06-2_thunder-perfect-mind.xml"/>
+        <ref type="reader" target="reader.html?doc=VI-2"/>
       </bibl>
       <bibl type="document" subtype="unannotated" xml:id="doc-VI-3">
         <title xml:lang="ja">権威ある教え</title>
@@ -387,6 +395,7 @@
         <idno type="siglum">NHC VI,3</idno>
         <extent><measure unit="segment" quantity="248"/><measure unit="token" quantity="2698"/><measure unit="gap" quantity="6"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/06-3_authoritative-teaching.xml"/>
+        <ref type="reader" target="reader.html?doc=VI-3"/>
       </bibl>
       <bibl type="document" subtype="unannotated" xml:id="doc-VI-4">
         <title xml:lang="ja">われらの大いなる力の概念</title>
@@ -395,6 +404,7 @@
         <idno type="siglum">NHC VI,4</idno>
         <extent><measure unit="segment" quantity="257"/><measure unit="token" quantity="2537"/><measure unit="gap" quantity="0"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/06-4_concept-of-our-great-power.xml"/>
+        <ref type="reader" target="reader.html?doc=VI-4"/>
       </bibl>
       <bibl type="document" subtype="unannotated" xml:id="doc-VI-5">
         <title xml:lang="ja">プラトン『国家』588b–589b</title>
@@ -403,6 +413,7 @@
         <idno type="siglum">NHC VI,5</idno>
         <extent><measure unit="segment" quantity="55"/><measure unit="token" quantity="699"/><measure unit="gap" quantity="0"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/06-5_plato-republic.xml"/>
+        <ref type="reader" target="reader.html?doc=VI-5"/>
       </bibl>
       <bibl type="document" subtype="unannotated" xml:id="doc-VI-6">
         <title xml:lang="ja">第八と第九についての講話</title>
@@ -411,6 +422,7 @@
         <idno type="siglum">NHC VI,6</idno>
         <extent><measure unit="segment" quantity="181"/><measure unit="token" quantity="2361"/><measure unit="gap" quantity="2"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/06-6_discourse-on-the-eighth-and-ninth.xml"/>
+        <ref type="reader" target="reader.html?doc=VI-6"/>
       </bibl>
       <bibl type="document" subtype="unannotated" xml:id="doc-VI-7">
         <title xml:lang="ja">感謝の祈り</title>
@@ -419,6 +431,7 @@
         <idno type="siglum">NHC VI,7</idno>
         <extent><measure unit="segment" quantity="27"/><measure unit="token" quantity="352"/><measure unit="gap" quantity="0"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/06-7_prayer-of-thanksgiving.xml"/>
+        <ref type="reader" target="reader.html?doc=VI-7"/>
       </bibl>
       <bibl type="document" subtype="unannotated" xml:id="doc-VI-8">
         <title xml:lang="ja">アスクレピオス 21–29</title>
@@ -427,6 +440,7 @@
         <idno type="siglum">NHC VI,8</idno>
         <extent><measure unit="segment" quantity="250"/><measure unit="token" quantity="3448"/><measure unit="gap" quantity="3"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/06-8_asclepius.xml"/>
+        <ref type="reader" target="reader.html?doc=VI-8"/>
       </bibl>
       <bibl type="document" subtype="unannotated" xml:id="doc-VII-1">
         <title xml:lang="ja">セームの釈義(パラフレイズ)</title>
@@ -435,6 +449,7 @@
         <idno type="siglum">NHC VII,1</idno>
         <extent><measure unit="segment" quantity="946"/><measure unit="token" quantity="11206"/><measure unit="gap" quantity="0"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/07-1_paraphrase-of-shem.xml"/>
+        <ref type="reader" target="reader.html?doc=VII-1"/>
       </bibl>
       <bibl type="document" subtype="unannotated" xml:id="doc-VII-2">
         <title xml:lang="ja">大セツの第二の教え</title>
@@ -443,6 +458,7 @@
         <idno type="siglum">NHC VII,2</idno>
         <extent><measure unit="segment" quantity="387"/><measure unit="token" quantity="4886"/><measure unit="gap" quantity="0"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/07-2_second-treatise-of-the-great-seth.xml"/>
+        <ref type="reader" target="reader.html?doc=VII-2"/>
       </bibl>
       <bibl type="document" subtype="unannotated" xml:id="doc-VII-3">
         <title xml:lang="ja">ペテロの黙示録</title>
@@ -451,6 +467,7 @@
         <idno type="siglum">NHC VII,3</idno>
         <extent><measure unit="segment" quantity="217"/><measure unit="token" quantity="3061"/><measure unit="gap" quantity="0"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/07-3_apocalypse-of-peter.xml"/>
+        <ref type="reader" target="reader.html?doc=VII-3"/>
       </bibl>
       <bibl type="document" subtype="draft" xml:id="doc-VII-4">
         <title xml:lang="ja">シルワノスの教え</title>

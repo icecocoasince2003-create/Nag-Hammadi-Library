@@ -10,8 +10,8 @@
      - 全文テキスト（ナグ・ハマディ写本 全文＝source/nhc_fulltext_split/。<bibl subtype="draft"> と subtype="unannotated"）は、
        左の〈全文テキスト〉に写本ごとに並べます。既定では選択も読み込みもせず、選んだ文書の XML だけを取得します
        （URL の w=wit-II-6 や doc=II-6 が指している文書は、開いたときに読み込みます）。
-       "draft" は品詞・レンマ・語釈を自動で付けた暫定版（人の目で未確認）で、用例から本文ビュワー reader.html へリンクします。
-       "unannotated" は品詞が「未注」、レンマは語形のままで、本文へのリンクはありません。
+       "draft" は品詞・レンマ・語釈を自動で付けた暫定版（人の目で未確認）、"unannotated" は品詞が「未注」でレンマは語形のまま。
+       どちらも、用例から本文ビュワー reader.html（カタログの <ref type="reader">）へリンクします。
        カタログの項目は scripts/sync_nhc_catalog.py が書き出します。
      - 〈検索〉の結果はレンマ単位（<w @lemma> + @type）で集計し、語義（data/lexicon.xml）・品詞・活用型・語形・頻度・文書別分布を表示します。
        行をクリックすると語義の詳細と用例（KWIC）を開き、用例から全文表示の該当箇所 (#seg-ID) へ移動できます。

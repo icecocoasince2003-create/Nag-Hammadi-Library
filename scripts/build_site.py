@@ -30,8 +30,9 @@
   3. LINKS にリンク先（ビュワーのURL）を登録する
   4. python3 scripts/build_site.py を実行して index.html を再生成
 
-【暫定公開（自動注釈の全文）】
-  status を D にすると、HOME の一覧に「暫定」と出し、reader.html?doc=写本-番号 へリンクします。
+【暫定公開（自動注釈の全文）と未注釈の全文】
+  status を D にすると「暫定」、U にすると「未注釈」と HOME の一覧に出し、reader.html?doc=写本-番号 へリンクします
+  （全文テキストの番号がこの一覧と違う文書は READER_DOC に書く）。
   reader.html もこのスクリプトが出力します（build_reader）。本文は data/catalog.xml の <bibl subtype="draft">
   が指す TEI で、その一覧は scripts/sync_nhc_catalog.py が書き出します。確かめていないことは reader.html が
   文書ごとに冒頭に示します。
@@ -47,7 +48,9 @@ OUTDIR = os.path.dirname(_HERE) if os.path.basename(_HERE).lower() in ("source",
 #   status:  A = 公開（LINKS のビュワーへリンク） / S = 準備中（tractate.html へリンク）
 #            D = 暫定公開（自動注釈の全文。reader.html?doc=写本-番号 へリンク。本文は data/catalog.xml の
 #                <bibl subtype="draft"> の TEI。人の目で確かめていないことを reader.html が文書ごとに示す）
-A = "avail"; S = "soon"; D = "draft"
+#            U = 未注釈の全文（reader.html へリンク。本文は <bibl subtype="unannotated"> の TEI。品詞・語義なし）
+#            D・U のリンク先の文書は、ふつうは同じ番号（写本-番号）。番号が違うものは READER_DOC に書く。
+A = "avail"; S = "soon"; D = "draft"; U = "text"
 CODICES = [
  ("I", 1, [
    (1, "使徒パウロの祈り", "The Prayer of the Apostle Paul", "Prière de l'apôtre Paul", S),
@@ -74,31 +77,31 @@ CODICES = [
  ]),
  ("IV", 4, [
    (1, "ヨハネのアポクリュフォン", "The Apocryphon of John", "Livre des secrets de Jean", D),
-   (2, "エジプト人の福音書", "The Gospel of the Egyptians", "Évangile des Égyptiens", S),
+   (2, "エジプト人の福音書", "The Gospel of the Egyptians", "Évangile des Égyptiens", U),
  ]),
  ("V", 5, [
    # III,3 は末尾標題「祝福されたエウグノストス」、V,1 は標題「エウグノストス」のみが残る
    (1, "エウグノストス", "Eugnostos", "Eugnoste", A),
-   (2, "パウロの黙示録", "The Apocalypse of Paul", "Apocalypse de Paul", S),
-   (3, "ヤコブの黙示録(第一)", "The (First) Apocalypse of James", "Première apocalypse de Jacques", S),
-   (4, "ヤコブの黙示録(第二)", "The (Second) Apocalypse of James", "Seconde apocalypse de Jacques", S),
-   (5, "アダムの黙示録", "The Apocalypse of Adam", "Apocalypse d'Adam", S),
+   (2, "パウロの黙示録", "The Apocalypse of Paul", "Apocalypse de Paul", U),
+   (3, "ヤコブの黙示録(第一)", "The (First) Apocalypse of James", "Première apocalypse de Jacques", U),
+   (4, "ヤコブの黙示録(第二)", "The (Second) Apocalypse of James", "Seconde apocalypse de Jacques", U),
+   (5, "アダムの黙示録", "The Apocalypse of Adam", "Apocalypse d'Adam", U),
  ]),
  ("VI", 6, [
-   (1, "ペテロと十二使徒の行伝", "The Acts of Peter and the Twelve Apostles", "Actes de Pierre et des douze apôtres", S),
-   (2, "雷・全きヌース(完全なる心)", "The Thunder, Perfect Mind", "Le Tonnerre, intellect parfait", S),
-   (3, "権威ある教え", "Authoritative Teaching", "Authentikos Logos", S),
-   (4, "われらの大いなる力の概念", "The Concept of Our Great Power", "Le Concept de notre grande puissance", S),
+   (1, "ペテロと十二使徒の行伝", "The Acts of Peter and the Twelve Apostles", "Actes de Pierre et des douze apôtres", U),
+   (2, "雷・全きヌース(完全なる心)", "The Thunder, Perfect Mind", "Le Tonnerre, intellect parfait", U),
+   (3, "権威ある教え", "Authoritative Teaching", "Authentikos Logos", U),
+   (4, "われらの大いなる力の概念", "The Concept of Our Great Power", "Le Concept de notre grande puissance", U),
    (5, "プラトン『国家』588A–589B", "Plato, Republic 588a–589b", "Platon, République 588a–589b", A),
-   (6, "第八と第九についての講話", "The Discourse on the Eighth and Ninth", "L'Ogdoade et l'Ennéade", S),
-   (7, "感謝の祈り", "The Prayer of Thanksgiving", "Prière d'action de grâces", S),
-   (8, "書記による覚書", "Scribal Note", "Note du scribe", S),
-   (9, "アスクレピオス 21–29", "Asclepius 21–29", "Asclépius 21–29", S),
+   (6, "第八と第九についての講話", "The Discourse on the Eighth and Ninth", "L'Ogdoade et l'Ennéade", U),
+   (7, "感謝の祈り", "The Prayer of Thanksgiving", "Prière d'action de grâces", U),
+   (8, "書記による覚書", "Scribal Note", "Note du scribe", U),
+   (9, "アスクレピオス 21–29", "Asclepius 21–29", "Asclépius 21–29", U),
  ]),
  ("VII", 7, [
-   (1, "セームの釈義(パラフレイズ)", "The Paraphrase of Shem", "Paraphrase de Sem", S),
-   (2, "大セツの第二の教え", "The Second Treatise of the Great Seth", "Deuxième traité du Grand Seth", S),
-   (3, "ペテロの黙示録", "The Apocalypse of Peter", "Apocalypse de Pierre", S),
+   (1, "セームの釈義(パラフレイズ)", "The Paraphrase of Shem", "Paraphrase de Sem", U),
+   (2, "大セツの第二の教え", "The Second Treatise of the Great Seth", "Deuxième traité du Grand Seth", U),
+   (3, "ペテロの黙示録", "The Apocalypse of Peter", "Apocalypse de Pierre", U),
    (4, "シルワノスの教え", "The Teachings of Silvanus", "Les Leçons de Silvanos", D),
    (5, "セツの三つの碑", "The Three Steles of Seth", "Les Trois Stèles de Seth", D),
  ]),
@@ -141,9 +144,15 @@ LINKS = {
 def esc(s): return html.escape(str(s), quote=True)
 def tid(roman, num): return f"{roman}-{num}"
 def locus(roman, num): return f"NHC&nbsp;{roman},{num}"
+# 全文テキスト（source/nhc_fulltext_split/）の文書番号が、この一覧の番号と違うもの（status D・U の行）。
+# 全文テキストは通用の番号に従い、書記の覚書を VI,7 の末尾（奥書）、アスクレピオスを VI,8 としている。
+READER_DOC = {
+    ("VI", 8): "VI-7#seg-VI-7508309",   # 書記による覚書 → VI,7『感謝の祈り』の末尾の奥書
+    ("VI", 9): "VI-8",                  # アスクレピオス 21–29
+}
 def href_for(roman, num, status):
     if status == A and (roman, num) in LINKS: return LINKS[(roman, num)]
-    if status == D: return f"reader.html?doc={tid(roman,num)}"
+    if status in (D, U): return "reader.html?doc=" + READER_DOC.get((roman, num), tid(roman, num))
     return f"tractate.html?id={tid(roman,num)}"
 def tri(ja, en, fr):
     """三言語のスパン（site.css が html[data-lang] に応じて出し分ける）"""
@@ -152,6 +161,7 @@ def tri(ja, en, fr):
 TOTAL = sum(len(t) for _,_,t in CODICES)
 AVAIL = sum(1 for _,_,t in CODICES for x in t if x[4] == A)
 DRAFT = sum(1 for _,_,t in CODICES for x in t if x[4] == D)
+PLAIN = sum(1 for _,_,t in CODICES for x in t if x[4] == U)
 TODAY = datetime.date.today().isoformat()
 
 # --- shared head / theme ----------------------------------------------------
@@ -223,9 +233,10 @@ def codex_block(roman, no, tracts):
     rows=[]
     for num, ja, en, fr, status in tracts:
         on = status == A
-        cls = "trow" + (" on" if on else " draft" if status == D else "")
+        cls = "trow" + (" on" if on else " draft" if status == D else " plain" if status == U else "")
         pill = (f'<span class="pill on">{tri("公開","Online","En ligne")}</span>' if on
                 else f'<span class="pill draft">{tri("暫定","Draft","Provisoire")}</span>' if status == D
+                else f'<span class="pill plain">{tri("未注釈","Text only","Texte seul")}</span>' if status == U
                 else f'<span class="pill">{tri("準備中","Soon","À venir")}</span>')
         search = esc((ja+" "+en+" "+fr).lower())
         rows.append(
@@ -334,6 +345,7 @@ html[data-lang="en"] .trow .tt .sub{font-family:var(--jp); font-style:normal; fo
  background:var(--hi); color:var(--ink-faint); border:1px solid var(--line); white-space:nowrap}
 .pill.on{background:var(--gold); color:#1a140a; border-color:var(--gold); font-weight:600}
 .pill.draft{background:transparent; color:var(--lapis); border-color:var(--lapis); font-weight:600}
+.pill.plain{background:transparent; color:var(--ink-soft); border-color:var(--ink-faint)}
 .legend{display:flex; flex-wrap:wrap; gap:6px 18px; margin:-6px 0 14px; font-size:.76rem; color:var(--ink-faint); line-height:1.7}
 .legend .pill{margin-right:6px}
 .trow .arr{color:var(--ink-faint); opacity:0; transition:opacity .12s, transform .12s; transform:translateX(-3px)}
@@ -438,10 +450,11 @@ def build_index():
   <div class="sec-h"><h2>{tri("文書一覧", "The codices", "Les codices")}</h2><small>NHC I–XIII</small><span class="rule"></span></div>
   <div class="ctool"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
    <input id="q" type="search" autocomplete="off">
-   <span class="cnt">{tri(f"公開 {AVAIL} · 暫定 {DRAFT} / 全 {TOTAL} 文書", f"{AVAIL} online · {DRAFT} draft · {TOTAL} in all", f"{AVAIL} en ligne · {DRAFT} provisoires · {TOTAL} au total")}</span></div>
+   <span class="cnt">{tri(f"公開 {AVAIL} · 暫定 {DRAFT} · 未注釈 {PLAIN} / 全 {TOTAL} 文書", f"{AVAIL} online · {DRAFT} draft · {PLAIN} text only · {TOTAL} in all", f"{AVAIL} en ligne · {DRAFT} provisoires · {PLAIN} texte seul · {TOTAL} au total")}</span></div>
   <p class="legend">
    <span><span class="pill on">{tri("公開","Online","En ligne")}</span>{tri("人の手で注釈・訳を付けた版", "annotated and translated by hand", "annoté et traduit à la main")}</span>
    <span><span class="pill draft">{tri("暫定","Draft","Provisoire")}</span>{tri("自動注釈の全文。人の目で未確認・校訂本と未照合", "full text with automatic annotation, not checked or collated", "texte intégral annoté automatiquement, non vérifié ni collationné")}</span>
+   <span><span class="pill plain">{tri("未注釈","Text only","Texte seul")}</span>{tri("本文だけの作業用テキスト。品詞・語義なし・校訂本と未照合", "working text only, no annotation, not collated", "texte de travail seul, sans annotation ni collation")}</span>
    <span><span class="pill">{tri("準備中","Soon","À venir")}</span>{tri("本文はまだ表示できません", "text not yet available", "texte pas encore disponible")}</span>
   </p>
   <div class="grid" id="grid">
@@ -452,9 +465,9 @@ def build_index():
 </div>
 
 <footer><div class="wrap">
-  {tri(f"<b>{AVAIL}</b>&nbsp;文書を公開・<b>{DRAFT}</b>&nbsp;文書を暫定公開 / 全&nbsp;<b>{TOTAL}</b>&nbsp;文書(13写本)",
-       f"<b>{AVAIL}</b>&nbsp;online and <b>{DRAFT}</b>&nbsp;as drafts, of&nbsp;<b>{TOTAL}</b>&nbsp;tractates (13 codices)",
-       f"<b>{AVAIL}</b>&nbsp;en ligne et <b>{DRAFT}</b>&nbsp;provisoires sur&nbsp;<b>{TOTAL}</b> traités (13 codices)")}　·
+  {tri(f"<b>{AVAIL}</b>&nbsp;文書を公開・<b>{DRAFT}</b>&nbsp;文書を暫定公開・<b>{PLAIN}</b>&nbsp;文書は未注釈の本文 / 全&nbsp;<b>{TOTAL}</b>&nbsp;文書(13写本)",
+       f"<b>{AVAIL}</b>&nbsp;online, <b>{DRAFT}</b>&nbsp;as drafts and <b>{PLAIN}</b>&nbsp;as text only, of&nbsp;<b>{TOTAL}</b>&nbsp;tractates (13 codices)",
+       f"<b>{AVAIL}</b>&nbsp;en ligne, <b>{DRAFT}</b>&nbsp;provisoires et <b>{PLAIN}</b>&nbsp;en texte seul sur&nbsp;<b>{TOTAL}</b> traités (13 codices)")}　·
   {tri("本文はパブリックドメイン、辞書・対訳は CC&nbsp;BY&nbsp;4.0",
        "Source texts: public domain · lexicon and translations: CC&nbsp;BY&nbsp;4.0",
        "Textes sources : domaine public · lexique et traductions : CC&nbsp;BY&nbsp;4.0")}　·
@@ -529,7 +542,7 @@ def build_tractate():
     for roman, no, tracts in CODICES:
         for num, ja, en, fr, status in tracts:
             cat[tid(roman, num)] = {"ja": ja, "en": en, "fr": fr, "roman": roman, "num": num,
-                                   "href": href_for(roman, num, status) if status in (A, D) else ""}
+                                   "href": href_for(roman, num, status) if status in (A, D, U) else ""}
     css = THEME + """
 .shell{position:relative; z-index:1; max-width:780px; margin:0 auto; padding:clamp(28px,6vw,64px) clamp(16px,4vw,40px) 80px}
 .eyebrow{font-family:var(--ui); font-size:.74rem; letter-spacing:.2em; text-transform:uppercase; color:var(--gold)}
@@ -639,6 +652,8 @@ POS_NAMES = {
  "X": ["未判定", "unresolved", "non résolu"],
 }
 REPO_URL = "https://github.com/icecocoasince2003-create/Nag-Hammadi-Library/"
+# 全文テキストの文書のうち、専用のビュワーもあるもの（reader.html がリンクを示す。キーは data/catalog.xml の doc-… から）
+EDITIONS = {"III-3": "eugnostos.html?wit=III", "V-1": "eugnostos.html?wit=V", "VI-5": "republic.html"}
 
 def build_reader():
     """reader.html?doc=II-6 — data/catalog.xml の文書の TEI（source/nhc_fulltext_split/tei/）を表示する。
@@ -712,7 +727,7 @@ h1{font-family:var(--disp); font-weight:600; line-height:1.12; font-size:clamp(1
 <main class="shell" id="shell"><p class="loading">…</p></main>
 <div class="mcard" id="card" role="dialog" aria-live="polite" hidden></div>
 <script>
-const POS=__POS__, REPO=__REPO__;
+const POS=__POS__, REPO=__REPO__, EDITIONS=__EDITIONS__;
 const H=document.documentElement, T='http://www.tei-c.org/ns/1.0', XNS='http://www.w3.org/XML/1998/namespace';
 const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -796,7 +811,8 @@ function readTEI(x){
 const AB={title:tri('表題','Title','Titre'), subscript:tri('奥書表題','Subscript title','Titre final'),
   colophon:tri('写字生の奥書・覚え書き','Scribal colophon or note','Colophon du scribe'), fragment:tri('未配置の断片','Unplaced fragments','Fragments non situés')};
 function renderText(){
-  const gk=UL()==='ja'?'ja':'en';
+  const gk=UL()==='ja'?'ja':'en', ann=D.st.typed>0;
+  const O={inter:ann&&OPT.inter, cert:ann&&OPT.cert, cuts:ann&&OPT.cuts};   // 未注釈の文書には効かせない
   MS=[];
   const html=D.abs.map(ab=>{
     const segs=ab.segs.map(s=>{
@@ -805,7 +821,7 @@ function renderText(){
         return '<span class="g">'+it.ms.map(m=>{
           const i=MS.push(m)-1;
           let inner='<span class="f">'+m.html+'</span>';
-          if(OPT.inter){ const g=(gk==='ja'?(m.ja||m.en):(m.en||m.ja))||'';
+          if(O.inter){ const g=(gk==='ja'?(m.ja||m.en):(m.en||m.ja))||'';
             inner+='<span class="il"><span class="p">'+esc(m.type)+'</span><span class="gl">'+esc(g)+'</span></span>'; }
           return '<span class="m'+(m.type==='X'?' x':'')+(m.cert?' c-'+m.cert:'')+'" data-i="'+i+'">'+inner+'</span>';
         }).join('')+'</span>';
@@ -815,7 +831,7 @@ function renderText(){
     return '<section class="ab ab-'+esc(ab.type)+'">'+(AB[ab.type]?'<h3>'+AB[ab.type]+'</h3>':'')+segs+'</section>';
   }).join('');
   const box=$('#text');
-  box.className='text'+(OPT.inter?' inter':'')+(OPT.cert?' cert':'')+(OPT.cuts?' cuts':'');
+  box.className='text'+(O.inter?' inter':'')+(O.cert?' cert':'')+(O.cuts?' cuts':'');
   box.innerHTML=html;
   hideCard();
 }
@@ -834,7 +850,14 @@ function statusHTML(){
       '<b>Partie du discours, lemme et glose</b> : attribués automatiquement. Dans ce texte, '+pct(s.low,s.m)+' % des morphèmes ont une certitude faible et '+pct(s.X,s.m)+' % n’ont pas pu être classés (X). Les gloses sont de brèves équivalences de dictionnaire, non des traductions vérifiées en contexte. Une certitude « high » ou « medium » ne garantit pas l’analyse.'));
   } else {
     li.push(tri('<b>注釈</b>：語のまとまり・品詞・レンマ・語義はまだ付いていません。','<b>Annotation</b>: no bound groups, parts of speech, lemmata or glosses yet.','<b>Annotation</b> : ni groupes, ni parties du discours, ni lemmes, ni gloses pour l’instant.'));
+    li.push(tri('<b>語の区切り</b>：元ファイルのままです。接頭辞や冠詞が分かれている箇所と、つながっている箇所があります。',
+      '<b>Word division</b>: as in the source file; prefixes and articles are sometimes separate and sometimes joined to the word.',
+      '<b>Découpage</b> : celui du fichier source ; préfixes et articles sont tantôt séparés, tantôt joints au mot.'));
   }
+  const ed=EDITIONS[DOC.key];
+  if(ed && !s.ref) li.push(tri('<b>専用のビュワー</b>：この文書は <a href="'+esc(ed)+'">専用のビュワー</a>でも読めます。',
+    '<b>Dedicated reader</b>: this text can also be read in its <a href="'+esc(ed)+'">own reader</a>.',
+    '<b>Visionneuse dédiée</b> : ce texte se lit aussi dans sa <a href="'+esc(ed)+'">propre visionneuse</a>.'));
   if(s.rw) li.push(tri('<b>ⲍ・ⲯ</b>：元ファイルで落ちていた字を、語形と文脈から補いました（点線の下線、'+s.rw+' 語）。'+(s.rwB?'このうち確度 B の '+s.rwB+' 語（破線）は、固有名などで校訂本での確認が必要です。':'校訂本とは照合していません。'),
     '<b>ⲍ and ⲯ</b>: letters lost in the source file were restored from the word form and context (dotted underline; '+s.rw+' words).'+(s.rwB?' The '+s.rwB+' of certainty B (dashed), names and the like, still need checking against the editions.':' None has been collated with the editions.'),
     '<b>ⲍ et ⲯ</b> : lettres perdues dans le fichier source, restituées d’après la forme et le contexte (soulignement pointillé ; '+s.rw+' mots).'+(s.rwB?' Les '+s.rwB+' de certitude B (tirets), noms propres notamment, restent à vérifier.':' Aucune n’a été collationnée.')));
@@ -902,12 +925,12 @@ function render(){
     '<h1>'+tri(esc(DOC.ja),esc(DOC.en),esc(DOC.fr))+'</h1><div class="alt">'+tri(esc(DOC.en),esc(DOC.ja),esc(DOC.en))+'</div>'+
     '<div class="meta">'+esc(D.lang)+' · '+tri(fmt(s.segs)+' セグメント · '+fmt(s.m)+' 形態素'+(ann?' · '+fmt(s.g)+' 語群':''), fmt(s.segs)+' segments · '+fmt(s.m)+' morphemes'+(ann?' · '+fmt(s.g)+' bound groups':''), fmt(s.segs)+' segments · '+fmt(s.m)+' morphèmes'+(ann?' · '+fmt(s.g)+' groupes':''))+'</div>'+
     statusHTML()+
-    '<div class="tools">'+
-      (ann?'<label><input type="checkbox" id="oInter"'+(OPT.inter?' checked':'')+'>'+tri('語義と品詞を重ねる','Show glosses and POS','Afficher gloses et catégories')+'</label>'+
-           '<label><input type="checkbox" id="oCert"'+(OPT.cert?' checked':'')+'>'+tri('確かでない注釈に印','Mark uncertain analyses','Signaler les analyses incertaines')+'</label>':'')+
+    (ann?'<div class="tools">'+
+      '<label><input type="checkbox" id="oInter"'+(OPT.inter?' checked':'')+'>'+tri('語義と品詞を重ねる','Show glosses and POS','Afficher gloses et catégories')+'</label>'+
+      '<label><input type="checkbox" id="oCert"'+(OPT.cert?' checked':'')+'>'+tri('確かでない注釈に印','Mark uncertain analyses','Signaler les analyses incertaines')+'</label>'+
       '<label><input type="checkbox" id="oCuts"'+(OPT.cuts?' checked':'')+'>'+tri('形態素の区切り','Morpheme boundaries','Limites des morphèmes')+'</label>'+
-      (ann?'<span class="lg">'+tri('語をクリックすると注釈を表示','Click a word for its analysis','Cliquez sur un mot pour son analyse')+'</span>':'')+
-    '</div>'+
+      '<span class="lg">'+tri('語をクリックすると注釈を表示','Click a word for its analysis','Cliquez sur un mot pour son analyse')+'</span>'+
+    '</div>':'<div style="height:14px"></div>')+
     '<article id="text" class="text"></article>'+navHTML();
   const bind=(id,k)=>{ const e=document.getElementById(id); if(e) e.addEventListener('change',()=>{ OPT[k]=e.checked; saveOpt(); renderText(); }); };
   bind('oInter','inter'); bind('oCert','cert'); bind('oCuts','cuts');
@@ -940,7 +963,8 @@ document.addEventListener('nhc:lang',()=>{ if(!D) return; setTitle(); if(OPT.int
 window.addEventListener('hashchange',gotoHash);
 </script>
 """
-    body = body.replace("__POS__", json.dumps(POS_NAMES, ensure_ascii=False)).replace("__REPO__", json.dumps(REPO_URL))
+    body = (body.replace("__POS__", json.dumps(POS_NAMES, ensure_ascii=False)).replace("__REPO__", json.dumps(REPO_URL))
+                .replace("__EDITIONS__", json.dumps(EDITIONS)))
     return ("<!doctype html><html lang=\"ja\" data-lang=\"ja\" data-i18n=\"full\" data-mode=\"dark\" data-modes=\"light dark\"><head><meta charset=\"utf-8\">"
             "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
             f"{MODE_BOOT}"
@@ -954,4 +978,4 @@ open(os.path.join(OUTDIR,"index.html"),"w",encoding="utf-8").write(_BANNER + bui
 open(os.path.join(OUTDIR,"tractate.html"),"w",encoding="utf-8").write(_BANNER + build_tractate())
 open(os.path.join(OUTDIR,"reader.html"),"w",encoding="utf-8").write(_BANNER + build_reader())
 print("wrote index.html (landing), tractate.html (placeholder) and reader.html (draft full texts)")
-print("codices:", len(CODICES), "| tractates:", TOTAL, "| available:", AVAIL, "| drafts:", DRAFT)
+print("codices:", len(CODICES), "| tractates:", TOTAL, "| available:", AVAIL, "| drafts:", DRAFT, "| text only:", PLAIN)
