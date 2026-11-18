@@ -72,42 +72,53 @@ nag_hammadi_library/
 ├─ .gitignore
 ├─ image/
 │   └─ icon.svg         ← サイトのアイコン画像(各ページが読み込みます)
-├─ data/               ← 自動生成されるXML(直接編集しない)
+├─ data/               ← サイトが読むXML(手作業の修正が入っていて、source/ からは作り直せない)
 │   ├─ eugnostos_tei.xml
 │   ├─ lexicon.xml
 │   ├─ eugnostos_theology.xml
 │   └─ republic_*.xml
-├─ source/             ← ★ここを編集(詳細は source/README.md)
+├─ source/             ← CSV／TSV(サイトに反映できるのは、いまは lexicon.csv だけ。下の「データの編集」)
 │   ├─ lexicon.csv         辞書(1行=1語義／同形異義語は同じlemmaを複数行)
 │   ├─ translations.csv    対訳(seg_id, ja, en, fr)
 │   ├─ notes.csv           注釈
 │   ├─ themes.csv          主題ラベル
 │   ├─ eugnostos_source.tsv  本文ソース(通常編集不要)
 │   └─ nhc_fulltext_split/   NHC 全文テキスト(56文書・未注釈の作業用ファイル。同フォルダの README_ja.md)
-└─ scripts/            ← ビルドスクリプト(通常触らない)
-    ├─ build_tei.py        source/ の CSV → data/ の XML を生成
+└─ scripts/            ← スクリプト(通常触らない)
+    ├─ build_tei.py        source/ の CSV から XML を試しに生成し、data/ と比べる(既定では data/ に書き込まない)
+    ├─ sync_lexicon.py     source/lexicon.csv の変更を data/lexicon.xml に反映する(xml:id は変えない)
     ├─ build_site.py       index.html / tractate.html を生成
     ├─ sync_theology_ana.py 注釈の @ana を本文へ同期する補助ツール
     └─ sync_nhc_catalog.py  NHC 全文テキスト(未注釈)の文書一覧を data/catalog.xml に書き出す
 ```
 
-- **編集するのは `source/` の中の CSV**だけです。編集後、リポジトリのルートで `python3 scripts/build_tei.py` を実行すると、
-  `data/` のXMLが再生成されます(`build_tei.py` は `source/` のCSVを読み、`data/` に書き出します)。
+- **`data/` の XML は、`source/` の CSV から作り直せる状態ではありません(2026-11 時点)。** 生成したあとに手作業で直した内容が
+  `data/` にだけあるためです。`python3 scripts/build_tei.py` は、既定では `data/` に書き込まず、生成結果を `build/tei/` に出して
+  `data/` との違いを表示するだけです。どこを直せばよいかは、下の「データの編集」にあります。
 - 共同編集の手順(ブランチ・Pull Request・競合の解決)は **CONTRIBUTING.md** を参照してください。
 - 目次トップ(`index.html`)とビュワー(`eugnostos.html`)は `data/` のXMLと `image/icon.svg` を読み込みます。
 - **サイトのアイコン**は `image/icon.svg`。お好きな画像に差し替えてください(同じ名前にすれば各ページが自動で読み込みます)。
 
 ## 収録ファイル
 
-**編集する入力(CSV／TSV)** — ここを直せば内容が変わります(Excel・Numbers・Googleスプレッドシート・テキストエディタで開けます。UTF-8/BOM付き):
+**`source/` の CSV／TSV** (Excel・Numbers・Googleスプレッドシート・テキストエディタで開けます。UTF-8/BOM付き)。
+直した内容をサイトに反映できるのは、いまは `lexicon.csv` だけです(下の「データの編集」):
 
 | ファイル | 役割 | 列 |
 |---|---|---|
-| `lexicon.csv` | **コプト語辞書** | `lemma, n, pos, grc, en, ja, fr, usg_ja, usg_en`(1行=1語義。同じ `lemma` を複数行にすると同形異義語) |
+| `lexicon.csv` | **コプト語辞書** | `lemma, n, pos, grc, en, ja, fr, usg_ja, usg_en, cdo`(1行=1語義。同じ `lemma` を複数行にすると同形異義語。`cdo` は Coptic Dictionary Online の項目 ID、例 `C1789`) |
 | `translations.csv` | **対訳** | `seg_id, ja, en, fr` |
 | `notes.csv` | **注釈** | `id, themes, targets, label_ja, body_ja, body_en, body_fr`(themes/targets は空白区切りのID列) |
 | `themes.csv` | **主題分類** | `id, ja, en, fr` |
 | `eugnostos_source.tsv` | 本文ソース | タブ区切りのコプト語トークン列(通常は編集不要) |
+
+**サイトが読むデータ(`data/` の XML)**:
+
+| ファイル | 役割 | 内容 |
+|---|---|---|
+| `eugnostos_tei.xml` | 本文(TEI) | 二証本(III,3 全文＋V,1 並行枠)。語ごとにレンマと品詞、節ごとに対訳を持つ。生成したあと手作業で直している。 |
+| `lexicon.xml` | コプト語辞書 | `lexicon.csv` の内容を `sync_lexicon.py` で反映。同形異義語は `<superEntry>`。 |
+| `eugnostos_theology.xml` | 注釈 | 中身は `notes.csv`＋`themes.csv` と同じ(2026-11 時点)。`@target`/`@ana` でリンク。 |
 
 **生成物(自動出力。直接編集しない)**:
 
@@ -116,28 +127,51 @@ nag_hammadi_library/
 | `index.html` | **トップページ(目次)** | NHC I–XIII の全文書カタログ。公開済みはビュワーへ、未整備は準備中ページへ遷移。 |
 | `eugnostos.html` | **ビュワー** | エウグノストスの三言語リーダー(単一HTML)。`← 一覧`で目次へ。 |
 | `tractate.html` | **準備中ページ(共通)** | `?id=コーデックス-番号` で文書を特定し「準備中」を表示。 |
-| `eugnostos_tei.xml` | 本文(TEI) | 二証本(III,3 全文＋V,1 並行枠)。各 `<w>` に `@lemma`、対訳は `@transJa/En/Fr`。 |
-| `eugnostos_lexicon.xml` | コプト語辞書 | `lexicon.csv` から生成。同形異義語は `<superEntry>`。 |
-| `eugnostos_theology.xml` | 注釈 | `notes.csv`＋`themes.csv` から生成。`@target`/`@ana` でリンク。 |
 
-**生成器(スクリプト)**:
+**スクリプト**:
 
 | ファイル | 役割 |
 |---|---|
-| `build_tei.py` | **CSV → 3つのXML** を生成(`lexicon.csv` 等を読むだけの薄い変換器)。 |
+| `build_tei.py` | CSV から3つのXMLを**試しに生成して `data/` と比べる**。既定では `data/` に書き込まない(下の「データの編集」)。 |
+| `sync_lexicon.py` | `lexicon.csv` の変更を `data/lexicon.xml` に反映する。`xml:id` は変えない。何も付けなければ変更点の表示だけで、`--write` で書き込む。 |
 | `build_site.py` | `index.html`(目次)と `tractate.html`(準備中)を生成。 |
 
-## データの編集(CSVテーブル)
+## データの編集
 
-内容の編集は **CSV を直すだけ**です。コードを触る必要はありません。編集後に
+**サイトが読むのは `data/` の XML です。2026-11 時点で、`data/` の XML は `source/` の CSV から作り直せません。**
+生成したあとに手作業で直した内容(冒頭 9 節の語の切り方・語のまとまり・レンマ・文脈上の語釈、品詞の付け直し、訳文の改訂、
+TEI の構造と書き方の修正)が `data/` にだけあり、CSV と生成スクリプト `build_tei.py` はそれに追いついていないためです。
+CSV と生成スクリプトを XML に合わせ直すのか、生成をやめて XML を元データにするのかは、まだ決めていません。
+それまでは次のとおりです。
+
+| 直したいもの | 直す場所 | 反映のしかた |
+|---|---|---|
+| 辞書(語義・品詞・CDO へのリンク) | `source/lexicon.csv` | `python3 scripts/sync_lexicon.py` で変更点を確かめ、`--write` を付けて `data/lexicon.xml` に書き込む(`xml:id` は変わらない) |
+| 本文(語の切り方・語のまとまり・レンマ・品詞・文脈上の語釈)と対訳 | `data/eugnostos_tei.xml` | 直接直す |
+| 注釈・主題分類 | `data/eugnostos_theology.xml` | 直接直す。注の `@target`・`@ana` を変えたら、`python3 scripts/sync_theology_ana.py --check` で本文の `@ana` とのずれを確かめる。主題分類(`<taxonomy>`)は `data/eugnostos_tei.xml` のヘッダーにも同じものがある |
+
+- `translations.csv`・`notes.csv`・`themes.csv`・`eugnostos_source.tsv` を直しても、サイトには反映されません。
+- すでにある見出し語に 2 つ目以降の語義の行を足した場合(新しい同形異義語)は、`sync_lexicon.py` は報告するだけで、
+  `data/lexicon.xml` には入りません。`<superEntry>` にまとめる作業は手で行います。
+
+### build_tei.py は data/ を書き換えない
 
 ```
 python3 scripts/build_tei.py
 ```
 
-を実行すると、CSV から3つのXML(本文・辞書・注釈)が再生成されます。スクリプトは自分と同じ
-フォルダのCSVを読み、同じフォルダにXMLを書き出します(引数なしでOK)。ビュワーの埋め込みサンプルも
-更新したい場合のみ `eugnostos.html` の再生成が必要です(下記「拡張のしかた」)。
+は、CSV・TSV から XML を生成して `build/tei/`(git の管理外)に書き出し、`data/` の現在のファイルと比べて、
+置き換えた場合に**消えるもの・増えるもの**を表示します。**`data/` には書き込みません。**
+
+- `--write-data` を付けると `data/` も更新しますが、いまのファイルの内容が少しでも消える・変わる場合は、書き込まずに止まります
+  (追加だけのときにだけ書き込みます)。いまの生成結果は `data/eugnostos_tei.xml` と `data/lexicon.xml` の手作業の修正を
+  含まないので、止まります。
+- `--write-data --allow-loss` は、失われるものがあっても置き換えます(前のファイルは `build/tei-backup/` に残ります)。
+  **いまの状態では使わないでください。** 2026-07-04 に、当時のこのスクリプトの出力で `data/` が上書きされ、
+  XML に直接加えてあった注釈 7 件と辞書の項目 189 件(4,014 → 3,825)が `data/` から消えました
+  (コミット `249a222`。直前の状態は `1f97a93` に残っています)。
+
+以下は CSV の列の説明です。
 
 ### lexicon.csv（辞書・同形異義語）
 1行が1つの語義です。`lemma`(コプト語の見出し)・`n`(語義番号)・`pos`(品詞コード)・
@@ -329,7 +363,7 @@ python3 scripts/check_tei.py --schema ~/Downloads/tei_all.rng
   Pasquier(BCNH)・Parrott(NHS 27, Brill 1991)・小林稔訳・Painchaud(JBL 1995)等を参照して作成した
   オリジナル**で、これらの翻訳を転記したものではありません。権威あるフランス語訳は **Pasquier の校訂**を参照してください。
 - 語釈は**レンマ単位(文脈非依存)**で、全トークンの**約87%**に付与済み。残り(稀な語形)は
-  語彙集を `build_tei.py` の `LEX` に追記すれば即座にカバーできます。
+  `source/lexicon.csv` に行を足し、`scripts/sync_lexicon.py` で `data/lexicon.xml` に反映すればカバーできます。
 - 対訳は**日・英・仏の三言語**。枠組み(冒頭・結び)と教義上の要所を中心に**29節**を整備済み。未整備の節は
   インターリニア語釈で意味を追え、訳は「準備中」と表示されます。
 - これらは**校訂版に照らした検証・拡充を前提とするシード**です。学術利用の際は
@@ -337,16 +371,16 @@ python3 scripts/check_tei.py --schema ~/Downloads/tei_all.rng
 
 ## 拡張のしかた
 
-1. **内容を編集**:`lexicon.csv`(辞書)・`translations.csv`(対訳)・`notes.csv`(注釈)・
-   `themes.csv`(主題)を直接編集。新しい語義・対訳・注を行追加するだけです。
-2. `python3 build_tei.py` を実行 → **3つのXML**(`eugnostos_tei.xml` /
-   `eugnostos_lexicon.xml` / `eugnostos_theology.xml`)が再生成されます。
-3. **ビュワーへ反映**:Webサーバ経由で `eugnostos.html` を開けば、生成された3XMLを自動で読み込みます
+1. **内容を編集**:上の「データの編集」の表のとおりです。辞書は `lexicon.csv` を直して `sync_lexicon.py` で反映し、
+   本文・対訳・注釈は `data/` の XML を直接直します。
+2. `python3 scripts/build_tei.py` は、**`data/` を作り直すためには使いません**。いまの生成結果は `data/` の手作業の修正を
+   含まないためです(何も付けなければ `data/` には書き込まず、違いを表示するだけです)。
+3. **ビュワーへ反映**:Webサーバ経由で `eugnostos.html` を開けば、`data/` の3つのXMLを自動で読み込みます
    (同じフォルダに置くだけ)。`file://` で直接開く場合のオフライン用埋め込みサンプルだけは、
    `eugnostos.html` を雛形(`viewer_template.html`)から作り直して `<script id="tei-main">` /
    `id="tei-lex">` / `id="tei-theo">` の中身を差し替えます。
-4. V,1 本文を実体化するには、校訂版のトークン列で `build_tei.py` の `emit_witness_V`
-   を本文化(`<gap>` を `<w>` 群に置換)。
+4. V,1 本文を実体化するには、`data/eugnostos_tei.xml` の `wit-V` にある `<gap>` を、校訂版のトークン列に拠った
+   `<w>` 群に置き換えます(`build_tei.py` の `emit_witness_V` を書き換えて生成し直す方法は、2. の理由でいまは使えません)。
 
 > 辞書だけ・注釈だけを単独で差し替えることもできます(ビュワーの「XMLを開く」やドラッグ＆ドロップは
 > 本文/辞書/注釈を中身から自動判別し、該当部分だけを更新します)。
@@ -354,6 +388,9 @@ python3 scripts/check_tei.py --schema ~/Downloads/tei_all.rng
 > **他の NHC 文書へ展開**するときも同じCSVの形式が使えます。文書ごとに `<name>_*.csv` と
 > `<name>_source.tsv` を用意し、`build_tei.py` のファイル名を差し替えれば、同じ仕組みで本文・辞書・
 > 注釈のXMLが作れます。同形異義語も `lexicon.csv` に行を足すだけで増やせます。
+> ただし、生成結果(`build/tei/` に出ます)は、生成スクリプトが作られた当時の書き方のままで、そのあと `data/` で行った
+> 構造と書き方の修正は入っていません(たとえば `<s>` が `<div>` の直下、辞書の `<entry>` が `<list>` の中、
+> 辞書の `xml:id` が実行のたびに変わる)。そのままでは TEI として妥当ではないので、公開する前に直す必要があります。
 
 
 ## 辞書データの出典（加筆分）

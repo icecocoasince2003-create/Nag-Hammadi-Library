@@ -1,6 +1,9 @@
 .DS_Store
 __MACOSX/
 
+# scripts/build_tei.py の生成結果 (build/tei/) と、data/ を置き換える前の写し (build/tei-backup/)
+/build/
+
 client_secret_*.json
 *.apps.googleusercontent.com.json
 .env
