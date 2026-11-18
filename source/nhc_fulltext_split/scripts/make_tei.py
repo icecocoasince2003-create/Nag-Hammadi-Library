@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-make_tei.py <build.py の出力フォルダ> [日付 YYYY-MM-DD]
+make_tei.py <build.py の出力フォルダ> [日付 YYYY-MM-DD] [--replace-boundgroups]
 
 build.py の出力（nhc_all.tsv / catalog.tsv / changes.tsv / restored_letters.tsv）から、
 文書ごとの TEI P5 ファイルを <出力フォルダ>/tei/<ファイル名>.xml に作る（tsv/ txt/ と同じファイル名）。
+
+語群（<phr>）を付けた版（写本 I–IV の 17 文書。README_ja.md の §10）は作り直さない。tei/ の同じ名前のファイルに
+<phr> があれば、そのファイルは書き換えずに残し、最後に一覧を出す（作り直すと、付けた語群が消えるため）。
+残したファイルの本文が nhc_all.tsv と合っているかは verify_tei.py で確かめる。
+それでも作り直すとき（語群は消える）は --replace-boundgroups を付ける。
 
 本文の構造は、サイトの既存の本文ファイル（data/eugnostos_tei.xml, data/republic_tei.xml）に合わせてある:
 
@@ -374,7 +379,14 @@ def body(c, recs, rest, notes, dropped, st):
     out += ['        </ab>', '      </div>', '    </body>', '  </text>', '</TEI>', '']
     return '\n'.join(out)
 
-def main(out, today=None):
+def has_bound_groups(path):
+    """語群（<phr>）を付けた版か。このスクリプトの出力には <phr> がない。"""
+    if not os.path.exists(path):
+        return False
+    with open(path, encoding='utf-8') as f:
+        return re.search(r'<phr[\s/>]', f.read()) is not None
+
+def main(out, today=None, replace_groups=False):
     today = today or datetime.date.today().isoformat()
     assert re.fullmatch(r'\d{4}-\d{2}-\d{2}', today), today
     cat = read_tsv(os.path.join(out, 'catalog.tsv'))
@@ -389,6 +401,7 @@ def main(out, today=None):
     dst = os.path.join(out, 'tei')
     os.makedirs(dst, exist_ok=True)
     keep = set()
+    kept = []                                                    # 語群を付けた版なので書き換えなかったファイル
     total = collections.Counter()
     fixed = bool(rest) or any(int(c['psi_to_xi']) for c in cat)
     for c in cat:
@@ -397,15 +410,26 @@ def main(out, today=None):
         assert st['segments'] == int(c['rows']) and st['tokens'] == int(c['tokens']) and st['gaps'] == int(c['gap_markers']) \
             and st['high'] + st['medium'] == int(c['restored']), (c['unit'], dict(st))
         name = c['file'] + '.xml'
-        with open(os.path.join(dst, name), 'w', encoding='utf-8', newline='') as f:
-            f.write(header(c, st, today, fixed) + b)
         keep.add(name)
         total.update(st)
+        if not replace_groups and has_bound_groups(os.path.join(dst, name)):
+            kept.append(name)
+            continue
+        with open(os.path.join(dst, name), 'w', encoding='utf-8', newline='') as f:
+            f.write(header(c, st, today, fixed) + b)
     for old in os.listdir(dst):                                  # 文書の構成を変えたあとに残った古いファイルは消す
         if old.endswith('.xml') and old not in keep:
             os.remove(os.path.join(dst, old))
     print(f'TEI files {len(keep)}; segments {total["segments"]}; tokens {total["tokens"]}; gaps {total["gaps"]}; '
           f'restored words {total["high"] + total["medium"]} (cert high {total["high"]}, medium {total["medium"]})')
+    if kept:
+        print(f'kept {len(kept)} files with bound groups (<phr>), not regenerated: {", ".join(kept)}')
+        print('  check them against nhc_all.tsv with verify_tei.py; '
+              'to regenerate them anyway (their bound groups are lost), pass --replace-boundgroups')
 
 if __name__ == '__main__':
-    main(*sys.argv[1:3])
+    flags = [a for a in sys.argv[1:] if a.startswith('--')]
+    args = [a for a in sys.argv[1:] if not a.startswith('--')]
+    if set(flags) - {'--replace-boundgroups'} or not 1 <= len(args) <= 2:
+        sys.exit(__doc__)
+    main(*args, replace_groups='--replace-boundgroups' in flags)

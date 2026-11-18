@@ -158,8 +158,9 @@
       </bibl>
 
       <!-- BEGIN nhc_fulltext_split — 自動生成: scripts/sync_nhc_catalog.py が書き出す範囲（END までは手で編集しない）
-           ナグ・ハマディ写本 全文テキスト（未注釈）: 56 文書・13,301 セグメント・236,617 語。
+           ナグ・ハマディ写本 全文テキスト（未注釈）: 56 文書・13,301 セグメント・237,036 語。
            品詞・レンマ・訳は付いておらず、校訂本との照合も済んでいない作業用の本文（source/nhc_fulltext_split/README_ja.md）。
+           うち 17 文書は、語群（<phr>）を推定で付けた暫定版（どの文書かは同 README_ja.md の §10）。
            subtype="unannotated" の文書は、検索ページでは既定で選択されず、選んだときだけ読み込まれる。
            本文を表示するビュワーはまだ無いので <ref type="reader"> は付けていない。 -->
       <bibl type="document" subtype="unannotated" xml:id="doc-I-2">
@@ -167,7 +168,7 @@
         <title xml:lang="en">The Apocryphon of James</title>
         <title xml:lang="fr">Épître apocryphe de Jacques</title>
         <idno type="siglum">NHC I,2</idno>
-        <extent><measure unit="segment" quantity="381"/><measure unit="token" quantity="4209"/><measure unit="gap" quantity="0"/></extent>
+        <extent><measure unit="segment" quantity="381"/><measure unit="token" quantity="4221"/><measure unit="gap" quantity="0"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/01-2_apocryphon-of-james.xml"/>
       </bibl>
       <bibl type="document" subtype="unannotated" xml:id="doc-I-3">
@@ -175,7 +176,7 @@
         <title xml:lang="en">The Gospel of Truth</title>
         <title xml:lang="fr">Évangile de la Vérité</title>
         <idno type="siglum">NHC I,3</idno>
-        <extent><measure unit="segment" quantity="733"/><measure unit="token" quantity="6823"/><measure unit="gap" quantity="0"/></extent>
+        <extent><measure unit="segment" quantity="733"/><measure unit="token" quantity="6844"/><measure unit="gap" quantity="0"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/01-3_gospel-of-truth.xml"/>
       </bibl>
       <bibl type="document" subtype="unannotated" xml:id="doc-I-4">
@@ -183,7 +184,7 @@
         <title xml:lang="en">The Treatise on the Resurrection</title>
         <title xml:lang="fr">Traité sur la résurrection</title>
         <idno type="siglum">NHC I,4</idno>
-        <extent><measure unit="segment" quantity="12"/><measure unit="token" quantity="1782"/><measure unit="gap" quantity="0"/></extent>
+        <extent><measure unit="segment" quantity="12"/><measure unit="token" quantity="1784"/><measure unit="gap" quantity="0"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/01-4_treatise-on-the-resurrection.xml"/>
       </bibl>
       <bibl type="document" subtype="unannotated" xml:id="doc-I-5">
@@ -191,7 +192,7 @@
         <title xml:lang="en">The Tripartite Tractate</title>
         <title xml:lang="fr">Traité tripartite</title>
         <idno type="siglum">NHC I,5</idno>
-        <extent><measure unit="segment" quantity="2705"/><measure unit="token" quantity="24193"/><measure unit="gap" quantity="0"/></extent>
+        <extent><measure unit="segment" quantity="2705"/><measure unit="token" quantity="24299"/><measure unit="gap" quantity="0"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/01-5_tripartite-tractate.xml"/>
       </bibl>
       <bibl type="document" subtype="unannotated" xml:id="doc-II-1">
@@ -199,7 +200,7 @@
         <title xml:lang="en">The Apocryphon of John</title>
         <title xml:lang="fr">Livre des secrets de Jean</title>
         <idno type="siglum">NHC II,1</idno>
-        <extent><measure unit="segment" quantity="78"/><measure unit="token" quantity="10552"/><measure unit="gap" quantity="1"/></extent>
+        <extent><measure unit="segment" quantity="78"/><measure unit="token" quantity="10576"/><measure unit="gap" quantity="1"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/02-1_apocryphon-of-john.xml"/>
       </bibl>
       <bibl type="document" subtype="unannotated" xml:id="doc-II-2">
@@ -207,7 +208,7 @@
         <title xml:lang="en">The Gospel of Thomas</title>
         <title xml:lang="fr">Évangile selon Thomas</title>
         <idno type="siglum">NHC II,2</idno>
-        <extent><measure unit="segment" quantity="18"/><measure unit="token" quantity="6569"/><measure unit="gap" quantity="0"/></extent>
+        <extent><measure unit="segment" quantity="18"/><measure unit="token" quantity="6583"/><measure unit="gap" quantity="0"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/02-2_gospel-of-thomas.xml"/>
       </bibl>
       <bibl type="document" subtype="unannotated" xml:id="doc-II-3">
@@ -215,7 +216,7 @@
         <title xml:lang="en">The Gospel of Philip</title>
         <title xml:lang="fr">Évangile selon Philippe</title>
         <idno type="siglum">NHC II,3</idno>
-        <extent><measure unit="segment" quantity="231"/><measure unit="token" quantity="11231"/><measure unit="gap" quantity="0"/></extent>
+        <extent><measure unit="segment" quantity="231"/><measure unit="token" quantity="11258"/><measure unit="gap" quantity="0"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/02-3_gospel-of-philip.xml"/>
       </bibl>
       <bibl type="document" subtype="unannotated" xml:id="doc-II-4">
@@ -223,7 +224,7 @@
         <title xml:lang="en">The Hypostasis of the Archons</title>
         <title xml:lang="fr">Hypostase des archontes</title>
         <idno type="siglum">NHC II,4</idno>
-        <extent><measure unit="segment" quantity="131"/><measure unit="token" quantity="3743"/><measure unit="gap" quantity="0"/></extent>
+        <extent><measure unit="segment" quantity="131"/><measure unit="token" quantity="3759"/><measure unit="gap" quantity="0"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/02-4_hypostasis-of-the-archons.xml"/>
       </bibl>
       <bibl type="document" subtype="unannotated" xml:id="doc-II-5">
@@ -231,7 +232,7 @@
         <title xml:lang="en">On the Origin of the World</title>
         <title xml:lang="fr">Écrit sans titre (L'Origine du monde)</title>
         <idno type="siglum">NHC II,5</idno>
-        <extent><measure unit="segment" quantity="289"/><measure unit="token" quantity="9865"/><measure unit="gap" quantity="0"/></extent>
+        <extent><measure unit="segment" quantity="289"/><measure unit="token" quantity="9896"/><measure unit="gap" quantity="0"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/02-5_on-the-origin-of-the-world.xml"/>
       </bibl>
       <bibl type="document" subtype="unannotated" xml:id="doc-II-6">
@@ -239,7 +240,7 @@
         <title xml:lang="en">The Exegesis on the Soul</title>
         <title xml:lang="fr">Exégèse de l'âme</title>
         <idno type="siglum">NHC II,6</idno>
-        <extent><measure unit="segment" quantity="105"/><measure unit="token" quantity="3414"/><measure unit="gap" quantity="0"/></extent>
+        <extent><measure unit="segment" quantity="105"/><measure unit="token" quantity="3423"/><measure unit="gap" quantity="0"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/02-6_exegesis-on-the-soul.xml"/>
       </bibl>
       <bibl type="document" subtype="unannotated" xml:id="doc-II-7">
@@ -247,7 +248,7 @@
         <title xml:lang="en">The Book of Thomas the Contender</title>
         <title xml:lang="fr">Livre de Thomas</title>
         <idno type="siglum">NHC II,7</idno>
-        <extent><measure unit="segment" quantity="129"/><measure unit="token" quantity="3685"/><measure unit="gap" quantity="0"/></extent>
+        <extent><measure unit="segment" quantity="129"/><measure unit="token" quantity="3701"/><measure unit="gap" quantity="0"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/02-7_book-of-thomas-the-contender.xml"/>
       </bibl>
       <bibl type="document" subtype="unannotated" xml:id="doc-III-1">
@@ -255,7 +256,7 @@
         <title xml:lang="en">The Apocryphon of John</title>
         <title xml:lang="fr">Livre des secrets de Jean</title>
         <idno type="siglum">NHC III,1</idno>
-        <extent><measure unit="segment" quantity="241"/><measure unit="token" quantity="6856"/><measure unit="gap" quantity="2"/></extent>
+        <extent><measure unit="segment" quantity="241"/><measure unit="token" quantity="6884"/><measure unit="gap" quantity="2"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/03-1_apocryphon-of-john.xml"/>
       </bibl>
       <bibl type="document" subtype="unannotated" xml:id="doc-III-2">
@@ -263,7 +264,7 @@
         <title xml:lang="en">The Gospel of the Egyptians</title>
         <title xml:lang="fr">Livre sacré du Grand Esprit invisible (Évangile des Égyptiens)</title>
         <idno type="siglum">NHC III,2</idno>
-        <extent><measure unit="segment" quantity="158"/><measure unit="token" quantity="4843"/><measure unit="gap" quantity="1"/></extent>
+        <extent><measure unit="segment" quantity="158"/><measure unit="token" quantity="4859"/><measure unit="gap" quantity="1"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/03-2_gospel-of-the-egyptians.xml"/>
       </bibl>
       <bibl type="document" subtype="unannotated" xml:id="doc-III-3">
@@ -271,7 +272,7 @@
         <title xml:lang="en">Eugnostos the Blessed</title>
         <title xml:lang="fr">Eugnoste le Bienheureux</title>
         <idno type="siglum">NHC III,3</idno>
-        <extent><measure unit="segment" quantity="142"/><measure unit="token" quantity="3173"/><measure unit="gap" quantity="0"/></extent>
+        <extent><measure unit="segment" quantity="142"/><measure unit="token" quantity="3184"/><measure unit="gap" quantity="0"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/03-3_eugnostos.xml"/>
       </bibl>
       <bibl type="document" subtype="unannotated" xml:id="doc-III-4">
@@ -279,7 +280,7 @@
         <title xml:lang="en">The Sophia of Jesus Christ</title>
         <title xml:lang="fr">Sagesse de Jésus-Christ</title>
         <idno type="siglum">NHC III,4</idno>
-        <extent><measure unit="segment" quantity="189"/><measure unit="token" quantity="4288"/><measure unit="gap" quantity="0"/></extent>
+        <extent><measure unit="segment" quantity="189"/><measure unit="token" quantity="4313"/><measure unit="gap" quantity="0"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml"/>
       </bibl>
       <bibl type="document" subtype="unannotated" xml:id="doc-III-5">
@@ -287,7 +288,7 @@
         <title xml:lang="en">The Dialogue of the Savior</title>
         <title xml:lang="fr">Dialogue du Sauveur</title>
         <idno type="siglum">NHC III,5</idno>
-        <extent><measure unit="segment" quantity="139"/><measure unit="token" quantity="4445"/><measure unit="gap" quantity="1"/></extent>
+        <extent><measure unit="segment" quantity="139"/><measure unit="token" quantity="4458"/><measure unit="gap" quantity="1"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/03-5_dialogue-of-the-savior.xml"/>
       </bibl>
       <bibl type="document" subtype="unannotated" xml:id="doc-IV-1">
@@ -295,7 +296,7 @@
         <title xml:lang="en">The Apocryphon of John</title>
         <title xml:lang="fr">Livre des secrets de Jean</title>
         <idno type="siglum">NHC IV,1</idno>
-        <extent><measure unit="segment" quantity="387"/><measure unit="token" quantity="8723"/><measure unit="gap" quantity="12"/></extent>
+        <extent><measure unit="segment" quantity="387"/><measure unit="token" quantity="8771"/><measure unit="gap" quantity="12"/></extent>
         <ref type="xml" target="source/nhc_fulltext_split/tei/04-1_apocryphon-of-john.xml"/>
       </bibl>
       <bibl type="document" subtype="unannotated" xml:id="doc-IV-2">

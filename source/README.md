@@ -44,6 +44,8 @@ CSV は Excel・Numbers・Google スプレッドシート・テキストエデ�
 - 中身と使い方は [`nhc_fulltext_split/README_ja.md`](nhc_fulltext_split/README_ja.md) を参照してください。
 - `tsv/`・`txt/`・`tei/`・`nhc_all.tsv`・`catalog.tsv` は生成物です。手で直さず、`nhc_fulltext_split/scripts/restore.py` の規則などを直して
   `build.py` → `make_tei.py` を実行し直します（元ファイル `Nag_Hammadi.txt` はこのリポジトリには入っていません）。
+  ただし `tei/` のうち写本 I–IV の 17 文書は、生成したあとに語群（`<phr>`）を付けた暫定版で、語群はこの XML を直接直します。
+  `make_tei.py` はこの 17 ファイルを作り直しません（同 README の §10）。
 - **サイトとのつながり:** コーパス検索（`search.html`）の左欄〈未注釈の本文〉から、選んだ文書の `tei/….xml` を読み込みます。
   その一覧（題名・略号・語数）は `data/catalog.xml` にあるので、`tei/` を作り直したら
   `python3 scripts/sync_nhc_catalog.py --write` で更新してください。TEI のファイル名・証本 ID（`wit-II-6` など）・

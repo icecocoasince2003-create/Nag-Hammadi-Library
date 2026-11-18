@@ -21,7 +21,9 @@
   * xml:id は「doc-」＋証本 ID から「wit-」を除いたもの（証本 wit-II-6 → doc-II-6）。
     検索ページは URL の w=wit-II-6 から、この対応で読み込む文書を決める。
   * 並びは catalog.tsv の順（写本順）。件数は TEI を数えて catalog.tsv と突き合わせ、
-    合わなければ書き込まずに止まる。
+    合わなければ書き込まずに止まる。ただし語群（<phr>）を付けた版（source/nhc_fulltext_split/README_ja.md の §10）は
+    語の区切りを一部変えてあるので、語数（<w> の数）は catalog.tsv と比べない（本文が元と同じであることは
+    source/nhc_fulltext_split/scripts/verify_tei.py が確かめる）。カタログに書く語数は、どの文書も TEI の <w> の数。
 
 使い方:  python3 scripts/sync_nhc_catalog.py            # 差分の有無を表示するだけ(dry-run)
          python3 scripts/sync_nhc_catalog.py --write    # data/catalog.xml に書き込む
@@ -70,13 +72,16 @@ def read_documents():
             problems.append(f"{unit}: 証本の @n が {siglum!r} です（'NHC {unit}' のはず）")
         n = {"segment": sum(1 for _ in wit.iter(TEI + "s")), "token": sum(1 for _ in wit.iter(TEI + "w")),
              "gap": sum(1 for _ in wit.iter(TEI + "gap"))}
+        grouped = wit.find(f".//{TEI}phr") is not None      # 語群を付けた版（語の区切りを一部変えてある）
         for unit_name, col in (("segment", "rows"), ("token", "tokens"), ("gap", "gap_markers")):
+            if unit_name == "token" and grouped:
+                continue
             if n[unit_name] != int(row[col]):
                 problems.append(f"{unit}: {unit_name} が TEI で {n[unit_name]}、catalog.tsv で {row[col]}")
         for lang in ("ja", "en", "fr"):
             if not titles.get(lang):
                 problems.append(f"{unit}: 題名（{lang}）がありません")
-        docs.append({"key": wid[len("wit-"):], "siglum": siglum, "titles": titles, "n": n,
+        docs.append({"key": wid[len("wit-"):], "siglum": siglum, "titles": titles, "n": n, "grouped": grouped,
                      "target": f"{PKG_URL}/tei/{name}.xml"})
     keys = [d["key"] for d in docs]
     if len(set(keys)) != len(keys):
@@ -91,6 +96,11 @@ def build_block(docs):
         f"{BEGIN} — 自動生成: scripts/sync_nhc_catalog.py が書き出す範囲（END までは手で編集しない）",
         f"{INDENT}     ナグ・ハマディ写本 全文テキスト（未注釈）: {len(docs)} 文書・{total['segment']:,} セグメント・{total['token']:,} 語。",
         f"{INDENT}     品詞・レンマ・訳は付いておらず、校訂本との照合も済んでいない作業用の本文（{PKG_URL}/README_ja.md）。",
+    ]
+    grouped = [d for d in docs if d["grouped"]]
+    if grouped:
+        out.append(f"{INDENT}     うち {len(grouped)} 文書は、語群（<phr>）を推定で付けた暫定版（どの文書かは同 README_ja.md の §10）。")
+    out += [
         f"{INDENT}     subtype=\"unannotated\" の文書は、検索ページでは既定で選択されず、選んだときだけ読み込まれる。",
         f"{INDENT}     本文を表示するビュワーはまだ無いので <ref type=\"reader\"> は付けていない。 -->",
     ]

@@ -7,10 +7,14 @@ make_tei.py が作った tei/*.xml を、同じフォルダの nhc_all.tsv / cat
   1. 整形式の XML であること。UTF-8（BOM なし）、改行は LF。
   2. TEI から（通し番号、種類、行 ID と開始位置、本文）を組み立て直すと nhc_all.tsv と完全に一致すること
      （<w> → トークン、<gap> → [...]、<ab type> → kind）。
+     語群（<phr>）を付けた版（README_ja.md の §10）は語の区切りを一部変えているので、本文は語の区切りを除いた
+     文字列（欠損 [...] の位置を含む）で比べ、区切りを変えた数を最後に示す。<phr> の中は <w> だけであること。
   3. ⲍ・ⲯ を戻した語の印（<w resp="#zp" cert="…">）が restored_letters.tsv と 1 対 1 に対応し、
-     印のない <w> には ⲍ・ⲯ がないこと。
+     印のない <w> には ⲍ・ⲯ がないこと。<w> の属性はこの印だけ（語群を付けた版では、注釈つきの版から写した
+     type・lemma・xml:lang も認める）。
   4. xml:id が XML の名前として正しく、<s> と証本（<text>）の ID が全ファイルを通じて重複しないこと。
-  5. ヘッダーの件数（<extent>）、本文の実数、catalog.tsv の件数が一致すること。
+  5. ヘッダーの件数（<extent>）、本文の実数、catalog.tsv の件数が一致すること
+     （語群を付けた版の語数は catalog.tsv と比べない。区切りを変えたため）。
   6. サイトの検索ページ・ビュワーと同じ読み方（<text type="witness"> の子孫の <s xml:id> と <w>）で
      数えたセグメント数・トークン数が一致すること。
   7. tei_all.rng（TEI P5 の RELAX NG スキーマ）を渡したときは、lxml でスキーマ検証も行う（lxml が必要）。
@@ -29,6 +33,14 @@ def read_tsv(path):
         lines = f.read().split('\n')
     head = lines[0].split('\t')
     return [dict(zip(head, l.split('\t'))) for l in lines[1:] if l]
+
+def word_ends(toks):
+    """トークンの終わりの位置（文字数で数える）。語の区切りを比べるのに使う。"""
+    pos, ends = 0, set()
+    for t in toks:
+        pos += len(t)
+        ends.add(pos)
+    return ends
 
 def main(out, rng=None):
     ok = True
@@ -92,6 +104,7 @@ def main(out, rng=None):
             continue
         kids = list(div)
         check(kids and kids[0].tag == NS + 'head' and all(k.tag == NS + 'ab' for k in kids[1:]), f'{unit}: div の子が head + ab でない')
+        grouped = tx.find(f'.//{NS}phr') is not None          # 語群（<phr>）を付けた版（README_ja.md の §10）
 
         # ---- 本文を組み立て直す
         got, prev = [], None
@@ -105,19 +118,33 @@ def main(out, rng=None):
                 check(s.tag == NS + 's' and not (s.text or '').strip() and not (s.tail or '').strip(),
                       f'{unit}: ab の中に <s> 以外のものがある')
                 toks, marks = [], []
+                here = f'{unit} n={s.get("n")}'
+
+                def word(w):
+                    t = w.text or ''
+                    check(len(w) == 0 and t != '' and not re.search(r'\s', t), f'{here}: <w> の中身が不正')
+                    extra = set(w.attrib) - {'cert', 'resp'}
+                    check(not extra or (grouped and extra <= {'type', 'lemma', XML + 'lang'}),
+                          f'{here}: <w> に想定外の属性 {sorted(w.attrib)}')
+                    if 'cert' in w.attrib or 'resp' in w.attrib:
+                        check(w.get('resp') == '#zp' and w.get('cert') in ('high', 'medium'),
+                              f'{here}: 復元の印が不完全 {w.attrib}')
+                        marks.append((t, w.get('cert')))
+                    elif restored_run:
+                        check('ⲍ' not in t and 'ⲯ' not in t, f'{here}: 印のない <w> に ⲍ・ⲯ がある: {t}')
+                    toks.append(t)
+
                 for ch in s:
-                    check(not (ch.tail or '').strip(), f'{unit} n={s.get("n")}: 要素の外に文字列がある')
+                    check(not (ch.tail or '').strip(), f'{here}: 要素の外に文字列がある')
                     if ch.tag == NS + 'w':
-                        t = ch.text or ''
-                        check(len(ch) == 0 and t != '' and not re.search(r'\s', t), f'{unit} n={s.get("n")}: <w> の中身が不正')
-                        check(set(ch.attrib) <= {'cert', 'resp'}, f'{unit} n={s.get("n")}: <w> に想定外の属性 {sorted(ch.attrib)}')
-                        if ch.attrib:
-                            check(ch.get('resp') == '#zp' and ch.get('cert') in ('high', 'medium'),
-                                  f'{unit} n={s.get("n")}: 復元の印が不完全 {ch.attrib}')
-                            marks.append((t, ch.get('cert')))
-                        elif restored_run:
-                            check('ⲍ' not in t and 'ⲯ' not in t, f'{unit} n={s.get("n")}: 印のない <w> に ⲍ・ⲯ がある: {t}')
-                        toks.append(t)
+                        word(ch)
+                    elif ch.tag == NS + 'phr':
+                        check(not ch.attrib and not (ch.text or '').strip() and len(ch) > 0,
+                              f'{here}: <phr> が空か、属性や文字列がある')
+                        for w in ch:
+                            check(w.tag == NS + 'w' and not (w.tail or '').strip(), f'{here}: <phr> の中に <w> 以外のものがある')
+                            if w.tag == NS + 'w':
+                                word(w)
                     elif ch.tag == NS + 'gap':
                         check(ch.get('reason') == 'lacuna' and ch.get('extent') == 'unknown' and ch.get('unit') in (None, 'line', 'page')
                               and set(ch.attrib) <= {'reason', 'extent', 'unit'} and len(ch) == 0 and not ch.text,
@@ -128,9 +155,17 @@ def main(out, rng=None):
                 got.append((s.get('n'), kind, s.get(XML + 'id') or '', toks, marks))
         exp = recs[unit]
         check(len(got) == len(exp), f'{unit}: レコード数 {len(got)} != {len(exp)}')
+        split = joined = 0
         for g, e in zip(got, exp):
             check(g[0] == e['seq'] and g[1] == e['kind'], f'{unit} n={g[0]}: 通し番号か種類が nhc_all.tsv と違う')
-            check(' '.join(g[3]) == e['text'], f'{unit} n={g[0]}: 本文が nhc_all.tsv と違う')
+            if grouped:
+                # 語の区切りを除いた文字列（欠損 [...] の位置を含む）を比べ、区切りを変えた数を数える
+                check(''.join(g[3]) == e['text'].replace(' ', ''), f'{unit} n={g[0]}: 本文の文字が nhc_all.tsv と違う')
+                a, b = word_ends(g[3]), word_ends(e['text'].split(' '))
+                split += len(a - b)
+                joined += len(b - a)
+            else:
+                check(' '.join(g[3]) == e['text'], f'{unit} n={g[0]}: 本文が nhc_all.tsv と違う')
             m = re.fullmatch(r'([IVX]+)-(\d+)(?:_(\d+))?', g[2])
             check(bool(m) and m.group(1) == codex and m.group(2) == e['src_id']
                   and (e['src_tok'] == 'all' if m.group(3) is None else e['src_tok'].split('-')[0] == m.group(3)),
@@ -144,7 +179,7 @@ def main(out, rng=None):
         nrest = collections.Counter(cert for g in got for _, cert in g[4])
         meas = {m.get('unit'): int(m.get('quantity')) for m in root.iter(NS + 'measure')}
         check(meas == {'segment': nseg, 'token': ntok, 'gap': ngap}, f'{unit}: <extent> の件数が本文と違う {meas}')
-        check(nseg == int(c['rows']) and ntok == int(c['tokens']) and ngap == int(c['gap_markers'])
+        check(nseg == int(c['rows']) and (grouped or ntok == int(c['tokens'])) and ngap == int(c['gap_markers'])
               and sum(nrest.values()) == int(c['restored']), f'{unit}: 件数が catalog.tsv と違う')
 
         # ---- サイトの検索ページ・ビュワーと同じ読み方
@@ -156,6 +191,9 @@ def main(out, rng=None):
         tot.update(files=1, segments=nseg, tokens=ntok, gaps=ngap, high=nrest['high'], medium=nrest['medium'],
                    gap_line=sum(1 for g in tx.iter(NS + 'gap') if g.get('unit') == 'line'),
                    gap_page=sum(1 for g in tx.iter(NS + 'gap') if g.get('unit') == 'page'), bytes=len(raw))
+        if grouped:
+            tot.update(grouped=1, phr=sum(1 for _ in tx.iter(NS + 'phr')), split=split, joined=joined,
+                       annotated=sum(1 for w in tx.iter(NS + 'w') if w.get('type') or w.get('lemma')))
 
     allrecs = sum(len(v) for v in recs.values())
     check(tot['segments'] == allrecs, f'セグメントの合計 {tot["segments"]} != nhc_all.tsv の {allrecs}')
@@ -163,6 +201,10 @@ def main(out, rng=None):
           f'gaps {tot["gaps"]} (unit line {tot["gap_line"]}, page {tot["gap_page"]}, none {tot["gaps"] - tot["gap_line"] - tot["gap_page"]}); '
           f'restored words {tot["high"] + tot["medium"]} (cert high {tot["high"]}, medium {tot["medium"]}); '
           f'unique ids {len(seen)}; total size {tot["bytes"] / 1e6:.1f} MB')
+    if tot['grouped']:
+        print(f'files with bound groups (<phr>) {tot["grouped"]}: {tot["phr"]} bound groups; '
+              f'word division against nhc_all.tsv: {tot["split"]} new divisions, {tot["joined"]} removed; '
+              f'{tot["annotated"]} <w> with type/lemma')
 
     # ---- RELAX NG（任意）
     if rng:

@@ -50,6 +50,11 @@
   TEI のヘッダー（`<publicationStmt>`）には、公開元・公開日と、下の「ライセンス」と同じ利用条件
   （コプト語本文はパブリックドメイン、TEI 符号化と下処理は CC BY 4.0）を入れてあります。
   作業用の本文であることも同じ箇所に明記しています。
+- **写本 I–IV の 17 文書（I,2〜IV,1）には、語群（bound group）の暫定版があります（2026-11-18）。**
+  TEI の `<w>` を正書法上の語ごとに `<phr>` でまとめ、一部の語を形態素に分けました（`ⲁϥ` → `ⲁ`＋`ϥ` など 380 語）。
+  大半は自動の推定による試案で、人の目での確認はこれからです（要確認の境目の一覧は `source/nhc_fulltext_split/boundgroups/`）。
+  作り方・確かめたこと・直し方は同 README の §10 にあります。`<phr>` のあるファイルは、TEI を作るスクリプト（`make_tei.py`）が
+  作り直さないようにしてあります。
 - **コーパス検索・統計から使えます。** `search.html` の左欄〈未注釈の本文〉に 56 文書が写本ごとに並び、
   選んだ文書だけを読み込んで検索・統計の対象に加えます。既定では選択も読み込みもしないので、
   注釈つきの文書（エウグノストス・『国家』）だけを見るときの一覧・数値・読み込み量は変わりません。
@@ -57,7 +62,8 @@
   （[コーパス検索ガイド](docs/CORPUS_SEARCH.md) の「未注釈の本文を検索する」）。
 - 文書の一覧（題名・略号・語数）は `data/catalog.xml` の `<bibl subtype="unannotated">` で、
   `python3 scripts/sync_nhc_catalog.py --write` が `source/nhc_fulltext_split/` から書き出します
-  （`tei/` を作り直したら実行。件数が `catalog.tsv` と合わなければ書き込まずに止まります）。
+  （`tei/` を作り直したら実行。件数が `catalog.tsv` と合わなければ書き込まずに止まります。語群を付けた 17 文書は
+  語の区切りを一部変えたので、語数だけは比べません）。
 - **本文を表示するビュワーと、文書一覧（HOME）からのリンクはまだありません。** 検索結果の用例には証本と § 番号だけが出ます。
 
 ## フォルダ構成
@@ -84,7 +90,7 @@ nag_hammadi_library/
 │   ├─ lexicon.csv         辞書(1行=1語義／同形異義語は同じlemmaを複数行)
 │   ├─ translations.csv    対訳(seg_id, ja, en, fr)
 │   ├─ eugnostos_source.tsv  本文ソース(通常編集不要)
-│   └─ nhc_fulltext_split/   NHC 全文テキスト(56文書・未注釈の作業用ファイル。同フォルダの README_ja.md)
+│   └─ nhc_fulltext_split/   NHC 全文テキスト(56文書・未注釈の作業用ファイル。写本 I–IV の 17 文書は語群の暫定版つき。同フォルダの README_ja.md)
 └─ scripts/            ← スクリプト(通常触らない)
     ├─ build_tei.py        source/ の CSV から XML を試しに生成し、data/ と比べる(既定では data/ に書き込まない)
     ├─ sync_lexicon.py     source/lexicon.csv の変更を data/lexicon.xml に反映する(xml:id は変えない)
@@ -343,8 +349,9 @@ index.html(目次:全53文書)
 
 ### TEI スキーマとの適合（2026-11-18 時点）
 
-`data/` の 7 ファイルと `source/nhc_fulltext_split/tei/` の 56 ファイルは、すべて TEI P5 の汎用スキーマ
-`tei_all.rng`（P5 4.3.0）で妥当です。TEI に無い独自の要素・属性は使っていません。
+`data/` の 6 ファイルと `source/nhc_fulltext_split/tei/` の 56 ファイルは、すべて TEI P5 の汎用スキーマ
+`tei_all.rng`（P5 4.3.0）で妥当です（語群の暫定版を入れたあと、2026-11-18 に検証し直しました）。
+TEI に無い独自の要素・属性は使っていません。
 
 2026-11-18 に、それまでの独自の書き方を TEI 標準の書き方に移しました。本文・訳・語釈の中身は変えていません。
 
