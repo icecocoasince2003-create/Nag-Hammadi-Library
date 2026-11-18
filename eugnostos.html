@@ -202,15 +202,26 @@ html[data-search="open"] aside{transform:none}
 .pref:hover, .pref[aria-current="true"]{background:var(--lapis); border-color:var(--lapis); color:var(--paper)}
 html[data-mode="light"] .pref:hover, html[data-mode="light"] .pref[aria-current="true"]{color:#fff}
 .pref:focus-visible{outline:2px solid var(--gold); outline-offset:2px}
-.par-panel{grid-area:par; display:none; flex-direction:column; min-width:0; min-height:0; overflow:hidden;
+.par-panel{grid-area:par; display:none; flex-direction:column; min-width:0; min-height:0; overflow:hidden; position:relative;
   background:var(--paper-2); border-left:1px solid var(--line-2); color:var(--ink); font-family:var(--ui); z-index:20}
 html[data-par="open"] .par-panel{display:flex}
+/* 広い画面ではパネルは本文の右の列。幅は --par-w（左端の取っ手で利用者が決めた幅。html の style に入る）、
+   決めていなければ 30vw（320〜460px）。最小 280px、本文の列が 420px より狭くならないところが最大（JS の PAR_W_MIN・MAIN_MIN と同じ） */
 @media (min-width:1100px){
-  html[data-par="open"] .app{grid-template-columns:232px minmax(0,1fr) clamp(320px,30vw,460px) !important;
+  html[data-par="open"] .app{grid-template-columns:232px minmax(0,1fr) clamp(280px, var(--par-w, clamp(320px,30vw,460px)), calc(100vw - 232px - 420px)) !important;
     grid-template-areas:"site site site" "head main par" !important}
-  html[data-par="open"][data-panel="off"] .app{grid-template-columns:minmax(0,1fr) clamp(320px,30vw,460px) !important;
+  html[data-par="open"][data-panel="off"] .app{grid-template-columns:minmax(0,1fr) clamp(280px, var(--par-w, clamp(320px,30vw,460px)), calc(100vw - 420px)) !important;
     grid-template-areas:"site site" "main par" !important}
 }
+/* 幅を変える取っ手（パネルの左端。広い画面だけ） */
+.pp-grip{display:none; position:absolute; left:0; top:0; bottom:0; width:10px; cursor:col-resize; z-index:3; touch-action:none}
+.pp-grip::after{content:""; position:absolute; left:3px; top:50%; width:3px; height:48px; margin-top:-24px; border-radius:3px;
+  background:var(--line-2); transition:background .15s}
+.pp-grip:hover::after, html[data-par-drag] .pp-grip::after{background:var(--lapis)}
+.pp-grip:focus-visible{outline:none}
+.pp-grip:focus-visible::after{background:var(--lapis); box-shadow:0 0 0 2px var(--gold)}
+@media (min-width:1100px){ .pp-grip{display:block} }
+html[data-par-drag], html[data-par-drag] *{cursor:col-resize !important; user-select:none !important; -webkit-user-select:none !important}
 @media (max-width:1099.98px){
   .par-panel{position:fixed; inset:0 0 0 auto; width:min(440px,94vw); z-index:49; box-shadow:0 18px 50px rgba(0,0,0,.35);
     background:var(--raise)}   /* 本文に重なるので、透けない色にする */
@@ -425,6 +436,9 @@ html[data-lang="en"] .l-en{display:revert}
 
   <!-- 並行箇所のパネル。<aside> にすると上の検索ドロワー用の aside{…} が効いてしまうので <div role="complementary"> -->
   <div class="par-panel" id="parPanel" role="complementary" aria-label="並行箇所 / Parallel passages">
+    <div class="pp-grip" id="parGrip" role="separator" aria-orientation="vertical" aria-controls="parPanel" tabindex="0"
+      aria-label="並行箇所のパネルの幅 / Width of the parallels panel"
+      title="ドラッグで幅を変更（← → キーでも可。ダブルクリックか Enter で元の幅） / Drag to resize (or ← →); double-click or Enter to reset"></div>
     <div class="pp-top">
       <span class="pp-title"><span class="ic" aria-hidden="true">‖ </span><span class="l-ja">並行箇所</span><span class="l-en">Parallel passages</span></span>
       <button class="pp-x" id="parClose" type="button" aria-label="閉じる / Close" title="閉じる / Close">×</button>
@@ -1002,7 +1016,7 @@ function parOpen(segId,grpId){
   if(grpId) parTab=grpId;
   if(!PAR_GROUPS.some(g=>g.id===parTab)) parTab=((parSel&&PAR_GROUPS.find(g=>g.links.has(parSel)))||PAR_GROUPS[0]).id;
   H.setAttribute("data-par","open");
-  updateParBtn(); markActive(); renderPar(true);
+  updateParBtn(); markActive(); renderPar(true); updateGrip();
   if(!parWide()){ const x=$("#parClose"); if(x) x.focus(); }
   else if(!was&&parSel){   // 開いた分だけ本文の幅が狭くなるので、選んだ箇所が見える位置にあるか確かめる
     requestAnimationFrame(()=>{ const el=document.getElementById("seg-"+parSel); if(el) scrollSegIntoView(el); });
@@ -1141,6 +1155,67 @@ document.addEventListener("keydown",e=>{
   const inPanel=document.activeElement&&document.activeElement.closest&&document.activeElement.closest("#parPanel");
   if(!parWide()||inPanel) parClose();
 });
+
+/* -- パネルの幅（広い画面だけ）--
+   左端の取っ手（#parGrip）をドラッグするか、取っ手にフォーカスして ← →（Shift で大きく）、Home / End で最小・最大。
+   ダブルクリックか Enter で既定の幅に戻す。幅は html の --par-w に入れ、このブラウザーに覚えておく（nhc-par-w）。
+   上限・下限は CSS の clamp() でも切るので、窓を狭めても本文の列は 420px より狭くならない。 */
+const PAR_W_KEY="nhc-par-w", PAR_W_MIN=280, MAIN_MIN=420, LEFT_PANEL=232;
+function parMaxW(){ return Math.max(PAR_W_MIN, innerWidth-(H.getAttribute("data-panel")==="off"?0:LEFT_PANEL)-MAIN_MIN); }
+function parCurW(){ const p=$("#parPanel"); return p&&parIsOpen()?Math.round(p.getBoundingClientRect().width):0; }
+function updateGrip(){
+  const g=$("#parGrip"); if(!g) return;
+  const w=parCurW(), en=UL()==="en";
+  g.setAttribute("aria-valuemin",String(PAR_W_MIN)); g.setAttribute("aria-valuemax",String(parMaxW()));
+  if(w){ g.setAttribute("aria-valuenow",String(w)); g.setAttribute("aria-valuetext",(en?"width ":"幅 ")+w+"px"); }
+}
+/* w: 幅（px）。null なら既定の幅に戻す。save: このブラウザーに覚えるか（ドラッグ中は覚えない） */
+function setParW(w,save){
+  if(w==null){
+    H.style.removeProperty("--par-w");
+    if(save){ try{ localStorage.removeItem(PAR_W_KEY); }catch(e){} }
+  } else {
+    w=Math.round(Math.min(parMaxW(),Math.max(PAR_W_MIN,w)));
+    H.style.setProperty("--par-w",w+"px");
+    if(save){ try{ localStorage.setItem(PAR_W_KEY,String(w)); }catch(e){} }
+  }
+  updateGrip();
+}
+function keepActiveInView(){ const el=parSel&&document.getElementById("seg-"+parSel); if(el) scrollSegIntoView(el); }
+{ let saved=0; try{ saved=+localStorage.getItem(PAR_W_KEY)||0; }catch(e){}
+  if(saved>0) H.style.setProperty("--par-w",Math.max(PAR_W_MIN,saved)+"px"); }
+(function wireGrip(){
+  const g=$("#parGrip"); if(!g) return;
+  g.addEventListener("pointerdown",e=>{
+    if(!parWide()||e.button!==0) return;
+    e.preventDefault(); g.focus({preventScroll:true});
+    try{ g.setPointerCapture(e.pointerId); }catch(err){}
+    const right=$("#parPanel").getBoundingClientRect().right;
+    let x=e.clientX, raf=0;
+    H.setAttribute("data-par-drag","");
+    const move=ev=>{ x=ev.clientX; if(!raf) raf=requestAnimationFrame(()=>{ raf=0; setParW(right-x,false); }); };
+    const end=()=>{
+      g.removeEventListener("pointermove",move); g.removeEventListener("pointerup",end); g.removeEventListener("pointercancel",end);
+      if(raf){ cancelAnimationFrame(raf); raf=0; }
+      H.removeAttribute("data-par-drag");
+      setParW(right-x,true); keepActiveInView();
+    };
+    g.addEventListener("pointermove",move); g.addEventListener("pointerup",end); g.addEventListener("pointercancel",end);
+  });
+  g.addEventListener("dblclick",()=>{ setParW(null,true); keepActiveInView(); });
+  g.addEventListener("keydown",e=>{
+    if(!parWide()) return;
+    const step=e.shiftKey?80:20; let w=parCurW();
+    if(e.key==="ArrowLeft") w+=step;          // 取っ手を左へ = パネルを広く
+    else if(e.key==="ArrowRight") w-=step;
+    else if(e.key==="Home") w=PAR_W_MIN;
+    else if(e.key==="End") w=parMaxW();
+    else if(e.key==="Enter"){ e.preventDefault(); setParW(null,true); keepActiveInView(); return; }
+    else return;
+    e.preventDefault(); setParW(w,true);
+  });
+  window.addEventListener("resize",updateGrip);
+})();
 
 /* ---------- search ---------- */
 let qt=null;
