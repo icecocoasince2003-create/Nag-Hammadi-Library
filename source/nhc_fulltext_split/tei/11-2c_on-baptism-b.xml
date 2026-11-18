@@ -6,7 +6,7 @@
         <title xml:lang="en">On Baptism B</title>
         <title xml:lang="ja">洗礼について B</title>
         <title xml:lang="fr">Sur le baptême B</title>
-        <title type="sub" xml:lang="en">Nag Hammadi Codex XI,2c — segmented Coptic text without linguistic annotation (working file)</title>
+        <title type="sub" xml:lang="en">Nag Hammadi Codex XI,2c — provisional bound groups and automatic morphological annotation, not checked by hand (for review)</title>
         <respStmt>
           <resp>TEI encoding; division of the corpus into tractates; removal of conversion residue</resp>
           <name>Sheneset project</name>
@@ -19,10 +19,18 @@
           <resp>source text (tokenised Coptic)</resp>
           <name>supplied corpus (Marcion segment ids)</name>
         </respStmt>
+        <respStmt xml:id="morph-auto">
+          <resp>Provisional morphosyntactic analysis from reference witnesses, a controlled core list, and explicitly flagged heuristics</resp>
+          <name>Automated draft, for human review</name>
+        </respStmt>
+        <respStmt xml:id="morph-reference">
+          <resp>Morphological assignments copied from the supplied annotated reference text</resp>
+          <name>Eugnostos Digital Corpus project</name>
+        </respStmt>
       </titleStmt>
       <extent>
         <measure unit="segment" quantity="1">1 segments</measure>
-        <measure unit="token" quantity="224">224 tokens</measure>
+        <measure unit="token" quantity="224">224 morpheme tokens (provisional)</measure>
         <measure unit="gap" quantity="2">2 gap markers</measure>
       </extent>
       <publicationStmt>
@@ -32,8 +40,8 @@
             <p xml:lang="en">The Coptic text is in the public domain. The TEI encoding and the preparation of the text (division into tractates, removal of conversion residue, restoration of ⲍ and ⲯ) are the work of the Sheneset project and are released under the Creative Commons Attribution 4.0 International licence (CC BY 4.0).</p>
             <p xml:lang="ja">コプト語本文はパブリックドメイン。TEI 符号化と本文の下処理（文書の分割、変換の残骸の除去、ⲍ・ⲯ の復元）は Sheneset プロジェクトによるもので、クリエイティブ・コモンズ 表示 4.0 国際（CC BY 4.0）で提供する。</p>
           </licence>
-          <p xml:lang="en">Published as a working text. It has not been collated with the critical editions and carries no linguistic annotation yet; see projectDesc and editorialDecl for what was changed and what is missing.</p>
-          <p xml:lang="ja">作業用の本文として公開している。校訂本との照合は済んでおらず、言語注釈もまだ付けていない。加えた変更と欠けている情報は projectDesc と editorialDecl を参照。</p>
+          <p xml:lang="en">Published as a working text. It has not been collated with the critical editions. Its bound groups, parts of speech, lemmata and glosses were assigned automatically and have not been checked by hand; see projectDesc and editorialDecl for what was changed and what is missing.</p>
+          <p xml:lang="ja">作業用の本文として公開している。校訂本との照合は済んでいない。語群・品詞・レンマ・語釈は自動で付けたもので、人の目で確かめていない。加えた変更と欠けている情報は projectDesc と editorialDecl を参照。</p>
         </availability>
         <date when="2026-11-17">2026-11-17</date>
       </publicationStmt>
@@ -69,22 +77,25 @@
     </fileDesc>
     <encodingDesc>
       <projectDesc>
-        <p xml:lang="ja">提供されたナグ・ハマディ写本全文のテキストファイルを文書ごとに分け、サイト掲載に向けて下処理したものの TEI 版。訳、語釈、品詞、レンマはまだ付けていない。下処理（文書の分割、変換の残骸の除去、ⲍ・ⲯ の復元）と TEI 化には生成 AI（Claude）を使い、結果が元ファイルと対応することを検証スクリプト（scripts/verify.py、scripts/verify_tei.py）で確かめた。</p>
-        <p xml:lang="en">TEI version of the supplied full text of the Nag Hammadi Codices, divided into tractates and preprocessed for publication on the site. No translation, gloss, part of speech or lemma has been added yet. The preprocessing (division into tractates, removal of conversion residue, restoration of ⲍ and ⲯ) and the TEI conversion were carried out with a generative AI model (Claude); the result was checked against the source file with the verification scripts (scripts/verify.py, scripts/verify_tei.py).</p>
+        <p xml:lang="ja">提供されたナグ・ハマディ写本全文のテキストファイルを文書ごとに分け、サイト掲載に向けて下処理したものの TEI 版。訳はまだ付けていない。語群・品詞・レンマ・語釈は 2026-11-18 に自動で付けた暫定版で、人の目で確かめていない（editorialDecl の segmentation と interpretation）。下処理（文書の分割、変換の残骸の除去、ⲍ・ⲯ の復元）と TEI 化には生成 AI（Claude）を使い、結果が元ファイルと対応することを検証スクリプト（scripts/verify.py、scripts/verify_tei.py）で確かめた。</p>
+        <p xml:lang="en">TEI version of the supplied full text of the Nag Hammadi Codices, divided into tractates and preprocessed for publication on the site. No translation has been added yet. Bound groups, parts of speech, lemmata and glosses were assigned automatically on 2026-11-18 and have not been checked by hand (see segmentation and interpretation in editorialDecl). The preprocessing (division into tractates, removal of conversion residue, restoration of ⲍ and ⲯ) and the TEI conversion were carried out with a generative AI model (Claude); the result was checked against the source file with the verification scripts (scripts/verify.py, scripts/verify_tei.py).</p>
       </projectDesc>
       <editorialDecl>
         <segmentation>
           <p xml:lang="ja"><gi>s</gi> は元ファイルの 1 行（1 セグメント）。行が文書の境目や表題の境目をまたぐときだけ分けた。<att>xml:id</att> は「写本番号-行 ID」で、分けた行には「_開始トークン位置」（元ファイルの行の中での位置、0 始まり）を付けた。<att>n</att> は文書内の通し番号。<gi>w</gi> は元ファイルの空白区切り（形態素解析器の出力とみられる）のままで、切り直していない。ⲍ・ⲯ を戻した語が途中で切れていたときだけ 1 つにつないだ。<gi>ab</gi> の <att>type</att> は <val>title</val>（冒頭表題）、<val>text</val>（本文）、<val>subscript</val>（奥書表題）、<val>colophon</val>（写字生の奥書・覚え書き）、<val>fragment</val>（未配置断片）。</p>
           <p xml:lang="en">Each <gi>s</gi> is one row (segment) of the source file; a row is split only where it straddles the boundary of a tractate or of a title. <att>xml:id</att> is the codex number followed by the row id; for split rows the position of the first token within the source row (counted from 0) is added after an underscore. <att>n</att> numbers the segments within the tractate. Each <gi>w</gi> is a token of the source file (apparently the output of a morphological segmenter) and has not been re-segmented, except that tokens were joined where a restored ⲍ or ⲯ fell inside a word that the segmenter had split. The <att>type</att> of <gi>ab</gi> is <val>title</val> (opening title), <val>text</val>, <val>subscript</val> (subscript title), <val>colophon</val> (scribal colophon or note) or <val>fragment</val> (unplaced fragments).</p>
+          <p xml:lang="ja">2026-11-18 暫定 bound-group 分析：&lt;phr&gt; はコプト語の正書法上のまとまり、&lt;w&gt; は形態素単位を表す。eugnostos_tei.xml の本文が文字単位で一致する既注釈箇所だけ参考の &lt;phr&gt;/&lt;w&gt; を転用した。それ以外は eugnostos_tei.xml・republic_tei.xml の既注釈例から学習した分類器で、元の &lt;w&gt; 間にグループ境界を推定した。元の &lt;w&gt; の切り方は原則維持し、元資料に含まれる誤分割・未分割を全面的に修正したものではない。人手による校正前の試案であり、分割結果を言語学上の確定事項と解釈しない。</p>
+          <p xml:lang="en">A small inventory of unambiguous surface forms is further split into morphemes based on the two references, but most source w segmentation remains unchanged. No broad morphological reanalysis or editorial collation has been performed; grouping is provisional.</p>
         </segmentation>
         <correction method="markup">
-          <p xml:lang="ja">元ファイルでは ⲝ がすべて ⲯ になっていたので、ⲝ に戻した（この文書では 0 字）。元ファイルで落ちていた ⲍ と ⲯ は、語形と文脈から語が決まる箇所で戻した（この文書では 1 語）。戻した語の <gi>w</gi> には <att>resp</att>="#zp" と <att>cert</att> を付けた。<val>high</val>（1 語）は語形と文脈から決まるもの、<val>medium</val>（0 語）は固有名など、校訂本や翻訳で知られている読みを当てたもの。どちらも校訂本とは照合していない。英語の編集注記が文字化けして残っていた箇所は、欠損の注記なので <gi>gap</gi> に置き換えた。変更は 1 か所ずつ、同梱の changes.tsv と restored_letters.tsv に記録してある。</p>
-          <p xml:lang="en">In the source file every ⲝ had been converted to ⲯ; these were changed back to ⲝ (0 letters in this file). The letters ⲍ and ⲯ, lost throughout the source file, were restored where the word could be identified from its form and context (1 words in this file). These words carry <att>resp</att>="#zp" and <att>cert</att> on <gi>w</gi>: <val>high</val> (1) = determined by word form and context; <val>medium</val> (0) = proper names and similar words, restored following readings known from editions and translations. None has been collated with the printed editions. Garbled residue of English editorial notes, which reported lost text, was replaced by <gi>gap</gi>. Every change is listed in the accompanying files changes.tsv and restored_letters.tsv.</p>
+          <p xml:lang="ja">元ファイルでは ⲝ がすべて ⲯ になっていたので、ⲝ に戻した（この文書では 0 字）。元ファイルで落ちていた ⲍ と ⲯ は、語形と文脈から語が決まる箇所で戻した（この文書では 1 語）。戻した字は <gi>supplied</gi> で包み、<att>resp</att>="#zp" と <att>cert</att> を付けた（<gi>w</gi> の <att>resp</att> と <att>cert</att> は形態素注釈のもの）。<val>high</val>（1 語）は語形と文脈から決まるもの、<val>medium</val>（0 語）は固有名など、校訂本や翻訳で知られている読みを当てたもの。どちらも校訂本とは照合していない。英語の編集注記が文字化けして残っていた箇所は、欠損の注記なので <gi>gap</gi> に置き換えた。変更は 1 か所ずつ、同梱の changes.tsv と restored_letters.tsv に記録してある。</p>
+          <p xml:lang="en">In the source file every ⲝ had been converted to ⲯ; these were changed back to ⲝ (0 letters in this file). The letters ⲍ and ⲯ, lost throughout the source file, were restored where the word could be identified from its form and context (1 words in this file). The restored letters are enclosed in <gi>supplied</gi> with <att>resp</att>="#zp" and <att>cert</att> (the <att>resp</att> and <att>cert</att> of <gi>w</gi> belong to the morphological annotation): <val>high</val> (1) = determined by word form and context; <val>medium</val> (0) = proper names and similar words, restored following readings known from editions and translations. None has been collated with the printed editions. Garbled residue of English editorial notes, which reported lost text, was replaced by <gi>gap</gi>. Every change is listed in the accompanying files changes.tsv and restored_letters.tsv.</p>
         </correction>
         <interpretation>
-          <p xml:lang="ja">品詞（<att>type</att>）、レンマ（<att>lemma</att>）、語釈、訳、ギリシア語借用語の印（<att>xml:lang</att>="grc"）はまだ付けていない。<gi>gap</gi>（<att>reason</att>="lacuna"）は、元ファイルに行・頁単位の欠損の注記があった位置を示す（この文書では 2 箇所）。それ以外の欠損と校訂者による復元の区別、下点、上線、句読点、頁と行の区切りは元ファイルになく、符号化していない。</p>
-          <p xml:lang="en">No part of speech (<att>type</att>), lemma (<att>lemma</att>), gloss, translation or loanword marking (<att>xml:lang</att>="grc") has been added yet. <gi>gap</gi> with <att>reason</att>="lacuna" marks the places where the source file had an editorial note reporting lost lines or pages (2 in this file). The source file does not distinguish other lacunae from editorial restorations and has no sublinear dots, supralinear strokes, punctuation, or page and line breaks; none of these is encoded.</p>
-        </interpretation>
+          <p xml:lang="ja">訳はまだ付けていない。品詞（<att>type</att>）、レンマ（<att>lemma</att>）、語釈、ギリシア語借用語の印（<att>xml:lang</att>="grc"）は、下の段落の自動注釈による暫定のもの。<gi>gap</gi>（<att>reason</att>="lacuna"）は、元ファイルに行・頁単位の欠損の注記があった位置を示す（この文書では 2 箇所）。それ以外の欠損と校訂者による復元の区別、下点、上線、句読点、頁と行の区切りは元ファイルになく、符号化していない。</p>
+          <p xml:lang="en">No translation has been added yet. Part of speech (<att>type</att>), lemma (<att>lemma</att>), glosses and loanword marking (<att>xml:lang</att>="grc") come from the provisional automatic annotation described below. <gi>gap</gi> with <att>reason</att>="lacuna" marks the places where the source file had an editorial note reporting lost lines or pages (2 in this file). The source file does not distinguish other lacunae from editorial restorations and has no sublinear dots, supralinear strokes, punctuation, or page and line breaks; none of these is encoded.</p>
+        <p xml:lang="ja">本版の形態素注釈は自動生成された暫定案。w/@type は仮の品詞、w/@lemma は推定できた場合の見出し語、w/@ana は standOff の英日語釈を参照する。w/@cert は high（参考本文との一致など）、medium（参照辞書・規則）、low（未確定の形態素解析）を表す。未知語は type="X" とし、検証のない lemma や語釈を補わない。全体は校訂版・辞書との照合を要する。</p>
+        <p xml:lang="en">The morphological annotation in this version is a provisional, automatically generated proposal. w/@type is a tentative part of speech, w/@lemma the headword where one could be inferred, and w/@ana points to the English and Japanese glosses in standOff. w/@cert is high (e.g. agreement with the annotated reference text), medium (reference lexicon or rules) or low (unresolved analysis), and w/@resp names the source (#morph-auto; #morph-reference for analyses copied from the annotated reference text). Unknown words have type="X" and no lemma or gloss. All of it still has to be checked against the critical editions and dictionaries.</p></interpretation>
       </editorialDecl>
     </encodingDesc>
     <profileDesc>
@@ -98,6 +109,9 @@
     <revisionDesc>
       <change when="2026-11-17">TEI file generated from the preprocessed text (scripts/make_tei.py).</change>
       <change when="2026-11-17">Published in the Sheneset repository and made searchable in the corpus search; publisher, licence and date stated in publicationStmt.</change>
+      <change when="2026-11-18">Provisional bound-group segmentation into &lt;phr&gt; containing morpheme &lt;w&gt;, with exact-match reference reuse where available and automatically inferred boundaries elsewhere; original text verified against input.</change>
+      <change when="2026-11-18">Provisional POS/lemma, stand-off English/Japanese glosses, and explicit confidence markers added; original Coptic text and segmentation preserved.</change>
+      <change when="2026-11-18">Added to the Sheneset repository and published as a draft: the restoration marks for ⲍ and ⲯ, which the annotation had overwritten, put back as &lt;supplied&gt; around the restored letters; glosses that no word points to removed; header statements about the annotation brought up to date.</change>
     </revisionDesc>
   </teiHeader>
   <text type="witness" xml:id="wit-XI-2c" n="NHC XI,2c" xml:lang="cop">
@@ -107,234 +121,569 @@
         <ab type="text">
           <s xml:id="XI-7512572_489" n="1">
             <gap reason="lacuna" unit="line" extent="unknown"/>
-            <w>ⲁ</w>
-            <w>ⲃⲁⲗ</w>
-            <w>ϩⲙ</w>
-            <w>ⲡ</w>
-            <w>ⲕⲟⲥⲙⲟⲥ</w>
-            <w>ⲁ</w>
-            <w>ϩⲟⲩⲛ</w>
-            <w>ⲁⲡⲓⲟⲣⲇⲁⲛⲏⲥ</w>
-            <w>ⲁⲩⲱ</w>
-            <w>ⲁ</w>
-            <w>ⲃⲁⲗ</w>
-            <w>ϩⲛ</w>
-            <w>ⲧ</w>
-            <w>ⲙⲛⲧ</w>
-            <w>ⲃⲗⲗⲉ</w>
-            <w>ⲙ</w>
-            <w>ⲡ</w>
-            <w>ⲕⲟⲥⲙⲟⲥ</w>
-            <w>ⲁ</w>
-            <w>ϩⲟⲩⲛ</w>
-            <w>ⲁ</w>
-            <w>ⲡ</w>
-            <w>ⲛⲉⲩ</w>
-            <w>ⲙ</w>
-            <w>ⲡ</w>
-            <w>ⲛⲟⲩⲧⲉ</w>
-            <w>ⲁ</w>
-            <w>ⲃⲁⲗ</w>
-            <w>ϩⲙ</w>
-            <w>ⲡ</w>
-            <w>ⲥⲁⲣⲕⲓⲕⲟⲛ</w>
-            <w>ⲁϩⲟⲩ</w>
-            <w>ⲛ</w>
-            <w>ⲁ</w>
-            <w>ⲡⲡ</w>
-            <w>ⲛⲉⲩ</w>
-            <w>ⲙⲁⲧⲓⲕⲟⲛ</w>
-            <w>ⲁ</w>
-            <w>ⲃⲁⲗ</w>
-            <w>ϩⲛ</w>
-            <w>ⲫⲩⲥⲓⲕⲟⲛ</w>
-            <w>ⲁϩⲟⲩ</w>
-            <w>ⲛ</w>
-            <w>ⲁⲧⲙⲛⲧⲁⲅⲅⲉⲗⲟⲥ</w>
-            <w>ⲁ</w>
-            <w>ⲃⲁⲗ</w>
-            <w>ϩⲙ</w>
-            <w>ⲡⲓⲥⲱⲱⲛⲧ</w>
-            <w>ⲁϩⲟⲩ</w>
-            <w>ⲛ</w>
-            <w>ⲁ</w>
-            <w>ⲡⲓⲡⲗⲏ</w>
-            <w>ⲣⲱ</w>
-            <w>ⲙⲁ</w>
-            <w>ⲁ</w>
-            <w>ⲃⲁⲗ</w>
-            <w>ϩⲛ</w>
-            <w>ⲡ</w>
-            <w>ⲕⲟⲥⲙⲟⲥ</w>
-            <w>ⲁ</w>
-            <w>ϩⲟⲩⲛ</w>
-            <w>ⲁ</w>
-            <w>ⲡ</w>
-            <w>ⲁⲓⲱⲛ</w>
-            <w>ⲁ</w>
-            <w>ⲃⲁⲗ</w>
-            <w>ϩⲛ</w>
-            <w>ⲛ</w>
-            <w>ⲣϩⲙϩⲉⲗ</w>
-            <w>ⲁϩⲟⲩ</w>
-            <w>ⲛ</w>
-            <w>ⲁ</w>
-            <w>ⲩ</w>
-            <w>ⲙⲛⲧ</w>
-            <w>ϣⲏⲣⲉ</w>
-            <w>ⲁ</w>
-            <w>ⲃⲁⲗ</w>
-            <w>ϩⲛ</w>
-            <w>ϩⲛϭⲗⲁⲗⲗⲙ</w>
-            <w>ⲁϩⲟⲩ</w>
-            <w>ⲛ</w>
-            <w>ⲁ</w>
-            <w>ⲛⲉⲩ</w>
-            <w>ⲉⲣⲏⲩ</w>
-            <w>ⲁ</w>
-            <w>ⲃⲁⲗ</w>
-            <w>ϩⲙ</w>
-            <w>ⲡ</w>
-            <w>ϫⲁⲉⲓⲉ</w>
-            <w>ⲁϩⲟⲩ</w>
-            <w>ⲛ</w>
-            <w>ⲁ</w>
-            <w>ⲡⲛ</w>
-            <w>ϯ</w>
-            <w>ⲙⲉ</w>
-            <w>ⲁ</w>
-            <w>ⲃⲁⲗ</w>
-            <w>ϩⲙ</w>
-            <w>ⲡⲱ</w>
-            <w>ⲣϣ</w>
-            <w>ⲁϩⲟⲩ</w>
-            <w>ⲛ</w>
-            <w>ⲁⲧϩⲙⲙⲉ</w>
-            <w>ⲁ</w>
-            <w>ⲃⲁⲗ</w>
-            <w>ϩⲛ</w>
-            <w>ⲗ</w>
-            <w>ⲁϩⲟⲩ</w>
-            <w>ⲛ</w>
-            <w>ⲁⲩ</w>
-            <w>ⲁⲩⲱ</w>
-            <w>ⲛⲧⲛ</w>
-            <w>ⲁϩⲟⲩ</w>
-            <w>ⲛ</w>
-            <w>ⲁⲛ</w>
-            <w>ⲧⲉ</w>
-            <w>ⲉⲓ</w>
-            <w>ⲧⲉ</w>
-            <w>ⲑ</w>
-            <w>ⲉ</w>
-            <w>ⲛⲧ</w>
-            <w>ⲁ</w>
-            <w>ⲩ</w>
-            <w>ⲛⲧ</w>
-            <w>ⲛ</w>
-            <w>ⲁ</w>
-            <w>ⲃⲁⲗ</w>
-            <w>ϩⲛ</w>
-            <w>ⲛ</w>
-            <w>ⲥⲱⲙⲁ</w>
-            <w>ⲛⲥⲡⲉⲣⲙⲁⲧⲓⲕⲟⲛ</w>
-            <w>ⲁϩⲟⲩ</w>
-            <w>ⲛ</w>
-            <w>ⲁ</w>
-            <w>ϩⲛ</w>
-            <w>ⲥⲱⲙⲁ</w>
-            <w>ⲁ</w>
-            <w>ⲩ</w>
-            <w>ⲙⲟⲣⲫⲏ</w>
-            <w>ⲛ</w>
-            <w>ⲧⲉⲗⲉⲓⲁ</w>
-            <w>ⲛ</w>
-            <w>ϩⲏⲧ</w>
-            <w>ⲟⲩ</w>
-            <w>ⲁ</w>
-            <w>ⲉⲓⲇⲩⲛⲉ</w>
-            <w>ⲙ</w>
-            <w>ⲙⲉⲛ</w>
-            <w>ⲛⲧⲩⲡⲓ</w>
-            <w>ⲕⲱ</w>
-            <w>ⲥ</w>
-            <w>ⲙⲡⲥⲉⲡⲉ</w>
-            <w>ⲡⲉ</w>
-            <w>ⲉⲓ</w>
-            <w>ⲛⲧⲁ</w>
-            <w>ⲡⲉⲭⲣⲏ</w>
-            <w>ⲥⲧⲟ</w>
-            <w>ⲥ</w>
-            <w>ⲥⲱⲧⲉ</w>
-            <w>ⲙⲙⲁ</w>
-            <w>ⲛ</w>
-            <w>ⲛϩⲏⲧ</w>
-            <w>ϥ</w>
-            <w>ϩⲛ</w>
-            <w>ⲧ</w>
-            <w>ⲕⲟⲓⲛⲱⲛⲓⲁ</w>
-            <w>ⲙ</w>
-            <w>ⲡⲉϥ</w>
-            <w>ⲡⲛⲉⲩⲙⲁ</w>
-            <w>ⲁⲩ</w>
-            <w>ⲱ</w>
-            <w>ⲛⲧ</w>
-            <w>ⲁ</w>
-            <w>ϥ</w>
-            <w>ⲉⲓⲛⲉ</w>
-            <w>ⲙⲙⲁ</w>
-            <w>ⲛ</w>
-            <w>ⲁ</w>
-            <w>ⲃⲁⲗ</w>
-            <w>ⲉ</w>
-            <w>ⲧ</w>
-            <w>ⲛ</w>
-            <w>ϩⲏ</w>
-            <w>ⲧ</w>
-            <w>ϥ</w>
-            <w>ⲁⲩⲱ</w>
-            <w>ϫⲙ</w>
-            <w>ⲡⲓ</w>
-            <w>ⲛⲉⲩ</w>
-            <w cert="high" resp="#zp">ⲛⲯⲩⲭⲏ</w>
-            <w>ⲛⲁ</w>
-            <w>ⲣ</w>
-            <w>ϩⲛ</w>
-            <w>ⲡⲛⲉⲩⲙⲁ</w>
-            <w>ⲛ</w>
-            <w>ⲧⲉⲗⲉⲓⲟⲛ</w>
-            <w>ⲉ</w>
-            <w>ⲣⲉ</w>
-            <w>ⲛ</w>
-            <w>ⲉⲧⲁⲩⲧⲉⲉⲓⲧⲟⲩ</w>
-            <w>ϭⲉ</w>
-            <w>ⲛⲉⲛ</w>
-            <w>ϩⲛ</w>
-            <w>ⲡ</w>
-            <w>ϣⲁⲣⲡ</w>
-            <w>ⲛ</w>
-            <w>ⲃⲁⲡⲧⲓⲥⲙⲁ</w>
-            <w>ⲉ</w>
-            <w>ⲩ</w>
+            <phr>
+              <w type="APST" cert="medium" resp="#morph-auto" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0">ⲁ</w>
+              <w type="N" cert="medium" resp="#morph-auto" lemma="ⲃⲁⲗ" ana="#g-en-79df4b171812 #g-ja-3a0ea34a22f0">ⲃⲁⲗ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ϩⲛ" ana="#g-en-af10ef20dd90 #g-ja-fa036821b6d2">ϩⲙ</w>
+            </phr>
+            <phr>
+              <w type="ART" cert="medium" resp="#morph-auto" lemma="ⲡ" ana="#g-en-f9921a1852ea #g-ja-084b374171cd">ⲡ</w>
+              <w type="N" cert="medium" resp="#morph-auto" lemma="ⲕⲟⲥⲙⲟⲥ" xml:lang="grc" ana="#g-en-968259a3644f #g-ja-29624b81f0c3">ⲕⲟⲥⲙⲟⲥ</w>
+            </phr>
+            <phr>
+              <w type="APST" cert="medium" resp="#morph-auto" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0">ⲁ</w>
+              <w type="N" cert="low" resp="#morph-auto" lemma="ϩⲟⲩⲛ">ϩⲟⲩⲛ</w>
+            </phr>
+            <phr>
+              <w type="N" cert="low" resp="#morph-auto" lemma="ⲁⲡⲓⲟⲣⲇⲁⲛⲏⲥ">ⲁⲡⲓⲟⲣⲇⲁⲛⲏⲥ</w>
+            </phr>
+            <phr>
+              <w type="CONJ" cert="medium" resp="#morph-auto" lemma="ⲁⲩⲱ" ana="#g-en-cffa50a32cb1 #g-ja-cbad2e959d4b">ⲁⲩⲱ</w>
+            </phr>
+            <phr>
+              <w type="APST" cert="medium" resp="#morph-auto" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0">ⲁ</w>
+              <w type="N" cert="medium" resp="#morph-auto" lemma="ⲃⲁⲗ" ana="#g-en-79df4b171812 #g-ja-3a0ea34a22f0">ⲃⲁⲗ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ϩⲛ" ana="#g-en-af10ef20dd90 #g-ja-fa036821b6d2">ϩⲛ</w>
+            </phr>
+            <phr>
+              <w type="ART" cert="medium" resp="#morph-auto" lemma="ⲧ" ana="#g-en-0bd8ea9fc267 #g-ja-3c594eb70f8d">ⲧ</w>
+              <w type="PFX" cert="medium" resp="#morph-auto" lemma="ⲙⲛⲧ" ana="#g-en-98db8a90aa90 #g-ja-4116353e8a44">ⲙⲛⲧ</w>
+            </phr>
+            <phr>
+              <w type="X" cert="low" resp="#morph-auto">ⲃⲗⲗⲉ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423">ⲙ</w>
+              <w type="ART" cert="medium" resp="#morph-auto" lemma="ⲡ" ana="#g-en-f9921a1852ea #g-ja-084b374171cd">ⲡ</w>
+              <w type="N" cert="medium" resp="#morph-auto" lemma="ⲕⲟⲥⲙⲟⲥ" xml:lang="grc" ana="#g-en-968259a3644f #g-ja-29624b81f0c3">ⲕⲟⲥⲙⲟⲥ</w>
+            </phr>
+            <phr>
+              <w type="APST" cert="medium" resp="#morph-auto" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0">ⲁ</w>
+              <w type="N" cert="low" resp="#morph-auto" lemma="ϩⲟⲩⲛ">ϩⲟⲩⲛ</w>
+            </phr>
+            <phr>
+              <w type="APST" cert="medium" resp="#morph-auto" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0">ⲁ</w>
+              <w type="ART" cert="medium" resp="#morph-auto" lemma="ⲡ" ana="#g-en-f9921a1852ea #g-ja-084b374171cd">ⲡ</w>
+              <w type="PPOS" cert="medium" resp="#morph-auto" lemma="ⲛⲉⲩ" ana="#g-en-df055c669423 #g-ja-c5c368801c09">ⲛⲉⲩ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423">ⲙ</w>
+              <w type="ART" cert="medium" resp="#morph-auto" lemma="ⲡ" ana="#g-en-f9921a1852ea #g-ja-084b374171cd">ⲡ</w>
+              <w type="N" cert="medium" resp="#morph-auto" lemma="ⲛⲟⲩⲧⲉ" ana="#g-en-21298df8a327 #g-ja-87a94db45b3b">ⲛⲟⲩⲧⲉ</w>
+            </phr>
+            <phr>
+              <w type="APST" cert="medium" resp="#morph-auto" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0">ⲁ</w>
+              <w type="N" cert="medium" resp="#morph-auto" lemma="ⲃⲁⲗ" ana="#g-en-79df4b171812 #g-ja-3a0ea34a22f0">ⲃⲁⲗ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ϩⲛ" ana="#g-en-af10ef20dd90 #g-ja-fa036821b6d2">ϩⲙ</w>
+            </phr>
+            <phr>
+              <w type="ART" cert="medium" resp="#morph-auto" lemma="ⲡ" ana="#g-en-f9921a1852ea #g-ja-084b374171cd">ⲡ</w>
+              <w type="N" cert="low" resp="#morph-auto" lemma="ⲥⲁⲣⲕⲓⲕⲟⲛ">ⲥⲁⲣⲕⲓⲕⲟⲛ</w>
+            </phr>
+            <phr>
+              <w type="X" cert="low" resp="#morph-auto">ⲁϩⲟⲩ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="low" resp="#morph-auto" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423">ⲛ</w>
+              <w type="APST" cert="medium" resp="#morph-auto" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0">ⲁ</w>
+              <w type="X" cert="low" resp="#morph-auto">ⲡⲡ</w>
+              <w type="PPOS" cert="medium" resp="#morph-auto" lemma="ⲛⲉⲩ" ana="#g-en-df055c669423 #g-ja-c5c368801c09">ⲛⲉⲩ</w>
+            </phr>
+            <phr>
+              <w type="X" cert="low" resp="#morph-auto">ⲙⲁⲧⲓⲕⲟⲛ</w>
+            </phr>
+            <phr>
+              <w type="APST" cert="medium" resp="#morph-auto" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0">ⲁ</w>
+              <w type="N" cert="medium" resp="#morph-auto" lemma="ⲃⲁⲗ" ana="#g-en-79df4b171812 #g-ja-3a0ea34a22f0">ⲃⲁⲗ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ϩⲛ" ana="#g-en-af10ef20dd90 #g-ja-fa036821b6d2">ϩⲛ</w>
+            </phr>
+            <phr>
+              <w type="X" cert="low" resp="#morph-auto">ⲫⲩⲥⲓⲕⲟⲛ</w>
+            </phr>
+            <phr>
+              <w type="X" cert="low" resp="#morph-auto">ⲁϩⲟⲩ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423">ⲛ</w>
+              <w type="N" cert="low" resp="#morph-auto" lemma="ⲁⲧⲙⲛⲧⲁⲅⲅⲉⲗⲟⲥ">ⲁⲧⲙⲛⲧⲁⲅⲅⲉⲗⲟⲥ</w>
+            </phr>
+            <phr>
+              <w type="APST" cert="medium" resp="#morph-auto" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0">ⲁ</w>
+              <w type="N" cert="medium" resp="#morph-auto" lemma="ⲃⲁⲗ" ana="#g-en-79df4b171812 #g-ja-3a0ea34a22f0">ⲃⲁⲗ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ϩⲛ" ana="#g-en-af10ef20dd90 #g-ja-fa036821b6d2">ϩⲙ</w>
+            </phr>
+            <phr>
+              <w type="X" cert="low" resp="#morph-auto">ⲡⲓⲥⲱⲱⲛⲧ</w>
+            </phr>
+            <phr>
+              <w type="X" cert="low" resp="#morph-auto">ⲁϩⲟⲩ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="low" resp="#morph-auto" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423">ⲛ</w>
+              <w type="APST" cert="medium" resp="#morph-auto" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0">ⲁ</w>
+              <w type="V" cert="low" resp="#morph-auto" lemma="ⲡⲓⲡⲗⲏ">ⲡⲓⲡⲗⲏ</w>
+            </phr>
+            <phr>
+              <w type="N" cert="medium" resp="#morph-auto" lemma="ⲣⲟ" ana="#g-en-87d17825792d #g-ja-1e7b07e7149d">ⲣⲱ</w>
+            </phr>
+            <phr>
+              <w type="N" cert="medium" resp="#morph-auto" lemma="ⲙⲁ" ana="#g-en-9da8f1fa7d3a #g-ja-07c4e81b2775">ⲙⲁ</w>
+            </phr>
+            <phr>
+              <w type="APST" cert="medium" resp="#morph-auto" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0">ⲁ</w>
+              <w type="N" cert="medium" resp="#morph-auto" lemma="ⲃⲁⲗ" ana="#g-en-79df4b171812 #g-ja-3a0ea34a22f0">ⲃⲁⲗ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ϩⲛ" ana="#g-en-af10ef20dd90 #g-ja-fa036821b6d2">ϩⲛ</w>
+            </phr>
+            <phr>
+              <w type="ART" cert="medium" resp="#morph-auto" lemma="ⲡ" ana="#g-en-f9921a1852ea #g-ja-084b374171cd">ⲡ</w>
+              <w type="N" cert="medium" resp="#morph-auto" lemma="ⲕⲟⲥⲙⲟⲥ" xml:lang="grc" ana="#g-en-968259a3644f #g-ja-29624b81f0c3">ⲕⲟⲥⲙⲟⲥ</w>
+            </phr>
+            <phr>
+              <w type="APST" cert="medium" resp="#morph-auto" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0">ⲁ</w>
+              <w type="N" cert="low" resp="#morph-auto" lemma="ϩⲟⲩⲛ">ϩⲟⲩⲛ</w>
+            </phr>
+            <phr>
+              <w type="APST" cert="medium" resp="#morph-auto" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0">ⲁ</w>
+              <w type="ART" cert="medium" resp="#morph-auto" lemma="ⲡ" ana="#g-en-f9921a1852ea #g-ja-084b374171cd">ⲡ</w>
+              <w type="N" cert="medium" resp="#morph-auto" lemma="ⲁⲓⲱⲛ" xml:lang="grc" ana="#g-en-4bb2020125bd #g-ja-60c0a6a896c2">ⲁⲓⲱⲛ</w>
+            </phr>
+            <phr>
+              <w type="APST" cert="medium" resp="#morph-auto" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0">ⲁ</w>
+              <w type="N" cert="medium" resp="#morph-auto" lemma="ⲃⲁⲗ" ana="#g-en-79df4b171812 #g-ja-3a0ea34a22f0">ⲃⲁⲗ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ϩⲛ" ana="#g-en-af10ef20dd90 #g-ja-fa036821b6d2">ϩⲛ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423">ⲛ</w>
+              <w type="N" cert="low" resp="#morph-auto" lemma="ⲣϩⲙϩⲉⲗ">ⲣϩⲙϩⲉⲗ</w>
+            </phr>
+            <phr>
+              <w type="X" cert="low" resp="#morph-auto">ⲁϩⲟⲩ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="low" resp="#morph-auto" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423">ⲛ</w>
+              <w type="APST" cert="medium" resp="#morph-auto" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0">ⲁ</w>
+              <w type="PPER" cert="medium" resp="#morph-auto" lemma="ⲩ" ana="#g-en-1e0d43bff60b #g-ja-298c47d14363">ⲩ</w>
+              <w type="PFX" cert="medium" resp="#morph-auto" lemma="ⲙⲛⲧ" ana="#g-en-98db8a90aa90 #g-ja-4116353e8a44">ⲙⲛⲧ</w>
+            </phr>
+            <phr>
+              <w type="N" cert="medium" resp="#morph-auto" lemma="ϣⲏⲣⲉ" ana="#g-en-5cb9ffd9afc2 #g-ja-30ed6d76aa0a">ϣⲏⲣⲉ</w>
+            </phr>
+            <phr>
+              <w type="APST" cert="medium" resp="#morph-auto" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0">ⲁ</w>
+              <w type="N" cert="medium" resp="#morph-auto" lemma="ⲃⲁⲗ" ana="#g-en-79df4b171812 #g-ja-3a0ea34a22f0">ⲃⲁⲗ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ϩⲛ" ana="#g-en-af10ef20dd90 #g-ja-fa036821b6d2">ϩⲛ</w>
+            </phr>
+            <phr>
+              <w type="X" cert="low" resp="#morph-auto">ϩⲛϭⲗⲁⲗⲗⲙ</w>
+            </phr>
+            <phr>
+              <w type="X" cert="low" resp="#morph-auto">ⲁϩⲟⲩ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="low" resp="#morph-auto" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423">ⲛ</w>
+              <w type="APST" cert="medium" resp="#morph-auto" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0">ⲁ</w>
+              <w type="PPOS" cert="medium" resp="#morph-auto" lemma="ⲛⲉⲩ" ana="#g-en-df055c669423 #g-ja-c5c368801c09">ⲛⲉⲩ</w>
+              <w type="N" cert="low" resp="#morph-auto" lemma="ⲉⲣⲏⲩ">ⲉⲣⲏⲩ</w>
+            </phr>
+            <phr>
+              <w type="APST" cert="medium" resp="#morph-auto" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0">ⲁ</w>
+              <w type="N" cert="medium" resp="#morph-auto" lemma="ⲃⲁⲗ" ana="#g-en-79df4b171812 #g-ja-3a0ea34a22f0">ⲃⲁⲗ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ϩⲛ" ana="#g-en-af10ef20dd90 #g-ja-fa036821b6d2">ϩⲙ</w>
+            </phr>
+            <phr>
+              <w type="ART" cert="medium" resp="#morph-auto" lemma="ⲡ" ana="#g-en-f9921a1852ea #g-ja-084b374171cd">ⲡ</w>
+              <w type="N" cert="low" resp="#morph-auto" lemma="ϫⲁⲉⲓⲉ">ϫⲁⲉⲓⲉ</w>
+            </phr>
+            <phr>
+              <w type="X" cert="low" resp="#morph-auto">ⲁϩⲟⲩ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="low" resp="#morph-auto" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423">ⲛ</w>
+              <w type="APST" cert="medium" resp="#morph-auto" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0">ⲁ</w>
+              <w type="X" cert="low" resp="#morph-auto">ⲡⲛ</w>
+            </phr>
+            <phr>
+              <w type="V" cert="low" resp="#morph-auto" lemma="ϯ" ana="#g-en-fa9f22e62229 #g-ja-65a52adbd87c">ϯ</w>
+            </phr>
+            <phr>
+              <w type="N" cert="low" resp="#morph-auto" lemma="ⲙⲉ" ana="#g-en-5ffe533b830f">ⲙⲉ</w>
+              <w type="APST" cert="medium" resp="#morph-auto" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0">ⲁ</w>
+              <w type="N" cert="medium" resp="#morph-auto" lemma="ⲃⲁⲗ" ana="#g-en-79df4b171812 #g-ja-3a0ea34a22f0">ⲃⲁⲗ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ϩⲛ" ana="#g-en-af10ef20dd90 #g-ja-fa036821b6d2">ϩⲙ</w>
+            </phr>
+            <phr>
+              <w type="X" cert="low" resp="#morph-auto">ⲡⲱ</w>
+            </phr>
+            <phr>
+              <w type="X" cert="low" resp="#morph-auto">ⲣϣ</w>
+            </phr>
+            <phr>
+              <w type="X" cert="low" resp="#morph-auto">ⲁϩⲟⲩ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423">ⲛ</w>
+              <w type="N" cert="low" resp="#morph-auto" lemma="ⲁⲧϩⲙⲙⲉ">ⲁⲧϩⲙⲙⲉ</w>
+            </phr>
+            <phr>
+              <w type="APST" cert="medium" resp="#morph-auto" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0">ⲁ</w>
+              <w type="N" cert="medium" resp="#morph-auto" lemma="ⲃⲁⲗ" ana="#g-en-79df4b171812 #g-ja-3a0ea34a22f0">ⲃⲁⲗ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ϩⲛ" ana="#g-en-af10ef20dd90 #g-ja-fa036821b6d2">ϩⲛ</w>
+            </phr>
+            <phr>
+              <w type="X" cert="low" resp="#morph-auto">ⲗ</w>
+              <w type="X" cert="low" resp="#morph-auto">ⲁϩⲟⲩ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423">ⲛ</w>
+              <w type="PRET" cert="high" resp="#morph-auto" lemma="ⲁⲩ">ⲁⲩ</w>
+            </phr>
+            <phr>
+              <w type="CONJ" cert="medium" resp="#morph-auto" lemma="ⲁⲩⲱ" ana="#g-en-cffa50a32cb1 #g-ja-cbad2e959d4b">ⲁⲩⲱ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="high" resp="#morph-auto" lemma="ⲛⲧⲛ">ⲛⲧⲛ</w>
+            </phr>
+            <phr>
+              <w type="X" cert="low" resp="#morph-auto">ⲁϩⲟⲩ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423">ⲛ</w>
+              <w type="NEG" cert="medium" resp="#morph-auto" lemma="ⲁⲛ" ana="#g-en-557f25551671 #g-ja-62fe8481b66c">ⲁⲛ</w>
+            </phr>
+            <phr>
+              <w type="COP" cert="medium" resp="#morph-auto" lemma="ⲧⲉ">ⲧⲉ</w>
+            </phr>
+            <phr>
+              <w type="V" cert="low" resp="#morph-auto" lemma="ⲉⲓ" ana="#g-en-d88d473b374e #g-ja-71400c113af9">ⲉⲓ</w>
+            </phr>
+            <phr>
+              <w type="COP" cert="medium" resp="#morph-auto" lemma="ⲧⲉ">ⲧⲉ</w>
+            </phr>
+            <phr>
+              <w type="ART" cert="high" resp="#morph-auto" lemma="ⲑ">ⲑ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ⲉ">ⲉ</w>
+              <w type="REL" cert="medium" resp="#morph-auto" lemma="ⲛⲧ" ana="#g-en-d282e837f11a #g-ja-7ad7f32bd051">ⲛⲧ</w>
+              <w type="APST" cert="medium" resp="#morph-auto" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0">ⲁ</w>
+              <w type="PPER" cert="medium" resp="#morph-auto" lemma="ⲩ" ana="#g-en-1e0d43bff60b #g-ja-298c47d14363">ⲩ</w>
+              <w type="REL" cert="medium" resp="#morph-auto" lemma="ⲛⲧ" ana="#g-en-d282e837f11a #g-ja-7ad7f32bd051">ⲛⲧ</w>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423">ⲛ</w>
+              <w type="APST" cert="medium" resp="#morph-auto" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0">ⲁ</w>
+              <w type="N" cert="medium" resp="#morph-auto" lemma="ⲃⲁⲗ" ana="#g-en-79df4b171812 #g-ja-3a0ea34a22f0">ⲃⲁⲗ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ϩⲛ" ana="#g-en-af10ef20dd90 #g-ja-fa036821b6d2">ϩⲛ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423">ⲛ</w>
+              <w type="N" cert="medium" resp="#morph-auto" lemma="ⲥⲱⲙⲁ" ana="#g-en-02083f4579e0 #g-ja-720c230fe99c">ⲥⲱⲙⲁ</w>
+            </phr>
+            <phr>
+              <w type="X" cert="low" resp="#morph-auto">ⲛⲥⲡⲉⲣⲙⲁⲧⲓⲕⲟⲛ</w>
+            </phr>
+            <phr>
+              <w type="X" cert="low" resp="#morph-auto">ⲁϩⲟⲩ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="low" resp="#morph-auto" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423">ⲛ</w>
+              <w type="APST" cert="medium" resp="#morph-auto" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0">ⲁ</w>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ϩⲛ" ana="#g-en-af10ef20dd90 #g-ja-fa036821b6d2">ϩⲛ</w>
+            </phr>
+            <phr>
+              <w type="N" cert="medium" resp="#morph-auto" lemma="ⲥⲱⲙⲁ" ana="#g-en-02083f4579e0 #g-ja-720c230fe99c">ⲥⲱⲙⲁ</w>
+            </phr>
+            <phr>
+              <w type="APST" cert="medium" resp="#morph-auto" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0">ⲁ</w>
+              <w type="PPER" cert="medium" resp="#morph-auto" lemma="ⲩ" ana="#g-en-1e0d43bff60b #g-ja-298c47d14363">ⲩ</w>
+              <w type="N" cert="high" resp="#morph-auto" lemma="ⲙⲟⲣⲫⲏ" xml:lang="grc" ana="#g-en-5080fd62c278">ⲙⲟⲣⲫⲏ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423">ⲛ</w>
+              <w type="N" cert="low" resp="#morph-auto" lemma="ⲧⲉⲗⲉⲓⲁ">ⲧⲉⲗⲉⲓⲁ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423">ⲛ</w>
+              <w type="N" cert="medium" resp="#morph-auto" lemma="ϩⲏⲧ" ana="#g-en-dadbaf4cc24e #g-ja-7bfa66708a9e">ϩⲏⲧ</w>
+            </phr>
+            <phr>
+              <w type="ART" cert="low" resp="#morph-auto" lemma="ⲟⲩ" ana="#g-en-16864bf8d9b3 #g-ja-ed327882f988">ⲟⲩ</w>
+            </phr>
+            <phr>
+              <w type="APST" cert="medium" resp="#morph-auto" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0">ⲁ</w>
+              <w type="V" cert="low" resp="#morph-auto" lemma="ⲉⲓⲇⲩⲛⲉ">ⲉⲓⲇⲩⲛⲉ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423">ⲙ</w>
+              <w type="PTC" cert="medium" resp="#morph-auto" lemma="ⲙⲉⲛ" xml:lang="grc" ana="#g-en-df103b69cba3 #g-ja-ff05faab1956">ⲙⲉⲛ</w>
+            </phr>
+            <phr>
+              <w type="X" cert="low" resp="#morph-auto">ⲛⲧⲩⲡⲓ</w>
+            </phr>
+            <phr>
+              <w type="V" cert="medium" resp="#morph-auto" lemma="ⲕⲱ" ana="#g-en-89a74a7a3e96 #g-ja-44742a964f59">ⲕⲱ</w>
+              <w type="PPER" cert="medium" resp="#morph-auto" lemma="ⲥ" ana="#g-en-ab46a445d43a #g-ja-5e02cfaa801c">ⲥ</w>
+              <w type="V" cert="low" resp="#morph-auto" lemma="ⲙⲡⲥⲉⲡⲉ">ⲙⲡⲥⲉⲡⲉ</w>
+            </phr>
+            <phr>
+              <w type="ART" cert="medium" resp="#morph-auto" lemma="ⲡ" ana="#g-en-f9921a1852ea #g-ja-084b374171cd">ⲡⲉ</w>
+              <w type="V" cert="low" resp="#morph-auto" lemma="ⲉⲓ" ana="#g-en-d88d473b374e #g-ja-71400c113af9">ⲉⲓ</w>
+            </phr>
+            <phr>
+              <w type="CFOC" cert="medium" resp="#morph-auto" lemma="ⲛⲧⲁ" ana="#g-en-9a30dda11521 #g-ja-0a324406cf2d">ⲛⲧⲁ</w>
+              <w type="X" cert="low" resp="#morph-auto">ⲡⲉⲭⲣⲏ</w>
+            </phr>
+            <phr>
+              <w type="X" cert="low" resp="#morph-auto">ⲥⲧⲟ</w>
+              <w type="PPER" cert="medium" resp="#morph-auto" lemma="ⲥ" ana="#g-en-ab46a445d43a #g-ja-5e02cfaa801c">ⲥ</w>
+              <w type="V" cert="low" resp="#morph-auto" lemma="ⲥⲱⲧⲉ">ⲥⲱⲧⲉ</w>
+            </phr>
+            <phr>
+              <w type="X" cert="low" resp="#morph-auto">ⲙⲙⲁ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423">ⲛ</w>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ⲛϩⲏⲧ" ana="#g-en-20b260f5d9a0 #g-ja-fa036821b6d2">ⲛϩⲏⲧ</w>
+              <w type="PPER" cert="medium" resp="#morph-auto" lemma="ϥ" ana="#g-en-b96f087daab1 #g-ja-fb66c561bbec">ϥ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ϩⲛ" ana="#g-en-af10ef20dd90 #g-ja-fa036821b6d2">ϩⲛ</w>
+            </phr>
+            <phr>
+              <w type="ART" cert="medium" resp="#morph-auto" lemma="ⲧ" ana="#g-en-0bd8ea9fc267 #g-ja-3c594eb70f8d">ⲧ</w>
+              <w type="N" cert="low" resp="#morph-auto" lemma="ⲕⲟⲓⲛⲱⲛⲓⲁ">ⲕⲟⲓⲛⲱⲛⲓⲁ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423">ⲙ</w>
+              <w type="PPOS" cert="medium" resp="#morph-auto" lemma="ⲡⲉϥ" ana="#g-en-b187a9ed471e #g-ja-e1b7d5621057">ⲡⲉϥ</w>
+              <w type="N" cert="medium" resp="#morph-auto" lemma="ⲡⲛⲉⲩⲙⲁ" xml:lang="grc" ana="#g-en-b40d51318efc #g-ja-41cce55bfe19">ⲡⲛⲉⲩⲙⲁ</w>
+            </phr>
+            <phr>
+              <w type="PRET" cert="high" resp="#morph-auto" lemma="ⲁⲩ">ⲁⲩ</w>
+            </phr>
+            <phr>
+              <w type="INTERJ" cert="high" resp="#morph-auto" lemma="ⲱ">ⲱ</w>
+            </phr>
+            <phr>
+              <w type="REL" cert="medium" resp="#morph-auto" lemma="ⲛⲧ" ana="#g-en-d282e837f11a #g-ja-7ad7f32bd051">ⲛⲧ</w>
+              <w type="APST" cert="medium" resp="#morph-auto" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0">ⲁ</w>
+              <w type="PPER" cert="medium" resp="#morph-auto" lemma="ϥ" ana="#g-en-b96f087daab1 #g-ja-fb66c561bbec">ϥ</w>
+              <w type="V" cert="medium" resp="#morph-auto" lemma="ⲉⲓⲛⲉ" ana="#g-en-aee2f4bb3213 #g-ja-fea418fabc5a">ⲉⲓⲛⲉ</w>
+            </phr>
+            <phr>
+              <w type="X" cert="low" resp="#morph-auto">ⲙⲙⲁ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="low" resp="#morph-auto" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423">ⲛ</w>
+              <w type="APST" cert="medium" resp="#morph-auto" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0">ⲁ</w>
+              <w type="N" cert="medium" resp="#morph-auto" lemma="ⲃⲁⲗ" ana="#g-en-79df4b171812 #g-ja-3a0ea34a22f0">ⲃⲁⲗ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ⲉ">ⲉ</w>
+              <w type="ART" cert="medium" resp="#morph-auto" lemma="ⲧ" ana="#g-en-0bd8ea9fc267 #g-ja-3c594eb70f8d">ⲧ</w>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423">ⲛ</w>
+              <w type="N" cert="high" resp="#morph-auto" lemma="ϩⲏ">ϩⲏ</w>
+            </phr>
+            <phr>
+              <w type="ART" cert="medium" resp="#morph-auto" lemma="ⲧ" ana="#g-en-0bd8ea9fc267 #g-ja-3c594eb70f8d">ⲧ</w>
+              <w type="PPER" cert="medium" resp="#morph-auto" lemma="ϥ" ana="#g-en-b96f087daab1 #g-ja-fb66c561bbec">ϥ</w>
+            </phr>
+            <phr>
+              <w type="CONJ" cert="medium" resp="#morph-auto" lemma="ⲁⲩⲱ" ana="#g-en-cffa50a32cb1 #g-ja-cbad2e959d4b">ⲁⲩⲱ</w>
+            </phr>
+            <phr>
+              <w type="X" cert="low" resp="#morph-auto">ϫⲙ</w>
+            </phr>
+            <phr>
+              <w type="ART" cert="medium" resp="#morph-auto" lemma="ⲡ" ana="#g-en-f9921a1852ea #g-ja-084b374171cd">ⲡⲓ</w>
+              <w type="PPOS" cert="medium" resp="#morph-auto" lemma="ⲛⲉⲩ" ana="#g-en-df055c669423 #g-ja-c5c368801c09">ⲛⲉⲩ</w>
+            </phr>
+            <phr>
+              <w cert="low" resp="#morph-auto" type="X">ⲛ<supplied reason="lost-in-source-file" resp="#zp" cert="high">ⲯ</supplied>ⲩⲭⲏ</w>
+            </phr>
+            <phr>
+              <w type="FUT" cert="medium" resp="#morph-auto" lemma="ⲛⲁ" ana="#g-en-fd64ae792fbe #g-ja-1ac83e7f1966">ⲛⲁ</w>
+              <w type="V" cert="medium" resp="#morph-auto" lemma="ⲣ" ana="#g-en-8699e2abdc6b #g-ja-56738c9362cd">ⲣ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ϩⲛ" ana="#g-en-af10ef20dd90 #g-ja-fa036821b6d2">ϩⲛ</w>
+            </phr>
+            <phr>
+              <w type="N" cert="medium" resp="#morph-auto" lemma="ⲡⲛⲉⲩⲙⲁ" xml:lang="grc" ana="#g-en-b40d51318efc #g-ja-41cce55bfe19">ⲡⲛⲉⲩⲙⲁ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423">ⲛ</w>
+              <w type="N" cert="low" resp="#morph-auto" lemma="ⲧⲉⲗⲉⲓⲟⲛ">ⲧⲉⲗⲉⲓⲟⲛ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ⲉ">ⲉ</w>
+              <w type="X" cert="low" resp="#morph-auto">ⲣⲉ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423">ⲛ</w>
+              <w type="N" cert="low" resp="#morph-auto" lemma="ⲉⲧⲁⲩⲧⲉⲉⲓⲧⲟⲩ">ⲉⲧⲁⲩⲧⲉⲉⲓⲧⲟⲩ</w>
+            </phr>
+            <phr>
+              <w type="PTC" cert="medium" resp="#morph-auto" lemma="ϭⲉ" ana="#g-en-83f3dd6b17dd #g-ja-8963231aa1d5">ϭⲉ</w>
+            </phr>
+            <phr>
+              <w type="X" cert="low" resp="#morph-auto">ⲛⲉⲛ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ϩⲛ" ana="#g-en-af10ef20dd90 #g-ja-fa036821b6d2">ϩⲛ</w>
+            </phr>
+            <phr>
+              <w type="ART" cert="medium" resp="#morph-auto" lemma="ⲡ" ana="#g-en-f9921a1852ea #g-ja-084b374171cd">ⲡ</w>
+              <w type="N" cert="low" resp="#morph-auto" lemma="ϣⲁⲣⲡ">ϣⲁⲣⲡ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423">ⲛ</w>
+              <w type="N" cert="low" resp="#morph-auto" lemma="ⲃⲁⲡⲧⲓⲥⲙⲁ">ⲃⲁⲡⲧⲓⲥⲙⲁ</w>
+            </phr>
+            <phr>
+              <w type="CCIRC" cert="low" resp="#morph-auto" lemma="ⲉ">ⲉ</w>
+              <w type="PPER" cert="medium" resp="#morph-auto" lemma="ⲩ" ana="#g-en-1e0d43bff60b #g-ja-298c47d14363">ⲩ</w>
+            </phr>
             <gap reason="lacuna" unit="line" extent="unknown"/>
-            <w>ⲁϩⲟⲣⲁⲧⲟⲛ</w>
-            <w>ⲛ</w>
-            <w>ⲉⲧⲉ</w>
-            <w>ⲡⲱϥ</w>
-            <w>ⲡⲉ</w>
-            <w>ⲉⲡⲉⲓⲇⲏ</w>
-            <w>ⲡⲉ</w>
-            <w>ⲛⲁ</w>
-            <w>ⲛ</w>
-            <w>ϣⲉ</w>
-            <w>ϫⲉ</w>
-            <w>ⲁ</w>
-            <w>ϩⲛ</w>
-            <w>ⲟ</w>
-            <w>ⲥ</w>
+            <phr>
+              <w type="X" cert="low" resp="#morph-auto">ⲁϩⲟⲣⲁⲧⲟⲛ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423">ⲛ</w>
+              <w type="REL" cert="medium" resp="#morph-auto" lemma="ⲉⲧⲉ" ana="#g-en-00bc7da068d7 #g-ja-b00d2c8f9b2e">ⲉⲧⲉ</w>
+            </phr>
+            <phr>
+              <w type="X" cert="low" resp="#morph-auto">ⲡⲱϥ</w>
+            </phr>
+            <phr>
+              <w type="COP" cert="medium" resp="#morph-auto" lemma="ⲡⲉ">ⲡⲉ</w>
+            </phr>
+            <phr>
+              <w type="X" cert="low" resp="#morph-auto">ⲉⲡⲉⲓⲇⲏ</w>
+            </phr>
+            <phr>
+              <w type="COP" cert="medium" resp="#morph-auto" lemma="ⲡⲉ">ⲡⲉ</w>
+            </phr>
+            <phr>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ⲛⲁ">ⲛⲁ</w>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423">ⲛ</w>
+              <w type="NUM" cert="high" resp="#morph-auto" lemma="ϣⲉ">ϣⲉ</w>
+            </phr>
+            <phr>
+              <w type="CONJ" cert="medium" resp="#morph-auto" lemma="ϫⲉ" ana="#g-en-a09e936e20a5 #g-ja-7f5c3fda28dc">ϫⲉ</w>
+            </phr>
+            <phr>
+              <w type="APST" cert="medium" resp="#morph-auto" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0">ⲁ</w>
+              <w type="PREP" cert="medium" resp="#morph-auto" lemma="ϩⲛ" ana="#g-en-af10ef20dd90 #g-ja-fa036821b6d2">ϩⲛ</w>
+              <w type="VSTAT" cert="medium" resp="#morph-auto" lemma="ⲟ">ⲟ</w>
+              <w type="PPER" cert="medium" resp="#morph-auto" lemma="ⲥ" ana="#g-en-ab46a445d43a #g-ja-5e02cfaa801c">ⲥ</w>
+            </phr>
           </s>
         </ab>
       </div>
     </body>
   </text>
+  <standOff>
+    <interpGrp type="gloss" xml:lang="en">
+      <interp xml:id="g-en-00bc7da068d7">that is / which</interp>
+      <interp xml:id="g-en-02083f4579e0">body</interp>
+      <interp xml:id="g-en-0bd8ea9fc267">the (feminine)</interp>
+      <interp xml:id="g-en-16864bf8d9b3">a / an</interp>
+      <interp xml:id="g-en-1e0d43bff60b">they / them</interp>
+      <interp xml:id="g-en-20b260f5d9a0">in / within</interp>
+      <interp xml:id="g-en-21298df8a327">god</interp>
+      <interp xml:id="g-en-4bb2020125bd">aeon</interp>
+      <interp xml:id="g-en-5080fd62c278">shape</interp>
+      <interp xml:id="g-en-50d334013e90">perfect / past tense marker</interp>
+      <interp xml:id="g-en-557f25551671">not</interp>
+      <interp xml:id="g-en-5cb9ffd9afc2">child / son</interp>
+      <interp xml:id="g-en-5ffe533b830f">true</interp>
+      <interp xml:id="g-en-79df4b171812">eye</interp>
+      <interp xml:id="g-en-83f3dd6b17dd">then / therefore</interp>
+      <interp xml:id="g-en-8699e2abdc6b">do / make</interp>
+      <interp xml:id="g-en-87d17825792d">mouth</interp>
+      <interp xml:id="g-en-89a74a7a3e96">put / leave</interp>
+      <interp xml:id="g-en-968259a3644f">world / cosmos</interp>
+      <interp xml:id="g-en-98db8a90aa90">abstract noun formative</interp>
+      <interp xml:id="g-en-9a30dda11521">who / which (past)</interp>
+      <interp xml:id="g-en-9da8f1fa7d3a">place</interp>
+      <interp xml:id="g-en-a09e936e20a5">that / saying</interp>
+      <interp xml:id="g-en-ab46a445d43a">she / her</interp>
+      <interp xml:id="g-en-aee2f4bb3213">bring / resemble</interp>
+      <interp xml:id="g-en-af10ef20dd90">in</interp>
+      <interp xml:id="g-en-b187a9ed471e">his</interp>
+      <interp xml:id="g-en-b40d51318efc">spirit</interp>
+      <interp xml:id="g-en-b96f087daab1">he / him</interp>
+      <interp xml:id="g-en-cffa50a32cb1">and</interp>
+      <interp xml:id="g-en-d2263e6a77aa">of the</interp>
+      <interp xml:id="g-en-d282e837f11a">which / that</interp>
+      <interp xml:id="g-en-d88d473b374e">come</interp>
+      <interp xml:id="g-en-dadbaf4cc24e">heart / interior</interp>
+      <interp xml:id="g-en-df055c669423">their</interp>
+      <interp xml:id="g-en-df103b69cba3">on the one hand</interp>
+      <interp xml:id="g-en-f9921a1852ea">the (masculine)</interp>
+      <interp xml:id="g-en-fa9f22e62229">give</interp>
+      <interp xml:id="g-en-fd64ae792fbe">future marker</interp>
+    </interpGrp>
+    <interpGrp type="gloss" xml:lang="ja">
+      <interp xml:id="g-ja-07c4e81b2775">場所</interp>
+      <interp xml:id="g-ja-084b374171cd">定冠詞（男性）</interp>
+      <interp xml:id="g-ja-0a324406cf2d">〜したところの（過去）</interp>
+      <interp xml:id="g-ja-1ac83e7f1966">未来標識</interp>
+      <interp xml:id="g-ja-1e7b07e7149d">口</interp>
+      <interp xml:id="g-ja-1f4ed58b32e0">完了・過去標識</interp>
+      <interp xml:id="g-ja-29624b81f0c3">世界／宇宙</interp>
+      <interp xml:id="g-ja-298c47d14363">彼ら／彼らを</interp>
+      <interp xml:id="g-ja-30ed6d76aa0a">子／息子</interp>
+      <interp xml:id="g-ja-3a0ea34a22f0">目</interp>
+      <interp xml:id="g-ja-3c594eb70f8d">定冠詞（女性）</interp>
+      <interp xml:id="g-ja-4116353e8a44">抽象名詞形成要素</interp>
+      <interp xml:id="g-ja-41cce55bfe19">霊</interp>
+      <interp xml:id="g-ja-44742a964f59">置く／残す</interp>
+      <interp xml:id="g-ja-56738c9362cd">行う／作る</interp>
+      <interp xml:id="g-ja-5e02cfaa801c">彼女／彼女を</interp>
+      <interp xml:id="g-ja-60c0a6a896c2">アイオーン</interp>
+      <interp xml:id="g-ja-62fe8481b66c">〜ない</interp>
+      <interp xml:id="g-ja-65a52adbd87c">与える</interp>
+      <interp xml:id="g-ja-71400c113af9">来る</interp>
+      <interp xml:id="g-ja-720c230fe99c">身体</interp>
+      <interp xml:id="g-ja-7ad7f32bd051">〜したところの</interp>
+      <interp xml:id="g-ja-7bfa66708a9e">心／内部</interp>
+      <interp xml:id="g-ja-7f5c3fda28dc">〜と／ということ</interp>
+      <interp xml:id="g-ja-87a94db45b3b">神</interp>
+      <interp xml:id="g-ja-8963231aa1d5">それでは／ゆえに</interp>
+      <interp xml:id="g-ja-b00d2c8f9b2e">すなわち／〜であるところの</interp>
+      <interp xml:id="g-ja-c5c368801c09">彼らの</interp>
+      <interp xml:id="g-ja-cbad2e959d4b">そして</interp>
+      <interp xml:id="g-ja-e1b7d5621057">彼の</interp>
+      <interp xml:id="g-ja-ed327882f988">不定冠詞</interp>
+      <interp xml:id="g-ja-f5edc59c9423">〜の</interp>
+      <interp xml:id="g-ja-fa036821b6d2">〜の中に</interp>
+      <interp xml:id="g-ja-fb66c561bbec">彼／彼を</interp>
+      <interp xml:id="g-ja-fea418fabc5a">持ってくる／似る</interp>
+      <interp xml:id="g-ja-ff05faab1956">一方では</interp>
+    </interpGrp>
+  </standOff>
 </TEI>

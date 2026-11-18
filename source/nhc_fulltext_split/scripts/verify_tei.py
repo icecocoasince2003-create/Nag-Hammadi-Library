@@ -12,6 +12,9 @@ make_tei.py が作った tei/*.xml を、同じフォルダの nhc_all.tsv / cat
   3. ⲍ・ⲯ を戻した語の印（<w resp="#zp" cert="…">）が restored_letters.tsv と 1 対 1 に対応し、
      印のない <w> には ⲍ・ⲯ がないこと。<w> の属性はこの印だけ（語群を付けた版では、注釈つきの版から写した
      type・lemma・xml:lang も認める）。
+     形態素注釈を付けた版（README_ja.md の §11）では、<w> の resp（#morph-auto / #morph-reference）と cert（high /
+     medium / low）は注釈のもので、ⲍ・ⲯ を戻した印は、戻した字を包む <supplied reason="lost-in-source-file"
+     resp="#zp" cert="…"> になる。語の中のどの ⲍ・ⲯ もこれに包まれていること。@ana の指す先は scripts/check_tei.py が確かめる。
   4. xml:id が XML の名前として正しく、<s> と証本（<text>）の ID が全ファイルを通じて重複しないこと。
   5. ヘッダーの件数（<extent>）、本文の実数、catalog.tsv の件数が一致すること
      （語群を付けた版の語数は catalog.tsv と比べない。区切りを変えたため）。
@@ -121,14 +124,28 @@ def main(out, rng=None):
                 here = f'{unit} n={s.get("n")}'
 
                 def word(w):
-                    t = w.text or ''
-                    check(len(w) == 0 and t != '' and not re.search(r'\s', t), f'{here}: <w> の中身が不正')
+                    t = ''.join(w.itertext())
+                    sup = list(w)                                   # 戻した字を包む <supplied>（注釈を付けた版、§11）
+                    check(t != '' and not re.search(r'\s', t) and (not sup or grouped), f'{here}: <w> の中身が不正')
+                    for x in sup:
+                        check(x.tag == NS + 'supplied' and len(x) == 0 and (x.text or '') in ('ⲍ', 'ⲯ')
+                              and set(x.attrib) == {'reason', 'resp', 'cert'} and x.get('reason') == 'lost-in-source-file'
+                              and x.get('resp') == '#zp' and x.get('cert') in ('high', 'medium'),
+                              f'{here}: <w> の中の要素が不正: {x.tag} {x.attrib}')
+                    check(len({x.get('cert') for x in sup}) <= 1, f'{here}: 1 語の中で復元の確度が違う: {t}')
+                    check(not sup or len(re.findall('[ⲍⲯ]', t)) == len(sup), f'{here}: <supplied> に包まれていない ⲍ・ⲯ がある: {t}')
                     extra = set(w.attrib) - {'cert', 'resp'}
-                    check(not extra or (grouped and extra <= {'type', 'lemma', XML + 'lang'}),
+                    check(not extra or (grouped and extra <= {'type', 'lemma', 'ana', XML + 'lang'}),
                           f'{here}: <w> に想定外の属性 {sorted(w.attrib)}')
-                    if 'cert' in w.attrib or 'resp' in w.attrib:
-                        check(w.get('resp') == '#zp' and w.get('cert') in ('high', 'medium'),
+                    resp = w.get('resp')
+                    if resp in ('#morph-auto', '#morph-reference'):  # 形態素注釈の責任と確度
+                        check(grouped and w.get('cert') in ('high', 'medium', 'low'), f'{here}: 注釈の確度が不正 {w.attrib}')
+                    elif 'cert' in w.attrib or resp is not None:
+                        check(resp == '#zp' and w.get('cert') in ('high', 'medium') and not sup,
                               f'{here}: 復元の印が不完全 {w.attrib}')
+                    if sup:
+                        marks.append((t, sup[0].get('cert')))
+                    elif resp == '#zp':
                         marks.append((t, w.get('cert')))
                     elif restored_run:
                         check('ⲍ' not in t and 'ⲯ' not in t, f'{here}: 印のない <w> に ⲍ・ⲯ がある: {t}')
@@ -193,7 +210,9 @@ def main(out, rng=None):
                    gap_page=sum(1 for g in tx.iter(NS + 'gap') if g.get('unit') == 'page'), bytes=len(raw))
         if grouped:
             tot.update(grouped=1, phr=sum(1 for _ in tx.iter(NS + 'phr')), split=split, joined=joined,
-                       annotated=sum(1 for w in tx.iter(NS + 'w') if w.get('type') or w.get('lemma')))
+                       annotated=sum(1 for w in tx.iter(NS + 'w') if w.get('type') or w.get('lemma')),
+                       morph=sum(1 for w in tx.iter(NS + 'w') if w.get('resp') in ('#morph-auto', '#morph-reference')),
+                       supplied=sum(1 for _ in tx.iter(NS + 'supplied')))
 
     allrecs = sum(len(v) for v in recs.values())
     check(tot['segments'] == allrecs, f'セグメントの合計 {tot["segments"]} != nhc_all.tsv の {allrecs}')
@@ -204,7 +223,8 @@ def main(out, rng=None):
     if tot['grouped']:
         print(f'files with bound groups (<phr>) {tot["grouped"]}: {tot["phr"]} bound groups; '
               f'word division against nhc_all.tsv: {tot["split"]} new divisions, {tot["joined"]} removed; '
-              f'{tot["annotated"]} <w> with type/lemma')
+              f'{tot["annotated"]} <w> with type/lemma ({tot["morph"]} carry the automatic annotation\'s resp/cert); '
+              f'{tot["supplied"]} restored letters in <supplied>')
 
     # ---- RELAX NG（任意）
     if rng:

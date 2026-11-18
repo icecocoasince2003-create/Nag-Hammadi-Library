@@ -2,6 +2,13 @@
   "_comment": "サイトの更新情報（HOME の NEWS 欄）。新しい項目を items の先頭に追加してください。date は YYYY-MM-DD、ja/en/fr は HTML 可、link は任意。",
   "items": [
     {
+      "date": "2026-11-18",
+      "ja": "<b>ナグ・ハマディ写本 39 文書の仮入力データを追加しました。</b>写本 I–IV と VII–XIII の全文テキストに、語のまとまり（語群）・品詞・レンマ・語義を自動で付けた暫定版です。文書一覧の「暫定」から新しい本文ビュワーで読め、コーパス検索の〈全文テキスト〉からも検索できます。人の目では確かめておらず、校訂本とも照合していません。確かめていないことは各文書の冒頭に記しています。",
+      "en": "<b>Provisional data for 39 Nag Hammadi texts.</b> The full texts of Codices I–IV and VII–XIII now carry an automatically generated draft of bound groups, parts of speech, lemmata and glosses. Open them from the “Draft” entries in the list of codices (a new reader), or search them under “Full text” in the corpus search. Nothing has been checked by hand or collated with the editions; each text lists at the top what remains unchecked.",
+      "fr": "<b>Données provisoires pour 39 textes de Nag Hammadi.</b> Le texte intégral des codex I–IV et VII–XIII comporte désormais une annotation automatique provisoire (groupes, parties du discours, lemmes, gloses). On les ouvre depuis les entrées « Provisoire » de la liste des codex (nouvelle visionneuse) ou on les cherche sous « Texte intégral » dans la recherche. Rien n’a été vérifié ni collationné avec les éditions ; chaque texte indique en tête ce qui reste à vérifier.",
+      "link": "index.html#corpus"
+    },
+    {
       "date": "2026-11-07",
       "ja": "<b>サイトを全面リニューアルしました。</b>上部ナビの刷新、HOME の英語・フランス語表示、「グノーシス主義とは」「プロジェクト」ページを追加。エウグノストスを写本ごとの標題（III,3『祝福されたエウグノストス』／V,1『エウグノストス』）で表示し、同形異義語は品詞で辞書を参照する方式に変更しました。参照している XML はビュワーからダウンロードできます。",
       "en": "<b>The site has been redesigned.</b> New top navigation, English and French on the home page, and new pages on Gnosticism and on the project. Eugnostos is now listed under each codex’s own title (III,3 <i>Eugnostos the Blessed</i> / V,1 <i>Eugnostos</i>); homographs are now looked up in the lexicon by part of speech; the XML files behind each viewer can be downloaded.",

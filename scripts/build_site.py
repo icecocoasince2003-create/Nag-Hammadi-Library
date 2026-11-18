@@ -10,7 +10,7 @@
 
       python3 scripts/build_site.py
 
-  出力される index.html と tractate.html は自動生成なので直接編集しない
+  出力される index.html・tractate.html・reader.html は自動生成なので直接編集しない
   でください。目次の内容を変えたいときは、下の CODICES テーブルを編集して
   再実行します。
 
@@ -29,6 +29,12 @@
   2. 下の CODICES で該当行の status を S(準備中) → A(公開) に変える
   3. LINKS にリンク先（ビュワーのURL）を登録する
   4. python3 scripts/build_site.py を実行して index.html を再生成
+
+【暫定公開（自動注釈の全文）】
+  status を D にすると、HOME の一覧に「暫定」と出し、reader.html?doc=写本-番号 へリンクします。
+  reader.html もこのスクリプトが出力します（build_reader）。本文は data/catalog.xml の <bibl subtype="draft">
+  が指す TEI で、その一覧は scripts/sync_nhc_catalog.py が書き出します。確かめていないことは reader.html が
+  文書ごとに冒頭に示します。
 ==============================================================================
 """
 import html, datetime, os, json
@@ -39,33 +45,35 @@ OUTDIR = os.path.dirname(_HERE) if os.path.basename(_HERE).lower() in ("source",
 # --- 文書カタログ -------------------------------------------------------------
 # 形式: (ローマ数字, コーデックス番号, [(文書番号, 日本語題, 英語題, フランス語題, status), ...])
 #   status:  A = 公開（LINKS のビュワーへリンク） / S = 準備中（tractate.html へリンク）
-A = "avail"; S = "soon"
+#            D = 暫定公開（自動注釈の全文。reader.html?doc=写本-番号 へリンク。本文は data/catalog.xml の
+#                <bibl subtype="draft"> の TEI。人の目で確かめていないことを reader.html が文書ごとに示す）
+A = "avail"; S = "soon"; D = "draft"
 CODICES = [
  ("I", 1, [
    (1, "使徒パウロの祈り", "The Prayer of the Apostle Paul", "Prière de l'apôtre Paul", S),
-   (2, "ヤコブのアポクリュフォン(秘密の書)", "The Apocryphon of James", "Épître apocryphe de Jacques", S),
-   (3, "真理の福音", "The Gospel of Truth", "Évangile de la Vérité", S),
-   (4, "復活についての教え(レギノスへの手紙)", "The Treatise on the Resurrection", "Traité sur la résurrection", S),
-   (5, "三部の教え", "The Tripartite Tractate", "Traité tripartite", S),
+   (2, "ヤコブのアポクリュフォン(秘密の書)", "The Apocryphon of James", "Épître apocryphe de Jacques", D),
+   (3, "真理の福音", "The Gospel of Truth", "Évangile de la Vérité", D),
+   (4, "復活についての教え(レギノスへの手紙)", "The Treatise on the Resurrection", "Traité sur la résurrection", D),
+   (5, "三部の教え", "The Tripartite Tractate", "Traité tripartite", D),
  ]),
  ("II", 2, [
-   (1, "ヨハネのアポクリュフォン", "The Apocryphon of John", "Livre des secrets de Jean", S),
-   (2, "トマスによる福音書", "The Gospel of Thomas", "Évangile selon Thomas", S),
-   (3, "フィリポによる福音書", "The Gospel of Philip", "Évangile selon Philippe", S),
-   (4, "アルコーンの本質(支配者たちの本質)", "The Hypostasis of the Archons", "Hypostase des archontes", S),
-   (5, "世界の起源について(無題文書)", "On the Origin of the World", "Écrit sans titre (L'Origine du monde)", S),
-   (6, "魂の解明", "The Exegesis on the Soul", "Exégèse de l'âme", S),
-   (7, "闘技者トマスの書", "The Book of Thomas the Contender", "Livre de Thomas", S),
+   (1, "ヨハネのアポクリュフォン", "The Apocryphon of John", "Livre des secrets de Jean", D),
+   (2, "トマスによる福音書", "The Gospel of Thomas", "Évangile selon Thomas", D),
+   (3, "フィリポによる福音書", "The Gospel of Philip", "Évangile selon Philippe", D),
+   (4, "アルコーンの本質(支配者たちの本質)", "The Hypostasis of the Archons", "Hypostase des archontes", D),
+   (5, "世界の起源について(無題文書)", "On the Origin of the World", "Écrit sans titre (L'Origine du monde)", D),
+   (6, "魂の解明", "The Exegesis on the Soul", "Exégèse de l'âme", D),
+   (7, "闘技者トマスの書", "The Book of Thomas the Contender", "Livre de Thomas", D),
  ]),
  ("III", 3, [
-   (1, "ヨハネのアポクリュフォン", "The Apocryphon of John", "Livre des secrets de Jean", S),
-   (2, "エジプト人の福音書(聖なる不可視の霊の書)", "The Gospel of the Egyptians", "Livre sacré du Grand Esprit invisible (Évangile des Égyptiens)", S),
+   (1, "ヨハネのアポクリュフォン", "The Apocryphon of John", "Livre des secrets de Jean", D),
+   (2, "エジプト人の福音書(聖なる不可視の霊の書)", "The Gospel of the Egyptians", "Livre sacré du Grand Esprit invisible (Évangile des Égyptiens)", D),
    (3, "祝福されたエウグノストス", "Eugnostos the Blessed", "Eugnoste le Bienheureux", A),
-   (4, "イエス・キリストの知恵(ソフィア)", "The Sophia of Jesus Christ", "Sagesse de Jésus-Christ", S),
-   (5, "救い主の対話", "The Dialogue of the Savior", "Dialogue du Sauveur", S),
+   (4, "イエス・キリストの知恵(ソフィア)", "The Sophia of Jesus Christ", "Sagesse de Jésus-Christ", D),
+   (5, "救い主の対話", "The Dialogue of the Savior", "Dialogue du Sauveur", D),
  ]),
  ("IV", 4, [
-   (1, "ヨハネのアポクリュフォン", "The Apocryphon of John", "Livre des secrets de Jean", S),
+   (1, "ヨハネのアポクリュフォン", "The Apocryphon of John", "Livre des secrets de Jean", D),
    (2, "エジプト人の福音書", "The Gospel of the Egyptians", "Évangile des Égyptiens", S),
  ]),
  ("V", 5, [
@@ -91,35 +99,35 @@ CODICES = [
    (1, "セームの釈義(パラフレイズ)", "The Paraphrase of Shem", "Paraphrase de Sem", S),
    (2, "大セツの第二の教え", "The Second Treatise of the Great Seth", "Deuxième traité du Grand Seth", S),
    (3, "ペテロの黙示録", "The Apocalypse of Peter", "Apocalypse de Pierre", S),
-   (4, "シルワノスの教え", "The Teachings of Silvanus", "Les Leçons de Silvanos", S),
-   (5, "セツの三つの碑", "The Three Steles of Seth", "Les Trois Stèles de Seth", S),
+   (4, "シルワノスの教え", "The Teachings of Silvanus", "Les Leçons de Silvanos", D),
+   (5, "セツの三つの碑", "The Three Steles of Seth", "Les Trois Stèles de Seth", D),
  ]),
  ("VIII", 8, [
-   (1, "ゾストリアノス", "Zostrianos", "Zostrien", S),
-   (2, "ペテロからフィリポへの手紙", "The Letter of Peter to Philip", "Lettre de Pierre à Philippe", S),
+   (1, "ゾストリアノス", "Zostrianos", "Zostrien", D),
+   (2, "ペテロからフィリポへの手紙", "The Letter of Peter to Philip", "Lettre de Pierre à Philippe", D),
  ]),
  ("IX", 9, [
-   (1, "メルキゼデク", "Melchizedek", "Melchisédek", S),
-   (2, "ノレアの思想", "The Thought of Norea", "Noréa", S),
-   (3, "真理の証言", "The Testimony of Truth", "Le Témoignage véritable", S),
+   (1, "メルキゼデク", "Melchizedek", "Melchisédek", D),
+   (2, "ノレアの思想", "The Thought of Norea", "Noréa", D),
+   (3, "真理の証言", "The Testimony of Truth", "Le Témoignage véritable", D),
  ]),
  ("X", 10, [
-   (1, "マルサネス", "Marsanes", "Marsanès", S),
+   (1, "マルサネス", "Marsanes", "Marsanès", D),
  ]),
  ("XI", 11, [
-   (1, "認識の解明", "The Interpretation of Knowledge", "Interprétation de la gnose", S),
-   (2, "ヴァレンティノス派の講解", "A Valentinian Exposition", "Exposé valentinien", S),
-   (3, "アロゲネス", "Allogenes", "Allogène", S),
-   (4, "ヒュプシフロネ", "Hypsiphrone", "Hypsiphroné", S),
+   (1, "認識の解明", "The Interpretation of Knowledge", "Interprétation de la gnose", D),
+   (2, "ヴァレンティノス派の講解", "A Valentinian Exposition", "Exposé valentinien", D),
+   (3, "アロゲネス", "Allogenes", "Allogène", D),
+   (4, "ヒュプシフロネ", "Hypsiphrone", "Hypsiphroné", D),
  ]),
  ("XII", 12, [
-   (1, "セクストスの金言", "The Sentences of Sextus", "Sentences de Sextus", S),
-   (2, "真理の福音(断片)", "The Gospel of Truth (fragments)", "Évangile de la Vérité (fragments)", S),
-   (3, "断片", "Fragments", "Fragments", S),
+   (1, "セクストスの金言", "The Sentences of Sextus", "Sentences de Sextus", D),
+   (2, "真理の福音(断片)", "The Gospel of Truth (fragments)", "Évangile de la Vérité (fragments)", D),
+   (3, "断片", "Fragments", "Fragments", D),
  ]),
  ("XIII", 13, [
-   (1, "三形態の原初思想(トリモルフォス・プロテンノイア)", "Trimorphic Protennoia", "Prôtennoia trimorphe", S),
-   (2, "世界の起源について(冒頭部)", "On the Origin of the World (excerpt)", "Écrit sans titre (extrait)", S),
+   (1, "三形態の原初思想(トリモルフォス・プロテンノイア)", "Trimorphic Protennoia", "Prôtennoia trimorphe", D),
+   (2, "世界の起源について(冒頭部)", "On the Origin of the World (excerpt)", "Écrit sans titre (extrait)", D),
  ]),
 ]
 
@@ -135,6 +143,7 @@ def tid(roman, num): return f"{roman}-{num}"
 def locus(roman, num): return f"NHC&nbsp;{roman},{num}"
 def href_for(roman, num, status):
     if status == A and (roman, num) in LINKS: return LINKS[(roman, num)]
+    if status == D: return f"reader.html?doc={tid(roman,num)}"
     return f"tractate.html?id={tid(roman,num)}"
 def tri(ja, en, fr):
     """三言語のスパン（site.css が html[data-lang] に応じて出し分ける）"""
@@ -142,6 +151,7 @@ def tri(ja, en, fr):
 
 TOTAL = sum(len(t) for _,_,t in CODICES)
 AVAIL = sum(1 for _,_,t in CODICES for x in t if x[4] == A)
+DRAFT = sum(1 for _,_,t in CODICES for x in t if x[4] == D)
 TODAY = datetime.date.today().isoformat()
 
 # --- shared head / theme ----------------------------------------------------
@@ -213,8 +223,9 @@ def codex_block(roman, no, tracts):
     rows=[]
     for num, ja, en, fr, status in tracts:
         on = status == A
-        cls = "trow" + (" on" if on else "")
+        cls = "trow" + (" on" if on else " draft" if status == D else "")
         pill = (f'<span class="pill on">{tri("公開","Online","En ligne")}</span>' if on
+                else f'<span class="pill draft">{tri("暫定","Draft","Provisoire")}</span>' if status == D
                 else f'<span class="pill">{tri("準備中","Soon","À venir")}</span>')
         search = esc((ja+" "+en+" "+fr).lower())
         rows.append(
@@ -322,6 +333,9 @@ html[data-lang="en"] .trow .tt .sub{font-family:var(--jp); font-style:normal; fo
 .pill{font-size:.66rem; letter-spacing:.06em; padding:3px 9px; border-radius:999px;
  background:var(--hi); color:var(--ink-faint); border:1px solid var(--line); white-space:nowrap}
 .pill.on{background:var(--gold); color:#1a140a; border-color:var(--gold); font-weight:600}
+.pill.draft{background:transparent; color:var(--lapis); border-color:var(--lapis); font-weight:600}
+.legend{display:flex; flex-wrap:wrap; gap:6px 18px; margin:-6px 0 14px; font-size:.76rem; color:var(--ink-faint); line-height:1.7}
+.legend .pill{margin-right:6px}
 .trow .arr{color:var(--ink-faint); opacity:0; transition:opacity .12s, transform .12s; transform:translateX(-3px)}
 .trow:hover .arr{opacity:1; transform:none}
 .trow.on{outline:1px solid rgba(154,114,32,.28)}
@@ -394,6 +408,19 @@ def build_index():
         <a href="search.html?doc=republic&amp;view=stats">{tri("統計", "Statistics", "Statistiques")}</a></div>
      </div>
    </div>
+   <div class="feat">
+     <div>
+       <div class="k">NHC I–IV · VII–XIII · {tri("暫定版", "draft", "provisoire")}</div>
+       <div class="ttl"><span class="cop">ⲛϫⲱⲱⲙⲉ</span>{tri(f"全文テキスト {DRAFT} 文書", f"Full text of {DRAFT} tractates", f"Texte intégral de {DRAFT} traités")}</div>
+       <div class="loc">{tri(
+         "語群・品詞・レンマ・語義を自動で付けた暫定版です。人の目では確かめておらず、本文も校訂本と照合していません。確かめていないことは各文書の冒頭に記しています。",
+         "A draft with bound groups, parts of speech, lemmata and glosses assigned automatically. Nothing has been checked by hand and the text has not been collated with the editions; each text lists what is unchecked at the top.",
+         "Version provisoire : groupes, parties du discours, lemmes et gloses attribués automatiquement. Rien n’a été vérifié et le texte n’a pas été collationné avec les éditions ; chaque texte indique en tête ce qui reste à vérifier.")}</div>
+       <div class="acts"><a class="go" href="#corpus">{tri("文書一覧から選ぶ ↓", "Choose from the list ↓", "Choisir dans la liste ↓")}</a>
+        <a href="reader.html?doc=II-2">{tri("例：トマスによる福音書", "e.g. the Gospel of Thomas", "p. ex. l’Évangile selon Thomas")}</a>
+        <a href="search.html">{tri("検索（〈全文テキスト〉）", "Search (“Full text”)", "Recherche (« Texte intégral »)")}</a></div>
+     </div>
+   </div>
  </div>
 
  <div class="two">
@@ -411,7 +438,12 @@ def build_index():
   <div class="sec-h"><h2>{tri("文書一覧", "The codices", "Les codices")}</h2><small>NHC I–XIII</small><span class="rule"></span></div>
   <div class="ctool"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
    <input id="q" type="search" autocomplete="off">
-   <span class="cnt">{tri(f"公開 {AVAIL} / 全 {TOTAL} 文書", f"{AVAIL} of {TOTAL} online", f"{AVAIL} sur {TOTAL} en ligne")}</span></div>
+   <span class="cnt">{tri(f"公開 {AVAIL} · 暫定 {DRAFT} / 全 {TOTAL} 文書", f"{AVAIL} online · {DRAFT} draft · {TOTAL} in all", f"{AVAIL} en ligne · {DRAFT} provisoires · {TOTAL} au total")}</span></div>
+  <p class="legend">
+   <span><span class="pill on">{tri("公開","Online","En ligne")}</span>{tri("人の手で注釈・訳を付けた版", "annotated and translated by hand", "annoté et traduit à la main")}</span>
+   <span><span class="pill draft">{tri("暫定","Draft","Provisoire")}</span>{tri("自動注釈の全文。人の目で未確認・校訂本と未照合", "full text with automatic annotation, not checked or collated", "texte intégral annoté automatiquement, non vérifié ni collationné")}</span>
+   <span><span class="pill">{tri("準備中","Soon","À venir")}</span>{tri("本文はまだ表示できません", "text not yet available", "texte pas encore disponible")}</span>
+  </p>
   <div class="grid" id="grid">
 {blocks}
    <p class="empty" id="empty" hidden>{tri("該当する文書がありません。", "No matching tractate.", "Aucun traité ne correspond.")}</p>
@@ -420,9 +452,9 @@ def build_index():
 </div>
 
 <footer><div class="wrap">
-  {tri(f"<b>{AVAIL}</b>&nbsp;文書を公開 / 全&nbsp;<b>{TOTAL}</b>&nbsp;文書(13写本)",
-       f"<b>{AVAIL}</b>&nbsp;of&nbsp;<b>{TOTAL}</b>&nbsp;tractates online (13 codices)",
-       f"<b>{AVAIL}</b>&nbsp;traités en ligne sur&nbsp;<b>{TOTAL}</b> (13 codices)")}　·
+  {tri(f"<b>{AVAIL}</b>&nbsp;文書を公開・<b>{DRAFT}</b>&nbsp;文書を暫定公開 / 全&nbsp;<b>{TOTAL}</b>&nbsp;文書(13写本)",
+       f"<b>{AVAIL}</b>&nbsp;online and <b>{DRAFT}</b>&nbsp;as drafts, of&nbsp;<b>{TOTAL}</b>&nbsp;tractates (13 codices)",
+       f"<b>{AVAIL}</b>&nbsp;en ligne et <b>{DRAFT}</b>&nbsp;provisoires sur&nbsp;<b>{TOTAL}</b> traités (13 codices)")}　·
   {tri("本文はパブリックドメイン、辞書・対訳は CC&nbsp;BY&nbsp;4.0",
        "Source texts: public domain · lexicon and translations: CC&nbsp;BY&nbsp;4.0",
        "Textes sources : domaine public · lexique et traductions : CC&nbsp;BY&nbsp;4.0")}　·
@@ -497,7 +529,7 @@ def build_tractate():
     for roman, no, tracts in CODICES:
         for num, ja, en, fr, status in tracts:
             cat[tid(roman, num)] = {"ja": ja, "en": en, "fr": fr, "roman": roman, "num": num,
-                                   "href": href_for(roman, num, status) if status == A else ""}
+                                   "href": href_for(roman, num, status) if status in (A, D) else ""}
     css = THEME + """
 .shell{position:relative; z-index:1; max-width:780px; margin:0 auto; padding:clamp(28px,6vw,64px) clamp(16px,4vw,40px) 80px}
 .eyebrow{font-family:var(--ui); font-size:.74rem; letter-spacing:.2em; text-transform:uppercase; color:var(--gold)}
@@ -577,9 +609,349 @@ if(!t){
             "<title>準備中 — Sheneset</title>"
             f"{FONTS}<style>{css}</style></head><body>{body}</body></html>")
 
+# --- reader.html (full-text reader for the draft texts) ----------------------
+# 品詞ラベル（search.html の POS と同じ内容。片方を直したらもう片方も直す）
+POS_NAMES = {
+ "ART": ["冠詞", "article", "article"], "N": ["名詞", "noun", "nom"], "NPROP": ["固有名詞", "proper noun", "nom propre"],
+ "V": ["動詞", "verb", "verbe"], "VSTAT": ["状態動詞", "stative", "statif"], "PREP": ["前置詞", "preposition", "préposition"],
+ "PPER": ["人称代名詞", "personal pronoun", "pronom personnel"], "PPOS": ["所有詞", "possessive", "possessif"],
+ "PDEM": ["指示詞", "demonstrative", "démonstratif"], "CONJ": ["接続詞", "conjunction", "conjonction"],
+ "PTC": ["不変化詞", "particle", "particule"], "NEG": ["否定辞", "negation", "négation"], "NUM": ["数詞", "numeral", "numéral"],
+ "ADV": ["副詞", "adverb", "adverbe"], "ADJ": ["形容詞", "adjective", "adjectif"], "REL": ["関係詞", "relative", "relatif"],
+ "CONV": ["変換詞", "converter", "convertisseur"], "FUT": ["未来辞", "future", "futur"], "PRET": ["過去辞", "preterite", "prétérit"],
+ "COP": ["繋辞", "copula", "copule"], "PFX": ["接頭辞", "prefix", "préfixe"], "INTERJ": ["間投詞", "interjection", "interjection"],
+ "AUX": ["助動詞", "auxiliary", "auxiliaire"], "POSS": ["所有冠詞", "possessive article", "article possessif"],
+ "EXIST": ["存在詞", "existential", "existentiel"], "PINT": ["疑問詞", "interrogative", "interrogatif"],
+ "FM": ["外来語句", "foreign material", "matériel étranger"],
+ "APST": ["完了（過去）助動詞", "perfect auxiliary", "auxiliaire du parfait"],
+ "AAOR": ["アオリスト助動詞", "aorist auxiliary", "auxiliaire de l’aoriste"],
+ "ACONJ": ["接続法助動詞", "conjunctive auxiliary", "auxiliaire du conjonctif"],
+ "ACAUS": ["使役不定詞", "causative infinitive", "infinitif causatif"],
+ "AOPT": ["希求法助動詞", "optative auxiliary", "auxiliaire de l’optatif"],
+ "ANEGAOR": ["否定アオリスト助動詞", "negative aorist aux.", "aux. de l’aoriste négatif"],
+ "ANEGPST": ["否定完了助動詞", "negative perfect aux.", "aux. du parfait négatif"],
+ "CREL": ["関係変換詞", "relative converter", "convertisseur relatif"],
+ "CCIRC": ["状況変換詞", "circumstantial converter", "convertisseur circonstanciel"],
+ "CFOC": ["焦点化変換詞", "focalising converter", "convertisseur focalisant"],
+ "CPRET": ["過去変換詞", "preterite converter", "convertisseur prétérit"],
+ "VBD": ["接尾活用の動詞（ⲡⲉϫⲉ- など）", "suffixally conjugated verb (ⲡⲉϫⲉ- etc.)", "verbe à conjugaison suffixale (ⲡⲉϫⲉ-, etc.)"],
+ "NEGPST": ["否定完了", "negative perfect", "parfait négatif"],
+ "X": ["未判定", "unresolved", "non résolu"],
+}
+REPO_URL = "https://github.com/icecocoasince2003-create/Nag-Hammadi-Library/"
+
+def build_reader():
+    """reader.html?doc=II-6 — data/catalog.xml の文書の TEI（source/nhc_fulltext_split/tei/）を表示する。
+    自動注釈の暫定版（<bibl subtype="draft">）が対象で、HOME の status D の行と検索の用例がここへリンクする。
+    人の目で確かめていないことを、文書ごとの件数とともに冒頭に示す。"""
+    css = THEME + """
+.shell{position:relative; z-index:1; max-width:980px; margin:0 auto; padding:clamp(22px,5vw,48px) clamp(16px,4vw,40px) 120px}
+.eyebrow{font-family:var(--ui); font-size:.74rem; letter-spacing:.2em; text-transform:uppercase; color:var(--gold)}
+h1{font-family:var(--disp); font-weight:600; line-height:1.12; font-size:clamp(1.8rem,4.6vw,2.7rem); margin:.3em 0 .12em}
+.alt{font-family:var(--disp); font-style:italic; color:var(--ink-faint); font-size:1.08rem}
+.meta{margin-top:8px; font-size:.8rem; color:var(--ink-faint)}
+.docnav{display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px 18px; margin:18px 0 0; font-size:.84rem}
+.docnav a{color:var(--ink-soft); text-decoration:none; text-underline-offset:5px}
+.docnav a:hover{text-decoration:underline; text-decoration-color:var(--gold)}
+.docnav .mid{color:var(--gold-bright,var(--gold)); font-weight:600}
+.status{margin:22px 0 0; background:var(--panel); border:1px solid var(--line); border-left:4px solid var(--lapis);
+ border-radius:14px; padding:16px 20px}
+.status h2{font-family:var(--disp); font-weight:600; font-size:1.06rem; margin:0 0 8px; color:var(--lapis)}
+.status ul{margin:0; padding-left:1.2em; color:var(--ink-soft); font-size:.86rem; line-height:1.75}
+.status li{margin:.15em 0}
+.status .links{display:flex; flex-wrap:wrap; gap:6px 18px; margin:10px 0 0; font-size:.82rem}
+.status .links a{color:var(--gold-bright,var(--gold)); text-underline-offset:4px}
+.tools{position:sticky; top:52px; z-index:5; display:flex; flex-wrap:wrap; align-items:center; gap:6px 18px; margin:20px 0 12px;
+ padding:8px 12px; background:var(--panel-2); border:1px solid var(--line); border-radius:12px; font-size:.82rem; color:var(--ink-soft);
+ -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px)}
+.tools label{display:inline-flex; align-items:center; gap:6px; cursor:pointer}
+.tools .lg{margin-left:auto; color:var(--ink-faint); font-size:.74rem}
+.tools .lg i{font-style:normal; padding:0 .3em; border-radius:3px}
+.text{font-family:var(--cop); color:var(--ink)}
+.ab h3{font-family:var(--ui); font-weight:600; font-size:.7rem; letter-spacing:.16em; text-transform:uppercase; color:var(--gold); margin:1.6em 0 .5em}
+.seg{margin:0 0 .5em; font-size:1.2rem; line-height:2.05; padding:2px 6px; border-radius:8px; overflow-wrap:anywhere}
+.seg.hit{background:var(--hi)}
+.sn{font-family:var(--ui); font-size:.68rem; color:var(--ink-faint); text-decoration:none; margin-right:.45em; vertical-align:.18em}
+.sn:hover{color:var(--gold)}
+.g{white-space:nowrap}
+.m{cursor:pointer; border-radius:3px}
+.m:hover .f{background:var(--sel)}
+.m.sel .f{background:var(--hi); outline:1px solid var(--gold)}
+.gap{color:var(--ink-faint); font-family:var(--ui); font-size:.9rem}
+.sup{text-decoration:underline dotted var(--gold); text-underline-offset:.22em}
+.sup.b{text-decoration:underline dashed var(--rose)}
+.text.cuts:not(.inter) .g .m + .m::before{content:"·"; color:var(--ink-faint); margin:0 .04em}
+.text.cert .m.c-low .f{box-shadow:inset 0 -.38em 0 rgba(207,147,166,.32)}
+.text.cert .m.x .f{text-decoration:underline wavy var(--rose); text-underline-offset:.25em}
+.text.inter .seg{line-height:1.25; margin-bottom:1em}
+.text.inter .g{display:inline-flex; gap:0 .14em; vertical-align:top; margin:0 .5em .55em 0; white-space:normal}
+.text.inter .m{display:inline-flex; flex-direction:column; align-items:flex-start}
+.il{display:flex; flex-direction:column; font-family:var(--ui); line-height:1.25; margin-top:2px}
+.il .p{font-size:.56rem; letter-spacing:.04em; color:var(--ink-faint)}
+.il .gl{font-size:.66rem; color:var(--lapis); max-width:8.5em; white-space:normal}
+.mcard{position:fixed; left:50%; bottom:14px; transform:translateX(-50%); z-index:40; width:min(560px,calc(100vw - 24px));
+ background:var(--panel-2); color:var(--ink); border:1px solid var(--line-2); border-radius:14px; box-shadow:var(--shadow);
+ padding:12px 16px 10px; font-size:.86rem; -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px)}
+.mcard .x{position:absolute; top:6px; right:8px; background:none; border:0; color:var(--ink-faint); font-size:1.3rem; cursor:pointer; line-height:1}
+.mcard .grp{font-size:1.3rem; margin:0 26px 6px 0}
+.mcard .grp .dot{color:var(--ink-faint); margin:0 .1em}
+.mcard .grp b{color:var(--gold-bright,var(--gold)); font-weight:600}
+.mcard dl{display:grid; grid-template-columns:max-content 1fr; gap:3px 12px; margin:0}
+.mcard dt{color:var(--ink-faint); font-size:.76rem; padding-top:.15em}
+.mcard dd{margin:0}
+.mcard .cop{font-family:var(--cop)}
+.mcard .na{color:var(--ink-faint)}
+.mcard code{font-size:.74rem; color:var(--ink-faint)}
+.mcard .lk{margin:8px 0 0; font-size:.8rem}
+.mcard .lk a{color:var(--gold-bright,var(--gold))}
+.loading, .err{color:var(--ink-faint); margin-top:24px}
+@media (max-width:640px){ .tools{top:46px} .tools .lg{margin-left:0} .seg{font-size:1.1rem} }
+"""
+    body = """
+<nav id="sitebar" class="sitebar sticky"></nav>
+<main class="shell" id="shell"><p class="loading">…</p></main>
+<div class="mcard" id="card" role="dialog" aria-live="polite" hidden></div>
+<script>
+const POS=__POS__, REPO=__REPO__;
+const H=document.documentElement, T='http://www.tei-c.org/ns/1.0', XNS='http://www.w3.org/XML/1998/namespace';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const tri=(ja,en,fr)=>'<span class="l-ja">'+ja+'</span><span class="l-en">'+en+'</span><span class="l-fr">'+(fr==null?en:fr)+'</span>';
+const UL=()=>H.getAttribute('data-lang')||'ja';
+const kids=(el,n)=>Array.from(el.children).filter(c=>c.localName===n);
+const all=(el,n)=>Array.from(el.getElementsByTagNameNS(T,n));
+const xid=el=>el.getAttributeNS(XNS,'id')||'';
+const xlang=el=>el.getAttributeNS(XNS,'lang')||'';
+const fmt=n=>Number(n).toLocaleString('en-US');
+const pct=(a,b)=>b?Math.round(a/b*100):0;
+const posName=p=>{ const e=POS[p]; return e?tri(esc(e[0]),esc(e[1]),esc(e[2])):esc(p); };
+const key=new URLSearchParams(location.search).get('doc')||'';
+const shell=$('#shell'), card=$('#card');
+let OPT={inter:false, cert:false, cuts:false};
+try{ Object.assign(OPT, JSON.parse(localStorage.getItem('nhc-reader')||'{}')); }catch(e){}
+const saveOpt=()=>{ try{ localStorage.setItem('nhc-reader', JSON.stringify(OPT)); }catch(e){} };
+let DOC=null, D=null, MS=[], NAV={prev:null, next:null};
+
+async function getXML(url){
+  const r=await fetch(url,{cache:'no-cache'});
+  if(!r.ok) throw new Error(url+' — HTTP '+r.status);
+  const x=new DOMParser().parseFromString(await r.text(),'application/xml');
+  if(x.getElementsByTagName('parsererror').length) throw new Error(url+' — XML');
+  return x;
+}
+/* data/catalog.xml の文書（<bibl type="document">） */
+function readCatalog(x){
+  return all(x,'bibl').filter(b=>b.getAttribute('type')==='document').map(b=>{
+    const t={}; kids(b,'title').forEach(e=>{ t[xlang(e)]=e.textContent.trim(); });
+    const ref={}; kids(b,'ref').forEach(r=>{ ref[r.getAttribute('type')]=r.getAttribute('target'); });
+    const sig=kids(b,'idno').find(i=>i.getAttribute('type')==='siglum');
+    return {key:xid(b).replace(/^doc-/,''), sub:b.getAttribute('subtype')||'', ja:t.ja||t.en||'', en:t.en||t.ja||'', fr:t.fr||t.en||'',
+            siglum:sig?sig.textContent.trim():'', xml:ref.xml||'', reader:ref.reader||''};
+  });
+}
+/* 形態素 1 つ。ⲍ・ⲯ を補った字は <supplied resp="#zp">（注釈を付けた版）か <w resp="#zp">（未注釈の版） */
+function morph(w, gl, st){
+  let html='', form='', sup='';
+  w.childNodes.forEach(n=>{
+    if(n.nodeType===3){ form+=n.nodeValue; html+=esc(n.nodeValue); }
+    else if(n.nodeType===1){ const c=n.textContent;
+      if(n.localName==='supplied'){ sup=n.getAttribute('cert')||'high'; html+='<span class="sup'+(sup==='medium'?' b':'')+'">'+esc(c)+'</span>'; }
+      else html+=esc(c);
+      form+=c; }
+  });
+  const resp=w.getAttribute('resp')||'', cert=w.getAttribute('cert')||'';
+  const m={form:form.trim(), html:html.trim(), type:w.getAttribute('type')||'', lemma:w.getAttribute('lemma')||'',
+           grc:xlang(w)==='grc', en:'', ja:'', cert:'', src:'', sup};
+  if(resp==='#zp'){ m.sup=cert||'high'; m.html='<span class="sup'+(m.sup==='medium'?' b':'')+'">'+m.html+'</span>'; }
+  else if(resp){ m.cert=cert; m.src=resp.replace(/^#/,''); }
+  (w.getAttribute('ana')||'').split(/\\s+/).forEach(p=>{ const g=gl[p.replace(/^#/,'')]; if(g && !m[g.l]) m[g.l]=g.t; });
+  st.m++; if(m.type) st.typed++; if(m.type==='X') st.X++; if(m.cert==='low') st.low++; if(m.src==='morph-reference') st.ref++;
+  if(m.sup){ st.rw++; if(m.sup==='medium') st.rwB++; }
+  return m;
+}
+function readTEI(x){
+  const gl={};
+  all(x,'interpGrp').filter(g=>g.getAttribute('type')==='gloss').forEach(g=>{
+    const l=xlang(g); all(g,'interp').forEach(i=>{ gl[xid(i)]={l, t:i.textContent.trim()}; }); });
+  const wit=all(x,'text').find(t=>t.getAttribute('type')==='witness');
+  if(!wit) throw new Error('TEI: <text type="witness"> がありません');
+  const st={m:0, g:0, typed:0, X:0, low:0, ref:0, rw:0, rwB:0, segs:0, gaps:0}, abs=[];
+  all(wit,'ab').forEach(ab=>{
+    const segs=[];
+    kids(ab,'s').forEach(s=>{
+      const items=[];
+      Array.from(s.children).forEach(c=>{
+        if(c.localName==='phr'){ const g={ms:kids(c,'w').map(w=>morph(w,gl,st))}; if(g.ms.length){ items.push(g); st.g++; } }
+        else if(c.localName==='w'){ items.push({ms:[morph(c,gl,st)]}); st.g++; }
+        else if(c.localName==='gap'){ items.push({gap:true}); st.gaps++; }
+      });
+      segs.push({id:xid(s), n:s.getAttribute('n')||'', items}); st.segs++;
+    });
+    abs.push({type:ab.getAttribute('type')||'text', segs});
+  });
+  const locus=all(x,'locus')[0], lang=all(x,'textLang')[0];
+  return {abs, st, locus:locus?locus.textContent.trim():'', lang:lang?lang.textContent.trim():''};
+}
+
+const AB={title:tri('表題','Title','Titre'), subscript:tri('奥書表題','Subscript title','Titre final'),
+  colophon:tri('写字生の奥書・覚え書き','Scribal colophon or note','Colophon du scribe'), fragment:tri('未配置の断片','Unplaced fragments','Fragments non situés')};
+function renderText(){
+  const gk=UL()==='ja'?'ja':'en';
+  MS=[];
+  const html=D.abs.map(ab=>{
+    const segs=ab.segs.map(s=>{
+      const body=s.items.map(it=>{
+        if(it.gap) return '<span class="gap" title="'+esc(UL()==='ja'?'元ファイルに欠損の注記があった位置':'lacuna noted in the source file')+'">〔…〕</span>';
+        return '<span class="g">'+it.ms.map(m=>{
+          const i=MS.push(m)-1;
+          let inner='<span class="f">'+m.html+'</span>';
+          if(OPT.inter){ const g=(gk==='ja'?(m.ja||m.en):(m.en||m.ja))||'';
+            inner+='<span class="il"><span class="p">'+esc(m.type)+'</span><span class="gl">'+esc(g)+'</span></span>'; }
+          return '<span class="m'+(m.type==='X'?' x':'')+(m.cert?' c-'+m.cert:'')+'" data-i="'+i+'">'+inner+'</span>';
+        }).join('')+'</span>';
+      }).join(' ');
+      return '<p class="seg" id="seg-'+esc(s.id)+'"><a class="sn" href="#seg-'+esc(s.id)+'">§'+esc(s.n)+'</a> <span class="tx">'+body+'</span></p>';
+    }).join('');
+    return '<section class="ab ab-'+esc(ab.type)+'">'+(AB[ab.type]?'<h3>'+AB[ab.type]+'</h3>':'')+segs+'</section>';
+  }).join('');
+  const box=$('#text');
+  box.className='text'+(OPT.inter?' inter':'')+(OPT.cert?' cert':'')+(OPT.cuts?' cuts':'');
+  box.innerHTML=html;
+  hideCard();
+}
+function statusHTML(){
+  const s=D.st, ann=s.typed>0, rel=REPO+'blob/main/source/nhc_fulltext_split/README_ja.md';
+  const li=[];
+  li.push(tri('<b>本文</b>：提供された全文テキストを下処理した作業用の本文です。校訂本や写本とは照合していません。上線、復元された文字の区別、頁と行の区切りは入っておらず、§ は元ファイルの行（セグメント）の番号です。〔…〕は元ファイルに欠損の注記があった位置です。',
+    '<b>Text</b>: a working text prepared from a supplied full-text file, not collated with the critical editions or the manuscript. It has no supralinear strokes, no marking of restored text and no page or line breaks; § numbers are the rows (segments) of the source file, and 〔…〕 marks where the source noted a lacuna.',
+    '<b>Texte</b> : texte de travail tiré d’un fichier fourni, non collationné avec les éditions critiques ni avec le manuscrit. Sans traits suscrits, sans distinction des restitutions, sans coupures de page ni de ligne ; les § sont les lignes (segments) du fichier source et 〔…〕 signale une lacune notée dans la source.'));
+  if(ann){
+    li.push(tri('<b>語のまとまり（語群）</b>：自動で推定したものです。全文テキスト全体で、境目のおよそ 4 分の 1 が要確認の一覧に入っています。',
+      '<b>Bound groups</b> (orthographic words): inferred automatically; across the full texts about a quarter of the boundaries are on the review list.',
+      '<b>Groupes</b> (mots graphiques) : déduits automatiquement ; sur l’ensemble, environ un quart des limites figurent sur la liste à vérifier.'));
+    li.push(tri('<b>品詞・レンマ・語義</b>：自動で付けたものです。この文書では、確度 low が '+pct(s.low,s.m)+'%、品詞を決められなかった語（X）が '+pct(s.X,s.m)+'% あります。語義は短い辞書的な意味で、文脈で確かめた訳語ではありません。確度 high・medium でも正しいとは限りません。',
+      '<b>Part of speech, lemma and gloss</b>: assigned automatically. In this text '+pct(s.low,s.m)+'% of the morphemes have low certainty and '+pct(s.X,s.m)+'% could not be classified (X). Glosses are short dictionary meanings, not translations checked against the context. High or medium certainty does not mean an analysis is correct.',
+      '<b>Partie du discours, lemme et glose</b> : attribués automatiquement. Dans ce texte, '+pct(s.low,s.m)+' % des morphèmes ont une certitude faible et '+pct(s.X,s.m)+' % n’ont pas pu être classés (X). Les gloses sont de brèves équivalences de dictionnaire, non des traductions vérifiées en contexte. Une certitude « high » ou « medium » ne garantit pas l’analyse.'));
+  } else {
+    li.push(tri('<b>注釈</b>：語のまとまり・品詞・レンマ・語義はまだ付いていません。','<b>Annotation</b>: no bound groups, parts of speech, lemmata or glosses yet.','<b>Annotation</b> : ni groupes, ni parties du discours, ni lemmes, ni gloses pour l’instant.'));
+  }
+  if(s.rw) li.push(tri('<b>ⲍ・ⲯ</b>：元ファイルで落ちていた字を、語形と文脈から補いました（点線の下線、'+s.rw+' 語）。'+(s.rwB?'このうち確度 B の '+s.rwB+' 語（破線）は、固有名などで校訂本での確認が必要です。':'校訂本とは照合していません。'),
+    '<b>ⲍ and ⲯ</b>: letters lost in the source file were restored from the word form and context (dotted underline; '+s.rw+' words).'+(s.rwB?' The '+s.rwB+' of certainty B (dashed), names and the like, still need checking against the editions.':' None has been collated with the editions.'),
+    '<b>ⲍ et ⲯ</b> : lettres perdues dans le fichier source, restituées d’après la forme et le contexte (soulignement pointillé ; '+s.rw+' mots).'+(s.rwB?' Les '+s.rwB+' de certitude B (tirets), noms propres notamment, restent à vérifier.':' Aucune n’a été collationnée.')));
+  if(s.ref) li.push(tri('<b>人の手による注釈</b>：冒頭の一部（'+s.ref+' 形態素）は、人の手で注釈した版から写しました。その版は <a href="eugnostos.html?wit=III">エウグノストスのビュワー</a>で読めます。',
+    '<b>Hand annotation</b>: part of the opening ('+s.ref+' morphemes) was copied from the hand-annotated edition, which you can read in the <a href="eugnostos.html?wit=III">Eugnostos reader</a>.',
+    '<b>Annotation manuelle</b> : une partie du début ('+s.ref+' morphèmes) provient de l’édition annotée à la main, consultable dans la <a href="eugnostos.html?wit=III">visionneuse d’Eugnoste</a>.'));
+  li.push(tri('<b>訳</b>：まだありません。','<b>Translation</b>: none yet.','<b>Traduction</b> : pas encore.'));
+  const head=ann?tri('暫定版 — 自動で付けた注釈で、人の目では確かめていません','Draft — automatic annotation, not checked by hand','Version provisoire — annotation automatique, non vérifiée')
+                :tri('未注釈の作業用本文','Unannotated working text','Texte de travail non annoté');
+  return '<section class="status"><h2>'+head+'</h2><ul>'+li.map(x=>'<li>'+x+'</li>').join('')+'</ul><p class="links">'+
+    '<a href="'+esc(DOC.xml)+'" download>'+tri('TEI（XML）をダウンロード','Download the TEI (XML)','Télécharger le TEI (XML)')+'</a>'+
+    '<a href="'+esc(rel)+'" target="_blank" rel="noopener">'+tri('作り方と確かめたこと（README §10・§11）','How it was made and checked (README §10–11)','Méthode et vérifications (README §10–11)')+'</a>'+
+    (ann?'<a href="'+esc(REPO+'tree/main/source/nhc_fulltext_split/annotation')+'" target="_blank" rel="noopener">'+tri('要確認の一覧','Review lists','Listes à vérifier')+'</a>':'')+
+    '<a href="search.html?doc='+encodeURIComponent(DOC.key)+'">'+tri('この文書を検索','Search this text','Chercher dans ce texte')+'</a>'+
+    '<a href="search.html?doc='+encodeURIComponent(DOC.key)+'&amp;view=stats">'+tri('統計','Statistics','Statistiques')+'</a></p></section>';
+}
+function navHTML(){
+  const a=d=>d?'<a href="reader.html?doc='+encodeURIComponent(d.key)+'">'+esc(d.siglum.replace(/^NHC\\s*/,''))+' '+tri(esc(d.ja),esc(d.en),esc(d.fr))+'</a>':'<span></span>';
+  return '<nav class="docnav">'+(NAV.prev?'<span>← '+a(NAV.prev)+'</span>':'<span></span>')+
+    '<a class="mid" href="index.html#corpus">'+tri('文書一覧','All texts','Tous les textes')+'</a>'+
+    (NAV.next?'<span>'+a(NAV.next)+' →</span>':'<span></span>')+'</nav>';
+}
+function setTitle(){
+  const l=UL(), nm=DOC[l]||DOC.ja, ann=D&&D.st.typed>0;
+  document.title=nm+' — '+DOC.siglum+' · '+({ja:ann?'暫定版':'作業用本文', en:ann?'draft':'working text', fr:ann?'provisoire':'texte de travail'}[l]||'')+' — Sheneset';
+}
+function hideCard(){ card.hidden=true; document.querySelectorAll('.m.sel').forEach(x=>x.classList.remove('sel')); }
+function showCard(el){
+  const m=MS[+el.dataset.i]; if(!m) return;
+  const g=el.closest('.g'), grp=g?Array.from(g.querySelectorAll('.m')).map(x=>MS[+x.dataset.i]):[m];
+  const certT={high:tri('high — 参考本文との一致などによる','high — e.g. agrees with the annotated reference text','high — p. ex. accord avec le texte de référence'),
+    medium:tri('medium — 語彙表・規則による仮の判定','medium — from the core word list or rules','medium — liste de base ou règles'),
+    low:tri('low — 推定。要確認','low — a guess; needs checking','low — conjecture, à vérifier')}[m.cert]||esc(m.cert);
+  const rows=[[tri('形態素','Morpheme','Morphème'),'<span class="cop">'+m.html+'</span>']];
+  if(D.st.typed){
+    rows.push([tri('レンマ','Lemma','Lemme'), m.lemma?'<span class="cop">'+esc(m.lemma)+'</span>':'<span class="na">'+tri('なし（未判定）','none (unresolved)','aucun (non résolu)')+'</span>']);
+    rows.push([tri('品詞','Part of speech','Catégorie'), m.type?posName(m.type)+' <code>'+esc(m.type)+'</code>':'<span class="na">—</span>']);
+    if(m.ja||m.en) rows.push([tri('語義（自動）','Gloss (automatic)','Glose (automatique)'), [m.ja,m.en].filter(Boolean).map(esc).join(' ／ ')]);
+    if(m.cert) rows.push([tri('確度','Certainty','Certitude'), certT]);
+    if(m.src) rows.push([tri('出どころ','Source','Source'), m.src==='morph-reference'?tri('人の手で注釈した版から写したもの','copied from the hand-annotated edition','copié de l’édition annotée à la main'):tri('自動注釈','automatic annotation','annotation automatique')]);
+    if(m.grc) rows.push([tri('借用語','Loanword','Emprunt'), tri('ギリシア語','Greek','grec')]);
+  }
+  if(m.sup) rows.push([tri('補った字','Restored letters','Lettres restituées'), m.sup==='medium'
+    ?tri('ⲍ・ⲯ を補った語。確度 B（固有名など。校訂本での確認が必要）','ⲍ/ⲯ restored; certainty B (names and the like; check against the editions)','ⲍ/ⲯ restitué ; certitude B (noms propres, etc. ; à vérifier)')
+    :tri('ⲍ・ⲯ を補った語。確度 A（語形と文脈から決まるもの）','ⲍ/ⲯ restored; certainty A (determined by word form and context)','ⲍ/ⲯ restitué ; certitude A (forme et contexte)')]);
+  const q=m.lemma?'lemma="'+m.lemma+'"':'tok="'+m.form+'"';
+  card.innerHTML='<button type="button" class="x" aria-label="close">×</button>'+
+    '<div class="grp cop">'+grp.map(x=>x===m?'<b>'+x.html+'</b>':x.html).join('<span class="dot">·</span>')+'</div>'+
+    '<dl>'+rows.map(r=>'<dt>'+r[0]+'</dt><dd>'+r[1]+'</dd>').join('')+'</dl>'+
+    '<p class="lk"><a href="search.html?doc='+encodeURIComponent(DOC.key)+'&amp;kind=aql&amp;q='+encodeURIComponent(q)+'">'+tri('この文書で検索','Search this text','Chercher dans ce texte')+' ('+esc(q)+') →</a></p>';
+  card.hidden=false;
+  document.querySelectorAll('.m.sel').forEach(x=>x.classList.remove('sel')); el.classList.add('sel');
+}
+function gotoHash(){
+  document.querySelectorAll('.seg.hit').forEach(x=>x.classList.remove('hit'));
+  if(!/^#seg-/.test(location.hash)) return;
+  const el=document.getElementById(decodeURIComponent(location.hash.slice(1)));
+  if(el){ el.classList.add('hit'); el.scrollIntoView({block:'center'}); }
+}
+function render(){
+  const s=D.st, ann=s.typed>0;
+  const m=/^NHC\\s+([IVX]+),/.exec(DOC.siglum);
+  shell.innerHTML=navHTML()+
+    '<div class="eyebrow" style="margin-top:18px">'+(m?'Codex '+m[1]+' · ':'')+esc(DOC.siglum)+(D.locus?' · '+esc(D.locus):'')+'</div>'+
+    '<h1>'+tri(esc(DOC.ja),esc(DOC.en),esc(DOC.fr))+'</h1><div class="alt">'+tri(esc(DOC.en),esc(DOC.ja),esc(DOC.en))+'</div>'+
+    '<div class="meta">'+esc(D.lang)+' · '+tri(fmt(s.segs)+' セグメント · '+fmt(s.m)+' 形態素'+(ann?' · '+fmt(s.g)+' 語群':''), fmt(s.segs)+' segments · '+fmt(s.m)+' morphemes'+(ann?' · '+fmt(s.g)+' bound groups':''), fmt(s.segs)+' segments · '+fmt(s.m)+' morphèmes'+(ann?' · '+fmt(s.g)+' groupes':''))+'</div>'+
+    statusHTML()+
+    '<div class="tools">'+
+      (ann?'<label><input type="checkbox" id="oInter"'+(OPT.inter?' checked':'')+'>'+tri('語義と品詞を重ねる','Show glosses and POS','Afficher gloses et catégories')+'</label>'+
+           '<label><input type="checkbox" id="oCert"'+(OPT.cert?' checked':'')+'>'+tri('確かでない注釈に印','Mark uncertain analyses','Signaler les analyses incertaines')+'</label>':'')+
+      '<label><input type="checkbox" id="oCuts"'+(OPT.cuts?' checked':'')+'>'+tri('形態素の区切り','Morpheme boundaries','Limites des morphèmes')+'</label>'+
+      (ann?'<span class="lg">'+tri('語をクリックすると注釈を表示','Click a word for its analysis','Cliquez sur un mot pour son analyse')+'</span>':'')+
+    '</div>'+
+    '<article id="text" class="text"></article>'+navHTML();
+  const bind=(id,k)=>{ const e=document.getElementById(id); if(e) e.addEventListener('change',()=>{ OPT[k]=e.checked; saveOpt(); renderText(); }); };
+  bind('oInter','inter'); bind('oCert','cert'); bind('oCuts','cuts');
+  renderText(); setTitle(); gotoHash();
+}
+function fail(msg, detail){
+  shell.innerHTML='<div class="eyebrow">Nag Hammadi Codices</div><h1>'+msg+'</h1>'+(detail?'<p class="err">'+esc(detail)+'</p>':'')+
+    '<div class="docnav"><a class="mid" href="index.html#corpus">'+tri('← 文書一覧へ','← All texts','← Tous les textes')+'</a></div>';
+}
+(async()=>{
+  try{
+    const docs=readCatalog(await getXML('data/catalog.xml'));
+    DOC=docs.find(d=>d.key===key && d.xml);
+    if(!DOC){ fail(tri('文書が見つかりません','Text not found','Texte introuvable'), key||'—'); return; }
+    if(!/^source\\/nhc_fulltext_split\\/tei\\//.test(DOC.xml) && DOC.reader && !/^reader\\.html/.test(DOC.reader)){ location.replace(DOC.reader); return; }
+    const withReader=docs.filter(d=>/^reader\\.html/.test(d.reader));
+    const i=withReader.indexOf(DOC);
+    NAV={prev:i>0?withReader[i-1]:null, next:i>=0&&i<withReader.length-1?withReader[i+1]:null};
+    shell.innerHTML='<p class="loading">'+tri('本文を読み込んでいます…','Loading the text…','Chargement du texte…')+'</p>';
+    D=readTEI(await getXML(DOC.xml));
+    render();
+  }catch(e){ console.error(e); fail(tri('読み込めませんでした','Could not load the text','Chargement impossible'), e.message); }
+})();
+document.addEventListener('click',e=>{
+  if(e.target.closest('#card .x')){ hideCard(); return; }
+  const m=e.target.closest('#text .m'); if(m) showCard(m);
+});
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') hideCard(); });
+document.addEventListener('nhc:lang',()=>{ if(!D) return; setTitle(); if(OPT.inter) renderText(); });
+window.addEventListener('hashchange',gotoHash);
+</script>
+"""
+    body = body.replace("__POS__", json.dumps(POS_NAMES, ensure_ascii=False)).replace("__REPO__", json.dumps(REPO_URL))
+    return ("<!doctype html><html lang=\"ja\" data-lang=\"ja\" data-i18n=\"full\" data-mode=\"dark\" data-modes=\"light dark\"><head><meta charset=\"utf-8\">"
+            "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
+            f"{MODE_BOOT}"
+            "<title>本文（暫定版） — Sheneset</title>"
+            "<meta name=\"description\" content=\"ナグ・ハマディ写本の全文テキスト（自動注釈の暫定版）/ Nag Hammadi Codices: full text with a draft automatic annotation.\">"
+            f"{FONTS}<style>{css}</style></head><body>{body}</body></html>")
+
 # --- write ------------------------------------------------------------------
 _BANNER = "<!-- 自動生成ファイル: scripts/build_site.py が出力します。直接編集せず、スクリプトの CODICES を編集して再実行してください。 -->\n"
 open(os.path.join(OUTDIR,"index.html"),"w",encoding="utf-8").write(_BANNER + build_index())
 open(os.path.join(OUTDIR,"tractate.html"),"w",encoding="utf-8").write(_BANNER + build_tractate())
-print("wrote index.html (landing) and tractate.html (placeholder)")
-print("codices:", len(CODICES), "| tractates:", TOTAL, "| available:", AVAIL)
+open(os.path.join(OUTDIR,"reader.html"),"w",encoding="utf-8").write(_BANNER + build_reader())
+print("wrote index.html (landing), tractate.html (placeholder) and reader.html (draft full texts)")
+print("codices:", len(CODICES), "| tractates:", TOTAL, "| available:", AVAIL, "| drafts:", DRAFT)

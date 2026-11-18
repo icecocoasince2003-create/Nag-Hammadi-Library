@@ -22,7 +22,8 @@
 | `project.html` | プロジェクト紹介。メンバー・資金協力は `data/project.json`（`public: true` のみ表示） | 手作業＋JSON |
 | `eugnostos.html` | エウグノストス。`?wit=III`（祝福されたエウグノストス）/ `?wit=V`（エウグノストス）/ `?wit=SYN`（対照） | 手作業 |
 | `republic.html` | 『国家』ビュワー | 手作業 |
-| `search.html` | コーパス検索・統計。見出し下のタブで〈検索〉と〈統計〉を切替（`?view=stats` で統計を直接開く）。左の〈文書〉〈品詞〉の絞り込みは両方に共通。〈未注釈の本文〉で NHC 全文（56文書）を選んで対象に加えられる。統計のセクションは JS 内の `SECTIONS` に追加 | 手作業 |
+| `reader.html` | 本文ビュワー（暫定版）。`?doc=II-6` のように文書を指定し、NHC 全文テキストの TEI（`source/nhc_fulltext_split/tei/`）を表示する。冒頭に、その文書で確かめていないことを示す。HOME の「暫定」の行と検索の用例がここへリンク | `python3 scripts/build_site.py` で生成 |
+| `search.html` | コーパス検索・統計。見出し下のタブで〈検索〉と〈統計〉を切替（`?view=stats` で統計を直接開く）。左の〈文書〉〈品詞〉の絞り込みは両方に共通。〈全文テキスト〉で NHC 全文（56文書）を選んで対象に加えられる。統計のセクションは JS 内の `SECTIONS` に追加 | 手作業 |
 | `stats.html` | 旧コーパス統計。`search.html?view=stats` への転送のみ（`?doc=…` は引き継ぐ） | 手作業 |
 | `profile.html` | プロフィール（ログイン中の利用者用）。表示名の変更、自分の投稿の確認と修正、ブックマーク、運営へのバグの報告・応援メッセージ | 手作業 |
 | `admin.html` | 投稿（コメント・注釈・誤りの指摘）の承認、公開済みの投稿への修正の申請の承認、運営へのメッセージの確認（運営用） | 手作業 |
@@ -38,33 +39,37 @@
 **同形異義語の参照**: 本文の `<w>` は `@lemma` と `@type`（品詞）の組で `lexicon.xml` を引きます。
 `@ana="#lex-…"` があればそれが最優先、品詞が一致する項目がない場合だけレンマ一致の全項目を候補として表示します。
 
-## ナグ・ハマディ写本 全文テキスト（下処理済み・未注釈）
+## ナグ・ハマディ写本 全文テキスト（下処理済み・39 文書は自動注釈の暫定版）
 
 `source/nhc_fulltext_split/` に、写本 I–XIII のコプト語本文を 56 の文書単位に分けたテキスト一式があります
 （13,301 セグメント・236,617 語。文書ごとの TSV・TXT・TEI P5 と、再実行用のスクリプト、加えた変更の全記録）。
 内容、加えた変更、直していない点、要確認の箇所、検証の方法は
 [`source/nhc_fulltext_split/README_ja.md`](source/nhc_fulltext_split/README_ja.md) にまとめてあります。
 
-- **作業用のファイルです。** 品詞・レンマ・訳・語釈はまだ付いておらず、校訂本との照合も済んでいません
+- **作業用のファイルです。** 訳はまだ付いておらず、校訂本との照合も済んでいません
   （元ファイルで落ちていた ⲍ・ⲯ を戻した 744 語のうち 42 語は確度 B。同 README の §4・§7）。
+- **39 文書（写本 I–IV の I,2〜IV,1、写本 VII–XIII の VII,4〜XIII,2）は、語群・品詞・レンマ・語義を自動で付けた暫定版です（2026-11-18）。**
+  人の目では確かめていません（形態素の 30% は確度 low、14% は品詞を決められず `X`）。作り方・件数・確かめていないこと・
+  リポジトリに置くときに直したことは同 README の §10・§11、要確認の一覧は `source/nhc_fulltext_split/annotation/` にあります。
+  残りの 17 文書（IV,2、写本 V・VI、VII,1–3）は未注釈です。
   TEI のヘッダー（`<publicationStmt>`）には、公開元・公開日と、下の「ライセンス」と同じ利用条件
   （コプト語本文はパブリックドメイン、TEI 符号化と下処理は CC BY 4.0）を入れてあります。
   作業用の本文であることも同じ箇所に明記しています。
-- **写本 I–IV の 17 文書（I,2〜IV,1）には、語群（bound group）の暫定版があります（2026-11-18）。**
-  TEI の `<w>` を正書法上の語ごとに `<phr>` でまとめ、一部の語を形態素に分けました（`ⲁϥ` → `ⲁ`＋`ϥ` など 380 語）。
-  大半は自動の推定による試案で、人の目での確認はこれからです（要確認の境目の一覧は `source/nhc_fulltext_split/boundgroups/`）。
-  作り方・確かめたこと・直し方は同 README の §10 にあります。`<phr>` のあるファイルは、TEI を作るスクリプト（`make_tei.py`）が
-  作り直さないようにしてあります。
-- **コーパス検索・統計から使えます。** `search.html` の左欄〈未注釈の本文〉に 56 文書が写本ごとに並び、
+  `<phr>` のあるファイルは、TEI を作るスクリプト（`make_tei.py`）が作り直さないようにしてあります。
+- **文書一覧（HOME）と本文ビュワーから読めます。** 暫定版の 39 文書のうち 33 文書は、HOME の写本ごとの一覧に「暫定」と示し、
+  本文ビュワー `reader.html?doc=II-6` へリンクしています（XI,2a–2e は XI,2 の前後の移動から開けます。III,3 は人の手で注釈した
+  `eugnostos.html` へのリンクのままです）。本文ビュワーは、冒頭にその文書で確かめていないこと（確度 low と `X` の割合、
+  ⲍ・ⲯ を補った語の数など）を示し、語をクリックすると品詞・レンマ・語義・確度を出します。
+- **コーパス検索・統計から使えます。** `search.html` の左欄〈全文テキスト〉に 56 文書が写本ごとに並び、
   選んだ文書だけを読み込んで検索・統計の対象に加えます。既定では選択も読み込みもしないので、
   注釈つきの文書（エウグノストス・『国家』）だけを見るときの一覧・数値・読み込み量は変わりません。
-  品詞は「未注」、レンマは語形のままなので、語形での検索（単語検索の〈語形〉、詳細式の `tok=…`）に使います
-  （[コーパス検索ガイド](docs/CORPUS_SEARCH.md) の「未注釈の本文を検索する」）。
-- 文書の一覧（題名・略号・語数）は `data/catalog.xml` の `<bibl subtype="unannotated">` で、
+  暫定版の 39 文書は品詞・レンマでも検索でき（結果は目安）、用例から本文ビュワーへ移れます。未注釈の 17 文書は
+  品詞が「未注」、レンマは語形のままなので、語形での検索（単語検索の〈語形〉、詳細式の `tok=…`）に使います
+  （[コーパス検索ガイド](docs/CORPUS_SEARCH.md) の「全文テキストを検索する」）。
+- 文書の一覧（題名・略号・語数）は `data/catalog.xml` の `<bibl subtype="draft">`（暫定版）と `<bibl subtype="unannotated">` で、
   `python3 scripts/sync_nhc_catalog.py --write` が `source/nhc_fulltext_split/` から書き出します
-  （`tei/` を作り直したら実行。件数が `catalog.tsv` と合わなければ書き込まずに止まります。語群を付けた 17 文書は
+  （`tei/` を作り直したら実行。件数が `catalog.tsv` と合わなければ書き込まずに止まります。語群を付けた 39 文書は
   語の区切りを一部変えたので、語数だけは比べません）。
-- **本文を表示するビュワーと、文書一覧（HOME）からのリンクはまだありません。** 検索結果の用例には証本と § 番号だけが出ます。
 
 ## フォルダ構成
 
@@ -74,6 +79,7 @@ nag_hammadi_library/
 ├─ eugnostos.html      ← エウグノストス・ビュワー(手作業管理)
 ├─ republic.html       ← プラトン『国家』断片ビュワー(手作業管理)
 ├─ tractate.html       ← 準備中ページ(自動生成)
+├─ reader.html         ← 本文ビュワー・暫定版(自動生成。?doc=II-6 など)
 ├─ README.md           ← この文書
 ├─ CONTRIBUTING.md     ← ★共同編集ガイド(招待を受けた方はまずこちら)
 ├─ .nojekyll           ← GitHub Pages 用
@@ -90,11 +96,11 @@ nag_hammadi_library/
 │   ├─ lexicon.csv         辞書(1行=1語義／同形異義語は同じlemmaを複数行)
 │   ├─ translations.csv    対訳(seg_id, ja, en, fr)
 │   ├─ eugnostos_source.tsv  本文ソース(通常編集不要)
-│   └─ nhc_fulltext_split/   NHC 全文テキスト(56文書・未注釈の作業用ファイル。写本 I–IV の 17 文書は語群の暫定版つき。同フォルダの README_ja.md)
+│   └─ nhc_fulltext_split/   NHC 全文テキスト(56文書の作業用ファイル。39 文書は自動注釈の暫定版。同フォルダの README_ja.md)
 └─ scripts/            ← スクリプト(通常触らない)
     ├─ build_tei.py        source/ の CSV から XML を試しに生成し、data/ と比べる(既定では data/ に書き込まない)
     ├─ sync_lexicon.py     source/lexicon.csv の変更を data/lexicon.xml に反映する(xml:id は変えない)
-    ├─ build_site.py       index.html / tractate.html を生成
+    ├─ build_site.py       index.html / tractate.html / reader.html を生成
     ├─ build_parallels.py  並行箇所(data/parallels.xml)を、文言の自動照合で作る
     └─ sync_nhc_catalog.py  NHC 全文テキスト(未注釈)の文書一覧を data/catalog.xml に書き出す
 ```
@@ -133,6 +139,7 @@ nag_hammadi_library/
 | `index.html` | **トップページ(目次)** | NHC I–XIII の全文書カタログ。公開済みはビュワーへ、未整備は準備中ページへ遷移。 |
 | `eugnostos.html` | **ビュワー** | エウグノストスの三言語リーダー(単一HTML)。`← 一覧`で目次へ。 |
 | `tractate.html` | **準備中ページ(共通)** | `?id=コーデックス-番号` で文書を特定し「準備中」を表示。 |
+| `reader.html` | **本文ビュワー(暫定版)** | `?doc=コーデックス-番号` で、`data/catalog.xml` の全文テキストの TEI を表示。冒頭に、その文書で確かめていないことを示す。 |
 
 **スクリプト**:
 
@@ -141,7 +148,7 @@ nag_hammadi_library/
 | `build_tei.py` | CSV から本文と辞書の XML を**試しに生成して `data/` と比べる**。既定では `data/` に書き込まない(下の「データの編集」)。 |
 | `build_parallels.py` | 並行箇所(`data/parallels.xml`)を文言の自動照合で作る。何も付けなければ要約の表示だけで、`--write` で書き込む。 |
 | `sync_lexicon.py` | `lexicon.csv` の変更を `data/lexicon.xml` に反映する。`xml:id` は変えない。何も付けなければ変更点の表示だけで、`--write` で書き込む。 |
-| `build_site.py` | `index.html`(目次)と `tractate.html`(準備中)を生成。 |
+| `build_site.py` | `index.html`(目次)・`tractate.html`(準備中)・`reader.html`(本文ビュワー・暫定版)を生成。 |
 
 ## データの編集
 

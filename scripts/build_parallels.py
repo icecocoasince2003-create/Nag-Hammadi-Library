@@ -80,7 +80,7 @@ def segments(path, witness=None):
     out = []
     for t in texts:
         for s in t.iter(TEI + "s"):
-            words = [w.text or "" for w in s.iter(TEI + "w")]
+            words = ["".join(w.itertext()) for w in s.iter(TEI + "w")]   # 戻した字の <supplied> の中も読む
             out.append((s.get(XML + "id"), s.get("n") or "", " ".join(words)))
     return out
 

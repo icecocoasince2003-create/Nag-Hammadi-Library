@@ -7,10 +7,12 @@
      - 文書一覧は data/catalog.xml から生成します。<bibl type="document"> のうち <ref type="xml"> を持つものを読み込み、
        本文 XML 内の <text type="witness"> を証本として並べます（subtype="planned" は「準備中」として表示のみ）。
        新しい文書は catalog.xml に1件足せば、この画面にも自動で加わります。
-     - 未注釈の本文（<bibl subtype="unannotated">。ナグ・ハマディ写本 全文テキスト＝source/nhc_fulltext_split/）は、
-       左の〈未注釈の本文〉に写本ごとに並べます。既定では選択も読み込みもせず、選んだ文書の XML だけを取得します
-       （URL の w=wit-II-6 や doc=II-6 が指している文書は、開いたときに読み込みます）。品詞は「未注」、レンマは語形のままです。
-       カタログの項目は scripts/sync_nhc_catalog.py が書き出します。本文ビュワーがないので、用例に本文へのリンクは付きません。
+     - 全文テキスト（ナグ・ハマディ写本 全文＝source/nhc_fulltext_split/。<bibl subtype="draft"> と subtype="unannotated"）は、
+       左の〈全文テキスト〉に写本ごとに並べます。既定では選択も読み込みもせず、選んだ文書の XML だけを取得します
+       （URL の w=wit-II-6 や doc=II-6 が指している文書は、開いたときに読み込みます）。
+       "draft" は品詞・レンマ・語釈を自動で付けた暫定版（人の目で未確認）で、用例から本文ビュワー reader.html へリンクします。
+       "unannotated" は品詞が「未注」、レンマは語形のままで、本文へのリンクはありません。
+       カタログの項目は scripts/sync_nhc_catalog.py が書き出します。
      - 〈検索〉の結果はレンマ単位（<w @lemma> + @type）で集計し、語義（data/lexicon.xml）・品詞・活用型・語形・頻度・文書別分布を表示します。
        行をクリックすると語義の詳細と用例（KWIC）を開き、用例から全文表示の該当箇所 (#seg-ID) へ移動できます。
      - 〈統計〉は、選択中の証本・品詞の範囲を TEI から直接集計します（検索語には依存しません）。
@@ -320,7 +322,7 @@ table.kw td.rc{color:var(--s-mut); white-space:nowrap; overflow:hidden; max-widt
       <ul id="docList"><li class="planned">…</li></ul>
       <!-- 未注釈の本文（catalog.xml の <bibl subtype="unannotated">）。既定では選択も読み込みもしない。一覧は renderRaw() が書く -->
       <details class="raw" id="rawBox" hidden>
-        <summary><span class="l-ja">未注釈の本文</span><span class="l-en">Unannotated texts</span><span class="l-fr">Textes non annotés</span><small id="rawSum"></small></summary>
+        <summary><span class="l-ja">全文テキスト（作業用）</span><span class="l-en">Full text (working files)</span><span class="l-fr">Texte intégral (fichiers de travail)</span><small id="rawSum"></small></summary>
         <p class="rawnote">
           <span class="l-ja">ナグ・ハマディ写本の本文です。校訂本と照合する前の作業用テキストで、品詞・レンマ・訳は付いていません（<a href="https://github.com/icecocoasince2003-create/Nag-Hammadi-Library/blob/main/source/nhc_fulltext_split/README_ja.md" target="_blank" rel="noopener">詳細</a>）。選んだ文書だけを読み込みます。</span>
           <span class="l-en">The Coptic text of the Nag Hammadi codices: a working text, not yet collated with the critical editions, without part of speech, lemma or translation (<a href="https://github.com/icecocoasince2003-create/Nag-Hammadi-Library/blob/main/source/nhc_fulltext_split/README_ja.md" target="_blank" rel="noopener">details, in Japanese</a>). Only the texts you select are loaded.</span>
@@ -355,9 +357,9 @@ table.kw td.rc{color:var(--s-mut); white-space:nowrap; overflow:hidden; max-widt
     <!-- ═══════ 検索 ═══════ -->
     <div id="viewSearch" role="tabpanel" aria-labelledby="tabSearch">
     <p class="lede">
-      <span class="l-ja">公開中の全文書を横断して、単語・形態素の品詞列・正規表現で検索します。単語の結果はレンマごとに、品詞列と詳細式の結果は文脈付きの用例で表示します。左の〈未注釈の本文〉を開くと、ナグ・ハマディ写本の全文（品詞・レンマなし）も検索に加えられます。</span>
-      <span class="l-en">Search all published texts by word, morpheme POS sequence or regular expression. Word results are grouped by lemma; sequence and query results show occurrences in context. Open “Unannotated texts” on the left to add the full text of the Nag Hammadi codices (no part of speech or lemma) to the search.</span>
-      <span class="l-fr">Recherchez des mots, des suites morphologiques ou des expressions régulières dans tous les textes publiés. Les mots sont regroupés par lemme ; les suites et requêtes affichent les occurrences en contexte. Ouvrez « Textes non annotés » à gauche pour ajouter à la recherche le texte intégral des codex de Nag Hammadi (sans partie du discours ni lemme).</span>
+      <span class="l-ja">公開中の全文書を横断して、単語・形態素の品詞列・正規表現で検索します。単語の結果はレンマごとに、品詞列と詳細式の結果は文脈付きの用例で表示します。左の〈全文テキスト〉を開くと、ナグ・ハマディ写本の全文も検索に加えられます（39 文書は品詞・レンマを自動で付けた暫定版で人の目では未確認、ほかは品詞・レンマなし）。</span>
+      <span class="l-en">Search all published texts by word, morpheme POS sequence or regular expression. Word results are grouped by lemma; sequence and query results show occurrences in context. Open “Full text” on the left to add the full text of the Nag Hammadi codices to the search (39 texts carry an automatic, unchecked draft of part of speech and lemma; the others have neither).</span>
+      <span class="l-fr">Recherchez des mots, des suites morphologiques ou des expressions régulières dans tous les textes publiés. Les mots sont regroupés par lemme ; les suites et requêtes affichent les occurrences en contexte. Ouvrez « Texte intégral » à gauche pour ajouter à la recherche le texte intégral des codex de Nag Hammadi (39 textes ont une annotation automatique provisoire, non vérifiée, de la partie du discours et du lemme ; les autres n’en ont pas).</span>
     </p>
 
     <div class="query-kind">
@@ -423,9 +425,9 @@ table.kw td.rc{color:var(--s-mut); white-space:nowrap; overflow:hidden; max-widt
     </div>
 
     <p class="foot">
-      <span class="l-ja">本文: <code>data/*_tei.xml</code>（各 <code>&lt;w&gt;</code> の <code>@lemma</code>・<code>@type</code>）／ 語義: <code>data/lexicon.xml</code>（レンマ＋品詞で参照、<code>@ana</code> による語義の固定を優先）／ 文書: <code>data/catalog.xml</code> ／ 未注釈の本文: <code>source/nhc_fulltext_split/tei/*.xml</code>（<code>@lemma</code>・<code>@type</code> なし。選んだ文書だけ読み込み）。上線などの合成記号は無視して照合します。ギリシア語借用語の印（grc）は <code>xml:lang="grc"</code> を持つ語のみ。活用型は辞書の <code>&lt;iType&gt;</code> または本文の <code>@msd</code> が付与されると表示されます。</span>
-      <span class="l-en">Text: <code>data/*_tei.xml</code> (<code>@lemma</code> and <code>@type</code> of each <code>&lt;w&gt;</code>) · meanings: <code>data/lexicon.xml</code> (looked up by lemma + POS; senses pinned with <code>@ana</code> take priority) · texts: <code>data/catalog.xml</code> · unannotated texts: <code>source/nhc_fulltext_split/tei/*.xml</code> (no <code>@lemma</code> or <code>@type</code>; loaded only when selected). Combining marks such as supralinear strokes are ignored in matching. The “grc” mark appears only on words bearing <code>xml:lang="grc"</code>. Inflection class is shown once <code>&lt;iType&gt;</code> (lexicon) or <code>@msd</code> (text) is supplied.</span>
-      <span class="l-fr">Texte : <code>data/*_tei.xml</code> (<code>@lemma</code> et <code>@type</code> de chaque <code>&lt;w&gt;</code>) · sens : <code>data/lexicon.xml</code> (lemme + partie du discours ; les sens fixés par <code>@ana</code> sont prioritaires) · textes : <code>data/catalog.xml</code> · textes non annotés : <code>source/nhc_fulltext_split/tei/*.xml</code> (sans <code>@lemma</code> ni <code>@type</code> ; chargés seulement s’ils sont sélectionnés). Les signes diacritiques (traits suscrits, etc.) sont ignorés. La marque « grc » ne concerne que les mots portant <code>xml:lang="grc"</code>. La classe flexionnelle s’affiche dès que <code>&lt;iType&gt;</code> (lexique) ou <code>@msd</code> (texte) est renseigné.</span>
+      <span class="l-ja">本文: <code>data/*_tei.xml</code>（各 <code>&lt;w&gt;</code> の <code>@lemma</code>・<code>@type</code>）／ 語義: <code>data/lexicon.xml</code>（レンマ＋品詞で参照、<code>@ana</code> による語義の固定を優先）／ 文書: <code>data/catalog.xml</code> ／ 全文テキスト: <code>source/nhc_fulltext_split/tei/*.xml</code>（39 文書は <code>@lemma</code>・<code>@type</code> を自動で付けた暫定版、ほかはなし。選んだ文書だけ読み込み）。上線などの合成記号は無視して照合します。ギリシア語借用語の印（grc）は <code>xml:lang="grc"</code> を持つ語のみ。活用型は辞書の <code>&lt;iType&gt;</code> または本文の <code>@msd</code> が付与されると表示されます。</span>
+      <span class="l-en">Text: <code>data/*_tei.xml</code> (<code>@lemma</code> and <code>@type</code> of each <code>&lt;w&gt;</code>) · meanings: <code>data/lexicon.xml</code> (looked up by lemma + POS; senses pinned with <code>@ana</code> take priority) · texts: <code>data/catalog.xml</code> · full text: <code>source/nhc_fulltext_split/tei/*.xml</code> (an automatic draft of <code>@lemma</code> and <code>@type</code> in 39 texts, none in the others; loaded only when selected). Combining marks such as supralinear strokes are ignored in matching. The “grc” mark appears only on words bearing <code>xml:lang="grc"</code>. Inflection class is shown once <code>&lt;iType&gt;</code> (lexicon) or <code>@msd</code> (text) is supplied.</span>
+      <span class="l-fr">Texte : <code>data/*_tei.xml</code> (<code>@lemma</code> et <code>@type</code> de chaque <code>&lt;w&gt;</code>) · sens : <code>data/lexicon.xml</code> (lemme + partie du discours ; les sens fixés par <code>@ana</code> sont prioritaires) · textes : <code>data/catalog.xml</code> · texte intégral : <code>source/nhc_fulltext_split/tei/*.xml</code> (<code>@lemma</code> et <code>@type</code> provisoires et automatiques dans 39 textes, absents des autres ; chargés seulement s’ils sont sélectionnés). Les signes diacritiques (traits suscrits, etc.) sont ignorés. La marque « grc » ne concerne que les mots portant <code>xml:lang="grc"</code>. La classe flexionnelle s’affiche dès que <code>&lt;iType&gt;</code> (lexique) ou <code>@msd</code> (texte) est renseigné.</span>
     </p>
   </main>
 </div>
@@ -470,15 +472,20 @@ const I18N = {
   rawBusy:  {ja:n=>n+" 文書を読み込み中…", en:n=>"Loading "+n+" text"+(n==="1"?"":"s")+"…", fr:n=>"Chargement de "+n+" texte"+(n==="1"?"":"s")+"…"},
   rawFail:  {ja:"読み込めませんでした（選び直すと再試行）", en:"could not be loaded (select again to retry)", fr:"chargement impossible (resélectionnez pour réessayer)"},
   rawDup:   {ja:"注釈つきの版が上にあります", en:"annotated edition listed above", fr:"édition annotée ci-dessus"},
+  rawDraft: {ja:"自動注釈（暫定）", en:"automatic annotation (draft)", fr:"annotation automatique (provisoire)"},
   rawTag:   {ja:"（未注釈）", en:" (unannotated)", fr:" (non annoté)"},
+  rawTagD:  {ja:"（自動注釈・暫定）", en:" (automatic draft)", fr:" (brouillon automatique)"},
   codex:    {ja:c=>"写本 "+c, en:c=>"Codex "+c, fr:c=>"Codex "+c},
   nDocs:    {ja:n=>n+" 文書", en:n=>n+" text"+(n==="1"?"":"s"), fr:n=>n+" texte"+(n==="1"?"":"s")},
   rawNote:  {ja:n=>"未注釈の本文（"+n+" 証本）を含みます。これらの文書では品詞がすべて「未注」、レンマは語形のままです。語形で検索してください（単語検索の「語形」、詳細式の tok）。",
              en:n=>"Includes unannotated text ("+n+" witness"+(n==="1"?"":"es")+"). In these texts every part of speech is “unannotated” and the lemma is simply the word form: search by form (“form” in word search, tok in a query).",
              fr:n=>"Comprend du texte non annoté ("+n+" témoin"+(n==="1"?"":"s")+"). Dans ces textes, la partie du discours est toujours « non annoté » et le lemme est la forme elle-même : cherchez par forme (« forme » en recherche par mot, tok dans une requête)."},
-  rawDupNote:{ja:s=>s+" は、注釈つきの版と未注釈の版の両方が選ばれています。同じ本文を二重に数えます。",
-             en:s=>s+": both the annotated and the unannotated version are selected, so the same text is counted twice.",
-             fr:s=>s+" : la version annotée et la version non annotée sont toutes deux sélectionnées ; le même texte est compté deux fois."},
+  rawNoteD: {ja:n=>"自動注釈の暫定版（"+n+" 証本）を含みます。語群・品詞・レンマ・語義は自動で付けたもので、人の目で確かめていません（未判定の語は品詞「未注」）。数値と用例は目安として扱ってください。",
+             en:n=>"Includes automatically annotated drafts ("+n+" witness"+(n==="1"?"":"es")+"). Their bound groups, parts of speech, lemmata and glosses were assigned automatically and have not been checked by hand (unresolved words are “unannotated”). Treat counts and hits as approximate.",
+             fr:n=>"Comprend des brouillons annotés automatiquement ("+n+" témoin"+(n==="1"?"":"s")+"). Leurs groupes, parties du discours, lemmes et gloses ont été attribués automatiquement et n’ont pas été vérifiés (les mots non résolus sont « non annoté »). Les chiffres et occurrences sont indicatifs."},
+  rawDupNote:{ja:s=>s+" は、注釈つきの版と全文テキストの版の両方が選ばれています。同じ本文を二重に数えます。",
+             en:s=>s+": both the annotated edition and the full-text version are selected, so the same text is counted twice.",
+             fr:s=>s+" : l’édition annotée et la version du texte intégral sont toutes deux sélectionnées ; le même texte est compté deux fois."},
   noReader: {ja:"この文書を表示するビュワーはまだありません", en:"There is no reader for this text yet", fr:"Pas encore de visionneuse pour ce texte"},
   gapT:     {ja:"欠損", en:"lacuna", fr:"lacune"},
   ph:       {ja:"レンマ・語形・語義で検索（例: ⲛⲟⲩⲧⲉ / ⲯⲩⲭⲏ / soul / 魂）", en:"Search by lemma, form or meaning (e.g. ⲛⲟⲩⲧⲉ / ⲯⲩⲭⲏ / soul / 魂)", fr:"Lemme, forme ou sens (ex. ⲛⲟⲩⲧⲉ / ⲯⲩⲭⲏ / âme / 魂)"},
@@ -619,6 +626,8 @@ const POS = {ART:["冠詞","article","article"],N:["名詞","noun","nom"],NPROP:
   CCIRC:["状況変換詞","circumstantial converter","convertisseur circonstanciel"],
   CFOC:["焦点化変換詞","focalising converter","convertisseur focalisant"],
   CPRET:["過去変換詞","preterite converter","convertisseur prétérit"],
+  VBD:["接尾活用の動詞（ⲡⲉϫⲉ- など）","suffixally conjugated verb (ⲡⲉϫⲉ- etc.)","verbe à conjugaison suffixale (ⲡⲉϫⲉ-, etc.)"],
+  NEGPST:["否定完了","negative perfect","parfait négatif"],
   X:["未注","unannotated","non annoté"]};
 const posName = p => { const e = POS[p]; return e ? e[{ja:0,en:1,fr:2}[UL()]] : p; };
 
@@ -667,8 +676,9 @@ function parseCatalog(xml){
     kids(b, "ref").forEach(r => { ref[r.getAttribute("type")] = r.getAttribute("target"); });
     const sig = kids(b, "idno").find(i => i.getAttribute("type") === "siglum");
     const siglum = sig ? sig.textContent.trim() : "";
-    // 未注釈の本文（subtype="unannotated"）：既定では選択せず、選んだときだけ読み込む。語数は <extent> から先に表示する
-    const lazy = b.getAttribute("subtype") === "unannotated" && !!ref.xml;
+    // 全文テキスト（subtype="unannotated"、自動注釈の暫定版は "draft"）：既定では選択せず、選んだときだけ読み込む。語数は <extent> から先に表示する
+    const draft = b.getAttribute("subtype") === "draft";
+    const lazy = (draft || b.getAttribute("subtype") === "unannotated") && !!ref.xml;
     const ext = kids(b, "extent")[0];
     const tokens = ext && kids(ext, "measure").find(m => m.getAttribute("unit") === "token");
     ST.docs.push({
@@ -676,7 +686,7 @@ function parseCatalog(xml){
       fr: title.fr || title.en || title.ja || "", cop: title.cop || "", siglum,
       reader: ref.reader || "", xml: ref.xml || "",
       planned: b.getAttribute("subtype") === "planned" || !ref.xml, wits: [],
-      lazy, state: lazy ? "idle" : "", ntok0: tokens ? +tokens.getAttribute("quantity") || 0 : 0,
+      lazy, draft, state: lazy ? "idle" : "", ntok0: tokens ? +tokens.getAttribute("quantity") || 0 : 0,
       codex: (/^NHC\s+([IVXLC]+),/.exec(siglum) || [])[1] || ""
     });
   });
@@ -1185,7 +1195,7 @@ function renderRaw(){
       '<span class="nm">' + esc(t("codex", codex)) + '<small>' + esc(t("nDocs", fmt(ds.length))) + '</small></span>' +
       '<span class="ct">' + fmt(sum(ds)) + '</span></label><ul class="sub">' + ds.map(d => {
         const loading = d.state === "loading";
-        const note = loading ? t("loading") : d.state === "error" ? t("rawFail") : overlapOf(d) ? t("rawDup") : "";
+        const note = loading ? t("loading") : d.state === "error" ? t("rawFail") : overlapOf(d) ? t("rawDup") : d.draft ? t("rawDraft") : "";
         return '<li><label class="opt' + (d.state === "error" ? " nodata" : "") + '"><input type="checkbox" data-raw="' + esc(d.key) + '"' +
           (lazySelected(d) ? " checked" : "") + (loading ? " disabled" : "") + '>' +
           '<span class="nm"><span class="sig">' + esc(d.siglum.replace(/^NHC\s*/, "")) + '</span>' + esc(name(d)) + (note ? '<small>' + esc(note) + '</small>' : "") + '</span>' +
@@ -1200,7 +1210,9 @@ function rawWarning(){
   const raw = witOrder().filter(w => w.doc.lazy && ST.sel.has(w.id));
   if(!raw.length) return "";
   const dup = raw.filter(w => { const o = overlapOf(w.doc); return o && ST.sel.has(o.id); });
-  return t("rawNote", fmt(raw.length)) + (dup.length ? " " + t("rawDupNote", dup.map(w => w.label).join(L3("・", ", ", ", "))) : "");
+  const nd = raw.filter(w => w.doc.draft).length, np = raw.length - nd;
+  return [nd ? t("rawNoteD", fmt(nd)) : "", np ? t("rawNote", fmt(np)) : ""].filter(Boolean).join(" ") +
+    (dup.length ? " " + t("rawDupNote", dup.map(w => w.label).join(L3("・", ", ", ", "))) : "");
 }
 
 function renderSide(){
@@ -1273,7 +1285,7 @@ function witName(w){
   const d = w.doc, L = UL();
   // 未注釈の本文には同じ題の文書がある（ヨハネのアポクリュフォン II,1 / III,1 / IV,1 など）ので、必ず略号を添える。
   // 注釈つきの版がある証本（III,3・VI,5）は、表の中で見分けがつくよう「未注釈」と明記する
-  if(d.lazy) return (d[L] || d.ja) + " " + w.short + (overlapOf(d) ? t("rawTag") : "");
+  if(d.lazy) return (d[L] || d.ja) + " " + w.short + (overlapOf(d) ? t(d.draft ? "rawTagD" : "rawTag") : "");
   return d.wits.length > 1 ? (d[L] || d.ja) + " " + w.short : (d[L] || d.ja);
 }
 

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """sync_nhc_catalog.py — source/nhc_fulltext_split/ の文書一覧を data/catalog.xml に反映する。
 
-ナグ・ハマディ写本 全文テキスト（未注釈・56文書）を、検索ページ（search.html）の〈未注釈の本文〉に
-出すための項目を作る。data/catalog.xml の
+ナグ・ハマディ写本 全文テキスト（56文書）を、検索ページ（search.html）の〈全文テキスト〉と、
+本文ビュワー（reader.html）に出すための項目を作る。data/catalog.xml の
 
     <!-- BEGIN nhc_fulltext_split … -->  から  <!-- END nhc_fulltext_split -->
 
@@ -15,9 +15,12 @@
       <idno type="siglum">NHC II,6</idno>            証本の @n
       <extent>… segment / token / gap の件数 …</extent>
       <ref type="xml" target="source/nhc_fulltext_split/tei/….xml"/>
+      <ref type="reader" target="reader.html?doc=II-6"/>   （subtype="draft" のときだけ）
     </bibl>
 
-  * subtype="unannotated" の文書は、検索ページでは既定で選択されず、選んだときだけ読み込まれる。
+  * subtype は、品詞などを自動で付けた暫定版（<w> に @type がある。README_ja.md の §11）なら "draft"、
+    それ以外は "unannotated"。"draft" の文書には本文ビュワー reader.html へのリンク（<ref type="reader">）を付ける。
+  * どちらの文書も、検索ページでは既定で選択されず、選んだときだけ読み込まれる。
   * xml:id は「doc-」＋証本 ID から「wit-」を除いたもの（証本 wit-II-6 → doc-II-6）。
     検索ページは URL の w=wit-II-6 から、この対応で読み込む文書を決める。
   * 並びは catalog.tsv の順（写本順）。件数は TEI を数えて catalog.tsv と突き合わせ、
@@ -73,6 +76,7 @@ def read_documents():
         n = {"segment": sum(1 for _ in wit.iter(TEI + "s")), "token": sum(1 for _ in wit.iter(TEI + "w")),
              "gap": sum(1 for _ in wit.iter(TEI + "gap"))}
         grouped = wit.find(f".//{TEI}phr") is not None      # 語群を付けた版（語の区切りを一部変えてある）
+        annotated = wit.find(f".//{TEI}w[@type]") is not None   # 品詞などを自動で付けた暫定版（README_ja.md の §11）
         for unit_name, col in (("segment", "rows"), ("token", "tokens"), ("gap", "gap_markers")):
             if unit_name == "token" and grouped:
                 continue
@@ -82,7 +86,7 @@ def read_documents():
             if not titles.get(lang):
                 problems.append(f"{unit}: 題名（{lang}）がありません")
         docs.append({"key": wid[len("wit-"):], "siglum": siglum, "titles": titles, "n": n, "grouped": grouped,
-                     "target": f"{PKG_URL}/tei/{name}.xml"})
+                     "annotated": annotated, "target": f"{PKG_URL}/tei/{name}.xml"})
     keys = [d["key"] for d in docs]
     if len(set(keys)) != len(keys):
         problems.append("文書のキーが重複しています")
@@ -94,18 +98,23 @@ def build_block(docs):
     out = [
         # XML のコメントには「--」を書けないので、ここに実行オプションは書かない（使い方はこのスクリプトの冒頭）
         f"{BEGIN} — 自動生成: scripts/sync_nhc_catalog.py が書き出す範囲（END までは手で編集しない）",
-        f"{INDENT}     ナグ・ハマディ写本 全文テキスト（未注釈）: {len(docs)} 文書・{total['segment']:,} セグメント・{total['token']:,} 語。",
-        f"{INDENT}     品詞・レンマ・訳は付いておらず、校訂本との照合も済んでいない作業用の本文（{PKG_URL}/README_ja.md）。",
+        f"{INDENT}     ナグ・ハマディ写本 全文テキスト: {len(docs)} 文書・{total['segment']:,} セグメント・{total['token']:,} 語。",
+        f"{INDENT}     校訂本との照合が済んでいない作業用の本文（{PKG_URL}/README_ja.md）。",
     ]
-    grouped = [d for d in docs if d["grouped"]]
-    if grouped:
-        out.append(f"{INDENT}     うち {len(grouped)} 文書は、語群（<phr>）を推定で付けた暫定版（どの文書かは同 README_ja.md の §10）。")
+    drafts = [d for d in docs if d["annotated"]]
+    plain = [d for d in docs if not d["annotated"]]
+    grouped_only = [d for d in plain if d["grouped"]]
+    if drafts:
+        out.append(f"{INDENT}     subtype=\"draft\" の {len(drafts)} 文書は、語群・品詞・レンマ・語釈を自動で付けた暫定版で、人の目で確かめていない"
+                   f"（同 README_ja.md の §11）。本文は <ref type=\"reader\"> の reader.html で読める。")
+    out.append(f"{INDENT}     subtype=\"unannotated\" の {len(plain)} 文書は、品詞・レンマ・訳が付いておらず、本文を表示するビュワーもまだ無い"
+               + (f"（うち {len(grouped_only)} 文書は語群だけ付けた暫定版。§10）。" if grouped_only else "。"))
     out += [
-        f"{INDENT}     subtype=\"unannotated\" の文書は、検索ページでは既定で選択されず、選んだときだけ読み込まれる。",
-        f"{INDENT}     本文を表示するビュワーはまだ無いので <ref type=\"reader\"> は付けていない。 -->",
+        f"{INDENT}     どちらも、検索ページでは既定で選択されず、選んだときだけ読み込まれる。 -->",
     ]
     for d in docs:
-        out.append(f'{INDENT}<bibl type="document" subtype="unannotated" xml:id="doc-{d["key"]}">')
+        sub = "draft" if d["annotated"] else "unannotated"
+        out.append(f'{INDENT}<bibl type="document" subtype="{sub}" xml:id="doc-{d["key"]}">')
         for lang in ("ja", "en", "fr"):
             out.append(f'{INDENT}  <title xml:lang="{lang}">{esc(d["titles"][lang])}</title>')
         out.append(f'{INDENT}  <idno type="siglum">{esc(d["siglum"])}</idno>')
@@ -113,6 +122,8 @@ def build_block(docs):
                    f'<measure unit="token" quantity="{d["n"]["token"]}"/>'
                    f'<measure unit="gap" quantity="{d["n"]["gap"]}"/></extent>')
         out.append(f'{INDENT}  <ref type="xml" target="{esc(d["target"])}"/>')
+        if d["annotated"]:
+            out.append(f'{INDENT}  <ref type="reader" target="reader.html?doc={esc(d["key"])}"/>')
         out.append(f"{INDENT}</bibl>")
     out.append(f"{INDENT}{END}")
     return "\n".join(out)
