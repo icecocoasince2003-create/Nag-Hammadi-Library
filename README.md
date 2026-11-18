@@ -116,7 +116,7 @@ nag_hammadi_library/
 
 | ファイル | 役割 | 内容 |
 |---|---|---|
-| `eugnostos_tei.xml` | 本文(TEI) | 二証本(III,3 全文＋V,1 並行枠)。各 `<w>` に `@lemma`、対訳は `@transJa/En/Fr`。生成したあと手作業で直している。 |
+| `eugnostos_tei.xml` | 本文(TEI) | 二証本(III,3 全文＋V,1 並行枠)。語ごとにレンマと品詞、節ごとに対訳を持つ。生成したあと手作業で直している。 |
 | `lexicon.xml` | コプト語辞書 | `lexicon.csv` の内容を `sync_lexicon.py` で反映。同形異義語は `<superEntry>`。 |
 | `eugnostos_theology.xml` | 注釈 | 中身は `notes.csv`＋`themes.csv` と同じ(2026-11 時点)。`@target`/`@ana` でリンク。 |
 
@@ -139,15 +139,15 @@ nag_hammadi_library/
 ## データの編集
 
 **サイトが読むのは `data/` の XML です。2026-11 時点で、`data/` の XML は `source/` の CSV から作り直せません。**
-生成したあとに手作業で直した内容(冒頭 9 節の語の切り方・`<phy>`・レンマ・文脈上の語釈、品詞の付け直し、訳文の改訂、
-TEI の構造の修正)が `data/` にだけあり、CSV と生成スクリプト `build_tei.py` はそれに追いついていないためです。
+生成したあとに手作業で直した内容(冒頭 9 節の語の切り方・語のまとまり・レンマ・文脈上の語釈、品詞の付け直し、訳文の改訂、
+TEI の構造と書き方の修正)が `data/` にだけあり、CSV と生成スクリプト `build_tei.py` はそれに追いついていないためです。
 CSV と生成スクリプトを XML に合わせ直すのか、生成をやめて XML を元データにするのかは、まだ決めていません。
 それまでは次のとおりです。
 
 | 直したいもの | 直す場所 | 反映のしかた |
 |---|---|---|
 | 辞書(語義・品詞・CDO へのリンク) | `source/lexicon.csv` | `python3 scripts/sync_lexicon.py` で変更点を確かめ、`--write` を付けて `data/lexicon.xml` に書き込む(`xml:id` は変わらない) |
-| 本文(語の切り方・レンマ・品詞・`<phy>`)と対訳 | `data/eugnostos_tei.xml` | 直接直す |
+| 本文(語の切り方・語のまとまり・レンマ・品詞・文脈上の語釈)と対訳 | `data/eugnostos_tei.xml` | 直接直す |
 | 注釈・主題分類 | `data/eugnostos_theology.xml` | 直接直す。注の `@target`・`@ana` を変えたら、`python3 scripts/sync_theology_ana.py --check` で本文の `@ana` とのずれを確かめる。主題分類(`<taxonomy>`)は `data/eugnostos_tei.xml` のヘッダーにも同じものがある |
 
 - `translations.csv`・`notes.csv`・`themes.csv`・`eugnostos_source.tsv` を直しても、サイトには反映されません。
@@ -343,9 +343,9 @@ TEI のデータを直したら、直す前と後の両方で検証して、メ�
 > **他の NHC 文書へ展開**するときも同じCSVの形式が使えます。文書ごとに `<name>_*.csv` と
 > `<name>_source.tsv` を用意し、`build_tei.py` のファイル名を差し替えれば、同じ仕組みで本文・辞書・
 > 注釈のXMLが作れます。同形異義語も `lexicon.csv` に行を足すだけで増やせます。
-> ただし、生成結果(`build/tei/` に出ます)は、2026-11-18 に `data/` で直した TEI の構造になっていません
-> (`<s>` が `<div>` の直下、辞書の `<entry>` が `<list>` の中、辞書の `xml:id` が実行のたびに変わる)。
-> そのままでは TEI として妥当ではないので、公開する前に直す必要があります。
+> ただし、生成結果(`build/tei/` に出ます)は、生成スクリプトが作られた当時の書き方のままで、そのあと `data/` で行った
+> 構造と書き方の修正は入っていません(たとえば `<s>` が `<div>` の直下、辞書の `<entry>` が `<list>` の中、
+> 辞書の `xml:id` が実行のたびに変わる)。そのままでは TEI として妥当ではないので、公開する前に直す必要があります。
 
 
 ## 辞書データの出典（加筆分）
