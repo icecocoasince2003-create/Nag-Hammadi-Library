@@ -22,8 +22,8 @@
         <p xml:lang="en">Published by this project: document metadata and related resources.</p>
       </publicationStmt>
       <sourceDesc>
-        <p xml:lang="ja">本文・辞書・注解の各XMLファイルを参照。</p>
-        <p xml:lang="en">See the individual text, lexicon and commentary XML files.</p>
+        <p xml:lang="ja">本文・辞書・並行箇所の各XMLファイルを参照。</p>
+        <p xml:lang="en">See the individual text, lexicon and parallel-passage XML files.</p>
       </sourceDesc>
     </fileDesc>
   </teiHeader>
@@ -106,6 +106,28 @@
         <ref type="search" target="search.html?doc=eugnostos"/>
         <ref type="stats" target="search.html?doc=eugnostos&amp;view=stats"/>
         <ref type="xml" target="data/eugnostos_tei.xml"/>
+        <ref type="parallels" target="data/parallels.xml"/>
+        <relatedItem type="corpus">
+          <bibl>
+            <ref target="#doc-V-1"/>
+            <note xml:lang="ja">V,1 の本文（未注釈）。III,3 と同じ文言の箇所を並行箇所として結んである（data/parallels.xml）</note>
+            <note xml:lang="en">The text of V,1 (unannotated). Passages with the same wording as III,3 are linked as parallels (data/parallels.xml)</note>
+          </bibl>
+        </relatedItem>
+        <relatedItem type="corpus">
+          <bibl>
+            <ref target="#doc-III-4"/>
+            <note xml:lang="ja">エウグノストスと同じ文言が、救い主と弟子たちの問答の形で長く続く。その箇所を並行箇所として結んである（data/parallels.xml）</note>
+            <note xml:lang="en">Long stretches of the wording of Eugnostos, set as a dialogue between the Saviour and his disciples; those passages are linked as parallels (data/parallels.xml)</note>
+          </bibl>
+        </relatedItem>
+        <relatedItem type="corpus">
+          <bibl>
+            <ref target="#doc-II-5"/>
+            <note xml:lang="ja">両書の文学的な接点を論じた研究がある: L. Painchaud, JBL 114 (1995) 81–101。文言が長く一致する箇所は無いので、箇所どうしは結んでいない</note>
+            <note xml:lang="en">The literary contacts between the two texts are discussed by L. Painchaud, JBL 114 (1995) 81–101. They share no long stretch of wording, so no passages are linked</note>
+          </bibl>
+        </relatedItem>
         <relatedItem type="corpus">
           <bibl>
             <ref target="#doc-republic"/>

@@ -355,9 +355,9 @@ def build_index():
    <div class="eyebrow">Nag Hammadi Codices I–XIII</div>
    <h1><span class="cop">ϣⲉⲛⲉⲥⲏⲧ</span>Sheneset<span class="tag">{tri("ナグ・ハマディ写本コーパス", "A digital TEI edition of the Nag Hammadi Codices", "Édition numérique TEI des codices de Nag Hammadi")}</span></h1>
    <p class="lead">{tri(
-     f"ナグ・ハマディ写本(全13冊・約{TOTAL}文書)を、<b>形態素グロス・コプト語辞書・神学注釈・日英仏訳</b>を備えた TEI&nbsp;P5 デジタル版として整備するプロジェクトです。各語をクリックすると語義が表示され、写本どうしの対照、注釈の併読ができます。",
-     f"A digital TEI&nbsp;P5 edition of the Nag Hammadi Codices (13 codices, some {TOTAL} tractates), with <b>morpheme-level glosses, a Coptic lexicon, theological notes and Japanese, English and French translations</b>. Click any word for its sense, compare the manuscript witnesses side by side and read the commentary alongside the text.",
-     f"Une édition numérique TEI&nbsp;P5 des codices de Nag Hammadi (13 codices, quelque {TOTAL} traités), avec <b>gloses morphologiques, lexique copte, notes théologiques et traductions japonaise, anglaise et française</b>. Cliquez sur un mot pour en voir le sens, comparez les témoins manuscrits et lisez le commentaire en regard du texte.")}</p>
+     f"ナグ・ハマディ写本(全13冊・約{TOTAL}文書)を、<b>形態素グロス・コプト語辞書・日英仏訳</b>を備えた TEI&nbsp;P5 デジタル版として整備するプロジェクトです。各語をクリックすると語義が表示され、写本どうしの対照や、他の文書の並行箇所の参照ができます。",
+     f"A digital TEI&nbsp;P5 edition of the Nag Hammadi Codices (13 codices, some {TOTAL} tractates), with <b>morpheme-level glosses, a Coptic lexicon and Japanese, English and French translations</b>. Click any word for its sense, compare the manuscript witnesses side by side and follow parallel passages into other texts.",
+     f"Une édition numérique TEI&nbsp;P5 des codices de Nag Hammadi (13 codices, quelque {TOTAL} traités), avec <b>gloses morphologiques, lexique copte et traductions japonaise, anglaise et française</b>. Cliquez sur un mot pour en voir le sens, comparez les témoins manuscrits et suivez les passages parallèles dans d’autres textes.")}</p>
    <div class="more">
      <a href="gnosticism.html">{tri("グノーシス主義とは →", "What is Gnosticism? →", "Qu'est-ce que le gnosticisme ? →")}</a>
      <a href="project.html">{tri("このプロジェクトについて →", "About the project →", "À propos du projet →")}</a>
@@ -423,9 +423,9 @@ def build_index():
   {tri(f"<b>{AVAIL}</b>&nbsp;文書を公開 / 全&nbsp;<b>{TOTAL}</b>&nbsp;文書(13写本)",
        f"<b>{AVAIL}</b>&nbsp;of&nbsp;<b>{TOTAL}</b>&nbsp;tractates online (13 codices)",
        f"<b>{AVAIL}</b>&nbsp;traités en ligne sur&nbsp;<b>{TOTAL}</b> (13 codices)")}　·
-  {tri("本文はパブリックドメイン、注釈・辞書・対訳は CC&nbsp;BY&nbsp;4.0",
-       "Source texts: public domain · notes, lexicon and translations: CC&nbsp;BY&nbsp;4.0",
-       "Textes sources : domaine public · notes, lexique et traductions : CC&nbsp;BY&nbsp;4.0")}　·
+  {tri("本文はパブリックドメイン、辞書・対訳は CC&nbsp;BY&nbsp;4.0",
+       "Source texts: public domain · lexicon and translations: CC&nbsp;BY&nbsp;4.0",
+       "Textes sources : domaine public · lexique et traductions : CC&nbsp;BY&nbsp;4.0")}　·
   <a href="project.html">{tri("プロジェクトについて", "About", "À propos")}</a>　·
   <a href="privacy.html">{tri("プライバシーポリシー", "Privacy", "Confidentialité")}</a>　·　
   <a href="terms.html">{tri("利用規約", "Terms", "Conditions")}</a>　·　
@@ -553,13 +553,13 @@ if(!t){
      <img src="image/web/gengen_roost.svg" alt="" loading="lazy"
        style="float:right; width:110px; aspect-ratio:1; border-radius:50%; object-fit:cover; object-position:center 22%; border:1px solid rgba(212,175,106,.45); margin:0 0 10px 14px">
      <h2>${tri('完成時に備わる構成','What the finished edition will offer','Ce que l’édition offrira')}</h2>
-     <p>${tri('本文書は本コーパスの拡張対象です。完成時には<b>エウグノストスと同一の構成</b>で公開され、同じビュワーで形態素クリック・三言語切替・注釈の併読ができるようになります。',
-              'This tractate is part of the planned expansion. It will be published <b>in the same format as Eugnostos</b>: click any morpheme, switch between three languages and read the notes alongside the text.',
-              'Ce traité fait partie de l’extension prévue. Il sera publié <b>au même format qu’Eugnoste</b> : gloses par morphème, trois langues et notes en regard du texte.')}</p>
+     <p>${tri('本文書は本コーパスの拡張対象です。完成時には<b>エウグノストスと同一の構成</b>で公開され、同じビュワーで形態素クリック・三言語切替・並行箇所の参照ができるようになります。',
+              'This tractate is part of the planned expansion. It will be published <b>in the same format as Eugnostos</b>: click any morpheme, switch between three languages and follow parallel passages into other texts.',
+              'Ce traité fait partie de l’extension prévue. Il sera publié <b>au même format qu’Eugnoste</b> : gloses par morphème, trois langues et passages parallèles d’autres textes.')}</p>
      <div class="layers">
        <div class="layer"><b>${tri('本文(TEI)','Text (TEI)','Texte (TEI)')}</b><small>${tri('コプト語・形態素グロス・証本対照','Coptic, glosses, witnesses','copte, gloses, témoins')}</small></div>
        <div class="layer"><b>${tri('コプト語辞書','Coptic lexicon','Lexique copte')}</b><small>${tri('レンマ＋品詞→日英仏','lemma + POS → JA/EN/FR','lemme + catégorie → JA/EN/FR')}</small></div>
-       <div class="layer"><b>${tri('注釈','Notes','Notes')}</b><small>${tri('神学的解釈・主題分類','theology, themes','théologie, thèmes')}</small></div>
+       <div class="layer"><b>${tri('並行箇所','Parallels','Parallèles')}</b><small>${tri('他の文書で同じ文言を持つ箇所','same wording in other texts','même formulation ailleurs')}</small></div>
        <div class="layer"><b>${tri('対訳','Translations','Traductions')}</b><small>${tri('日本語・英語・フランス語','Japanese, English, French','japonais, anglais, français')}</small></div>
      </div>
    </div>

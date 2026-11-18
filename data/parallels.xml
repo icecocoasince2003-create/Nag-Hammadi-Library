@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 並行箇所の一覧。scripts/build_parallels.py が書き出す（方法は下の encodingDesc）。
+     resp="#align" の <link> は自動の照合の結果で、スクリプトを実行し直すと作り直される。
+     手で確かめた対応を足すときは resp を付けずに書く（そのときスクリプトは上書きせずに止まる）。 -->
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="ja">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title xml:lang="ja">並行箇所 — エウグノストスと同じ文言を持つ箇所</title>
+        <title xml:lang="en">Parallel passages — places that share the wording of Eugnostos</title>
+        <respStmt xml:id="align">
+          <resp>automatic alignment (scripts/build_parallels.py)</resp>
+          <name>Sheneset project</name>
+        </respStmt>
+      </titleStmt>
+      <publicationStmt>
+        <authority>Sheneset — TEI corpus of the Nag Hammadi Codices</authority>
+        <availability status="free">
+          <licence target="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</licence>
+        </availability>
+        <date when="2026-11-18">2026-11-18</date>
+      </publicationStmt>
+      <sourceDesc>
+        <p xml:lang="ja">エウグノストス III,3 の本文は <ref target="eugnostos_tei.xml">eugnostos_tei.xml</ref>（証本 wit-III）。対応先の本文は、ナグ・ハマディ写本 全文テキスト（未注釈・校訂本と未照合の作業用テキスト。<ref target="../source/nhc_fulltext_split/README_ja.md">source/nhc_fulltext_split/README_ja.md</ref>）。文書の題名と略号は <ref target="catalog.xml">catalog.xml</ref>。</p>
+        <p xml:lang="en">The text of Eugnostos III,3 is eugnostos_tei.xml (witness wit-III). The other texts come from the unannotated full text of the Nag Hammadi Codices (a working text not yet collated with the critical editions; source/nhc_fulltext_split/README_ja.md). Titles and sigla are in catalog.xml.</p>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <editorialDecl>
+        <p xml:lang="ja">各 &lt;link&gt; は、エウグノストス III,3 のセグメント（&lt;s&gt;）と、同じ文言を持つ他の文書のセグメントを結ぶ。自動の照合による: 両方の本文から語の区切り・合成記号（上線など）・記号を除いて 1 本の文字列にし、順序を保ったまま一致する 4 文字以上の部分を探した（Python の difflib.SequenceMatcher）。セグメントの組で 8 文字以上（短いセグメントでは 5 文字以上で、どちらかの半分以上）一致すれば結ぶ。1 つのセグメントの対応先が離れた何か所にもあるときは、一致のいちばん多いまとまりを残し、まとまりの中の一致の無いセグメントも含める。@cert は一致の強さ: high は、そのセグメントの文字の半分以上が一致するか、20 文字以上続けて一致するもの。medium は 4 分の 1 以上か 10 文字以上。low はそれ以外。言い換えられた箇所は結ばれていない。ほかの文書（『世界の起源について』を含む）とは、定型句より長い一致が無いので結んでいない。頁・行番号は対応先の本文に無いので、セグメントの番号（@n）で示す。</p>
+        <p xml:lang="en">Each &lt;link&gt; joins a segment (&lt;s&gt;) of Eugnostos III,3 to a segment of another text with the same wording. The links come from an automatic comparison: both texts were reduced to a single string without word division, combining marks (supralinear strokes etc.) or punctuation, and shared runs of four or more letters were found in order (Python difflib.SequenceMatcher). A pair of segments is linked when at least 8 letters match (for short segments, at least 5 letters making up half of either segment). When a segment matches several separate places, the place with the most matching letters is kept, and segments without a match inside that place are included. @cert gives the strength of the match: high when half the letters of the segment match or a run of 20 letters matches; medium for a quarter or a run of 10; low otherwise. Passages that were reworded are not linked. No other text (On the Origin of the World included) shares more than stock phrases with Eugnostos, so none is linked. The other texts have no page and line numbers, so segments are cited by number (@n).</p>
+      </editorialDecl>
+    </encodingDesc>
+  </teiHeader>
+  <standOff>
+    <linkGrp type="parallel" subtype="witness" xml:id="par-eug-V1" corresp="catalog.xml#doc-eugnostos catalog.xml#doc-V-1">
+      <desc xml:lang="ja">エウグノストスのもう一つの写本（NHC V,1）。同じ文書だが、III,3 と文言の一致しない箇所が多い。</desc>
+      <desc xml:lang="en">The other manuscript of Eugnostos (NHC V,1): the same text, but often worded differently from III,3.</desc>
+      <link target="eugnostos_tei.xml#III-INCIPIT ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506196_27" cert="low" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505191 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506198" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505191 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506199" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505191 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506200" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505191 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506201" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505191 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506202" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505191 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506203" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505191 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506204" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505191 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506205" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505192 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506206" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505193 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506207" cert="low" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505195 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506209" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505195 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506210" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505195 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506211" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505195 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506212" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505195 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506213" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505195 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506214" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505196 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506214" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505196 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506215" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505196 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506216" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505201 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506228" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505201 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506229" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505202 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506232" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505203 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506233" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505204 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506234" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505204 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506235" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505206 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506236" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505208 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506237" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505209 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506237" cert="low" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505209 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506238" cert="low" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505211 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506240" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505212 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506242" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505212 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506243" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505212 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506244" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505212 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506245" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505213 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506246" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505213 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506247" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505213 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506248" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505213 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506249" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505214 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506250" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505215 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506251" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505216 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506251" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505216 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506252" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505217 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506254" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505220 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506256" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505220 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506257" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505221 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506261" cert="low" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505222 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506261" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505223 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506263" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505226 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506268" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505227 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506269" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505227 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506270" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505228 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506272" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505228 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506273" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505228 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506274" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505228 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506275" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505234 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506287" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505235 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506287" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505236 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506288" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505237 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506289" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505240 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506293" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505241 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506294" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505241 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506295" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505241 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506296" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505241 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506297" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505242 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506298" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505242 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506299" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505243 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506300" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505244 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506302" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505245 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506302" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505247 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506305" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505249 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506307" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505249 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506308" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505249 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506309" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505251 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506311" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505252 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506312" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505253 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506314" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505253 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506315" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505255 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506342" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505258 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506347" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505259 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506348" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505260 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506348" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505260 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506349" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505260 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506350" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505260 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506351" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505261 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506352" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505261 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506353" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505262 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506354" cert="low" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505263 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506354" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505263 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506355" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505264 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506357" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505264 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506358" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505264 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506359" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505265 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506360" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505265 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506361" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505265 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506362" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505265 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506363" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505265 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506364" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505266 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506366" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505266 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506367" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505266 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506368" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505267 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506369" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505268 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506370" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505269 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506371" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505276 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506372" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505277 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506373" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505283 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506377" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505285 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506389" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505286 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506397" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505288 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506398" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505289 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506399" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505290 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506400" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505290 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506401" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505291 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506401" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505291 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506402" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505291 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506403" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505291 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506404" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505291 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506405" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505295 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506407" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505296 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506408" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505296 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506409" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505296 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506410" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505296 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506411" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505297 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506412" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505298 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506413" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505298 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506414" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505298 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506415" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505298 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506416" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505298 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506417" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505298 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506418" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505299 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506418" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505299 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506419" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505300 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506420" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505302 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506423" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505302 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506424" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505302 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506425" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505302 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506426" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505302 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506427" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505303 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506428" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505303 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506429" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505304 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506430" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505306 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506431" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505306 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506432" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505306 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506433" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505306 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506434" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505307 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506434" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505307 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506435" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505310 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506438" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505310 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506439" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505310 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506440" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505311 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506441" cert="low" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505312 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506442" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505312 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506443" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505316 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506443" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505317 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506444" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505317 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506445" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505318 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506445" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505318 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506446" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505318 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506447" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505319 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506448" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505319 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506449" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505320 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506451" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505321 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506452" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505322 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506453" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505323 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506454" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505324 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506454" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505324 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506455" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505324 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506456" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505324 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506457" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505324 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506458" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505326 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506458" cert="low" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505327 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506459" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505328 ../source/nhc_fulltext_split/tei/05-1_eugnostos.xml#V-7506460" cert="high" resp="#align"/>
+    </linkGrp>
+    <linkGrp type="parallel" subtype="rewriting" xml:id="par-eug-SJC" corresp="catalog.xml#doc-eugnostos catalog.xml#doc-III-4">
+      <desc xml:lang="ja">『イエス・キリストの知恵』（NHC III,4。写本 III でエウグノストスのすぐ後に書かれている）。エウグノストスと同じ文言が、救い主と弟子たちの問答の形で長く続く。BG 8502,3 にも残る（本コーパスには未収録）。</desc>
+      <desc xml:lang="en">The Sophia of Jesus Christ (NHC III,4, copied right after Eugnostos in Codex III): long stretches of the same wording, set as a dialogue between the Saviour and his disciples. Also extant in BG 8502,3 (not in this corpus).</desc>
+      <link target="eugnostos_tei.xml#III-7505191 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505340" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505191 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505341" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505191 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505342" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505191 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505343" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505191 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505344" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505192 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505344" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505193 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505345" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505194 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505348" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505194 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505349" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505195 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505352" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505195 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505353" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505195 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505354" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505195 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505355" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505195 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505356" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505196 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505356" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505197 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505360" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505197 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505361" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505197 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505362" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505198 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505363" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505199 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505364" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505199 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505365" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505200 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505366" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505200 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505367" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505200 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505368" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505201 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505368" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505202 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505368" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505202 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505369" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505203 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505370" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505204 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505370" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505206 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505370" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505207 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505371" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505208 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505371" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505209 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505371" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505209 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505372" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505209 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505373" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505209 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505374" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505210 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505387" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505211 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505388" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505211 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505389" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505211 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505390" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505211 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505391" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505212 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505392" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505213 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505393" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505213 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505394" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505216 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505395" cert="low" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505217 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505398" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505218 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505399" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505220 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505401" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505220 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505402" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505221 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505403" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505221 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505404" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505222 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505404" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505223 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505405" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505224 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505406" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505225 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505406" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505226 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505406" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505227 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505407" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505228 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505408" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505228 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505409" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505228 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505410" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505228 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505411" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505229 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505412" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505230 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505413" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505230 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505414" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505233 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505418" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505234 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505419" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505235 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505420" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505240 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505420" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505240 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505421" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505240 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505422" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505240 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505423" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505241 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505423" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505241 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505424" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505242 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505424" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505243 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505424" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505244 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505425" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505245 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505426" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505246 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505426" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505247 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505426" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505247 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505427" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505248 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505427" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505249 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505428" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505251 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505430" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505252 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505431" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505252 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505432" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505253 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505432" cert="low" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505257 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505438" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505258 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505442" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505260 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505447" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505261 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505447" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505261 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505448" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505262 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505449" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505263 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505449" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505264 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505453" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505265 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505454" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505265 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505455" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505274 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505455" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505277 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505455" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505285 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505466" cert="low" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505291 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505473" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505302 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505473" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505303 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505474" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505304 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505474" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505305 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505475" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505306 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505476" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505307 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505477" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505307 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505478" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505308 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505478" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505309 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505478" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505309 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505479" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505310 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505480" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505311 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505480" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505312 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505482" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505313 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505483" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505314 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505484" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505316 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505484" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505317 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505485" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505318 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505485" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505318 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505486" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505318 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505487" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505319 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505490" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505320 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505490" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505321 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505490" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505323 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505490" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505324 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505490" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505324 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505491" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505325 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505492" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505326 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505492" cert="high" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505327 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505493" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505328 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505499" cert="medium" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505330 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505500" cert="low" resp="#align"/>
+      <link target="eugnostos_tei.xml#III-7505330 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505501" cert="low" resp="#align"/>
+    </linkGrp>
+  </standOff>
+</TEI>

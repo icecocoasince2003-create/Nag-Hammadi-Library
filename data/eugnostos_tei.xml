@@ -5,10 +5,10 @@
       <titleStmt>
         <title ref="urn:cts:copticLit:nag.eugnostos" xml:lang="en">Eugnostos</title>
         <title xml:lang="ja">エウグノストス</title>
-        <title type="sub" xml:lang="en">A two-witness TEI edition with stand-off lexicon and annotations (NHC III,3 and V,1)</title>
+        <title type="sub" xml:lang="en">A two-witness TEI edition with a stand-off lexicon (NHC III,3 and V,1)</title>
         <author>Anonymous (Gnostic; Greek original, 1st–2nd c. CE)</author>
         <respStmt>
-          <resp>TEI encoding, lexicon, translation and theological notes</resp>
+          <resp>TEI encoding, lexicon and translation</resp>
           <name>Eugnostos Digital Corpus project</name>
         </respStmt>
         <respStmt>
@@ -17,7 +17,7 @@
         </respStmt>
       </titleStmt>
       <editionStmt>
-        <edition n="0.1">Seed edition — lexicon, translations and notes are a curated first pass for scholarly review.</edition>
+        <edition n="0.1">Seed edition — lexicon and translations are a curated first pass for scholarly review.</edition>
       </editionStmt>
       <publicationStmt>
         <authority>Eugnostos Digital Corpus</authority>
@@ -81,119 +81,32 @@
     </fileDesc>
     <encodingDesc>
       <projectDesc>
-        <p xml:lang="ja">ナグ・ハマディ写本『エウグノストス』を、形態素ごとに意味を参照でき、写本III,3とV,1を対照でき、神学的解釈を併読できる形で公開するためのTEI符号化。データは3ファイルに分離しています。</p>
+        <p xml:lang="ja">ナグ・ハマディ写本『エウグノストス』を、形態素ごとに意味を参照でき、写本III,3とV,1を対照でき、他の文書の並行箇所を参照できる形で公開するためのTEI符号化。本文・辞書・並行箇所の一覧は別のファイルに分けています。</p>
       </projectDesc>
       <editorialDecl>
-        <p xml:lang="ja">本ファイルは本文です。各 <gi>w</gi> は <att>type</att>（品詞）と <att>lemma</att>（レンマ）を持ち、語義は別ファイルのコプト語辞書（<ref target="lexicon.xml">lexicon.xml</ref>）をレンマと品詞で参照します。ギリシア語からの借用語は <att>xml:lang</att>="grc"。神学的解釈（注釈）は別ファイル（<ref target="eugnostos_theology.xml">eugnostos_theology.xml</ref>）にあり、<att>target</att> で本文の <gi>s</gi> を指します。</p>
-        <p xml:lang="en">This is the text file. Each <gi>w</gi> carries <att>type</att> (part of speech) and <att>lemma</att>; its senses are in the companion dictionary <ref target="lexicon.xml">lexicon.xml</ref>, joined by lemma and part of speech. Greek loanwords have <att>xml:lang</att>="grc". Theological annotations are in <ref target="eugnostos_theology.xml">eugnostos_theology.xml</ref> and point to an <gi>s</gi> of this text with <att>target</att>.</p>
+        <p xml:lang="ja">本ファイルは本文です。各 <gi>w</gi> は <att>type</att>（品詞）と <att>lemma</att>（レンマ）を持ち、語義は別ファイルのコプト語辞書（<ref target="lexicon.xml">lexicon.xml</ref>）をレンマと品詞で参照します。ギリシア語からの借用語は <att>xml:lang</att>="grc"。他の文書の並行箇所は別ファイル（<ref target="parallels.xml">parallels.xml</ref>）にあり、<gi>link</gi> の <att>target</att> で本文の <gi>s</gi> を指します。</p>
+        <p xml:lang="en">This is the text file. Each <gi>w</gi> carries <att>type</att> (part of speech) and <att>lemma</att>; its senses are in the companion dictionary <ref target="lexicon.xml">lexicon.xml</ref>, joined by lemma and part of speech. Greek loanwords have <att>xml:lang</att>="grc". Parallel passages in other texts are listed in <ref target="parallels.xml">parallels.xml</ref>, whose <gi>link</gi> elements point to an <gi>s</gi> of this text with <att>target</att>.</p>
         <segmentation>
           <p xml:lang="ja">本文は <gi>s</gi>（セグメント）に分け、その中の形態素を <gi>w</gi> とします。続けて書かれる語群（bound group。正書法上の 1 語）は <gi>phr</gi> でまとめます。Coptic SCRIPTORIUM の TEI と同じ書き方です。<gi>phr</gi> に入っていない <gi>w</gi> は、語群の区切りをまだ付けていない箇所です。</p>
           <p xml:lang="en">The text is divided into <gi>s</gi> (segments), and each morpheme is a <gi>w</gi>. A bound group, the orthographic word of Coptic, is a <gi>phr</gi>, as in the TEI of Coptic SCRIPTORIUM. A <gi>w</gi> outside a <gi>phr</gi> belongs to a passage where bound groups have not been marked yet.</p>
         </segmentation>
         <interpretation>
-          <p xml:lang="ja">対訳は、各証本の <gi>body</gi> の末尾にある <gi>div</gi>（<att>type</att>="translation"、言語は <att>xml:lang</att>）に置き、<gi>seg</gi> の <att>corresp</att> で本文の <gi>s</gi> と対応づけます。個々の語形の文脈上の語釈は <gi>standOff</gi> の <gi>interpGrp</gi>（<att>type</att>="gloss"）にあり、<gi>w</gi> が <att>ana</att> で指します。<gi>s</gi> の <att>ana</att> は、神学的主題の分類（下の <gi>taxonomy</gi>）を指します。</p>
-          <p xml:lang="en">Translations are in a <gi>div</gi> (<att>type</att>="translation", language in <att>xml:lang</att>) at the end of each witness's <gi>body</gi>; each <gi>seg</gi> is aligned with an <gi>s</gi> of the text by <att>corresp</att>. Contextual glosses of individual tokens are in the <gi>interpGrp</gi> (<att>type</att>="gloss") of <gi>standOff</gi>; a <gi>w</gi> points to one with <att>ana</att>. The <att>ana</att> of an <gi>s</gi> points to the taxonomy of theological themes below.</p>
+          <p xml:lang="ja">対訳は、各証本の <gi>body</gi> の末尾にある <gi>div</gi>（<att>type</att>="translation"、言語は <att>xml:lang</att>）に置き、<gi>seg</gi> の <att>corresp</att> で本文の <gi>s</gi> と対応づけます。個々の語形の文脈上の語釈は <gi>standOff</gi> の <gi>interpGrp</gi>（<att>type</att>="gloss"）にあり、<gi>w</gi> が <att>ana</att> で指します。</p>
+          <p xml:lang="en">Translations are in a <gi>div</gi> (<att>type</att>="translation", language in <att>xml:lang</att>) at the end of each witness's <gi>body</gi>; each <gi>seg</gi> is aligned with an <gi>s</gi> of the text by <att>corresp</att>. Contextual glosses of individual tokens are in the <gi>interpGrp</gi> (<att>type</att>="gloss") of <gi>standOff</gi>; a <gi>w</gi> points to one with <att>ana</att>.</p>
         </interpretation>
       </editorialDecl>
-      <classDecl>
-        <taxonomy xml:id="theology-taxonomy">
-          <desc xml:lang="ja">神学的主題の分類。&lt;s&gt; の @ana から参照されます(注釈ファイルにも同じ分類を収録)。</desc>
-          <category xml:id="th-frame">
-            <catDesc xml:lang="ja">書簡という枠組み</catDesc>
-            <catDesc xml:lang="en">Epistolary frame</catDesc>
-            <catDesc xml:lang="fr">Cadre épistolaire</catDesc>
-          </category>
-          <category xml:id="th-apophatic">
-            <catDesc xml:lang="ja">否定神学(語りえぬ父)</catDesc>
-            <catDesc xml:lang="en">Apophatic theology</catDesc>
-            <catDesc xml:lang="fr">Théologie apophatique</catDesc>
-          </category>
-          <category xml:id="th-propator">
-            <catDesc xml:lang="ja">先在の父(プロパトール)</catDesc>
-            <catDesc xml:lang="en">The Forefather</catDesc>
-            <catDesc xml:lang="fr">Le Propatôr (Père préexistant)</catDesc>
-          </category>
-          <category xml:id="th-autogenes">
-            <catDesc xml:lang="ja">自生者(アウトゲネース)</catDesc>
-            <catDesc xml:lang="en">The Self-Begotten</catDesc>
-            <catDesc xml:lang="fr">L'Autogène (auto-engendré)</catDesc>
-          </category>
-          <category xml:id="th-anthropos">
-            <catDesc xml:lang="ja">不死の人間</catDesc>
-            <catDesc xml:lang="en">The Immortal Man</catDesc>
-            <catDesc xml:lang="fr">L'Homme immortel</catDesc>
-          </category>
-          <category xml:id="th-son">
-            <catDesc xml:lang="ja">人の子=救済者</catDesc>
-            <catDesc xml:lang="en">The Son of Man / Saviour</catDesc>
-            <catDesc xml:lang="fr">Le Fils de l'Homme / Sauveur</catDesc>
-          </category>
-          <category xml:id="th-sophia">
-            <catDesc xml:lang="ja">ソフィアと対(シュジュギア)</catDesc>
-            <catDesc xml:lang="en">Sophia &amp; syzygy</catDesc>
-            <catDesc xml:lang="fr">Sophia et la syzygie</catDesc>
-          </category>
-          <category xml:id="th-androgyny">
-            <catDesc xml:lang="ja">両性具有</catDesc>
-            <catDesc xml:lang="en">Androgyny</catDesc>
-            <catDesc xml:lang="fr">Androgynie</catDesc>
-          </category>
-          <category xml:id="th-aeons">
-            <catDesc xml:lang="ja">アイオーン論(12・72・360)</catDesc>
-            <catDesc xml:lang="en">The aeons (12/72/360)</catDesc>
-            <catDesc xml:lang="fr">Les éons (12/72/360)</catDesc>
-          </category>
-          <category xml:id="th-ekklesia">
-            <catDesc xml:lang="ja">天上の教会</catDesc>
-            <catDesc xml:lang="en">The heavenly Church</catDesc>
-            <catDesc xml:lang="fr">L'Église céleste</catDesc>
-          </category>
-          <category xml:id="th-cosmology">
-            <catDesc xml:lang="ja">型と対型・宇宙構造</catDesc>
-            <catDesc xml:lang="en">Types &amp; cosmic structure</catDesc>
-            <catDesc xml:lang="fr">Types et structure cosmique</catDesc>
-          </category>
-          <category xml:id="th-sjc">
-            <catDesc xml:lang="ja">『イエス・キリストの知恵』との関係</catDesc>
-            <catDesc xml:lang="en">Relation to the Sophia of Jesus Christ</catDesc>
-            <catDesc xml:lang="fr">Rapport avec la Sagesse de Jésus-Christ</catDesc>
-          </category>
-          <category xml:id="th-witness">
-            <catDesc xml:lang="ja">写本III,3とV,1の異同</catDesc>
-            <catDesc xml:lang="en">Witnesses III,3 and V,1</catDesc>
-            <catDesc xml:lang="fr">Les témoins III,3 et V,1</catDesc>
-          </category>
-          <category xml:id="th-origworld">
-            <catDesc xml:lang="ja">『世界の起源について』との関係</catDesc>
-            <catDesc xml:lang="en">Relation to On the Origin of the World</catDesc>
-            <catDesc xml:lang="fr">Rapport avec l'Écrit sans titre</catDesc>
-          </category>
-          <category xml:id="th-dispositio">
-            <catDesc xml:lang="ja">修辞的構成(四部構成)</catDesc>
-            <catDesc xml:lang="en">Rhetorical dispositio</catDesc>
-            <catDesc xml:lang="fr">Dispositio rhétorique</catDesc>
-          </category>
-        </taxonomy>
-      </classDecl>
     </encodingDesc>
     <profileDesc>
       <langUsage>
         <language ident="cop">Sahidic Coptic</language>
         <language ident="grc">Greek (loanwords)</language>
-        <language ident="ja">Japanese (translations, notes)</language>
-        <language ident="en">English (translations, notes)</language>
-        <language ident="fr">French (translations, notes)</language>
+        <language ident="ja">Japanese (translations)</language>
+        <language ident="en">English (translations)</language>
+        <language ident="fr">French (translations)</language>
       </langUsage>
-      <textClass>
-        <keywords scheme="#theology-taxonomy">
-          <term>Gnosticism</term>
-          <term>cosmogony</term>
-          <term>Sethian</term>
-          <term>apophatic theology</term>
-        </keywords>
-      </textClass>
     </profileDesc>
     <revisionDesc>
+      <change when="2026-11-18">Theological interpretation removed: the theme pointers (<att>ana</att>) on <gi>s</gi>, the taxonomy of theological themes and the keywords that used it are gone, and so is the companion file of theological notes. Parallel passages in other texts are listed in parallels.xml instead.</change>
       <change when="2026-11-18">Project-specific markup replaced by TEI elements and attributes: bound groups are <gi>phr</gi>; translations moved from attributes of <gi>s</gi> to <gi>div</gi> type="translation", aligned by <att>corresp</att>; contextual glosses moved from an attribute of <gi>w</gi> to <gi>interp</gi>, pointed to by <att>ana</att>; <att>type</att> instead of <att>subtype</att> on the incipit and colophon segments. On the same day the <gi>s</gi> elements were wrapped in an <gi>ab</gi> and <gi>msContents</gi> was moved before <gi>history</gi>. The text, the translations and the glosses themselves are unchanged.</change>
       <change when="2026-06-16" n="0.1">Initial seed build from tokenised Codex III,3 source; lexicon and annotations split into companion files.</change>
     </revisionDesc>
@@ -219,7 +132,7 @@
           <div type="tractate" n="Eugnostos" subtype="codexIII">
             <head xml:lang="en">Eugnostos the Blessed — Nag Hammadi Codex III,3 (pp. 70–90)</head>
             <ab>
-            <s xml:id="III-INCIPIT" n="1" ana="#th-dispositio #th-frame #th-sjc #th-witness" corresp="#wit-V" type="incipit">
+            <s xml:id="III-INCIPIT" n="1" corresp="#wit-V" type="incipit">
             <phr>
               <w type="NPROP" lemma="ⲉⲩⲅⲛⲱⲥⲧⲟⲥ" xml:lang="grc">ⲉⲩⲅⲛⲱⲥⲧⲟⲥ</w>
             </phr>
@@ -250,7 +163,7 @@
               <w type="PDEM" lemma="ⲛⲁⲓ">ⲛⲉⲉⲓ</w>
             </phr>
             </s>
-            <s xml:id="III-7505191" n="2" ana="#th-apophatic #th-dispositio #th-frame #th-sjc">
+            <s xml:id="III-7505191" n="2">
             <phr>
               <w type="PREP" lemma="ⲉ">ⲉ</w>
               <w type="ACAUS" lemma="ⲧⲣⲉ">ⲧⲣⲉ</w>
@@ -488,7 +401,7 @@
               <w type="PPER" lemma="ϥ">ϥ</w>
             </phr>
             </s>
-            <s xml:id="III-7505192" n="3" ana="#th-apophatic #th-frame">
+            <s xml:id="III-7505192" n="3">
             <phr>
               <w type="ART" lemma="ϩⲉⲛ">ϩⲉⲛ</w>
             </phr>
@@ -506,7 +419,7 @@
               <w type="COP" lemma="ⲧⲉ">ⲧⲉ</w>
             </phr>
             </s>
-            <s xml:id="III-7505193" n="4" ana="#th-apophatic #th-frame">
+            <s xml:id="III-7505193" n="4">
             <phr>
               <w type="ART" lemma="ϩⲉⲛ">ϩⲉⲛ</w>
               <w type="N" lemma="ⲕⲟⲟⲩⲉ">ⲕⲟⲟⲩⲉ</w>
@@ -584,7 +497,7 @@
               <w type="N" lemma="ⲙⲉ" ana="#gl-true">ⲙⲏⲉ</w>
             </phr>
             </s>
-            <s xml:id="III-7505194" n="5" ana="#th-apophatic #th-frame">
+            <s xml:id="III-7505194" n="5">
             <phr>
               <w type="ART" lemma="ⲡ">ⲡ</w>
               <w type="CREL" lemma="ⲉⲧ">ⲉⲧ</w>
@@ -649,7 +562,7 @@
               <w type="COP" lemma="ⲧⲉ">ⲧⲉ</w>
             </phr>
             </s>
-            <s xml:id="III-7505195" n="6" ana="#th-apophatic #th-frame">
+            <s xml:id="III-7505195" n="6">
             <phr>
               <w type="ART" lemma="ⲡ">ⲡ</w>
               <w type="CREL" lemma="ⲉⲧⲉ">ⲉⲧⲉ</w>
@@ -797,7 +710,7 @@
               <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
             </phr>
             </s>
-            <s xml:id="III-7505196" n="7" ana="#th-apophatic">
+            <s xml:id="III-7505196" n="7">
               <phr>
                 <w type="ANEGAOR" lemma="ⲙⲡⲉ">ⲙⲡⲉ</w>
               </phr>
@@ -850,7 +763,7 @@
                 <w type="PPER" lemma="ϥ">ϥ</w>
               </phr>
             </s>
-            <s xml:id="III-7505197" n="8" ana="#th-apophatic">
+            <s xml:id="III-7505197" n="8">
               <phr>
                 <w type="ART" lemma="ⲡ">ⲡ</w>
                 <w type="REL" lemma="ⲉⲧ">ⲉⲧ</w>
@@ -945,7 +858,7 @@
                 <w type="N" lemma="ϩⲁⲉ">ϩⲁⲏ</w>
               </phr>
               </s>
-            <s xml:id="III-7505198" n="9" ana="#th-apophatic">
+            <s xml:id="III-7505198" n="9">
               <phr>
                 <w type="NEG" lemma="ⲙⲙⲛ">ⲙⲙⲛ</w>
               </phr>
@@ -1128,7 +1041,7 @@
               <w type="X" lemma="ⲛⲁⲫⲑⲁⲣ">ⲛⲁⲫⲑⲁⲣ</w>
               <w type="X" lemma="ⲧⲟⲥ">ⲧⲟⲥ</w>
             </s>
-            <s xml:id="III-7505201" n="12" ana="#th-apophatic">
+            <s xml:id="III-7505201" n="12">
               <w type="N" lemma="ⲟⲩⲁ">ⲟⲩⲁ</w>
               <w type="PREP" lemma="ⲉ">ⲉ</w>
               <w type="NEG" lemma="ⲙⲛ">ⲙⲛ</w>
@@ -1168,7 +1081,7 @@
               <w type="ADV" lemma="ⲙⲙⲓⲛ">ⲙⲙⲓⲛ</w>
               <w type="X" lemma="ⲙⲙⲟϥ">ⲙⲙⲟϥ</w>
             </s>
-            <s xml:id="III-7505202" n="13" ana="#th-apophatic">
+            <s xml:id="III-7505202" n="13">
               <w type="PFX" lemma="ⲟⲩⲁⲧ">ⲟⲩⲁⲧ</w>
               <w type="V" lemma="ϣⲓ">ϣⲓ</w>
               <w type="ART" lemma="ⲧ">ⲧ</w>
@@ -1248,19 +1161,19 @@
               <w type="V" lemma="ⲁⲙⲁϩⲧⲉ">ⲁⲙⲁϩⲧⲉ</w>
               <w type="X" lemma="ⲙⲙⲟϥ">ⲙⲙⲟϥ</w>
             </s>
-            <s xml:id="III-7505207" n="18" ana="#th-anthropos #th-apophatic">
+            <s xml:id="III-7505207" n="18">
               <w type="X" lemma="ⲡⲉⲧⲙ">ⲡⲉⲧⲙ</w>
               <w type="N" lemma="ⲙⲁ">ⲙⲁ</w>
               <w type="PPER" lemma="ⲩ">ⲩ</w>
               <w type="PTC" lemma="ⲅⲁⲣ" xml:lang="grc">ⲅⲁⲣ</w>
             </s>
-            <s xml:id="III-7505208" n="19" ana="#th-anthropos #th-apophatic">
+            <s xml:id="III-7505208" n="19">
               <w type="N" lemma="ⲟⲩⲛⲟⲩ">ⲟⲩⲛⲟⲩ</w>
               <w type="PPER" lemma="ⲥ">ⲥ</w>
               <w type="ADJ" lemma="ⲧⲏⲣ">ⲧⲏⲣ</w>
               <w type="PPER" lemma="ϥ">ϥ</w>
             </s>
-            <s xml:id="III-7505209" n="20" ana="#th-anthropos #th-apophatic">
+            <s xml:id="III-7505209" n="20">
               <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
               <w type="N" lemma="ⲉⲛⲛⲟⲓⲁ" xml:lang="grc">ⲉⲛⲛⲟⲓⲁ</w>
               <w type="NEG" lemma="ⲙⲛ">ⲙⲛ</w>
@@ -1308,7 +1221,7 @@
               <w type="V" lemma="ⲥⲟⲟⲩⲛ">ⲥⲟⲟⲩⲛ</w>
               <w type="X" lemma="ⲙⲡⲁⲅⲉⲛⲛⲏⲧⲟⲥ" xml:lang="grc">ⲙⲡⲁⲅⲉⲛⲛⲏⲧⲟⲥ</w>
             </s>
-            <s xml:id="III-7505210" n="21" ana="#th-anthropos #th-apophatic">
+            <s xml:id="III-7505210" n="21">
               <w type="PRET" lemma="ⲛⲉ">ⲛⲉ</w>
               <w type="PREP" lemma="ⲙ">ⲙ</w>
               <w type="PPOS" lemma="ⲡⲁ">ⲡⲁ</w>
@@ -1327,7 +1240,7 @@
               <w type="PTC" lemma="ⲇⲉ" xml:lang="grc">ⲇⲉ</w>
               <w type="VSTAT" lemma="ϣⲟⲟⲡ">ϣⲟⲟⲡ</w>
             </s>
-            <s xml:id="III-7505211" n="22" ana="#th-anthropos #th-apophatic">
+            <s xml:id="III-7505211" n="22">
               <w type="CONJ" lemma="ⲟⲩⲧⲉ" xml:lang="grc">ⲟⲩⲧⲉ</w>
               <w type="ART" lemma="ⲛⲓ">ⲛⲓ</w>
               <w type="ADJ" lemma="ⲁⲫⲑⲁⲣⲧⲟⲥ" xml:lang="grc">ⲁⲫⲑⲁⲣⲧⲟⲥ</w>
@@ -1363,7 +1276,7 @@
               <w type="PREP" lemma="ϩⲙ">ϩⲙ</w>
               <w type="X" lemma="ⲡⲧⲁⲕⲟ">ⲡⲧⲁⲕⲟ</w>
             </s>
-            <s xml:id="III-7505212" n="23" ana="#th-apophatic #th-dispositio">
+            <s xml:id="III-7505212" n="23">
               <w type="X" lemma="ⲡⲉⲛⲧⲁ">ⲡⲉⲛⲧⲁ</w>
               <w type="PPER" lemma="ϥ">ϥ</w>
               <w type="V" lemma="ϣⲱ">ϣⲱ</w>
@@ -1394,7 +1307,7 @@
               <w type="PREP" lemma="ϩⲛ">ϩⲛ</w>
               <w type="X" lemma="ⲧⲁⲫⲑⲁⲣⲥⲓⲁ" xml:lang="grc">ⲧⲁⲫⲑⲁⲣⲥⲓⲁ</w>
             </s>
-            <s xml:id="III-7505213" n="24" ana="#th-apophatic #th-dispositio">
+            <s xml:id="III-7505213" n="24">
               <w type="CONJ" lemma="ϩⲱⲥⲧⲉ" xml:lang="grc">ϩⲱⲥⲧⲉ</w>
               <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
               <w type="N" lemma="ⲙⲏⲏϣⲉ">ⲙⲏⲏϣⲉ</w>
@@ -1414,13 +1327,13 @@
               <w type="APST" lemma="ⲁ">ⲁ</w>
               <w type="X" lemma="ⲩⲙⲟⲩ">ⲩⲙⲟⲩ</w>
             </s>
-            <s xml:id="III-7505214" n="25" ana="#th-apophatic #th-dispositio">
+            <s xml:id="III-7505214" n="25">
               <w type="CONJ" lemma="ⲁⲩⲱ">ⲁⲩⲱ</w>
               <w type="ADV" lemma="ϩⲱ">ϩⲱ</w>
               <w type="V" lemma="ϣⲁ">ϣⲁ</w>
               <w type="ADV" lemma="ⲡⲉⲉⲓⲙⲁ">ⲡⲉⲉⲓⲙⲁ</w>
             </s>
-            <s xml:id="III-7505215" n="26" ana="#th-apophatic #th-dispositio">
+            <s xml:id="III-7505215" n="26">
               <w type="X" lemma="ⲉⲡⲓ">ⲉⲡⲓ</w>
               <w type="NEG" lemma="ⲙⲛ">ⲙⲛ</w>
               <w type="V" lemma="ϣ">ϣ</w>
@@ -1448,7 +1361,7 @@
               <w type="N" lemma="ⲛⲟⲩⲧⲉ">ⲛⲟⲩⲧⲉ</w>
               <w type="X" lemma="ⲙⲙⲏⲉ">ⲙⲙⲏⲉ</w>
             </s>
-            <s xml:id="III-7505216" n="27" ana="#th-apophatic #th-dispositio">
+            <s xml:id="III-7505216" n="27">
               <w type="CONJ" lemma="ⲉϣⲱⲡⲉ">ⲉϣⲱⲡⲉ</w>
               <w type="PTC" lemma="ϭⲉ">ϭⲉ</w>
               <w type="PREP" lemma="ⲉ">ⲉ</w>
@@ -1485,7 +1398,7 @@
               <w type="V" lemma="ⲛⲟⲓ" xml:lang="grc">ⲛⲟⲓ</w>
               <w type="APST" lemma="ⲁ">ⲁ</w>
             </s>
-            <s xml:id="III-7505217" n="28" ana="#th-apophatic #th-dispositio">
+            <s xml:id="III-7505217" n="28">
               <w type="X" lemma="ⲛⲁⲧⲥⲁⲃⲟ">ⲛⲁⲧⲥⲁⲃⲟ</w>
               <w type="PPER" lemma="ϥ">ϥ</w>
               <w type="CONJ" lemma="ϫⲉ">ϫⲉ</w>
@@ -1502,7 +1415,7 @@
               <w type="ADV" lemma="ⲉⲃⲟⲗ">ⲉⲃⲟⲗ</w>
               <w type="NEG" lemma="ⲁⲛ">ⲁⲛ</w>
             </s>
-            <s xml:id="III-7505218" n="29" ana="#th-apophatic #th-dispositio">
+            <s xml:id="III-7505218" n="29">
               <w type="PRET" lemma="ⲁⲩ">ⲁⲩ</w>
               <w type="X" lemma="ϭⲛⲧ">ϭⲛⲧ</w>
               <w type="PPER" lemma="ⲥ">ⲥ</w>
@@ -1513,7 +1426,7 @@
               <w type="PREP" lemma="ⲉ">ⲉ</w>
               <w type="N" lemma="ⲃⲟⲗ">ⲃⲟⲗ</w>
             </s>
-            <s xml:id="III-7505219" n="30" ana="#th-apophatic #th-dispositio">
+            <s xml:id="III-7505219" n="30">
               <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
               <w type="N" lemma="ⲁⲣⲭⲏ" xml:lang="grc">ⲁⲣⲭⲏ</w>
               <w type="PREP" lemma="ⲛ">ⲛ</w>
@@ -1521,7 +1434,7 @@
               <w type="COP" lemma="ⲧⲉ">ⲧⲉ</w>
               <w type="PDEM" lemma="ⲧⲁⲓ">ⲧⲁⲓ</w>
             </s>
-            <s xml:id="III-7505220" n="31" ana="#th-apophatic #th-propator">
+            <s xml:id="III-7505220" n="31">
               <w type="ART" lemma="ⲡ">ⲡ</w>
               <w type="N" lemma="ϫⲟⲉⲓⲥ">ϫⲟⲉⲓⲥ</w>
               <w type="PREP" lemma="ⲙ">ⲙ</w>
@@ -1555,7 +1468,7 @@
               <w type="ADV" lemma="ⲉⲃⲟⲗ">ⲉⲃⲟⲗ</w>
               <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
             </s>
-            <s xml:id="III-7505221" n="32" ana="#th-apophatic #th-propator">
+            <s xml:id="III-7505221" n="32">
               <w type="ART" lemma="ⲡ">ⲡ</w>
               <w type="ART" lemma="ⲉⲧⲙ">ⲉⲧⲙ</w>
               <w type="N" lemma="ⲙⲁ">ⲙⲁ</w>
@@ -1578,13 +1491,13 @@
               <w type="X" lemma="ⲛϩⲣⲁⲓ">ⲛϩⲣⲁⲓ</w>
               <w type="PREP" lemma="ⲛϩⲏⲧϥ">ⲛϩⲏⲧϥ</w>
             </s>
-            <s xml:id="III-7505222" n="33" ana="#th-apophatic #th-propator">
+            <s xml:id="III-7505222" n="33">
               <w type="ADV" lemma="ⲛⲑⲉ">ⲛⲑⲉ</w>
               <w type="PREP" lemma="ⲛ">ⲛ</w>
               <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
               <w type="N" lemma="ⲉⲓⲁⲗ">ⲉⲓⲁⲗ</w>
             </s>
-            <s xml:id="III-7505223" n="34" ana="#th-apophatic #th-propator">
+            <s xml:id="III-7505223" n="34">
               <w type="X" lemma="ⲉⲁ">ⲉⲁ</w>
               <w type="PPER" lemma="ϥ">ϥ</w>
               <w type="V" lemma="ⲟⲩⲱⲛϩ">ⲟⲩⲱⲛϩ</w>
@@ -1600,7 +1513,7 @@
               <w type="N" lemma="ⲡⲁⲩⲧⲟⲅⲉⲛ" xml:lang="grc">ⲡⲁⲩⲧⲟⲅⲉⲛ</w>
               <w type="N" lemma="ⲉⲧⲱⲣ" xml:lang="grc">ⲉⲧⲱⲣ</w>
             </s>
-            <s xml:id="III-7505224" n="35" ana="#th-aeons #th-autogenes">
+            <s xml:id="III-7505224" n="35">
               <w type="CONJ" lemma="ⲁⲩⲱ">ⲁⲩⲱ</w>
               <w type="AUX" lemma="ⲛⲁ">ⲛⲁ</w>
               <w type="PREP" lemma="ⲛ">ⲛ</w>
@@ -1614,7 +1527,7 @@
               <w type="X" lemma="ⲟⲛⲧⲟⲥ" xml:lang="grc">ⲟⲛⲧⲟⲥ</w>
               <w type="ADJ" lemma="ⲛⲁⲅⲉⲛⲛⲏⲧⲟⲥ" xml:lang="grc">ⲛⲁⲅⲉⲛⲛⲏⲧⲟⲥ</w>
             </s>
-            <s xml:id="III-7505225" n="36" ana="#th-aeons #th-autogenes">
+            <s xml:id="III-7505225" n="36">
               <w type="X" lemma="ⲟⲩϩⲓ">ⲟⲩϩⲓ</w>
               <w type="X" lemma="ⲥⲟⲭⲣⲟⲛⲟⲥ" xml:lang="grc">ⲥⲟⲭⲣⲟⲛⲟⲥ</w>
               <w type="PTC" lemma="ⲙⲉⲛ" xml:lang="grc">ⲙⲉⲛ</w>
@@ -1624,7 +1537,7 @@
               <w type="PPOS" lemma="ⲧⲉϥ">ⲧⲉϥ</w>
               <w type="N" lemma="ϩⲏ">ϩⲏ</w>
             </s>
-            <s xml:id="III-7505226" n="37" ana="#th-aeons #th-autogenes">
+            <s xml:id="III-7505226" n="37">
               <w type="CONJ" lemma="ⲁⲗⲗⲁ" xml:lang="grc">ⲁⲗⲗⲁ</w>
               <w type="PREP" lemma="ⲛ">ⲛ</w>
               <w type="PPER" lemma="ϥ">ϥ</w>
@@ -1635,7 +1548,7 @@
               <w type="PREP" lemma="ϩⲛ">ϩⲛ</w>
               <w type="N" lemma="ⲧϭⲟⲙ">ⲧϭⲟⲙ</w>
             </s>
-            <s xml:id="III-7505227" n="38" ana="#th-aeons #th-autogenes">
+            <s xml:id="III-7505227" n="38">
               <w type="X" lemma="ⲙⲛⲛⲥⲱϥ">ⲙⲛⲛⲥⲱϥ</w>
               <w type="PRET" lemma="ⲁϥ">ⲁϥ</w>
               <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
@@ -1662,7 +1575,7 @@
               <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
               <w type="N" lemma="ⲏⲡⲉ">ⲏⲡⲉ</w>
             </s>
-            <s xml:id="III-7505228" n="39" ana="#th-aeons #th-autogenes">
+            <s xml:id="III-7505228" n="39">
               <w type="N" lemma="ⲉϣⲁⲩ">ⲉϣⲁⲩ</w>
               <w type="V" lemma="ⲙⲟⲩⲧⲉ">ⲙⲟⲩⲧⲉ</w>
               <w type="PREP" lemma="ⲉⲣⲟ">ⲉⲣⲟ</w>
@@ -1753,7 +1666,7 @@
               <w type="PREP" lemma="ⲛϩⲏⲧ">ⲛϩⲏⲧ</w>
               <w type="PPER" lemma="ϥ">ϥ</w>
             </s>
-            <s xml:id="III-7505229" n="40" ana="#th-aeons #th-autogenes">
+            <s xml:id="III-7505229" n="40">
               <w type="X" lemma="ⲉⲩⲙⲏⲛ">ⲉⲩⲙⲏⲛ</w>
               <w type="ADV" lemma="ⲉⲃⲟⲗ">ⲉⲃⲟⲗ</w>
               <w type="PREP" lemma="ⲉ">ⲉ</w>
@@ -1782,7 +1695,7 @@
               <w type="REL" lemma="ⲉⲧⲉ">ⲉⲧⲉ</w>
               <w type="X" lemma="ⲙⲉⲩϣⲓⲧϥ">ⲙⲉⲩϣⲓⲧϥ</w>
             </s>
-            <s xml:id="III-7505230" n="41" ana="#th-aeons #th-autogenes">
+            <s xml:id="III-7505230" n="41">
               <w type="PDEM" lemma="ⲡⲁⲓ">ⲡⲁⲓ</w>
               <w type="REL" lemma="ⲉⲧⲉ">ⲉⲧⲉ</w>
               <w type="NEG" lemma="ⲙⲡ">ⲙⲡ</w>
@@ -1805,7 +1718,7 @@
               <w type="PRET" lemma="ⲛⲉ">ⲛⲉ</w>
               <w type="N" lemma="ⲩⲕⲟⲥⲙⲟⲥ" xml:lang="grc">ⲩⲕⲟⲥⲙⲟⲥ</w>
             </s>
-            <s xml:id="III-7505231" n="42" ana="#th-aeons #th-autogenes">
+            <s xml:id="III-7505231" n="42">
               <w type="CONJ" lemma="ⲁⲩⲱ">ⲁⲩⲱ</w>
               <w type="ADV" lemma="ϩⲱ">ϩⲱ</w>
               <w type="V" lemma="ϣⲁ">ϣⲁ</w>
@@ -1820,7 +1733,7 @@
               <w type="PREP" lemma="ϩⲙ">ϩⲙ</w>
               <w type="X" lemma="ⲡⲓⲁⲡⲓⲣⲟⲛ">ⲡⲓⲁⲡⲓⲣⲟⲛ</w>
             </s>
-            <s xml:id="III-7505232" n="43" ana="#th-aeons #th-autogenes">
+            <s xml:id="III-7505232" n="43">
               <w type="N" lemma="ⲕⲉ">ⲕⲉ</w>
               <w type="N" lemma="ⲁⲣⲭⲏ" xml:lang="grc">ⲁⲣⲭⲏ</w>
               <w type="PREP" lemma="ⲛ">ⲛ</w>
@@ -1828,7 +1741,7 @@
               <w type="COP" lemma="ⲧⲉ">ⲧⲉ</w>
               <w type="PDEM" lemma="ⲧⲁⲓ">ⲧⲁⲓ</w>
             </s>
-            <s xml:id="III-7505233" n="44" ana="#th-aeons #th-autogenes">
+            <s xml:id="III-7505233" n="44">
               <w type="ADV" lemma="ⲉⲃⲟⲗ">ⲉⲃⲟⲗ</w>
               <w type="PREP" lemma="ϩⲓ">ϩⲓ</w>
               <w type="V" lemma="ⲧⲟⲟⲧ">ⲧⲟⲟⲧ</w>
@@ -1844,7 +1757,7 @@
               <w type="CONJ" lemma="ⲏ" xml:lang="grc">ⲏ</w>
               <w type="X" lemma="ⲙⲡⲧⲏⲣϥ">ⲙⲡⲧⲏⲣϥ</w>
             </s>
-            <s xml:id="III-7505234" n="45" ana="#th-androgyny #th-anthropos #th-sophia">
+            <s xml:id="III-7505234" n="45">
               <w type="PREP" lemma="ϩⲙ">ϩⲙ</w>
               <w type="ART" lemma="ⲡ">ⲡ</w>
               <w type="ADJ" lemma="ⲁⲡⲉⲣⲁⲛⲧⲟⲛ" xml:lang="grc">ⲁⲡⲉⲣⲁⲛⲧⲟⲛ</w>
@@ -1889,7 +1802,7 @@
               <w type="ADJ" lemma="ⲛⲟϭ">ⲛⲟϭ</w>
               <w type="X" lemma="ⲛϭⲟⲙ">ⲛϭⲟⲙ</w>
             </s>
-            <s xml:id="III-7505235" n="46" ana="#th-androgyny #th-anthropos #th-sophia">
+            <s xml:id="III-7505235" n="46">
               <w type="PREP" lemma="ⲛ">ⲛ</w>
               <w type="COP" lemma="ⲧⲉ">ⲧⲉ</w>
               <w type="N" lemma="ⲩⲛⲟⲩ">ⲩⲛⲟⲩ</w>
@@ -1910,7 +1823,7 @@
               <w type="X" lemma="ⲛⲁⲧⲟⲥ" xml:lang="grc">ⲛⲁⲧⲟⲥ</w>
               <w type="N" lemma="ⲛϩⲟⲟⲩⲧⲥϩⲓⲙⲉ">ⲛϩⲟⲟⲩⲧⲥϩⲓⲙⲉ</w>
             </s>
-            <s xml:id="III-7505236" n="47" ana="#th-androgyny #th-anthropos #th-sophia">
+            <s xml:id="III-7505236" n="47">
               <w type="PPOS" lemma="ⲡⲉϥ">ⲡⲉϥ</w>
               <w type="N" lemma="ⲣⲁⲛ">ⲣⲁⲛ</w>
               <w type="N" lemma="ⲙⲙⲛⲧϩⲟⲟⲩⲧ">ⲙⲙⲛⲧϩⲟⲟⲩⲧ</w>
@@ -1930,7 +1843,7 @@
               <w type="PREP" lemma="ⲉ">ⲉ</w>
               <w type="N" lemma="ⲃⲟⲗ">ⲃⲟⲗ</w>
             </s>
-            <s xml:id="III-7505237" n="48" ana="#th-androgyny #th-anthropos #th-sophia">
+            <s xml:id="III-7505237" n="48">
               <w type="PPOS" lemma="ⲡⲉϥ">ⲡⲉϥ</w>
               <w type="N" lemma="ⲣⲁⲛ">ⲣⲁⲛ</w>
               <w type="PTC" lemma="ⲇⲉ" xml:lang="grc">ⲇⲉ</w>
@@ -1943,7 +1856,7 @@
               <w type="X" lemma="ⲛⲅⲉⲛ">ⲛⲅⲉⲛ</w>
               <w type="X" lemma="ⲉⲧⲉⲓⲣⲁ">ⲉⲧⲉⲓⲣⲁ</w>
             </s>
-            <s xml:id="III-7505238" n="49" ana="#th-androgyny #th-anthropos #th-sophia">
+            <s xml:id="III-7505238" n="49">
               <w type="NUM" lemma="ⲥⲉ">ⲥⲉ</w>
               <w type="V" lemma="ϫⲱ">ϫⲱ</w>
               <w type="PREP" lemma="ⲙⲙⲟ">ⲙⲙⲟ</w>
@@ -2018,7 +1931,7 @@
               <w type="NUM" lemma="ⲙⲛⲧ">ⲙⲛⲧ</w>
               <w type="N" lemma="ⲣⲣⲟ">ⲣⲣⲟ</w>
             </s>
-            <s xml:id="III-7505241" n="52" ana="#th-aeons #th-anthropos">
+            <s xml:id="III-7505241" n="52">
               <w type="X" lemma="ⲡⲓⲱⲧ">ⲡⲓⲱⲧ</w>
               <w type="PTC" lemma="ⲅⲁⲣ" xml:lang="grc">ⲅⲁⲣ</w>
               <w type="PREP" lemma="ⲉ">ⲉ</w>
@@ -2065,7 +1978,7 @@
               <w type="ADJ" lemma="ⲛⲟϭ">ⲛⲟϭ</w>
               <w type="X" lemma="ⲛⲉⲯⲟⲩⲥⲓⲁ" xml:lang="grc">ⲛⲉⲯⲟⲩⲥⲓⲁ</w>
             </s>
-            <s xml:id="III-7505242" n="53" ana="#th-aeons #th-anthropos">
+            <s xml:id="III-7505242" n="53">
                             <w type="APST" lemma="ⲁ">ⲁ</w>
               <w type="X" lemma="ϥⲣ">ϥⲣ</w>
               <w type="N" lemma="ⲣⲣⲟ">ⲣⲣⲟ</w>
@@ -2096,7 +2009,7 @@
               <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
               <w type="N" lemma="ⲏⲡⲉ">ⲏⲡⲉ</w>
             </s>
-            <s xml:id="III-7505243" n="54" ana="#th-aeons #th-anthropos">
+            <s xml:id="III-7505243" n="54">
               <w type="ADV" lemma="ⲉϩⲟⲩⲛ">ⲉϩⲟⲩⲛ</w>
               <w type="PREP" lemma="ⲉ">ⲉ</w>
               <w type="X" lemma="ⲩϩⲩⲡⲏ">ⲩϩⲩⲡⲏ</w>
@@ -2120,7 +2033,7 @@
               <w type="NEG" lemma="ⲙⲛ">ⲙⲛ</w>
               <w type="X" lemma="ⲧⲙⲛⲧⲣⲣⲟ">ⲧⲙⲛⲧⲣⲣⲟ</w>
             </s>
-            <s xml:id="III-7505244" n="55" ana="#th-aeons #th-anthropos">
+            <s xml:id="III-7505244" n="55">
               <w type="PREP" lemma="ⲉⲧⲃⲉ">ⲉⲧⲃⲉ</w>
               <w type="PDEM" lemma="ⲡⲁⲓ">ⲡⲁⲓ</w>
                             <w type="APST" lemma="ⲁ">ⲁ</w>
@@ -2134,12 +2047,12 @@
               <w type="NEG" lemma="ⲛⲛ">ⲛⲛ</w>
               <w type="N" lemma="ⲛⲟⲩⲧⲉ">ⲛⲟⲩⲧⲉ</w>
             </s>
-            <s xml:id="III-7505245" n="56" ana="#th-aeons #th-anthropos">
+            <s xml:id="III-7505245" n="56">
               <w type="ART" lemma="ⲡ">ⲡ</w>
               <w type="N" lemma="ⲣⲣⲟ">ⲣⲣⲟ</w>
               <w type="X" lemma="ⲛⲣⲣⲱⲟⲩ">ⲛⲣⲣⲱⲟⲩ</w>
             </s>
-            <s xml:id="III-7505246" n="57" ana="#th-aeons #th-anthropos">
+            <s xml:id="III-7505246" n="57">
               <w type="NUM" lemma="ⲡⲉϩⲟⲩⲉⲓⲧ">ⲡⲉϩⲟⲩⲉⲓⲧ</w>
               <w type="PREP" lemma="ⲛ">ⲛ</w>
               <w type="N" lemma="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</w>
@@ -2151,7 +2064,7 @@
               <w type="AUX" lemma="ⲛⲁ">ⲛⲁ</w>
               <w type="V" lemma="ϣⲱⲡⲉ">ϣⲱⲡⲉ</w>
             </s>
-            <s xml:id="III-7505247" n="58" ana="#th-androgyny #th-son #th-sophia">
+            <s xml:id="III-7505247" n="58">
               <w type="PREP" lemma="ⲙⲛⲛⲥⲁ">ⲙⲛⲛⲥⲁ</w>
               <w type="PDEM" lemma="ⲛⲁⲓ">ⲛⲁⲓ</w>
               <w type="EXIST" lemma="ⲟⲩⲛⲧⲁ">ⲟⲩⲛⲧⲁ</w>
@@ -2165,7 +2078,7 @@
               <w type="N" lemma="ⲛⲟⲩⲥ" xml:lang="grc">ⲛⲟⲩⲥ</w>
               <w type="X" lemma="ⲟⲩⲉⲛⲛⲟⲓⲁ" xml:lang="grc">ⲟⲩⲉⲛⲛⲟⲓⲁ</w>
             </s>
-            <s xml:id="III-7505248" n="59" ana="#th-androgyny #th-son #th-sophia">
+            <s xml:id="III-7505248" n="59">
               <w type="PREP" lemma="ⲛ">ⲛ</w>
               <w type="ART" lemma="ⲑ">ⲑ</w>
               <w type="PREP" lemma="ⲉ">ⲉ</w>
@@ -2183,7 +2096,7 @@
               <w type="NEG" lemma="ⲙⲛ">ⲙⲛ</w>
               <w type="X" lemma="ⲟⲩⲇⲩⲛⲁⲙⲓⲥ" xml:lang="grc">ⲟⲩⲇⲩⲛⲁⲙⲓⲥ</w>
             </s>
-            <s xml:id="III-7505249" n="60" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505249" n="60">
               <w type="N" lemma="ⲙⲉⲗⲟⲥ" xml:lang="grc">ⲙⲉⲗⲟⲥ</w>
               <w type="ADJ" lemma="ⲛⲓⲙ">ⲛⲓⲙ</w>
               <w type="PREP" lemma="ⲉ">ⲉ</w>
@@ -2202,7 +2115,7 @@
               <w type="NUM" lemma="ⲥⲉ">ⲥⲉ</w>
               <w type="ADJ" lemma="ϣⲏϣ">ϣⲏϣ</w>
             </s>
-            <s xml:id="III-7505250" n="61" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505250" n="61">
               <w type="PREP" lemma="ⲕⲁⲧⲁ" xml:lang="grc">ⲕⲁⲧⲁ</w>
               <w type="ART" lemma="ⲧ">ⲧ</w>
               <w type="N" lemma="ϭⲟⲙ">ϭⲟⲙ</w>
@@ -2210,7 +2123,7 @@
               <w type="X" lemma="ⲟⲩⲇⲓⲁ" xml:lang="grc">ⲟⲩⲇⲓⲁ</w>
               <w type="X" lemma="ⲫⲟⲣⲁ">ⲫⲟⲣⲁ</w>
             </s>
-            <s xml:id="III-7505251" n="62" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505251" n="62">
               <w type="ADV" lemma="ⲛⲑⲉ">ⲛⲑⲉ</w>
               <w type="X" lemma="ⲛⲡ">ⲛⲡ</w>
               <w type="VSTAT" lemma="ϣⲓⲃⲉ">ϣⲓⲃⲉ</w>
@@ -2220,7 +2133,7 @@
               <w type="PREP" lemma="ⲉ">ⲉ</w>
               <w type="X" lemma="ⲩϣⲏⲣⲉ">ⲩϣⲏⲣⲉ</w>
             </s>
-            <s xml:id="III-7505252" n="63" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505252" n="63">
               <w type="CONJ" lemma="ⲁⲩⲱ">ⲁⲩⲱ</w>
               <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
               <w type="N" lemma="ϣⲏⲣⲉ">ϣⲏⲣⲉ</w>
@@ -2248,7 +2161,7 @@
               <w type="V" lemma="ϫⲡⲟ">ϫⲡⲟ</w>
               <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
             </s>
-            <s xml:id="III-7505253" n="64" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505253" n="64">
               <w type="X" lemma="ⲧⲙⲟⲛⲁⲥ">ⲧⲙⲟⲛⲁⲥ</w>
               <w type="VSTAT" lemma="ⲟ">ⲟ</w>
               <w type="PREP" lemma="ⲛ">ⲛ</w>
@@ -2273,7 +2186,7 @@
               <w type="PREP" lemma="ⲉϫⲛ">ⲉϫⲛ</w>
               <w type="X" lemma="ⲛⲣⲁϣⲉ">ⲛⲣⲁϣⲉ</w>
             </s>
-            <s xml:id="III-7505254" n="65" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505254" n="65">
               <w type="CONV" lemma="ⲉⲣⲉ">ⲉⲣⲉ</w>
               <w type="PREP" lemma="ⲛ">ⲛ</w>
               <w type="V" lemma="ⲣⲁϣⲉ">ⲣⲁϣⲉ</w>
@@ -2281,12 +2194,12 @@
               <w type="PREP" lemma="ⲉϫⲛ">ⲉϫⲛ</w>
               <w type="X" lemma="ⲛⲣⲁϣⲟ">ⲛⲣⲁϣⲟ</w>
             </s>
-            <s xml:id="III-7505255" n="66" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505255" n="66">
               <w type="CONV" lemma="ⲉⲣⲉ">ⲉⲣⲉ</w>
               <w type="PREP" lemma="ⲛ">ⲛ</w>
               <w type="NUM" lemma="ϣⲟ">ϣⲟ</w>
             </s>
-            <s xml:id="III-7505256" n="67" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505256" n="67">
               <w type="X" lemma="ⲁⲣ">ⲁⲣ</w>
               <w type="X" lemma="ⲭⲓ">ⲭⲓ</w>
               <w type="PREP" lemma="ⲉϫⲛ">ⲉϫⲛ</w>
@@ -2294,7 +2207,7 @@
               <w type="REL" lemma="ⲉⲧ">ⲉⲧ</w>
               <w type="N" lemma="ⲃⲁ">ⲃⲁ</w>
             </s>
-            <s xml:id="III-7505257" n="68" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505257" n="68">
               <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
               <w type="N" lemma="ⲥⲙⲟⲧ">ⲥⲙⲟⲧ</w>
               <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
@@ -2309,7 +2222,7 @@
               <w type="PREP" lemma="ⲛⲧⲉ">ⲛⲧⲉ</w>
               <w type="X" lemma="ⲉⲓϩⲉ">ⲉⲓϩⲉ</w>
             </s>
-            <s xml:id="III-7505258" n="69" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505258" n="69">
               <w type="PPOS" lemma="ⲧⲉϥ">ⲧⲉϥ</w>
               <w type="N" lemma="ⲙⲟⲛⲁⲥ" xml:lang="grc">ⲙⲟⲛⲁⲥ</w>
               <w type="COP" lemma="ⲧⲉ">ⲧⲉ</w>
@@ -2331,7 +2244,7 @@
               <w type="PREP" lemma="ⲉ">ⲉ</w>
               <w type="X" lemma="ⲩϩⲩⲡⲏⲣⲉⲥⲓⲁ" xml:lang="grc">ⲩϩⲩⲡⲏⲣⲉⲥⲓⲁ</w>
             </s>
-            <s xml:id="III-7505259" n="70" ana="#th-anthropos #th-cosmology #th-ekklesia #th-origworld">
+            <s xml:id="III-7505259" n="70">
               <w type="ART" lemma="ⲡ">ⲡ</w>
               <w type="N" lemma="ⲙⲏⲏϣⲉ">ⲙⲏⲏϣⲉ</w>
               <w type="ADJ" lemma="ⲧⲏⲣ">ⲧⲏⲣ</w>
@@ -2355,7 +2268,7 @@
               <w type="PRET" lemma="ⲛⲉ">ⲛⲉ</w>
               <w type="X" lemma="ⲧⲟⲩⲁⲁⲃ">ⲧⲟⲩⲁⲁⲃ</w>
             </s>
-            <s xml:id="III-7505260" n="71" ana="#th-anthropos #th-ekklesia">
+            <s xml:id="III-7505260" n="71">
               <w type="X" lemma="ⲛⲟⲩⲟⲉⲓⲛ">ⲛⲟⲩⲟⲉⲓⲛ</w>
               <w type="AUX" lemma="ⲛⲁ">ⲛⲁ</w>
               <w type="ART" lemma="ⲧ">ⲧ</w>
@@ -2384,7 +2297,7 @@
               <w type="X" lemma="ⲡⲉⲡⲣⲱⲧⲟⲅⲉⲛⲉ">ⲡⲉⲡⲣⲱⲧⲟⲅⲉⲛⲉ</w>
               <w type="X" lemma="ⲧⲱⲣ">ⲧⲱⲣ</w>
             </s>
-            <s xml:id="III-7505261" n="72" ana="#th-anthropos #th-ekklesia">
+            <s xml:id="III-7505261" n="72">
               <w type="X" lemma="ⲛⲉⲓⲱⲧ">ⲛⲉⲓⲱⲧ</w>
               <w type="V" lemma="ϣⲁ">ϣⲁ</w>
               <w type="PPER" lemma="ⲩ">ⲩ</w>
@@ -2398,7 +2311,7 @@
               <w type="ART" lemma="ⲡ">ⲡ</w>
               <w type="N" lemma="ⲟⲩⲟⲉⲓⲛ">ⲟⲩⲟⲉⲓⲛ</w>
             </s>
-            <s xml:id="III-7505262" n="73" ana="#th-aeons #th-son">
+            <s xml:id="III-7505262" n="73">
               <w type="X" lemma="ⲧⲙⲛⲧ">ⲧⲙⲛⲧ</w>
               <w type="V" lemma="ⲣ">ⲣ</w>
               <w type="N" lemma="ⲣⲟ">ⲣⲟ</w>
@@ -2446,7 +2359,7 @@
               <w type="N" lemma="ⲉⲟⲟⲩ">ⲉⲟⲟⲩ</w>
               <w type="ADJ" lemma="ⲛⲁⲧⲧⲁⲕⲟ">ⲛⲁⲧⲧⲁⲕⲟ</w>
             </s>
-            <s xml:id="III-7505263" n="74" ana="#th-aeons #th-son">
+            <s xml:id="III-7505263" n="74">
               <w type="PDEM" lemma="ⲡⲁⲓ">ⲡⲁⲓ</w>
               <w type="REL" lemma="ⲉⲧⲉ">ⲉⲧⲉ</w>
               <w type="PREP" lemma="ⲙ">ⲙ</w>
@@ -2472,7 +2385,7 @@
               <w type="PRET" lemma="ⲛⲉ">ⲛⲉ</w>
               <w type="N" lemma="ⲩⲕⲟⲥⲙⲟⲥ" xml:lang="grc">ⲩⲕⲟⲥⲙⲟⲥ</w>
             </s>
-            <s xml:id="III-7505264" n="75" ana="#th-androgyny #th-son #th-sophia">
+            <s xml:id="III-7505264" n="75">
               <w type="ART" lemma="ⲡ">ⲡ</w>
               <w type="N" lemma="ϣⲏⲣⲉ">ϣⲏⲣⲉ</w>
               <w type="PTC" lemma="ϭⲉ">ϭⲉ</w>
@@ -2498,7 +2411,7 @@
               <w type="N" lemma="ⲟⲩⲟⲉⲓⲛ">ⲟⲩⲟⲉⲓⲛ</w>
               <w type="N" lemma="ⲛϩⲟⲟⲩⲧⲥϩⲓⲙⲉ">ⲛϩⲟⲟⲩⲧⲥϩⲓⲙⲉ</w>
             </s>
-            <s xml:id="III-7505265" n="76" ana="#th-androgyny #th-son #th-sophia">
+            <s xml:id="III-7505265" n="76">
               <w type="PPOS" lemma="ⲡⲉϥ">ⲡⲉϥ</w>
               <w type="N" lemma="ⲣⲁⲛ">ⲣⲁⲛ</w>
               <w type="NEG" lemma="ⲙⲙⲛⲧ">ⲙⲙⲛⲧ</w>
@@ -2575,7 +2488,7 @@
               <w type="PREP" lemma="ϩⲁⲧⲉⲩ">ϩⲁⲧⲉⲩ</w>
               <w type="N" lemma="ϩⲏ">ϩⲏ</w>
             </s>
-            <s xml:id="III-7505266" n="77" ana="#th-aeons #th-androgyny #th-sophia">
+            <s xml:id="III-7505266" n="77">
               <w type="PREP" lemma="ⲛ">ⲛ</w>
               <w type="N" lemma="ϩⲟⲟⲩⲧ">ϩⲟⲟⲩⲧ</w>
               <w type="PPOS" lemma="ⲛⲉⲩ">ⲛⲉⲩ</w>
@@ -2602,7 +2515,7 @@
               <w type="X" lemma="ⲡⲅⲉⲛ">ⲡⲅⲉⲛ</w>
               <w type="N" lemma="ⲉⲧⲱⲣ" xml:lang="grc">ⲉⲧⲱⲣ</w>
             </s>
-            <s xml:id="III-7505267" n="78" ana="#th-aeons #th-androgyny #th-sophia">
+            <s xml:id="III-7505267" n="78">
               <w type="ART" lemma="ⲡ">ⲡ</w>
               <w type="NUM" lemma="ⲙⲉϩ">ⲙⲉϩ</w>
               <w type="NUM" lemma="ϥⲧⲟⲟⲩ">ϥⲧⲟⲟⲩ</w>
@@ -2610,7 +2523,7 @@
               <w type="N" lemma="ⲡⲉⲡⲣⲱⲧⲟⲅⲉⲛ" xml:lang="grc">ⲡⲉⲡⲣⲱⲧⲟⲅⲉⲛ</w>
               <w type="N" lemma="ⲉⲧⲱⲣ" xml:lang="grc">ⲉⲧⲱⲣ</w>
             </s>
-            <s xml:id="III-7505268" n="79" ana="#th-aeons #th-androgyny #th-sophia">
+            <s xml:id="III-7505268" n="79">
               <w type="X" lemma="ⲡⲙⲉϩ">ⲡⲙⲉϩ</w>
               <w type="V" lemma="ϯ">ϯ</w>
               <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
@@ -2618,13 +2531,13 @@
               <w type="N" lemma="ⲡⲁⲛⲅⲉⲛ" xml:lang="grc">ⲡⲁⲛⲅⲉⲛ</w>
               <w type="N" lemma="ⲉⲧⲱⲣ" xml:lang="grc">ⲉⲧⲱⲣ</w>
             </s>
-            <s xml:id="III-7505269" n="80" ana="#th-aeons #th-androgyny #th-sophia">
+            <s xml:id="III-7505269" n="80">
               <w type="X" lemma="ⲡⲙⲉϩⲥⲟⲟⲩ">ⲡⲙⲉϩⲥⲟⲟⲩ</w>
               <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
               <w type="X" lemma="ⲡⲁⲣⲭⲓⲅⲉⲛ">ⲡⲁⲣⲭⲓⲅⲉⲛ</w>
               <w type="N" lemma="ⲉⲧⲱⲣ" xml:lang="grc">ⲉⲧⲱⲣ</w>
             </s>
-            <s xml:id="III-7505270" n="81" ana="#th-aeons #th-androgyny #th-sophia">
+            <s xml:id="III-7505270" n="81">
               <w type="PREP" lemma="ⲛ">ⲛ</w>
               <w type="N" lemma="ⲣⲁⲛ">ⲣⲁⲛ</w>
               <w type="ADV" lemma="ϩⲱ">ϩⲱ</w>
@@ -2635,7 +2548,7 @@
               <w type="PRET" lemma="ⲛⲉ">ⲛⲉ</w>
               <w type="PDEM" lemma="ⲛⲁⲓ">ⲛⲁⲓ</w>
             </s>
-            <s xml:id="III-7505271" n="82" ana="#th-aeons #th-androgyny #th-sophia">
+            <s xml:id="III-7505271" n="82">
               <w type="ART" lemma="ⲧ">ⲧ</w>
               <w type="NUM" lemma="ϣⲟⲣⲡ">ϣⲟⲣⲡ</w>
               <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
@@ -2643,15 +2556,15 @@
               <w type="ADJ" lemma="ⲡⲁⲛⲥⲟⲫⲟⲥ" xml:lang="grc">ⲡⲁⲛⲥⲟⲫⲟⲥ</w>
               <w type="N" lemma="ⲥⲟⲫⲓⲁ" xml:lang="grc">ⲥⲟⲫⲓⲁ</w>
             </s>
-            <s xml:id="III-7505272" n="83" ana="#th-aeons #th-androgyny #th-sophia">
+            <s xml:id="III-7505272" n="83">
               <w type="X" lemma="ⲧⲙⲉϩⲥⲛⲧⲉ">ⲧⲙⲉϩⲥⲛⲧⲉ</w>
               <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
               <w type="X" lemma="ⲡⲁⲛⲙⲏⲧⲱⲣ">ⲡⲁⲛⲙⲏⲧⲱⲣ</w>
             </s>
-            <s xml:id="III-7505273" n="84" ana="#th-aeons #th-androgyny #th-sophia">
+            <s xml:id="III-7505273" n="84">
               <w type="N" lemma="ⲥⲟⲫⲓⲁ" xml:lang="grc">ⲥⲟⲫⲓⲁ</w>
             </s>
-            <s xml:id="III-7505274" n="85" ana="#th-aeons #th-androgyny #th-sophia">
+            <s xml:id="III-7505274" n="85">
               <w type="X" lemma="ⲧⲙⲉϩϣⲟ">ⲧⲙⲉϩϣⲟ</w>
               <w type="PREP" lemma="ⲙ">ⲙ</w>
               <w type="COP" lemma="ⲧⲉ">ⲧⲉ</w>
@@ -2660,7 +2573,7 @@
               <w type="N" lemma="ⲉⲧⲓⲣⲁ" xml:lang="grc">ⲉⲧⲓⲣⲁ</w>
               <w type="N" lemma="ⲥⲟⲫⲓⲁ" xml:lang="grc">ⲥⲟⲫⲓⲁ</w>
             </s>
-            <s xml:id="III-7505275" n="86" ana="#th-aeons #th-androgyny #th-sophia">
+            <s xml:id="III-7505275" n="86">
               <w type="X" lemma="ⲧⲙⲉϩϥⲧⲟⲉ">ⲧⲙⲉϩϥⲧⲟⲉ</w>
               <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
               <w type="X" lemma="ⲧⲉⲡⲣⲱⲧⲟⲅⲉⲛ">ⲧⲉⲡⲣⲱⲧⲟⲅⲉⲛ</w>
@@ -2669,7 +2582,7 @@
                             <w type="APST" lemma="ⲁ">ⲁ</w>
               <w type="N" lemma="ⲥⲟⲫⲓⲁ" xml:lang="grc">ⲥⲟⲫⲓⲁ</w>
             </s>
-            <s xml:id="III-7505276" n="87" ana="#th-aeons #th-androgyny #th-sophia">
+            <s xml:id="III-7505276" n="87">
               <w type="X" lemma="ⲧⲙⲉϩϯⲉ">ⲧⲙⲉϩϯⲉ</w>
               <w type="COP" lemma="ⲧⲉ">ⲧⲉ</w>
               <w type="ART" lemma="ⲧ">ⲧ</w>
@@ -2677,7 +2590,7 @@
               <w type="NUM" lemma="ⲥⲟ">ⲥⲟ</w>
               <w type="N" lemma="ⲫⲓⲁ" xml:lang="grc">ⲫⲓⲁ</w>
             </s>
-            <s xml:id="III-7505277" n="88" ana="#th-aeons #th-androgyny #th-sophia">
+            <s xml:id="III-7505277" n="88">
               <w type="X" lemma="ⲧⲙⲉϩⲥⲟⲉ">ⲧⲙⲉϩⲥⲟⲉ</w>
               <w type="COP" lemma="ⲧⲉ">ⲧⲉ</w>
               <w type="ART" lemma="ⲧ">ⲧ</w>
@@ -2685,7 +2598,7 @@
               <w type="NUM" lemma="ⲥⲟ">ⲥⲟ</w>
               <w type="N" lemma="ⲫⲓⲁ" xml:lang="grc">ⲫⲓⲁ</w>
             </s>
-            <s xml:id="III-7505278" n="89" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505278" n="89">
               <w type="ADV" lemma="ⲉⲃⲟⲗ">ⲉⲃⲟⲗ</w>
               <w type="PREP" lemma="ϩⲛ">ϩⲛ</w>
               <w type="X" lemma="ⲧⲉⲩⲥⲩⲛⲫⲱⲛⲏ">ⲧⲉⲩⲥⲩⲛⲫⲱⲛⲏ</w>
@@ -2694,7 +2607,7 @@
               <w type="REL" lemma="ⲛⲧⲁⲉⲓⲣ">ⲛⲧⲁⲉⲓⲣ</w>
               <w type="ADV" lemma="ϣⲣⲡ">ϣⲣⲡ</w>
             </s>
-            <s xml:id="III-7505279" n="90" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505279" n="90">
               <w type="PREP" lemma="ⲛ">ⲛ</w>
               <w type="V" lemma="ϫⲟ">ϫⲟ</w>
               <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
@@ -2710,7 +2623,7 @@
               <w type="PTC" lemma="ⲛϭⲓ">ⲛϭⲓ</w>
               <w type="X" lemma="ⲛⲉⲛⲛⲟⲓⲁ" xml:lang="grc">ⲛⲉⲛⲛⲟⲓⲁ</w>
             </s>
-            <s xml:id="III-7505280" n="91" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505280" n="91">
               <w type="ADV" lemma="ⲉⲃⲟⲗ">ⲉⲃⲟⲗ</w>
               <w type="PREP" lemma="ϩⲛ">ϩⲛ</w>
               <w type="PREP" lemma="ⲛ">ⲛ</w>
@@ -2730,21 +2643,21 @@
               <w type="PPER" lemma="ⲥ">ⲥ</w>
               <w type="X" lemma="ⲛⲗⲟⲅⲓⲥⲙⲟⲥ" xml:lang="grc">ⲛⲗⲟⲅⲓⲥⲙⲟⲥ</w>
             </s>
-            <s xml:id="III-7505281" n="92" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505281" n="92">
               <w type="ADV" lemma="ⲉⲃⲟⲗ">ⲉⲃⲟⲗ</w>
               <w type="PREP" lemma="ϩⲛ">ϩⲛ</w>
               <w type="X" lemma="ⲛⲗⲟⲅⲓ">ⲛⲗⲟⲅⲓ</w>
               <w type="X" lemma="ⲥⲙⲟⲥ" xml:lang="grc">ⲥⲙⲟⲥ</w>
               <w type="X" lemma="ⲛⲉⲑⲉⲗⲏⲥⲓⲥ" xml:lang="grc">ⲛⲉⲑⲉⲗⲏⲥⲓⲥ</w>
             </s>
-            <s xml:id="III-7505282" n="93" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505282" n="93">
               <w type="ADV" lemma="ⲉⲃⲟⲗ">ⲉⲃⲟⲗ</w>
               <w type="PREP" lemma="ϩⲛ">ϩⲛ</w>
               <w type="PRET" lemma="ⲛⲉ">ⲛⲉ</w>
               <w type="N" lemma="ⲑⲉⲗⲏⲥⲓⲥ" xml:lang="grc">ⲑⲉⲗⲏⲥⲓⲥ</w>
               <w type="X" lemma="ⲛⲗⲟⲅⲟⲥ" xml:lang="grc">ⲛⲗⲟⲅⲟⲥ</w>
             </s>
-            <s xml:id="III-7505283" n="94" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505283" n="94">
               <w type="X" lemma="ⲧⲙⲛⲧⲥⲛⲟⲟⲩⲥ">ⲧⲙⲛⲧⲥⲛⲟⲟⲩⲥ</w>
               <w type="PTC" lemma="ϭⲉ">ϭⲉ</w>
               <w type="PREP" lemma="ⲛ">ⲛ</w>
@@ -2770,7 +2683,7 @@
               <w type="PRET" lemma="ⲛⲉ">ⲛⲉ</w>
               <w type="N" lemma="ϩⲓⲟⲙⲉ">ϩⲓⲟⲙⲉ</w>
             </s>
-            <s xml:id="III-7505284" n="95" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505284" n="95">
               <w type="CONJ" lemma="ϩⲱⲥⲧⲉ" xml:lang="grc">ϩⲱⲥⲧⲉ</w>
               <w type="PREP" lemma="ⲛ">ⲛ</w>
               <w type="PPER" lemma="ⲥ">ⲥ</w>
@@ -2779,7 +2692,7 @@
               <w type="NUM" lemma="ⲥⲛⲟⲟⲩⲥ">ⲥⲛⲟⲟⲩⲥ</w>
               <w type="X" lemma="ⲛⲇⲩⲛⲁⲙⲓⲥ" xml:lang="grc">ⲛⲇⲩⲛⲁⲙⲓⲥ</w>
             </s>
-            <s xml:id="III-7505285" n="96" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505285" n="96">
               <w type="X" lemma="ⲧⲉϣϥⲉⲥⲛⲟ">ⲧⲉϣϥⲉⲥⲛⲟ</w>
               <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
               <w type="PPER" lemma="ⲥ">ⲥ</w>
@@ -2814,7 +2727,7 @@
               <w type="ART" lemma="ⲡ">ⲡ</w>
               <w type="V" lemma="ⲟⲩⲱϣ">ⲟⲩⲱϣ</w>
             </s>
-            <s xml:id="III-7505286" n="97" ana="#th-cosmology #th-son">
+            <s xml:id="III-7505286" n="97">
               <w type="X" lemma="ⲡⲁⲑⲁⲛⲁⲧⲟⲥ" xml:lang="grc">ⲡⲁⲑⲁⲛⲁⲧⲟⲥ</w>
               <w type="PTC" lemma="ϭⲉ">ϭⲉ</w>
               <w type="PREP" lemma="ⲛ">ⲛ</w>
@@ -2831,7 +2744,7 @@
                             <w type="APST" lemma="ⲁ">ⲁ</w>
               <w type="X" lemma="ⲓⲱⲛ">ⲓⲱⲛ</w>
             </s>
-            <s xml:id="III-7505287" n="98" ana="#th-cosmology #th-son">
+            <s xml:id="III-7505287" n="98">
               <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
               <w type="N" lemma="ⲭⲣⲟⲛⲟⲥ" xml:lang="grc">ⲭⲣⲟⲛⲟⲥ</w>
                             <w type="APST" lemma="ⲁ">ⲁ</w>
@@ -2844,7 +2757,7 @@
               <w type="PPOS" lemma="ⲡⲉϥ">ⲡⲉϥ</w>
               <w type="N" lemma="ϣⲏⲣⲉ">ϣⲏⲣⲉ</w>
             </s>
-            <s xml:id="III-7505288" n="99" ana="#th-cosmology #th-son">
+            <s xml:id="III-7505288" n="99">
               <w type="N" lemma="ⲧⲉⲣⲟⲙⲡⲉ">ⲧⲉⲣⲟⲙⲡⲉ</w>
                             <w type="APST" lemma="ⲁ">ⲁ</w>
               <w type="PPER" lemma="ⲥ">ⲥ</w>
@@ -2854,7 +2767,7 @@
               <w type="NEG" lemma="ⲙⲡ">ⲙⲡ</w>
               <w type="N" lemma="ⲥⲱⲧⲏⲣ" xml:lang="grc">ⲥⲱⲧⲏⲣ</w>
             </s>
-            <s xml:id="III-7505289" n="100" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505289" n="100">
               <w type="X" lemma="ⲡⲙⲛⲧⲥⲛⲟ">ⲡⲙⲛⲧⲥⲛⲟ</w>
               <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
               <w type="PPER" lemma="ⲥ">ⲥ</w>
@@ -2871,7 +2784,7 @@
               <w type="NUM" lemma="ⲥⲛⲟⲟⲩⲥ">ⲥⲛⲟⲟⲩⲥ</w>
               <w type="X" lemma="ⲛϭⲟⲙ">ⲛϭⲟⲙ</w>
             </s>
-            <s xml:id="III-7505290" n="101" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505290" n="101">
               <w type="ART" lemma="ⲡ">ⲡ</w>
               <w type="NUM" lemma="ϣⲙⲧ">ϣⲙⲧ</w>
               <w type="X" lemma="ⲧϣⲉⲥⲉ">ⲧϣⲉⲥⲉ</w>
@@ -2984,7 +2897,7 @@
             <s xml:id="III-7505294" n="105">
               <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
             </s>
-            <s xml:id="III-7505295" n="106" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505295" n="106">
               <w type="PREP" lemma="ϩⲙ">ϩⲙ</w>
               <w type="ART" lemma="ⲡ">ⲡ</w>
               <w type="N" lemma="ⲟⲩⲁ">ⲟⲩⲁ</w>
@@ -3015,7 +2928,7 @@
               <w type="ADV" lemma="ⲉⲃⲟⲗ">ⲉⲃⲟⲗ</w>
               <w type="PREP" lemma="ⲛϩⲏⲧϥ">ⲛϩⲏⲧϥ</w>
             </s>
-            <s xml:id="III-7505296" n="107" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505296" n="107">
               <w type="CONJ" lemma="ⲁⲩⲱ">ⲁⲩⲱ</w>
               <w type="PREP" lemma="ϩⲛ">ϩⲛ</w>
               <w type="PREP" lemma="ⲙ">ⲙ</w>
@@ -3075,7 +2988,7 @@
               <w type="PREP" lemma="ϩⲁⲧⲉⲩ">ϩⲁⲧⲉⲩ</w>
               <w type="N" lemma="ϩⲏ">ϩⲏ</w>
             </s>
-            <s xml:id="III-7505297" n="108" ana="#th-cosmology #th-son">
+            <s xml:id="III-7505297" n="108">
               <w type="CONJ" lemma="ⲁⲩⲱ">ⲁⲩⲱ</w>
               <w type="PDEM" lemma="ⲛⲁⲓ">ⲛⲁⲓ</w>
               <w type="PDEM" lemma="ⲧⲏ">ⲧⲏ</w>
@@ -3104,7 +3017,7 @@
               <w type="NUM" lemma="ⲙⲛⲧ">ⲙⲛⲧ</w>
               <w type="N" lemma="ⲥϩⲓⲙⲉ">ⲥϩⲓⲙⲉ</w>
             </s>
-            <s xml:id="III-7505298" n="109" ana="#th-cosmology #th-ekklesia #th-origworld #th-son">
+            <s xml:id="III-7505298" n="109">
               <w type="NUM" lemma="ⲡⲉϩⲟⲩⲉⲓⲧ">ⲡⲉϩⲟⲩⲉⲓⲧ</w>
               <w type="PTC" lemma="ϭⲉ">ϭⲉ</w>
               <w type="PREP" lemma="ⲛ">ⲛ</w>
@@ -3186,7 +3099,7 @@
               <w type="PREP" lemma="ⲛ">ⲛ</w>
               <w type="N" lemma="ϩⲏⲧϥ">ϩⲏⲧϥ</w>
             </s>
-            <s xml:id="III-7505299" n="110" ana="#th-androgyny #th-cosmology #th-ekklesia">
+            <s xml:id="III-7505299" n="110">
               <w type="X" lemma="ⲡⲥⲁⲛϩⲣⲉ">ⲡⲥⲁⲛϩⲣⲉ</w>
               <w type="X" lemma="ⲛⲧⲙⲉϩϣ">ⲛⲧⲙⲉϩϣ</w>
               <w type="N" lemma="ⲙⲟⲩ">ⲙⲟⲩ</w>
@@ -3260,7 +3173,7 @@
               <w type="ADJ" lemma="ⲛⲟϭ">ⲛⲟϭ</w>
               <w type="ADJ" lemma="ⲛⲓⲙ">ⲛⲓⲙ</w>
             </s>
-            <s xml:id="III-7505302" n="113" ana="#th-androgyny #th-cosmology #th-ekklesia">
+            <s xml:id="III-7505302" n="113">
               <w type="CONJ" lemma="ⲁⲩⲱ">ⲁⲩⲱ</w>
               <w type="ADV" lemma="ⲉⲃⲟⲗ">ⲉⲃⲟⲗ</w>
               <w type="PREP" lemma="ϩⲛ">ϩⲛ</w>
@@ -3381,7 +3294,7 @@
               <w type="PREP" lemma="ⲉ">ⲉ</w>
               <w type="X" lemma="ⲩⲙⲛⲧⲟⲩⲁ">ⲩⲙⲛⲧⲟⲩⲁ</w>
             </s>
-            <s xml:id="III-7505303" n="114" ana="#th-androgyny #th-cosmology #th-ekklesia">
+            <s xml:id="III-7505303" n="114">
               <w type="V" lemma="ϣ">ϣ</w>
                             <w type="APST" lemma="ⲁ">ⲁ</w>
               <w type="PPER" lemma="ⲩ">ⲩ</w>
@@ -3401,7 +3314,7 @@
               <w type="ART" lemma="ⲧ">ⲧ</w>
               <w type="X" lemma="ⲟⲩⲁⲧⲃ">ⲟⲩⲁⲧⲃ</w>
             </s>
-            <s xml:id="III-7505304" n="115" ana="#th-androgyny #th-cosmology #th-ekklesia">
+            <s xml:id="III-7505304" n="115">
               <w type="PREP" lemma="ⲉ">ⲉ</w>
               <w type="ART" lemma="ⲧ">ⲧ</w>
               <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
@@ -3414,13 +3327,13 @@
               <w type="PREP" lemma="ⲛ">ⲛ</w>
               <w type="X" lemma="ⲧⲙⲉϩϣⲙⲟⲩⲛⲉ">ⲧⲙⲉϩϣⲙⲟⲩⲛⲉ</w>
             </s>
-            <s xml:id="III-7505305" n="116" ana="#th-androgyny #th-cosmology #th-ekklesia">
+            <s xml:id="III-7505305" n="116">
               <w type="X" lemma="ⲁⲩⲟⲩⲟⲛϩⲥ">ⲁⲩⲟⲩⲟⲛϩⲥ</w>
               <w type="ADV" lemma="ⲉⲃⲟⲗ">ⲉⲃⲟⲗ</w>
               <w type="PREP" lemma="ⲉ">ⲉ</w>
               <w type="X" lemma="ⲩϩⲁⲟⲩⲧⲥϩⲓⲙⲉ">ⲩϩⲁⲟⲩⲧⲥϩⲓⲙⲉ</w>
             </s>
-            <s xml:id="III-7505306" n="117" ana="#th-androgyny #th-cosmology #th-ekklesia">
+            <s xml:id="III-7505306" n="117">
               <w type="PRET" lemma="ⲁⲩ">ⲁⲩ</w>
               <w type="V" lemma="ϯ">ϯ</w>
               <w type="N" lemma="ⲣⲁⲛ">ⲣⲁⲛ</w>
@@ -3435,7 +3348,7 @@
               <w type="N" lemma="ⲙⲉⲣⲟⲥ" xml:lang="grc">ⲙⲉⲣⲟⲥ</w>
               <w type="X" lemma="ⲛⲥϩⲓⲙⲉ">ⲛⲥϩⲓⲙⲉ</w>
             </s>
-            <s xml:id="III-7505307" n="118" ana="#th-androgyny #th-cosmology #th-ekklesia">
+            <s xml:id="III-7505307" n="118">
               <w type="ART" lemma="ⲡ">ⲡ</w>
               <w type="N" lemma="ϩⲟⲟⲩⲧ">ϩⲟⲟⲩⲧ</w>
                             <w type="APST" lemma="ⲁ">ⲁ</w>
@@ -3515,7 +3428,7 @@
               <w type="CONJ" lemma="ϫⲉ">ϫⲉ</w>
               <w type="X" lemma="ⲛⲛⲟⲩⲧⲉ">ⲛⲛⲟⲩⲧⲉ</w>
             </s>
-            <s xml:id="III-7505310" n="121" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505310" n="121">
               <w type="PREP" lemma="ⲛ">ⲛ</w>
               <w type="N" lemma="ⲛⲟⲩⲧⲉ">ⲛⲟⲩⲧⲉ</w>
               <w type="PTC" lemma="ⲇⲉ" xml:lang="grc">ⲇⲉ</w>
@@ -3534,7 +3447,7 @@
               <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
               <w type="COP" lemma="ⲧⲉ">ⲧⲉ</w>
             </s>
-            <s xml:id="III-7505311" n="122" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505311" n="122">
               <w type="PREP" lemma="ⲛ">ⲛ</w>
               <w type="N" lemma="ⲛⲟⲩⲧⲉ">ⲛⲟⲩⲧⲉ</w>
               <w type="PTC" lemma="ⲇⲉ" xml:lang="grc">ⲇⲉ</w>
@@ -3549,7 +3462,7 @@
               <w type="V" lemma="ϫⲟ">ϫⲟ</w>
               <w type="PTC" lemma="ⲉⲓⲥ">ⲉⲓⲥ</w>
             </s>
-            <s xml:id="III-7505312" n="123" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505312" n="123">
               <w type="PREP" lemma="ⲛ">ⲛ</w>
               <w type="N" lemma="ϫⲟⲉⲓⲥ">ϫⲟⲉⲓⲥ</w>
               <w type="PTC" lemma="ⲇⲉ" xml:lang="grc">ⲇⲉ</w>
@@ -3566,7 +3479,7 @@
               <w type="ADV" lemma="ⲉⲃⲟⲗ">ⲉⲃⲟⲗ</w>
               <w type="X" lemma="ⲛϩⲛϫⲟⲉⲓⲥ" xml:lang="grc">ⲛϩⲛϫⲟⲉⲓⲥ</w>
             </s>
-            <s xml:id="III-7505313" n="124" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505313" n="124">
               <w type="PREP" lemma="ⲛ">ⲛ</w>
               <w type="N" lemma="ϫⲟⲉⲓⲥ">ϫⲟⲉⲓⲥ</w>
               <w type="PTC" lemma="ⲇⲉ" xml:lang="grc">ⲇⲉ</w>
@@ -3583,7 +3496,7 @@
                             <w type="APST" lemma="ⲁ">ⲁ</w>
               <w type="X" lemma="ⲣⲭⲁⲅⲅⲉⲗⲟⲥ" xml:lang="grc">ⲣⲭⲁⲅⲅⲉⲗⲟⲥ</w>
             </s>
-            <s xml:id="III-7505314" n="125" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505314" n="125">
               <w type="X" lemma="ⲛⲁⲣⲭⲁⲅⲅⲉⲗⲟⲥ" xml:lang="grc">ⲛⲁⲣⲭⲁⲅⲅⲉⲗⲟⲥ</w>
               <w type="PRET" lemma="ⲁⲩ">ⲁⲩ</w>
               <w type="V" lemma="ⲟⲩⲱⲛϩ">ⲟⲩⲱⲛϩ</w>
@@ -3598,10 +3511,10 @@
               <w type="X" lemma="ⲁⲧϩⲓⲇⲉⲁ">ⲁⲧϩⲓⲇⲉⲁ</w>
               <w type="V" lemma="ⲟⲩⲱⲛϩ">ⲟⲩⲱⲛϩ</w>
             </s>
-            <s xml:id="III-7505315" n="126" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505315" n="126">
               <w type="PREP" lemma="ϩⲓ">ϩⲓ</w>
             </s>
-            <s xml:id="III-7505316" n="127" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505316" n="127">
               <w type="N" lemma="ⲥⲭⲏⲙⲁ" xml:lang="grc">ⲥⲭⲏⲙⲁ</w>
               <w type="PREP" lemma="ϩⲓ">ϩⲓ</w>
               <w type="N" lemma="ⲙⲟⲣⲫⲏ" xml:lang="grc">ⲙⲟⲣⲫⲏ</w>
@@ -3619,7 +3532,7 @@
               <w type="X" lemma="ⲕⲟ">ⲕⲟ</w>
               <w type="X" lemma="ⲥⲙⲟⲥ" xml:lang="grc">ⲥⲙⲟⲥ</w>
             </s>
-            <s xml:id="III-7505317" n="128" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505317" n="128">
               <w type="X" lemma="ⲛⲁⲑⲁⲛⲁⲧⲟⲥ" xml:lang="grc">ⲛⲁⲑⲁⲛⲁⲧⲟⲥ</w>
               <w type="ADJ" lemma="ⲧⲏⲣ">ⲧⲏⲣ</w>
               <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
@@ -3664,7 +3577,7 @@
               <w type="CONJ" lemma="ϫⲉ">ϫⲉ</w>
               <w type="N" lemma="ⲥⲓⲅⲏ" xml:lang="grc">ⲥⲓⲅⲏ</w>
             </s>
-            <s xml:id="III-7505318" n="129" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505318" n="129">
               <w type="REL" lemma="ⲛⲧⲁⲩ">ⲛⲧⲁⲩ</w>
               <w type="V" lemma="ϯ">ϯ</w>
               <w type="N" lemma="ⲣⲛ">ⲣⲛ</w>
@@ -3764,7 +3677,7 @@
               <w type="PPER" lemma="ⲥ">ⲥ</w>
               <w type="ADJ" lemma="ⲛⲓⲙ">ⲛⲓⲙ</w>
             </s>
-            <s xml:id="III-7505319" n="130" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505319" n="130">
               <w type="X" lemma="ⲁⲩⲧⲥⲁⲛⲟ">ⲁⲩⲧⲥⲁⲛⲟ</w>
               <w type="AUX" lemma="ⲛⲁ">ⲛⲁ</w>
               <w type="PPER" lemma="ⲩ">ⲩ</w>
@@ -3804,7 +3717,7 @@
               <w type="PREP" lemma="ⲉ">ⲉ</w>
               <w type="X" lemma="ⲣⲟⲟⲩ">ⲣⲟⲟⲩ</w>
             </s>
-            <s xml:id="III-7505320" n="131" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505320" n="131">
               <w type="NEG" lemma="ⲙⲙⲛ">ⲙⲙⲛ</w>
               <w type="PREP" lemma="ϩⲓ">ϩⲓ</w>
               <w type="NUM" lemma="ⲥⲉ">ⲥⲉ</w>
@@ -3816,14 +3729,14 @@
               <w type="PFX" lemma="ⲁⲧ">ⲁⲧ</w>
               <w type="N" lemma="ϭⲟⲙ">ϭⲟⲙ</w>
             </s>
-            <s xml:id="III-7505321" n="132" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505321" n="132">
               <w type="CONJ" lemma="ⲁⲗⲗⲁ" xml:lang="grc">ⲁⲗⲗⲁ</w>
               <w type="V" lemma="ⲟⲩⲱϣ">ⲟⲩⲱϣ</w>
               <w type="PREP" lemma="ⲉ">ⲉ</w>
               <w type="ADV" lemma="ⲙⲙⲁⲧⲉ">ⲙⲙⲁⲧⲉ</w>
               <w type="COP" lemma="ⲡⲉ">ⲡⲉ</w>
             </s>
-            <s xml:id="III-7505322" n="133" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505322" n="133">
               <w type="V" lemma="ϣⲁ">ϣⲁ</w>
               <w type="PPER" lemma="ϥ">ϥ</w>
               <w type="V" lemma="ϣⲱⲡⲉ">ϣⲱⲡⲉ</w>
@@ -3833,7 +3746,7 @@
               <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
               <w type="ADV" lemma="ⲛⲧⲉⲉⲓϩⲉ">ⲛⲧⲉⲉⲓϩⲉ</w>
             </s>
-            <s xml:id="III-7505323" n="134" ana="#th-aeons #th-cosmology">
+            <s xml:id="III-7505323" n="134">
                             <w type="APST" lemma="ⲁ">ⲁ</w>
               <w type="PPER" lemma="ⲩ">ⲩ</w>
               <w type="V" lemma="ϫⲱⲕ">ϫⲱⲕ</w>
@@ -3845,7 +3758,7 @@
               <w type="PRET" lemma="ⲛⲉ">ⲛⲉ</w>
               <w type="X" lemma="ⲩⲡⲉ">ⲩⲡⲉ</w>
             </s>
-            <s xml:id="III-7505324" n="135" ana="#th-apophatic #th-cosmology">
+            <s xml:id="III-7505324" n="135">
               <w type="NEG" lemma="ⲙⲛ">ⲙⲛ</w>
               <w type="X" lemma="ⲛⲉⲥⲧⲉⲣⲉ">ⲛⲉⲥⲧⲉⲣⲉ</w>
               <w type="INTERJ" lemma="ⲱ">ⲱ</w>
@@ -3914,7 +3827,7 @@
               <w type="PRET" lemma="ⲛⲉ">ⲛⲉ</w>
               <w type="N" lemma="ⲩⲕⲟⲥⲙⲟⲥ" xml:lang="grc">ⲩⲕⲟⲥⲙⲟⲥ</w>
             </s>
-            <s xml:id="III-7505325" n="136" ana="#th-apophatic #th-cosmology">
+            <s xml:id="III-7505325" n="136">
               <w type="COP" lemma="ⲧⲉ">ⲧⲉ</w>
               <w type="N" lemma="ⲫⲩⲥⲓⲥ" xml:lang="grc">ⲫⲩⲥⲓⲥ</w>
               <w type="PTC" lemma="ⲇⲉ" xml:lang="grc">ⲇⲉ</w>
@@ -3942,7 +3855,7 @@
               <w type="V" lemma="ⲣ">ⲣ</w>
               <w type="N" lemma="ⲟⲩⲟⲉⲓⲛ">ⲟⲩⲟⲉⲓⲛ</w>
             </s>
-            <s xml:id="III-7505326" n="137" ana="#th-apophatic #th-cosmology">
+            <s xml:id="III-7505326" n="137">
               <w type="AUX" lemma="ⲛⲁ">ⲛⲁ</w>
               <w type="X" lemma="ⲧϩⲁⲉⲓⲃⲉⲥ">ⲧϩⲁⲉⲓⲃⲉⲥ</w>
               <w type="NEG" lemma="ⲙⲛ">ⲙⲛ</w>
@@ -4018,7 +3931,7 @@
               <w type="V" lemma="ϣⲁ">ϣⲁ</w>
               <w type="ADV" lemma="ⲡⲉⲉⲓⲙⲁ">ⲡⲉⲉⲓⲙⲁ</w>
             </s>
-            <s xml:id="III-7505327" n="138" ana="#th-cosmology #th-dispositio #th-ekklesia #th-frame #th-origworld #th-sjc">
+            <s xml:id="III-7505327" n="138">
               <w type="PDEM" lemma="ⲛⲁⲓ">ⲛⲁⲓ</w>
               <w type="PTC" lemma="ⲇⲉ" xml:lang="grc">ⲇⲉ</w>
               <w type="PDEM" lemma="ⲧⲏ">ⲧⲏ</w>
@@ -4045,7 +3958,7 @@
               <w type="V" lemma="ⲧⲱⲟⲩⲛ">ⲧⲱⲟⲩⲛ</w>
               <w type="PPER" lemma="ⲙⲙⲟⲥ">ⲙⲙⲟⲥ</w>
             </s>
-            <s xml:id="III-7505328" n="139" ana="#th-cosmology #th-ekklesia #th-frame #th-origworld #th-sjc">
+            <s xml:id="III-7505328" n="139">
               <w type="AUX" lemma="ϣⲁⲛⲧⲉ">ϣⲁⲛⲧⲉ</w>
               <w type="ART" lemma="ⲡⲓ">ⲡⲓ</w>
               <w type="PFX" lemma="ⲁⲧ">ⲁⲧ</w>
@@ -4055,11 +3968,11 @@
               <w type="PREP" lemma="ⲉ">ⲉ</w>
               <w type="N" lemma="ⲃⲟⲗ">ⲃⲟⲗ</w>
             </s>
-            <s xml:id="III-7505329" n="140" ana="#th-frame #th-sjc">
+            <s xml:id="III-7505329" n="140">
               <w type="PREP" lemma="ⲛ">ⲛ</w>
               <w type="N" lemma="ϩⲏⲧⲕ">ϩⲏⲧⲕ</w>
             </s>
-            <s xml:id="III-7505330" n="141" ana="#th-frame #th-sjc" type="colophon">
+            <s xml:id="III-7505330" n="141" type="colophon">
               <w type="CONJ" lemma="ⲁⲩⲱ">ⲁⲩⲱ</w>
               <w type="PDEM" lemma="ⲛⲁⲓ">ⲛⲁⲓ</w>
               <w type="ADJ" lemma="ⲧⲏⲣ">ⲧⲏⲣ</w>

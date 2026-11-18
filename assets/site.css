@@ -190,7 +190,7 @@ body > .app > header .chip:focus-visible, body > .app > header .tab:focus-visibl
   body > .app > header .chip, body > .app > header .tab { padding-top: 8px; padding-bottom: 8px; }
 }
 
-/* 並び: ← 一覧 / 文書名 / 注解へ / 写本 / 表示 / ツール */
+/* 並び: ← 一覧 / 文書名 / 並行箇所 / 写本 / 表示 / ツール */
 body > .app > header > .homelink {
   order: 0; align-self: flex-start; width: auto; padding: 2px 0;
   font-size: .78rem; color: var(--chrome-faint, #8a85a6);
@@ -202,7 +202,7 @@ body > .app > header .brand .brandtext { display: block; }
 body > .app > header .brand .t { font-size: 1.06rem; line-height: 1.4; }
 body > .app > header .brand .t .cop { display: block; font-size: 1.12rem; line-height: 1.3; }
 body > .app > header .brand .s { margin-top: 6px; font-size: .62rem; line-height: 1.6; letter-spacing: .12em; }
-body > .app > header > #notesJump { order: 2; margin-top: 8px; }
+body > .app > header > #parBtn { order: 2; margin-top: 8px; }
 body > .app > header > .tabs { order: 3; }
 body > .app > header > .controls {
   order: 4; display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start;
@@ -297,7 +297,7 @@ body > .app > header .chip.searchlink { color: var(--gold-bright, #e7c885) !impo
   }
   .app main .trans { max-width: 78ch; }
   .app main #reading.parallel, .app main .corpus-head, .app main .grcsrc-foot,
-  .app main .endnotes, .app main .facsimile, .app main .syn {
+  .app main .facsimile, .app main .syn {
     max-width: min(94vw, 1760px);
   }
   .app main .corpus-head, .app main .prow { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }

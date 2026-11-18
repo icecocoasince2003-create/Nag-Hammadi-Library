@@ -2,8 +2,8 @@
 
 > **2026-11 時点の注意。** サイトが読む `data/` の XML には、生成したあとに手作業で直した内容が入っていて、
 > このフォルダの CSV から作り直すことはできません。**このフォルダで直した内容をサイトに反映できるのは、いまは `lexicon.csv`（辞書）だけです。**
-> 本文・対訳・注釈は `data/` の XML を直接直します。`translations.csv`・`notes.csv`・`themes.csv`・`eugnostos_source.tsv` を直しても、
-> サイトには反映されません。くわしくはリポジトリ直下の `README.md` の「データの編集」を見てください。
+> 本文・対訳は `data/` の XML を直接直します。`translations.csv`・`eugnostos_source.tsv` を直しても、
+> サイトには反映されません。神学的注釈の `notes.csv`・`themes.csv` は、注釈とともに 2026-11-18 に削除しました。くわしくはリポジトリ直下の `README.md` の「データの編集」を見てください。
 
 `lexicon.csv` を直したら、リポジトリのルートで次を実行します。
 
@@ -24,8 +24,6 @@ CSV は Excel・Numbers・Google スプレッドシート・テキストエデ�
 |---|---|---|---|
 | `lexicon.csv` | コプト語辞書 | `lemma, n, pos, grc, en, ja, fr, usg_ja, usg_en, cdo` | 1行 = 1語義。同じ `lemma` を複数行（`n`=1,2,3…）にすると同形異義語。`grc`=Y でギリシア借用語。`cdo` は Coptic Dictionary Online の項目 ID（例 `C1789`） |
 | `translations.csv` | 対訳 | `seg_id, ja, en, fr` | `seg_id` は本文セグメントの ID（変更しない） |
-| `notes.csv` | 神学的注釈 | `id, themes, targets, label_ja, body_ja, body_en, body_fr` | `themes` / `targets` は空白区切りの ID 列 |
-| `themes.csv` | 主題分類 | `id, ja, en, fr` | `notes.csv` の `themes` から参照される |
 | `eugnostos_source.tsv` | 本文ソース | タブ区切りトークン列 | **通常は編集不要**。変更する場合は必ず PR でレビューを受けること |
 
 ## 編集時の注意

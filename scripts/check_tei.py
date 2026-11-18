@@ -19,6 +19,7 @@ TEI のスキーマ（tei_all.rng）は「要素や属性の並びが正しい�
   7. TEI の Schematron 規則のうち、このコーパスに関係するもの
        （@subtype には @type が要る、<ab> や <p> を入れ子にしない、@target を持つ <relatedItem> は空、など。
          xmllint は Schematron を実行しないので、ここで同じ内容を調べます）
+  8. 並行箇所（parallels.xml の <linkGrp type="parallel">）の <link> の @target が、2 つの <s> を指しているか
 
 --schema に tei_all.rng の場所を渡すと、xmllint によるスキーマ検証も続けて行います。
 
@@ -186,6 +187,22 @@ def check(path):
                 out.append("ギリシア語の <s> の @corresp が指すファイルを読めません: %s" % c)
             elif other.get(frag) != "s":
                 out.append("ギリシア語の <s> の @corresp の指す <s> がありません: %s" % c)
+
+    # 8. 並行箇所
+    for g in root.iter(T + "linkGrp"):
+        if g.get("type") != "parallel":
+            continue
+        for link in g.iter(T + "link"):
+            ptrs = (link.get("target") or "").split()
+            if len(ptrs) != 2:
+                out.append("並行箇所の <link> の @target は、セグメント（<s>）2 つを指します: %s" % (link.get("target") or "（空）"))
+            for p in ptrs:
+                doc, _, frag = p.partition("#")
+                other = ids_of(os.path.join(here, doc)) if doc else {k: name(v.tag) for k, v in local.items()}
+                if other is None:
+                    out.append("並行箇所の <link> が指すファイルを読めません: %s" % p)
+                elif other.get(frag) != "s":
+                    out.append("並行箇所の <link> の指す <s> がありません: %s" % p)
     return out
 
 

@@ -1,7 +1,9 @@
 # Sheneset — ナグ・ハマディ写本 TEIコーパス & ビュワー
 
-ナグ・ハマディ写本(NHC I–XIII)を、**形態素ごとに意味を参照でき／写本を対照でき／神学的解釈を
-併読でき／日英仏の対訳を持つ**形で Web 公開するための TEI P5 コーパスと静的サイトです。
+ナグ・ハマディ写本(NHC I–XIII)を、**形態素ごとに意味を参照でき／写本を対照でき／他の文書の
+並行箇所をたどれ／日英仏の対訳を持つ**形で Web 公開するための TEI P5 コーパスと静的サイトです。
+（神学的解釈の注と『国家』の釈義・注解は、2026-11-18 に削除しました。代わりに、他の文書に同じ文言がある箇所を
+並行箇所として結び、本文の印から横のパネルで読めるようにしています。下の「並行箇所」）
 現在は『祝福されたエウグノストス』(Eugnostos the Blessed, NHC III,3 / V,1)を公開し、
 **全13写本・約53文書へ拡張できる目次トップとページ遷移**を備えています。
 
@@ -75,20 +77,19 @@ nag_hammadi_library/
 ├─ data/               ← サイトが読むXML(手作業の修正が入っていて、source/ からは作り直せない)
 │   ├─ eugnostos_tei.xml
 │   ├─ lexicon.xml
-│   ├─ eugnostos_theology.xml
+│   ├─ parallels.xml      ← 並行箇所(scripts/build_parallels.py が作る)
+│   ├─ catalog.xml
 │   └─ republic_*.xml
 ├─ source/             ← CSV／TSV(サイトに反映できるのは、いまは lexicon.csv だけ。下の「データの編集」)
 │   ├─ lexicon.csv         辞書(1行=1語義／同形異義語は同じlemmaを複数行)
 │   ├─ translations.csv    対訳(seg_id, ja, en, fr)
-│   ├─ notes.csv           注釈
-│   ├─ themes.csv          主題ラベル
 │   ├─ eugnostos_source.tsv  本文ソース(通常編集不要)
 │   └─ nhc_fulltext_split/   NHC 全文テキスト(56文書・未注釈の作業用ファイル。同フォルダの README_ja.md)
 └─ scripts/            ← スクリプト(通常触らない)
     ├─ build_tei.py        source/ の CSV から XML を試しに生成し、data/ と比べる(既定では data/ に書き込まない)
     ├─ sync_lexicon.py     source/lexicon.csv の変更を data/lexicon.xml に反映する(xml:id は変えない)
     ├─ build_site.py       index.html / tractate.html を生成
-    ├─ sync_theology_ana.py 注釈の @ana を本文へ同期する補助ツール
+    ├─ build_parallels.py  並行箇所(data/parallels.xml)を、文言の自動照合で作る
     └─ sync_nhc_catalog.py  NHC 全文テキスト(未注釈)の文書一覧を data/catalog.xml に書き出す
 ```
 
@@ -108,8 +109,6 @@ nag_hammadi_library/
 |---|---|---|
 | `lexicon.csv` | **コプト語辞書** | `lemma, n, pos, grc, en, ja, fr, usg_ja, usg_en, cdo`(1行=1語義。同じ `lemma` を複数行にすると同形異義語。`cdo` は Coptic Dictionary Online の項目 ID、例 `C1789`) |
 | `translations.csv` | **対訳** | `seg_id, ja, en, fr` |
-| `notes.csv` | **注釈** | `id, themes, targets, label_ja, body_ja, body_en, body_fr`(themes/targets は空白区切りのID列) |
-| `themes.csv` | **主題分類** | `id, ja, en, fr` |
 | `eugnostos_source.tsv` | 本文ソース | タブ区切りのコプト語トークン列(通常は編集不要) |
 
 **サイトが読むデータ(`data/` の XML)**:
@@ -118,7 +117,8 @@ nag_hammadi_library/
 |---|---|---|
 | `eugnostos_tei.xml` | 本文(TEI) | 二証本(III,3 全文＋V,1 並行枠)。語ごとにレンマと品詞、節ごとに対訳を持つ。生成したあと手作業で直している。 |
 | `lexicon.xml` | コプト語辞書 | `lexicon.csv` の内容を `sync_lexicon.py` で反映。同形異義語は `<superEntry>`。 |
-| `eugnostos_theology.xml` | 注釈 | 中身は `notes.csv`＋`themes.csv` と同じ(2026-11 時点)。`@target`/`@ana` でリンク。 |
+| `parallels.xml` | 並行箇所 | エウグノストス III,3 のセグメントと、同じ文言を持つ他の文書(V,1・『イエス・キリストの知恵』III,4)のセグメントを `<link>` で結ぶ。`scripts/build_parallels.py` が作る(下の「並行箇所」)。 |
+| `catalog.xml` | 文書カタログ | 文書の題名・略号・関連する文書(`<relatedItem>`)。並行箇所のパネルが題名と関連文書をここから読む。 |
 
 **生成物(自動出力。直接編集しない)**:
 
@@ -132,7 +132,8 @@ nag_hammadi_library/
 
 | ファイル | 役割 |
 |---|---|
-| `build_tei.py` | CSV から3つのXMLを**試しに生成して `data/` と比べる**。既定では `data/` に書き込まない(下の「データの編集」)。 |
+| `build_tei.py` | CSV から本文と辞書の XML を**試しに生成して `data/` と比べる**。既定では `data/` に書き込まない(下の「データの編集」)。 |
+| `build_parallels.py` | 並行箇所(`data/parallels.xml`)を文言の自動照合で作る。何も付けなければ要約の表示だけで、`--write` で書き込む。 |
 | `sync_lexicon.py` | `lexicon.csv` の変更を `data/lexicon.xml` に反映する。`xml:id` は変えない。何も付けなければ変更点の表示だけで、`--write` で書き込む。 |
 | `build_site.py` | `index.html`(目次)と `tractate.html`(準備中)を生成。 |
 
@@ -148,9 +149,9 @@ CSV と生成スクリプトを XML に合わせ直すのか、生成をやめ�
 |---|---|---|
 | 辞書(語義・品詞・CDO へのリンク) | `source/lexicon.csv` | `python3 scripts/sync_lexicon.py` で変更点を確かめ、`--write` を付けて `data/lexicon.xml` に書き込む(`xml:id` は変わらない) |
 | 本文(語の切り方・語のまとまり・レンマ・品詞・文脈上の語釈)と対訳 | `data/eugnostos_tei.xml` | 直接直す |
-| 注釈・主題分類 | `data/eugnostos_theology.xml` | 直接直す。注の `@target`・`@ana` を変えたら、`python3 scripts/sync_theology_ana.py --check` で本文の `@ana` とのずれを確かめる。主題分類(`<taxonomy>`)は `data/eugnostos_tei.xml` のヘッダーにも同じものがある |
+| 並行箇所 | `data/parallels.xml` | `python3 scripts/build_parallels.py` で要約を確かめ、`--write` で書き込む(本文を直したあとも実行し直す)。手で確かめた対応を足すときは `resp="#align"` を付けずに `<link>` を書く(スクリプトはそれを上書きせずに止まる) |
 
-- `translations.csv`・`notes.csv`・`themes.csv`・`eugnostos_source.tsv` を直しても、サイトには反映されません。
+- `translations.csv`・`eugnostos_source.tsv` を直しても、サイトには反映されません。
 - すでにある見出し語に 2 つ目以降の語義の行を足した場合(新しい同形異義語)は、`sync_lexicon.py` は報告するだけで、
   `data/lexicon.xml` には入りません。`<superEntry>` にまとめる作業は手で行います。
 
@@ -189,12 +190,6 @@ python3 scripts/build_tei.py
 `seg_id`(本文セグメントのID。`eugnostos_source.tsv` のID、冒頭は `INCIPIT`)に対し
 `ja`/`en`/`fr` の対訳を書きます。空欄の言語は「準備中」と表示されます。
 
-### notes.csv（注釈）／themes.csv（主題）
-`notes.csv` は1行=1注。`themes`・`targets` は**空白区切り**のID列(`targets` は `7505191` のような
-セグメントID、`themes` は `themes.csv` の `id`)。`label_ja`＋`body_ja/en/fr` が注の本文です。
-`themes.csv` は主題の対訳ラベル(`id, ja, en, fr`)。`notes.csv` の `themes` と `本文 <s>` の
-`@ana` は、この `id` を参照します。
-
 ## サイト構成と画面遷移
 
 ```
@@ -209,23 +204,24 @@ index.html(目次:全53文書)
 
 ### 新しい文書を追加するには
 
-1. その文書の3ファイル(`<name>_tei.xml` / `_lexicon.xml` / `_theology.xml`)を `build_tei.py` と同様に用意。
+1. その文書の本文(`<name>_tei.xml`)を用意し、語彙を共通の辞書(`lexicon.xml`)に足す。他の文書と同じ文言を持つ箇所があれば、
+   `build_parallels.py` の `TARGETS` に対応先を足して並行箇所を作る。
 2. `eugnostos.html` を雛形に `<name>.html` ビュワーを作成(または共通ビュワー化)。
 3. `build_site.py` の `CODICES` で当該行の status を `S`(準備中)→`A`(公開)に変更し、
    `href_for()` の遷移先をそのビュワーに向ける。`python3 scripts/build_site.py` で目次を再生成。
 
 ## 公開方法
 
-`index.html` / `eugnostos.html` / `tractate.html` と3つのデータファイル
-（`eugnostos_tei.xml` / `eugnostos_lexicon.xml` / `eugnostos_theology.xml`）を
-**同じディレクトリにまとめて置いて**任意のWebサーバ(GitHub Pages, Netlify, さくら, S3 など)に
+リポジトリの中身(HTML・`assets/`・`data/`・`source/nhc_fulltext_split/tei/`・`image/`・`iiif/`)を
+**同じ構成のまま**任意のWebサーバ(GitHub Pages, Netlify, さくら, S3 など)に
 アップロードするだけです。入口は `index.html`。すべてサーバ不要の
-静的ファイルで、ビュワーは同じ場所の3ファイルを `fetch` で読み込みます。
+静的ファイルで、ビュワーは `data/` の XML を `fetch` で読み込みます(並行箇所のパネルと〈対照〉は、対応先の本文を
+`source/nhc_fulltext_split/tei/` から必要になったときに読み込みます)。
 
 > ローカルで `eugnostos.html` をダブルクリックして開いた場合(`file://`)は、ブラウザの制約で
 > 外部XMLを読めないため、**埋め込みのサンプル(冒頭十数節)**が表示されます。全文を見るには
-> Webサーバ経由で開くか、画面の「XMLを開く」/ドラッグ＆ドロップで3ファイルを(まとめて)
-> 読み込んでください。ファイルの種類(本文/辞書/注釈)は中身から自動判別します。
+> Webサーバ経由で開いてください(『国家』のビュワーは、画面の「XMLを開く」/ドラッグ＆ドロップで本文・辞書・ギリシア語・
+> カタログを読み込むこともできます。ファイルの種類は中身から自動判別します)。
 
 フォントは Google Fonts(Spectral / Inter / Noto Sans JP / Noto Serif JP / **Noto Sans Coptic**)を
 読み込みます。オフライン公開する場合はこれらをローカルにセルフホストしてください
@@ -233,21 +229,27 @@ index.html(目次:全53文書)
 
 ## ビュワーの使い方
 
-- **写本タブ**「III,3 本文 / V,1 / 対照」で証本を切替(対照は左右二段で並置)。
+- **写本タブ**「III,3 本文 / V,1 / 対照」で証本を切替。〈対照〉は左に III,3、右に V,1 の本文(未注釈の作業用テキスト)を、
+  並行箇所の対応で並べます。一致する文字に色が付きます。対応の見つからないセグメントが続くところは 1 行にまとめ、
+  前後の対応のあいだにある V,1 の本文を「対応は未確認」として示します。
 - **形態素をクリック**→ 語義カード(語形・レンマ・品詞・日英仏語釈・借用語表示)。
 - **同形異義語**(綴りが同じで意味が異なる語)は、本文中で金色の点線＋`⁝`で示し、語義カードに①②…と**全語義を品詞・用法つきで列挙**します(既定語義にはバッジ表示)。
 - **「語釈を重ねる」**でインターリニア(各語の下に語義)を表示。「語釈: 日/英/仏」で言語を巡回切替(419項目すべてに三言語の語義あり)。
-- **「訳: 日/英/仏」**で対訳と神学注解の言語を巡回切替。
-- **左の「流出の系譜」**(署名要素)= 語りえぬ父→自生者→不死の人間→人の子(救済者)→
-  ソフィア→アイオーン(12・72・360)→教会、という本文の流出順。ノードを選ぶと
-  該当主題の本文がハイライトされ、右の注がその主題に絞り込まれます。
-- **右パネル**「神学的解釈」=`<standOff>` の注を表示し「本文へ」で該当節へジャンプ。
+- **「訳: 日/英/仏」**で対訳の言語を巡回切替。
+- **並行箇所**: 他の文書にも同じ文言があるセグメントには、訳の後ろに `‖ V,1`・`‖ III,4` のような印が付きます。
+  押すと右のパネルに対応先の本文が出ます(広い画面では本文の右に並び、狭い画面では本文に重なります)。
+  - パネルの上に III,3 のセグメント、下のタブで文書を切替。一致する文字に両方とも色が付き、「III,3 の文字の一致」は
+    III,3 側の文字のうち対応先と一致した割合です。〈前後も表示〉で対応先の前後 2 セグメントも出ます。
+  - 〈‹ ›〉でその文書と対応する前・次のセグメントへ移ります。本文も一緒に動きます。
+  - 対応の見つからないセグメントでは、前後の対応箇所のあいだにある対応先の本文を「対応は未確認」として畳んで示します。
+  - 左の文書パネルの〈‖ 並行箇所〉で、文書ごとの一覧(対応するセグメントの数、最初の並行箇所へのボタン、コーパス検索への
+    リンク)と、箇所は結んでいないが関連する文書(カタログの `<relatedItem>`。『世界の起源について』など)を開けます。
 - **検索**=コプト語形・レンマ・英語/日本語語釈・対訳を横断検索。
 - **上部ナビの ☀／☾** で表示モード（ライト／ダーク）を切替（全ページ共通）。
 
-## TEI設計の要点（3ファイル分離）
+## TEI設計の要点（ファイルの分離）
 
-データは役割ごとに3つの TEI 文書へ分離し、ID参照で連携させています。
+データは役割ごとに別々の TEI 文書(本文・辞書・並行箇所・カタログ)へ分離し、ID参照で連携させています。
 
 **① 本文 `eugnostos_tei.xml`** — ルート `<TEI xml:lang="cop">` 直下の `<group>` が
 二つの `<text type="witness">` を並置:
@@ -262,7 +264,7 @@ index.html(目次:全53文書)
 <w type="N" lemma="ⲥⲟⲫⲓⲁ" xml:lang="grc">ⲥⲟⲫⲓⲁ</w>
 ```
 `@type`=品詞、`@lemma`=レンマ、ギリシア借用語は `@xml:lang="grc"`。セグメント `<s>` は
-`xml:id`・通し番号 `@n`・主題 `@ana` を持ちます。冒頭と奥書のセグメントは `<s type="incipit">`・`<s type="colophon">`。
+`xml:id` と通し番号 `@n` を持ちます。冒頭と奥書のセグメントは `<s type="incipit">`・`<s type="colophon">`。
 
 続けて書かれる**語群**（bound group。正書法上の 1 語）は `<phr>` でまとめます。Coptic SCRIPTORIUM の TEI と同じ書き方です。
 ```xml
@@ -316,11 +318,24 @@ index.html(目次:全53文書)
 
 **同形異義語(homograph)**は、1つの綴りに対して複数の `<entry>` を `<superEntry>` にまとめます。各 `<entry>` は固有 `xml:id`(例 `lex-…-1` / `lex-…-2`)・`<gramGrp><pos>`・用法ヒント `<usg type="hint">`・三言語語義を個別に持ちます。例:`ⲡⲉ`(繋辞「～である」／名詞「天」)、`ⲙⲉ`(否定／真理・愛)、`ⲛⲁ`(未来助動詞／与格前置詞／「憐れむ」)など全15形・32語義。本文側は `<w ana="#lex-…-2">` で特定語義を指定でき(任意)、ビュワーは指定があればその語義を、無ければ先頭(最頻)語義を既定として表示します。
 
-**③ 注釈 `eugnostos_theology.xml`** — `<standOff><listAnnotation type="theology">` に
-神学的解釈の `<note>`(**17件**)を格納。各 `<note>` は主題分類(`<encodingDesc>` の `<taxonomy>` に
-**15主題**)を `@ana` で、本文セグメントを `@target="eugnostos_tei.xml#III-…"` で参照します。
-うち2件は Painchaud(JBL 1995)に基づく「修辞的四部構成(序論・叙述・論証・結語)」と
-「『世界の起源について』(NHC II,5/XIII,2)との相補関係」の注で、いずれも要約・参照(原文転記ではない)です。
+**③ 並行箇所 `parallels.xml`** — `<standOff>` に、対応先の文書ごとの `<linkGrp type="parallel">` を置きます。
+`@subtype` は関係の種類(`witness` = 同じ文書の別の写本、`rewriting` = 同じ文言を別の形で用いる文書)、`@corresp` は
+カタログの 2 文書(`catalog.xml#doc-eugnostos catalog.xml#doc-III-4`)、`<desc>` は日英の説明です。
+各 `<link>` は本文のセグメントと対応先のセグメントを 1 組ずつ結びます。
+```xml
+<linkGrp type="parallel" subtype="rewriting" xml:id="par-eug-SJC" corresp="catalog.xml#doc-eugnostos catalog.xml#doc-III-4">
+  <desc xml:lang="ja">『イエス・キリストの知恵』…</desc>
+  <link target="eugnostos_tei.xml#III-7505191 ../source/nhc_fulltext_split/tei/03-4_sophia-of-jesus-christ.xml#III-7505340" cert="high" resp="#align"/>
+</linkGrp>
+```
+`@cert` は一致の強さ(high / medium / low)、`resp="#align"` は自動の照合で作ったことを示します(ヘッダーの `<respStmt xml:id="align">`)。
+1 つのセグメントが複数のセグメントに対応するときは、`<link>` を複数書きます。対応先の本文は未注釈の全文テキスト
+(`source/nhc_fulltext_split/tei/`)で、頁・行番号が無いのでセグメントの番号(`@n`)で示します。
+
+**神学的解釈の注と主題分類は 2026-11-18 に削除しました。** `eugnostos_theology.xml`(注 17 件・主題 15)、
+`republic_commentary.xml`(釈義・注解 17 件・主題 16)、その元の `source/notes.csv`・`source/themes.csv`、
+本文の `<s>` の主題(`@ana="#th-…"`)と `eugnostos_tei.xml` のヘッダーの `<taxonomy>`、補助の `scripts/sync_theology_ana.py` が
+対象です。削除前の内容はコミット `1950340` に残っています。
 
 ### TEI スキーマとの適合（2026-11-18 時点）
 
@@ -356,11 +371,36 @@ curl -o ~/Downloads/tei_all.rng https://tei-c.org/Vault/P5/4.3.0/xml/tei/custom/
 python3 scripts/check_tei.py --schema ~/Downloads/tei_all.rng
 ```
 
+## 並行箇所(data/parallels.xml)の作り方
+
+```
+python3 scripts/build_parallels.py           # 要約と、いまの data/parallels.xml との違いを表示するだけ
+python3 scripts/build_parallels.py --write   # data/parallels.xml に書き込む
+```
+
+エウグノストス III,3 の各セグメントについて、同じ文言が残っている箇所を探して結びます。対応先は、いまは次の 2 文書です。
+
+| 対応先 | 関係 | 結んだセグメント(2026-11-18) |
+|---|---|---|
+| エウグノストス V,1(`05-1_eugnostos.xml`) | 同じ文書のもう一つの写本。文言の一致しない箇所が多い | III,3 の 141 のうち 90 ↔ V,1 の 269 のうち 158(`<link>` 173 本) |
+| 『イエス・キリストの知恵』III,4(`03-4_sophia-of-jesus-christ.xml`) | エウグノストスと同じ文言が、問答の形で長く続く | III,3 の 141 のうち 90 ↔ III,4 の 189 のうち 97(`<link>` 132 本) |
+
+- **方法.** 両方の本文から語の区切り・上線などの合成記号・記号を除いて 1 本の文字列にし、順序を保ったまま一致する 4 文字以上の
+  部分を探します(`difflib.SequenceMatcher`)。セグメントの組で 8 文字以上(短いセグメントでは 5 文字以上で、どちらかの半分以上)
+  一致すれば結びます。詳しくはスクリプトの冒頭と `parallels.xml` のヘッダーにあります。ビュワーの色付けも同じ考え方です。
+- **結ばれないもの.** 言い換えられた箇所(V,1 は訳が違う箇所が多い)。ビュワーは、前後の対応箇所のあいだにある本文を
+  「対応は未確認」として見せます。
+- **ほかの文書.** NHC の残りの 53 文書とは、定型句(「すべてのアイオーンとその世界」「世界の基が置かれた時から」など、20 文字台)
+  より長い一致がありません。『世界の起源について』(II,5)は、箇所は結ばず、カタログの `<relatedItem>` で文書どうしを関連づけ、
+  両書の文学的な接点を論じた研究(L. Painchaud, JBL 114 (1995) 81–101)を示しています。
+- **確かめていないこと.** 校訂版(Parrott, NHS 27 など)の対観表とは照合していません。対応先の本文も校訂本と照合する前の作業用テキストです。
+- 本文(`eugnostos_tei.xml` の III,3)や `source/nhc_fulltext_split/tei/` を直したら、実行し直してください。
+
 ## データの性質(重要)
 
-- **コプト語本文はパブリックドメイン**です。一方、**形態素グロス・対訳・神学注解は本プロジェクトに
-  よる原文オリジナルの初版シード**で、**CC BY 4.0** で提供します。**フランス語訳・日本語訳・英訳・注釈は、
-  Pasquier(BCNH)・Parrott(NHS 27, Brill 1991)・小林稔訳・Painchaud(JBL 1995)等を参照して作成した
+- **コプト語本文はパブリックドメイン**です。一方、**形態素グロス・対訳は本プロジェクトに
+  よる原文オリジナルの初版シード**で、**CC BY 4.0** で提供します。**フランス語訳・日本語訳・英訳は、
+  Pasquier(BCNH)・Parrott(NHS 27, Brill 1991)・小林稔訳等を参照して作成した
   オリジナル**で、これらの翻訳を転記したものではありません。権威あるフランス語訳は **Pasquier の校訂**を参照してください。
 - 語釈は**レンマ単位(文脈非依存)**で、全トークンの**約87%**に付与済み。残り(稀な語形)は
   `source/lexicon.csv` に行を足し、`scripts/sync_lexicon.py` で `data/lexicon.xml` に反映すればカバーできます。
@@ -372,22 +412,19 @@ python3 scripts/check_tei.py --schema ~/Downloads/tei_all.rng
 ## 拡張のしかた
 
 1. **内容を編集**:上の「データの編集」の表のとおりです。辞書は `lexicon.csv` を直して `sync_lexicon.py` で反映し、
-   本文・対訳・注釈は `data/` の XML を直接直します。
+   本文・対訳は `data/` の XML を直接直します。並行箇所は `build_parallels.py` で作り直します。
 2. `python3 scripts/build_tei.py` は、**`data/` を作り直すためには使いません**。いまの生成結果は `data/` の手作業の修正を
    含まないためです(何も付けなければ `data/` には書き込まず、違いを表示するだけです)。
-3. **ビュワーへ反映**:Webサーバ経由で `eugnostos.html` を開けば、`data/` の3つのXMLを自動で読み込みます
+3. **ビュワーへ反映**:Webサーバ経由で `eugnostos.html` を開けば、`data/` のXMLを自動で読み込みます
    (同じフォルダに置くだけ)。`file://` で直接開く場合のオフライン用埋め込みサンプルだけは、
    `eugnostos.html` を雛形(`viewer_template.html`)から作り直して `<script id="tei-main">` /
    `id="tei-lex">` / `id="tei-theo">` の中身を差し替えます。
 4. V,1 本文を実体化するには、`data/eugnostos_tei.xml` の `wit-V` にある `<gap>` を、校訂版のトークン列に拠った
    `<w>` 群に置き換えます(`build_tei.py` の `emit_witness_V` を書き換えて生成し直す方法は、2. の理由でいまは使えません)。
 
-> 辞書だけ・注釈だけを単独で差し替えることもできます(ビュワーの「XMLを開く」やドラッグ＆ドロップは
-> 本文/辞書/注釈を中身から自動判別し、該当部分だけを更新します)。
->
 > **他の NHC 文書へ展開**するときも同じCSVの形式が使えます。文書ごとに `<name>_*.csv` と
-> `<name>_source.tsv` を用意し、`build_tei.py` のファイル名を差し替えれば、同じ仕組みで本文・辞書・
-> 注釈のXMLが作れます。同形異義語も `lexicon.csv` に行を足すだけで増やせます。
+> `<name>_source.tsv` を用意し、`build_tei.py` のファイル名を差し替えれば、同じ仕組みで本文・辞書の
+> XMLが作れます。同形異義語も `lexicon.csv` に行を足すだけで増やせます。
 > ただし、生成結果(`build/tei/` に出ます)は、生成スクリプトが作られた当時の書き方のままで、そのあと `data/` で行った
 > 構造と書き方の修正は入っていません(たとえば `<s>` が `<div>` の直下、辞書の `<entry>` が `<list>` の中、
 > 辞書の `xml:id` が実行のたびに変わる)。そのままでは TEI として妥当ではないので、公開する前に直す必要があります。
@@ -415,7 +452,7 @@ python3 scripts/check_tei.py --schema ~/Downloads/tei_all.rng
 | 対象 | ライセンス |
 |---|---|
 | ソースコード（HTML のマークアップ・CSS・JavaScript、`assets/`、`scripts/` の Python、`supabase/schema.sql`） | [MIT License](LICENSE) |
-| 本プロジェクトが作成したデータとテキスト（`data/`・`source/` の TEI 符号化・対訳・語釈・辞書・注釈、ページ内の解説文） | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.ja) |
+| 本プロジェクトが作成したデータとテキスト（`data/`・`source/` の TEI 符号化・対訳・語釈・辞書・並行箇所の一覧、ページ内の解説文） | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.ja) |
 | コプト語本文、プラトン『国家』のギリシア語本文（OCT/Burnet） | パブリックドメイン |
 | 第三者の資料（上記「辞書データの出典」の Coptic SCRIPTORIUM ほか、IIIF で表示する写本画像、外部のフォント・ライブラリ） | 各提供元の条件に従います |
 
@@ -464,6 +501,6 @@ Code is released under the MIT License (see `LICENSE`). Data and texts created b
 ## Republic: eugnostos と同一エンジンに統一（最新）
 
 - `republic.html` は **`viewer_template.html`（eugnostos.html と同じビュワー・エンジン）から生成**。語彙ポップオーバー（lemma+品詞→品詞・日英語義・辞書リンク、同形異義の自動選択）、行間グロス、訳の言語切替、検索、アイオーン/コーデクス表示——すべて eugnostos と同一の挙動です。
-- **唯一の違いがギリシア語**：eugnostos が右パネルに出していた「神学的解釈」の位置に、republic は **ギリシア語原文（`<s>` の @transGrc を連続表示）** を出します。
+- **唯一の違いがギリシア語**：eugnostos が右パネルに出していた「神学的解釈」（2026-11-18 に削除）の位置に、republic は **ギリシア語原文（`<s>` の @transGrc を連続表示）** を出します。
 - 単一証本のため、写本タブ（III/V/対照）と流出テーマ柱は不使用（エンジンは保持・非表示）。
 - データは eugnostos と同形式の2ファイル：`data/republic_tei.xml`（witness/s/phy/w + transJa/transEn/transGrc）と `data/republic_lexicon.xml`（lemma+品詞→日英 sense + dict ref、71エントリ）。
