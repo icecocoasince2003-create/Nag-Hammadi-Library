@@ -541,7 +541,7 @@ const I18N = {
   hGap:     {ja:"欠損・不明", en:"Gaps", fr:"Lacunes"},
   /* 詳細 */
   dSenses:  {ja:"語義（辞書）", en:"Senses (lexicon)", fr:"Sens (lexique)"},
-  dWGloss:  {ja:"本文中の語釈（@gloss）", en:"In-text glosses (@gloss)", fr:"Gloses du texte (@gloss)"},
+  dWGloss:  {ja:"本文中の語釈（その箇所での意味）", en:"In-text glosses (meaning in that passage)", fr:"Gloses du texte (sens dans le passage)"},
   dForms:   {ja:"語形", en:"Forms", fr:"Formes"},
   dIType:   {ja:"活用型", en:"Inflection", fr:"Flexion"},
   dITypeNA: {ja:"未付与（辞書の <iType> または本文の @msd を付与すると表示されます）", en:"Not yet annotated (add <iType> to the lexicon or @msd to the text)", fr:"Pas encore annoté (ajouter <iType> au lexique ou @msd au texte)"},
@@ -701,6 +701,10 @@ function parseLex(xml){
 }
 const GAP = Object.freeze({gap: true});   // wit.groups の中で欠損（<gap>）の位置を表す印
 function parseText(xml, doc){
+  // 本文中の語釈（文脈上の語釈）：<interpGrp type="gloss"> の <interp>。本文の <w> が @ana で指す（以前の書き方は <w gloss="…">）
+  const glossOf = new Map();
+  T(xml, "interpGrp").filter(g => g.getAttribute("type") === "gloss").forEach(g =>
+    T(g, "interp").forEach(i => { const id = xmlId(i); if(id) glossOf.set(id, i.textContent.trim()); }));
   T(xml, "text").filter(x => x.getAttribute("type") === "witness").forEach(tx => {
     const label = tx.getAttribute("n") || doc.siglum;
     const wit = {id: xmlId(tx) || doc.key, label, short: label.replace(/^NHC\s*/, ""), doc, segs: [], groups: [], ntok: 0};
@@ -725,14 +729,17 @@ function parseText(xml, doc){
           return;
         }
         if(w.localName !== "w") return;
-        const phy = w.closest("phy");
+        const phy = w.closest("phr, phy");                                 // 語群は TEI の <phr>（以前の書き方 <phy> も読む）
         if(!phy || phy !== lastPhy){ wit.groups.push([]); lastPhy = phy; }
         const form = w.textContent.trim();
         const lemma = (w.getAttribute("lemma") || form).trim();
         const pos = w.getAttribute("type") || "X";
+        // @ana のポインタ：語釈（#gl-…）を指すものと、辞書の語義を固定するもの（#lex-…）を分ける
+        const ptrs = (w.getAttribute("ana") || "").split(/\s+/).map(x => x.split("#").pop()).filter(Boolean);
+        const glId = ptrs.find(id => glossOf.has(id));
         const tk = {w: wi, s: si, g: wit.groups.length - 1, form, lemma, pos,
           grc: xmlLang(w) === "grc", msd: w.getAttribute("msd") || "",
-          ana: (w.getAttribute("ana") || "").split("#").pop(), gl: w.getAttribute("gloss") || "",
+          ana: ptrs.find(id => !glossOf.has(id)) || "", gl: glId ? glossOf.get(glId) : (w.getAttribute("gloss") || ""),
           key: lemma + "\t" + pos};
         wit.groups[wit.groups.length - 1].push(ST.toks.length);
         wit.segs[si].tokens.push(ST.toks.length);

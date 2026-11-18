@@ -3,15 +3,27 @@
   republic_greek.xml — ギリシア語パラレル本文
   Plato, Republic (Politeia) IX 588b-589b / OCT (ed. J. Burnet), public domain.
 
-  ▸ 編集方法
-     各 <s> の @corresp は コプト語本文 republic_tei.xml の <s xml:id="..."> に対応。
-     対応する rep-番号を探し、<grc>(ギリシア語)/<ja>(和訳)/<en>(英訳) を書き換え・追記するだけ。
-     コプト語が独自に展開・逸脱していてギリシア語が無い箇所は、要素を空のままにしておく。
+  ▸ 構成（TEI 標準の書き方。2026-11-18 に移行）
+     1. <div type="greek-parallel">             ギリシア語本文  <s xml:id="grc-N" corresp="republic_tei.xml#rep-N">…</s>
+     2. <div type="translation" xml:lang="ja">   その和訳        <seg corresp="#grc-N">…</seg>
+     3. <div type="translation" xml:lang="en">   その英訳        <seg corresp="#grc-N">…</seg>
 
-  ▸ @cert（確度フラグ）
-     prov = 暫定整列（要 Burnet/OCT 校訂）。確定したら @cert="high" に変えるか属性を削除。
+  ▸ 編集方法
+     各 <s> の @corresp は、コプト語本文 republic_tei.xml の <s xml:id="rep-N"> を指します。
+     xml:id は、対応する rep-番号に合わせて grc-N とします。
+     ・ギリシア語を直す … 1 の <s xml:id="grc-N"> の中身を書き換える。
+     ・訳を直す … 2・3 の <seg corresp="#grc-N"> の中身を書き換える。
+     ・新しく対応づける … 1 に <s xml:id="grc-N" corresp="republic_tei.xml#rep-N">…</s> を番号順の位置に足し、
+       2・3 にも同じ位置に <seg corresp="#grc-N">…</seg> を足す。
+     コプト語が独自に展開・逸脱していてギリシア語が無い箇所には、<s> を置きません。
+
+  ▸ @cert（確度）
+     cert="low" = 暫定整列（要 Burnet/OCT 校訂）。確定したら cert="high" に変えるか、属性を削除。
+     （以前は独自の値 "prov" でした。TEI の @cert が取れる値は high / medium / low / unknown です。）
 
   ▸ 翻訳の権利: ギリシア語=public domain / 和訳・英訳=本プロジェクト(CC BY 4.0)
+
+  ▸ 点検: python3 scripts/check_tei.py （ポインタの切れや書き方の誤りを報告します）
 -->
 <TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="grc">
   <teiHeader>
@@ -20,7 +32,7 @@
         <title>Plato, Republic 588B-589B — Greek parallel, aligned to NHC VI,5</title>
       </titleStmt>
       <publicationStmt>
-        <p>Greek = Plato, Republic (OCT/Burnet, public domain). Japanese/English of the Greek = this project (CC BY 4.0). First-pass alignment to the Coptic; segments marked cert="prov" require verification.</p>
+        <p>Greek = Plato, Republic (OCT/Burnet, public domain). Japanese/English of the Greek = this project (CC BY 4.0). First-pass alignment to the Coptic; segments marked cert="low" require verification.</p>
       </publicationStmt>
       <sourceDesc>
         <bibl xml:id="src_grc">
@@ -31,6 +43,12 @@
         </bibl>
       </sourceDesc>
     </fileDesc>
+    <encodingDesc>
+      <editorialDecl>
+        <p xml:lang="ja">ギリシア語本文は <gi>s</gi> に分け、それぞれが <att>corresp</att> でコプト語本文（<ref target="republic_tei.xml">republic_tei.xml</ref>）の <gi>s</gi> を指します。ギリシア語の和訳・英訳は <gi>div</gi>（<att>type</att>="translation"）に置き、<gi>seg</gi> の <att>corresp</att> でギリシア語の <gi>s</gi> と対応づけます。<att>cert</att>="low" は暫定の整列（Burnet の校訂本文での確認が必要）を表します。コプト語が独自に展開していてギリシア語が無い箇所には <gi>s</gi> を置きません。</p>
+        <p xml:lang="en">The Greek text is divided into <gi>s</gi> elements, each pointing with <att>corresp</att> to an <gi>s</gi> of the Coptic text (<ref target="republic_tei.xml">republic_tei.xml</ref>). The Japanese and English translations of the Greek are in <gi>div</gi> elements (<att>type</att>="translation"); each <gi>seg</gi> is aligned with a Greek <gi>s</gi> by <att>corresp</att>. <att>cert</att>="low" marks a provisional alignment, to be verified against Burnet's text. Where the Coptic goes its own way and has no Greek counterpart, there is no <gi>s</gi>.</p>
+      </editorialDecl>
+    </encodingDesc>
     <profileDesc>
       <langUsage>
         <language ident="grc">Ancient Greek</language>
@@ -38,286 +56,114 @@
         <language ident="en">English</language>
       </langUsage>
     </profileDesc>
+    <revisionDesc>
+      <change when="2026-11-18">Project-specific markup replaced by TEI elements and attributes: the Greek is now the content of each <gi>s</gi> (it was in a child element); its translations are in <gi>div</gi> type="translation", aligned by <att>corresp</att>; <att>corresp</att> names the file as well as the segment; cert="low" replaces the project value "prov"; the 25 empty placeholders for segments without a Greek counterpart were removed. The Greek text and its translations are unchanged.</change>
+    </revisionDesc>
   </teiHeader>
   <text type="parallel" xml:lang="grc">
     <body>
       <div type="greek-parallel" subtype="republic">
-        <s corresp="rep-1">
-          <grc>ἐπειδὴ ἐνταῦθα λόγου γεγόναμεν,</grc>
-          <ja>議論がここまで来たのだから、</ja>
-          <en>Since we have come to this point in the argument,</en>
-        </s>
-        <s corresp="rep-2">
-          <grc>πάλιν ἀναλάβωμεν τὰ πρῶτα λεχθέντα.</grc>
-          <ja>最初に語られたことを改めて取り上げよう。</ja>
-          <en>let us take up again the things first said.</en>
-        </s>
-        <s corresp="rep-3" cert="prov">
-          <grc>ἦν δέ πού τι λεγόμενον,</grc>
-          <ja>たしか、こう言われていたはずだ——</ja>
-          <en>There was, I believe, something said—</en>
-        </s>
-        <s corresp="rep-4">
-          <grc>ὅτι λυσιτελοῖ ἀδικία τῷ τελέως μὲν ἀδίκῳ, δοξαζομένῳ δὲ δικαίῳ.</grc>
-          <ja>完全に不正でありながら正しいと思われている者にこそ、不正は利益になる、という主張だ。</ja>
-          <en>—that injustice profits the one who is perfectly unjust yet reputed to be just.</en>
-        </s>
-        <s corresp="rep-5">
-          <grc></grc>
-          <ja></ja>
-          <en></en>
-        </s>
-        <s corresp="rep-6" cert="prov">
-          <grc>ἢ οὐχ οὕτως ἐλέχθη;</grc>
-          <ja>——あるいは、そう言われたのではなかったか。</ja>
-          <en>—or was it not put in this way?</en>
-        </s>
-        <s corresp="rep-7" cert="prov">
-          <grc>οὕτω μὲν οὖν.</grc>
-          <ja>「いかにも、そのとおり」。</ja>
-          <en>“Just so, then.”</en>
-        </s>
-        <s corresp="rep-8" cert="prov">
-          <grc>νῦν δή, ἔφην,</grc>
-          <ja>「では今こそ」、と私は言った、</ja>
-          <en>“Now then,” I said,</en>
-        </s>
-        <s corresp="rep-9" cert="prov">
-          <grc>αὐτῷ διαλεγώμεθα, ἐπειδὴ διωμολογησάμεθα,</grc>
-          <ja>彼と論じ合おう、われわれは(すでに)合意したのだから——</ja>
-          <en>let us reason with him, since we have agreed—</en>
-        </s>
-        <s corresp="rep-10" cert="prov">
-          <grc>τό τε ἀδικεῖν</grc>
-          <ja>不正をなすことと、</ja>
-          <en>both the doing of injustice</en>
-        </s>
-        <s corresp="rep-11" cert="prov">
-          <grc>καὶ τὸ δίκαια πράττειν,</grc>
-          <ja>正しいことをなすことが、</ja>
-          <en>and the doing of just things,</en>
-        </s>
-        <s corresp="rep-12" cert="prov">
-          <grc>ἣν ἑκάτερον ἔχει δύναμιν.</grc>
-          <ja>それぞれが持つその力を。</ja>
-          <en>what power each of them has.</en>
-        </s>
-        <s corresp="rep-13">
-          <grc>πλάσαντες οὖν τῆς ψυχῆς εἰκόνα λόγῳ,</grc>
-          <ja>では言葉によって魂の像をかたどり、</ja>
-          <en>Having molded, then, in words an image of the soul,</en>
-        </s>
-        <s corresp="rep-14" cert="prov">
-          <grc>ἵνα εἰδῇ ὁ ἐκεῖνα λέγων οἷον ἔλεγεν.</grc>
-          <ja>かのことを語った者が、自分が何を語っていたかを知るために。</ja>
-          <en>so that he who said those things may see what sort of thing he was saying.</en>
-        </s>
-        <s corresp="rep-15">
-          <grc></grc>
-          <ja></ja>
-          <en></en>
-        </s>
-        <!-- rep-16/17: コプト語本文の区切りに合わせ、Χιμαίρας…Κερβέρου の句を rep-16 から rep-17 へ移して再整列（要 Burnet/OCT 確認）。 -->
-        <s corresp="rep-16" cert="prov">
-          <grc>οἷαι δὲ μυθολογοῦνται παλαιαὶ γενέσθαι φύσεις,</grc>
-          <ja>また、古来生じたと語り伝えられる本性のうち——</ja>
-          <en>and such ancient natures as are storied to have come into being—</en>
-        </s>
-        <s corresp="rep-17" cert="prov">
-          <grc>ἥ τε Χιμαίρας καὶ Σκύλλης καὶ Κερβέρου, καὶ ἄλλαι τινὲς συχναὶ λέγονται,</grc>
-          <ja>すなわちキマイラ・スキュラ・ケルベロス、そして他にも多くのものが語り伝えられている——</ja>
-          <en>namely the Chimaera, Scylla, and Cerberus, and various others, too, are spoken of—</en>
-        </s>
-        <s corresp="rep-18">
-          <grc>εἰς μίαν ἰδέαν συνελθεῖν.</grc>
-          <ja>それらが一つの形へと合わさるような像を。</ja>
-          <en>to come together into a single form.</en>
-        </s>
-        <s corresp="rep-19">
-          <grc>πλάττε τοίνυν μίαν μὲν ἰδέαν θηρίου ποικίλου καὶ πολυκεφάλου,</grc>
-          <ja>そこでまず、多彩で多頭の獣の形を一つかたどれ。</ja>
-          <en>Mold, then, a single form of a manifold, many-headed beast,</en>
-        </s>
-        <s corresp="rep-20">
-          <grc></grc>
-          <ja></ja>
-          <en></en>
-        </s>
-        <s corresp="rep-21">
-          <grc>πλάττε τοίνυν μίαν μὲν ἰδέαν θηρίου ποικίλου καὶ πολυκεφάλου,</grc>
-          <ja>そこでまず、多彩で多頭の獣の形を一つかたどれ。</ja>
-          <en>Mold, then, a single form of a manifold, many-headed beast,</en>
-        </s>
-        <s corresp="rep-22">
-          <grc>ἡμέρων δὲ θηρίων ἔχοντος κεφαλὰς κύκλῳ καὶ ἀγρίων,</grc>
-          <ja>飼い慣らされた獣と野生の獣の頭を周囲にめぐらせ、</ja>
-          <en>having heads of tame and of wild beasts all around,</en>
-        </s>
-        <s corresp="rep-23">
-          <grc>καὶ δυνατοῦ μεταβάλλειν καὶ φύειν ἐξ αὑτοῦ πάντα ταῦτα.</grc>
-          <ja>それらすべてを自らのうちから変化させ生み出しうる獣を。</ja>
-          <en>and able to change and to grow all of these out of itself.</en>
-        </s>
-        <s corresp="rep-24">
-          <grc></grc>
-          <ja></ja>
-          <en></en>
-        </s>
-        <s corresp="rep-25">
-          <grc></grc>
-          <ja></ja>
-          <en></en>
-        </s>
-        <s corresp="rep-26">
-          <grc>μίαν δὴ τοίνυν ἄλλην ἰδέαν λέοντος, μίαν δὲ ἀνθρώπου·</grc>
-          <ja>次にもう一つ、獅子の形を、そしてもう一つ、人間の形をかたどれ。</ja>
-          <en>Then another single form, of a lion, and one of a man;</en>
-        </s>
-        <s corresp="rep-27">
-          <grc></grc>
-          <ja></ja>
-          <en></en>
-        </s>
-        <s corresp="rep-28">
-          <grc></grc>
-          <ja></ja>
-          <en></en>
-        </s>
-        <s corresp="rep-29">
-          <grc></grc>
-          <ja></ja>
-          <en></en>
-        </s>        
-        <s corresp="rep-30">
-          <grc></grc>
-          <ja></ja>
-          <en></en>
-        </s>
-        <s corresp="rep-31">
-          <grc></grc>
-          <ja></ja>
-          <en></en>
-        </s>          
-        <s corresp="rep-32">
-          <grc>πολὺ δὲ μέγιστον ἔστω τὸ πρῶτον καὶ δεύτερον τὸ δεύτερον.</grc>
-          <ja>第一のものを遥かに最大とし、第二のものを二番目の大きさとせよ。</ja>
-          <en>but let the first be by far the largest, and the second, second.</en>
-        </s>
-        <s corresp="rep-33">
-          <grc></grc>
-          <ja></ja>
-          <en></en>
-        </s>     
-        <s corresp="rep-34">
-          <grc>σύναπτε τοίνυν αὐτὰ εἰς ἓν τρία ὄντα, ὥστε πῃ συμπεφυκέναι ἀλλήλοις.</grc>
-          <ja>そこで、三つあるそれらを一つに結び合わせ、互いに癒合させよ。</ja>
-          <en>Now join them—being three—into one, so that they have somehow grown together with one another.</en>
-        </s>
-        <s corresp="rep-35">
-          <grc></grc>
-          <ja></ja>
-          <en></en>
-        </s>   
-        <s corresp="rep-36">
-          <grc>περίπλασον δὴ αὐτοῖς ἔξωθεν ἑνὸς εἰκόνα, τὴν τοῦ ἀνθρώπου,</grc>
-          <ja>そしてそれらの外側に、人間という一つのものの像を塗り重ねよ。</ja>
-          <en>Then mold around them, on the outside, the image of one—that of the man—</en>
-        </s>
-        <s corresp="rep-37">
-          <grc>ὥστε τῷ μὴ δυναμένῳ τὰ ἐντὸς ὁρᾶν, ἀλλὰ τὸ ἔξω μόνον ἔλυτρον ὁρῶντι,</grc>
-          <ja>内側を見ることのできない者、外側の覆いだけを見る者には、</ja>
-          <en>so that, to one unable to see what is within but seeing only the outer shell,</en>
-        </s>
-        <s corresp="rep-38">
-          <grc></grc>
-          <ja></ja>
-          <en></en>
-        </s>
-        <s corresp="rep-39">
-          <grc>ἓν ζῷον φαίνεσθαι, ἄνθρωπον.</grc>
-          <ja>一つの生き物、すなわち人間に見えるように。</ja>
-          <en>it appears as a single creature, a man.</en>
-        </s>
-        <s corresp="rep-40">
-          <grc></grc>
-          <ja></ja>
-          <en></en>
-        </s>
-        <s corresp="rep-41">
-          <grc>λέγωμεν δὴ τῷ λέγοντι ὡς λυσιτελεῖ τούτῳ τῷ ἀνθρώπῳ ἀδικεῖν,</grc>
-          <ja>では、この人間にとって不正を行なうことが益になると言う者に向かって言おう、</ja>
-          <en>Let us say, then, to him who claims that it profits this man to do injustice,</en>
-        </s>
-        <s corresp="rep-42">
-          <grc>δικαιοπραγεῖν δὲ οὐ συμφέρειν.</grc>
-          <ja>正義を行なうことは益にならない、と説く者に対して。</ja>
-          <en>and that to act justly does not benefit him.</en>
-        </s>
-        <s corresp="rep-43">
-          <grc></grc>
-          <ja></ja>
-          <en></en>
-        </s>
-        <s corresp="rep-44">
-          <grc></grc>
-          <ja></ja>
-          <en></en>
-        </s>
-        <s corresp="rep-45">
-          <grc></grc>
-          <ja></ja>
-          <en></en>
-        </s>
-        <s corresp="rep-46">
-          <grc></grc>
-          <ja></ja>
-          <en></en>
-        </s>
-        <s corresp="rep-47">
-          <grc></grc>
-          <ja></ja>
-          <en></en>
-        </s>
-        <s corresp="rep-48">
-          <grc></grc>
-          <ja></ja>
-          <en></en>
-        </s>
-        <s corresp="rep-49">
-          <grc></grc>
-          <ja></ja>
-          <en></en>
-        </s>
-        <s corresp="rep-50">
-          <grc></grc>
-          <ja></ja>
-          <en></en>
-        </s>
-        <s corresp="rep-51">
-          <grc></grc>
-          <ja></ja>
-          <en></en>
-        </s>
-        <s corresp="rep-52">
-          <grc></grc>
-          <ja></ja>
-          <en></en>
-        </s>
-        <s corresp="rep-53">
-          <grc>ὥσπερ γεωργὸς τὰ μὲν ἥμερα τρέφων καὶ τιθασεύων,</grc>
-          <ja>ちょうど農夫が、飼い慣らされたものを養い馴らし、</ja>
-          <en>just as a farmer nurtures and tames the cultivated growths,</en>
-        </s>
-        <s corresp="rep-54">
-          <grc></grc>
-          <ja></ja>
-          <en></en>
-        </s>
-        <s corresp="rep-55">
-          <grc>τὰ δὲ ἄγρια ἀποκωλύων φύεσθαι.</grc>
-          <ja>野生のものが生え育つのを妨げるように。</ja>
-          <en>but prevents the wild ones from growing.</en>
-        </s>
+        <ab>
+          <s xml:id="grc-1" corresp="republic_tei.xml#rep-1">ἐπειδὴ ἐνταῦθα λόγου γεγόναμεν,</s>
+          <s xml:id="grc-2" corresp="republic_tei.xml#rep-2">πάλιν ἀναλάβωμεν τὰ πρῶτα λεχθέντα.</s>
+          <s xml:id="grc-3" corresp="republic_tei.xml#rep-3" cert="low">ἦν δέ πού τι λεγόμενον,</s>
+          <s xml:id="grc-4" corresp="republic_tei.xml#rep-4">ὅτι λυσιτελοῖ ἀδικία τῷ τελέως μὲν ἀδίκῳ, δοξαζομένῳ δὲ δικαίῳ.</s>
+          <s xml:id="grc-6" corresp="republic_tei.xml#rep-6" cert="low">ἢ οὐχ οὕτως ἐλέχθη;</s>
+          <s xml:id="grc-7" corresp="republic_tei.xml#rep-7" cert="low">οὕτω μὲν οὖν.</s>
+          <s xml:id="grc-8" corresp="republic_tei.xml#rep-8" cert="low">νῦν δή, ἔφην,</s>
+          <s xml:id="grc-9" corresp="republic_tei.xml#rep-9" cert="low">αὐτῷ διαλεγώμεθα, ἐπειδὴ διωμολογησάμεθα,</s>
+          <s xml:id="grc-10" corresp="republic_tei.xml#rep-10" cert="low">τό τε ἀδικεῖν</s>
+          <s xml:id="grc-11" corresp="republic_tei.xml#rep-11" cert="low">καὶ τὸ δίκαια πράττειν,</s>
+          <s xml:id="grc-12" corresp="republic_tei.xml#rep-12" cert="low">ἣν ἑκάτερον ἔχει δύναμιν.</s>
+          <s xml:id="grc-13" corresp="republic_tei.xml#rep-13">πλάσαντες οὖν τῆς ψυχῆς εἰκόνα λόγῳ,</s>
+          <s xml:id="grc-14" corresp="republic_tei.xml#rep-14" cert="low">ἵνα εἰδῇ ὁ ἐκεῖνα λέγων οἷον ἔλεγεν.</s>
+          <!-- rep-16/17: コプト語本文の区切りに合わせ、Χιμαίρας…Κερβέρου の句を rep-16 から rep-17 へ移して再整列（要 Burnet/OCT 確認）。 -->
+          <s xml:id="grc-16" corresp="republic_tei.xml#rep-16" cert="low">οἷαι δὲ μυθολογοῦνται παλαιαὶ γενέσθαι φύσεις,</s>
+          <s xml:id="grc-17" corresp="republic_tei.xml#rep-17" cert="low">ἥ τε Χιμαίρας καὶ Σκύλλης καὶ Κερβέρου, καὶ ἄλλαι τινὲς συχναὶ λέγονται,</s>
+          <s xml:id="grc-18" corresp="republic_tei.xml#rep-18">εἰς μίαν ἰδέαν συνελθεῖν.</s>
+          <s xml:id="grc-19" corresp="republic_tei.xml#rep-19">πλάττε τοίνυν μίαν μὲν ἰδέαν θηρίου ποικίλου καὶ πολυκεφάλου,</s>
+          <s xml:id="grc-21" corresp="republic_tei.xml#rep-21">πλάττε τοίνυν μίαν μὲν ἰδέαν θηρίου ποικίλου καὶ πολυκεφάλου,</s>
+          <s xml:id="grc-22" corresp="republic_tei.xml#rep-22">ἡμέρων δὲ θηρίων ἔχοντος κεφαλὰς κύκλῳ καὶ ἀγρίων,</s>
+          <s xml:id="grc-23" corresp="republic_tei.xml#rep-23">καὶ δυνατοῦ μεταβάλλειν καὶ φύειν ἐξ αὑτοῦ πάντα ταῦτα.</s>
+          <s xml:id="grc-26" corresp="republic_tei.xml#rep-26">μίαν δὴ τοίνυν ἄλλην ἰδέαν λέοντος, μίαν δὲ ἀνθρώπου·</s>
+          <s xml:id="grc-32" corresp="republic_tei.xml#rep-32">πολὺ δὲ μέγιστον ἔστω τὸ πρῶτον καὶ δεύτερον τὸ δεύτερον.</s>
+          <s xml:id="grc-34" corresp="republic_tei.xml#rep-34">σύναπτε τοίνυν αὐτὰ εἰς ἓν τρία ὄντα, ὥστε πῃ συμπεφυκέναι ἀλλήλοις.</s>
+          <s xml:id="grc-36" corresp="republic_tei.xml#rep-36">περίπλασον δὴ αὐτοῖς ἔξωθεν ἑνὸς εἰκόνα, τὴν τοῦ ἀνθρώπου,</s>
+          <s xml:id="grc-37" corresp="republic_tei.xml#rep-37">ὥστε τῷ μὴ δυναμένῳ τὰ ἐντὸς ὁρᾶν, ἀλλὰ τὸ ἔξω μόνον ἔλυτρον ὁρῶντι,</s>
+          <s xml:id="grc-39" corresp="republic_tei.xml#rep-39">ἓν ζῷον φαίνεσθαι, ἄνθρωπον.</s>
+          <s xml:id="grc-41" corresp="republic_tei.xml#rep-41">λέγωμεν δὴ τῷ λέγοντι ὡς λυσιτελεῖ τούτῳ τῷ ἀνθρώπῳ ἀδικεῖν,</s>
+          <s xml:id="grc-42" corresp="republic_tei.xml#rep-42">δικαιοπραγεῖν δὲ οὐ συμφέρειν.</s>
+          <s xml:id="grc-53" corresp="republic_tei.xml#rep-53">ὥσπερ γεωργὸς τὰ μὲν ἥμερα τρέφων καὶ τιθασεύων,</s>
+          <s xml:id="grc-55" corresp="republic_tei.xml#rep-55">τὰ δὲ ἄγρια ἀποκωλύων φύεσθαι.</s>
+        </ab>
+      </div>
+      <div type="translation" xml:lang="ja">
+        <ab>
+          <seg corresp="#grc-1">議論がここまで来たのだから、</seg>
+          <seg corresp="#grc-2">最初に語られたことを改めて取り上げよう。</seg>
+          <seg corresp="#grc-3">たしか、こう言われていたはずだ——</seg>
+          <seg corresp="#grc-4">完全に不正でありながら正しいと思われている者にこそ、不正は利益になる、という主張だ。</seg>
+          <seg corresp="#grc-6">——あるいは、そう言われたのではなかったか。</seg>
+          <seg corresp="#grc-7">「いかにも、そのとおり」。</seg>
+          <seg corresp="#grc-8">「では今こそ」、と私は言った、</seg>
+          <seg corresp="#grc-9">彼と論じ合おう、われわれは(すでに)合意したのだから——</seg>
+          <seg corresp="#grc-10">不正をなすことと、</seg>
+          <seg corresp="#grc-11">正しいことをなすことが、</seg>
+          <seg corresp="#grc-12">それぞれが持つその力を。</seg>
+          <seg corresp="#grc-13">では言葉によって魂の像をかたどり、</seg>
+          <seg corresp="#grc-14">かのことを語った者が、自分が何を語っていたかを知るために。</seg>
+          <seg corresp="#grc-16">また、古来生じたと語り伝えられる本性のうち——</seg>
+          <seg corresp="#grc-17">すなわちキマイラ・スキュラ・ケルベロス、そして他にも多くのものが語り伝えられている——</seg>
+          <seg corresp="#grc-18">それらが一つの形へと合わさるような像を。</seg>
+          <seg corresp="#grc-19">そこでまず、多彩で多頭の獣の形を一つかたどれ。</seg>
+          <seg corresp="#grc-21">そこでまず、多彩で多頭の獣の形を一つかたどれ。</seg>
+          <seg corresp="#grc-22">飼い慣らされた獣と野生の獣の頭を周囲にめぐらせ、</seg>
+          <seg corresp="#grc-23">それらすべてを自らのうちから変化させ生み出しうる獣を。</seg>
+          <seg corresp="#grc-26">次にもう一つ、獅子の形を、そしてもう一つ、人間の形をかたどれ。</seg>
+          <seg corresp="#grc-32">第一のものを遥かに最大とし、第二のものを二番目の大きさとせよ。</seg>
+          <seg corresp="#grc-34">そこで、三つあるそれらを一つに結び合わせ、互いに癒合させよ。</seg>
+          <seg corresp="#grc-36">そしてそれらの外側に、人間という一つのものの像を塗り重ねよ。</seg>
+          <seg corresp="#grc-37">内側を見ることのできない者、外側の覆いだけを見る者には、</seg>
+          <seg corresp="#grc-39">一つの生き物、すなわち人間に見えるように。</seg>
+          <seg corresp="#grc-41">では、この人間にとって不正を行なうことが益になると言う者に向かって言おう、</seg>
+          <seg corresp="#grc-42">正義を行なうことは益にならない、と説く者に対して。</seg>
+          <seg corresp="#grc-53">ちょうど農夫が、飼い慣らされたものを養い馴らし、</seg>
+          <seg corresp="#grc-55">野生のものが生え育つのを妨げるように。</seg>
+        </ab>
+      </div>
+      <div type="translation" xml:lang="en">
+        <ab>
+          <seg corresp="#grc-1">Since we have come to this point in the argument,</seg>
+          <seg corresp="#grc-2">let us take up again the things first said.</seg>
+          <seg corresp="#grc-3">There was, I believe, something said—</seg>
+          <seg corresp="#grc-4">—that injustice profits the one who is perfectly unjust yet reputed to be just.</seg>
+          <seg corresp="#grc-6">—or was it not put in this way?</seg>
+          <seg corresp="#grc-7">“Just so, then.”</seg>
+          <seg corresp="#grc-8">“Now then,” I said,</seg>
+          <seg corresp="#grc-9">let us reason with him, since we have agreed—</seg>
+          <seg corresp="#grc-10">both the doing of injustice</seg>
+          <seg corresp="#grc-11">and the doing of just things,</seg>
+          <seg corresp="#grc-12">what power each of them has.</seg>
+          <seg corresp="#grc-13">Having molded, then, in words an image of the soul,</seg>
+          <seg corresp="#grc-14">so that he who said those things may see what sort of thing he was saying.</seg>
+          <seg corresp="#grc-16">and such ancient natures as are storied to have come into being—</seg>
+          <seg corresp="#grc-17">namely the Chimaera, Scylla, and Cerberus, and various others, too, are spoken of—</seg>
+          <seg corresp="#grc-18">to come together into a single form.</seg>
+          <seg corresp="#grc-19">Mold, then, a single form of a manifold, many-headed beast,</seg>
+          <seg corresp="#grc-21">Mold, then, a single form of a manifold, many-headed beast,</seg>
+          <seg corresp="#grc-22">having heads of tame and of wild beasts all around,</seg>
+          <seg corresp="#grc-23">and able to change and to grow all of these out of itself.</seg>
+          <seg corresp="#grc-26">Then another single form, of a lion, and one of a man;</seg>
+          <seg corresp="#grc-32">but let the first be by far the largest, and the second, second.</seg>
+          <seg corresp="#grc-34">Now join them—being three—into one, so that they have somehow grown together with one another.</seg>
+          <seg corresp="#grc-36">Then mold around them, on the outside, the image of one—that of the man—</seg>
+          <seg corresp="#grc-37">so that, to one unable to see what is within but seeing only the outer shell,</seg>
+          <seg corresp="#grc-39">it appears as a single creature, a man.</seg>
+          <seg corresp="#grc-41">Let us say, then, to him who claims that it profits this man to do injustice,</seg>
+          <seg corresp="#grc-42">and that to act justly does not benefit him.</seg>
+          <seg corresp="#grc-53">just as a farmer nurtures and tames the cultivated growths,</seg>
+          <seg corresp="#grc-55">but prevents the wild ones from growing.</seg>
+        </ab>
       </div>
     </body>
   </text>

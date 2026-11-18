@@ -228,7 +228,43 @@ index.html(目次:全53文書)
 <w type="N" lemma="ⲥⲟⲫⲓⲁ" xml:lang="grc">ⲥⲟⲫⲓⲁ</w>
 ```
 `@type`=品詞、`@lemma`=レンマ、ギリシア借用語は `@xml:lang="grc"`。セグメント `<s>` は
-`@source="marcion:…"`・通し番号 `@n`、対訳 `@transJa`/`@transEn`、主題 `@ana` を持ちます。
+`xml:id`・通し番号 `@n`・主題 `@ana` を持ちます。冒頭と奥書のセグメントは `<s type="incipit">`・`<s type="colophon">`。
+
+続けて書かれる**語群**（bound group。正書法上の 1 語）は `<phr>` でまとめます。Coptic SCRIPTORIUM の TEI と同じ書き方です。
+```xml
+<s xml:id="rep-1" n="1">
+  <phr>
+    <w type="PREP" lemma="ⲛ">ⲛ</w>
+    <w type="ART" lemma="ⲟⲩ">ⲟⲩ</w>
+    <w type="N" lemma="ⲗⲟⲅⲟⲥ" ana="#gl-discussion" xml:lang="grc">ⲗⲟⲅⲟⲥ</w>
+  </phr>
+</s>
+```
+**対訳**は `<s>` の中には書きません。同じ証本の `<body>` の末尾に、言語ごとの `<div type="translation">` を置き、
+`@corresp` で本文の `<s>` と対応づけます。
+```xml
+<div type="translation" xml:lang="ja">
+  <ab>
+    <seg corresp="#rep-1">さて、議論がこの段階に至ったからには、</seg>
+  </ab>
+</div>
+```
+**文脈上の語釈**（その箇所での意味。辞書の語義とは別のもの）は、`<w>` の `@ana` が `<standOff>` の `<interp>` を指す形で持ちます。
+同じ語釈は 1 つの `<interp>` を何度でも指せます。`@ana` には、辞書の語義を固定するポインタ（`#lex-…`。下の ② を参照）と
+語釈のポインタ（`#gl-…`）を、空白で区切って並べて書けます。
+```xml
+<standOff>
+  <interpGrp type="gloss" xml:lang="en">
+    <interp xml:id="gl-discussion">discussion</interp>
+  </interpGrp>
+</standOff>
+```
+訳や語釈を足すとき:
+
+- **訳を足す**: その言語の `<div type="translation">` に `<seg corresp="#セグメントの xml:id">訳</seg>` を、本文と同じ順番の位置に足します
+  （その言語の `<div>` がまだ無ければ、`<body>` の末尾に作ります）。
+- **語釈を足す**: `<interpGrp type="gloss">` に `<interp xml:id="gl-…">語釈</interp>` を足し、`<w>` に `ana="#gl-…"` を書きます。
+- 書いたあとは `python3 scripts/check_tei.py` で、指す先が切れていないか・同じ `<s>` に訳が 2 つ無いかを確かめられます。
 
 **② コプト語辞書 `eugnostos_lexicon.xml`** — レンマ語義集(419項目):
 ```xml
@@ -254,28 +290,37 @@ index.html(目次:全53文書)
 
 ### TEI スキーマとの適合（2026-11-18 時点）
 
-TEI P5 の汎用スキーマ `tei_all.rng`（P5 4.3.0）で確かめた状態です。
+`data/` の 7 ファイルと `source/nhc_fulltext_split/tei/` の 56 ファイルは、すべて TEI P5 の汎用スキーマ
+`tei_all.rng`（P5 4.3.0）で妥当です。TEI に無い独自の要素・属性は使っていません。
 
-| ファイル | 状態 |
+2026-11-18 に、それまでの独自の書き方を TEI 標準の書き方に移しました。本文・訳・語釈の中身は変えていません。
+
+| 以前の書き方 | いまの書き方（TEI 標準） |
 |---|---|
-| `data/lexicon.xml`、`data/catalog.xml`、`data/eugnostos_theology.xml`、`data/republic_commentary.xml`、`source/nhc_fulltext_split/tei/*.xml`（56 ファイル） | 妥当 |
-| `data/eugnostos_tei.xml`、`data/republic_tei.xml` | 下の「独自の書き方」を除けば妥当（独自の要素・属性を取り除いた写しで確認） |
-| `data/republic_greek.xml` | 未対応（独自の要素 `<grc>`・`<ja>`・`<en>`、`cert="prov"`、`<div>` 直下の `<s>`） |
+| `<phy>`（語群） | `<phr>` |
+| `<s transJa="…" transEn="…" transFr="…">` | `<div type="translation" xml:lang="…">` の中の `<seg corresp="#…">` |
+| `<w gloss="…">`（文脈上の語釈） | `<w ana="#gl-…">` と `<interp xml:id="gl-…">` |
+| `<s subtype="incipit">`（`@type` なし） | `<s type="incipit">` |
+| ギリシア語層の `<s corresp="rep-1"><grc>…</grc><ja>…</ja><en>…</en></s>` | `<s xml:id="grc-1" corresp="republic_tei.xml#rep-1">…</s>` と、訳の `<div type="translation">` |
+| `cert="prov"`（暫定整列） | `cert="low"` |
 
-**独自の書き方。** 次の 3 つは TEI に無い要素・属性です。ビュワーと検索がこの形で読むので、そのままにしてあります。
+ビュワー（`eugnostos.html`・`republic.html`）と検索（`search.html`）は、以前の書き方のファイルも引き続き読めます。
+以前の書き方のファイルは `python3 scripts/migrate_tei_markup.py ファイル名 --write` で直せます（`--write` を付けなければ、何が変わるかを表示するだけです）。
 
-- 対訳を `<s>` の属性に持つ: `@transJa`・`@transEn`・`@transFr`
-- 形態素を正書法上の語にまとめる `<phy>`
-- 文脈上の語釈を持つ `<w>` の `@gloss`
-
-確かめ方（スキーマはリポジトリに入れていません。TEI のサイトから取得します。約 1 MB）:
+**点検のしかた。** データを直したら、次を実行してください。スキーマでは分からない誤り
+（訳や語釈の指す先が無い、同じ `<s>` に訳が 2 つある、以前の書き方が残っている、など）を報告します。
 
 ```
-curl -O https://tei-c.org/Vault/P5/4.3.0/xml/tei/custom/schema/relaxng/tei_all.rng
-xmllint --noout --relaxng tei_all.rng data/lexicon.xml data/catalog.xml data/eugnostos_theology.xml data/republic_commentary.xml
+python3 scripts/check_tei.py
 ```
 
-TEI のデータを直したら、直す前と後の両方で検証して、メッセージを見比べてください。
+スキーマでの検証も併せて行うには、スキーマを取得して場所を渡します
+（スキーマはリポジトリに入れていません。TEI のサイトから取得します。約 1 MB。`xmllint` は macOS に入っています）。
+
+```
+curl -o ~/Downloads/tei_all.rng https://tei-c.org/Vault/P5/4.3.0/xml/tei/custom/schema/relaxng/tei_all.rng
+python3 scripts/check_tei.py --schema ~/Downloads/tei_all.rng
+```
 
 ## データの性質(重要)
 
@@ -367,6 +412,9 @@ Code is released under the MIT License (see `LICENSE`). Data and texts created b
 - **著作権**: コプト語＝PD、日本語・英語＝本プロジェクト（CC BY 4.0）、ギリシア語＝PD。
 - **2026-11-18 の修正**: `<s>` を `<ab>` で包み（`<div>` の直下には置けないため）、改頁を TEI の `<pb n="…"/>` に統一しました（以前は `<p n>` と `<pd>`）。
   誤記も 2 か所直しています: 大文字の `<W>`（この形態素 `ⲉⲧ` はビュワーにも検索にも出ていませんでした）と、`<lb>` の `breal`（正しくは `break`）。
+- **2026-11-18 の移行（TEI 標準の書き方）**: この README の『国家』の説明に出てくる `<phy>`、`<s>` の属性 `transJa`/`transEn`、`<w gloss>` は、それぞれの時点での書き方です。
+  いまは `<phr>`、`<div type="translation">`、`@ana` → `<interp>` で書いています（上の「TEI スキーマとの適合」に対応表があります）。
+  ギリシア語層 `data/republic_greek.xml` も、`<s xml:id="grc-N" corresp="republic_tei.xml#rep-N">` と訳の `<div type="translation">` に直しました。
 
 
 ## Republic: 辞書リンクを lexicon に分離（改訂）

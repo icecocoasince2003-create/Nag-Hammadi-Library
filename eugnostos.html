@@ -432,12 +432,31 @@ let THEME_LABELS={}, NOTES=[], NOTE_REFS=new Map(), SEGS_III=[], SEGS_V=[], curW
 function getId(el){return el.getAttributeNS(XML_NS,"id")||el.getAttribute("xml:id")||"";}
 function getLang(el){return el.getAttributeNS(XML_NS,"lang")||el.getAttribute("xml:lang")||"";}
 function T(el,tag){return Array.from(el.getElementsByTagNameNS(TEI_NS,tag));}
+/* ポインタの属性（@ana・@corresp。"#id" や "file.xml#id" を空白で区切ったもの）から id を取り出す */
+function ptrIds(el,att){ return (el.getAttribute(att)||"").split(/\s+/).map(x=>x.split("#").pop()).filter(Boolean); }
+/* 対訳: <div type="translation" xml:lang="ja|en|fr"> の中で、@corresp が本文の <s> を指している要素（TEI 標準の書き方）。
+   返り値は {ja:Map(セグメントの id → 訳), en:…}。以前の書き方（<s> の属性 transJa など）は、読む側で併せて見る。 */
+function readTrans(doc){
+  const out={}; if(!doc) return out;
+  T(doc,"div").filter(d=>d.getAttribute("type")==="translation").forEach(d=>{
+    const l=getLang(d); if(!l) return;
+    const m=out[l]||(out[l]=new Map());
+    Array.from(d.getElementsByTagNameNS(TEI_NS,"*")).forEach(e=>{
+      if(!e.hasAttribute("corresp")) return;
+      const tx=e.textContent.replace(/\s+/g," ").trim();
+      ptrIds(e,"corresp").forEach(id=>{ if(!m.has(id)) m.set(id,tx); });
+    });
+  });
+  return out;
+}
+/* 語群（正書法上の 1 語）は TEI の <phr>。以前の書き方 <phy> も読む。 */
+function isGroup(el){ return !!el&&(el.localName==="phr"||el.localName==="phy"); }
 function phyGroups(wEls){ const groups=[]; let curPhy=null,cur=null;
-  wEls.forEach((w,idx)=>{ const p=w.parentNode; const phy=(p&&p.localName==="phy")?p:null;
+  wEls.forEach((w,idx)=>{ const p=w.parentNode; const phy=isGroup(p)?p:null;
     if(phy&&phy===curPhy){ cur.push(idx); } else { cur=[idx]; groups.push(cur); curPhy=phy; } });
   return groups; }
 /* document-order stream of a segment: words (by flat index), line breaks, page breaks, gaps.
-   Handles markers at 3 levels: direct child of <s>, inside <phy>, and inside a split <w>. */
+   Handles markers at 3 levels: direct child of <s>, inside <phr>, and inside a split <w>. */
 function buildFlow(sEl){
   const flow=[]; let wi=0;
   const addMark=el=>{ const ln=el.localName;
@@ -449,7 +468,7 @@ function buildFlow(sEl){
     node.childNodes.forEach(c=>{
       if(c.nodeType!==1) return;
       const ln=c.localName;
-      if(ln==="phy"){ flow.push({k:"phyo"}); walk(c); flow.push({k:"phyc"}); }
+      if(isGroup(c)){ flow.push({k:"phyo"}); walk(c); flow.push({k:"phyc"}); }
       else if(ln==="w"){ flow.push({k:"w", i:wi}); wi++;
         Array.from(c.children).forEach(ch=>addMark(ch)); } // lb/pd that split this word
       else if(ln==="lb"||ln==="pb"||ln==="pd"||ln==="p"||ln==="gap"){ addMark(c); }
@@ -558,6 +577,7 @@ function parse(){
     LEXMAP.get(lemma).push(sense);
   });
   // witnesses from the text file
+  const TR=readTrans(DOC_MAIN);
   const wit=id=>{
     const t=Array.from(T(DOC_MAIN,"text")).find(x=>getId(x)===id);
     if(!t) return [];
@@ -566,17 +586,20 @@ function parse(){
         const lemma=w.getAttribute("lemma")||w.textContent;
         const type=w.getAttribute("type")||"";
         // a token may pin a specific homograph via @ana="#lex-…-n"
-        const pin=(w.getAttribute("ana")||"").split("#").pop();
+        // （@ana には文脈上の語釈 #gl-… など他のポインタも並ぶので、辞書の項目を指すものだけを固定に使う）
+        const pin=ptrIds(w,"ana").find(id=>(LEXMAP.get(lemma)||[]).some(x=>x.id===id))||"";
         const r=resolveSenses(lemma,type,pin), def=r.def;
         return {form:w.textContent, lemma, senses:r.cands, others:r.others, how:r.how, defId:def.id||"",
           pos:type||def.pos||"X",
           gloss:def.en||"", glossJa:def.ja||"", glossFr:def.fr||"",
           grc:getLang(w)==="grc", amb:r.cands.length>1};
       });
-      return {id:getId(s), n:s.getAttribute("n")||"", sub:s.getAttribute("subtype")||"",
+      const sid=getId(s), tr=l=>(TR[l]&&TR[l].get(sid))||"";
+      // 冒頭・奥書の印は <s type="incipit">（以前の書き方は @subtype）。対訳は <div type="translation">（以前の書き方は <s> の属性）
+      return {id:sid, n:s.getAttribute("n")||"", sub:s.getAttribute("subtype")||s.getAttribute("type")||"",
         themes:(s.getAttribute("ana")||"").split(/\s+/).map(x=>x.split("#").pop()).filter(Boolean),
-        transJa:s.getAttribute("transJa")||"", transEn:s.getAttribute("transEn")||"",
-        transFr:s.getAttribute("transFr")||"",
+        transJa:tr("ja")||s.getAttribute("transJa")||"", transEn:tr("en")||s.getAttribute("transEn")||"",
+        transFr:tr("fr")||s.getAttribute("transFr")||"",
         corresp:(s.getAttribute("corresp")||"").split("#").pop(),
         gap:T(s,"gap").length>0, words:ws, groups:phyGroups(wEls), flow:buildFlow(s)};
     });
