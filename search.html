@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <!-- コーパス検索・統計ページ（手作業管理）
-     - 見出し下のタブで〈検索〉と〈統計〉を切り替えます（旧 stats.html をこのページに統合。統計は ?view=stats で直接開けます）。
+     - 見出し下のタブで〈検索〉〈統計〉〈チュートリアル〉を切り替えます（旧 stats.html をこのページに統合。統計は ?view=stats、
+       チュートリアルは ?view=tutorial で直接開けます）。
        左の〈文書〉〈品詞〉の絞り込みは、検索と統計の両方に共通です。
      - 既定で注釈つきの全文書を横断します。左の〈文書〉一覧で証本ごとに絞り込めます。
        旧URL（?doc=republic / ?doc=eugnostos）は、その文書だけを選択した状態で開きます。
@@ -17,6 +18,9 @@
        行をクリックすると語義の詳細と用例（KWIC）を開き、用例から全文表示の該当箇所 (#seg-ID) へ移動できます。
      - 〈統計〉は、選択中の証本・品詞の範囲を TEI から直接集計します（検索語には依存しません）。
        セクションを増やすときは JS 内の SECTIONS 配列に1要素 push するだけで、目次と本体が自動生成されます。
+     - 〈チュートリアル〉は検索の使い方の説明（#viewGuide に静的な三言語の HTML で書く）。〈試す〉で例の式を〈検索〉で実行します。
+       節（<section class="tut-sec" id="tut-…">）を足すと目次に自動で加わります。…?view=tutorial#tut-regex のように節へ直接リンクできます。
+       例を足す・変えるときは、実際の本文で1件以上一致することを確かめてください（例の書き方は #viewGuide 冒頭のコメント）。
      - 活用型: 辞書の <entry><gramGrp><iType> と、本文の <w @msd> を読み込みます（未付与の間は「—」）。
      - 同形異義語の参照はビュワーと同じ規則（@ana による固定 → レンマ＋品詞 → レンマのみ）。
      - UI言語は site.js の三言語切替（html[data-i18n="full"]）に従います。
@@ -24,7 +28,7 @@
      - 品詞列・詳細式は assets/corpus-query.js を Worker 内で実行し、形態素の並びをセグメント単位で検索します
        （<s> と証本の境界、<s> の中の欠損 <gap> をまたぐ一致は返しません）。
        対応する式と制限: docs/CORPUS_SEARCH.md。ANNIS/AQL の全機能への対応ではありません。
-     URL パラメータ: view=stats（統計を開く）, q=検索語, kind=word|pos|aql（検索方式）, m=part|pre|ex（一致方法）, f=flg（対象: f語形 lレンマ g語義）,
+     URL パラメータ: view=stats|tutorial（統計・チュートリアルを開く）, q=検索語, kind=word|pos|aql（検索方式）, m=part|pre|ex（一致方法）, f=flg（対象: f語形 lレンマ g語義）,
                      w=証本ID（カンマ区切り）, xpos=除外する品詞 -->
 <html lang="ja" data-lang="ja" data-i18n="full" data-mode="dark" data-modes="light dark"
   data-title-en="Corpus search and statistics — Sheneset"
@@ -159,6 +163,13 @@ h1{font-size:1.45rem; font-weight:700; margin:0 0 4px; letter-spacing:.01em}
 .sequence-context mark{color:var(--s-ink)}
 .sequence-annotations{display:flex; flex-wrap:wrap; gap:6px 16px; font-size:.8rem; color:var(--s-mut)}
 .sequence-annotations code{color:var(--s-ink)}
+/* 検索式の早見表（#queryHelp）と、チュートリアルへのリンク */
+.qh{border-collapse:collapse; margin:10px 0 4px}
+.qh th{font-weight:700; color:var(--s-ink); text-align:left; white-space:nowrap; vertical-align:baseline; padding:4px 14px 4px 0}
+.qh td{vertical-align:baseline; padding:4px 0}
+.qh code, .tut code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace,"Noto Sans Coptic"}
+.qh-more a, .empty a, .query-error a{color:var(--s-link); text-underline-offset:3px}
+#howTo{font-size:.8rem; margin-left:2px}
 
 h2.sec{font-size:1rem; font-weight:700; color:var(--s-gold); margin:34px 0 10px; padding-bottom:6px; border-bottom:1px solid var(--s-rule);
   display:flex; align-items:baseline; gap:12px; flex-wrap:wrap}
@@ -297,6 +308,60 @@ table.kw td.rc{color:var(--s-mut); white-space:nowrap; overflow:hidden; max-widt
 .sv-tbl table.st td.barc{width:24%}
 .sv-tbl.narrow{max-width:420px}
 
+/* ---- チュートリアル（#viewGuide。説明文は HTML に静的に書く） ---- */
+.tut-sec{scroll-margin-top:calc(var(--sbh,47px) + 10px); max-width:900px}
+.tut-n{display:inline-grid; place-items:center; min-width:1.75em; height:1.75em; padding:0 .3em; border:1px solid var(--s-gold);
+  border-radius:999px; color:var(--s-acc); font-size:.74rem; font-weight:600; font-variant-numeric:tabular-nums; align-self:center}
+.tut-sec h3{font-size:.88rem; font-weight:700; color:var(--s-ink); margin:22px 0 6px}
+.tut-sec p, .tut-sec li{font-size:.88rem; line-height:1.85}
+.tut-sec p{margin:8px 0; max-width:78ch}
+.tut-sec p.tut-small{font-size:.78rem; color:var(--s-faint)}
+.tut-sec a{color:var(--s-link); text-underline-offset:3px}
+.tut-sec code{font-size:.86em; color:var(--s-acc); background:var(--s-bg2); border:1px solid var(--s-rule2); border-radius:4px;
+  padding:0 .3em; overflow-wrap:anywhere}
+.tut-sec b{color:var(--s-ink)}
+.tut-steps, .tut-notes{margin:10px 0; padding-left:1.5em; max-width:78ch}
+.tut-steps li, .tut-notes li{margin:5px 0}
+.tut-steps li::marker, .tut-notes li::marker{color:var(--s-gold)}
+/* 例：式（左上）・説明（左下）・〈試す〉（右） */
+.tut-exs{margin:14px 0 8px; border-top:1px solid var(--s-rule2); max-width:820px}
+.tut-ex{display:grid; grid-template-columns:minmax(0,1fr) auto; column-gap:16px; align-items:center; padding:10px 0; border-bottom:1px solid var(--s-rule2)}
+.tut-ex > code{justify-self:start; font-size:.95rem; padding:1px 7px}
+.tut-ex > p{grid-column:1; margin:5px 0 0; font-size:.82rem; line-height:1.7; color:var(--s-mut)}
+.tut-ex > .tut-try{grid-column:2; grid-row:1 / span 2}
+.tut-try{white-space:nowrap}
+.tut-try::after{content:" ›"}
+.tut-run .tut-try{margin-left:6px; padding:2px 10px; font-size:.74rem}
+.tut-run small{display:block; margin-top:3px; color:var(--s-mut); font-size:.76rem}
+/* 表 */
+.tut-tbl{overflow-x:auto; margin:12px 0; max-width:880px}
+.tut-tbl table{border-collapse:collapse; font-size:.84rem}
+.tut-tbl th, .tut-tbl td{text-align:left; vertical-align:baseline; padding:7px 14px 7px 0; border-bottom:1px solid var(--s-rule2)}
+.tut-tbl thead th{font-weight:500; font-size:.76rem; color:var(--s-mut); border-bottom:1px solid var(--s-rule); white-space:nowrap}
+.tut-tbl tbody th{font-weight:500; color:var(--s-ink); white-space:nowrap}
+.tut-tbl th small{display:block; font-weight:400; color:var(--s-mut); font-size:.74rem}
+/* 形態素の図（1） */
+.tut-morph th{padding-right:22px}
+.tut-morph td{text-align:center; padding:7px 18px; font-size:1.05rem}
+.tut-morph td small{display:block; font-size:.72rem; color:var(--s-mut)}
+.tut-morph code, .tut-re tbody th code{white-space:nowrap; overflow-wrap:normal}
+.tut-morph tr:first-child td{letter-spacing:.04em; color:var(--s-acc)}
+/* 距離の図（5） */
+.tut-pos{display:inline-flex; gap:4px; vertical-align:middle}
+.tut-pos i{display:inline-grid; place-items:center; width:2.1em; height:1.8em; border:1px solid var(--s-gold); border-radius:5px;
+  font-style:normal; font-size:.8rem; color:var(--s-acc)}
+.tut-pos i.any{border-color:var(--s-edge); color:var(--s-mut)}
+.tut-pos i.opt{border:1px dashed var(--s-edge); color:var(--s-faint)}
+/* 大事な規則の囲み（6） */
+.tut-key{margin:16px 0; padding:2px 18px 6px; border-left:3px solid var(--s-gold); border-radius:0 10px 10px 0; background:var(--s-bg2); max-width:860px}
+.tut-key h3{margin-top:14px}
+/* 品詞タグの一覧（3。renderGuide() が書く） */
+.tut-tags{list-style:none; padding:0; margin:10px 0 4px; columns:3 210px; column-gap:28px; max-width:880px}
+.tut-sec .tut-tags li{display:flex; align-items:baseline; gap:10px; margin:0; padding:3px 0; font-size:.82rem; line-height:1.6;
+  break-inside:avoid; border-bottom:1px solid var(--s-rule2)}
+.tut-tags code{min-width:5.4em; text-align:center}
+.tut-tags .ct{margin-left:auto; color:var(--s-faint); font-size:.74rem; font-variant-numeric:tabular-nums}
+
 @media (max-width: 860px){
   .layout{grid-template-columns:1fr}
   .side{position:static; height:auto; max-height:42vh; border-right:0; border-bottom:1px solid var(--s-rule); padding:16px}
@@ -308,6 +373,14 @@ table.kw td.rc{color:var(--s-mut); white-space:nowrap; overflow:hidden; max-widt
   .sv-bar{grid-template-columns:minmax(92px,132px) minmax(0,1fr) 44px}
   .sv-bars.pc .sv-bar{grid-template-columns:minmax(92px,132px) minmax(0,1fr) 44px 38px}
   .sv-tbl:not(.narrow) table.st{min-width:620px}
+}
+/* 狭い画面のチュートリアル：表の見出しも折り返し、余白を詰める */
+@media (max-width: 560px){
+  .tut-tbl tbody th{white-space:normal}
+  .tut-tbl th, .tut-tbl td{padding-right:10px}
+  .tut-morph th{padding-right:8px}
+  .tut-morph td{padding:6px 7px}
+  .tut-ex{column-gap:10px}
 }
 </style>
 </head>
@@ -350,6 +423,7 @@ table.kw td.rc{color:var(--s-mut); white-space:nowrap; overflow:hidden; max-widt
     <div class="views" role="tablist" aria-label="表示の切替 / View">
       <button type="button" role="tab" id="tabSearch" data-view="search" aria-controls="viewSearch" aria-selected="true"><span class="l-ja">検索</span><span class="l-en">Search</span><span class="l-fr">Recherche</span></button>
       <button type="button" role="tab" id="tabStats" data-view="stats" aria-controls="viewStats" aria-selected="false" tabindex="-1"><span class="l-ja">統計</span><span class="l-en">Statistics</span><span class="l-fr">Statistiques</span></button>
+      <button type="button" role="tab" id="tabGuide" data-view="tutorial" aria-controls="viewGuide" aria-selected="false" tabindex="-1"><span class="l-ja">チュートリアル</span><span class="l-en">Tutorial</span><span class="l-fr">Tutoriel</span></button>
     </div>
 
     <div class="notice" id="loadwarn" hidden></div>
@@ -365,6 +439,8 @@ table.kw td.rc{color:var(--s-mut); white-space:nowrap; overflow:hidden; max-widt
     <div class="query-kind">
       <label for="queryKind"><span class="l-ja">検索方式</span><span class="l-en">Search type</span><span class="l-fr">Type de recherche</span></label>
       <select id="queryKind"><option value="word"></option><option value="pos"></option><option value="aql"></option></select>
+      <!-- 選んでいる検索方式の説明（チュートリアルの節）へ。href は applyQueryControls() が検索方式に合わせて書き換える -->
+      <a class="lnk" id="howTo" href="?view=tutorial#tut-word" data-tut="tut-word"><span class="l-ja">使い方</span><span class="l-en">How to search</span><span class="l-fr">Mode d’emploi</span></a>
     </div>
     <form class="qrow" id="qform" role="search">
       <label class="vh" for="q">検索語 / Query</label>
@@ -374,15 +450,33 @@ table.kw td.rc{color:var(--s-mut); white-space:nowrap; overflow:hidden; max-widt
     <p class="query-hint" id="queryHint"></p>
     <details class="query-help" id="queryHelp" hidden>
       <summary><span class="l-ja">検索式の書き方・例</span><span class="l-en">Query syntax and examples</span><span class="l-fr">Syntaxe et exemples</span></summary>
-      <p><span class="l-ja">品詞列は <code>ART N V</code> のようにタグを空白で区切ります。詳細式はANNISのAQLを参考にした一部の構文に対応します。<code>tok</code>（語形）、<code>lemma</code>、<code>pos</code>（品詞）、<code>msd</code>（形態情報）を指定できます。</span><span class="l-en">Separate POS tags with spaces, e.g. <code>ART N V</code>. Detailed queries support a subset inspired by ANNIS AQL: <code>tok</code> (form), <code>lemma</code>, <code>pos</code> and <code>msd</code>.</span><span class="l-fr">Séparez les étiquettes par des espaces : <code>ART N V</code>. Les requêtes prennent en charge un sous-ensemble inspiré d’AQL (ANNIS) : <code>tok</code> (forme), <code>lemma</code>, <code>pos</code> et <code>msd</code>.</span></p>
+      <!-- 要点だけの早見表。詳しい説明・例は〈チュートリアル〉（#viewGuide）に書き、ここからリンクする -->
+      <table class="qh">
+        <tr><th scope="row"><span class="l-ja">品詞列</span><span class="l-en">POS sequence</span><span class="l-fr">Suite de PdD</span></th>
+          <td><span class="l-ja">品詞タグを空白で区切って並べます: <code>ART N</code>、<code>PREP ART N</code>。タグは大文字で、左の〈品詞〉一覧に載っています。</span><span class="l-en">List POS tags separated by spaces: <code>ART N</code>, <code>PREP ART N</code>. Tags are upper-case; the Part of speech list on the left shows them.</span><span class="l-fr">Listez les étiquettes séparées par des espaces : <code>ART N</code>, <code>PREP ART N</code>. Elles s’écrivent en majuscules ; la liste Partie du discours, à gauche, les donne.</span></td></tr>
+        <tr><th scope="row"><span class="l-ja">条件</span><span class="l-en">Conditions</span><span class="l-fr">Conditions</span></th>
+          <td><span class="l-ja"><code>tok="…"</code> 語形、<code>lemma="…"</code> レンマ、<code>pos="…"</code> 品詞。<code>tok</code> だけなら任意の1形態素です。</span><span class="l-en"><code>tok="…"</code> form, <code>lemma="…"</code> lemma, <code>pos="…"</code> part of speech. <code>tok</code> alone matches any one morpheme.</span><span class="l-fr"><code>tok="…"</code> forme, <code>lemma="…"</code> lemme, <code>pos="…"</code> partie du discours. <code>tok</code> seul correspond à n’importe quel morphème.</span></td></tr>
+        <tr><th scope="row"><span class="l-ja">並び</span><span class="l-en">Order</span><span class="l-fr">Ordre</span></th>
+          <td><span class="l-ja"><code>A . B</code> 直後、<code>A .2 B</code> 2つ後（間に1形態素）、<code>A .1,3 B</code> 1〜3つ後（間に0〜2形態素）。</span><span class="l-en"><code>A . B</code> right after, <code>A .2 B</code> two after (one morpheme between), <code>A .1,3 B</code> one to three after (0–2 between).</span><span class="l-fr"><code>A . B</code> juste après, <code>A .2 B</code> deux après (un morphème entre les deux), <code>A .1,3 B</code> un à trois après (0 à 2 entre les deux).</span></td></tr>
+        <tr><th scope="row"><span class="l-ja">値</span><span class="l-en">Values</span><span class="l-fr">Valeurs</span></th>
+          <td><span class="l-ja"><code>"…"</code> は完全一致（語形・レンマは上線などと大文字・小文字を無視）。<code>/…/</code> は正規表現で、値の全体に一致させます: 含む <code>/.*ⲛⲟⲩⲧ.*/</code>、どちらか <code>/N|NPROP/</code>。</span><span class="l-en"><code>"…"</code> is an exact match (forms and lemmas ignore supralinear strokes and case). <code>/…/</code> is a regular expression that must match the whole value: contains <code>/.*ⲛⲟⲩⲧ.*/</code>, either <code>/N|NPROP/</code>.</span><span class="l-fr"><code>"…"</code> : correspondance exacte (formes et lemmes ignorent traits suscrits et casse). <code>/…/</code> : expression régulière, qui doit couvrir toute la valeur : contient <code>/.*ⲛⲟⲩⲧ.*/</code>, l’un ou l’autre <code>/N|NPROP/</code>.</span></td></tr>
+      </table>
       <div class="query-examples">
         <button type="button" class="btn" data-query-kind="pos" data-query="ART N">ART N</button>
         <button type="button" class="btn" data-query-kind="aql" data-query='pos="ART" . pos="N"'>pos="ART" . pos="N"</button>
-        <button type="button" class="btn" data-query-kind="aql" data-query='pos="ART" .1,3 pos=/N.*/'>pos="ART" .1,3 pos=/N.*/</button>
+        <button type="button" class="btn" data-query-kind="aql" data-query='pos="ART" .1,3 pos="N"'>pos="ART" .1,3 pos="N"</button>
+        <button type="button" class="btn" data-query-kind="aql" data-query='pos="V" . lemma="ⲉⲃⲟⲗ"'>pos="V" . lemma="ⲉⲃⲟⲗ"</button>
+        <button type="button" class="btn" data-query-kind="aql" data-query='lemma="ⲉⲓⲣⲉ"'>lemma="ⲉⲓⲣⲉ"</button>
         <button type="button" class="btn" data-query-kind="aql" data-query="lemma=/.*ⲛⲟⲩⲧ.*/">lemma=/.*ⲛⲟⲩⲧ.*/</button>
+        <button type="button" class="btn" data-query-kind="aql" data-query="pos=/N|NPROP/">pos=/N|NPROP/</button>
       </div>
-      <p><span class="l-ja"><code>.</code> は隣接、<code>.1,3</code> は距離1〜3（間に0〜2形態素）。各形態素の順序を保ち、証本・セグメントをまたいで照合しません。左の品詞フィルターは一致する形態素に適用し、間の形態素を取り除くことはありません。</span><span class="l-en"><code>.</code> means adjacent; <code>.1,3</code> means a distance of 1–3 (0–2 intervening morphemes). Searches preserve morpheme order within each witness and segment. POS filters apply to matched morphemes without removing intervening tokens.</span><span class="l-fr"><code>.</code> signifie adjacent ; <code>.1,3</code> une distance de 1 à 3 (0 à 2 morphèmes intercalés). L’ordre est conservé, sans dépasser le témoin ni le segment. Le filtre de PdD s’applique aux morphèmes trouvés sans supprimer les morphèmes intermédiaires.</span></p>
-      <p><span class="l-ja">正規表現は <code>/…/</code> で囲み、注釈値全体に照合します。部分一致には <code>.*</code> を使用します。JavaScriptのUnicode正規表現で、大文字・小文字と上線などの合成記号を区別します。<code>"…"</code> の語形・レンマは従来の単語検索と同じく合成記号・大文字小文字を無視し、品詞はタグを完全一致で指定します。</span><span class="l-en">Write regex as <code>/…/</code>; it matches the entire annotation value. Use <code>.*</code> for substrings. JavaScript Unicode regex preserves case and combining marks. Literal <code>"…"</code> forms and lemmas ignore case and combining marks like word search; POS tags match exactly.</span><span class="l-fr">Écrivez les expressions régulières entre <code>/…/</code> : elles couvrent la valeur entière. Utilisez <code>.*</code> pour une sous-chaîne. La syntaxe Unicode JavaScript distingue casse et diacritiques. Les formes et lemmes entre <code>"…"</code> ignorent casse et diacritiques ; les étiquettes de PdD correspondent exactement.</span></p>
+      <p class="qh-more"><span class="l-ja">詳しい説明と例（〈チュートリアル〉）:</span><span class="l-en">Explanations and more examples (Tutorial):</span><span class="l-fr">Explications et autres exemples (Tutoriel) :</span>
+        <a href="?view=tutorial#tut-pos" data-tut="tut-pos"><span class="l-ja">品詞列</span><span class="l-en">POS sequences</span><span class="l-fr">suites de PdD</span></a> ·
+        <a href="?view=tutorial#tut-aql" data-tut="tut-aql"><span class="l-ja">詳細式の条件</span><span class="l-en">conditions</span><span class="l-fr">conditions</span></a> ·
+        <a href="?view=tutorial#tut-seq" data-tut="tut-seq"><span class="l-ja">並びと距離</span><span class="l-en">order and distance</span><span class="l-fr">ordre et distance</span></a> ·
+        <a href="?view=tutorial#tut-regex" data-tut="tut-regex"><span class="l-ja">正規表現</span><span class="l-en">regular expressions</span><span class="l-fr">expressions régulières</span></a> ·
+        <a href="?view=tutorial#tut-ref" data-tut="tut-ref"><span class="l-ja">早見表</span><span class="l-en">cheat sheet</span><span class="l-fr">aide-mémoire</span></a> ·
+        <a href="?view=tutorial#tut-trouble" data-tut="tut-trouble"><span class="l-ja">うまくいかないとき</span><span class="l-en">troubleshooting</span><span class="l-fr">en cas de problème</span></a></p>
     </details>
     <div class="opts" id="lexicalOptions">
       <fieldset>
@@ -424,6 +518,323 @@ table.kw td.rc{color:var(--s-mut); white-space:nowrap; overflow:hidden; max-widt
     <div id="sections"></div>
     </div>
 
+    <!-- ═══════ チュートリアル ═══════
+         説明文は静的な三言語の HTML。例の〈試す〉（.tut-try）は、それを囲む .tut-ex / .tut-run の最初の <code> を式として〈検索〉で実行する。
+         data-kind = word | pos | aql（省略時 aql）。単語検索の例は data-m（一致: part|pre|ex）・data-f（対象: f語形 lレンマ g語義）、
+         data-raw は全文テキスト（作業用）の文書のキー（試すときに読み込んで選択に加える）。
+         目次（#tutToc）と〈試す〉の文字は guideStatic() が、品詞タグの一覧（#tutTags）は読み込んだ本文から renderGuide() が作る。
+         例を足すときは、実際の本文で検索して1件以上一致することを確かめてください。 -->
+    <div id="viewGuide" class="tut" role="tabpanel" aria-labelledby="tabGuide" hidden>
+    <p class="lede">
+      <span class="l-ja">検索のしかたを、実際に検索しながら順に説明します。〈試す〉を押すと〈検索〉タブに切り替わり、その式で検索します。〈チュートリアル〉タブに戻ると、読んでいた位置から続けられます。例は、既定の対象（注釈つきの全文書、品詞はすべて）を前提にしています。</span>
+      <span class="l-en">This tutorial explains corpus search step by step, with examples you can run. “Try” switches to the Search tab and runs the example; the Tutorial tab brings you back to where you were reading. The examples assume the default scope (all annotated texts, all parts of speech).</span>
+      <span class="l-fr">Ce tutoriel présente la recherche pas à pas, avec des exemples à lancer. « Essayer » ouvre l’onglet Recherche et lance l’exemple ; l’onglet Tutoriel vous ramène là où vous lisiez. Les exemples supposent la sélection par défaut (tous les textes annotés, toutes les parties du discours).</span>
+    </p>
+    <nav class="sv-toc" id="tutToc" aria-label="目次 / Contents"></nav>
+
+    <section class="tut-sec" id="tut-start">
+      <h2 class="sec"><span class="tut-n">1</span><span class="l-ja">検索の流れ</span><span class="l-en">How searching works</span><span class="l-fr">Principe de la recherche</span></h2>
+      <ol class="tut-steps">
+        <li><span class="l-ja">左の〈文書〉で、検索する文書を選びます。既定では注釈つきの全文書が対象です。文書名にポインターを合わせると出る〈のみ〉で、その文書だけを選べます。</span><span class="l-en">Choose the texts to search under Texts on the left. By default all annotated texts are included. Hover over a text and click “only” to search that text alone.</span><span class="l-fr">Choisissez les textes à interroger sous Textes, à gauche. Par défaut, tous les textes annotés sont inclus. Survolez un texte et cliquez sur « seul » pour n’interroger que lui.</span></li>
+        <li><span class="l-ja">〈検索方式〉を選びます。<b>単語</b>はレンマ・語形・語義（日・英・仏）で探し、結果をレンマごとにまとめます。<b>品詞列</b>は品詞タグの並びで、<b>詳細式</b>は語形・レンマ・品詞の条件とその並び方で探し、一致した箇所を1件ずつ文脈とともに示します。</span><span class="l-en">Pick a search type. <b>Word</b> looks up lemmas, forms and meanings (Japanese, English, French) and groups the results by lemma. <b>POS sequence</b> looks for a run of part-of-speech tags, and <b>Query</b> combines conditions on form, lemma and part of speech with their order; both list every match in context.</span><span class="l-fr">Choisissez un type de recherche. <b>Mot</b> cherche lemmes, formes et sens (japonais, anglais, français) et regroupe les résultats par lemme. <b>Suite de PdD</b> cherche une suite d’étiquettes, et <b>Requête</b> combine des conditions sur la forme, le lemme et la partie du discours avec leur ordre ; toutes deux listent chaque occurrence en contexte.</span></li>
+        <li><span class="l-ja">検索欄に入力します。入力が止まると自動で検索します（品詞列・詳細式は、書きかけの式がエラーにならないよう0.5秒待ちます）。Enter キーか〈検索〉ボタンを押すと、すぐに検索します。</span><span class="l-en">Type in the search box. The search runs when you stop typing (POS sequences and queries wait half a second, so that an unfinished expression is not reported as an error). Press Enter or click Search to run it at once.</span><span class="l-fr">Saisissez votre recherche. Elle se lance dès que vous cessez de taper (les suites et requêtes attendent une demi-seconde, pour qu’une expression inachevée ne soit pas signalée comme erreur). Appuyez sur Entrée ou cliquez sur Rechercher pour la lancer aussitôt.</span></li>
+        <li><span class="l-ja">左の〈品詞〉で、結果に含める品詞を絞り込めます。〈統計〉タブでは、選んだ範囲の語数や品詞の内訳を見られます。</span><span class="l-en">Under Part of speech on the left, you can restrict the results to some parts of speech. The Statistics tab gives counts and breakdowns for the current selection.</span><span class="l-fr">Sous Partie du discours, à gauche, vous pouvez restreindre les résultats à certaines parties du discours. L’onglet Statistiques donne les effectifs et répartitions de la sélection.</span></li>
+      </ol>
+      <h3><span class="l-ja">検索の単位は形態素</span><span class="l-en">The unit of search is the morpheme</span><span class="l-fr">L’unité de recherche est le morphème</span></h3>
+      <p><span class="l-ja">注釈つきの本文では、続けて書かれた1語（語群）を形態素に分け、形態素ごとに語形・レンマ・品詞を付けています。品詞列と詳細式は、この形態素を単位に探します。例えば ⲙⲡⲕⲟⲥⲙⲟⲥ は3つの形態素です。</span><span class="l-en">In the annotated texts, each written word (a bound group) is divided into morphemes, and every morpheme has a form, a lemma and a part of speech. POS sequences and queries search morpheme by morpheme. ⲙⲡⲕⲟⲥⲙⲟⲥ, for example, is three morphemes:</span><span class="l-fr">Dans les textes annotés, chaque mot écrit (groupe lié) est divisé en morphèmes, et chaque morphème porte une forme, un lemme et une partie du discours. Les suites et les requêtes cherchent morphème par morphème. ⲙⲡⲕⲟⲥⲙⲟⲥ, par exemple, compte trois morphèmes :</span></p>
+      <div class="tut-tbl"><table class="tut-morph">
+        <tr><th scope="row"><span class="l-ja">語（語群）</span><span class="l-en">written word</span><span class="l-fr">mot écrit</span></th><td colspan="3" class="cop">ⲙⲡⲕⲟⲥⲙⲟⲥ</td></tr>
+        <tr><th scope="row"><span class="l-ja">語形</span><span class="l-en">form</span><span class="l-fr">forme</span> <code>tok</code></th><td class="cop">ⲙ</td><td class="cop">ⲡ</td><td class="cop">ⲕⲟⲥⲙⲟⲥ</td></tr>
+        <tr><th scope="row"><span class="l-ja">レンマ</span><span class="l-en">lemma</span><span class="l-fr">lemme</span> <code>lemma</code></th><td class="cop">ⲛ</td><td class="cop">ⲡ</td><td class="cop">ⲕⲟⲥⲙⲟⲥ</td></tr>
+        <tr><th scope="row"><span class="l-ja">品詞</span><span class="l-en">part of speech</span><span class="l-fr">partie du discours</span> <code>pos</code></th><td><code>PREP</code><small><span class="l-ja">前置詞</span><span class="l-en">preposition</span><span class="l-fr">préposition</span></small></td><td><code>ART</code><small><span class="l-ja">冠詞</span><span class="l-en">article</span><span class="l-fr">article</span></small></td><td><code>N</code><small><span class="l-ja">名詞</span><span class="l-en">noun</span><span class="l-fr">nom</span></small></td></tr>
+      </table></div>
+      <p><span class="l-ja">1つ目の形態素は、本文に書かれた形（語形）が ⲙ、見出し語（レンマ）が ⲛ です。前置詞 ⲛ は、ⲡ などの唇音の前では ⲙ と書かれます。語形で探すかレンマで探すかで、結果が変わります（<a href="#tut-aql">→ 4</a>）。</span><span class="l-en">The first morpheme is written ⲙ (its form), but its headword (lemma) is ⲛ: the preposition ⲛ is written ⲙ before labials such as ⲡ. Searching by form or by lemma therefore gives different results (<a href="#tut-aql">→ 4</a>).</span><span class="l-fr">Le premier morphème s’écrit ⲙ (sa forme), mais son lemme est ⲛ : la préposition ⲛ s’écrit ⲙ devant une labiale comme ⲡ. Chercher par forme ou par lemme donne donc des résultats différents (<a href="#tut-aql">→ 4</a>).</span></p>
+    </section>
+
+    <section class="tut-sec" id="tut-word">
+      <h2 class="sec"><span class="tut-n">2</span><span class="l-ja">単語で探す</span><span class="l-en">Searching by word</span><span class="l-fr">Chercher un mot</span></h2>
+      <p><span class="l-ja">〈単語〉は、いちばん手軽な検索です。コプト語のレンマ・語形のほか、日本語・英語・フランス語の語義でも探せます。結果はレンマごとに1行にまとまり、品詞・語義・語形・頻度・文書ごとの数を示します。</span><span class="l-en">Word search is the simplest way in. Besides Coptic lemmas and forms, it searches the meanings in Japanese, English and French. Results come one row per lemma, with part of speech, meaning, forms, frequency and counts per text.</span><span class="l-fr">La recherche par mot est la plus simple. Outre les lemmes et formes coptes, elle interroge les sens en japonais, anglais et français. Les résultats donnent une ligne par lemme, avec partie du discours, sens, formes, fréquence et effectifs par texte.</span></p>
+      <div class="tut-exs">
+        <div class="tut-ex" data-kind="word"><code>ⲛⲟⲩⲧⲉ</code>
+          <p><span class="l-ja">コプト語で探します。〈一致〉が〈部分一致〉なので、ⲛⲟⲩⲧⲉ を含むレンマや語形がすべて一致します。</span><span class="l-en">Search in Coptic. Matching is “contains”, so every lemma or form containing ⲛⲟⲩⲧⲉ matches.</span><span class="l-fr">Recherche en copte. La correspondance est « contient » : tout lemme ou toute forme contenant ⲛⲟⲩⲧⲉ est retenu.</span></p>
+          <button type="button" class="btn tut-try"></button></div>
+        <div class="tut-ex" data-kind="word"><code><span class="l-ja">魂</span><span class="l-en">soul</span><span class="l-fr">âme</span></code>
+          <p><span class="l-ja">語義で探します。日本語の語義「魂」から ⲯⲩⲭⲏ が見つかります。英語なら soul、フランス語なら âme でも探せます。</span><span class="l-en">Search by meaning: the English gloss “soul” finds ⲯⲩⲭⲏ. The Japanese 魂 and the French âme work as well.</span><span class="l-fr">Recherche par sens : la glose française « âme » trouve ⲯⲩⲭⲏ. Le japonais 魂 et l’anglais soul fonctionnent aussi.</span></p>
+          <button type="button" class="btn tut-try"></button></div>
+        <div class="tut-ex" data-kind="word" data-m="ex" data-f="l"><code>ⲉⲓⲣⲉ</code>
+          <p><span class="l-ja">〈一致〉を〈完全一致〉、〈対象〉を〈レンマ〉だけにして、レンマ ⲉⲓⲣⲉ「する、作る」だけを探します。語形の欄に、本文に現れた ⲣ・ⲁⲁ・ⲟ などの形がまとまって出ます。</span><span class="l-en">With Matching set to “exact” and only “lemma” ticked, this finds the lemma ⲉⲓⲣⲉ “do, make” alone. The Forms column gathers the shapes found in the text, such as ⲣ, ⲁⲁ and ⲟ.</span><span class="l-fr">Avec la correspondance « exact » et seul « lemme » coché, on obtient le seul lemme ⲉⲓⲣⲉ « faire ». La colonne Formes réunit les formes attestées, comme ⲣ, ⲁⲁ et ⲟ.</span></p>
+          <button type="button" class="btn tut-try"></button></div>
+        <div class="tut-ex" data-kind="word" data-m="pre" data-f="l"><code>ⲁⲣⲭ</code>
+          <p><span class="l-ja">〈前方一致〉で、ⲁⲣⲭ で始まるレンマ（ⲁⲣⲭⲏ、ⲁⲣⲭⲉⲓ、ⲁⲣⲭⲱⲛ など）をまとめて探します。</span><span class="l-en">“Begins with” finds every lemma starting with ⲁⲣⲭ (ⲁⲣⲭⲏ, ⲁⲣⲭⲉⲓ, ⲁⲣⲭⲱⲛ…).</span><span class="l-fr">« Commence par » trouve tous les lemmes en ⲁⲣⲭ (ⲁⲣⲭⲏ, ⲁⲣⲭⲉⲓ, ⲁⲣⲭⲱⲛ…).</span></p>
+          <button type="button" class="btn tut-try"></button></div>
+      </div>
+      <ul class="tut-notes">
+        <li><span class="l-ja">〈対象〉で照合する項目（レンマ・語形・語義）を、〈一致〉で一致のしかた（部分一致＝含む、前方一致＝…で始まる、完全一致）を選びます。語義の完全一致は、「;」や「、」で区切られた語義のどれか1つと同じなら一致します。</span><span class="l-en">“Match in” chooses what is compared (lemma, form, meaning); “Matching” chooses how (contains, begins with, exact). An exact match on meaning succeeds when any one of the meanings separated by “;” or “,” is identical.</span><span class="l-fr">« Chercher dans » choisit ce qui est comparé (lemme, forme, sens) ; « Correspondance », la manière (contient, commence par, exact). En correspondance exacte, un sens est retenu si l’un des sens séparés par « ; » ou « , » est identique.</span></li>
+        <li><span class="l-ja">上線などの合成記号と、大文字・小文字は無視して照合します。</span><span class="l-en">Supralinear strokes and other combining marks, and upper and lower case, are ignored.</span><span class="l-fr">Les traits suscrits et autres signes diacritiques, ainsi que la casse, sont ignorés.</span></li>
+        <li><span class="l-ja">行をクリックすると、辞書の語義・本文中の語釈・用例（KWIC）を開きます。用例の位置をクリックすると、本文の該当箇所へ移動します。列の見出しをクリックすると並べ替えます。</span><span class="l-en">Click a row to open its dictionary senses, in-text glosses and occurrences (KWIC); click the reference of an occurrence to go to the passage. Click a column heading to sort.</span><span class="l-fr">Cliquez sur une ligne pour ouvrir les sens du lexique, les gloses du texte et les occurrences (KWIC) ; cliquez sur la référence d’une occurrence pour aller au passage. Cliquez sur un en-tête de colonne pour trier.</span></li>
+        <li><span class="l-ja">品詞の並びや正規表現は〈単語〉では使えません。〈品詞列〉か〈詳細式〉を選びます。</span><span class="l-en">Word search takes neither POS sequences nor regular expressions: use POS sequence or Query for those.</span><span class="l-fr">La recherche par mot n’accepte ni suites de PdD ni expressions régulières : utilisez Suite de PdD ou Requête.</span></li>
+      </ul>
+    </section>
+
+    <section class="tut-sec" id="tut-pos">
+      <h2 class="sec"><span class="tut-n">3</span><span class="l-ja">品詞の並びで探す（品詞列）</span><span class="l-en">Searching by POS sequence</span><span class="l-fr">Chercher une suite de parties du discours</span></h2>
+      <p><span class="l-ja">〈品詞列〉では、品詞タグを空白で区切って並べます。その順に隣り合って並ぶ形態素を探し、一致した箇所を1件ずつ文脈とともに示します。</span><span class="l-en">In POS sequence, list part-of-speech tags separated by spaces. The search finds morphemes standing next to each other in that order and shows each match in context.</span><span class="l-fr">Dans Suite de PdD, listez les étiquettes séparées par des espaces. La recherche trouve des morphèmes contigus dans cet ordre et montre chaque occurrence en contexte.</span></p>
+      <div class="tut-exs">
+        <div class="tut-ex" data-kind="pos"><code>ART N</code>
+          <p><span class="l-ja">冠詞の直後に名詞（ⲡⲛⲟⲩⲧⲉ の ⲡ＋ⲛⲟⲩⲧⲉ など）。</span><span class="l-en">An article immediately followed by a noun (ⲡ + ⲛⲟⲩⲧⲉ in ⲡⲛⲟⲩⲧⲉ, etc.).</span><span class="l-fr">Un article immédiatement suivi d’un nom (ⲡ + ⲛⲟⲩⲧⲉ dans ⲡⲛⲟⲩⲧⲉ, etc.).</span></p>
+          <button type="button" class="btn tut-try"></button></div>
+        <div class="tut-ex" data-kind="pos"><code>PREP ART N</code>
+          <p><span class="l-ja">前置詞＋冠詞＋名詞（ⲙⲡⲕⲟⲥⲙⲟⲥ など）。</span><span class="l-en">Preposition + article + noun (ⲙⲡⲕⲟⲥⲙⲟⲥ, etc.).</span><span class="l-fr">Préposition + article + nom (ⲙⲡⲕⲟⲥⲙⲟⲥ, etc.).</span></p>
+          <button type="button" class="btn tut-try"></button></div>
+        <div class="tut-ex" data-kind="pos"><code>APST PPER V</code>
+          <p><span class="l-ja">完了の助動詞＋人称代名詞＋動詞（ⲁⲩϫⲡⲟ など）。</span><span class="l-en">Perfect auxiliary + personal pronoun + verb (ⲁⲩϫⲡⲟ, etc.).</span><span class="l-fr">Auxiliaire du parfait + pronom personnel + verbe (ⲁⲩϫⲡⲟ, etc.).</span></p>
+          <button type="button" class="btn tut-try"></button></div>
+        <div class="tut-ex" data-kind="pos"><code>N ADJ</code>
+          <p><span class="l-ja">名詞の直後に形容詞（ⲣⲱⲙⲉ ⲛⲓⲙ など）。</span><span class="l-en">A noun followed by an adjective (ⲣⲱⲙⲉ ⲛⲓⲙ, etc.).</span><span class="l-fr">Un nom suivi d’un adjectif (ⲣⲱⲙⲉ ⲛⲓⲙ, etc.).</span></p>
+          <button type="button" class="btn tut-try"></button></div>
+      </div>
+      <ul class="tut-notes">
+        <li><span class="l-ja">タグは大文字で書き、表記どおりに完全に一致するものだけを探します。<code>N</code> は名詞だけで、固有名詞 <code>NPROP</code> や数詞 <code>NUM</code> は含みません。いくつかの品詞をまとめて探すには、詳細式の正規表現を使います（<a href="#tut-regex">→ 6</a>）。</span><span class="l-en">Tags are written in capitals and must match exactly. <code>N</code> means common nouns only: proper nouns (<code>NPROP</code>) and numerals (<code>NUM</code>) are separate tags. To search several parts of speech at once, use a regular expression in a query (<a href="#tut-regex">→ 6</a>).</span><span class="l-fr">Les étiquettes s’écrivent en majuscules et doivent correspondre exactement. <code>N</code> ne couvre que les noms communs : noms propres (<code>NPROP</code>) et numéraux (<code>NUM</code>) sont à part. Pour chercher plusieurs parties du discours à la fois, utilisez une expression régulière dans une requête (<a href="#tut-regex">→ 6</a>).</span></li>
+        <li><span class="l-ja">隣り合う形態素だけを探します。間に別の形態素が入る並びや、レンマ・語形の指定は、詳細式で書きます。品詞列 <code>ART N</code> は、詳細式 <code>pos="ART" . pos="N"</code> と同じ結果になります（<a href="#tut-seq">→ 5</a>）。</span><span class="l-en">Only adjacent morphemes are matched. To allow other morphemes in between, or to name a lemma or form, write a query; the sequence <code>ART N</code> gives the same results as the query <code>pos="ART" . pos="N"</code> (<a href="#tut-seq">→ 5</a>).</span><span class="l-fr">Seuls des morphèmes contigus sont retenus. Pour admettre d’autres morphèmes entre eux, ou préciser un lemme ou une forme, écrivez une requête ; la suite <code>ART N</code> donne les mêmes résultats que la requête <code>pos="ART" . pos="N"</code> (<a href="#tut-seq">→ 5</a>).</span></li>
+      </ul>
+      <h3><span class="l-ja">品詞タグの一覧</span><span class="l-en">Part-of-speech tags</span><span class="l-fr">Étiquettes des parties du discours</span></h3>
+      <ul class="tut-tags" id="tutTags"></ul>
+      <p class="tut-small" id="tutTagsNote"></p>
+    </section>
+
+    <section class="tut-sec" id="tut-aql">
+      <h2 class="sec"><span class="tut-n">4</span><span class="l-ja">詳細式：形態素の条件を書く</span><span class="l-en">Queries: conditions on a morpheme</span><span class="l-fr">Requêtes : conditions sur un morphème</span></h2>
+      <p><span class="l-ja">〈詳細式〉では、1つの形態素に対する条件を <code>注釈名="値"</code> の形で書きます。条件が1つだけの式は、条件に合う形態素をすべて、1件ずつ文脈とともに示します（〈単語〉と違い、レンマごとにはまとめません）。</span><span class="l-en">In Query, a condition on one morpheme is written <code>annotation="value"</code>. A query with a single condition lists every morpheme that meets it, each in context (unlike Word search, the results are not grouped by lemma).</span><span class="l-fr">Dans Requête, une condition sur un morphème s’écrit <code>annotation="valeur"</code>. Une requête à une seule condition donne chaque morphème qui la remplit, en contexte (contrairement à la recherche par mot, sans regroupement par lemme).</span></p>
+      <div class="tut-tbl"><table>
+        <thead><tr><th><span class="l-ja">注釈名</span><span class="l-en">Annotation</span><span class="l-fr">Annotation</span></th><th><span class="l-ja">対象</span><span class="l-en">What it matches</span><span class="l-fr">Ce qu’elle désigne</span></th><th><span class="l-ja">例</span><span class="l-en">Example</span><span class="l-fr">Exemple</span></th></tr></thead>
+        <tbody>
+          <tr><th scope="row"><code>tok</code> <small><span class="l-ja">（<code>form</code> も同じ）</span><span class="l-en">(or <code>form</code>)</span><span class="l-fr">(ou <code>form</code>)</span></small></th><td><span class="l-ja">語形：本文に書かれた形</span><span class="l-en">the form, as written in the text</span><span class="l-fr">la forme, telle qu’écrite dans le texte</span></td><td class="tut-run" data-kind="aql"><code>tok="ⲉⲓⲣⲉ"</code> <button type="button" class="btn tut-try"></button></td></tr>
+          <tr><th scope="row"><code>lemma</code></th><td><span class="l-ja">レンマ（見出し語）</span><span class="l-en">the lemma (headword)</span><span class="l-fr">le lemme (entrée du lexique)</span></td><td class="tut-run" data-kind="aql"><code>lemma="ⲉⲓⲣⲉ"</code> <button type="button" class="btn tut-try"></button></td></tr>
+          <tr><th scope="row"><code>pos</code> <small><span class="l-ja">（<code>type</code> も同じ）</span><span class="l-en">(or <code>type</code>)</span><span class="l-fr">(ou <code>type</code>)</span></small></th><td><span class="l-ja">品詞タグ</span><span class="l-en">the part-of-speech tag</span><span class="l-fr">l’étiquette de partie du discours</span></td><td class="tut-run" data-kind="aql"><code>pos="NPROP"</code> <button type="button" class="btn tut-try"></button></td></tr>
+          <tr><th scope="row"><code>msd</code></th><td><span class="l-ja">形態情報。いまの本文にはまだ付いていないので、一致しません。</span><span class="l-en">morphological features; not yet supplied in the texts, so nothing matches yet</span><span class="l-fr">traits morphologiques ; pas encore renseignés dans les textes, donc rien ne correspond pour l’instant</span></td><td>—</td></tr>
+        </tbody>
+      </table></div>
+      <p><span class="l-ja">語形とレンマの違いに注意してください。<code>tok="ⲉⲓⲣⲉ"</code> は ⲉⲓⲣⲉ と書かれた箇所だけに一致しますが、<code>lemma="ⲉⲓⲣⲉ"</code> は ⲣ・ⲁⲁ・ⲟ など、レンマが ⲉⲓⲣⲉ の形すべてに一致します。</span><span class="l-en">Mind the difference between form and lemma: <code>tok="ⲉⲓⲣⲉ"</code> matches only where ⲉⲓⲣⲉ is written, while <code>lemma="ⲉⲓⲣⲉ"</code> matches every form of that lemma, such as ⲣ, ⲁⲁ and ⲟ.</span><span class="l-fr">Attention à la différence entre forme et lemme : <code>tok="ⲉⲓⲣⲉ"</code> ne trouve que les passages où ⲉⲓⲣⲉ est écrit, alors que <code>lemma="ⲉⲓⲣⲉ"</code> trouve toutes les formes de ce lemme, comme ⲣ, ⲁⲁ et ⲟ.</span></p>
+      <h3><span class="l-ja">値の書き方</span><span class="l-en">Writing values</span><span class="l-fr">Écrire les valeurs</span></h3>
+      <ul class="tut-notes">
+        <li><span class="l-ja"><code>"…"</code>（二重引用符）は、値と完全に一致するものを探します。語形・レンマは、〈単語〉と同じく、上線などの合成記号と大文字・小文字を無視して比べます。品詞と <code>msd</code> は大文字・小文字も区別します（<code>pos="n"</code> は一致しません）。</span><span class="l-en"><code>"…"</code> (double quotes) looks for an exact value. Forms and lemmas are compared as in Word search, ignoring supralinear strokes and case. Parts of speech and <code>msd</code> are case-sensitive (<code>pos="n"</code> finds nothing).</span><span class="l-fr"><code>"…"</code> (guillemets droits) cherche une valeur exacte. Formes et lemmes sont comparés comme dans la recherche par mot, sans tenir compte des traits suscrits ni de la casse. Parties du discours et <code>msd</code> distinguent la casse (<code>pos="n"</code> ne trouve rien).</span></li>
+        <li><span class="l-ja"><code>/…/</code>（スラッシュ）で囲むと、正規表現として照合します（<a href="#tut-regex">→ 6</a>）。</span><span class="l-en"><code>/…/</code> (slashes) makes the value a regular expression (<a href="#tut-regex">→ 6</a>).</span><span class="l-fr"><code>/…/</code> (barres obliques) fait de la valeur une expression régulière (<a href="#tut-regex">→ 6</a>).</span></li>
+        <li><span class="l-ja">値の中の <code>"</code> と <code>\</code> は、<code>\"</code>、<code>\\</code> と書きます。</span><span class="l-en">Inside a value, write <code>\"</code> for a double quote and <code>\\</code> for a backslash.</span><span class="l-fr">Dans une valeur, écrivez <code>\"</code> pour un guillemet et <code>\\</code> pour une barre oblique inverse.</span></li>
+        <li><span class="l-ja">注釈名は小文字で書きます（<code>POS="N"</code> はエラー）。<code>=</code> や <code>.</code> の前後の空白は、あってもなくても構いません。</span><span class="l-en">Annotation names are lower-case (<code>POS="N"</code> is an error). Spaces around <code>=</code> and <code>.</code> are optional.</span><span class="l-fr">Les noms d’annotation s’écrivent en minuscules (<code>POS="N"</code> est une erreur). Les espaces autour de <code>=</code> et de <code>.</code> sont facultatifs.</span></li>
+        <li><span class="l-ja">値を付けない <code>tok</code> は、どの形態素にも一致します。並びの中で「何でもよい1形態素」を表すときに使います（<a href="#tut-seq">→ 5</a>）。</span><span class="l-en"><code>tok</code> with no value matches any morpheme; use it for “any one morpheme” inside a sequence (<a href="#tut-seq">→ 5</a>).</span><span class="l-fr"><code>tok</code> sans valeur correspond à n’importe quel morphème ; il sert à noter « un morphème quelconque » dans une suite (<a href="#tut-seq">→ 5</a>).</span></li>
+      </ul>
+      <h3><span class="l-ja">1つの形態素に付けられる条件は1つ</span><span class="l-en">One condition per morpheme</span><span class="l-fr">Une condition par morphème</span></h3>
+      <p><span class="l-ja">「レンマが ⲛ で、品詞が前置詞」のように、1つの形態素に2つの条件を付けることはできません。式の条件が1つなら、左の〈品詞〉で品詞を絞ると同じことができます。次の式を試してから、〈品詞〉一覧の〈前置詞〉で〈のみ〉を押すと、前置詞の ⲛ だけが残ります。〈品詞〉の絞り込みは式のすべての条件に掛かるので、終わったら〈品詞〉の〈すべて〉で元に戻してください。</span><span class="l-en">A morpheme cannot carry two conditions, such as “lemma ⲛ and part of speech preposition”. When the query has a single condition, the Part of speech filter on the left does the same job: try the query below, then click “only” next to Preposition in that list, and only the preposition ⲛ remains. The filter applies to every condition of a query, so click “All” in Part of speech afterwards to reset it.</span><span class="l-fr">Un morphème ne peut porter deux conditions, comme « lemme ⲛ et partie du discours préposition ». Si la requête n’a qu’une condition, le filtre Partie du discours, à gauche, fait le même travail : essayez la requête ci-dessous, puis cliquez sur « seul » à côté de Préposition dans cette liste ; seule la préposition ⲛ reste. Ce filtre s’applique à toutes les conditions d’une requête : cliquez ensuite sur « Tout » sous Partie du discours pour le réinitialiser.</span></p>
+      <div class="tut-exs">
+        <div class="tut-ex"><code>lemma="ⲛ"</code>
+          <p><span class="l-ja">レンマ ⲛ は、前置詞のほか、冠詞（複数）や接続法の助動詞などにも付いています。</span><span class="l-en">The lemma ⲛ covers the preposition, but also the plural article, the conjunctive auxiliary and others.</span><span class="l-fr">Le lemme ⲛ couvre la préposition, mais aussi l’article pluriel, l’auxiliaire du conjonctif, etc.</span></p>
+          <button type="button" class="btn tut-try"></button></div>
+      </div>
+    </section>
+
+    <section class="tut-sec" id="tut-seq">
+      <h2 class="sec"><span class="tut-n">5</span><span class="l-ja">詳細式：並びと距離</span><span class="l-en">Queries: order and distance</span><span class="l-fr">Requêtes : ordre et distance</span></h2>
+      <p><span class="l-ja">条件どうしを <code>.</code>（ピリオド）でつなぐと、その順に並ぶ形態素を探します。<code>.</code> の直後に数を書くと、形態素どうしの距離を指定できます。距離 1 が「隣り合う」です。</span><span class="l-en">Joining conditions with <code>.</code> (a full stop) looks for morphemes in that order. A number right after the <code>.</code> sets the distance between them; a distance of 1 means adjacent.</span><span class="l-fr">Relier des conditions par <code>.</code> (un point) cherche des morphèmes dans cet ordre. Un nombre juste après le <code>.</code> fixe la distance entre eux ; une distance de 1 signifie contigus.</span></p>
+      <div class="tut-tbl"><table>
+        <thead><tr><th><span class="l-ja">書き方</span><span class="l-en">Syntax</span><span class="l-fr">Syntaxe</span></th><th><span class="l-ja">意味</span><span class="l-en">Meaning</span><span class="l-fr">Sens</span></th><th aria-hidden="true"></th></tr></thead>
+        <tbody>
+          <tr><th scope="row"><code>A . B</code></th><td><span class="l-ja">B が A の直後（距離 1）</span><span class="l-en">B right after A (distance 1)</span><span class="l-fr">B juste après A (distance 1)</span></td><td aria-hidden="true"><span class="tut-pos"><i>A</i><i>B</i></span></td></tr>
+          <tr><th scope="row"><code>A .2 B</code></th><td><span class="l-ja">B が A のちょうど2つ後（間に1形態素）</span><span class="l-en">B exactly two after A (one morpheme between)</span><span class="l-fr">B exactement deux après A (un morphème entre les deux)</span></td><td aria-hidden="true"><span class="tut-pos"><i>A</i><i class="any">·</i><i>B</i></span></td></tr>
+          <tr><th scope="row"><code>A .1,3 B</code></th><td><span class="l-ja">B が A の1〜3つ後（間に0〜2形態素）</span><span class="l-en">B one to three after A (0–2 morphemes between)</span><span class="l-fr">B un à trois après A (0 à 2 morphèmes entre les deux)</span></td><td aria-hidden="true"><span class="tut-pos"><i>A</i><i class="opt">?</i><i class="opt">?</i><i>B</i></span></td></tr>
+        </tbody>
+      </table></div>
+      <div class="tut-exs">
+        <div class="tut-ex"><code>pos="ART" . pos="N"</code>
+          <p><span class="l-ja">冠詞の直後に名詞。品詞列 <code>ART N</code> と同じです。</span><span class="l-en">An article right before a noun: the same as the sequence <code>ART N</code>.</span><span class="l-fr">Un article juste avant un nom : identique à la suite <code>ART N</code>.</span></p>
+          <button type="button" class="btn tut-try"></button></div>
+        <div class="tut-ex"><code>lemma="ⲡ" . pos="N"</code>
+          <p><span class="l-ja">冠詞 ⲡ（男性・単数）の直後に名詞。レンマと品詞の条件を組み合わせられます。</span><span class="l-en">The article ⲡ (masculine singular) before a noun: lemma and part-of-speech conditions can be combined.</span><span class="l-fr">L’article ⲡ (masculin singulier) avant un nom : on peut combiner conditions de lemme et de partie du discours.</span></p>
+          <button type="button" class="btn tut-try"></button></div>
+        <div class="tut-ex"><code>pos="V" . lemma="ⲉⲃⲟⲗ"</code>
+          <p><span class="l-ja">動詞の直後に ⲉⲃⲟⲗ。ⲟⲩⲱⲛϩ ⲉⲃⲟⲗ「現れる」のような句動詞が見つかります。</span><span class="l-en">A verb followed by ⲉⲃⲟⲗ: finds phrasal verbs such as ⲟⲩⲱⲛϩ ⲉⲃⲟⲗ “appear”.</span><span class="l-fr">Un verbe suivi de ⲉⲃⲟⲗ : trouve des verbes composés comme ⲟⲩⲱⲛϩ ⲉⲃⲟⲗ « apparaître ».</span></p>
+          <button type="button" class="btn tut-try"></button></div>
+        <div class="tut-ex"><code>pos="ART" .2 pos="N"</code>
+          <p><span class="l-ja">冠詞と名詞の間に、ちょうど1つの形態素がある箇所。</span><span class="l-en">An article and a noun with exactly one morpheme between them.</span><span class="l-fr">Un article et un nom séparés par exactement un morphème.</span></p>
+          <button type="button" class="btn tut-try"></button></div>
+        <div class="tut-ex"><code>pos="ART" . tok . pos="N"</code>
+          <p><span class="l-ja">前の例と同じ箇所ですが、間の形態素も一致に含めるので、強調表示と CSV に出ます。</span><span class="l-en">The same places as the previous example, but the morpheme in between is part of the match, so it is highlighted and exported to CSV.</span><span class="l-fr">Les mêmes passages que l’exemple précédent, mais le morphème intercalé fait partie de l’occurrence : il est surligné et exporté en CSV.</span></p>
+          <button type="button" class="btn tut-try"></button></div>
+        <div class="tut-ex"><code>pos="NEG" .1,3 pos="V"</code>
+          <p><span class="l-ja">否定辞から1〜3形態素後に動詞。</span><span class="l-en">A verb one to three morphemes after a negation.</span><span class="l-fr">Un verbe un à trois morphèmes après une négation.</span></p>
+          <button type="button" class="btn tut-try"></button></div>
+        <div class="tut-ex"><code>pos="ART" .1,2 pos="N" .1,2 pos="V"</code>
+          <p><span class="l-ja">3つ以上の条件もつなげます。距離は、それぞれ直前の条件の形態素から数えます。</span><span class="l-en">Three or more conditions can be chained. Each distance is counted from the morpheme matched by the condition just before it.</span><span class="l-fr">On peut enchaîner trois conditions ou plus. Chaque distance se compte à partir du morphème retenu par la condition précédente.</span></p>
+          <button type="button" class="btn tut-try"></button></div>
+      </div>
+      <ul class="tut-notes">
+        <li><span class="l-ja">距離に幅があると、同じ位置から始まる一致が複数返ることがあります。例えば <code>pos="ART" .1,3 pos="N"</code> で、冠詞のあとに名詞が2つ続けば、2件の用例になります。</span><span class="l-en">With a range of distances, several matches can start at the same place: with <code>pos="ART" .1,3 pos="N"</code>, an article followed by two nouns gives two matches.</span><span class="l-fr">Avec une plage de distances, plusieurs occurrences peuvent partir du même endroit : avec <code>pos="ART" .1,3 pos="N"</code>, un article suivi de deux noms donne deux occurrences.</span></li>
+        <li><span class="l-ja">距離は 1〜1,000 で指定します。上限のない <code>.*</code> は使えないので、<code>.1,1000</code> のように書きます。</span><span class="l-en">Distances range from 1 to 1,000. Unbounded <code>.*</code> is not available: write <code>.1,1000</code> instead.</span><span class="l-fr">Les distances vont de 1 à 1 000. La distance illimitée <code>.*</code> n’existe pas : écrivez <code>.1,1000</code>.</span></li>
+        <li><span class="l-ja">距離は形態素で数えます。ⲙⲡⲕⲟⲥⲙⲟⲥ（<a href="#tut-start">→ 1</a>）は3形態素なので、ⲙ から ⲕⲟⲥⲙⲟⲥ までの距離は 2 です。</span><span class="l-en">Distances count morphemes: ⲙⲡⲕⲟⲥⲙⲟⲥ (<a href="#tut-start">→ 1</a>) is three morphemes, so the distance from ⲙ to ⲕⲟⲥⲙⲟⲥ is 2.</span><span class="l-fr">Les distances se comptent en morphèmes : ⲙⲡⲕⲟⲥⲙⲟⲥ (<a href="#tut-start">→ 1</a>) compte trois morphèmes, donc la distance de ⲙ à ⲕⲟⲥⲙⲟⲥ est 2.</span></li>
+        <li><span class="l-ja">一致は1つのセグメント（TEI の <code>&lt;s&gt;</code>。おおむね文にあたる区切り）の中で探します。証本の境界と、セグメントの中の欠損（<code>&lt;gap&gt;</code>）もまたぎません。欠損の前後は、何形態素離れていたか分からないためです。</span><span class="l-en">Matches are sought within one segment (a TEI <code>&lt;s&gt;</code>, roughly a sentence). They never cross a witness boundary or a lacuna (<code>&lt;gap&gt;</code>) inside the segment, since the number of morphemes lost there is unknown.</span><span class="l-fr">Les occurrences sont cherchées dans un seul segment (un <code>&lt;s&gt;</code> TEI, à peu près une phrase). Elles ne franchissent ni la limite d’un témoin ni une lacune (<code>&lt;gap&gt;</code>) du segment, car on ignore combien de morphèmes y manquent.</span></li>
+        <li><span class="l-ja">左の〈品詞〉で外した品詞の形態素は、条件に一致しなくなりますが、距離を数えるときは元の位置に残ります。例えば ART ADV N の ADV を外しても、<code>pos="ART" . pos="N"</code> には一致しません。</span><span class="l-en">Morphemes whose part of speech is unticked on the left no longer match any condition, but they keep their place when distances are counted: unticking ADV in ART ADV N does not make it match <code>pos="ART" . pos="N"</code>.</span><span class="l-fr">Les morphèmes dont la partie du discours est décochée à gauche ne remplissent plus aucune condition, mais gardent leur place dans le calcul des distances : décocher ADV dans ART ADV N ne le fait pas correspondre à <code>pos="ART" . pos="N"</code>.</span></li>
+        <li><span class="l-ja">条件は1つの式に16個までです。</span><span class="l-en">A query can hold up to 16 conditions.</span><span class="l-fr">Une requête compte au plus 16 conditions.</span></li>
+      </ul>
+    </section>
+
+    <section class="tut-sec" id="tut-regex">
+      <h2 class="sec"><span class="tut-n">6</span><span class="l-ja">詳細式：正規表現</span><span class="l-en">Queries: regular expressions</span><span class="l-fr">Requêtes : expressions régulières</span></h2>
+      <p><span class="l-ja">値を <code>"…"</code> の代わりに <code>/…/</code> で囲むと、正規表現（文字の並びのパターン）として照合します。似た形をまとめて探したり、いくつかの値のどれかに一致させたりできます。</span><span class="l-en">Enclose a value in <code>/…/</code> instead of <code>"…"</code> to match it as a regular expression, a pattern of characters. This lets you gather similar forms or accept any of several values.</span><span class="l-fr">Encadrez une valeur par <code>/…/</code> au lieu de <code>"…"</code> pour l’apparier comme expression régulière, un motif de caractères. On peut ainsi réunir des formes voisines ou accepter plusieurs valeurs.</span></p>
+      <div class="tut-key">
+        <h3><span class="l-ja">いちばん大事な規則：値の全体に一致させる</span><span class="l-en">The key rule: match the whole value</span><span class="l-fr">Règle essentielle : couvrir toute la valeur</span></h3>
+        <p><span class="l-ja">正規表現は、値の一部ではなく全体に一致したときだけ一致とみなします。<code>pos=/N/</code> は N だけに一致し、NPROP には一致しません。<code>lemma=/ⲛⲟⲩⲧ/</code> は ⲛⲟⲩⲧⲉ に一致しません。値の一部を探すときは、<code>.*</code>（任意の文字列）を補います。</span><span class="l-en">A regular expression counts only when it matches the whole value, not just part of it. <code>pos=/N/</code> matches N but not NPROP, and <code>lemma=/ⲛⲟⲩⲧ/</code> does not match ⲛⲟⲩⲧⲉ. To look for part of a value, add <code>.*</code> (any characters).</span><span class="l-fr">Une expression régulière n’est retenue que si elle couvre toute la valeur, pas une partie. <code>pos=/N/</code> trouve N mais pas NPROP, et <code>lemma=/ⲛⲟⲩⲧ/</code> ne trouve pas ⲛⲟⲩⲧⲉ. Pour chercher une partie de la valeur, ajoutez <code>.*</code> (n’importe quels caractères).</span></p>
+        <div class="tut-exs">
+          <div class="tut-ex"><code>lemma=/.*ⲛⲟⲩⲧ.*/</code>
+            <p><span class="l-ja">ⲛⲟⲩⲧ を含む（前後に <code>.*</code>）：ⲛⲟⲩⲧⲉ と ⲛⲛⲟⲩⲧⲉ。</span><span class="l-en">Contains ⲛⲟⲩⲧ (<code>.*</code> on both sides): ⲛⲟⲩⲧⲉ and ⲛⲛⲟⲩⲧⲉ.</span><span class="l-fr">Contient ⲛⲟⲩⲧ (<code>.*</code> des deux côtés) : ⲛⲟⲩⲧⲉ et ⲛⲛⲟⲩⲧⲉ.</span></p>
+            <button type="button" class="btn tut-try"></button></div>
+          <div class="tut-ex"><code>lemma=/ⲁⲣⲭ.*/</code>
+            <p><span class="l-ja">ⲁⲣⲭ で始まる（後ろに <code>.*</code>）。</span><span class="l-en">Begins with ⲁⲣⲭ (<code>.*</code> after it).</span><span class="l-fr">Commence par ⲁⲣⲭ (<code>.*</code> après).</span></p>
+            <button type="button" class="btn tut-try"></button></div>
+          <div class="tut-ex"><code>lemma=/.*ⲟⲥ/</code>
+            <p><span class="l-ja">ⲟⲥ で終わる（前に <code>.*</code>）。ⲕⲟⲥⲙⲟⲥ や ⲁⲅⲅⲉⲗⲟⲥ など、ギリシア語に由来する語が多く見つかります。</span><span class="l-en">Ends with ⲟⲥ (<code>.*</code> before it): mostly words of Greek origin, such as ⲕⲟⲥⲙⲟⲥ and ⲁⲅⲅⲉⲗⲟⲥ.</span><span class="l-fr">Se termine par ⲟⲥ (<code>.*</code> avant) : surtout des mots d’origine grecque, comme ⲕⲟⲥⲙⲟⲥ et ⲁⲅⲅⲉⲗⲟⲥ.</span></p>
+            <button type="button" class="btn tut-try"></button></div>
+        </div>
+      </div>
+      <h3><span class="l-ja">よく使う記号</span><span class="l-en">Common symbols</span><span class="l-fr">Symboles courants</span></h3>
+      <div class="tut-tbl"><table class="tut-re">
+        <thead><tr><th><span class="l-ja">記号</span><span class="l-en">Symbol</span><span class="l-fr">Symbole</span></th><th><span class="l-ja">意味</span><span class="l-en">Meaning</span><span class="l-fr">Sens</span></th><th><span class="l-ja">例</span><span class="l-en">Example</span><span class="l-fr">Exemple</span></th></tr></thead>
+        <tbody>
+          <tr><th scope="row"><code>.</code></th><td><span class="l-ja">任意の1文字</span><span class="l-en">any one character</span><span class="l-fr">un caractère quelconque</span></td><td class="tut-run"><code>tok=/ϣ.ⲡⲉ/</code> <button type="button" class="btn tut-try"></button><small>→ ϣⲱⲡⲉ</small></td></tr>
+          <tr><th scope="row"><code>*</code></th><td><span class="l-ja">直前の文字（やまとまり）の0回以上の繰り返し。<code>.*</code> で「任意の文字列」</span><span class="l-en">the preceding character (or group) zero or more times; <code>.*</code> is “any characters”</span><span class="l-fr">le caractère (ou groupe) précédent, zéro fois ou plus ; <code>.*</code> = « n’importe quels caractères »</span></td><td class="tut-run"><code>lemma=/ⲁⲣⲭ.*/</code> <button type="button" class="btn tut-try"></button></td></tr>
+          <tr><th scope="row"><code>+</code></th><td><span class="l-ja">1回以上の繰り返し</span><span class="l-en">one or more times</span><span class="l-fr">une fois ou plus</span></td><td class="tut-run"><code>tok=/[ⲁⲉⲏⲓⲟⲩⲱ]+/</code> <button type="button" class="btn tut-try"></button><small><span class="l-ja">→ 母音字だけの語形</span><span class="l-en">→ forms made only of vowel letters</span><span class="l-fr">→ formes faites seulement de voyelles</span></small></td></tr>
+          <tr><th scope="row"><code>?</code></th><td><span class="l-ja">直前の文字（やまとまり）が、あってもなくてもよい</span><span class="l-en">the preceding character (or group) is optional</span><span class="l-fr">le caractère (ou groupe) précédent est facultatif</span></td><td class="tut-run"><code>lemma=/ⲛ?ⲛⲟⲩⲧⲉ/</code> <button type="button" class="btn tut-try"></button><small>→ ⲛⲟⲩⲧⲉ, ⲛⲛⲟⲩⲧⲉ</small></td></tr>
+          <tr><th scope="row"><code>{n,m}</code></th><td><span class="l-ja">n回以上m回以下（<code>{n,}</code> は n回以上）</span><span class="l-en">from n to m times (<code>{n,}</code>: n or more)</span><span class="l-fr">de n à m fois (<code>{n,}</code> : n fois ou plus)</span></td><td class="tut-run"><code>tok=/.{8,}/</code> <button type="button" class="btn tut-try"></button><small><span class="l-ja">→ 8文字以上の語形</span><span class="l-en">→ forms of 8 letters or more</span><span class="l-fr">→ formes de 8 lettres ou plus</span></small></td></tr>
+          <tr><th scope="row"><code>|</code></th><td><span class="l-ja">または</span><span class="l-en">or</span><span class="l-fr">ou</span></td><td class="tut-run"><code>pos=/N|NPROP/</code> <button type="button" class="btn tut-try"></button><small><span class="l-ja">→ 名詞か固有名詞</span><span class="l-en">→ noun or proper noun</span><span class="l-fr">→ nom ou nom propre</span></small></td></tr>
+          <tr><th scope="row"><code>( )</code></th><td><span class="l-ja">まとまりにする。<code>|</code> の範囲を区切ります</span><span class="l-en">groups characters, and limits the reach of <code>|</code></span><span class="l-fr">regroupe des caractères et délimite la portée de <code>|</code></span></td><td class="tut-run"><code>pos=/A(PST|AOR|CONJ)/</code> <button type="button" class="btn tut-try"></button><small>→ APST, AAOR, ACONJ</small></td></tr>
+          <tr><th scope="row"><code>[ ]</code></th><td><span class="l-ja">中のどれか1文字</span><span class="l-en">any one of the characters inside</span><span class="l-fr">l’un des caractères entre crochets</span></td><td class="tut-run"><code>tok=/ϩ[ⲛⲙ]/</code> <button type="button" class="btn tut-try"></button><small>→ ϩⲛ, ϩⲙ</small></td></tr>
+          <tr><th scope="row"><code>[^ ]</code></th><td><span class="l-ja">中にない1文字</span><span class="l-en">any one character not inside</span><span class="l-fr">un caractère absent des crochets</span></td><td class="tut-run"><code>tok=/[^ⲁⲉⲏⲓⲟⲩⲱ]+/</code> <button type="button" class="btn tut-try"></button><small><span class="l-ja">→ 母音字を含まない語形</span><span class="l-en">→ forms without vowel letters</span><span class="l-fr">→ formes sans voyelle</span></small></td></tr>
+          <tr><th scope="row"><code>\</code></th><td><span class="l-ja">次の記号を、ただの文字として扱う</span><span class="l-en">treats the next symbol as a plain character</span><span class="l-fr">traite le symbole suivant comme un caractère ordinaire</span></td><td class="tut-run"><code>tok=/.*\[.*/</code> <button type="button" class="btn tut-try"></button><small><span class="l-ja">→ 補った文字の角括弧を含む語形</span><span class="l-en">→ forms containing brackets for restored letters</span><span class="l-fr">→ formes contenant des crochets de restitution</span></small></td></tr>
+        </tbody>
+      </table></div>
+      <div class="tut-exs">
+        <div class="tut-ex"><code>pos="ART" . lemma=/ⲛⲟⲩⲧⲉ|ⲣⲱⲙⲉ/</code>
+          <p><span class="l-ja">正規表現は並びの中でも使えます。冠詞の直後に ⲛⲟⲩⲧⲉ か ⲣⲱⲙⲉ。</span><span class="l-en">Regular expressions work inside sequences too: an article right before ⲛⲟⲩⲧⲉ or ⲣⲱⲙⲉ.</span><span class="l-fr">Les expressions régulières fonctionnent aussi dans les suites : un article juste avant ⲛⲟⲩⲧⲉ ou ⲣⲱⲙⲉ.</span></p>
+          <button type="button" class="btn tut-try"></button></div>
+        <div class="tut-ex"><code>tok=/\[?ϩ\]?ⲉ/</code>
+          <p><span class="l-ja">語形には、欠損を補った文字を示す角括弧が入ることがあり（<code>[ϩ]ⲉ</code> など）、<code>tok="ϩⲉ"</code> では見つかりません。角括弧があってもなくてもよい式にすると、<code>[ϩ]ⲉ</code> も一致します（レンマで <code>lemma="ϩⲉ"</code> と探す方法もあります）。</span><span class="l-en">Some forms contain square brackets around restored letters (<code>[ϩ]ⲉ</code> and the like), which <code>tok="ϩⲉ"</code> misses. Making the brackets optional catches <code>[ϩ]ⲉ</code> too (searching by lemma, <code>lemma="ϩⲉ"</code>, also works).</span><span class="l-fr">Certaines formes contiennent des crochets autour de lettres restituées (<code>[ϩ]ⲉ</code>, etc.), que <code>tok="ϩⲉ"</code> manque. En rendant les crochets facultatifs, on trouve aussi <code>[ϩ]ⲉ</code> (chercher par lemme, <code>lemma="ϩⲉ"</code>, fonctionne aussi).</span></p>
+          <button type="button" class="btn tut-try"></button></div>
+        <div class="tut-ex"><code>pos=/N.*/</code>
+          <p><span class="l-ja">注意が要る例です。N で始まるタグすべてに一致するので、名詞・固有名詞のほか、数詞 <code>NUM</code> や否定辞 <code>NEG</code> も含みます。名詞と固有名詞だけなら <code>pos=/N|NPROP/</code> と書きます。</span><span class="l-en">A cautionary example: it matches every tag beginning with N, so besides nouns and proper nouns it also takes numerals (<code>NUM</code>) and negations (<code>NEG</code>). For nouns and proper nouns only, write <code>pos=/N|NPROP/</code>.</span><span class="l-fr">Exemple à surveiller : il couvre toutes les étiquettes commençant par N, donc, outre noms et noms propres, les numéraux (<code>NUM</code>) et les négations (<code>NEG</code>). Pour les seuls noms et noms propres, écrivez <code>pos=/N|NPROP/</code>.</span></p>
+          <button type="button" class="btn tut-try"></button></div>
+      </div>
+      <h3><span class="l-ja">知っておくとよいこと</span><span class="l-en">Good to know</span><span class="l-fr">À savoir</span></h3>
+      <ul class="tut-notes">
+        <li><span class="l-ja">正規表現は書いたとおりの文字で照合し、大文字・小文字や上線などの合成記号を区別します（<code>"…"</code> の語形・レンマは区別しません）。</span><span class="l-en">Regular expressions compare characters exactly as written: case and supralinear strokes count (unlike <code>"…"</code> for forms and lemmas).</span><span class="l-fr">Les expressions régulières comparent les caractères tels qu’écrits : la casse et les traits suscrits comptent (contrairement à <code>"…"</code> pour formes et lemmes).</span></li>
+        <li><span class="l-ja">正規表現の中の <code>/</code> は <code>\/</code> と書きます。<code>/…/i</code> のようなフラグは付けられません。</span><span class="l-en">Write <code>\/</code> for a slash inside a pattern. Flags such as <code>/…/i</code> are not available.</span><span class="l-fr">Écrivez <code>\/</code> pour une barre oblique dans un motif. Les options comme <code>/…/i</code> ne sont pas disponibles.</span></li>
+        <li><span class="l-ja">コプト文字の範囲指定 <code>[ⲁ-ⲱ]</code> は思いどおりに働きません。Unicode ではコプト文字の大文字と小文字が交互に並び、ϣ ϥ ϧ ϩ ϫ ϭ ϯ は別の場所にあるためです。文字を並べて書くか（<code>[ⲁⲉⲏⲓⲟⲩⲱ]</code>）、任意のコプト文字には <code>\p{Script=Coptic}</code> を使います。</span><span class="l-en">A Coptic range such as <code>[ⲁ-ⲱ]</code> does not do what you expect: Unicode interleaves Coptic capital and small letters, and ϣ ϥ ϧ ϩ ϫ ϭ ϯ are encoded elsewhere. List the letters (<code>[ⲁⲉⲏⲓⲟⲩⲱ]</code>), or use <code>\p{Script=Coptic}</code> for any Coptic letter.</span><span class="l-fr">Une plage copte comme <code>[ⲁ-ⲱ]</code> ne fonctionne pas comme prévu : Unicode alterne majuscules et minuscules coptes, et ϣ ϥ ϧ ϩ ϫ ϭ ϯ sont codées ailleurs. Énumérez les lettres (<code>[ⲁⲉⲏⲓⲟⲩⲱ]</code>) ou utilisez <code>\p{Script=Coptic}</code> pour toute lettre copte.</span></li>
+        <li><span class="l-ja">処理系は、ブラウザーの JavaScript の正規表現（Unicode モード）です。<code>(.*)*</code> のような繰り返しの入れ子は非常に遅くなることがあり、3秒を超えると検索を中断します。</span><span class="l-en">Patterns run on the browser’s JavaScript regular expressions (Unicode mode). Nested repetition such as <code>(.*)*</code> can be very slow; a search that takes more than 3 seconds is stopped.</span><span class="l-fr">Les motifs sont exécutés par les expressions régulières JavaScript du navigateur (mode Unicode). Des répétitions imbriquées comme <code>(.*)*</code> peuvent être très lentes ; une recherche de plus de 3 secondes est interrompue.</span></li>
+        <li><span class="l-ja">式はそれだけで完結している必要があります。括弧の対応が取れていない式（<code>lemma=/(ⲛⲟⲩⲧⲉ/</code>）はエラーになります。</span><span class="l-en">Each pattern must be complete in itself: unbalanced brackets (<code>lemma=/(ⲛⲟⲩⲧⲉ/</code>) are an error.</span><span class="l-fr">Chaque motif doit être complet : des parenthèses non appariées (<code>lemma=/(ⲛⲟⲩⲧⲉ/</code>) provoquent une erreur.</span></li>
+      </ul>
+    </section>
+
+    <section class="tut-sec" id="tut-results">
+      <h2 class="sec"><span class="tut-n">7</span><span class="l-ja">結果を読む・保存する</span><span class="l-en">Reading and saving results</span><span class="l-fr">Lire et enregistrer les résultats</span></h2>
+      <p><span class="l-ja">〈品詞列〉と〈詳細式〉の結果は、一致した箇所が1件ずつ並びます。1件は3行です。</span><span class="l-en">POS sequence and Query results list one match at a time, in three lines:</span><span class="l-fr">Les résultats des suites et requêtes donnent une occurrence à la fois, sur trois lignes :</span></p>
+      <ol class="tut-steps">
+        <li><span class="l-ja">文書名と § 番号（セグメント）。クリックすると、本文の該当箇所を開きます。</span><span class="l-en">The text and § number (the segment). Click it to open the passage.</span><span class="l-fr">Le texte et le numéro de § (le segment). Cliquez dessus pour ouvrir le passage.</span></li>
+        <li><span class="l-ja">文脈。一致した形態素を強調し、その前後6形態素ずつを示します。離れた形態素の間は「…」で省き、欠損の位置は […] で示します。</span><span class="l-en">The context: matched morphemes are highlighted, with six morphemes on either side. Long stretches between matched morphemes are cut to “…”, and lacunae are shown as […].</span><span class="l-fr">Le contexte : les morphèmes trouvés sont surlignés, avec six morphèmes de part et d’autre. Les longs intervalles entre eux sont abrégés en « … », et les lacunes notées […].</span></li>
+        <li><span class="l-ja">一致した形態素ごとの 語形 · 品詞 · レンマ。</span><span class="l-en">Form · part of speech · lemma of each matched morpheme.</span><span class="l-fr">Forme · partie du discours · lemme de chaque morphème trouvé.</span></li>
+      </ol>
+      <ul class="tut-notes">
+        <li><span class="l-ja">200件ずつ表示し、〈さらに表示〉で続きを出します。一度に取得するのは2,000件までです。</span><span class="l-en">Results appear 200 at a time; “Show more” adds the next ones. At most 2,000 are retrieved.</span><span class="l-fr">Les résultats s’affichent par 200 ; « Afficher plus » ajoute les suivants. Au plus 2 000 sont récupérés.</span></li>
+        <li><span class="l-ja">〈CSV で保存〉は、取得したすべての用例を書き出します。列は witness（証本）、segment（セグメント）、forms（語形）、lemmas（レンマ）、pos（品詞）、morpheme_positions（セグメントの中の位置。1から）、reader（本文へのリンク）です。表計算ソフトで開けます。</span><span class="l-en">“Download CSV” saves every retrieved match, with the columns witness, segment, forms, lemmas, pos, morpheme_positions (position in the segment, from 1) and reader (link to the passage). It opens in any spreadsheet program.</span><span class="l-fr">« Télécharger CSV » enregistre toutes les occurrences récupérées, avec les colonnes witness (témoin), segment, forms (formes), lemmas (lemmes), pos, morpheme_positions (position dans le segment, à partir de 1) et reader (lien vers le passage). Il s’ouvre dans tout tableur.</span></li>
+        <li><span class="l-ja">検索方式・式と、文書・品詞の絞り込みは、ページの URL に保存されます。URL をブックマークしたり人に送ったりすると、同じ検索を開けます。</span><span class="l-en">The search type, the query and the text and POS filters are kept in the page URL: bookmark or share it to reopen the same search.</span><span class="l-fr">Le type de recherche, la requête et les filtres (textes, PdD) sont conservés dans l’URL de la page : ajoutez-la à vos favoris ou partagez-la pour rouvrir la même recherche.</span></li>
+        <li><span class="l-ja">〈単語〉の結果はレンマの表です。行をクリックすると語義と用例を開き、列の見出しで並べ替えます。〈CSV で保存〉は、レンマごとの頻度表を書き出します。</span><span class="l-en">Word search gives a table of lemmas: click a row for senses and occurrences, and a heading to sort. Its “Download CSV” saves a frequency table by lemma.</span><span class="l-fr">La recherche par mot donne un tableau de lemmes : cliquez sur une ligne pour les sens et occurrences, sur un en-tête pour trier. Son « Télécharger CSV » enregistre un tableau de fréquences par lemme.</span></li>
+      </ul>
+    </section>
+
+    <section class="tut-sec" id="tut-raw">
+      <h2 class="sec"><span class="tut-n">8</span><span class="l-ja">全文テキスト（作業用）を探す</span><span class="l-en">Searching the full text (working files)</span><span class="l-fr">Chercher dans le texte intégral (fichiers de travail)</span></h2>
+      <p><span class="l-ja">左の〈全文テキスト（作業用）〉を開くと、ナグ・ハマディ写本 I〜XIII の本文（56文書）を検索に加えられます。選んだ文書だけを読み込みます。注釈は文書によって2通りで、探し方が少し変わります。</span><span class="l-en">Open “Full text (working files)” on the left to add the text of Nag Hammadi Codices I–XIII (56 texts) to the search; only the texts you select are loaded. Their annotation comes in two kinds, which changes how you search:</span><span class="l-fr">Ouvrez « Texte intégral (fichiers de travail) », à gauche, pour ajouter à la recherche le texte des codex I–XIII de Nag Hammadi (56 textes) ; seuls les textes sélectionnés sont chargés. Leur annotation est de deux sortes, ce qui change la manière de chercher :</span></p>
+      <ul class="tut-notes">
+        <li><span class="l-ja"><b>自動注釈の暫定版</b>（一覧に「自動注釈（暫定）」と出る39文書）：品詞・レンマを自動で付けてあり、<code>pos</code>・<code>lemma</code> の条件や〈品詞列〉でも探せます。ただし人の目では確かめておらず、品詞を決められなかった語は <code>X</code>（未注）です。結果と数は目安として扱い、本文ビュワーで確かめてください。</span><span class="l-en"><b>Automatic drafts</b> (the 39 texts marked “automatic annotation (draft)” in the list): parts of speech and lemmas were assigned automatically, so <code>pos</code> and <code>lemma</code> conditions and POS sequences work. They have not been checked by hand, and words that could not be resolved are <code>X</code> (unannotated): treat hits and counts as approximate and check them in the reader.</span><span class="l-fr"><b>Brouillons automatiques</b> (les 39 textes marqués « annotation automatique (provisoire) » dans la liste) : parties du discours et lemmes ont été attribués automatiquement ; les conditions <code>pos</code> et <code>lemma</code> et les suites de PdD fonctionnent. Ils n’ont pas été vérifiés, et les mots non résolus valent <code>X</code> (non annoté) : considérez occurrences et effectifs comme indicatifs et vérifiez-les dans la visionneuse.</span></li>
+        <li><span class="l-ja"><b>未注釈</b>（残りの17文書）：品詞はすべて <code>X</code>、レンマは語形と同じです。語形 <code>tok</code> で探します。</span><span class="l-en"><b>Unannotated</b> (the other 17 texts): every part of speech is <code>X</code> and the lemma is just the form, so search with <code>tok</code>.</span><span class="l-fr"><b>Non annotés</b> (les 17 autres textes) : toutes les parties du discours valent <code>X</code> et le lemme est la forme elle-même ; cherchez avec <code>tok</code>.</span></li>
+        <li><span class="l-ja">語の区切りは自動または元のファイルによるので、冠詞などが次の語とつながったまま残っている箇所があります（ⲧⲯⲩⲭⲏ など）。語の一部を探すときは、前後を <code>.*</code> で受けます。</span><span class="l-en">Word division is automatic or follows the source files, so an article sometimes stays joined to the next word (ⲧⲯⲩⲭⲏ, etc.). To find part of a word, put <code>.*</code> on both sides.</span><span class="l-fr">La division des mots est automatique ou suit les fichiers sources : un article reste parfois joint au mot suivant (ⲧⲯⲩⲭⲏ, etc.). Pour trouver une partie de mot, mettez <code>.*</code> des deux côtés.</span></li>
+        <li><span class="l-ja">暫定版では、一部の語を形態素に分けています（ⲁϥ → ⲁ＋ϥ）。分けた語は、もとの形では一致しません。</span><span class="l-en">In the drafts some words are split into morphemes (ⲁϥ → ⲁ + ϥ); a split word no longer matches its unsplit form.</span><span class="l-fr">Dans les brouillons, certains mots sont divisés en morphèmes (ⲁϥ → ⲁ + ϥ) ; un mot divisé ne correspond plus à sa forme d’origine.</span></li>
+        <li><span class="l-ja">用例の位置をクリックすると、本文ビュワーの該当箇所を開きます。</span><span class="l-en">Click the reference of a match to open the passage in the reader.</span><span class="l-fr">Cliquez sur la référence d’une occurrence pour ouvrir le passage dans la visionneuse.</span></li>
+      </ul>
+      <div class="tut-exs">
+        <div class="tut-ex" data-raw="II-6"><code>tok=/.*ⲯⲩⲭⲏ.*/</code>
+          <p><span class="l-ja">『魂の解明』（NHC II,6。自動注釈の暫定版）を読み込んで検索に加え、ⲯⲩⲭⲏ「魂」を含む語形を探します。</span><span class="l-en">Loads The Exegesis on the Soul (NHC II,6, an automatic draft) into the search and finds forms containing ⲯⲩⲭⲏ “soul”.</span><span class="l-fr">Charge l’Exégèse de l’âme (NHC II,6, brouillon automatique) dans la recherche et trouve les formes contenant ⲯⲩⲭⲏ « âme ».</span></p>
+          <button type="button" class="btn tut-try"></button></div>
+        <div class="tut-ex" data-raw="II-6"><code>lemma="ⲯⲩⲭⲏ"</code>
+          <p><span class="l-ja">暫定版ではレンマでも探せますが、ⲧⲯⲩⲭⲏ のように冠詞とつながったまま残った語は一致しないので、前の例より少なくなります。</span><span class="l-en">Drafts can be searched by lemma too, but words left joined to their article, such as ⲧⲯⲩⲭⲏ, do not match, so this finds fewer than the previous example.</span><span class="l-fr">Les brouillons se cherchent aussi par lemme, mais les mots restés joints à leur article, comme ⲧⲯⲩⲭⲏ, ne correspondent pas : on en trouve moins qu’avec l’exemple précédent.</span></p>
+          <button type="button" class="btn tut-try"></button></div>
+        <div class="tut-ex" data-raw="II-6"><code>tok="ⲁ" . tok="ϥ"</code>
+          <p><span class="l-ja">形態素に分けた ⲁϥ（完了の助動詞＋「彼」）を探します。<code>tok="ⲁϥ"</code> では見つかりません。</span><span class="l-en">Finds ⲁϥ (perfect auxiliary + “he”) split into morphemes; <code>tok="ⲁϥ"</code> finds nothing.</span><span class="l-fr">Trouve ⲁϥ (auxiliaire du parfait + « il ») divisé en morphèmes ; <code>tok="ⲁϥ"</code> ne trouve rien.</span></p>
+          <button type="button" class="btn tut-try"></button></div>
+      </div>
+    </section>
+
+    <section class="tut-sec" id="tut-ref">
+      <h2 class="sec"><span class="tut-n">9</span><span class="l-ja">詳細式の早見表</span><span class="l-en">Query cheat sheet</span><span class="l-fr">Aide-mémoire des requêtes</span></h2>
+      <div class="tut-tbl"><table>
+        <thead><tr><th><span class="l-ja">書き方</span><span class="l-en">Syntax</span><span class="l-fr">Syntaxe</span></th><th><span class="l-ja">意味</span><span class="l-en">Meaning</span><span class="l-fr">Sens</span></th></tr></thead>
+        <tbody>
+          <tr><th scope="row"><code>tok="ⲣⲱⲙⲉ"</code></th><td><span class="l-ja">語形が ⲣⲱⲙⲉ（上線などと大文字・小文字は無視）。<code>form</code> も同じ</span><span class="l-en">the form is ⲣⲱⲙⲉ (supralinear strokes and case ignored); <code>form</code> is the same</span><span class="l-fr">la forme est ⲣⲱⲙⲉ (traits suscrits et casse ignorés) ; <code>form</code> est équivalent</span></td></tr>
+          <tr><th scope="row"><code>lemma="ⲣⲱⲙⲉ"</code></th><td><span class="l-ja">レンマが ⲣⲱⲙⲉ</span><span class="l-en">the lemma is ⲣⲱⲙⲉ</span><span class="l-fr">le lemme est ⲣⲱⲙⲉ</span></td></tr>
+          <tr><th scope="row"><code>pos="N"</code></th><td><span class="l-ja">品詞タグが N（完全一致）。<code>type</code> も同じ</span><span class="l-en">the part-of-speech tag is N (exact); <code>type</code> is the same</span><span class="l-fr">l’étiquette est N (exacte) ; <code>type</code> est équivalent</span></td></tr>
+          <tr><th scope="row"><code>msd="…"</code></th><td><span class="l-ja">形態情報（まだ付いていません）</span><span class="l-en">morphological features (not supplied yet)</span><span class="l-fr">traits morphologiques (pas encore renseignés)</span></td></tr>
+          <tr><th scope="row"><code>tok</code></th><td><span class="l-ja">任意の1形態素</span><span class="l-en">any one morpheme</span><span class="l-fr">un morphème quelconque</span></td></tr>
+          <tr><th scope="row"><code><span class="l-ja">注釈名</span><span class="l-en">name</span><span class="l-fr">nom</span>=/…/</code></th><td><span class="l-ja">正規表現。値の全体に一致したものだけ</span><span class="l-en">regular expression, matching the whole value</span><span class="l-fr">expression régulière, couvrant toute la valeur</span></td></tr>
+          <tr><th scope="row"><code>A . B</code></th><td><span class="l-ja">B が A の直後</span><span class="l-en">B right after A</span><span class="l-fr">B juste après A</span></td></tr>
+          <tr><th scope="row"><code>A .n B</code></th><td><span class="l-ja">B が A の n 形態素後（n は 1〜1,000）</span><span class="l-en">B n morphemes after A (n from 1 to 1,000)</span><span class="l-fr">B n morphèmes après A (n de 1 à 1 000)</span></td></tr>
+          <tr><th scope="row"><code>A .n,m B</code></th><td><span class="l-ja">B が A の n〜m 形態素後</span><span class="l-en">B n to m morphemes after A</span><span class="l-fr">B de n à m morphèmes après A</span></td></tr>
+          <tr><th scope="row"><code>\"</code> <code>\\</code></th><td><span class="l-ja"><code>"…"</code> の中の引用符・バックスラッシュ</span><span class="l-en">a double quote or backslash inside <code>"…"</code></span><span class="l-fr">guillemet ou barre oblique inverse dans <code>"…"</code></span></td></tr>
+          <tr><th scope="row"><code>\/</code></th><td><span class="l-ja"><code>/…/</code> の中のスラッシュ</span><span class="l-en">a slash inside <code>/…/</code></span><span class="l-fr">barre oblique dans <code>/…/</code></span></td></tr>
+        </tbody>
+      </table></div>
+      <h3><span class="l-ja">上限</span><span class="l-en">Limits</span><span class="l-fr">Limites</span></h3>
+      <ul class="tut-notes">
+        <li><span class="l-ja">式は4,096文字・条件16個まで。距離は1,000まで。</span><span class="l-en">Queries: up to 4,096 characters and 16 conditions; distances up to 1,000.</span><span class="l-fr">Requêtes : au plus 4 096 caractères et 16 conditions ; distances jusqu’à 1 000.</span></li>
+        <li><span class="l-ja">結果は2,000件まで。</span><span class="l-en">Up to 2,000 results.</span><span class="l-fr">Au plus 2 000 résultats.</span></li>
+        <li><span class="l-ja">検索が3秒を超えたとき、また候補の組み合わせが多すぎるとき（照合が200万回を超えるとき）は、検索を中断します。</span><span class="l-en">A search stops after 3 seconds, or when it has too many candidate combinations (over 2 million comparisons).</span><span class="l-fr">Une recherche s’arrête après 3 secondes, ou si elle a trop de combinaisons possibles (plus de 2 millions de comparaisons).</span></li>
+      </ul>
+      <h3><span class="l-ja">対応していない書き方</span><span class="l-en">Not supported</span><span class="l-fr">Non pris en charge</span></h3>
+      <p><span class="l-ja">詳細式の記法は、コーパス検索システム ANNIS の検索言語 AQL のうち、注釈の条件と並び（<code>.</code>・<code>.n,m</code>）の部分にならっています。次の書き方には対応していません。</span><span class="l-en">The query syntax follows the part of AQL, the query language of the ANNIS corpus search system, that covers annotation conditions and order (<code>.</code>, <code>.n,m</code>). The following are not supported:</span><span class="l-fr">La syntaxe des requêtes reprend la partie d’AQL, le langage de requête du système ANNIS, qui couvre les conditions sur les annotations et l’ordre (<code>.</code>, <code>.n,m</code>). Ne sont pas pris en charge :</span></p>
+      <ul class="tut-notes">
+        <li><span class="l-ja"><code>&amp;</code> で条件をつなぐ書き方と、<code>#1</code> などの番号による参照（1つの形態素に複数の条件を付ける書き方）</span><span class="l-en">joining conditions with <code>&amp;</code> and referring to them by number (<code>#1</code>), i.e. several conditions on one morpheme</span><span class="l-fr">relier des conditions par <code>&amp;</code> et y renvoyer par numéro (<code>#1</code>), c’est-à-dire plusieurs conditions sur un morphème</span></li>
+        <li><span class="l-ja">式どうしの「または」（<code>|</code> は正規表現の中でだけ使えます）</span><span class="l-en">“or” between whole expressions (<code>|</code> works only inside a regular expression)</span><span class="l-fr">« ou » entre expressions entières (<code>|</code> ne s’emploie qu’à l’intérieur d’une expression régulière)</span></li>
+        <li><span class="l-ja">上限のない距離 <code>.*</code></span><span class="l-en">unbounded distance <code>.*</code></span><span class="l-fr">la distance illimitée <code>.*</code></span></li>
+        <li><span class="l-ja">支配（<code>&gt;</code>）・包含（<code>_i_</code>）などの構造の演算子と、メタデータの条件</span><span class="l-en">structural operators such as dominance (<code>&gt;</code>) and inclusion (<code>_i_</code>), and metadata conditions</span><span class="l-fr">les opérateurs structurels comme la dominance (<code>&gt;</code>) et l’inclusion (<code>_i_</code>), et les conditions sur les métadonnées</span></li>
+        <li><span class="l-ja">正規表現のフラグ（<code>/…/i</code>）</span><span class="l-en">regular-expression flags (<code>/…/i</code>)</span><span class="l-fr">les options d’expression régulière (<code>/…/i</code>)</span></li>
+      </ul>
+    </section>
+
+    <section class="tut-sec" id="tut-trouble">
+      <h2 class="sec"><span class="tut-n">10</span><span class="l-ja">うまくいかないとき</span><span class="l-en">Troubleshooting</span><span class="l-fr">En cas de problème</span></h2>
+      <h3><span class="l-ja">エラーが出たとき</span><span class="l-en">When an error appears</span><span class="l-fr">En cas d’erreur</span></h3>
+      <p><span class="l-ja">エラー文の先頭に、式の何文字目に問題があるかを示します。よくある原因と直し方です。</span><span class="l-en">The message starts with the position (character number) of the problem in the query. Common causes and fixes:</span><span class="l-fr">Le message commence par la position (numéro du caractère) du problème dans la requête. Causes et corrections fréquentes :</span></p>
+      <div class="tut-tbl"><table>
+        <thead><tr><th><span class="l-ja">式</span><span class="l-en">Query</span><span class="l-fr">Requête</span></th><th><span class="l-ja">原因</span><span class="l-en">Cause</span><span class="l-fr">Cause</span></th><th><span class="l-ja">直した式</span><span class="l-en">Fixed</span><span class="l-fr">Corrigée</span></th></tr></thead>
+        <tbody>
+          <tr><th scope="row"><code>pos="N</code></th><td><span class="l-ja">引用符が閉じていない</span><span class="l-en">the quote is not closed</span><span class="l-fr">le guillemet n’est pas fermé</span></td><td class="tut-run"><code>pos="N"</code> <button type="button" class="btn tut-try"></button></td></tr>
+          <tr><th scope="row"><code>POS="N"</code></th><td><span class="l-ja">注釈名は小文字（tok・form・lemma・pos・type・msd）</span><span class="l-en">annotation names are lower-case (tok, form, lemma, pos, type, msd)</span><span class="l-fr">les noms d’annotation sont en minuscules (tok, form, lemma, pos, type, msd)</span></td><td class="tut-run"><code>pos="N"</code> <button type="button" class="btn tut-try"></button></td></tr>
+          <tr><th scope="row"><code>word="ⲣⲱⲙⲉ"</code></th><td><span class="l-ja">使えない注釈名</span><span class="l-en">unknown annotation name</span><span class="l-fr">nom d’annotation inconnu</span></td><td class="tut-run"><code>tok="ⲣⲱⲙⲉ"</code> <button type="button" class="btn tut-try"></button></td></tr>
+          <tr><th scope="row"><code>pos=N</code></th><td><span class="l-ja">値を <code>"…"</code> か <code>/…/</code> で囲んでいない</span><span class="l-en">the value is not in <code>"…"</code> or <code>/…/</code></span><span class="l-fr">la valeur n’est pas entre <code>"…"</code> ou <code>/…/</code></span></td><td class="tut-run"><code>pos="N"</code> <button type="button" class="btn tut-try"></button></td></tr>
+          <tr><th scope="row"><code>pos="ART" pos="N"</code></th><td><span class="l-ja">条件の間に <code>.</code> がない</span><span class="l-en">no <code>.</code> between the conditions</span><span class="l-fr">pas de <code>.</code> entre les conditions</span></td><td class="tut-run"><code>pos="ART" . pos="N"</code> <button type="button" class="btn tut-try"></button></td></tr>
+          <tr><th scope="row"><code>pos="ART" .* pos="N"</code></th><td><span class="l-ja">上限のない距離</span><span class="l-en">unbounded distance</span><span class="l-fr">distance illimitée</span></td><td class="tut-run"><code>pos="ART" .1,1000 pos="N"</code> <button type="button" class="btn tut-try"></button></td></tr>
+          <tr><th scope="row"><code>lemma=/(ⲛⲟⲩⲧⲉ/</code></th><td><span class="l-ja">正規表現の括弧が閉じていない</span><span class="l-en">unclosed bracket in the pattern</span><span class="l-fr">parenthèse non fermée dans le motif</span></td><td class="tut-run"><code>lemma=/(ⲛⲟⲩⲧⲉ)/</code> <button type="button" class="btn tut-try"></button></td></tr>
+        </tbody>
+      </table></div>
+      <h3><span class="l-ja">1件も見つからないとき</span><span class="l-en">When nothing is found</span><span class="l-fr">Quand rien n’est trouvé</span></h3>
+      <ul class="tut-notes">
+        <li><span class="l-ja">品詞タグは大文字です（<code>pos="n"</code> → <code>pos="N"</code>）。</span><span class="l-en">Tags are upper-case (<code>pos="n"</code> → <code>pos="N"</code>).</span><span class="l-fr">Les étiquettes sont en majuscules (<code>pos="n"</code> → <code>pos="N"</code>).</span></li>
+        <li><span class="l-ja">正規表現は値の全体に一致させます（<code>lemma=/ⲛⲟⲩⲧ/</code> → <code>lemma=/ⲛⲟⲩⲧ.*/</code>）。</span><span class="l-en">A pattern must match the whole value (<code>lemma=/ⲛⲟⲩⲧ/</code> → <code>lemma=/ⲛⲟⲩⲧ.*/</code>).</span><span class="l-fr">Un motif doit couvrir toute la valeur (<code>lemma=/ⲛⲟⲩⲧ/</code> → <code>lemma=/ⲛⲟⲩⲧ.*/</code>).</span></li>
+        <li><span class="l-ja">語形とレンマを取り違えていないか確かめます。形の変わる語は、レンマで探すと確実です（<a href="#tut-aql">→ 4</a>）。語形には、補った文字の角括弧が入っていることもあります（<a href="#tut-regex">→ 6</a>）。</span><span class="l-en">Check that form and lemma are not mixed up; words that change shape are best searched by lemma (<a href="#tut-aql">→ 4</a>). Forms may also contain brackets around restored letters (<a href="#tut-regex">→ 6</a>).</span><span class="l-fr">Vérifiez que forme et lemme ne sont pas confondus ; les mots qui changent de forme se cherchent mieux par lemme (<a href="#tut-aql">→ 4</a>). Les formes peuvent aussi contenir des crochets de restitution (<a href="#tut-regex">→ 6</a>).</span></li>
+        <li><span class="l-ja">左の〈文書〉と〈品詞〉の絞り込みを確かめます。</span><span class="l-en">Check the Texts and Part of speech filters on the left.</span><span class="l-fr">Vérifiez les filtres Textes et Partie du discours, à gauche.</span></li>
+        <li><span class="l-ja">セグメントの境界や欠損をまたぐ並びは見つかりません（<a href="#tut-seq">→ 5</a>）。</span><span class="l-en">Sequences crossing a segment boundary or a lacuna are never found (<a href="#tut-seq">→ 5</a>).</span><span class="l-fr">Une suite qui franchit une limite de segment ou une lacune n’est jamais trouvée (<a href="#tut-seq">→ 5</a>).</span></li>
+        <li><span class="l-ja">全文テキストのうち未注釈の17文書では、<code>pos</code> と <code>lemma</code> の条件は使えません。自動注釈の暫定版でも、語が分けきれていなかったり品詞が <code>X</code> だったりして、見つからないことがあります（<a href="#tut-raw">→ 8</a>）。</span><span class="l-en">In the 17 unannotated full texts, <code>pos</code> and <code>lemma</code> conditions do not work; in the automatic drafts, a word may be left unsplit or tagged <code>X</code> (<a href="#tut-raw">→ 8</a>).</span><span class="l-fr">Dans les 17 textes intégraux non annotés, les conditions <code>pos</code> et <code>lemma</code> ne fonctionnent pas ; dans les brouillons automatiques, un mot peut rester non divisé ou valoir <code>X</code> (<a href="#tut-raw">→ 8</a>).</span></li>
+      </ul>
+      <h3><span class="l-ja">検索が中断したとき</span><span class="l-en">When a search is stopped</span><span class="l-fr">Quand une recherche est interrompue</span></h3>
+      <p><span class="l-ja">「候補が多すぎる」「3秒を超えた」と出たときは、条件を増やす・距離を狭める・正規表現を簡単にする・文書を絞り込む、のいずれかを試してください。</span><span class="l-en">If the search reports too many candidates or a 3-second timeout, add conditions, narrow the distances, simplify the regular expression or select fewer texts.</span><span class="l-fr">Si la recherche signale trop de combinaisons ou dépasse 3 secondes, ajoutez des conditions, réduisez les distances, simplifiez l’expression régulière ou sélectionnez moins de textes.</span></p>
+    </section>
+    </div>
+
     <p class="foot">
       <span class="l-ja">本文: <code>data/*_tei.xml</code>（各 <code>&lt;w&gt;</code> の <code>@lemma</code>・<code>@type</code>）／ 語義: <code>data/lexicon.xml</code>（レンマ＋品詞で参照、<code>@ana</code> による語義の固定を優先）／ 文書: <code>data/catalog.xml</code> ／ 全文テキスト: <code>source/nhc_fulltext_split/tei/*.xml</code>（39 文書は <code>@lemma</code>・<code>@type</code> を自動で付けた暫定版、ほかはなし。選んだ文書だけ読み込み）。上線などの合成記号は無視して照合します。ギリシア語借用語の印（grc）は <code>xml:lang="grc"</code> を持つ語のみ。活用型は辞書の <code>&lt;iType&gt;</code> または本文の <code>@msd</code> が付与されると表示されます。</span>
       <span class="l-en">Text: <code>data/*_tei.xml</code> (<code>@lemma</code> and <code>@type</code> of each <code>&lt;w&gt;</code>) · meanings: <code>data/lexicon.xml</code> (looked up by lemma + POS; senses pinned with <code>@ana</code> take priority) · texts: <code>data/catalog.xml</code> · full text: <code>source/nhc_fulltext_split/tei/*.xml</code> (an automatic draft of <code>@lemma</code> and <code>@type</code> in 39 texts, none in the others; loaded only when selected). Combining marks such as supralinear strokes are ignored in matching. The “grc” mark appears only on words bearing <code>xml:lang="grc"</code>. Inflection class is shown once <code>&lt;iType&gt;</code> (lexicon) or <code>@msd</code> (text) is supplied.</span>
@@ -454,13 +865,20 @@ const UL = () => { const l = H.getAttribute("data-lang"); return l === "en" || l
 const I18N = {
   kindWord: {ja:"単語", en:"Word", fr:"Mot"},
   kindPos:  {ja:"品詞列", en:"POS sequence", fr:"Suite de PdD"},
-  kindAql:  {ja:"詳細式（ANNIS参考）", en:"Query (ANNIS-inspired)", fr:"Requête (inspirée d’ANNIS)"},
+  kindAql:  {ja:"詳細式", en:"Query", fr:"Requête"},
   phPos:    {ja:"品詞を順番に入力（例: ART N / PREP ART N）", en:"POS tags in order (e.g. ART N / PREP ART N)", fr:"Étiquettes dans l’ordre (ex. ART N / PREP ART N)"},
   phAql:    {ja:'例: pos="ART" . pos="N" / lemma=/.*ⲛⲟⲩⲧ.*/', en:'e.g. pos="ART" . pos="N" / lemma=/.*ⲛⲟⲩⲧ.*/', fr:'ex. pos="ART" . pos="N" / lemma=/.*ⲛⲟⲩⲧ.*/'},
   hintWord: {ja:"品詞の順序や正規表現を使う場合は、検索方式を「品詞列」または「詳細式」に切り替えてください。", en:"For ordered POS tags or regex, choose POS sequence or Query.", fr:"Pour les suites de PdD ou les expressions régulières, choisissez Suite de PdD ou Requête."},
   hintPos:  {ja:"形態素の品詞タグを空白で区切ります。例: ART N は冠詞の直後に名詞が続く用例。", en:"Separate morpheme POS tags with spaces. ART N finds an article immediately followed by a noun.", fr:"Séparez les étiquettes par des espaces. ART N trouve un article immédiatement suivi d’un nom."},
-  hintAql:  {ja:'例: pos="ART" .1,3 pos=/N.*/。記号やタグの書き方は下の「検索式の書き方・例」を参照してください。', en:'e.g. pos="ART" .1,3 pos=/N.*/. Open the syntax help below for operators and examples.', fr:'Ex. pos="ART" .1,3 pos=/N.*/. Consultez les exemples et la syntaxe ci-dessous.'},
+  hintAql:  {ja:'例: pos="ART" .1,3 pos="N"（冠詞の1〜3形態素後に名詞）。書き方は下の「検索式の書き方・例」と〈チュートリアル〉にあります。', en:'e.g. pos="ART" .1,3 pos="N" (a noun 1–3 morphemes after an article). See the syntax help below and the Tutorial tab.', fr:'Ex. pos="ART" .1,3 pos="N" (un nom 1 à 3 morphèmes après un article). Voir l’aide ci-dessous et l’onglet Tutoriel.'},
   seqPrompt:{ja:"品詞列または詳細式を入力してください。下の例をクリックして検索することもできます。", en:"Enter a POS sequence or query, or click an example in the syntax help.", fr:"Saisissez une suite ou une requête, ou cliquez sur un exemple dans l’aide."},
+  /* チュートリアル（〈チュートリアル〉タブと、検索結果からの案内） */
+  tryIt:    {ja:"試す", en:"Try", fr:"Essayer"},
+  tryAria:  {ja:q=>"試す: "+q, en:q=>"Try: "+q, fr:q=>"Essayer : "+q},
+  helpLink: {ja:"うまくいかないとき", en:"Troubleshooting", fr:"En cas de problème"},
+  tutTagsNote:{ja:"注釈つきの本文に現れるタグと語数です。このほかに、まれなタグもあります。選んだ文書でのタグと語数は、左の〈品詞〉一覧で確かめられます。",
+             en:"Tags found in the annotated texts, with token counts. A few rare tags are not listed. The Part of speech list on the left shows the tags and counts for the texts you select.",
+             fr:"Étiquettes présentes dans les textes annotés, avec le nombre d’occurrences. Quelques étiquettes rares ne figurent pas ici. La liste Partie du discours, à gauche, donne les étiquettes et les nombres pour les textes sélectionnés."},
   seqBusy:  {ja:"形態素の並びを検索中…", en:"Searching morpheme sequences…", fr:"Recherche des suites morphologiques…"},
   seqNone:  {ja:"一致する用例はありません。品詞タグ・順序・文書の選択を確認してください。", en:"No occurrences match. Check POS tags, order and selected texts.", fr:"Aucune occurrence. Vérifiez les étiquettes, l’ordre et les textes sélectionnés."},
   nSeq:     {ja:n=>n+" 用例", en:n=>n+" occurrence"+(n==="1"?"":"s"), fr:n=>n+" occurrence"+(n==="1"?"":"s")},
@@ -639,7 +1057,8 @@ const ckey = s => [...norm(s)].map(c => RANK.has(c) ? String.fromCharCode(0x4e00
 
 /* ---------- 状態 ---------- */
 const ST = {
-  view: "search",      // "search"（検索）| "stats"（統計）
+  view: "search",      // "search"（検索）| "stats"（統計）| "tutorial"（チュートリアル）
+  tutScroll: null,     // チュートリアルを離れたときの縦位置（タブで戻ったときに、読んでいた位置へ戻す）
   docs: [],            // {key, ja, en, fr, cop, siglum, reader, xml, planned, wits:[],
                        //  lazy（未注釈の本文：選んだときだけ読み込む）, state（""|"idle"|"loading"|"loaded"|"error"）, ntok0（カタログ上の語数）, codex}
   wits: [],            // {i, id, label, short, doc, segs:[{id, n, tokens:[tokIdx], breaks:[欠損の位置]}], groups:[[tokIdx] | GAP], ntok, nseg, pages, lines, gaps:Map(reason → 件数)}
@@ -865,10 +1284,13 @@ async function load(){
     $("#sections").innerHTML = "";
   }
 }
-/* 〈統計〉のセクションへの直リンク（…?view=stats#sec-loan など）は、描画が終わってから該当箇所へ移動する */
+/* 〈統計〉のセクション・〈チュートリアル〉の節への直リンク（…?view=stats#sec-loan、…?view=tutorial#tut-regex など）は、
+   描画が終わってから該当箇所へ移動する */
+const HASH_OF = {stats: /^#sec-/, tutorial: /^#tut-/};
+const viewHash = () => HASH_OF[ST.view] && HASH_OF[ST.view].test(location.hash) ? location.hash : "";
 function gotoHash(){
-  if(ST.view !== "stats" || !/^#sec-/.test(location.hash)) return;
-  const el = document.getElementById(location.hash.slice(1));
+  const h = viewHash(); if(!h) return;
+  const el = document.getElementById(h.slice(1));
   if(el) el.scrollIntoView();
 }
 
@@ -896,7 +1318,7 @@ function selParam(){
 }
 function writeURL(){
   const p = new URLSearchParams();
-  if(ST.view === "stats") p.set("view", "stats");
+  if(ST.view !== "search") p.set("view", ST.view);
   const q = $("#q").value.trim(); if(q) p.set("q", q);
   if($("#queryKind").value !== "word") p.set("kind", $("#queryKind").value);
   if($("#mode").value !== "part") p.set("m", $("#mode").value);
@@ -905,7 +1327,7 @@ function writeURL(){
   const w = selParam(); if(w !== null) p.set("w", w);
   if(ST.posOff.size) p.set("xpos", [...ST.posOff].join(","));
   const s = p.toString();
-  history.replaceState(null, "", location.pathname + (s ? "?" + s : "") + (ST.view === "stats" ? location.hash : ""));
+  history.replaceState(null, "", location.pathname + (s ? "?" + s : "") + viewHash());
 }
 /* 〈統計〉のレンマから〈検索〉へ：そのレンマの完全一致（対象はレンマのみ）を、いまの絞り込みのまま開くリンク */
 function lemmaHref(lemma){
@@ -1052,6 +1474,8 @@ function applyQueryControls(){
   q.placeholder = t(kind === "pos" ? "phPos" : kind === "aql" ? "phAql" : "ph");
   q.setAttribute("aria-label", q.placeholder);
   $("#queryHint").textContent = t(kind === "pos" ? "hintPos" : kind === "aql" ? "hintAql" : "hintWord");
+  const how = $("#howTo"), sec = kind === "pos" ? "tut-pos" : kind === "aql" ? "tut-aql" : "tut-word";   // 「使い方」は検索方式の節へ
+  how.dataset.tut = sec; how.href = "?view=tutorial#" + sec;
   $("#lexicalOptions").hidden = advanced;
   $("#queryHelp").hidden = !advanced;
   $("#lx").parentElement.hidden = advanced;
@@ -1059,6 +1483,8 @@ function applyQueryControls(){
   $("#queryError").hidden = true;
   q.removeAttribute("aria-invalid");
 }
+/* 一致なし・エラーのときに添える、チュートリアルの「うまくいかないとき」へのリンク（クリックはページ内で処理。下の「操作」） */
+const troubleLink = () => '<a href="?view=tutorial#tut-trouble" data-tut="tut-trouble">' + esc(t("helpLink")) + '</a>';
 /* セグメント内の <w> は ST.toks 上で連続して並ぶ（parseText）。セグメント内の位置（0始まり）は 通し番号 − 先頭の通し番号 */
 const segPos = (seg, i) => i - seg.tokens[0];
 /* 用例の文脈：一致した形態素それぞれの前後 PAD 個。範囲が重なる・隣り合うものはつなぎ、
@@ -1108,7 +1534,7 @@ function renderSequences(){
     box.innerHTML = '<p class="empty">' + esc(t("seqBusy")) + '</p>'; return;
   }
   if(QS.status === "error"){
-    $("#queryError").textContent = queryErrorText(QS.error); $("#queryError").hidden = false;
+    $("#queryError").innerHTML = esc(queryErrorText(QS.error)) + " " + troubleLink(); $("#queryError").hidden = false;
     $("#q").setAttribute("aria-invalid", "true"); box.innerHTML = ""; say(""); return;
   }
   if(!QS.result) return;
@@ -1125,7 +1551,7 @@ function renderSequences(){
         '</p><div class="sequence-annotations">' + match.tokens.map(i => { const tk = ST.toks[i];
           return '<span><span class="cop">' + esc(tk.form) + '</span> · <code>' + esc(tk.pos) + '</code> · <span class="cop">' + esc(tk.lemma) + '</span></span>';
         }).join("") + '</div></li>';
-    }).join("") + '</ol>' : '<p class="empty">' + esc(t("seqNone")) + '</p>');
+    }).join("") + '</ol>' : '<p class="empty">' + esc(t("seqNone")) + " " + troubleLink() + '</p>');
   if(matches.length > ST.limit) $("#more").innerHTML = '<button type="button" class="btn" id="moreBtn">' + esc(t("showMore", fmt(matches.length - ST.limit))) + '</button>';
 }
 function sequenceCSV(){
@@ -1622,17 +2048,85 @@ function renderStatsView(){
   }).join("");
 }
 
-/* ---------- 表示切替（検索 / 統計） ---------- */
+/* ---------- 表示切替（検索 / 統計 / チュートリアル） ---------- */
+const VIEWS = ["search", "stats", "tutorial"];
+const VIEW_TAB = {search:"#tabSearch", stats:"#tabStats", tutorial:"#tabGuide"};
+const VIEW_PANEL = {search:"#viewSearch", stats:"#viewStats", tutorial:"#viewGuide"};
 function applyView(){
-  const s = ST.view === "stats";
-  $("#viewSearch").hidden = s; $("#viewStats").hidden = !s;
-  $("#tabSearch").setAttribute("aria-selected", String(!s)); $("#tabStats").setAttribute("aria-selected", String(s));
-  $("#tabSearch").tabIndex = s ? -1 : 0; $("#tabStats").tabIndex = s ? 0 : -1;
+  VIEWS.forEach(v => {
+    const on = ST.view === v, tab = $(VIEW_TAB[v]);
+    $(VIEW_PANEL[v]).hidden = !on;
+    tab.setAttribute("aria-selected", String(on)); tab.tabIndex = on ? 0 : -1;
+  });
 }
+/* 上部ナビ（固定）の下に、要素 el の上端が来る縦位置 */
+const underBar = el => Math.max(0, el.getBoundingClientRect().top + scrollY - ($("#sitebar").offsetHeight || 0) - 12);
 function setView(v){
-  ST.view = v === "stats" ? "stats" : "search";
+  v = VIEWS.includes(v) ? v : "search";
+  if(v !== ST.view){
+    if(ST.view === "tutorial") ST.tutScroll = scrollY;     // チュートリアルで読んでいた位置を覚えておく
+    // タブより下にいたら、表示を替える前にタブの位置まで戻す。長い表示（チュートリアル・統計）から短い表示に替えると、
+    // ブラウザーは縮んだ分だけ位置を詰め、あとで結果が出て伸びたときに元の深い位置へ戻してしまうため
+    const top = underBar($(".views"));
+    if(scrollY > top) scrollTo(0, top);
+  }
+  ST.view = v;
   applyView();
   render();
+}
+/* タブで切り替えたとき：チュートリアルは前に読んでいた位置へ戻す */
+function selectTab(v){
+  if(v === ST.view) return;
+  setView(v);
+  if(v === "tutorial" && ST.tutScroll != null) scrollTo(0, ST.tutScroll);
+}
+/* チュートリアルの節 id を開く（「使い方」・検索式の早見表・結果の「うまくいかないとき」のリンクから） */
+function openTutorial(id){
+  setView("tutorial");
+  history.replaceState(null, "", location.pathname + location.search + "#" + id);
+  const el = document.getElementById(id);
+  if(el) el.scrollIntoView();
+}
+/* チュートリアルの例を〈検索〉で実行する。d は例の data-*（kind・m・f・raw）、query は式 */
+function tryExample(d, query){
+  const kind = ["word", "pos", "aql"].includes(d.kind) ? d.kind : "aql";
+  clearTimeout(qt); resetSequenceSearch();
+  $("#queryKind").value = kind; $("#q").value = query;
+  if(kind === "word"){                                     // 単語検索の例は、一致と対象も例のとおりにする（既定は 部分一致・すべて）
+    const f = d.f || "flg";
+    $("#mode").value = ["part", "pre", "ex"].includes(d.m) ? d.m : "part";
+    $("#fForm").checked = f.includes("f"); $("#fLemma").checked = f.includes("l"); $("#fGloss").checked = f.includes("g");
+  }
+  ST.limit = 200;
+  const raw = d.raw ? rawDoc(d.raw) : null;               // 全文テキストの文書の例：読み込んで選択に加える（読み込み後に検索し直す）
+  if(raw && !lazySelected(raw)){ $("#rawBox").open = true; useLazy([raw], lazyOn); }
+  setView("search");
+  scrollTo(0, underBar($(".query-kind")));                // 式と結果が見える位置へ
+}
+
+/* ---------- チュートリアル ----------
+   本文は HTML（#viewGuide）に静的に書いてある。ここでは表示言語に合わせて目次と〈試す〉の文字を作り（guideStatic）、
+   読み込んだ本文から品詞タグの一覧を作る（renderGuide）。 */
+const exampleOf = b => b.closest(".tut-ex, .tut-run");
+const codeText = (code, L) => (code.querySelector(".l-" + L) || code).textContent.trim();   // 言語ごとに例が違う式（<code> の中の .l-ja など）
+function guideStatic(){
+  const L = UL();
+  $("#tutToc").innerHTML = [...document.querySelectorAll("#viewGuide .tut-sec")].map(s => {
+    const h = s.querySelector("h2"), n = h.querySelector(".tut-n"), txt = h.querySelector(".l-" + L) || h.querySelector(".l-ja");
+    return '<a href="#' + s.id + '">' + esc((n ? n.textContent + ". " : "") + (txt ? txt.textContent : "")) + '</a>';
+  }).join("");
+  document.querySelectorAll("#viewGuide .tut-try").forEach(b => {
+    const ex = exampleOf(b), code = ex && ex.querySelector("code");
+    b.textContent = t("tryIt");
+    if(code) b.setAttribute("aria-label", t("tryAria", codeText(code, L)));
+  });
+  $("#tutTagsNote").textContent = t("tutTagsNote");
+}
+function renderGuide(){
+  const cnt = new Map();
+  ST.toks.forEach(tk => { if(!ST.wits[tk.w].doc.lazy) inc(cnt, tk.pos); });   // 注釈つきの本文だけを数える
+  $("#tutTags").innerHTML = [...cnt.entries()].filter(([p]) => POS[p]).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .map(([p, n]) => '<li><code>' + esc(p) + '</code><span>' + esc(posName(p)) + '</span><span class="ct">' + fmt(n) + '</span></li>').join("");
 }
 
 let LAST = null;
@@ -1644,6 +2138,10 @@ function render(){
   if(ST.view === "stats"){
     if(QS.status === "pending") resetSequenceSearch();
     renderSide(); renderStatsView(); writeURL(); return;
+  }
+  if(ST.view === "tutorial"){
+    if(QS.status === "pending") resetSequenceSearch();
+    renderSide(); renderGuide(); writeURL(); return;
   }
   if($("#queryKind").value !== "word"){
     renderSide(); renderSequences(); writeURL(); return;
@@ -1674,6 +2172,7 @@ function applyLang(){
   ["kindWord","kindPos","kindAql"].forEach((v, i) => { $("#queryKind").options[i].textContent = t(v); });
   const sel = $("#mode");
   ["part","pre","ex"].forEach((v, i) => { sel.options[i].textContent = t(v); });
+  guideStatic();
   render();
 }
 
@@ -1785,13 +2284,28 @@ document.addEventListener("click", e => {
   if(e.target.closest("#csvBtn")) csv();
 });
 
-/* 表示切替（検索 / 統計）：クリックと左右の矢印キー */
-$(".views").addEventListener("click", e => { const b = e.target.closest("button[data-view]"); if(b) setView(b.dataset.view); });
+/* 表示切替（検索 / 統計 / チュートリアル）：クリックと、左右の矢印キー・Home・End */
+$(".views").addEventListener("click", e => { const b = e.target.closest("button[data-view]"); if(b) selectTab(b.dataset.view); });
 $(".views").addEventListener("keydown", e => {
-  if(e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+  const i = VIEWS.indexOf(ST.view), n = VIEWS.length;
+  const j = {ArrowRight:(i + 1) % n, ArrowLeft:(i + n - 1) % n, Home:0, End:n - 1}[e.key];
+  if(j === undefined) return;
   e.preventDefault();
-  setView(ST.view === "stats" ? "search" : "stats");
-  $(ST.view === "stats" ? "#tabStats" : "#tabSearch").focus();
+  selectTab(VIEWS[j]);
+  $(VIEW_TAB[VIEWS[j]]).focus();
+});
+/* チュートリアルの〈試す〉：その例の式を〈検索〉で実行する */
+$("#viewGuide").addEventListener("click", e => {
+  const b = e.target.closest(".tut-try"); if(!b) return;
+  const ex = exampleOf(b), code = ex && ex.querySelector("code"); if(!code) return;
+  tryExample(ex.dataset, codeText(code, UL()));
+});
+/* チュートリアルの節へのリンク（data-tut）：ページ内で開く。修飾キーつきのクリックは通常のリンクとして新しいタブなどで開ける */
+document.addEventListener("click", e => {
+  const a = e.target.closest("a[data-tut]");
+  if(!a || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+  e.preventDefault();
+  openTutorial(a.dataset.tut);
 });
 /* 〈統計〉のレンマをクリック → 〈検索〉でそのレンマ（完全一致・対象はレンマのみ）を開く。
    修飾キーつきのクリックは通常のリンクとして新しいタブなどで開ける */
@@ -1813,10 +2327,13 @@ document.addEventListener("nhc:sitebar", () => { measureBar(); applyLang(); });
 addEventListener("resize", measureBar);
 document.addEventListener("nhc:lang", applyLang);
 
-/* ?view=stats なら読み込みの前から〈統計〉を開いておく（旧 stats.html からの転送もここへ来る） */
-ST.view = new URLSearchParams(location.search).get("view") === "stats" ? "stats" : "search";
+/* ?view=stats・?view=tutorial なら読み込みの前から〈統計〉〈チュートリアル〉を開いておく（旧 stats.html からの転送もここへ来る）。
+   チュートリアルは静的な文なので、本文の読み込みを待たずに読める */
+const view0 = new URLSearchParams(location.search).get("view");
+ST.view = VIEWS.includes(view0) ? view0 : "search";
 applyView();
 applyLang();
+gotoHash();
 load();
 </script>
 </body>
