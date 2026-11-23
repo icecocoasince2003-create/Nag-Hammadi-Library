@@ -32,9 +32,9 @@
     { id: "news",   href: "index.html#news",     ja: "NEWS",            en: "News",            fr: "Actualités" }
   ];
   var SITE = {
-    ja: { name: "Sheneset", sub: "ナグ・ハマディ写本コーパス", nav: "サイト内ナビゲーション", panel: "文書メニュー（表示・ツール）" },
-    en: { name: "Sheneset", sub: "Digital TEI edition of the Nag Hammadi Codices", nav: "Site navigation", panel: "Document menu (display and tools)" },
-    fr: { name: "Sheneset", sub: "Édition numérique TEI des codices de Nag Hammadi", nav: "Navigation du site", panel: "Menu du document (affichage et outils)" }
+    ja: { name: "Sheneset", sub: "ナグ・ハマディ写本コーパス", nav: "サイト内ナビゲーション", panel: "文書メニュー（表示・ツール）", menu: "メニュー" },
+    en: { name: "Sheneset", sub: "Digital TEI edition of the Nag Hammadi Codices", nav: "Site navigation", panel: "Document menu (display and tools)", menu: "Menu" },
+    fr: { name: "Sheneset", sub: "Édition numérique TEI des codices de Nag Hammadi", nav: "Navigation du site", panel: "Menu du document (affichage et outils)", menu: "Menu" }
   };
 
   function stored() {
@@ -240,6 +240,44 @@
     });
   }
 
+  /* ---- 狭い画面（幅 760px 以下）のサイトメニュー ----
+     ナビのリンク（NAV の 8 項目）は、広い画面では横に並べ、幅 760px 以下では 2 段目の〈メニュー ▾〉ボタンにまとめる
+     （以前は 2 段目を横にスクロールさせていたが、幅 390px では「グノーシス主義とは」から先が画面の外にあり、気づきにくかった）。
+     WAI-ARIA の disclosure の作法: ボタンは aria-expanded と aria-controls を持ち、押すとリンクの一覧がナビのすぐ下に縦に並んで開く。
+     リンクへは普通に Tab で進む。Esc（フォーカスはボタンに戻る）・一覧の外を押す・フォーカスがナビの外に出る・リンクを選ぶ、で閉じる。
+     幅 761px 以上ではボタンを出さず、一覧は常に見える。境界の 760px は assets/site.css の 1) の @media とそろえること。 */
+  var MENU_NARROW = "(max-width: 760px)";
+  var menuOpen = false;
+  function setMenu(open, refocus) {
+    var nav = document.getElementById("sitebar"), b = document.getElementById("sbMenu");
+    menuOpen = !!open;
+    if (nav) nav.classList.toggle("menu-open", menuOpen);
+    if (b) {
+      b.setAttribute("aria-expanded", String(menuOpen));
+      if (refocus) b.focus();
+    }
+  }
+  function wireMenuGlobal() {
+    var nav = document.getElementById("sitebar");
+    function outside(t) { return !nav || !nav.contains(t); }
+    document.addEventListener(window.PointerEvent ? "pointerdown" : "mousedown", function (e) {
+      if (menuOpen && outside(e.target)) setMenu(false);
+    });
+    document.addEventListener("focusin", function (e) {
+      if (menuOpen && outside(e.target)) setMenu(false);
+    });
+    // Esc は捕捉の段階で受ける（ビュワーのドロワーなど、Esc で閉じるほかのものには渡さない）
+    document.addEventListener("keydown", function (e) {
+      if (e.key !== "Escape" || !menuOpen) return;
+      e.preventDefault(); e.stopPropagation();
+      setMenu(false, !outside(document.activeElement));
+    }, true);
+    if (window.matchMedia) {
+      var mq = window.matchMedia(MENU_NARROW), off = function () { if (!mq.matches) setMenu(false); };
+      if (mq.addEventListener) mq.addEventListener("change", off); else if (mq.addListener) mq.addListener(off);
+    }
+  }
+
   function pageId() {
     var p = (location.pathname.split("/").pop() || "index.html").toLowerCase();
     if (p === "" || p === "index.html") return "home";
@@ -263,8 +301,10 @@
         '" aria-label="' + esc(S.panel) + '" title="' + esc(S.panel) + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" ' +
         'stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>' : "") +
       '<a class="sb-brand" href="index.html"><img src="image/icon.svg" alt="" width="26" height="26" onerror="this.style.display=\'none\'">' +
-      '<span class="sb-name"><b><span class="cop">ϣⲉⲛⲉⲥⲏⲧ</span>' + esc(S.name) + '</b><small>' + esc(S.sub) + '</small></span></a>' +
-      '<div class="sb-links">' + NAV.map(function (n) {
+      '<span class="sb-name"><b><span class="cop" lang="cop">ϣⲉⲛⲉⲥⲏⲧ</span>' + esc(S.name) + '</b><small>' + esc(S.sub) + '</small></span></a>' +
+      '<div class="sb-menu"><button type="button" class="sb-menubtn" id="sbMenu" aria-expanded="' + menuOpen + '" aria-controls="sbLinks">' +
+        '<span>' + esc(S.menu) + '</span>' + CARET_ICON + '</button></div>' +
+      '<div class="sb-links" id="sbLinks">' + NAV.map(function (n) {
         return '<a class="sb-link" data-nav="' + n.id + '" href="' + n.href + '"' + (n.id === cur ? ' aria-current="page"' : "") + '>' + esc(n[L] || n.ja) + '</a>';
       }).join("") + '</div>' +
       '<div class="sb-tools">' +
@@ -276,6 +316,10 @@
         '<a class="sb-auth" id="sbAuth" href="#" hidden></a>' +
       '</div>';
     wireLangMenu(nav);
+    nav.classList.toggle("menu-open", menuOpen);
+    nav.querySelector("#sbMenu").addEventListener("click", function () { setMenu(!menuOpen); });
+    // 一覧のリンクを選んだら閉じる（HOME の「NEWS」のように同じページの中へ移るときのため）
+    nav.querySelector("#sbLinks").addEventListener("click", function (e) { if (e.target.closest("a")) setMenu(false); });
     var mb = nav.querySelector(".sb-mode");
     if (mb) mb.addEventListener("click", function () { setMode(curMode === "light" ? "dark" : "light"); });
     if (panel) {
@@ -419,6 +463,7 @@
     }
     render(nav);
     wireLangMenuGlobal();
+    wireMenuGlobal();
     wireXmlMenus();
     followSegHash();
   }
