@@ -25,8 +25,19 @@ jobs:
       - name: TEI の点検（scripts/check_tei.py）
         run: python3 scripts/check_tei.py
 
-      - name: コーパス検索のテスト（tests/corpus-query.test.cjs）
-        run: node --test tests/corpus-query.test.cjs
+      - name: コーパス検索と確認作業の画面のテスト（tests/corpus-query.test.cjs・tests/review-core.test.cjs）
+        run: node --test tests/corpus-query.test.cjs tests/review-core.test.cjs
+
+      - name: 確認作業の画面で書き出したファイルを読むスクリプトのテスト（tests/test_*.py）
+        run: python3 -m unittest discover -s tests -p "test_*.py" -v
+
+      - name: 確認作業の画面のテスト（tests/review.test.html を、ヘッドレスの Chrome で開く）
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 > /dev/null 2>&1 &
+          for i in $(seq 1 30); do curl -sf http://127.0.0.1:8765/tests/review.test.html > /dev/null && break; sleep 0.5; done
+          out=$(google-chrome --headless=new --disable-gpu --no-sandbox --no-first-run --virtual-time-budget=60000 --dump-dom "http://127.0.0.1:8765/tests/review.test.html")
+          echo "$out" | grep -o '<span class="[pf]">[^<]*' | sed 's/<span class="[pf]">//'
+          echo "$out" | grep -q 'id="result" data-status="pass"' || { echo "::error file=tests/review.test.html::確認作業の画面のテストが通りません"; exit 1; }
 
       - name: JSON の構文（data/*.json・iiif/*.json）
         run: |

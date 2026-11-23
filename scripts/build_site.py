@@ -1281,7 +1281,7 @@ window.addEventListener('hashchange',gotoHash);
             f"{FONTS}<script defer src=\"assets/viewer-tools.js\"></script><style>{css}</style></head><body>{body}</body></html>")
 
 # --- sitemap.xml・robots.txt -------------------------------------------------
-# 検索エンジン向けの URL の一覧。管理用（admin・profile）、転送だけの stats.html、準備中の案内 tractate.html は載せない。
+# 検索エンジン向けの URL の一覧。管理用（admin・profile）、確認作業の画面 review.html、転送だけの stats.html、準備中の案内 tractate.html は載せない。
 SITEMAP_PAGES = ["", "guide.html", "gnosticism.html", "project.html", "search.html", "lexicon.html",
                  "eugnostos.html?wit=III", "eugnostos.html?wit=SYN", "republic.html"]
 SITEMAP_TAIL = ["privacy.html", "terms.html"]
@@ -1311,6 +1311,7 @@ def build_robots():
             "User-agent: *\n"
             "Disallow: /admin.html\n"
             "Disallow: /profile.html\n"
+            "Disallow: /review.html\n"
             "\n"
             f"Sitemap: {SITE_URL}sitemap.xml\n")
 

@@ -32,6 +32,7 @@
 | `stats.html` | 旧コーパス統計。`search.html?view=stats` への転送のみ（`?doc=…` は引き継ぐ） | 手作業 |
 | `profile.html` | プロフィール（ログイン中の利用者用）。表示名の変更、自分の投稿の確認と修正、ブックマーク、運営へのバグの報告・応援メッセージ | 手作業 |
 | `admin.html` | 投稿（コメント・注釈・誤りの指摘）の承認、公開済みの投稿への修正の申請の承認、運営へのメッセージの確認（運営用） | 手作業 |
+| `review.html` | 確認作業の画面（日・英）。確認待ちの作業（解題・精度の抜き取り・語録の区切り・長いセグメントの切れ目）を 1 件ずつ判断し、結果をファイルとして書き出す。下の「確認作業の画面」。noindex、ナビ・sitemap に載せず、robots.txt で Disallow | 手作業。キューは `data/review_queues.json` |
 
 共通部品: `assets/cosmos.css`・`assets/cosmos.js`（配色と背景。ダーク＝宇宙テーマが既定、ライトモードの配色もここ）、
 `assets/site.css`・`assets/site.js`（上部ナビ・言語切替・表示モード切替・XML ダウンロードメニュー・ワイド表示）、
@@ -373,6 +374,57 @@ python3 scripts/insert_breaks.py tests/fixtures/reader_breaks_draft.tsv --file t
   あれば、スクリプトは「もうある」として何もしません。
 
 セグメントの分け直し（`scripts/split_segments.py`）、トマスによる福音書の語録の区切り、300 形態素を超える長いセグメントの切れ目は、まだ案の段階です（`source/nhc_fulltext_split/proposals/README_ja.md` と、同じフォルダの TSV。生田目の確認待ち）。
+
+## 確認作業の画面（review.html）
+
+確認を待っている作業（キュー）を 1 件ずつ文脈と並べて判断し、結果をファイルとして書き出す画面です
+（<https://sheneset.vercel.app/review.html>。ナビ・sitemap には載せず、検索エンジンにも出しません）。
+**サーバーにもほかのサイトにも何も送りません。** 途中の状態は、キューと元のファイルのハッシュ（SHA-256）ごとに、
+そのブラウザーの localStorage に保存するだけです（Google アナリティクスとログインのスクリプトも読み込みません）。
+
+| キュー | ファイル | 判断すること | 書き込む列・欄 |
+|---|---|---|---|
+| ① 解題 | `data/intros.json` | 日・英・仏の欄を直し、確かめたら「確認済み」にする | 各項目の `summary`・`pages`・`copies`・`language` の各言語、`todo`、`reviewed`、`reviewed_by`（項目の末尾に足す） |
+| ② 精度の抜き取り | `source/nhc_fulltext_split/evaluation/review_sample.tsv` | 対象の形態素の正しい品詞とレンマ。**自動の答え（品詞・レンマ・語義・確度）は、両方を入れるまで隠す**（先に見ると判断が引きずられ、精度が高めに出るため） | `正しい品詞`・`正しいレンマ`・`メモ`、`確認者`（末尾に足す） |
+| ③ トマスの語録の区切り | `source/nhc_fulltext_split/proposals/thomas_sayings.tsv` | 承認・却下・保留。位置が違えば、本文の正しい語群を押す（修正して承認） | `状態`、`修正した位置`・`確認者`（末尾に足す） |
+| ④ 長いセグメントの切れ目 | `source/nhc_fulltext_split/proposals/long_segment_breaks.tsv` | 同上（承認 = ここで分ける） | 同上 |
+
+**使い方。** 確認者の名前かイニシャルを入れ、キューを選んで 1 件ずつ判断します（名前を入れないと書き込めません。判断のたびに
+その行に記録します）。TSV のキューでは、その文書の TEI から該当のセグメントを出し、対象の語（②）や分け目の位置（③④）に印を
+付けます（本文ビュワーの該当箇所へのリンクつき）。〈未処理だけ〉で絞り込み、〈番号へ〉で飛べます。キーボード: `←`・`→`（`k`・`j`）
+で前後、`n` で次の未処理、`g` で番号へ、③④ では `a` 承認・`r` 却下・`h` 保留・`u` 未処理に戻す。② では入力欄で `Enter` を押すと
+次の未処理へ進みます。
+
+**書き出しと再開。** 〈ファイルを書き出す〉で、元と同じ名前・同じ形のファイルをダウンロードします（TSV は列の順・UTF-8・改行・
+BOM の有無を、JSON はキーの順と字下げ 2 を元のまま。足す列は末尾。何も変えていなければ元とバイト単位で同じ）。前に書き出した
+ファイルは〈書き出したファイルを読み込む〉で読み込めて、その続きから作業できます（書き込めない列が変わっていれば知らせて無視します）。
+元のファイルが更新されると保存先も変わり、前の版で入力した記録は〈この版に引き継ぐ〉で移せます。
+
+**反映の流れ。**
+
+1. 書き出したファイルを、GitHub の画面（リポジトリのそのファイルのフォルダで Add file → Upload files。同じ名前のファイルを
+   置き換える）からアップロードするか、Claude Code に渡してコミットします。
+2. 分担したときは、まとめてから 1. に進みます。食い違い（同じ行の同じ列が違う値）があれば一覧を出して止まり、何も書き込みません
+   （確認者の名前は「・」でつなぐ）:
+
+   ```
+   python3 scripts/merge_review.py thomas 書き出し_A.tsv 書き出し_B.tsv                     # 確かめるだけ
+   python3 scripts/merge_review.py thomas 書き出し_A.tsv 書き出し_B.tsv --write             # 元のファイルに書き込む
+   ```
+3. ① は、`reviewed: true` にした解題が本文ビュワーの「この文書について」に出ます（公開されたとき）。
+4. ② は、`python3 source/nhc_fulltext_split/evaluation/score_review.py source/nhc_fulltext_split/evaluation/review_sample.tsv` で集計します
+   （`確認者` の列があっても読めます）。
+5. ③④ は、`python3 scripts/split_segments.py source/nhc_fulltext_split/proposals/long_segment_breaks.tsv`（③ は `--doc II-2` を付ける）で、
+   **状態が「承認」か「修正して承認」の行だけ**を当てはめます（「修正した位置」があればそちらを使う。③ では種別が「語録の始まり」の行だけを
+   分け目にする）。表示だけで確かめてから `--write` を付けます。ほかの状態の行は当てはめず、件数を表示します。
+
+**キューを足す。** `data/review_queues.json` の `queues` に 1 項目足します（書き方はファイルの `_comment`）。表の形に合わせて
+`kind`（`judge` = 列に答えを書く、`status` = 承認・却下などを決める、`intros` = 解題）、行を見分ける `key`、文脈のための `doc`・`seg`・`w`・
+`context`、表示する `show`、隠す `blind`、書き込む `fields`・`status`・`corrected`・`reviewer` を書けば、画面にも `merge_review.py` にも出ます。
+
+**試験。** `node --test tests/review-core.test.cjs`（読み書き）、`tests/review.test.html`（画面。ブラウザーで開くと結果が出る。GitHub の
+自動チェックではヘッドレスの Chrome で開く。ふだんの入力を消さないよう `review.html?ns=test` で開く）、
+`python3 -m unittest discover -s tests -p "test_*.py"`（`merge_review.py`・`score_review.py`・`split_segments.py`）。
 
 ## サイト構成と画面遷移
 

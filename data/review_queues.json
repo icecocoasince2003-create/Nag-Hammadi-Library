@@ -1,0 +1,75 @@
+{
+  "_comment": "確認作業の画面（review.html）のキューの定義。画面と、書き出したファイルをまとめる scripts/merge_review.py の両方がこのファイルを読む。キューを足すときは queues に 1 項目足す（README の「確認作業の画面」）。kind: intros = data/intros.json の解題、judge = 決まった列に答えを書き込む表（tsv）、status = 1 行ずつ承認・却下などを決める表（tsv）。key は行を見分ける列（組み合わせて一意）。doc は TEI を読むための文書（column = 列の値、siglum = その値が「III,1」のような写本の番号、fixed = 決まった文書）。seg・w は文脈を出すためのセグメントの id と語の位置（その <s> の中で何番目の <w> か。1 から）。context: word = その語に印、break = その語の前に分け目の印（語群の最初の語だけ選べる）。show は表示する列、blind は答えを入れるまで隠す列。fields は書き込む列（type: pos = 品詞の一覧から、lemma = 辞書の見出しを候補に、text = 自由な文字、choice = 別の列の候補から選ぶ）。status は状態の列、pending はまだ判断していない行の値、values は選べる値、corrected は位置を直したときに書く列（末尾に足す）。reviewer は確認者の列（末尾に足す。intros では解題の項目のキー）。",
+  "status_values": {
+    "approve": "承認",
+    "approve_corrected": "修正して承認",
+    "reject": "却下",
+    "hold": "保留"
+  },
+  "queues": [
+    {
+      "id": "intros",
+      "title": {"ja": "① 解題", "en": "① Introductions"},
+      "kind": "intros",
+      "file": "data/intros.json",
+      "reviewer": "reviewed_by",
+      "fields": ["summary", "pages", "copies", "language"],
+      "langs": ["ja", "en", "fr"],
+      "note": {"ja": "日・英・仏の欄を直し、確かめたら「確認済み」にする（reviewed: true。本文ビュワーに表示されるようになる）。直すべき点は todo に 1 行ずつ。", "en": "Correct the ja/en/fr fields and tick “Reviewed” once checked (reviewed: true; the reader then shows the introduction). Write open points in todo, one per line."}
+    },
+    {
+      "id": "sample",
+      "title": {"ja": "② 精度の抜き取り", "en": "② Accuracy sample"},
+      "kind": "judge",
+      "file": "source/nhc_fulltext_split/evaluation/review_sample.tsv",
+      "key": ["番号"],
+      "doc": {"column": "文書", "siglum": true},
+      "seg": "seg_id",
+      "w": "語の位置",
+      "context": "word",
+      "show": ["番号", "文書", "seg_id", "語の位置", "前後の文脈", "語形"],
+      "blind": ["層", "自動の品詞", "自動のレンマ", "自動の語義", "cert", "resp"],
+      "fields": [
+        {"column": "正しい品詞", "type": "pos", "required": true, "special": ["?"]},
+        {"column": "正しいレンマ", "type": "lemma", "required": true, "special": ["-", "?"]},
+        {"column": "メモ", "type": "text"}
+      ],
+      "reviewer": "確認者",
+      "note": {"ja": "対象の形態素（【】の中）の正しい品詞とレンマを入れる。決められないときは ?、レンマが無い形態素は -。自動の答えは、両方を入れるまで隠してある（先に見ると判断が引きずられるため）。集計は score_review.py。", "en": "Enter the correct part of speech and lemma of the target morpheme (in 【】). Use ? when undecidable and - for a morpheme without a lemma. The automatic answer stays hidden until both are entered, so that it cannot bias the judgment. Scored by score_review.py."}
+    },
+    {
+      "id": "thomas",
+      "title": {"ja": "③ トマスの語録の区切り", "en": "③ Sayings of Thomas"},
+      "kind": "status",
+      "file": "source/nhc_fulltext_split/proposals/thomas_sayings.tsv",
+      "key": ["seg_id", "w"],
+      "doc": {"fixed": "II-2"},
+      "seg": "seg_id",
+      "w": "w",
+      "context": "break",
+      "show": ["語録番号", "種別", "§", "w", "phr", "直前の数語", "始まりの数語", "根拠", "確度", "要確認", "§の範囲"],
+      "status": "状態",
+      "pending": "案（生田目の確認待ち）",
+      "corrected": "修正した位置",
+      "reviewer": "確認者",
+      "note": {"ja": "種別（語録の始まり・序文・語録の途中）と位置が正しければ承認。位置が違うときは、本文の正しい語群を押す（修正して承認）。当てはめは split_segments.py（承認した行だけ）。", "en": "Approve when the type (saying start, prologue, inside a saying) and the place are right. If the place is wrong, click the right bound group in the text (approved with a correction). Applied by split_segments.py (approved rows only)."}
+    },
+    {
+      "id": "breaks",
+      "title": {"ja": "④ 長いセグメントの切れ目", "en": "④ Breaks in long segments"},
+      "kind": "status",
+      "file": "source/nhc_fulltext_split/proposals/long_segment_breaks.tsv",
+      "key": ["doc", "seg_id", "w"],
+      "doc": {"column": "doc"},
+      "seg": "seg_id",
+      "w": "w",
+      "context": "break",
+      "show": ["doc", "§", "w", "phr", "前の数語", "後の数語", "手がかり", "根拠", "優先度", "例", "備考"],
+      "status": "状態",
+      "pending": "案（生田目の確認待ち）",
+      "corrected": "修正した位置",
+      "reviewer": "確認者",
+      "note": {"ja": "ここで分けるなら承認、分けないなら却下。位置を変えるときは、本文の正しい語群を押す（修正して承認）。当てはめは split_segments.py（承認した行だけ）。", "en": "Approve to split here, reject not to. To move the break, click the right bound group in the text (approved with a correction). Applied by split_segments.py (approved rows only)."}
+    }
+  ]
+}

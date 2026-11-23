@@ -6,8 +6,10 @@
 > `sitemap.xml`, `robots.txt`): change `scripts/build_site.py` or its data and run it again. The XML in `data/`
 > contains hand corrections, so edit it in place and never regenerate it with `scripts/build_tei.py`. Lexicon
 > changes go through `source/lexicon.csv` and `scripts/sync_lexicon.py`. Never change an existing `xml:id`.
-> Before opening a pull request, run `python3 scripts/check_tei.py`, `node --test tests/corpus-query.test.cjs`,
-> `python3 scripts/check_style.py` and `python3 scripts/build_site.py --check`; GitHub runs the same checks.
+> Before opening a pull request, run `python3 scripts/check_tei.py`, `node --test tests/corpus-query.test.cjs tests/review-core.test.cjs`,
+> `python3 -m unittest discover -s tests -p "test_*.py"`, `python3 scripts/check_style.py` and `python3 scripts/build_site.py --check`;
+> GitHub runs the same checks (and opens `tests/review.test.html` in headless Chrome). Pending decisions (introductions, the accuracy
+> sample, proposed breaks) are made in `review.html`, which downloads the decided file; `scripts/merge_review.py` combines several.
 > Translations, glosses and notes are the project's own work (CC BY 4.0): do not copy published translations or
 > commentaries. If you use generative AI, say so: in the pull request description, or in the commit message
 > when you commit without a pull request. The annotation stops at text, word division, part of speech, lemma, gloss,
@@ -67,6 +69,7 @@ cd Nag-Hammadi-Library
 | 文書ごとの解題（ビュワーの「この文書について」） | `data/intros.json`（確かめた項目の `reviewed` を `true` にすると表示される。確かでない点は `todo` に書く） | `python3 -m json.tool data/intros.json > /dev/null`、ブラウザーで確かめる |
 | 写本ファクシミリ（IIIF）の画像 | `iiif/<文書名>.json` の `pages[].source`（[iiif/README.md](iiif/README.md)） | — |
 | 版番号・DOI | `data/release.json`・`CITATION.cff`・`.zenodo.json`（README の「版とリリースの作り方」） | `python3 scripts/check_release.py`・`python3 scripts/build_site.py` |
+| 確認待ちの作業（解題の確認、精度の抜き取り、語録の区切り、長いセグメントの切れ目など） | `review.html` で判断して書き出したファイル（キューの定義は `data/review_queues.json`） | 分担したら `python3 scripts/merge_review.py`、そのあとはキューごとの手順（README の「確認作業の画面」） |
 
 守ってほしいこと:
 
@@ -120,13 +123,16 @@ Pull Request を出す前に、リポジトリのルートで次を実行して�
 
 ```
 python3 scripts/check_tei.py                    # TEI の点検（ポインタの切れ、訳の重複、以前の書き方など）。終了コード 0 なら問題なし
-node --test tests/corpus-query.test.cjs         # コーパス検索のテスト（tests/ ではなくファイルを指定する）
+node --test tests/corpus-query.test.cjs tests/review-core.test.cjs   # コーパス検索と確認作業の画面のテスト（ファイルを指定する）
+python3 -m unittest discover -s tests -p "test_*.py"                 # 確認作業の画面で書き出したファイルを読むスクリプトのテスト
 python3 scripts/check_style.py                  # 表記ゆれの点検（下の 8.）
 python3 scripts/build_site.py --check           # 生成ファイルが最新か（違えば build_site.py を実行してコミットする）
 python3 scripts/check_release.py                # 版の情報が data/release.json・CITATION.cff・.zenodo.json でそろっているか
 ```
 
 - JSON（`data/*.json`・`iiif/*.json`）を直したら、構文が正しいことも確かめます（`python3 -m json.tool data/news.json` など）。
+- `review.html`・`assets/review-core.js` を直したら、ローカルのサーバーで `tests/review.test.html` を開き、結果が PASS になることを
+  確かめます（GitHub の自動チェックはヘッドレスの Chrome で同じページを開きます）。
 - TEI のスキーマでも確かめるときは、スキーマを取得して `python3 scripts/check_tei.py --schema <tei_all.rng の場所>`
   （README の「TEI スキーマとの適合」）。
 - 画面を変えたときは、ローカルのサーバー（2.）で変えたページを開き、表示とブラウザーのコンソールにエラーが無いことを確かめます。
