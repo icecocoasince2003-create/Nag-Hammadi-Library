@@ -59,10 +59,11 @@ cd Nag-Hammadi-Library
 | ビュワー・検索ページなどの画面（`eugnostos.html`・`republic.html`・`search.html`・`gnosticism.html`・`project.html` など） | その HTML を直接（手作業で管理しているページ） | ブラウザーで確かめる（6.） |
 | 写本の写真へのリンク | `data/facsimile_links.json`（アーカイブで実際に開いて確かめた URL だけを書く） | — |
 | 写本ファクシミリ（IIIF）の画像 | `iiif/<文書名>.json` の `pages[].source`（[iiif/README.md](iiif/README.md)） | — |
+| 版番号・DOI | `data/release.json`・`CITATION.cff`・`.zenodo.json`（README の「版とリリースの作り方」） | `python3 scripts/check_release.py`・`python3 scripts/build_site.py` |
 
 守ってほしいこと:
 
-- **生成ファイルは直接直さない。** `index.html`・`tractate.html`・`reader.html`・`sitemap.xml`・`robots.txt` は
+- **生成ファイルは直接直さない。** `index.html`・`tractate.html`・`reader.html`・`sitemap.xml`・`robots.txt`・`data/doc_dates.json` は
   `scripts/build_site.py` の出力です。スクリプトかデータを直してから作り直します（直接直しても、次に作り直したときに消えます）。
 - **`data/` の XML は `scripts/build_tei.py` で上書きしない。** `data/` の XML には、生成したあとに手作業で直した内容が入っていて、
   `source/` の CSV からは作り直せません。`build_tei.py` は、何も付けなければ `data/` に書き込まず、違いを表示するだけです。
@@ -109,6 +110,7 @@ python3 scripts/check_tei.py                    # TEI の点検（ポインタ�
 node --test tests/corpus-query.test.cjs         # コーパス検索のテスト（tests/ ではなくファイルを指定する）
 python3 scripts/check_style.py                  # 表記ゆれの点検（下の 8.）
 python3 scripts/build_site.py --check           # 生成ファイルが最新か（違えば build_site.py を実行してコミットする）
+python3 scripts/check_release.py                # 版の情報が data/release.json・CITATION.cff・.zenodo.json でそろっているか
 ```
 
 - JSON（`data/*.json`・`iiif/*.json`）を直したら、構文が正しいことも確かめます（`python3 -m json.tool data/news.json` など）。

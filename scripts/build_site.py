@@ -11,8 +11,8 @@
       python3 scripts/build_site.py
       python3 scripts/build_site.py --check   生成ファイルが最新かを調べるだけ（書き込まない。CI で使う）
 
-  出力される index.html・tractate.html・reader.html・sitemap.xml・robots.txt は自動生成なので直接編集しない
-  でください。--check は、いまのスクリプトとデータから作り直したものとファイルを比べ、違えば終了コード 1 で
+  出力される index.html・tractate.html・reader.html・sitemap.xml・robots.txt・data/doc_dates.json は自動生成なので
+  直接編集しないでください。--check は、いまのスクリプトとデータから作り直したものとファイルを比べ、違えば終了コード 1 で
   ファイル名を表示します（index.html のフッターの「生成」の日付は、作り直すたびに変わるので比べません）。目次の内容を変えたいときは、下の CODICES テーブルを編集して
   再実行します。
 
@@ -48,9 +48,14 @@ import html, datetime, os, json, re, sys
 _HERE = os.path.dirname(os.path.abspath(__file__))
 OUTDIR = os.path.dirname(_HERE) if os.path.basename(_HERE).lower() in ("source", "build", "src", "scripts") else _HERE
 
-# --- 公開 URL と、リンクを共有したときのプレビュー（OGP） -----------------------------
-# 独自ドメインに移すときは、ここと、手作業管理のページの <head> の og:url・og:image を直す。
-SITE_URL = "https://sheneset.vercel.app/"
+# --- 版の情報と公開 URL（data/release.json）、リンクを共有したときのプレビュー（OGP） -------------
+# 版番号は HOME のフッターに出す。引用表記（project.html・ビュワー）も同じファイルを読む（assets/viewer-tools.js）。
+# 独自ドメインに移すときは、release.json の url と、手作業管理のページの <head> の og:url・og:image、
+# CITATION.cff・.zenodo.json の URL を直す（scripts/check_release.py が release.json との食い違いを報告する）。
+with open(os.path.join(OUTDIR, "data", "release.json"), encoding="utf-8") as _f:
+    RELEASE = json.load(_f)
+VERSION = RELEASE.get("version", "")
+SITE_URL = RELEASE.get("url") or "https://sheneset.vercel.app/"
 OG_IMAGE = "image/og-image.png"          # 1200×630 の PNG（og:image に SVG は使えない）。scripts/make_og_image.py が作る
 
 def og_tags(path, title, desc):
@@ -570,7 +575,7 @@ def build_index():
   <a href="privacy.html">{tri("プライバシーポリシー", "Privacy", "Confidentialité")}</a>　·　
   <a href="terms.html">{tri("利用規約", "Terms", "Conditions")}</a>　·　
   <a href="https://github.com/icecocoasince2003-create/Nag-Hammadi-Library" target="_blank" rel="noopener">GitHub</a>　·
-  {tri("生成", "built", "généré")} {TODAY}
+  {"v" + VERSION + " · " if VERSION else ""}{tri("生成", "built", "généré")} {TODAY}
 </div></footer>
 
 <script>
@@ -937,7 +942,7 @@ function renderText(){
           return '<span class="m'+(m.type==='X'?' x':'')+(m.cert?' c-'+m.cert:'')+'" data-i="'+i+'">'+inner+'</span>';
         }).join('')+'</span>';
       }).join(' ');
-      return '<p class="seg" id="seg-'+esc(s.id)+'"><a class="sn" href="#seg-'+esc(s.id)+'">§'+esc(s.n)+'</a> <span class="tx">'+body+'</span></p>';
+      return '<p class="seg" id="seg-'+esc(s.id)+'"><a class="sn" href="#seg-'+esc(s.id)+'" aria-haspopup="dialog" title="この箇所を引用 / Cite this passage">§'+esc(s.n)+'</a> <span class="tx">'+body+'</span></p>';
     }).join('');
     return '<section class="ab ab-'+esc(ab.type)+'">'+(AB[ab.type]?'<h3>'+AB[ab.type]+'</h3>':'')+segs+'</section>';
   }).join('');
@@ -1038,7 +1043,8 @@ function render(){
     '<div class="eyebrow" style="margin-top:18px">'+(m?'Codex '+m[1]+' · ':'')+esc(DOC.siglum)+(D.locus?' · '+esc(D.locus):'')+'</div>'+
     '<h1>'+tri(esc(DOC.ja),esc(DOC.en),esc(DOC.fr))+'</h1><div class="alt">'+tri(esc(DOC.en),esc(DOC.ja),esc(DOC.en))+'</div>'+
     '<div class="meta">'+esc(D.lang)+' · '+tri(fmt(s.segs)+' セグメント · '+fmt(s.m)+' 形態素'+(ann?' · '+fmt(s.g)+' 語群':''), fmt(s.segs)+' segments · '+fmt(s.m)+' morphemes'+(ann?' · '+fmt(s.g)+' bound groups':''), fmt(s.segs)+' segments · '+fmt(s.m)+' morphèmes'+(ann?' · '+fmt(s.g)+' groupes':''))+'</div>'+
-    (m?'<p class="doc-photos" data-codices="'+esc(m[1])+'" hidden></p>':'')+
+    '<div class="doc-tools"><button type="button" class="doc-cite" id="docCite" aria-haspopup="dialog">'+tri('この文書を引用','Cite this text','Citer ce texte')+'</button>'+
+      (m?'<span class="doc-photos" data-codices="'+esc(m[1])+'" hidden></span>':'')+'</div>'+
     statusHTML()+
     (ann?'<div class="tools">'+
       '<label><input type="checkbox" id="oInter"'+(OPT.inter?' checked':'')+'>'+tri('語義と品詞を重ねる','Show glosses and POS','Afficher gloses et catégories')+'</label>'+
@@ -1051,6 +1057,20 @@ function render(){
   bind('oInter','inter'); bind('oCert','cert'); bind('oCuts','cuts');
   renderText(); setTitle(); gotoHash();
   withTools(t=>t.fill(shell));
+}
+/* 引用（assets/viewer-tools.js）。§ を押すと、これまでどおりその箇所へ移る（ハッシュの更新）のに加えて、引用のメニューを開く。
+   文書の引用（冒頭の〈この文書を引用〉）には、その文書の最終更新日（data/doc_dates.json）を添える */
+const docStatus=()=>D&&D.st.typed>0?'draft':'text';
+function citeSeg(a){
+  const id=decodeURIComponent((a.getAttribute('href')||'').replace(/^#seg-/,''));
+  const s=D?D.abs.flatMap(ab=>ab.segs).find(x=>x.id===id):null; if(!s) return;
+  const base=DOC.siglum+' §'+s.n, st=docStatus();
+  withTools(t=>t.cite(a,{kind:'passage', path:'reader.html?doc='+encodeURIComponent(DOC.key)+'#seg-'+encodeURIComponent(id),
+    where:{ja:t.withStatus('ja',base,st), en:t.withStatus('en',base,st), fr:t.withStatus('fr',base,st)}}));
+}
+function citeDoc(b){
+  withTools(t=>t.cite(b,{kind:'document', path:'reader.html?doc='+encodeURIComponent(DOC.key),
+    doc:{key:DOC.key, siglum:DOC.siglum, title:{ja:DOC.ja, en:DOC.en, fr:DOC.fr}, status:docStatus()}}));
 }
 function fail(msg, detail){
   shell.innerHTML='<div class="eyebrow">Nag Hammadi Codices</div><h1>'+msg+'</h1>'+(detail?'<p class="err">'+esc(detail)+'</p>':'')+
@@ -1072,6 +1092,8 @@ function fail(msg, detail){
 })();
 document.addEventListener('click',e=>{
   if(e.target.closest('#card .x')){ hideCard(); return; }
+  const sn=e.target.closest('#text .sn'); if(sn){ citeSeg(sn); return; }
+  const dc=e.target.closest('#docCite'); if(dc){ citeDoc(dc); return; }
   const m=e.target.closest('#text .m'); if(m) showCard(m);
 });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') hideCard(); });
@@ -1122,11 +1144,55 @@ def build_robots():
             "\n"
             f"Sitemap: {SITE_URL}sitemap.xml\n")
 
+# --- data/doc_dates.json（文書ごとの最終更新日）---------------------------------
+# ビュワーの〈この文書を引用〉が、引用表記に添える日付（assets/viewer-tools.js）。data/catalog.xml の文書のうち本文の XML
+# （<ref type="xml">）を持つものについて、その XML を最後に変えたコミットの日付（git log -1 --format=%cs -- ファイル）を書く。
+# まだコミットしていない変更のあるファイルは今日の日付にする（直したその日にコミットすれば、コミットの日付と同じになる）。
+# git を使えないときは日付を空にする。--check では、文書とファイルの対応だけを比べる（日付はコミットのたびに変わるので比べない）。
+def git_dates(paths):
+    import subprocess
+    try:
+        run = lambda *a: subprocess.run(("git",) + a, cwd=OUTDIR, capture_output=True, text=True, check=True).stdout
+        dirty = {line[3:].strip() for line in run("status", "--porcelain", "--", *paths).splitlines()}
+        dates, cur = {}, None
+        for line in run("log", "--format=@%cs", "--name-only", "--", *paths).splitlines():
+            if line.startswith("@"):
+                cur = line[1:]
+            elif line and line not in dates:
+                dates[line] = cur
+        return {p: (TODAY if p in dirty else dates.get(p, "")) for p in paths}
+    except (OSError, subprocess.CalledProcessError):
+        return {p: "" for p in paths}
+
+def build_doc_dates():
+    import xml.etree.ElementTree as ET
+    T, XID = "{http://www.tei-c.org/ns/1.0}", "{http://www.w3.org/XML/1998/namespace}id"
+    files = {}
+    for b in ET.parse(os.path.join(OUTDIR, "data", "catalog.xml")).getroot().iter(T + "bibl"):
+        ref = next((r.get("target") for r in b.findall(T + "ref") if r.get("type") == "xml"), None)
+        if b.get("type") == "document" and ref and b.get(XID, "").startswith("doc-"):
+            files[b.get(XID)[4:]] = ref
+    dates = git_dates(sorted(set(files.values())))
+    comment = ("自動生成ファイル: scripts/build_site.py が出力します（直接編集しない）。文書ごとの最終更新日"
+               "（本文の XML を最後に変えたコミットの日付）。ビュワーの〈この文書を引用〉が読む。")
+    rows = [json.dumps(k, ensure_ascii=False) + ": " + json.dumps({"file": f, "updated": dates.get(f, "")}, ensure_ascii=False)
+            for k, f in files.items()]
+    return ('{\n  "_comment": ' + json.dumps(comment, ensure_ascii=False) + ',\n  "docs": {\n    ' +
+            ",\n    ".join(rows) + "\n  }\n}\n")   # 1 文書 1 行（日付が変わったときの差分が 1 行で済む）
+
+def _doc_files(text):
+    """--check 用: doc_dates.json の文書とファイルの対応（日付は除く）"""
+    try:
+        return {k: v.get("file") for k, v in json.loads(text).get("docs", {}).items()}
+    except ValueError:
+        return None
+
 # --- write ------------------------------------------------------------------
 _BANNER = "<!-- 自動生成ファイル: scripts/build_site.py が出力します。直接編集せず、スクリプトの CODICES を編集して再実行してください。 -->\n"
 _sitemap, _n_urls = build_sitemap()
 OUTPUTS = {"index.html": _BANNER + build_index(), "tractate.html": _BANNER + build_tractate(),
-           "reader.html": _BANNER + build_reader(), "sitemap.xml": _sitemap, "robots.txt": build_robots()}
+           "reader.html": _BANNER + build_reader(), "sitemap.xml": _sitemap, "robots.txt": build_robots(),
+           os.path.join("data", "doc_dates.json"): build_doc_dates()}
 # 生成の日付（index.html のフッターの「生成 …」）は作り直すたびに変わるので、--check では比べない
 _BUILT = re.compile(r'(<span class="l-fr">généré</span>) \d{4}-\d{2}-\d{2}')
 
@@ -1139,7 +1205,10 @@ if "--check" in sys.argv[1:]:
         except OSError:
             stale.append(name + "（ファイルがありません）")
             continue
-        if _BUILT.sub(r"\1", current) != _BUILT.sub(r"\1", text):
+        if name.endswith("doc_dates.json"):
+            if _doc_files(current) != _doc_files(text):
+                stale.append(name)
+        elif _BUILT.sub(r"\1", current) != _BUILT.sub(r"\1", text):
             stale.append(name)
     if stale:
         print("生成ファイルが、いまのスクリプトとデータから作り直したものと違います: " + "、".join(stale))
@@ -1152,6 +1221,6 @@ for name, text in OUTPUTS.items():
     with open(os.path.join(OUTDIR, name), "w", encoding="utf-8") as f:
         f.write(text)
 print("wrote index.html (landing), tractate.html (placeholder) and reader.html (draft full texts)")
-print("wrote sitemap.xml (%d URLs) and robots.txt" % _n_urls)
+print("wrote sitemap.xml (%d URLs), robots.txt and data/doc_dates.json" % _n_urls)
 print("codices:", len(CODICES), "| tractates:", TOTAL, "| available:", AVAIL, "| drafts:", DRAFT, "| text only:", PLAIN, "| soon:", SOON,
       "| listed but not counted:", ", ".join("%s,%s" % k for k in sorted(UNCOUNTED)))

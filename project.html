@@ -65,6 +65,8 @@ html[data-lang="ja"] .member .nm{font-family:"Noto Serif JP",serif}
 .mailbox .mb-n{font-size:.78rem; line-height:1.7; color:var(--ink-faint)}
 /* ライトモード（配色は assets/cosmos.css）: 暗い地を前提にした部分 */
 html[data-mode="light"] .cite{background:rgba(74,58,30,.05)}
+.cite-dl{margin:10px 0 0; font-size:.88rem}
+.cite-dl a{color:var(--gold-bright); text-underline-offset:4px}
 html[data-mode="light"] .member .mono{background:radial-gradient(circle at 50% 40%, rgba(157,139,224,.16), rgba(154,114,32,.1))}
 </style>
 <link rel="stylesheet" href="assets/cosmos.css">
@@ -72,6 +74,7 @@ html[data-mode="light"] .member .mono{background:radial-gradient(circle at 50% 4
 <link rel="stylesheet" href="assets/community.css">
 <script defer src="assets/cosmos.js"></script>
 <script defer src="assets/site.js"></script>
+<script defer src="assets/viewer-tools.js"></script>
 <script defer src="assets/analytics.js"></script>
 <script defer src="assets/community-config.js"></script>
 <script defer src="assets/community.js"></script>
@@ -144,6 +147,7 @@ html[data-mode="light"] .member .mono{background:radial-gradient(circle at 50% 4
   <span class="l-en">The Coptic texts (and the Greek of Plato’s Republic, OCT/Burnet) are in the public domain. Notes, lexicon, translations and essays are this project’s own work, published under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>. The site’s source code (HTML, CSS, JavaScript and Python scripts) is released under the <a href="https://github.com/icecocoasince2003-create/Nag-Hammadi-Library/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>. Please cite as:</span>
   <span class="l-fr">Les textes coptes (et le grec de la République de Platon, OCT/Burnet) sont dans le domaine public. Notes, lexique, traductions et essais sont l’œuvre du projet, publiés sous <a href="https://creativecommons.org/licenses/by/4.0/deed.fr" target="_blank" rel="noopener">CC BY 4.0</a>. Le code source du site (HTML, CSS, JavaScript et scripts Python) est publié sous <a href="https://github.com/icecocoasince2003-create/Nag-Hammadi-Library/blob/main/LICENSE" target="_blank" rel="noopener">licence MIT</a>. Citation proposée :</span></p>
   <div class="cite" id="citeBox"></div>
+  <p class="cite-dl" id="citeZenodo" hidden><a href="https://doi.org/" target="_blank" rel="noopener"><span class="l-ja">全データを一括でダウンロード（版つき）↗</span><span class="l-en">Download all the data of this version ↗</span><span class="l-fr">Télécharger toutes les données de cette version ↗</span></a></p>
 
   <h2 id="sheneset"><span class="num">VII</span><span class="l-ja">サイト名とマスコット</span><span class="l-en">The name and the mascot</span><span class="l-fr">Le nom et la mascotte</span></h2>
   <p><span class="l-ja">サイト名の「Sheneset（シェネセト）」は、ナグ・ハマディ写本が見つかったジャバル・アッ＝ターリフの崖に近い古代の町の、コプト語の名前 <span class="cop">ϣⲉⲛⲉⲥⲏⲧ</span> に由来します。この町はギリシア語でケノボスキオン（「ガチョウの牧場」）と呼ばれ、初期の研究では写本も「ケノボスキオン写本」と呼ばれていました。<span class="cop">ϣⲉⲛⲉⲥⲏⲧ</span> の原義は「セトの木（々）」です。このセトはエジプトの神ですが、写本に多く含まれるセツ派の文書とも響き合う名前です。</span>
@@ -169,13 +173,19 @@ html[data-mode="light"] .member .mono{background:radial-gradient(circle at 50% 4
   const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const tri=o=>{ o=o||{}; return ["ja","en","fr"].map(l=>`<span class="l-${l}">${esc(o[l]||o.en||o.ja||"")}</span>`).join(""); };
 
-  /* 引用表記（閲覧日は今日の日付） */
-  const today=new Date().toISOString().slice(0,10);
-  const url=location.origin && location.origin.startsWith("http") ? location.origin+"/" : "https://sheneset.vercel.app/";
-  document.getElementById("citeBox").innerHTML=
-    `<span class="l-ja">生田目心愛 編『Sheneset：ナグ・ハマディ写本コーパス』2026年–. ${esc(url)}（${today} 閲覧）</span>`+
-    `<span class="l-en">Kokoa Nabatame (ed.), <i>Sheneset: A Digital TEI Edition of the Nag Hammadi Codices</i>, 2026–. ${esc(url)} (accessed ${today}).</span>`+
-    `<span class="l-fr">Kokoa Nabatame (éd.), <i>Sheneset : édition numérique TEI des codices de Nag Hammadi</i>, 2026–. ${esc(url)} (consulté le ${today}).</span>`;
+  /* 引用表記。版番号・DOI・公開 URL は data/release.json、閲覧日は今日の日付。書式はビュワーの〈この箇所を引用〉と同じ
+     （assets/viewer-tools.js の citation。defer で読み込むので、まだ無いときは読み込み後に呼んでもらう）。
+     DOI があれば、Zenodo の記録（全データの一括ダウンロード）へのリンクも出す */
+  const withTools=f=>{ if(window.NHCTools) f(window.NHCTools); else (window.NHCToolsQ=window.NHCToolsQ||[]).push(f); };
+  withTools(t=>t.release().then(rel=>{
+    document.getElementById("citeBox").innerHTML=["ja","en","fr"].map(l=>
+      `<span class="l-${l}">${t.citationHTML(rel,l,{ja:"2026年–",en:"2026–",fr:"2026–"}[l],"")}</span>`).join("");
+    if(rel.doi){
+      const z=document.getElementById("citeZenodo");
+      z.querySelector("a").href="https://doi.org/"+encodeURI(rel.doi);
+      z.hidden=false;
+    }
+  }));
 
   fetch("data/project.json",{cache:"no-store"}).then(r=>r.ok?r.json():Promise.reject(r.status)).then(d=>{
     const members=(d.members||[]).filter(m=>m.public);

@@ -111,6 +111,10 @@ main{grid-area:main; overflow-y:auto; padding:34px clamp(18px,4vw,60px) 120px; s
 .seg .no{position:absolute; left:8px; top:15px; width:34px; text-align:right; font-family:var(--disp);
   font-size:.82rem; color:var(--ink-faint); font-variant-numeric:tabular-nums; user-select:none}
 .seg.incipit .no, .seg.colophon .no{color:var(--gold)}
+/* § の番号はボタン（押すと〈この箇所を引用〉のメニュー。assets/viewer-tools.js）。見た目は上の .no のまま */
+button.no{-webkit-appearance:none; appearance:none; background:none; border:0; padding:0; margin:0;
+  font:inherit; color:inherit; line-height:inherit; letter-spacing:inherit; cursor:pointer}
+button.no:hover, button.no[aria-expanded="true"]{color:var(--gold)}
 .seg:target, .seg.flash{background:var(--hi)}
 .seg.par-active{background:var(--sel); box-shadow:inset 3px 0 0 var(--lapis)}
 .coptic{font-family:var(--copt); font-size:1.46rem; line-height:1.95; direction:ltr; color:var(--ink); word-spacing:.04em}
@@ -386,8 +390,8 @@ html[data-lang="en"] .l-en{display:revert}
       <div class="seg-ctl">
         <button class="chip" id="ilBtn" aria-pressed="true" title="語釈を本文に重ねて表示 / Show interlinear glosses"><span class="l-ja">語釈</span><span class="l-en">Interlinear</span></button>
         <button class="chip" id="loanBtn" aria-pressed="false" title="ギリシア語借用語をマーキング / Mark Greek loanwords"><span class="l-ja">借用語</span><span class="l-en">Loanwords</span><span id="loanN" class="loann"></span></button>
-        <button class="chip" id="pageBtn" aria-pressed="false" title="写本のページ番号を表示 / Show codex page numbers"><span class="l-ja">ページ</span><span class="l-en">Pages</span></button>
-        <button class="chip" id="lineBtn" aria-pressed="false" title="写本の行番号を表示 / Show manuscript line numbers"><span class="l-ja">行</span><span class="l-en">Lines</span></button>
+        <button class="chip" id="pageBtn" aria-pressed="false" title="写本のページ番号を表示 / Show codex page numbers" hidden><span class="l-ja">ページ</span><span class="l-en">Pages</span></button>
+        <button class="chip" id="lineBtn" aria-pressed="false" title="写本の行番号を表示 / Show manuscript line numbers" hidden><span class="l-ja">行</span><span class="l-en">Lines</span></button>
         <button class="chip" id="tlBtn" aria-pressed="false" title="語釈・対訳・注解の言語 / Language of glosses, translation and notes">訳: 日</button>
         <button class="chip" id="langBtn" title="Language / 言語">English</button>
       </div>
@@ -418,7 +422,7 @@ html[data-lang="en"] .l-en{display:revert}
     <div class="doc-head">
       <div class="kick" id="docKick">Nag Hammadi Codex III,3 · pp. 70–90</div>
       <h1 id="docH1"><span class="cop">ⲉⲩⲅⲛⲱⲥⲧⲟⲥ ⲡⲙⲁⲕⲁⲣⲓⲟⲥ</span><br><span class="l-ja">祝福されたエウグノストス</span><span class="l-en">Eugnostos the Blessed</span></h1>
-      <p class="doc-photos" data-codices="III V" hidden></p>
+      <div class="doc-tools"><button type="button" class="doc-cite" id="docCite" aria-haspopup="dialog"><span class="l-ja">この文書を引用</span><span class="l-en">Cite this text</span></button><span class="doc-photos" data-codices="III V" hidden></span></div>
       <p class="meta"><span class="l-ja">前1〜2世紀のギリシア語原典に遡るとされる、非キリスト教的な思弁的宇宙生成論。語りえぬ第一原理から、先在の父・自生者・不死の人間・人の子(救済者)・ソフィアと諸アイオーンが流出する次第を、書簡の体裁で説く。各形態素をクリックすると語義が表示されます。他の文書にも同じ文言がある箇所には訳の後ろに <span class="pref" aria-hidden="true">‖ V,1</span> のような印があり、押すと右のパネルに並行箇所が表示されます。</span><span class="l-en">A non-Christian speculative cosmogony, held to go back to a Greek original of the 1st–2nd c. BCE. In epistolary form it expounds how, from the ineffable First Principle, there emanate the pre-existent Father, the Self-Begotten, the Immortal Man, the Son of Man (the Saviour), Sophia and the Aeons. Click any morpheme for its sense. Where the same wording also occurs in another text, a mark such as <span class="pref" aria-hidden="true">‖ V,1</span> follows the translation; select it to see the parallel passage in the side panel.</span></p>
     </div>
         <section class="facsimile" id="facsimile" aria-label="写本ファクシミリ / Facsimile" hidden>
@@ -575,8 +579,15 @@ async function load(){
   buildAll();
 }
 function buildAll(){
-  parse(); parsePar(); render();
+  parse(); parsePar(); markerButtons(); render();
   buildCredit();
+}
+/* 〈ページ〉〈行〉は、本文に改頁（<pb>）・改行（<lb>）があるときだけ出す（いまのエウグノストスの本文には無い） */
+function markerButtons(){
+  const segs=SEGS_III.concat(SEGS_V), has=k=>segs.some(s=>(s.flow||[]).some(it=>it.k===k));
+  const pb=$("#pageBtn"), lb=$("#lineBtn");
+  if(pb) pb.hidden=!has("pd");
+  if(lb) lb.hidden=!has("lb");
 }
 function showLoadError(base, diag){
   const url=base+"data/eugnostos_tei.xml";
@@ -701,7 +712,7 @@ function segHTML(s){
   if(!tr) tr = pendingText();
   const sub=s.sub?(" "+s.sub):"";
   return `<div class="seg${sub}" id="seg-${s.id}" data-id="${s.id}">
-    <div class="no">${s.n||""}</div>
+    <button type="button" class="no" data-cite="${s.id}" aria-haspopup="dialog" title="この箇所を引用 / Cite this passage">${s.n||""}</button>
     <div class="coptic">${words}</div>
     <div class="${trCls}">${escapeHTML(tr)}${parRefsHTML(s)}</div>
   </div>`;
@@ -733,7 +744,7 @@ function render(){
    一致する文字に印を付ける（並行箇所のパネルと同じ照合）。 */
 function synLeftHTML(s,html){
   const tr=pickTrans(s);
-  return `<div class="lseg"><div class="no" style="position:static;color:var(--gold)">${escapeHTML(s.n)}</div>`+
+  return `<div class="lseg"><button type="button" class="no" data-cite="${s.id}" aria-haspopup="dialog" title="この箇所を引用 / Cite this passage" style="position:static;color:var(--gold)">${escapeHTML(s.n)}</button>`+
     `<div class="coptic" style="font-size:1.16rem">${html}</div>${tr?`<div class="trans">${escapeHTML(tr)}</div>`:""}</div>`;
 }
 function renderSyn(box){
@@ -1382,6 +1393,29 @@ function applyUILang(){
     if(typeof render==="function"){ render(); updateParBtn(); }
   }; }
 applyUILang();
+
+/* ---------- 引用（〈この箇所を引用〉〈この文書を引用〉。assets/viewer-tools.js） ----------
+   セグメントの番号を押すと、その箇所の引用のメニューを開く。III,3 の箇所は eugnostos.html?wit=III#seg-…、
+   V,1 の枠（V-INCIPIT）は ?wit=V#seg-… を指す。この本文には頁・行が無いので、箇所は §（セグメントの番号）で示す。
+   〈この文書を引用〉は、いま開いている写本（III,3 / V,1 / 対照）の文書としての引用で、本文の最終更新日を添える。 */
+const withTools=f=>{ if(window.NHCTools) f(window.NHCTools); else (window.NHCToolsQ=window.NHCToolsQ||[]).push(f); };
+const CITE_DOC={
+  III:{siglum:"NHC III,3", title:{ja:"祝福されたエウグノストス", en:"Eugnostos the Blessed", fr:"Eugnoste le Bienheureux"}, status:""},
+  V:{siglum:"NHC V,1", title:{ja:"エウグノストス", en:"Eugnostos", fr:"Eugnoste"}, status:"text"},
+  SYN:{siglum:"NHC III,3 / V,1", title:{ja:"エウグノストス", en:"Eugnostos", fr:"Eugnoste"}, status:""}};
+document.addEventListener("click",e=>{
+  if(!e.target.closest) return;
+  const b=e.target.closest("button.no[data-cite]");
+  if(b){
+    const id=b.dataset.cite, inV=/^V-/.test(id), s=(inV?SEGS_V:SEGS_III).find(x=>x.id===id); if(!s) return;
+    const where=(inV?"NHC V,1":"NHC III,3")+" §"+s.n;
+    withTools(t=>t.cite(b,{kind:"passage", path:"eugnostos.html?wit="+(inV?"V":"III")+"#seg-"+id, where:{ja:where, en:where, fr:where}}));
+    return;
+  }
+  const d=e.target.closest("#docCite");
+  if(d){ const w=CITE_DOC[curWit]||CITE_DOC.III;
+    withTools(t=>t.cite(d,{kind:"document", path:"eugnostos.html?wit="+(CITE_DOC[curWit]?curWit:"III"), doc:Object.assign({key:"eugnostos"},w)})); }
+});
 
 /* ---------- credit ---------- */
 function buildCredit(){

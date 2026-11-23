@@ -187,7 +187,7 @@ function renderText(){
           return '<span class="m'+(m.type==='X'?' x':'')+(m.cert?' c-'+m.cert:'')+'" data-i="'+i+'">'+inner+'</span>';
         }).join('')+'</span>';
       }).join(' ');
-      return '<p class="seg" id="seg-'+esc(s.id)+'"><a class="sn" href="#seg-'+esc(s.id)+'">§'+esc(s.n)+'</a> <span class="tx">'+body+'</span></p>';
+      return '<p class="seg" id="seg-'+esc(s.id)+'"><a class="sn" href="#seg-'+esc(s.id)+'" aria-haspopup="dialog" title="この箇所を引用 / Cite this passage">§'+esc(s.n)+'</a> <span class="tx">'+body+'</span></p>';
     }).join('');
     return '<section class="ab ab-'+esc(ab.type)+'">'+(AB[ab.type]?'<h3>'+AB[ab.type]+'</h3>':'')+segs+'</section>';
   }).join('');
@@ -288,7 +288,8 @@ function render(){
     '<div class="eyebrow" style="margin-top:18px">'+(m?'Codex '+m[1]+' · ':'')+esc(DOC.siglum)+(D.locus?' · '+esc(D.locus):'')+'</div>'+
     '<h1>'+tri(esc(DOC.ja),esc(DOC.en),esc(DOC.fr))+'</h1><div class="alt">'+tri(esc(DOC.en),esc(DOC.ja),esc(DOC.en))+'</div>'+
     '<div class="meta">'+esc(D.lang)+' · '+tri(fmt(s.segs)+' セグメント · '+fmt(s.m)+' 形態素'+(ann?' · '+fmt(s.g)+' 語群':''), fmt(s.segs)+' segments · '+fmt(s.m)+' morphemes'+(ann?' · '+fmt(s.g)+' bound groups':''), fmt(s.segs)+' segments · '+fmt(s.m)+' morphèmes'+(ann?' · '+fmt(s.g)+' groupes':''))+'</div>'+
-    (m?'<p class="doc-photos" data-codices="'+esc(m[1])+'" hidden></p>':'')+
+    '<div class="doc-tools"><button type="button" class="doc-cite" id="docCite" aria-haspopup="dialog">'+tri('この文書を引用','Cite this text','Citer ce texte')+'</button>'+
+      (m?'<span class="doc-photos" data-codices="'+esc(m[1])+'" hidden></span>':'')+'</div>'+
     statusHTML()+
     (ann?'<div class="tools">'+
       '<label><input type="checkbox" id="oInter"'+(OPT.inter?' checked':'')+'>'+tri('語義と品詞を重ねる','Show glosses and POS','Afficher gloses et catégories')+'</label>'+
@@ -301,6 +302,20 @@ function render(){
   bind('oInter','inter'); bind('oCert','cert'); bind('oCuts','cuts');
   renderText(); setTitle(); gotoHash();
   withTools(t=>t.fill(shell));
+}
+/* 引用（assets/viewer-tools.js）。§ を押すと、これまでどおりその箇所へ移る（ハッシュの更新）のに加えて、引用のメニューを開く。
+   文書の引用（冒頭の〈この文書を引用〉）には、その文書の最終更新日（data/doc_dates.json）を添える */
+const docStatus=()=>D&&D.st.typed>0?'draft':'text';
+function citeSeg(a){
+  const id=decodeURIComponent((a.getAttribute('href')||'').replace(/^#seg-/,''));
+  const s=D?D.abs.flatMap(ab=>ab.segs).find(x=>x.id===id):null; if(!s) return;
+  const base=DOC.siglum+' §'+s.n, st=docStatus();
+  withTools(t=>t.cite(a,{kind:'passage', path:'reader.html?doc='+encodeURIComponent(DOC.key)+'#seg-'+encodeURIComponent(id),
+    where:{ja:t.withStatus('ja',base,st), en:t.withStatus('en',base,st), fr:t.withStatus('fr',base,st)}}));
+}
+function citeDoc(b){
+  withTools(t=>t.cite(b,{kind:'document', path:'reader.html?doc='+encodeURIComponent(DOC.key),
+    doc:{key:DOC.key, siglum:DOC.siglum, title:{ja:DOC.ja, en:DOC.en, fr:DOC.fr}, status:docStatus()}}));
 }
 function fail(msg, detail){
   shell.innerHTML='<div class="eyebrow">Nag Hammadi Codices</div><h1>'+msg+'</h1>'+(detail?'<p class="err">'+esc(detail)+'</p>':'')+
@@ -322,6 +337,8 @@ function fail(msg, detail){
 })();
 document.addEventListener('click',e=>{
   if(e.target.closest('#card .x')){ hideCard(); return; }
+  const sn=e.target.closest('#text .sn'); if(sn){ citeSeg(sn); return; }
+  const dc=e.target.closest('#docCite'); if(dc){ citeDoc(dc); return; }
   const m=e.target.closest('#text .m'); if(m) showCard(m);
 });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') hideCard(); });

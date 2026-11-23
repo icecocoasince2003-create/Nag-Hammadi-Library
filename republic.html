@@ -74,6 +74,12 @@ body{
 .pcop .no{position:absolute; left:2px; top:1px; width:30px; text-align:right; font-family:var(--disp);
   font-size:.8rem; color:var(--ink-faint); font-variant-numeric:tabular-nums; user-select:none}
 .prow:target .pcop, .prow.flash .pcop{background:var(--hi)}
+/* § の番号はボタン（押すと〈この箇所を引用〉のメニュー。assets/viewer-tools.js）。見た目は上の .no のまま */
+button.no{-webkit-appearance:none; appearance:none; background:none; border:0; padding:0; margin:0;
+  font:inherit; color:inherit; line-height:inherit; letter-spacing:inherit; cursor:pointer}
+button.no:hover, button.no[aria-expanded="true"]{color:var(--gold)}
+/* 頁・行のアンカー（#p48.16）で開いたときの、その行（頁）の印 */
+.lbm.hit, .pdm.hit{outline:2px solid var(--gold); outline-offset:1px; border-radius:3px}
 /* Greek cell */
 .grcline{font-family:"GFS Didot","Spectral","Noto Serif",Georgia,serif; font-size:1.16rem; line-height:1.92; color:var(--ink)}
 .grcja{font-family:"Noto Serif JP",serif; font-size:.9rem; line-height:1.72; color:var(--ink-soft); margin-top:6px}
@@ -381,7 +387,7 @@ a.relcard:hover{border-color:var(--gold)}
     <div class="doc-head">
       <div class="kick">Nag Hammadi Codex VI,5 · pp. 48–51</div>
       <h1><span class="cop">ⲡⲟⲗⲓⲧⲉⲓⲁ</span><br><span class="l-ja">プラトン『国家』588b–589b</span><span class="l-en">Plato, Republic 588b–589b</span></h1>
-      <p class="doc-photos" data-codices="VI" hidden></p>
+      <div class="doc-tools"><button type="button" class="doc-cite" id="docCite" aria-haspopup="dialog"><span class="l-ja">この文書を引用</span><span class="l-en">Cite this text</span></button><span class="doc-photos" data-codices="VI" hidden></span></div>
       <p class="meta"><span class="l-ja">プラトン『国家』第9巻 588b–589b のコプト語訳（NHC VI,5）と、対応するギリシア語原文の対訳。左にコプト語本文、右にギリシア語原文（OCT/Burnet）を並べています。各形態素をクリックすると品詞・語義・辞書が表示され、〈借用語〉ボタンでギリシア語からの借用語が左本文上にマーキングされます。</span><span class="l-en">A Coptic translation of Plato’s Republic, Book IX 588b–589b (NHC VI,5), set in parallel with the Greek original (OCT/Burnet): Coptic on the left, Greek on the right. Click any morpheme for its part of speech, sense and dictionary entry; the “Loanwords” button marks Greek loanwords within the Coptic text.</span></p>
     </div>
         <section class="facsimile" id="facsimile" aria-label="写本ファクシミリ / Facsimile" hidden>
@@ -544,7 +550,7 @@ async function load(){
   buildAll();
 }
 function buildAll(){
-  parse(); render(); buildCredit();
+  parse(); locIndex(); markerButtons(); render(); buildCredit(); gotoPageLine();
 }
 function showLoadError(base, diag){
   const url=base+"data/republic_tei.xml";
@@ -700,7 +706,7 @@ function segHTML(s){
   if(!tr) tr = pendingText();
   return `<div class="prow" id="seg-${s.id}" data-id="${s.id}">
     <div class="pcell ccol"><div class="pcop">
-      <div class="no">${s.n||""}</div>
+      <button type="button" class="no" data-cite="${s.id}" aria-haspopup="dialog" title="この箇所を引用 / Cite this passage">${s.n||""}</button>
       <div class="coptic">${cop}</div>
       <div class="${trCls}">${escapeHTML(tr)}</div>
     </div></div>
@@ -1052,6 +1058,80 @@ function applyUILang(){
   }; }
 applyUILang();
 
+/* ---------- 頁・行（<pb>・<lb>）と、頁・行のアンカー ----------
+   locIndex: 各セグメントの最初と最後の語が写本のどの頁・行にあるか（s.loc = {from:{pg,ln}, to:{pg,ln}}、
+   s.pg0 = セグメントの始まる前の頁）。頁・行の無い本文では s.loc は null。
+   republic.html#p48.16 は 48 頁 16 行を含む（最初の）セグメントへ、#p48 は 48 頁の語のある最初のセグメントへ移り、
+   そのセグメントと、行（頁）の印を目立たせる（頁・行の番号も表示する）。引用文の URL にもこの形を使う。
+   同じ形を、あとで頁・行を入れるほかの本文でも使う。 */
+function locIndex(){
+  let pg="", ln="";
+  SEGS_III.forEach(s=>{
+    let from=null, to=null; s.pg0=pg;
+    (s.flow||[]).forEach(it=>{
+      if(it.k==="pd"){ pg=it.n; ln=""; }
+      else if(it.k==="lb"){ ln=it.n; }
+      else if(it.k==="w"){ const here={pg, ln}; if(!from) from=here; to=here; }
+    });
+    s.loc=from&&from.pg&&from.ln?{from, to}:null;
+  });
+}
+function locLabel(loc){
+  const a=loc.from, b=loc.to;
+  return a.pg===b.pg ? a.pg+","+a.ln+(b.ln!==a.ln?"–"+b.ln:"") : a.pg+","+a.ln+"–"+b.pg+","+b.ln;
+}
+function plCmp(a,b){ return (+a.pg - +b.pg)||(+a.ln - +b.ln); }
+function gotoPageLine(){
+  const m=/^#p(\d+)(?:\.(\d+))?$/.exec(location.hash); if(!m) return;
+  const pg=m[1], ln=m[2]==null?null:m[2], t={pg, ln};
+  const s=SEGS_III.find(x=>x.loc&&(ln==null ? +x.loc.from.pg<=+pg&&+x.loc.to.pg>=+pg : plCmp(x.loc.from,t)<=0&&plCmp(x.loc.to,t)>=0));
+  const row=s&&document.getElementById("seg-"+s.id); if(!row) return;
+  // 頁・行の番号を表示する（〈ページ〉〈行〉を押したのと同じ）
+  [["data-page","#pageBtn"],["data-line","#lineBtn"]].forEach(([a,b])=>{ H.setAttribute(a,"on"); const e=$(b); if(e) e.setAttribute("aria-pressed","true"); });
+  // その行（頁）の印: セグメントの中の頁と行の印を順にたどる
+  $$(".lbm.hit,.pdm.hit").forEach(x=>x.classList.toggle("hit",false));
+  let cur=s.pg0, mark=null;
+  $$(".pdm,.lbm",row).some(x=>{
+    if(x.classList.contains("pdm")){ cur=x.dataset.n; if(ln==null&&cur===pg){ mark=x; return true; } }
+    else if(ln!=null&&cur===pg&&x.dataset.n===ln){ mark=x; return true; }
+    return false;
+  });
+  if(mark) mark.classList.add("hit");
+  row.scrollIntoView({block:"center"});
+  row.classList.add("flash"); setTimeout(()=>row.classList.toggle("flash",false),2200);
+}
+window.addEventListener("hashchange",gotoPageLine);
+/* 〈ページ〉〈行〉は、本文に改頁（<pb>）・改行（<lb>）があるときだけ出す */
+function markerButtons(){
+  const has=k=>SEGS_III.some(s=>(s.flow||[]).some(it=>it.k===k));
+  const pb=$("#pageBtn"), lb=$("#lineBtn");
+  if(pb) pb.hidden=!has("pd");
+  if(lb) lb.hidden=!has("lb");
+}
+
+/* ---------- 引用（〈この箇所を引用〉〈この文書を引用〉。assets/viewer-tools.js） ----------
+   セグメントの番号を押すと、その箇所の引用のメニューを開く。箇所は写本の頁・行（NHC VI 48,16–17）と §、
+   URL は頁・行のアンカー（republic.html#p48.16）。〈この文書を引用〉には本文の最終更新日を添える。 */
+const withTools=f=>{ if(window.NHCTools) f(window.NHCTools); else (window.NHCToolsQ=window.NHCToolsQ||[]).push(f); };
+const CITE_DOC={key:"republic", siglum:"NHC VI,5", status:"",
+  title:{ja:"プラトン『国家』588b–589b", en:"Plato, Republic 588b–589b", fr:"Platon, République 588b–589b"}};
+document.addEventListener("click",e=>{
+  if(!e.target.closest) return;
+  const b=e.target.closest("button.no[data-cite]");
+  if(b){
+    const s=SEGS_III.find(x=>x.id===b.dataset.cite); if(!s) return;
+    let path, where;
+    if(s.loc){ const lab="NHC VI "+locLabel(s.loc);
+      path="republic.html#p"+s.loc.from.pg+"."+s.loc.from.ln;
+      where={ja:lab+"（§"+s.n+"）", en:lab+" (§"+s.n+")", fr:lab+" (§"+s.n+")"}; }
+    else { const lab="NHC VI,5 §"+s.n; path="republic.html#seg-"+s.id; where={ja:lab, en:lab, fr:lab}; }
+    withTools(t=>t.cite(b,{kind:"passage", path, where}));
+    return;
+  }
+  const d=e.target.closest("#docCite");
+  if(d) withTools(t=>t.cite(d,{kind:"document", path:"republic.html", doc:CITE_DOC}));
+});
+
 /* ---------- credit ---------- */
 function buildCredit(){
   $("#credit").innerHTML=`
@@ -1078,7 +1158,7 @@ function classifyAndStore(xml){
 }
 function refreshAfterLoad(){
   $("#loadwarn").hidden=true; $("#q").value=""; closeSearch();
-  doSearch(""); parse(); render(); buildCredit();
+  doSearch(""); parse(); locIndex(); markerButtons(); render(); buildCredit();
 }
 function readFiles(files){
   const list=Array.from(files||[]); if(!list.length) return;

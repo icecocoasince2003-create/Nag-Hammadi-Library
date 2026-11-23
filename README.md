@@ -100,6 +100,8 @@ nag_hammadi_library/
 ├─ .nojekyll           ← GitHub Pages 用
 ├─ .gitignore
 ├─ .vercelignore       ← Vercel で配信しないもの(いまは design/ だけ)
+├─ CITATION.cff        ← 引用のための情報(GitHub の「Cite this repository」)。版番号は data/release.json と同じにする
+├─ .zenodo.json        ← Zenodo の記録の情報(GitHub のリリースから DOI を発行するとき)。版番号は data/release.json と同じにする
 ├─ design/             ← デザイン用の資料(アイコン・キャラクターシート・表情・配色案の PDF)。サイトからは使わず、配信しない
 ├─ image/
 │   ├─ icon.svg         ← サイトのアイコン画像(各ページが読み込みます)
@@ -109,6 +111,10 @@ nag_hammadi_library/
 │   ├─ lexicon.xml
 │   ├─ parallels.xml      ← 並行箇所(scripts/build_parallels.py が作る)
 │   ├─ catalog.xml
+│   ├─ release.json       ← 版の情報(版番号・リリースの日・DOI・公開 URL)。下の「版とリリースの作り方」
+│   ├─ doc_dates.json     ← 文書ごとの最終更新日(scripts/build_site.py が git の履歴から書き出す)
+│   ├─ facsimile_links.json ← 写本ごとの写真(Claremont, Nag Hammadi Archive)へのリンク
+│   ├─ news.json・links.json  ← HOME の NEWS と関連サイト
 │   └─ republic_*.xml
 ├─ source/             ← CSV／TSV(サイトに反映できるのは、いまは lexicon.csv だけ。下の「データの編集」)
 │   ├─ lexicon.csv         辞書(1行=1語義／同形異義語は同じlemmaを複数行)
@@ -262,6 +268,22 @@ index.html(目次:全52文書)
 読み込みます。オフライン公開する場合はこれらをローカルにセルフホストしてください
 (Coptic字形が無い環境では汎用セリフにフォールバックします)。
 
+## 版とリリースの作り方
+
+版の情報は `data/release.json` にまとめています（版番号 `version`、リリースの日 `date`、その版の DOI `doi`、すべての版をまとめる DOI
+`doi_all_versions`、公開 URL `url`）。サイトの引用表記（`project.html` の引用欄、ビュワーの〈この箇所を引用〉〈この文書を引用〉）と、
+HOME のフッターの版番号は、このファイルを読みます。`CITATION.cff`（GitHub の「Cite this repository」）と `.zenodo.json`（Zenodo の記録の情報）
+は手で同じ内容に合わせ、`python3 scripts/check_release.py` で確かめます（GitHub の自動チェックでも走り、`CITATION.cff` は cffconvert でも検証します）。
+2 つのファイルが両方あると、Zenodo は `.zenodo.json` だけを使います。
+
+1. `data/release.json` の `version`（と、決まっていれば `date`）を新しい版にし、`CITATION.cff` の `version`（と `date-released`）、
+   `.zenodo.json` の `version` も同じにする。`python3 scripts/check_release.py` と `python3 scripts/build_site.py` を実行してコミットし、`main` に入れる。
+2. GitHub でリリースを作る（タグは `v0.1.0` の形）。
+3. Zenodo の GitHub 連携でこのリポジトリを有効にしてあれば、Zenodo がリリースから記録を作り、DOI を発行する（`.zenodo.json` の情報を使う）。
+4. 発行された DOI を `data/release.json` の `doi` に（最初のリリースでは、すべての版をまとめる DOI も `doi_all_versions` に）書き、
+   `CITATION.cff` に `doi:` を足す。`check_release.py` で確かめてコミットする。DOI が入ると、引用表記の URL の前に DOI が入り、
+   `project.html` の引用欄に Zenodo の記録へのリンク（全データの一括ダウンロード）が出る。
+
 ## ビュワーの使い方
 
 - **写本タブ**「III,3 本文 / V,1 / 対照」で証本を切替。V,1 には語ごとの注釈がまだ無いので、〈V,1〉はそのことと、本文を読める場所
@@ -286,6 +308,17 @@ index.html(目次:全52文書)
     リンク)と、箇所は結んでいないが関連する文書(カタログの `<relatedItem>`。『世界の起源について』など)を開けます。
 - **検索**=コプト語形・レンマ・英語/日本語語釈・対訳を横断検索。
 - **上部ナビの ☀／☾** で表示モード（ライト／ダーク）を切替（全ページ共通）。
+- **引用**: セグメントの番号（§）を押すと、〈リンクをコピー〉〈引用をコピー〉の小さなメニューが開きます（本文ビュワー `reader.html` では、
+  これまでどおりその箇所への移動（`#seg-…`）もします）。題の下の〈この文書を引用〉は、文書単位の引用（版番号と、その文書の
+  最終更新日つき）です。書式は `project.html` の引用欄と同じで、版番号・DOI は `data/release.json`、最終更新日は
+  `data/doc_dates.json` から入ります（`assets/viewer-tools.js`）。クリップボードが使えないときは、文を選べる形で出します。
+- **頁・行**: 頁・行の情報（`<pb>`・`<lb>`）がある本文（いまは『国家』だけ）では、〈ページ〉〈行〉で写本の頁と行の番号を出せ、
+  `republic.html#p48.16`（48 頁 16 行を含む箇所）・`republic.html#p48`（48 頁の始まり）で、その箇所へ移って目立たせます。
+  箇所の引用も「NHC VI 48,16–17（§1）」とこのアンカーの URL で示します。頁・行の無い本文（エウグノストスなど）では、
+  〈ページ〉〈行〉のボタンを出しません。
+- **写本の写真**: 題の下に、Claremont Colleges Digital Library の Nag Hammadi Archive にある、その写本の写真（1970 年代の白黒写真）
+  へのリンクがあります（`data/facsimile_links.json`。著作権は図書館にあるので、リンクだけです）。写本ファクシミリ（IIIF）のパネルは、
+  `iiif/*.json` に画像の `source` を書いたときだけ出ます（`iiif/README.md`）。
 
 ## TEI設計の要点（ファイルの分離）
 

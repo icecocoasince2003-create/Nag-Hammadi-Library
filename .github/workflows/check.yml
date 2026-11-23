@@ -41,3 +41,11 @@ jobs:
 
       - name: 生成ファイルが最新か（scripts/build_site.py --check）
         run: python3 scripts/build_site.py --check
+
+      - name: 版の情報がそろっているか（data/release.json・CITATION.cff・.zenodo.json。scripts/check_release.py）
+        run: python3 scripts/check_release.py
+
+      - name: CITATION.cff の検証（cffconvert）
+        uses: citation-file-format/cffconvert-github-action@2.0.0
+        with:
+          args: "--validate"

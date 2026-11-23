@@ -1,0 +1,33 @@
+# 引用のための情報（GitHub の「Cite this repository」に使われる）。版番号・DOI・URL は data/release.json と同じにする
+# （scripts/check_release.py が確かめる）。DOI が発行されたら doi: を、リリースの日が決まったら date-released: を足す。
+cff-version: 1.2.0
+message: "If you use this dataset, please cite it as below."
+type: dataset
+title: "Sheneset: A Digital TEI Edition of the Nag Hammadi Codices"
+abstract: >-
+  A TEI P5 corpus and website for the Coptic texts of the Nag Hammadi Codices
+  (NHC I–XIII): morpheme-level annotation (lemma and part of speech), a Coptic
+  lexicon with Japanese, English and French senses, Japanese, English and
+  French translations, parallel passages, and the full text of the codices as
+  working files (39 tractates with a draft automatic annotation that has not
+  been checked by hand). The Coptic texts and the Greek text of Plato's
+  Republic (OCT/Burnet) are in the public domain; the data and texts created by
+  the project are released under CC BY 4.0, the source code under the MIT
+  License.
+authors:
+  - family-names: Nabatame
+    given-names: Kokoa
+    affiliation: University of Tsukuba
+license:
+  - CC-BY-4.0
+  - MIT
+url: "https://sheneset.vercel.app/"
+repository-code: "https://github.com/icecocoasince2003-create/Nag-Hammadi-Library"
+version: "0.1.0"
+keywords:
+  - Coptic
+  - Nag Hammadi Codices
+  - TEI
+  - digital scholarly edition
+  - Gnosticism
+  - morphological annotation
