@@ -3,7 +3,8 @@
    - 全ページの最上部に共通ナビ（#sitebar）を描画します。
      ナビ項目を増やすときは下の NAV に1行足すだけで全ページに反映されます。
    - 表示言語（日本語 / English / Français）を localStorage に保存し、
-     ページ間で引き継ぎます。
+     ページ間で引き継ぎます。最初に開くときの言語は、URL の ?lang=（ja・en・fr）＞ 保存値 ＞ ブラウザーの言語の順で決めます
+     （ブラウザーの言語が ja・en・fr のどれでもなければ英語）。各ページの <head> の 1 行スクリプトが、同じ順で描画前に反映します。
        * 三言語対応ページ（<html data-i18n="full">）: html[data-lang] を ja/en/fr に切替
        * 既存のビュワー（日英のみ）: ページ内の #langBtn / #tlBtn を操作して同期
          （French を選ぶと UI は英語、語釈・対訳はフランス語になります）
@@ -38,6 +39,31 @@
     try { var v = localStorage.getItem(KEY); return LANGS.indexOf(v) >= 0 ? v : null; } catch (e) { return null; }
   }
   function store(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
+
+  /* ---- 最初に表示する言語 ----
+     URL の ?lang=（ja・en・fr）＞ 保存値 ＞ ブラウザーの言語（navigator.languages を先頭から見て、ja・en・fr のどれかに
+     当たったもの。どれにも当たらなければ英語）。URL で指定された言語は保存値にも書き込む（ほかのページに移っても同じ言語が続く）。
+     言語を切り替えても URL は書き換えない。各ページの <head> の 1 行スクリプト（build_site.py の LANG_BOOT と同じもの）が、
+     同じ順で描画前に反映している（日本語が一瞬出るのを防ぐ）。順や書き方を変えるときは、そちらも合わせること。 */
+  function urlLang() {
+    var m = /[?&]lang=([^&#]*)/i.exec(location.search);
+    var v = m ? m[1].toLowerCase() : null;
+    return LANGS.indexOf(v) >= 0 ? v : null;
+  }
+  function browserLang() {
+    var list = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ""];
+    for (var i = 0; i < list.length; i++) {
+      var p = String(list[i]).toLowerCase().split(/[-_]/)[0];
+      if (LANGS.indexOf(p) >= 0) return p;
+    }
+    return "en";
+  }
+  function initialLang() {
+    var u = urlLang();
+    if (u) { store(u); return u; }
+    return stored() || browserLang();
+  }
+  var cur = null;   // 選択中の言語（mount で決める。日英だけのビュワーでも ja / en / fr のどれか）
   function fullI18n() { return H.getAttribute("data-i18n") === "full"; }
   /* 三言語ページは <html data-title-en="…" data-title-fr="…"> でタイトルも切替（日本語は <title> の初期値） */
   var TITLE_JA = document.title;
@@ -50,6 +76,7 @@
   /* 現在の表示言語（ナビの表示に使う） */
   function lang() {
     if (fullI18n()) return H.getAttribute("data-lang") || "ja";
+    if (cur) return cur;
     var s = stored();
     if (s) return s;
     return H.getAttribute("data-lang") === "en" ? "en" : "ja";
@@ -221,11 +248,14 @@
     if (tb) {
       var want = target; // ja / en / fr
       for (var i = 0; i < 3 && (H.getAttribute("data-tl") || "ja") !== want; i++) tb.click();
+      // <head> の 1 行スクリプトが言語を反映済みのときはボタンを押さないので、押した状態の表示だけ合わせる
+      tb.setAttribute("aria-pressed", String((H.getAttribute("data-tl") || "ja") !== "ja"));
     }
   }
 
   function setLang(v) {
     if (LANGS.indexOf(v) < 0) return;
+    cur = v;
     store(v);
     if (fullI18n()) {
       H.setAttribute("data-lang", v);
@@ -260,13 +290,12 @@
       if (curMode !== mode()) applyMode();
     }
 
-    var s = stored();
+    var v = cur = initialLang();
     if (fullI18n()) {
-      var v = s || H.getAttribute("data-lang") || "ja";
       H.setAttribute("data-lang", v); H.setAttribute("lang", v); applyTitle(v);
-    } else if (s && s !== "ja") {
-      // ページ本体のスクリプトが初期化を終えてから同期する
-      setTimeout(function () { syncLegacy(s); render(nav); }, 0);
+    } else {
+      // ページ本体のスクリプトが初期化を終えてから同期する（<head> の 1 行スクリプトが反映済みなら、ボタンは押さない）
+      setTimeout(function () { syncLegacy(v); render(nav); }, 0);
     }
     // 既存ページ内の言語ボタンを押した場合も保存して引き継ぐ
     var lb = document.getElementById("langBtn");
@@ -276,6 +305,7 @@
           var ui = H.getAttribute("data-lang") === "en" ? "en" : "ja";
           var tl = H.getAttribute("data-tl");
           var v = ui === "en" && tl === "fr" ? "fr" : ui;
+          cur = v;
           store(v);
           render(nav);
           document.dispatchEvent(new CustomEvent("nhc:lang", { detail: { lang: v } }));

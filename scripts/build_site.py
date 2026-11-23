@@ -243,6 +243,19 @@ MODE_BOOT = ('<script>/* 表示モード（ライト／ダーク）の保存値�
              'try{if(localStorage.getItem("nhc-mode")==="light")'
              'document.documentElement.setAttribute("data-mode","light")}catch(e){}</script>')
 
+# 表示言語を描画前に反映する 1 行スクリプト（日本語が一瞬出るのを防ぐ）。決め方は URL の ?lang=（ja・en・fr）＞ 保存値
+# （localStorage "nhc-lang"）＞ ブラウザーの言語（どれにも当たらなければ英語）。正式な処理（URL の言語の保存など）は
+# assets/site.js の initialLang。三言語のページ（data-i18n="full"）は html[data-lang] を、日英だけのビュワーは
+# data-lang（ja / en）と語釈・対訳の言語（data-gl・data-tl）を設定する。手作業管理のページの <head> にも同じ文字列を入れてある。
+LANG_BOOT = ('<script>/* 表示言語（?lang= ＞ 保存値 ＞ ブラウザーの言語、ほかは英語）を描画前に反映（正式な処理と保存は assets/site.js） */'
+             '(function(H){var L=["ja","en","fr"],m=/[?&]lang=([^&#]*)/i.exec(location.search),v=m?m[1].toLowerCase():null;'
+             'if(L.indexOf(v)<0){v=null;try{v=localStorage.getItem("nhc-lang")}catch(e){}}'
+             'if(L.indexOf(v)<0){v="en";var n=navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||""];'
+             'for(var i=0;i<n.length;i++){var p=String(n[i]).toLowerCase().split(/[-_]/)[0];if(L.indexOf(p)>=0){v=p;break}}}'
+             'if(H.getAttribute("data-i18n")==="full"){H.setAttribute("data-lang",v);H.setAttribute("lang",v)}'
+             'else if(v!=="ja"){H.setAttribute("data-lang","en");H.setAttribute("lang","en");H.setAttribute("data-gl",v);H.setAttribute("data-tl",v)}'
+             '})(document.documentElement)</script>')
+
 THEME = """
 :root{
  --bg:#f3eede; --panel:#fbf8f1; --panel-2:#f6f1e6;
@@ -622,7 +635,7 @@ fetch('data/links.json',{{cache:'no-store'}}).then(r=>r.ok?r.json():Promise.reje
             " data-title-en=\"Sheneset — a digital TEI edition of the Nag Hammadi Codices\""
             " data-title-fr=\"Sheneset — édition numérique TEI des codices de Nag Hammadi\"><head><meta charset=\"utf-8\">"
             "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
-            f"{MODE_BOOT}"
+            f"{MODE_BOOT}{LANG_BOOT}"
             + head_meta("", "Sheneset — ナグ・ハマディ写本コーパス",
                         "ナグ・ハマディ写本のTEI P5デジタル版（コプト語本文・形態素グロス・辞書・注釈・日英仏訳）/ A digital TEI edition of the Nag Hammadi Codices.") +
             f"{FONTS}<style>{THEME}{INDEX_CSS}</style></head><body>{body}</body></html>")
@@ -709,7 +722,7 @@ if(!t){
     body = body.replace("__CATALOG__", json.dumps(cat, ensure_ascii=False))
     return ("<!doctype html><html lang=\"ja\" data-lang=\"ja\" data-i18n=\"full\" data-mode=\"dark\" data-modes=\"light dark\"><head><meta charset=\"utf-8\">"
             "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
-            f"{MODE_BOOT}"
+            f"{MODE_BOOT}{LANG_BOOT}"
             + head_meta("tractate.html", "準備中 — Sheneset",
                         "ナグ・ハマディ写本のうち、本文をまだ表示できない文書の案内 / A Nag Hammadi tractate whose text is not yet available.") +
             f"{FONTS}<style>{css}</style></head><body>{body}</body></html>")
@@ -1068,7 +1081,7 @@ window.addEventListener('hashchange',gotoHash);
                 .replace("__EDITIONS__", json.dumps(EDITIONS)).replace("__SYNOPSES__", json.dumps(SYNOPSES)))
     return ("<!doctype html><html lang=\"ja\" data-lang=\"ja\" data-i18n=\"full\" data-mode=\"dark\" data-modes=\"light dark\"><head><meta charset=\"utf-8\">"
             "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
-            f"{MODE_BOOT}"
+            f"{MODE_BOOT}{LANG_BOOT}"
             + head_meta("reader.html", "本文（暫定版） — Sheneset",
                         "ナグ・ハマディ写本の全文テキスト（自動注釈の暫定版）/ Nag Hammadi Codices: full text with a draft automatic annotation.") +
             f"{FONTS}<script defer src=\"assets/viewer-tools.js\"></script><style>{css}</style></head><body>{body}</body></html>")
