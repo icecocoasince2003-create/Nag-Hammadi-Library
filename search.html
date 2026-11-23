@@ -267,6 +267,9 @@ table.kw td.rc{color:var(--s-mut); white-space:nowrap; overflow:hidden; max-widt
 .empty{padding:28px 0; color:var(--s-mut); font-size:.9rem}
 .notice{border-left:3px solid var(--s-warn); border-radius:0 8px 8px 0; background:var(--s-bg2); padding:10px 14px; font-size:.84rem; margin:16px 0}
 .notice code{font-size:.8rem}
+/* ?scope=all（全文書）で開いたときの、全文テキストの読み込みの進み具合 */
+.allprog{border-left-color:var(--s-link, var(--lapis)); display:flex; flex-wrap:wrap; align-items:center; gap:6px 14px}
+.allprog progress{flex:1 1 12em; max-width:22em; height:8px; accent-color:var(--gold)}
 .notice .fail{display:flex; gap:14px; align-items:center; flex:1 1 100%; min-width:0}
 .notice .fail img{flex:none; width:92px; height:92px}
 .notice .fail>div{min-width:0}
@@ -539,6 +542,8 @@ html[data-mode="light"] .tour .tour-acts .tour-next, html[data-mode="light"] .to
     </div>
 
     <div class="notice" id="loadwarn" hidden></div>
+    <!-- ?scope=all で開いたとき、全文テキストを読み込んでいる間の進み具合（renderProgress） -->
+    <div class="notice allprog" id="allProg" role="status" hidden></div>
 
     <!-- ═══════ 検索 ═══════ -->
     <div id="viewSearch" role="tabpanel" aria-labelledby="tabSearch">
@@ -1031,6 +1036,9 @@ const I18N = {
   rawTotal: {ja:(d,n)=>d+" 文書 · "+n+" 語", en:(d,n)=>d+" texts · "+n+" tokens", fr:(d,n)=>d+" textes · "+n+" occurrences"},
   rawOn:    {ja:(a,d)=>d+" 文書中 "+a+" 文書を選択中", en:(a,d)=>a+" of "+d+" texts selected", fr:(a,d)=>a+" texte"+(a==="1"?"":"s")+" sur "+d+" sélectionné"+(a==="1"?"":"s")},
   rawBusy:  {ja:n=>n+" 文書を読み込み中…", en:n=>"Loading "+n+" text"+(n==="1"?"":"s")+"…", fr:n=>"Chargement de "+n+" texte"+(n==="1"?"":"s")+"…"},
+  allLoading:{ja:(a,n)=>"全文書を対象にするため、全文テキストを読み込んでいます… "+a+" / "+n+" 文書", en:(a,n)=>"Loading the full texts to search all documents… "+a+" of "+n, fr:(a,n)=>"Chargement des textes intégraux pour chercher dans tous les documents… "+a+" sur "+n},
+  allFail:  {ja:n=>n+" 文書を読み込めませんでした。左の〈全文テキスト（作業用）〉で選び直すと再試行します。", en:n=>n+" text"+(n==="1"?"":"s")+" could not be loaded. Select them again under “Full text” on the left to retry.", fr:n=>n+" texte"+(n==="1"?"":"s")+" n’ont pas pu être chargés. Resélectionnez-les sous « Texte intégral » à gauche pour réessayer."},
+  dLex:     {ja:"辞書の項目", en:"Lexicon entry", fr:"Entrée du lexique"},
   rawFail:  {ja:"読み込めませんでした（選び直すと再試行）", en:"could not be loaded (select again to retry)", fr:"chargement impossible (resélectionnez pour réessayer)"},
   rawDup:   {ja:"注釈つきの版が上にあります", en:"annotated edition listed above", fr:"édition annotée ci-dessus"},
   rawDraft: {ja:"自動注釈（暫定）", en:"automatic annotation (draft)", fr:"annotation automatique (provisoire)"},
@@ -1212,6 +1220,8 @@ const ST = {
   wits: [],            // {i, id, label, short, doc, segs:[{id, n, tokens:[tokIdx], breaks:[欠損の位置]}], groups:[[tokIdx] | GAP], ntok, nseg, pages, lines, gaps:Map(reason → 件数)}
                        //  読み込んだ順に並ぶ（i はこの配列での番号）。表示の順はカタログの順＝witOrder()
   lazyQueue: Promise.resolve(),   // 未注釈の本文の読み込みと、それに続く選択の変更を、押した順に1つずつ処理する
+  scopeAll: "",        // "pending": ?scope=all で開き、全文テキストを読み込んでいる間（URL は scope=all のまま）
+  progress: null,      // ?scope=all の読み込みの進み具合 {done, total, failed}（終われば null）
   toks: [],            // {w, s, g, form, lemma, pos, grc, msd, ana, gl, key}
   groups: new Map(),   // key(lemma\tpos) → {key, lemma, pos, toks:[], ents:[], amb, wgl:Map, grc, itypes:[], gsearch:[]}
   lex: new Map(),      // lemma → [entry]
@@ -1377,7 +1387,8 @@ function lazyDocsInURL(){
 function fetchLazy(docs){
   return Promise.all(docs.map(d => {
     d.state = "loading";
-    return fetchXML(d.xml, "no-cache").then(x => { d.fetched = x; }, e => { d.state = "error"; console.warn("search: " + e.message); });
+    return fetchXML(d.xml, "no-cache").then(x => { d.fetched = x; }, e => { d.state = "error"; console.warn("search: " + e.message); })
+      .then(() => { if(ST.progress){ ST.progress.done++; if(d.state === "error") ST.progress.failed++; renderProgress(); } });
   }));
 }
 /* 取得できた本文をカタログの順に取り込む。1つでも取り込んだら true */
@@ -1408,6 +1419,52 @@ function useLazy(docs, apply){
   }).catch(e => { console.error(e); render(); });
 }
 
+/* ---------- 全文書（?scope=all）----------
+   HOME と辞書のページの検索窓は search.html?q=…&scope=all を開く。注釈つきの版（既定の選択）に加えて、〈全文テキスト（作業用）〉の
+   文書をすべて選んだ状態にする（〈すべて選択〉と同じく、注釈つきの版が選ばれている証本 III,3・VI,5 は二重に数えないよう除く）。
+   全文テキストは合わせて約 28 MB（gzip で約 2 MB）で、読み込みの進み具合を #allProg に出す。w= があるときは w= を優先する。
+   選択が「全文書」のままなら、URL には w= の長い一覧ではなく scope=all と書く（isAllScope）。 */
+function wantAllScope(){
+  const p = new URLSearchParams(location.search);
+  return p.get("scope") === "all" && !p.has("w") && !p.has("doc");
+}
+function loadAllScope(){
+  const docs = lazyDocs().filter(lazyBulk).filter(d => d.state !== "loaded");
+  if(!docs.length){ ST.scopeAll = ""; render(); return; }
+  ST.progress = {done: 0, total: docs.length, failed: 0};
+  $("#rawBox").open = true;
+  renderProgress();
+  useLazy(docs, ds => {
+    lazyOn(ds);
+    const failed = ST.progress ? ST.progress.failed : 0;
+    ST.scopeAll = ""; ST.progress = null;
+    renderProgress(failed);
+  });
+}
+function renderProgress(failed){
+  const box = $("#allProg"), P = ST.progress;
+  if(P){
+    box.hidden = false;
+    box.innerHTML = '<span>' + esc(t("allLoading", fmt(P.done), fmt(P.total))) + '</span><progress max="' + P.total + '" value="' + P.done + '"></progress>';
+  } else if(failed){
+    box.hidden = false; box.textContent = t("allFail", fmt(failed));
+  } else { box.hidden = true; box.textContent = ""; }
+}
+/* 選択が「全文書」（注釈つきの全証本と、二重にならない全文テキストすべて。すべて読み込み済み）と同じか */
+function isAllScope(){
+  if(ST.scopeAll === "pending") return true;
+  const eager = eagerWits();
+  if(!eager.length || !eager.every(w => ST.sel.has(w.id))) return false;
+  const lazy = lazyDocs().filter(d => { const o = overlapOf(d); return !(o && ST.sel.has(o.id)); });
+  if(!lazy.length || !lazy.every(d => d.state === "loaded" && d.wits.length && d.wits.every(w => ST.sel.has(w.id)))) return false;
+  return ST.sel.size === eager.length + lazy.reduce((a, d) => a + d.wits.length, 0);
+}
+/* URL に選択を書く: 全文書なら scope=all、既定（注釈つきの全証本）なら書かない、ほかは w= */
+function setSelParam(p){
+  if(isAllScope()){ p.set("scope", "all"); return; }
+  const w = selParam(); if(w !== null) p.set("w", w);
+}
+
 async function load(){
   $("#listHead").textContent = t("loading");
   $("#sections").innerHTML = '<p class="empty">' + esc(t("loading")) + '</p>';
@@ -1423,8 +1480,11 @@ async function load(){
     readURL();
     if(lazyDocs().some(d => d.wits.some(w => ST.sel.has(w.id)))) $("#rawBox").open = true;
     ST.ready = true;
+    const all = wantAllScope();
+    if(all) ST.scopeAll = "pending";
     render();
     gotoHash();
+    if(all) loadAllScope();
     if(ST.view === "search" && !ST.guide && !tourSeen()) startTour();   // 初めて開いたときは操作案内を出す
   }catch(e){
     const w = $("#loadwarn"); w.hidden = false;
@@ -1479,7 +1539,7 @@ function writeURL(){
   if($("#mode").value !== "part") p.set("m", $("#mode").value);
   const f = ($("#fForm").checked ? "f" : "") + ($("#fLemma").checked ? "l" : "") + ($("#fGloss").checked ? "g" : "");
   if(f !== "flg") p.set("f", f);
-  const w = selParam(); if(w !== null) p.set("w", w);
+  setSelParam(p);
   if(ST.posOff.size) p.set("xpos", [...ST.posOff].join(","));
   const s = p.toString();
   history.replaceState(null, "", location.pathname + (s ? "?" + s : "") + viewHash());
@@ -1487,7 +1547,7 @@ function writeURL(){
 /* 〈統計〉のレンマから〈検索〉へ：そのレンマの完全一致（対象はレンマのみ）を、いまの絞り込みのまま開くリンク */
 function lemmaHref(lemma){
   const p = new URLSearchParams({q: lemma, m: "ex", f: "l"});
-  const w = selParam(); if(w !== null) p.set("w", w);
+  setSelParam(p);
   if(ST.posOff.size) p.set("xpos", [...ST.posOff].join(","));
   return "?" + p.toString();
 }
@@ -1965,7 +2025,8 @@ function detail(r, R){
       (g.ents.length > 1 || e.pos !== g.pos ? esc(posName(e.pos)) + " · " : "") +
       (parts.length ? parts.join(" &nbsp; ") : '<span class="u">' + esc(t("noGloss")) + '</span>') +
       (u ? ' <span class="u">(' + esc(u) + ')</span>' : "") +
-      (e.ref ? ' · <a href="' + esc(e.ref) + '" target="_blank" rel="noopener">' + esc(t("dCdo")) + '</a>' : "") + '</p>';
+      (e.ref ? ' · <a href="' + esc(e.ref) + '" target="_blank" rel="noopener">' + esc(t("dCdo")) + '</a>' : "") +
+      (e.id ? ' · <a href="lexicon.html#' + encodeURIComponent(e.id) + '">' + esc(t("dLex")) + ' →</a>' : "") + '</p>';
   }).join("") || '<p class="sense"><span class="u">' + esc(t("noGloss")) + '</span></p>';
   const wgl = g.wgl.size ? '<h4>' + esc(t("dWGloss")) + '</h4><p class="sense">' +
     [...g.wgl.entries()].sort((a, b) => b[1] - a[1]).map(([s, n]) => esc(s) + ' <span class="n">' + n + '</span>').join(", ") + '</p>' : "";

@@ -57,14 +57,14 @@ cd Nag-Hammadi-Library
 | 並行箇所 | （自動で作る） | `python3 scripts/build_parallels.py` で要約を確かめ、`--write` で `data/parallels.xml` に書き込む |
 | 全文テキスト（`source/nhc_fulltext_split/`）の文書一覧 | （自動で作る） | `python3 scripts/sync_nhc_catalog.py --write`（`data/catalog.xml` の `BEGIN`〜`END nhc_fulltext_split` の範囲） |
 | 全文テキストのうち、自動注釈の暫定版の 39 文書 | `source/nhc_fulltext_split/tei/` の XML を直接 | `python3 scripts/check_tei.py`（[source/nhc_fulltext_split/README_ja.md](source/nhc_fulltext_split/README_ja.md) の §10・§11） |
-| ビュワー・検索ページなどの画面（`eugnostos.html`・`republic.html`・`search.html`・`gnosticism.html`・`project.html` など） | その HTML を直接（手作業で管理しているページ） | ブラウザーで確かめる（6.） |
+| ビュワー・検索ページなどの画面（`eugnostos.html`・`republic.html`・`search.html`・`lexicon.html`・`gnosticism.html`・`project.html` など） | その HTML を直接（手作業で管理しているページ） | ブラウザーで確かめる（6.） |
 | 写本の写真へのリンク | `data/facsimile_links.json`（アーカイブで実際に開いて確かめた URL だけを書く） | — |
 | 写本ファクシミリ（IIIF）の画像 | `iiif/<文書名>.json` の `pages[].source`（[iiif/README.md](iiif/README.md)） | — |
 | 版番号・DOI | `data/release.json`・`CITATION.cff`・`.zenodo.json`（README の「版とリリースの作り方」） | `python3 scripts/check_release.py`・`python3 scripts/build_site.py` |
 
 守ってほしいこと:
 
-- **生成ファイルは直接直さない。** `index.html`・`tractate.html`・`reader.html`・`sitemap.xml`・`robots.txt`・`data/doc_dates.json` は
+- **生成ファイルは直接直さない。** `index.html`・`tractate.html`・`reader.html`・`sitemap.xml`・`robots.txt`・`data/doc_dates.json`・`data/pos_labels.json` は
   `scripts/build_site.py` の出力です。スクリプトかデータを直してから作り直します（直接直しても、次に作り直したときに消えます）。
 - **`data/` の XML は `scripts/build_tei.py` で上書きしない。** `data/` の XML には、生成したあとに手作業で直した内容が入っていて、
   `source/` の CSV からは作り直せません。`build_tei.py` は、何も付けなければ `data/` に書き込まず、違いを表示するだけです。
@@ -141,7 +141,7 @@ git push -u origin fix/lexicon-sense
 
 **競合（conflict）が起きたら。** `main` を取り込んで（`git pull origin main` など）競合したときは、次のように解きます。
 
-- **生成ファイル**（`index.html`・`tractate.html`・`reader.html`・`sitemap.xml`・`robots.txt`）: 手で解かず、どちらかを採ってから
+- **生成ファイル**（`index.html`・`tractate.html`・`reader.html`・`sitemap.xml`・`robots.txt`・`data/doc_dates.json`・`data/pos_labels.json`）: 手で解かず、どちらかを採ってから
   `python3 scripts/build_site.py` で作り直します（もとのスクリプトやデータの競合を先に解く）。
 - **`data/` の本文の XML**: 手で解きます。`build_tei.py` で作り直してはいけません（3.）。解いたら `python3 scripts/check_tei.py`。
 - **辞書**: `source/lexicon.csv` の競合を解いてから、`main` の `data/lexicon.xml` に対して `python3 scripts/sync_lexicon.py --write` を

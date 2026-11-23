@@ -11,7 +11,7 @@
       python3 scripts/build_site.py
       python3 scripts/build_site.py --check   生成ファイルが最新かを調べるだけ（書き込まない。CI で使う）
 
-  出力される index.html・tractate.html・reader.html・sitemap.xml・robots.txt・data/doc_dates.json は自動生成なので
+  出力される index.html・tractate.html・reader.html・sitemap.xml・robots.txt・data/doc_dates.json・data/pos_labels.json は自動生成なので
   直接編集しないでください。--check は、いまのスクリプトとデータから作り直したものとファイルを比べ、違えば終了コード 1 で
   ファイル名を表示します（index.html のフッターの「生成」の日付は、作り直すたびに変わるので比べません）。目次の内容を変えたいときは、下の CODICES テーブルを編集して
   再実行します。
@@ -489,6 +489,20 @@ def build_index():
      <a href="project.html">{tri("このプロジェクトについて →", "About the project →", "À propos du projet →")}</a>
      <a href="#corpus">{tri("文書一覧へ ↓", "Browse the codices ↓", "Parcourir les codices ↓")}</a>
    </div>
+   <form class="qbox" action="search.html" method="get" role="search" aria-label="全文書を検索 / Search all texts">
+    <input type="hidden" name="scope" value="all">
+    <input class="qbox-q" name="q" type="search" required autocomplete="off" spellcheck="false" data-ph-label
+      data-ph-ja="全文書の本文をコプト語で検索（例: ⲛⲟⲩⲧⲉ）" data-ph-en="Search the Coptic text of all documents (e.g. ⲛⲟⲩⲧⲉ)" data-ph-fr="Chercher dans le texte copte de tous les documents (p. ex. ⲛⲟⲩⲧⲉ)">
+    <span class="qbox-f">
+     <label><input type="radio" name="f" value="f" checked>{tri("語形", "Word form", "Forme")}</label>
+     <label><input type="radio" name="f" value="l">{tri("レンマ", "Lemma", "Lemme")}</label>
+    </span>
+    <button type="submit">{tri("検索", "Search", "Chercher")}</button>
+   </form>
+   <p class="qbox-note">{tri(
+     "人の手で注釈した版と、全文テキスト（暫定版・未注釈）のすべてを対象に、<a href='search.html'>コーパス検索</a>で探します。全文テキストは初めに読み込むので、少し時間がかかります。語の意味から引くときは<a href='lexicon.html'>辞書</a>へ。",
+     "Searches the hand-annotated editions and all the full texts (draft and unannotated) with the <a href='search.html'>corpus search</a>; the full texts are loaded first, which takes a moment. To look a word up by meaning, use the <a href='lexicon.html'>lexicon</a>.",
+     "Recherche dans les éditions annotées à la main et dans tous les textes intégraux (provisoires et non annotés) avec la <a href='search.html'>recherche du corpus</a> ; les textes intégraux sont d’abord chargés, ce qui prend un peu de temps. Pour chercher un mot par son sens, voir le <a href='lexicon.html'>lexique</a>.")}</p>
   </div>
   <img class="hero-fig" src="image/web/gengen_guide.svg" alt="" loading="lazy">
  </section>
@@ -1004,6 +1018,28 @@ function setTitle(){
   document.title=nm+' — '+DOC.siglum+' · '+({ja:ann?'暫定版':'作業用本文', en:ann?'draft':'working text', fr:ann?'provisoire':'texte de travail'}[l]||'')+' — Sheneset';
 }
 function hideCard(){ card.hidden=true; document.querySelectorAll('.m.sel').forEach(x=>x.classList.remove('sel')); }
+/* 辞書のページ（lexicon.html）の項目へのリンク。data/lexicon.xml は、語を初めて押したときに 1 度だけ読む。
+   レンマと品詞の組が一致する項目へ。品詞の合う項目が無ければ、そのレンマの項目（同形異義語ならそのまとまり）へ。
+   辞書に無い語（レンマの無い語を含む）にはリンクを出さない */
+let LEXP=null;
+function lexIndex(){
+  if(!LEXP) LEXP=fetch('data/lexicon.xml',{cache:'no-cache'}).then(r=>r.ok?r.text():Promise.reject(r.status)).then(t=>{
+    const x=new DOMParser().parseFromString(t,'application/xml'), ix=new Map();
+    all(x,'entry').forEach(e=>{
+      const o=e.getElementsByTagNameNS(T,'orth')[0]; if(!o) return;
+      const p=e.getElementsByTagNameNS(T,'pos')[0], par=e.parentNode, lem=o.textContent.trim();
+      if(!ix.has(lem)) ix.set(lem,[]);
+      ix.get(lem).push({id:xid(e), pos:p?p.textContent.trim():'', sup:par&&par.localName==='superEntry'?xid(par):''});
+    });
+    return ix;
+  }).catch(()=>null);
+  return LEXP;
+}
+function lexTarget(ix,m){
+  const es=ix&&m.lemma?ix.get(m.lemma):null; if(!es||!es.length) return '';
+  const hit=es.find(e=>e.pos===m.type); if(hit) return hit.id;
+  return es[0].sup||es[0].id;
+}
 function showCard(el){
   const m=MS[+el.dataset.i]; if(!m) return;
   const g=el.closest('.g'), grp=g?Array.from(g.querySelectorAll('.m')).map(x=>MS[+x.dataset.i]):[m];
@@ -1027,8 +1063,14 @@ function showCard(el){
     '<div class="grp cop">'+grp.map(x=>x===m?'<b>'+x.html+'</b>':x.html).join('<span class="dot">·</span>')+'</div>'+
     '<dl>'+rows.map(r=>'<dt>'+r[0]+'</dt><dd>'+r[1]+'</dd>').join('')+'</dl>'+
     '<p class="lk"><a href="search.html?doc='+encodeURIComponent(DOC.key)+'&amp;kind=aql&amp;q='+encodeURIComponent(q)+'">'+tri('この文書で検索','Search this text','Chercher dans ce texte')+' ('+esc(q)+') →</a></p>';
-  card.hidden=false;
+  card.hidden=false; card.dataset.i=el.dataset.i;
   document.querySelectorAll('.m.sel').forEach(x=>x.classList.remove('sel')); el.classList.add('sel');
+  if(m.lemma) lexIndex().then(ix=>{
+    const id=lexTarget(ix,m), at=el.dataset.i;
+    if(!id||card.hidden||card.dataset.i!==at||card.querySelector('.lexl')) return;
+    const lk=card.querySelector('.lk');
+    if(lk) lk.insertAdjacentHTML('beforeend',' · <a class="lexl" href="lexicon.html#'+encodeURIComponent(id)+'">'+tri('辞書の項目','Lexicon entry','Entrée du lexique')+' →</a>');
+  });
 }
 function gotoHash(){
   document.querySelectorAll('.seg.hit').forEach(x=>x.classList.remove('hit'));
@@ -1112,7 +1154,7 @@ window.addEventListener('hashchange',gotoHash);
 
 # --- sitemap.xml・robots.txt -------------------------------------------------
 # 検索エンジン向けの URL の一覧。管理用（admin・profile）、転送だけの stats.html、準備中の案内 tractate.html は載せない。
-SITEMAP_PAGES = ["", "gnosticism.html", "project.html", "search.html",
+SITEMAP_PAGES = ["", "gnosticism.html", "project.html", "search.html", "lexicon.html",
                  "eugnostos.html?wit=III", "eugnostos.html?wit=SYN", "republic.html"]
 SITEMAP_TAIL = ["privacy.html", "terms.html"]
 
@@ -1180,6 +1222,49 @@ def build_doc_dates():
     return ('{\n  "_comment": ' + json.dumps(comment, ensure_ascii=False) + ',\n  "docs": {\n    ' +
             ",\n    ".join(rows) + "\n  }\n}\n")   # 1 文書 1 行（日付が変わったときの差分が 1 行で済む）
 
+# --- data/pos_labels.json（品詞タグの三言語の名前と、本文での出現数）---------------------------
+# 辞書のページ（lexicon.html）の品詞の名前と、〈はじめての方へ〉（guide.html）の品詞の表が読む。名前は上の POS_NAMES が正
+# （search.html の POS も同じ内容にしておく）。出現数は本文の <w type="…"> の数で、hand は人の手で注釈した本文
+# （HAND_TEXTS）、draft は自動注釈の暫定版（data/catalog.xml の <bibl subtype="draft"> の本文）。
+# POS_NAMES に無いタグは表に出さず、unlisted に数と出現するファイルだけを書く（誤記か正式なタグかは決めていない）。
+HAND_TEXTS = ["data/eugnostos_tei.xml", "data/republic_tei.xml"]
+
+def catalog_texts(subtype):
+    """data/catalog.xml の <bibl type="document" subtype="…"> の本文の XML（<ref type="xml">）を、カタログの順に"""
+    import xml.etree.ElementTree as ET
+    T = "{http://www.tei-c.org/ns/1.0}"
+    out = []
+    for b in ET.parse(os.path.join(OUTDIR, "data", "catalog.xml")).getroot().iter(T + "bibl"):
+        if b.get("type") == "document" and b.get("subtype") == subtype:
+            out += [r.get("target") for r in b.findall(T + "ref") if r.get("type") == "xml" and r.get("target")]
+    return out
+
+def build_pos_labels():
+    import xml.etree.ElementTree as ET
+    from collections import Counter, defaultdict
+    T = "{http://www.tei-c.org/ns/1.0}"
+    groups = (("hand", HAND_TEXTS), ("draft", catalog_texts("draft")))
+    count = {k: Counter() for k, _ in groups}
+    where = defaultdict(Counter)
+    for kind, files in groups:
+        for rel in files:
+            for el in ET.parse(os.path.join(OUTDIR, rel)).getroot().iter(T + "w"):
+                t = el.get("type")
+                if t:
+                    count[kind][t] += 1
+                    if t not in POS_NAMES:
+                        where[t][rel] += 1
+    row = lambda d: json.dumps(d, ensure_ascii=False)
+    tags = [row({"tag": t, "ja": v[0], "en": v[1], "fr": v[2], "hand": count["hand"][t], "draft": count["draft"][t]})
+            for t, v in POS_NAMES.items()]
+    unlisted = [row({"tag": t, "hand": count["hand"][t], "draft": count["draft"][t], "files": dict(sorted(where[t].items()))})
+                for t in sorted(where)]
+    comment = ("自動生成ファイル: scripts/build_site.py が出力します（直接編集しない）。品詞タグの三言語の名前（build_site.py の POS_NAMES）と、"
+               "本文の <w type> の数。hand は人の手で注釈した本文（" + "・".join(HAND_TEXTS) + "）、draft は自動注釈の暫定版（"
+               + str(len(groups[1][1])) + " 文書）。unlisted は POS_NAMES に無いタグ（表には出さない）。")
+    return ('{\n  "_comment": ' + json.dumps(comment, ensure_ascii=False) + ',\n  "tags": [\n    ' + ",\n    ".join(tags) +
+            '\n  ],\n  "unlisted": [\n    ' + ",\n    ".join(unlisted) + '\n  ]\n}\n')
+
 def _doc_files(text):
     """--check 用: doc_dates.json の文書とファイルの対応（日付は除く）"""
     try:
@@ -1192,7 +1277,8 @@ _BANNER = "<!-- 自動生成ファイル: scripts/build_site.py が出力しま�
 _sitemap, _n_urls = build_sitemap()
 OUTPUTS = {"index.html": _BANNER + build_index(), "tractate.html": _BANNER + build_tractate(),
            "reader.html": _BANNER + build_reader(), "sitemap.xml": _sitemap, "robots.txt": build_robots(),
-           os.path.join("data", "doc_dates.json"): build_doc_dates()}
+           os.path.join("data", "doc_dates.json"): build_doc_dates(),
+           os.path.join("data", "pos_labels.json"): build_pos_labels()}
 # 生成の日付（index.html のフッターの「生成 …」）は作り直すたびに変わるので、--check では比べない
 _BUILT = re.compile(r'(<span class="l-fr">généré</span>) \d{4}-\d{2}-\d{2}')
 
@@ -1221,6 +1307,6 @@ for name, text in OUTPUTS.items():
     with open(os.path.join(OUTDIR, name), "w", encoding="utf-8") as f:
         f.write(text)
 print("wrote index.html (landing), tractate.html (placeholder) and reader.html (draft full texts)")
-print("wrote sitemap.xml (%d URLs), robots.txt and data/doc_dates.json" % _n_urls)
+print("wrote sitemap.xml (%d URLs), robots.txt, data/doc_dates.json and data/pos_labels.json" % _n_urls)
 print("codices:", len(CODICES), "| tractates:", TOTAL, "| available:", AVAIL, "| drafts:", DRAFT, "| text only:", PLAIN, "| soon:", SOON,
       "| listed but not counted:", ", ".join("%s,%s" % k for k in sorted(UNCOUNTED)))

@@ -249,6 +249,28 @@ function setTitle(){
   document.title=nm+' — '+DOC.siglum+' · '+({ja:ann?'暫定版':'作業用本文', en:ann?'draft':'working text', fr:ann?'provisoire':'texte de travail'}[l]||'')+' — Sheneset';
 }
 function hideCard(){ card.hidden=true; document.querySelectorAll('.m.sel').forEach(x=>x.classList.remove('sel')); }
+/* 辞書のページ（lexicon.html）の項目へのリンク。data/lexicon.xml は、語を初めて押したときに 1 度だけ読む。
+   レンマと品詞の組が一致する項目へ。品詞の合う項目が無ければ、そのレンマの項目（同形異義語ならそのまとまり）へ。
+   辞書に無い語（レンマの無い語を含む）にはリンクを出さない */
+let LEXP=null;
+function lexIndex(){
+  if(!LEXP) LEXP=fetch('data/lexicon.xml',{cache:'no-cache'}).then(r=>r.ok?r.text():Promise.reject(r.status)).then(t=>{
+    const x=new DOMParser().parseFromString(t,'application/xml'), ix=new Map();
+    all(x,'entry').forEach(e=>{
+      const o=e.getElementsByTagNameNS(T,'orth')[0]; if(!o) return;
+      const p=e.getElementsByTagNameNS(T,'pos')[0], par=e.parentNode, lem=o.textContent.trim();
+      if(!ix.has(lem)) ix.set(lem,[]);
+      ix.get(lem).push({id:xid(e), pos:p?p.textContent.trim():'', sup:par&&par.localName==='superEntry'?xid(par):''});
+    });
+    return ix;
+  }).catch(()=>null);
+  return LEXP;
+}
+function lexTarget(ix,m){
+  const es=ix&&m.lemma?ix.get(m.lemma):null; if(!es||!es.length) return '';
+  const hit=es.find(e=>e.pos===m.type); if(hit) return hit.id;
+  return es[0].sup||es[0].id;
+}
 function showCard(el){
   const m=MS[+el.dataset.i]; if(!m) return;
   const g=el.closest('.g'), grp=g?Array.from(g.querySelectorAll('.m')).map(x=>MS[+x.dataset.i]):[m];
@@ -272,8 +294,14 @@ function showCard(el){
     '<div class="grp cop">'+grp.map(x=>x===m?'<b>'+x.html+'</b>':x.html).join('<span class="dot">·</span>')+'</div>'+
     '<dl>'+rows.map(r=>'<dt>'+r[0]+'</dt><dd>'+r[1]+'</dd>').join('')+'</dl>'+
     '<p class="lk"><a href="search.html?doc='+encodeURIComponent(DOC.key)+'&amp;kind=aql&amp;q='+encodeURIComponent(q)+'">'+tri('この文書で検索','Search this text','Chercher dans ce texte')+' ('+esc(q)+') →</a></p>';
-  card.hidden=false;
+  card.hidden=false; card.dataset.i=el.dataset.i;
   document.querySelectorAll('.m.sel').forEach(x=>x.classList.remove('sel')); el.classList.add('sel');
+  if(m.lemma) lexIndex().then(ix=>{
+    const id=lexTarget(ix,m), at=el.dataset.i;
+    if(!id||card.hidden||card.dataset.i!==at||card.querySelector('.lexl')) return;
+    const lk=card.querySelector('.lk');
+    if(lk) lk.insertAdjacentHTML('beforeend',' · <a class="lexl" href="lexicon.html#'+encodeURIComponent(id)+'">'+tri('辞書の項目','Lexicon entry','Entrée du lexique')+' →</a>');
+  });
 }
 function gotoHash(){
   document.querySelectorAll('.seg.hit').forEach(x=>x.classList.remove('hit'));

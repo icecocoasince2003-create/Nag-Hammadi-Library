@@ -147,6 +147,17 @@ html[data-mode="light"] .feat, html[data-mode="light"] .codex, html[data-mode="l
      <a href="project.html"><span class="l-ja">このプロジェクトについて →</span><span class="l-en">About the project →</span><span class="l-fr">À propos du projet →</span></a>
      <a href="#corpus"><span class="l-ja">文書一覧へ ↓</span><span class="l-en">Browse the codices ↓</span><span class="l-fr">Parcourir les codices ↓</span></a>
    </div>
+   <form class="qbox" action="search.html" method="get" role="search" aria-label="全文書を検索 / Search all texts">
+    <input type="hidden" name="scope" value="all">
+    <input class="qbox-q" name="q" type="search" required autocomplete="off" spellcheck="false" data-ph-label
+      data-ph-ja="全文書の本文をコプト語で検索（例: ⲛⲟⲩⲧⲉ）" data-ph-en="Search the Coptic text of all documents (e.g. ⲛⲟⲩⲧⲉ)" data-ph-fr="Chercher dans le texte copte de tous les documents (p. ex. ⲛⲟⲩⲧⲉ)">
+    <span class="qbox-f">
+     <label><input type="radio" name="f" value="f" checked><span class="l-ja">語形</span><span class="l-en">Word form</span><span class="l-fr">Forme</span></label>
+     <label><input type="radio" name="f" value="l"><span class="l-ja">レンマ</span><span class="l-en">Lemma</span><span class="l-fr">Lemme</span></label>
+    </span>
+    <button type="submit"><span class="l-ja">検索</span><span class="l-en">Search</span><span class="l-fr">Chercher</span></button>
+   </form>
+   <p class="qbox-note"><span class="l-ja">人の手で注釈した版と、全文テキスト（暫定版・未注釈）のすべてを対象に、<a href='search.html'>コーパス検索</a>で探します。全文テキストは初めに読み込むので、少し時間がかかります。語の意味から引くときは<a href='lexicon.html'>辞書</a>へ。</span><span class="l-en">Searches the hand-annotated editions and all the full texts (draft and unannotated) with the <a href='search.html'>corpus search</a>; the full texts are loaded first, which takes a moment. To look a word up by meaning, use the <a href='lexicon.html'>lexicon</a>.</span><span class="l-fr">Recherche dans les éditions annotées à la main et dans tous les textes intégraux (provisoires et non annotés) avec la <a href='search.html'>recherche du corpus</a> ; les textes intégraux sont d’abord chargés, ce qui prend un peu de temps. Pour chercher un mot par son sens, voir le <a href='lexicon.html'>lexique</a>.</span></p>
   </div>
   <img class="hero-fig" src="image/web/gengen_guide.svg" alt="" loading="lazy">
  </section>
