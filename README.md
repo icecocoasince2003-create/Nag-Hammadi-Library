@@ -96,6 +96,7 @@ nag_hammadi_library/
 ├─ robots.txt          ← 管理用ページ(admin・profile)を検索エンジンから外し、sitemap.xml を示す(自動生成)
 ├─ README.md           ← この文書
 ├─ CONTRIBUTING.md     ← ★共同編集ガイド(招待を受けた方はまずこちら)
+├─ .github/workflows/check.yml ← Pull Request と main への push のたびに走る自動チェック
 ├─ .nojekyll           ← GitHub Pages 用
 ├─ .gitignore
 ├─ .vercelignore       ← Vercel で配信しないもの(いまは design/ だけ)
@@ -119,6 +120,8 @@ nag_hammadi_library/
     ├─ sync_lexicon.py     source/lexicon.csv の変更を data/lexicon.xml に反映する(xml:id は変えない)
     ├─ build_site.py       index.html / tractate.html / reader.html / sitemap.xml / robots.txt を生成
     ├─ make_og_image.py    共有用の画像 image/og-image.png を作る(rsvg-convert が要る)
+    ├─ check_tei.py        TEI の点検(ポインタの切れ・以前の書き方など)。--schema でスキーマ検証も
+    ├─ check_style.py      表記ゆれの点検(規則は style_rules.json)
     ├─ build_parallels.py  並行箇所(data/parallels.xml)を、文言の自動照合で作る
     └─ sync_nhc_catalog.py  NHC 全文テキスト(未注釈)の文書一覧を data/catalog.xml に書き出す
 ```
@@ -126,7 +129,7 @@ nag_hammadi_library/
 - **`data/` の XML は、`source/` の CSV から作り直せる状態ではありません(2026-11 時点)。** 生成したあとに手作業で直した内容が
   `data/` にだけあるためです。`python3 scripts/build_tei.py` は、既定では `data/` に書き込まず、生成結果を `build/tei/` に出して
   `data/` との違いを表示するだけです。どこを直せばよいかは、下の「データの編集」にあります。
-- 共同編集の手順(ブランチ・Pull Request・競合の解決)は **CONTRIBUTING.md** を参照してください。
+- 共同編集の手順(どのファイルを直すか、符号化と訳の約束、確かめ方、ブランチ・Pull Request・競合の解決)は **[CONTRIBUTING.md](CONTRIBUTING.md)** を参照してください。
 - 目次トップ(`index.html`)とビュワー(`eugnostos.html`)は `data/` のXMLと `image/icon.svg` を読み込みます。
 - **サイトのアイコン**は `image/icon.svg`。お好きな画像に差し替えてください(同じ名前にすれば各ページが自動で読み込みます)。
 

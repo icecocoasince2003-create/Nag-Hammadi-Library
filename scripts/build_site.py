@@ -9,9 +9,11 @@
   実行方法（リポジトリのルートで）:
 
       python3 scripts/build_site.py
+      python3 scripts/build_site.py --check   生成ファイルが最新かを調べるだけ（書き込まない。CI で使う）
 
-  出力される index.html・tractate.html・reader.html は自動生成なので直接編集しない
-  でください。目次の内容を変えたいときは、下の CODICES テーブルを編集して
+  出力される index.html・tractate.html・reader.html・sitemap.xml・robots.txt は自動生成なので直接編集しない
+  でください。--check は、いまのスクリプトとデータから作り直したものとファイルを比べ、違えば終了コード 1 で
+  ファイル名を表示します（index.html のフッターの「生成」の日付は、作り直すたびに変わるので比べません）。目次の内容を変えたいときは、下の CODICES テーブルを編集して
   再実行します。
 
   * HOME は日本語・英語・フランス語の三言語表示です（上部ナビで切替）。
@@ -41,7 +43,7 @@
   文書ごとに冒頭に示します。
 ==============================================================================
 """
-import html, datetime, os, json
+import html, datetime, os, json, re, sys
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 OUTDIR = os.path.dirname(_HERE) if os.path.basename(_HERE).lower() in ("source", "build", "src", "scripts") else _HERE
@@ -1122,12 +1124,33 @@ def build_robots():
 
 # --- write ------------------------------------------------------------------
 _BANNER = "<!-- 自動生成ファイル: scripts/build_site.py が出力します。直接編集せず、スクリプトの CODICES を編集して再実行してください。 -->\n"
-open(os.path.join(OUTDIR,"index.html"),"w",encoding="utf-8").write(_BANNER + build_index())
-open(os.path.join(OUTDIR,"tractate.html"),"w",encoding="utf-8").write(_BANNER + build_tractate())
-open(os.path.join(OUTDIR,"reader.html"),"w",encoding="utf-8").write(_BANNER + build_reader())
 _sitemap, _n_urls = build_sitemap()
-open(os.path.join(OUTDIR,"sitemap.xml"),"w",encoding="utf-8").write(_sitemap)
-open(os.path.join(OUTDIR,"robots.txt"),"w",encoding="utf-8").write(build_robots())
+OUTPUTS = {"index.html": _BANNER + build_index(), "tractate.html": _BANNER + build_tractate(),
+           "reader.html": _BANNER + build_reader(), "sitemap.xml": _sitemap, "robots.txt": build_robots()}
+# 生成の日付（index.html のフッターの「生成 …」）は作り直すたびに変わるので、--check では比べない
+_BUILT = re.compile(r'(<span class="l-fr">généré</span>) \d{4}-\d{2}-\d{2}')
+
+if "--check" in sys.argv[1:]:
+    stale = []
+    for name, text in OUTPUTS.items():
+        try:
+            with open(os.path.join(OUTDIR, name), encoding="utf-8") as f:
+                current = f.read()
+        except OSError:
+            stale.append(name + "（ファイルがありません）")
+            continue
+        if _BUILT.sub(r"\1", current) != _BUILT.sub(r"\1", text):
+            stale.append(name)
+    if stale:
+        print("生成ファイルが、いまのスクリプトとデータから作り直したものと違います: " + "、".join(stale))
+        print("python3 scripts/build_site.py を実行して、作り直したファイルをコミットしてください。")
+        sys.exit(1)
+    print("生成ファイルは最新です（%s）" % "・".join(OUTPUTS))
+    sys.exit(0)
+
+for name, text in OUTPUTS.items():
+    with open(os.path.join(OUTDIR, name), "w", encoding="utf-8") as f:
+        f.write(text)
 print("wrote index.html (landing), tractate.html (placeholder) and reader.html (draft full texts)")
 print("wrote sitemap.xml (%d URLs) and robots.txt" % _n_urls)
 print("codices:", len(CODICES), "| tractates:", TOTAL, "| available:", AVAIL, "| drafts:", DRAFT, "| text only:", PLAIN, "| soon:", SOON,

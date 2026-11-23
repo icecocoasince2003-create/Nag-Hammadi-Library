@@ -1,0 +1,43 @@
+# Sheneset の自動チェック。Pull Request と、main への push のたびに走ります。
+# 手元で同じことを確かめるには、リポジトリのルートで各ステップの run を実行します（CONTRIBUTING.md の「6. 確かめ方」）。
+name: check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+
+      - name: TEI の点検（scripts/check_tei.py）
+        run: python3 scripts/check_tei.py
+
+      - name: コーパス検索のテスト（tests/corpus-query.test.cjs）
+        run: node --test tests/corpus-query.test.cjs
+
+      - name: JSON の構文（data/*.json・iiif/*.json）
+        run: |
+          bad=0
+          for f in data/*.json iiif/*.json; do
+            python3 -m json.tool "$f" > /dev/null || { echo "::error file=$f::JSON として読めません"; bad=1; }
+          done
+          exit $bad
+
+      - name: 表記ゆれ（scripts/check_style.py、規則は scripts/style_rules.json）
+        run: python3 scripts/check_style.py
+
+      - name: 生成ファイルが最新か（scripts/build_site.py --check）
+        run: python3 scripts/build_site.py --check
