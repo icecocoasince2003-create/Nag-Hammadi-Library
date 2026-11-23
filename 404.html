@@ -1,0 +1,77 @@
+<!-- 404（ページが見つからない）のページ（手作業管理）。Vercel は、無い URL を開かれたときに、このファイルを状態コード 404 で返す。
+     どの深さの URL（/a/b/c など）で返されても画像・CSS・リンクが切れないよう、<base href="/"> でサイトのルートを基準にしている
+     （ナビ（assets/site.js）の相対リンクも、これでルートから解決される）。検索エンジンには出さない（noindex）。sitemap には載せない。 -->
+<!DOCTYPE html>
+<html lang="ja" data-lang="ja" data-i18n="full" data-mode="dark" data-modes="light dark" data-title-en="Page not found — Sheneset" data-title-fr="Page introuvable — Sheneset">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<base href="/">
+<script>/* 表示モード（ライト／ダーク）の保存値を描画前に反映（保存は assets/site.js） */try{if(localStorage.getItem("nhc-mode")==="light")document.documentElement.setAttribute("data-mode","light")}catch(e){}</script>
+<script>/* 表示言語（?lang= ＞ 保存値 ＞ ブラウザーの言語、ほかは英語）を描画前に反映（正式な処理と保存は assets/site.js） */(function(H){var L=["ja","en","fr"],m=/[?&]lang=([^&#]*)/i.exec(location.search),v=m?m[1].toLowerCase():null;if(L.indexOf(v)<0){v=null;try{v=localStorage.getItem("nhc-lang")}catch(e){}}if(L.indexOf(v)<0){v="en";var n=navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||""];for(var i=0;i<n.length;i++){var p=String(n[i]).toLowerCase().split(/[-_]/)[0];if(L.indexOf(p)>=0){v=p;break}}}if(H.getAttribute("data-i18n")==="full"){H.setAttribute("data-lang",v);H.setAttribute("lang",v)}else if(v!=="ja"){H.setAttribute("data-lang","en");H.setAttribute("lang","en");H.setAttribute("data-gl",v);H.setAttribute("data-tl",v)}})(document.documentElement)</script>
+<meta name="robots" content="noindex">
+<title>ページが見つかりません — Sheneset</title>
+<meta name="description" content="お探しのページは見つかりませんでした / Page not found / Page introuvable — Sheneset">
+<link rel="icon" type="image/svg+xml" href="image/icon.svg">
+<link rel="alternate icon" type="image/png" sizes="32x32" href="image/favicon-32.png">
+<link rel="apple-touch-icon" href="image/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{ --ui:'Inter','Noto Sans JP',system-ui,sans-serif; }
+*{box-sizing:border-box} html,body{margin:0}
+body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
+.page{max-width:760px}
+.nf{display:flex; flex-direction:column; align-items:center; text-align:center; padding:28px 0 8px}
+.nf img{width:168px; height:168px; border-radius:50%; object-fit:cover; object-position:center 22%;
+  background:radial-gradient(circle at 50% 38%,#2b2856,#17152f 72%); border:1px solid rgba(212,175,106,.35)}
+.nf h1{margin:22px 0 6px}
+.nf .lede{margin:0 auto}
+.nf .path{font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.84rem; color:var(--ink-faint); word-break:break-all; margin:10px 0 0}
+.nf .path:empty{display:none}
+.go{display:flex; flex-wrap:wrap; justify-content:center; gap:10px 14px; list-style:none; padding:0; margin:26px 0 0}
+.go a{display:inline-block; padding:9px 18px; border:1px solid var(--line); border-radius:999px; color:var(--ink);
+  text-decoration:none; font-size:.92rem; background:var(--hi)}
+.go a:hover, .go a:focus-visible{border-color:var(--gold); color:var(--gold-bright); outline:none}
+</style>
+<link rel="stylesheet" href="assets/cosmos.css">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/community.css">
+<script defer src="assets/cosmos.js"></script>
+<script defer src="assets/site.js"></script>
+<script defer src="assets/analytics.js"></script>
+<script defer src="assets/community-config.js"></script>
+<script defer src="assets/community.js"></script>
+</head>
+<body>
+<nav id="sitebar" class="sitebar sticky"></nav>
+<main class="page">
+  <div class="nf">
+    <img src="image/web/gengen_cry.svg" alt="" width="168" height="168">
+    <div class="eyebrow">404</div>
+    <h1><span class="l-ja jp">ページが見つかりません</span><span class="l-en">Page not found</span><span class="l-fr">Page introuvable</span></h1>
+    <p class="lede"><span class="l-ja">お探しのページは、移動したか、URL が違っているようです。下のリンクから探してみてください。</span><span class="l-en">The page you are looking for has moved, or the address is not quite right. Try one of the links below.</span><span class="l-fr">La page demandée a été déplacée, ou l’adresse n’est pas tout à fait exacte. Essayez l’un des liens ci-dessous.</span></p>
+    <p class="path" id="nfPath"></p>
+    <ul class="go">
+      <li><a href="index.html"><span class="l-ja">HOME</span><span class="l-en">Home</span><span class="l-fr">Accueil</span></a></li>
+      <li><a href="index.html#corpus"><span class="l-ja">文書一覧</span><span class="l-en">Texts</span><span class="l-fr">Textes</span></a></li>
+      <li><a href="search.html"><span class="l-ja">検索・統計</span><span class="l-en">Search</span><span class="l-fr">Recherche</span></a></li>
+    </ul>
+  </div>
+</main>
+<footer class="site-foot">
+  <a href="index.html"><span class="l-ja">HOME</span><span class="l-en">Home</span><span class="l-fr">Accueil</span></a>
+  · <a href="project.html"><span class="l-ja">プロジェクトについて</span><span class="l-en">About</span><span class="l-fr">À propos</span></a>
+</footer>
+<script>
+/* 開かれた URL（パス）を表示する。文字列として入れる（HTML としては解釈しない） */
+(function(){
+  var p = document.getElementById("nfPath"), path = location.pathname;
+  if(!p || path === "/404.html") return;
+  try { path = decodeURI(path); } catch(e) {}   // 壊れた %xx のときはそのまま出す
+  p.textContent = path;
+})();
+</script>
+</body>
+</html>
