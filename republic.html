@@ -310,10 +310,10 @@ a.relcard:hover{border-color:var(--gold)}
 <script>/* 左の文書パネルを折りたたんだ状態（assets/site.js が保存）を描画前に反映 */try{if(localStorage.getItem("nhc-panel")==="off")document.documentElement.setAttribute("data-panel","off")}catch(e){}</script>
 <script defer src="assets/cosmos.js"></script>
 <script defer src="assets/site.js"></script>
+<script defer src="assets/viewer-tools.js"></script>
 <script defer src="assets/analytics.js"></script>
 <script defer src="assets/community-config.js"></script>
 <script defer src="assets/community.js"></script>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.1/openseadragon.min.js"></script>
 </head>
 <body data-doc="republic">
 <div class="app">
@@ -366,12 +366,13 @@ a.relcard:hover{border-color:var(--gold)}
     <div class="doc-head">
       <div class="kick">Nag Hammadi Codex VI,5 · pp. 48–51</div>
       <h1><span class="cop">ⲡⲟⲗⲓⲧⲉⲓⲁ</span><br><span class="l-ja">プラトン『国家』588b–589b</span><span class="l-en">Plato, Republic 588b–589b</span></h1>
+      <p class="doc-photos" data-codices="VI" hidden></p>
       <p class="meta"><span class="l-ja">プラトン『国家』第9巻 588b–589b のコプト語訳（NHC VI,5）と、対応するギリシア語原文の対訳。左にコプト語本文、右にギリシア語原文（OCT/Burnet）を並べています。各形態素をクリックすると品詞・語義・辞書が表示され、〈借用語〉ボタンでギリシア語からの借用語が左本文上にマーキングされます。</span><span class="l-en">A Coptic translation of Plato’s Republic, Book IX 588b–589b (NHC VI,5), set in parallel with the Greek original (OCT/Burnet): Coptic on the left, Greek on the right. Click any morpheme for its part of speech, sense and dictionary entry; the “Loanwords” button marks Greek loanwords within the Coptic text.</span></p>
     </div>
-        <section class="facsimile" id="facsimile" aria-label="写本ファクシミリ / Facsimile">
+        <section class="facsimile" id="facsimile" aria-label="写本ファクシミリ / Facsimile" hidden>
       <div class="fx-head">
         <span class="fx-title">Facsimile · IIIF</span>
-        <span class="fx-sub" id="fxStatus">iiif/republic.json</span>
+        <span class="fx-sub" id="fxStatus"></span>
         <button class="chip" id="fxPrev" hidden>‹</button>
         <span class="fx-sub" id="fxPage" hidden style="flex:none"></span>
         <button class="chip" id="fxNext" hidden>›</button>
@@ -1094,60 +1095,72 @@ window.addEventListener("drop",e=>{ e.preventDefault(); dragDepth=0; H.removeAtt
 load();
 </script>
 <script>
-/* ---- IIIFファクシミリパネル（iiif/FX_DOC.json を読み込み、初回展開時に初期化） ---- */
+/* ---- 写本ファクシミリ（IIIF）のパネル ----
+   ページを開いた時点で iiif/FX_DOC.json を読み、pages[] のうち source（IIIF Image API の info.json の URL）の
+   あるページだけを、この順にパネルで送れるようにする（書き方は iiif/README.md）。
+   source のあるページが 1 つも無いとき（2026-11 時点）と、JSON を読めないときは、パネル（#facsimile）を出さない。
+   source を書き込めば、コードを変えずにパネルが出る。attribution（画像の提供元）はパネルの下に出す。
+   画像ビュワー OpenSeadragon は、初めて〈開く〉を押したときに読み込む。 */
 (function(){
   var FX_DOC = "republic";
-  var cfg = null, viewer = null, pageIdx = 0;
+  var OSD = "https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.1/";
   var $ = function(s){ return document.querySelector(s); };
-  var btn = $("#fxToggle"), body = $("#fxBody"), status = $("#fxStatus"), note = $("#fxNote");
+  var sec = $("#facsimile"), btn = $("#fxToggle"), body = $("#fxBody"), status = $("#fxStatus"), note = $("#fxNote");
   var prev = $("#fxPrev"), next = $("#fxNext"), pageLbl = $("#fxPage");
-  if(!btn) return;
+  if(!sec || !btn) return;
+  var pages = [], attribution = "", viewer = null, pageIdx = 0, osdLoading = null;
+  function msg(ja, en){ return '<span class="l-ja">' + ja + '</span><span class="l-en">' + en + '</span>'; }
 
-  function sourceFor(i){
-    var p = cfg.pages && cfg.pages[i];
-    return (p && p.source) ? p.source : null;
+  fetch("iiif/" + FX_DOC + ".json", {cache:"no-cache"})
+    .then(function(r){ if(!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    .then(function(cfg){
+      pages = (cfg.pages || []).filter(function(p){ return p && p.source; });
+      if(!pages.length) return;
+      attribution = cfg.attribution || "";
+      status.textContent = cfg.label || "";
+      sec.hidden = false;
+    })
+    .catch(function(){});
+  function loadOSD(){
+    if(window.OpenSeadragon) return Promise.resolve();
+    if(!osdLoading) osdLoading = new Promise(function(ok, ng){
+      var s = document.createElement("script");
+      s.src = OSD + "openseadragon.min.js";
+      s.onload = ok;
+      s.onerror = function(){ osdLoading = null; ng(); };
+      document.head.appendChild(s);
+    });
+    return osdLoading;
   }
   function openPage(i){
-    if(!viewer || !cfg) return;
     pageIdx = i;
-    var src = sourceFor(i) || cfg.demoTileSource;
-    viewer.open(src);
-    var p = cfg.pages && cfg.pages[i];
-    pageLbl.textContent = p ? ("p. " + p.page + "  (" + (i+1) + "/" + cfg.pages.length + ")") : "";
-    var isDemo = !sourceFor(i);
-    note.textContent = isDemo
-      ? "デモ画像を表示中です。実際の写本画像を表示するには iiif/" + FX_DOC + ".json の pages[].source に IIIF info.json のURLを記入してください。"
-      : (cfg.attribution || "");
+    viewer.open(pages[i].source);
+    pageLbl.textContent = "p. " + pages[i].page + "  (" + (i+1) + "/" + pages.length + ")";
+    note.textContent = attribution;
   }
   function init(){
     if(viewer) return;
-    if(typeof OpenSeadragon === "undefined"){
-      note.textContent = "OpenSeadragon を読み込めませんでした（オフラインの可能性）。";
-      return;
-    }
-    fetch("iiif/" + FX_DOC + ".json", {cache:"no-store"})
-      .then(function(r){ if(!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
-      .catch(function(){ return { label:"", pages:[], demoTileSource:"https://openseadragon.github.io/example-images/duomo/duomo.dzi" }; })
-      .then(function(c){
-        cfg = c;
-        viewer = OpenSeadragon({
-          id: "osdView",
-          prefixUrl: "https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.1/images/",
-          showNavigator: true,
-          navigatorPosition: "BOTTOM_RIGHT",
-          crossOriginPolicy: "Anonymous"
-        });
-        viewer.addHandler("open-failed", function(){
-          note.textContent = "画像を読み込めませんでした。iiif/" + FX_DOC + ".json の source を確認してください。";
-        });
-        if(cfg.pages && cfg.pages.length > 1){
-          prev.hidden = next.hidden = pageLbl.hidden = false;
-          prev.onclick = function(){ openPage((pageIdx - 1 + cfg.pages.length) % cfg.pages.length); };
-          next.onclick = function(){ openPage((pageIdx + 1) % cfg.pages.length); };
-        }
-        openPage(0);
-        if(cfg.label) status.textContent = cfg.label;
+    loadOSD().then(function(){
+      if(viewer) return;
+      viewer = OpenSeadragon({
+        id: "osdView",
+        prefixUrl: OSD + "images/",
+        showNavigator: true,
+        navigatorPosition: "BOTTOM_RIGHT",
+        crossOriginPolicy: "Anonymous"
       });
+      viewer.addHandler("open-failed", function(){
+        note.innerHTML = msg("画像を読み込めませんでした。", "The image could not be loaded.");
+      });
+      if(pages.length > 1){
+        prev.hidden = next.hidden = pageLbl.hidden = false;
+        prev.onclick = function(){ openPage((pageIdx - 1 + pages.length) % pages.length); };
+        next.onclick = function(){ openPage((pageIdx + 1) % pages.length); };
+      }
+      openPage(0);
+    }, function(){
+      note.innerHTML = msg("画像ビュワーを読み込めませんでした（オフラインの可能性があります）。", "The image viewer could not be loaded (you may be offline).");
+    });
   }
   btn.onclick = function(){
     var open = !body.hidden;

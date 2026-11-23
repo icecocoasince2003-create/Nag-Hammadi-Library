@@ -5,6 +5,7 @@
    3) 三言語表示 (.l-ja / .l-en / .l-fr)
    4) 広い画面でのビュワー本文幅の拡張
    5) 解説ページ（gnosticism / project / admin）の共通部品
+   6) 本文ビュワー（reader / eugnostos / republic）の冒頭の小さなリンク（写本の写真。assets/viewer-tools.js）
    ============================================================ */
 
 /* ---------- 3) 言語表示 ---------- */
@@ -372,3 +373,9 @@ html[data-mode="light"] .app main .corpus-head, html[data-mode="light"] .app mai
   .app > .sitebar { min-width: 0; }
   .app { max-width: 100vw; overflow-x: hidden; }
 }
+
+/* ---------- 6) 本文ビュワーの冒頭の小さなリンク（写本の写真。assets/viewer-tools.js が書き込む） ---------- */
+.doc-photos { margin: 8px 0 0; font-size: .8rem; line-height: 1.7; color: var(--ink-faint); }
+.doc-photos a { color: var(--gold-bright, var(--gold)); text-decoration: none; text-underline-offset: 4px; }
+.doc-photos a:hover { text-decoration: underline; }
+.doc-photos .dp-note { font-size: .72rem; margin-left: .3em; }

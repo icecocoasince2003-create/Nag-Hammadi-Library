@@ -344,10 +344,10 @@ html[data-lang="en"] .l-en{display:revert}
 <script>/* 左の文書パネルを折りたたんだ状態（assets/site.js が保存）を描画前に反映 */try{if(localStorage.getItem("nhc-panel")==="off")document.documentElement.setAttribute("data-panel","off")}catch(e){}</script>
 <script defer src="assets/cosmos.js"></script>
 <script defer src="assets/site.js"></script>
+<script defer src="assets/viewer-tools.js"></script>
 <script defer src="assets/analytics.js"></script>
 <script defer src="assets/community-config.js"></script>
 <script defer src="assets/community.js"></script>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.1/openseadragon.min.js"></script>
 </head>
 <body data-doc="eugnostos">
 <div class="app">
@@ -403,12 +403,13 @@ html[data-lang="en"] .l-en{display:revert}
     <div class="doc-head">
       <div class="kick" id="docKick">Nag Hammadi Codex III,3 · pp. 70–90</div>
       <h1 id="docH1"><span class="cop">ⲉⲩⲅⲛⲱⲥⲧⲟⲥ ⲡⲙⲁⲕⲁⲣⲓⲟⲥ</span><br><span class="l-ja">祝福されたエウグノストス</span><span class="l-en">Eugnostos the Blessed</span></h1>
+      <p class="doc-photos" data-codices="III V" hidden></p>
       <p class="meta"><span class="l-ja">前1〜2世紀のギリシア語原典に遡るとされる、非キリスト教的な思弁的宇宙生成論。語りえぬ第一原理から、先在の父・自生者・不死の人間・人の子(救済者)・ソフィアと諸アイオーンが流出する次第を、書簡の体裁で説く。各形態素をクリックすると語義が表示されます。他の文書にも同じ文言がある箇所には訳の後ろに <span class="pref" aria-hidden="true">‖ V,1</span> のような印があり、押すと右のパネルに並行箇所が表示されます。</span><span class="l-en">A non-Christian speculative cosmogony, held to go back to a Greek original of the 1st–2nd c. BCE. In epistolary form it expounds how, from the ineffable First Principle, there emanate the pre-existent Father, the Self-Begotten, the Immortal Man, the Son of Man (the Saviour), Sophia and the Aeons. Click any morpheme for its sense. Where the same wording also occurs in another text, a mark such as <span class="pref" aria-hidden="true">‖ V,1</span> follows the translation; select it to see the parallel passage in the side panel.</span></p>
     </div>
-        <section class="facsimile" id="facsimile" aria-label="写本ファクシミリ / Facsimile">
+        <section class="facsimile" id="facsimile" aria-label="写本ファクシミリ / Facsimile" hidden>
       <div class="fx-head">
         <span class="fx-title">Facsimile · IIIF</span>
-        <span class="fx-sub" id="fxStatus">iiif/eugnostos.json</span>
+        <span class="fx-sub" id="fxStatus"></span>
         <button class="chip" id="fxPrev" hidden>‹</button>
         <span class="fx-sub" id="fxPage" hidden style="flex:none"></span>
         <button class="chip" id="fxNext" hidden>›</button>
@@ -1375,60 +1376,72 @@ function buildCredit(){
 load();
 </script>
 <script>
-/* ---- IIIFファクシミリパネル（iiif/FX_DOC.json を読み込み、初回展開時に初期化） ---- */
+/* ---- 写本ファクシミリ（IIIF）のパネル ----
+   ページを開いた時点で iiif/FX_DOC.json を読み、pages[] のうち source（IIIF Image API の info.json の URL）の
+   あるページだけを、この順にパネルで送れるようにする（書き方は iiif/README.md）。
+   source のあるページが 1 つも無いとき（2026-11 時点）と、JSON を読めないときは、パネル（#facsimile）を出さない。
+   source を書き込めば、コードを変えずにパネルが出る。attribution（画像の提供元）はパネルの下に出す。
+   画像ビュワー OpenSeadragon は、初めて〈開く〉を押したときに読み込む。 */
 (function(){
   var FX_DOC = "eugnostos";
-  var cfg = null, viewer = null, pageIdx = 0;
+  var OSD = "https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.1/";
   var $ = function(s){ return document.querySelector(s); };
-  var btn = $("#fxToggle"), body = $("#fxBody"), status = $("#fxStatus"), note = $("#fxNote");
+  var sec = $("#facsimile"), btn = $("#fxToggle"), body = $("#fxBody"), status = $("#fxStatus"), note = $("#fxNote");
   var prev = $("#fxPrev"), next = $("#fxNext"), pageLbl = $("#fxPage");
-  if(!btn) return;
+  if(!sec || !btn) return;
+  var pages = [], attribution = "", viewer = null, pageIdx = 0, osdLoading = null;
+  function msg(ja, en){ return '<span class="l-ja">' + ja + '</span><span class="l-en">' + en + '</span>'; }
 
-  function sourceFor(i){
-    var p = cfg.pages && cfg.pages[i];
-    return (p && p.source) ? p.source : null;
+  fetch("iiif/" + FX_DOC + ".json", {cache:"no-cache"})
+    .then(function(r){ if(!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    .then(function(cfg){
+      pages = (cfg.pages || []).filter(function(p){ return p && p.source; });
+      if(!pages.length) return;
+      attribution = cfg.attribution || "";
+      status.textContent = cfg.label || "";
+      sec.hidden = false;
+    })
+    .catch(function(){});
+  function loadOSD(){
+    if(window.OpenSeadragon) return Promise.resolve();
+    if(!osdLoading) osdLoading = new Promise(function(ok, ng){
+      var s = document.createElement("script");
+      s.src = OSD + "openseadragon.min.js";
+      s.onload = ok;
+      s.onerror = function(){ osdLoading = null; ng(); };
+      document.head.appendChild(s);
+    });
+    return osdLoading;
   }
   function openPage(i){
-    if(!viewer || !cfg) return;
     pageIdx = i;
-    var src = sourceFor(i) || cfg.demoTileSource;
-    viewer.open(src);
-    var p = cfg.pages && cfg.pages[i];
-    pageLbl.textContent = p ? ("p. " + p.page + "  (" + (i+1) + "/" + cfg.pages.length + ")") : "";
-    var isDemo = !sourceFor(i);
-    note.textContent = isDemo
-      ? "デモ画像を表示中です。実際の写本画像を表示するには iiif/" + FX_DOC + ".json の pages[].source に IIIF info.json のURLを記入してください。"
-      : (cfg.attribution || "");
+    viewer.open(pages[i].source);
+    pageLbl.textContent = "p. " + pages[i].page + "  (" + (i+1) + "/" + pages.length + ")";
+    note.textContent = attribution;
   }
   function init(){
     if(viewer) return;
-    if(typeof OpenSeadragon === "undefined"){
-      note.textContent = "OpenSeadragon を読み込めませんでした（オフラインの可能性）。";
-      return;
-    }
-    fetch("iiif/" + FX_DOC + ".json", {cache:"no-store"})
-      .then(function(r){ if(!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
-      .catch(function(){ return { label:"", pages:[], demoTileSource:"https://openseadragon.github.io/example-images/duomo/duomo.dzi" }; })
-      .then(function(c){
-        cfg = c;
-        viewer = OpenSeadragon({
-          id: "osdView",
-          prefixUrl: "https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.1/images/",
-          showNavigator: true,
-          navigatorPosition: "BOTTOM_RIGHT",
-          crossOriginPolicy: "Anonymous"
-        });
-        viewer.addHandler("open-failed", function(){
-          note.textContent = "画像を読み込めませんでした。iiif/" + FX_DOC + ".json の source を確認してください。";
-        });
-        if(cfg.pages && cfg.pages.length > 1){
-          prev.hidden = next.hidden = pageLbl.hidden = false;
-          prev.onclick = function(){ openPage((pageIdx - 1 + cfg.pages.length) % cfg.pages.length); };
-          next.onclick = function(){ openPage((pageIdx + 1) % cfg.pages.length); };
-        }
-        openPage(0);
-        if(cfg.label) status.textContent = cfg.label;
+    loadOSD().then(function(){
+      if(viewer) return;
+      viewer = OpenSeadragon({
+        id: "osdView",
+        prefixUrl: OSD + "images/",
+        showNavigator: true,
+        navigatorPosition: "BOTTOM_RIGHT",
+        crossOriginPolicy: "Anonymous"
       });
+      viewer.addHandler("open-failed", function(){
+        note.innerHTML = msg("画像を読み込めませんでした。", "The image could not be loaded.");
+      });
+      if(pages.length > 1){
+        prev.hidden = next.hidden = pageLbl.hidden = false;
+        prev.onclick = function(){ openPage((pageIdx - 1 + pages.length) % pages.length); };
+        next.onclick = function(){ openPage((pageIdx + 1) % pages.length); };
+      }
+      openPage(0);
+    }, function(){
+      note.innerHTML = msg("画像ビュワーを読み込めませんでした（オフラインの可能性があります）。", "The image viewer could not be loaded (you may be offline).");
+    });
   }
   btn.onclick = function(){
     var open = !body.hidden;

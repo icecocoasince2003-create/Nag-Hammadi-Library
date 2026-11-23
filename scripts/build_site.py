@@ -414,7 +414,7 @@ def build_index():
      <div>
        <div class="k">NHC VI,5</div>
        <div class="ttl"><span class="cop">ⲡⲟⲗⲓⲧⲉⲓⲁ</span>{tri("プラトン『国家』588b–589b", "Plato, <i>Republic</i> 588b–589b", "Platon, <i>République</i> 588b–589b")}</div>
-       <div class="loc">{tri("ギリシア語原文対照・IIIFファクシミリ", "Greek parallel text · IIIF facsimile", "Texte grec en regard · fac-similé IIIF")}</div>
+       <div class="loc">{tri("ギリシア語原文対照", "Greek parallel text", "Texte grec en regard")}</div>
        <div class="acts"><a class="go" href="republic.html">{tri("全文を読む →", "Read the text →", "Lire le texte →")}</a>
         <a href="search.html?doc=republic">{tri("検索", "Search", "Recherche")}</a>
         <a href="search.html?doc=republic&amp;view=stats">{tri("統計", "Statistics", "Statistiques")}</a></div>
@@ -740,6 +740,8 @@ const xlang=el=>el.getAttributeNS(XNS,'lang')||'';
 const fmt=n=>Number(n).toLocaleString('en-US');
 const pct=(a,b)=>b?Math.round(a/b*100):0;
 const posName=p=>{ const e=POS[p]; return e?tri(esc(e[0]),esc(e[1]),esc(e[2])):esc(p); };
+/* assets/viewer-tools.js（写本の写真へのリンクなど）。defer で読み込むので、まだ無いときは読み込み後に呼んでもらう */
+const withTools=f=>{ if(window.NHCTools) f(window.NHCTools); else (window.NHCToolsQ=window.NHCToolsQ||[]).push(f); };
 const key=new URLSearchParams(location.search).get('doc')||'';
 const shell=$('#shell'), card=$('#card');
 let OPT={inter:false, cert:false, cuts:false};
@@ -924,6 +926,7 @@ function render(){
     '<div class="eyebrow" style="margin-top:18px">'+(m?'Codex '+m[1]+' · ':'')+esc(DOC.siglum)+(D.locus?' · '+esc(D.locus):'')+'</div>'+
     '<h1>'+tri(esc(DOC.ja),esc(DOC.en),esc(DOC.fr))+'</h1><div class="alt">'+tri(esc(DOC.en),esc(DOC.ja),esc(DOC.en))+'</div>'+
     '<div class="meta">'+esc(D.lang)+' · '+tri(fmt(s.segs)+' セグメント · '+fmt(s.m)+' 形態素'+(ann?' · '+fmt(s.g)+' 語群':''), fmt(s.segs)+' segments · '+fmt(s.m)+' morphemes'+(ann?' · '+fmt(s.g)+' bound groups':''), fmt(s.segs)+' segments · '+fmt(s.m)+' morphèmes'+(ann?' · '+fmt(s.g)+' groupes':''))+'</div>'+
+    (m?'<p class="doc-photos" data-codices="'+esc(m[1])+'" hidden></p>':'')+
     statusHTML()+
     (ann?'<div class="tools">'+
       '<label><input type="checkbox" id="oInter"'+(OPT.inter?' checked':'')+'>'+tri('語義と品詞を重ねる','Show glosses and POS','Afficher gloses et catégories')+'</label>'+
@@ -935,6 +938,7 @@ function render(){
   const bind=(id,k)=>{ const e=document.getElementById(id); if(e) e.addEventListener('change',()=>{ OPT[k]=e.checked; saveOpt(); renderText(); }); };
   bind('oInter','inter'); bind('oCert','cert'); bind('oCuts','cuts');
   renderText(); setTitle(); gotoHash();
+  withTools(t=>t.fill(shell));
 }
 function fail(msg, detail){
   shell.innerHTML='<div class="eyebrow">Nag Hammadi Codices</div><h1>'+msg+'</h1>'+(detail?'<p class="err">'+esc(detail)+'</p>':'')+
@@ -970,7 +974,7 @@ window.addEventListener('hashchange',gotoHash);
             f"{MODE_BOOT}"
             "<title>本文（暫定版） — Sheneset</title>"
             "<meta name=\"description\" content=\"ナグ・ハマディ写本の全文テキスト（自動注釈の暫定版）/ Nag Hammadi Codices: full text with a draft automatic annotation.\">"
-            f"{FONTS}<style>{css}</style></head><body>{body}</body></html>")
+            f"{FONTS}<script defer src=\"assets/viewer-tools.js\"></script><style>{css}</style></head><body>{body}</body></html>")
 
 # --- write ------------------------------------------------------------------
 _BANNER = "<!-- 自動生成ファイル: scripts/build_site.py が出力します。直接編集せず、スクリプトの CODICES を編集して再実行してください。 -->\n"
