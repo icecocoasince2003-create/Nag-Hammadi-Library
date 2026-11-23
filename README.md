@@ -142,6 +142,7 @@ nag_hammadi_library/
     ├─ make_og_image.py    共有用の画像 image/og-image.png を作る(rsvg-convert が要る)
     ├─ check_tei.py        TEI の点検(ポインタの切れ・以前の書き方・見出しとレンマへのコプト文字以外の文字の混入・語釈に使わない語など)。--schema でスキーマ検証も
     ├─ gloss_rules.json    語釈と辞書の語義に使わない語の一覧(check_tei.py が読む。CONTRIBUTING.md の 10.)
+    ├─ tei_allowlist.json  TEI の要素ごとに使ってよい属性と値(check_tei.py の 12. が読む。説明は docs/sheneset_odd.xml)
     ├─ check_style.py      表記ゆれの点検(規則は style_rules.json)
     ├─ build_parallels.py  並行箇所(data/parallels.xml)を、文言の自動照合で作る
     └─ sync_nhc_catalog.py  NHC 全文テキスト(未注釈)の文書一覧を data/catalog.xml に書き出す
@@ -659,6 +660,10 @@ TEI に無い独自の要素・属性は使っていません。
 ```
 python3 scripts/check_tei.py
 ```
+
+GitHub の自動チェックは、TEI-C の今の版の `tei_all.rng` を取得して、すべての TEI をスキーマ検証します（2026-11-23 から。いまは結果を
+出すだけで、エラーがあっても止めない。0 件を確かめたら、`.github/workflows/check.yml` の `continue-on-error` を消して止める設定にする）。
+`check_tei.py` は、属性と値の許可リスト（`scripts/tei_allowlist.json`。説明は TEI の ODD `docs/sheneset_odd.xml`）の外のものが入ると失敗します。
 
 スキーマでの検証も併せて行うには、スキーマを取得して場所を渡します
 （スキーマはリポジトリに入れていません。TEI のサイトから取得します。約 1 MB。`xmllint` は macOS に入っています）。

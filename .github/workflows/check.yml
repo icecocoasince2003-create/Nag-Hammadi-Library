@@ -25,6 +25,17 @@ jobs:
       - name: TEI の点検（scripts/check_tei.py）
         run: python3 scripts/check_tei.py
 
+      # TEI-C の今の版の tei_all.rng で、すべての TEI をスキーマ検証する（xmllint。2〜3 分かかる）。
+      # いまは結果を出すだけで、エラーがあっても止めない（continue-on-error）。エラーが 0 件になったことを確かめたら、
+      # continue-on-error を消して、失敗で止まるようにする（README「TEI スキーマとの適合」）
+      - name: TEI のスキーマ検証（tei_all.rng。いまは止めない）
+        continue-on-error: true
+        run: |
+          command -v xmllint > /dev/null || { sudo apt-get update -qq && sudo apt-get install -y -qq libxml2-utils; }
+          curl -fsSL --retry 3 -o "$RUNNER_TEMP/tei_all.rng" https://tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng
+          grep -o 'TEI Edition: [^"<]*' "$RUNNER_TEMP/tei_all.rng" | head -1 || true
+          python3 scripts/check_tei.py --schema "$RUNNER_TEMP/tei_all.rng"
+
       - name: コーパス検索と確認作業の画面のテスト（tests/corpus-query.test.cjs・tests/review-core.test.cjs）
         run: node --test tests/corpus-query.test.cjs tests/review-core.test.cjs
 

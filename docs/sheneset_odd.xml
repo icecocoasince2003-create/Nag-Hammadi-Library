@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Sheneset の符号化の説明（TEI ODD）。要素・属性・値の一覧と、この版で扱わないこと。
+     機械の点検は scripts/check_tei.py の 12.（許可リスト scripts/tei_allowlist.json）と TEI のスキーマ（tei_all.rng）で行い、
+     この ODD から RNG は作っていない（作るなら TEI の Roma か TEI Stylesheets の odd2rng を使う）。品詞の一覧（下の valList）は
+     data/pos_labels.json（scripts/build_site.py の POS_NAMES）と、属性と値は許可リストと同じにする。どちらかを変えたら、ここも直す。 -->
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="ja">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title xml:lang="ja">Sheneset の符号化の説明（TEI ODD）</title>
+        <title xml:lang="en">Encoding description of Sheneset (TEI ODD)</title>
+        <title xml:lang="fr">Description de l’encodage de Sheneset (ODD TEI)</title>
+      </titleStmt>
+      <publicationStmt>
+        <publisher>Sheneset</publisher>
+        <pubPlace>https://sheneset.vercel.app/</pubPlace>
+        <availability><licence target="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</licence></availability>
+      </publicationStmt>
+      <sourceDesc>
+        <p>Written for the Sheneset repository (docs/sheneset_odd.xml) from the data as of 2026-11-23.</p>
+      </sourceDesc>
+    </fileDesc>
+    <revisionDesc>
+      <change when="2026-11-23">First version: elements, attributes and values in use, the part-of-speech list, and what the edition does not annotate.</change>
+    </revisionDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div xml:id="about">
+        <head xml:lang="ja">この文書について</head>
+        <head xml:lang="en">About this document</head>
+        <p xml:lang="ja">Sheneset（ナグ・ハマディ写本コーパス）の TEI P5 データで使っている要素・属性・値と、この版で扱わないことをまとめたもの。データは TEI P5 の標準の要素と属性だけで書き、独自の要素は使わない。書き方の詳しい約束は README の「TEI設計の要点」と CONTRIBUTING.md の「4. 符号化の約束」にある。</p>
+        <p xml:lang="en">The elements, attributes and values used in Sheneset’s TEI P5 data (the Nag Hammadi Codices corpus), and what the edition does not annotate. The data use only standard TEI P5 elements and attributes. Detailed conventions are in the README (“TEI設計の要点”) and CONTRIBUTING.md (§4).</p>
+      </div>
+      <div xml:id="elements">
+        <head xml:lang="ja">使う要素と属性</head>
+        <head xml:lang="en">Elements and attributes in use</head>
+        <p xml:lang="ja">本文の注釈に使う要素と、それぞれが持てる属性。値を決めた属性は、この値しか取らない（scripts/check_tei.py の 12. が、許可リスト scripts/tei_allowlist.json と照らして確かめる。ここに無い属性や値が入ると点検が失敗する）。</p>
+        <p xml:lang="en">Elements used in the annotation of the texts and the attributes each may carry. Attributes with a value list take only those values (scripts/check_tei.py check 12 compares the data with the allowlist scripts/tei_allowlist.json; any other attribute or value makes the check fail).</p>
+        <table>
+          <row role="label"><cell>element</cell><cell>attributes (values)</cell><cell xml:lang="ja">意味</cell><cell xml:lang="en">meaning</cell></row>
+          <row><cell><gi>w</gi></cell><cell>type: 品詞の一覧（下）／ the POS list (below); lemma; ana; cert: high, medium, low; resp: #morph-auto, #morph-reference, #zp; xml:lang: grc</cell><cell xml:lang="ja">形態素。暫定版では自動注釈、未注釈の文書では元ファイルの語。</cell><cell xml:lang="en">A morpheme; in the drafts automatically annotated, in the unannotated texts a token of the source file.</cell></row>
+          <row><cell><gi>phr</gi></cell><cell>—</cell><cell xml:lang="ja">語群（bound group。正書法上の 1 語）。属性は持たない。</cell><cell xml:lang="en">Bound group (orthographic word); no attributes.</cell></row>
+          <row><cell><gi>s</gi></cell><cell>xml:id; n; corresp; type: incipit, colophon; cert: high, medium, low</cell><cell xml:lang="ja">セグメント（サイトの §）。xml:id はリンク・検索・利用者の投稿が指すので変えない。</cell><cell xml:lang="en">Segment (the site's §); its xml:id is used by links, the search and readers' posts and never changes.</cell></row>
+          <row><cell><gi>supplied</gi></cell><cell>reason: lost-in-source-file; resp: #zp; cert: high, medium</cell><cell xml:lang="ja">元ファイルで落ちていた ⲍ・ⲯ を補った字。cert high は語形と文脈から決まるもの、medium は校訂本での確認が必要なもの。</cell><cell xml:lang="en">Restored ⲍ/ⲯ lost in the source file; cert high = determined by form and context, medium = check against the editions.</cell></row>
+          <row><cell><gi>gap</gi></cell><cell>reason: lacuna, unclear; unit: line, page; extent: unknown</cell><cell xml:lang="ja">欠損（lacuna）か判読不能（unclear）。</cell><cell xml:lang="en">A lacuna or an illegible passage.</cell></row>
+          <row><cell><gi>pb</gi></cell><cell>n; break: no</cell><cell xml:lang="ja">写本の頁の区切り。</cell><cell xml:lang="en">Codex page break.</cell></row>
+          <row><cell><gi>lb</gi></cell><cell>n; break: no</cell><cell xml:lang="ja">写本の行の区切り。</cell><cell xml:lang="en">Line break.</cell></row>
+          <row><cell><gi>ab</gi></cell><cell>type: text, subscript, title, colophon, fragment</cell><cell xml:lang="ja">本文のまとまり（text・subscript・title・colophon・fragment）。</cell><cell xml:lang="en">A block of text.</cell></row>
+          <row><cell><gi>seg</gi></cell><cell>corresp</cell><cell xml:lang="ja">対訳（&lt;div type="translation"&gt;）の 1 つの訳。@corresp が本文の &lt;s&gt; を指す。</cell><cell xml:lang="en">One translation in &lt;div type="translation"&gt;; @corresp points to the &lt;s&gt;.</cell></row>
+          <row><cell><gi>interpGrp</gi></cell><cell>type: gloss; xml:lang: en, ja, fr</cell><cell xml:lang="ja">語釈の表（type="gloss"、言語ごと）。</cell><cell xml:lang="en">A table of glosses (type="gloss", one per language).</cell></row>
+          <row><cell><gi>interp</gi></cell><cell>xml:id</cell><cell xml:lang="ja">語釈（短い訳語）。&lt;w&gt; の @ana が指す。</cell><cell xml:lang="en">A gloss (short equivalent), pointed to by &lt;w&gt; @ana.</cell></row>
+          <row><cell><gi>linkGrp</gi></cell><cell>xml:id; type: parallel; subtype: witness, rewriting; corresp</cell><cell xml:lang="ja">並行箇所の組（data/parallels.xml）。</cell><cell xml:lang="en">A group of parallel passages (data/parallels.xml).</cell></row>
+          <row><cell><gi>link</gi></cell><cell>target; cert: high, medium, low; resp: #align</cell><cell xml:lang="ja">並行箇所 1 組。@target が 2 つの &lt;s&gt; を指し、@cert は対応の根拠の強さ、@resp は自動照合（#align）。</cell><cell xml:lang="en">One parallel; @target points to two &lt;s&gt;, @cert is the strength of the evidence, @resp the automatic alignment (#align).</cell></row>
+        </table>
+        <p xml:lang="ja">品詞の一覧（<gi>w</gi> の <att>type</att>）は、下の TEI の指定の valList。名前は日・英・仏で、サイトの品詞の表（はじめての方へ III）と同じ。</p>
+        <p xml:lang="en">The part-of-speech list (<att>type</att> on <gi>w</gi>) is the valList in the TEI specification below, with names in Japanese, English and French as in the site’s table (Getting started, III).</p>
+      </div>
+      <div xml:id="out-of-scope">
+        <head xml:lang="ja">この版で扱わないこと</head>
+        <head xml:lang="en">What this edition does not annotate</head>
+        <p xml:lang="ja">Sheneset の注釈は、本文・語の区切り・品詞・レンマ・語釈・訳・並行箇所まで。次のことは、要素・属性・値・語釈のどの形でも加えない。</p>
+        <p xml:lang="en">The annotation covers the text, word division, parts of speech, lemmata, glosses, translations and parallels. The following are not added in any form (element, attribute, value or gloss).</p>
+        <list>
+          <item><p xml:lang="ja">主語・目的語などの文法関係は注釈しない。</p><p xml:lang="en">Grammatical relations such as subject and object are not annotated.</p></item>
+          <item><p xml:lang="ja">目的語に前置詞 ⲛ-／ⲙⲙⲟ= が付くかどうかを区別しない。</p><p xml:lang="en">No distinction is made as to whether an object takes the preposition ⲛ-/ⲙⲙⲟ=.</p></item>
+          <item><p xml:lang="ja">ⲛ-／ⲙⲙⲟ= は、使い方にかかわらず形のとおり前置詞（PREP）とし、語釈は形の説明にとどめる（ⲙⲙⲟ=「前置詞 ⲛ- の代名詞形」）。</p><p xml:lang="en">ⲛ-/ⲙⲙⲟ= is tagged by its form as a preposition (PREP), however it is used, and its gloss only describes the form (ⲙⲙⲟ= “preposition n- (before suffixes)”).</p></item>
+        </list>
+        <p xml:lang="ja">語釈と辞書の語義に、目的語の標示や格を表す語が入っていないことは、scripts/check_tei.py の 11.（使わない語の一覧は scripts/gloss_rules.json）が確かめる。</p>
+        <p xml:lang="en">scripts/check_tei.py check 11 makes sure no gloss or lexicon sense contains terms for object marking or case (the list of terms is scripts/gloss_rules.json).</p>
+      </div>
+      <div xml:id="schema">
+        <head xml:lang="ja">TEI の指定</head>
+        <head xml:lang="en">TEI specification</head>
+        <p xml:lang="ja">TEI のすべてのモジュール（tei_all と同じ範囲）に、上の値の一覧を足した指定。この指定から RNG は作っていない。データは TEI-C の tei_all.rng で検証している。</p>
+        <p xml:lang="en">All TEI modules (the scope of tei_all) with the value lists above. No RNG is generated from this specification; the data are validated against TEI-C’s tei_all.rng.</p>
+        <schemaSpec ident="sheneset" start="TEI">
+          <moduleRef key="tei"/>
+          <moduleRef key="core"/>
+          <moduleRef key="header"/>
+          <moduleRef key="textstructure"/>
+          <moduleRef key="analysis"/>
+          <moduleRef key="linking"/>
+          <moduleRef key="transcr"/>
+          <moduleRef key="msdescription"/>
+          <moduleRef key="namesdates"/>
+          <moduleRef key="dictionaries"/>
+          <moduleRef key="textcrit"/>
+          <moduleRef key="tagdocs"/>
+          <elementSpec ident="w" mode="change">
+            <attList>
+              <attDef ident="type" mode="change"><desc xml:lang="ja">品詞の略号（下の一覧から）。X は未判定。</desc><desc xml:lang="en">Part-of-speech tag (from the list below); X means unresolved.</desc>
+                <valList type="closed" mode="add">
+                  <valItem ident="ART"><gloss xml:lang="ja">冠詞</gloss><gloss xml:lang="en">article</gloss><gloss xml:lang="fr">article</gloss></valItem>
+                  <valItem ident="N"><gloss xml:lang="ja">名詞</gloss><gloss xml:lang="en">noun</gloss><gloss xml:lang="fr">nom</gloss></valItem>
+                  <valItem ident="NPROP"><gloss xml:lang="ja">固有名詞</gloss><gloss xml:lang="en">proper noun</gloss><gloss xml:lang="fr">nom propre</gloss></valItem>
+                  <valItem ident="V"><gloss xml:lang="ja">動詞</gloss><gloss xml:lang="en">verb</gloss><gloss xml:lang="fr">verbe</gloss></valItem>
+                  <valItem ident="VSTAT"><gloss xml:lang="ja">状態動詞</gloss><gloss xml:lang="en">stative</gloss><gloss xml:lang="fr">statif</gloss></valItem>
+                  <valItem ident="PREP"><gloss xml:lang="ja">前置詞</gloss><gloss xml:lang="en">preposition</gloss><gloss xml:lang="fr">préposition</gloss></valItem>
+                  <valItem ident="PPER"><gloss xml:lang="ja">人称代名詞</gloss><gloss xml:lang="en">personal pronoun</gloss><gloss xml:lang="fr">pronom personnel</gloss></valItem>
+                  <valItem ident="PPOS"><gloss xml:lang="ja">所有詞</gloss><gloss xml:lang="en">possessive</gloss><gloss xml:lang="fr">possessif</gloss></valItem>
+                  <valItem ident="PDEM"><gloss xml:lang="ja">指示詞</gloss><gloss xml:lang="en">demonstrative</gloss><gloss xml:lang="fr">démonstratif</gloss></valItem>
+                  <valItem ident="CONJ"><gloss xml:lang="ja">接続詞</gloss><gloss xml:lang="en">conjunction</gloss><gloss xml:lang="fr">conjonction</gloss></valItem>
+                  <valItem ident="PTC"><gloss xml:lang="ja">不変化詞</gloss><gloss xml:lang="en">particle</gloss><gloss xml:lang="fr">particule</gloss></valItem>
+                  <valItem ident="NEG"><gloss xml:lang="ja">否定辞</gloss><gloss xml:lang="en">negation</gloss><gloss xml:lang="fr">négation</gloss></valItem>
+                  <valItem ident="NUM"><gloss xml:lang="ja">数詞</gloss><gloss xml:lang="en">numeral</gloss><gloss xml:lang="fr">numéral</gloss></valItem>
+                  <valItem ident="ADV"><gloss xml:lang="ja">副詞</gloss><gloss xml:lang="en">adverb</gloss><gloss xml:lang="fr">adverbe</gloss></valItem>
+                  <valItem ident="ADJ"><gloss xml:lang="ja">形容詞</gloss><gloss xml:lang="en">adjective</gloss><gloss xml:lang="fr">adjectif</gloss></valItem>
+                  <valItem ident="REL"><gloss xml:lang="ja">関係詞</gloss><gloss xml:lang="en">relative</gloss><gloss xml:lang="fr">relatif</gloss></valItem>
+                  <valItem ident="CONV"><gloss xml:lang="ja">変換詞</gloss><gloss xml:lang="en">converter</gloss><gloss xml:lang="fr">convertisseur</gloss></valItem>
+                  <valItem ident="FUT"><gloss xml:lang="ja">未来辞</gloss><gloss xml:lang="en">future</gloss><gloss xml:lang="fr">futur</gloss></valItem>
+                  <valItem ident="PRET"><gloss xml:lang="ja">過去辞</gloss><gloss xml:lang="en">preterite</gloss><gloss xml:lang="fr">prétérit</gloss></valItem>
+                  <valItem ident="COP"><gloss xml:lang="ja">繋辞</gloss><gloss xml:lang="en">copula</gloss><gloss xml:lang="fr">copule</gloss></valItem>
+                  <valItem ident="PFX"><gloss xml:lang="ja">接頭辞</gloss><gloss xml:lang="en">prefix</gloss><gloss xml:lang="fr">préfixe</gloss></valItem>
+                  <valItem ident="INTERJ"><gloss xml:lang="ja">間投詞</gloss><gloss xml:lang="en">interjection</gloss><gloss xml:lang="fr">interjection</gloss></valItem>
+                  <valItem ident="AUX"><gloss xml:lang="ja">助動詞</gloss><gloss xml:lang="en">auxiliary</gloss><gloss xml:lang="fr">auxiliaire</gloss></valItem>
+                  <valItem ident="POSS"><gloss xml:lang="ja">所有冠詞</gloss><gloss xml:lang="en">possessive article</gloss><gloss xml:lang="fr">article possessif</gloss></valItem>
+                  <valItem ident="EXIST"><gloss xml:lang="ja">存在詞</gloss><gloss xml:lang="en">existential</gloss><gloss xml:lang="fr">existentiel</gloss></valItem>
+                  <valItem ident="PINT"><gloss xml:lang="ja">疑問詞</gloss><gloss xml:lang="en">interrogative</gloss><gloss xml:lang="fr">interrogatif</gloss></valItem>
+                  <valItem ident="FM"><gloss xml:lang="ja">外来語句</gloss><gloss xml:lang="en">foreign material</gloss><gloss xml:lang="fr">matériel étranger</gloss></valItem>
+                  <valItem ident="APST"><gloss xml:lang="ja">完了（過去）助動詞</gloss><gloss xml:lang="en">perfect auxiliary</gloss><gloss xml:lang="fr">auxiliaire du parfait</gloss></valItem>
+                  <valItem ident="AAOR"><gloss xml:lang="ja">アオリスト助動詞</gloss><gloss xml:lang="en">aorist auxiliary</gloss><gloss xml:lang="fr">auxiliaire de l’aoriste</gloss></valItem>
+                  <valItem ident="ACONJ"><gloss xml:lang="ja">接続法助動詞</gloss><gloss xml:lang="en">conjunctive auxiliary</gloss><gloss xml:lang="fr">auxiliaire du conjonctif</gloss></valItem>
+                  <valItem ident="ACAUS"><gloss xml:lang="ja">使役不定詞</gloss><gloss xml:lang="en">causative infinitive</gloss><gloss xml:lang="fr">infinitif causatif</gloss></valItem>
+                  <valItem ident="AOPT"><gloss xml:lang="ja">希求法助動詞</gloss><gloss xml:lang="en">optative auxiliary</gloss><gloss xml:lang="fr">auxiliaire de l’optatif</gloss></valItem>
+                  <valItem ident="ANEGAOR"><gloss xml:lang="ja">否定アオリスト助動詞</gloss><gloss xml:lang="en">negative aorist aux.</gloss><gloss xml:lang="fr">aux. de l’aoriste négatif</gloss></valItem>
+                  <valItem ident="ANEGPST"><gloss xml:lang="ja">否定完了助動詞</gloss><gloss xml:lang="en">negative perfect aux.</gloss><gloss xml:lang="fr">aux. du parfait négatif</gloss></valItem>
+                  <valItem ident="CREL"><gloss xml:lang="ja">関係変換詞</gloss><gloss xml:lang="en">relative converter</gloss><gloss xml:lang="fr">convertisseur relatif</gloss></valItem>
+                  <valItem ident="CCIRC"><gloss xml:lang="ja">状況変換詞</gloss><gloss xml:lang="en">circumstantial converter</gloss><gloss xml:lang="fr">convertisseur circonstanciel</gloss></valItem>
+                  <valItem ident="CFOC"><gloss xml:lang="ja">焦点化変換詞</gloss><gloss xml:lang="en">focalising converter</gloss><gloss xml:lang="fr">convertisseur focalisant</gloss></valItem>
+                  <valItem ident="CPRET"><gloss xml:lang="ja">過去変換詞</gloss><gloss xml:lang="en">preterite converter</gloss><gloss xml:lang="fr">convertisseur prétérit</gloss></valItem>
+                  <valItem ident="VBD"><gloss xml:lang="ja">接尾活用の動詞（ⲡⲉϫⲉ- など）</gloss><gloss xml:lang="en">suffixally conjugated verb (ⲡⲉϫⲉ- etc.)</gloss><gloss xml:lang="fr">verbe à conjugaison suffixale (ⲡⲉϫⲉ-, etc.)</gloss></valItem>
+                  <valItem ident="NEGPST"><gloss xml:lang="ja">否定完了</gloss><gloss xml:lang="en">negative perfect</gloss><gloss xml:lang="fr">parfait négatif</gloss></valItem>
+                  <valItem ident="X"><gloss xml:lang="ja">未判定</gloss><gloss xml:lang="en">unresolved</gloss><gloss xml:lang="fr">non résolu</gloss></valItem>
+                </valList>
+              </attDef>
+              <attDef ident="cert" mode="change"><desc xml:lang="ja">自動注釈の確度（スクリプトの目安。正解率ではない）。</desc><desc xml:lang="en">Certainty of the automatic annotation (the script's own rating, not an accuracy).</desc><valList type="closed" mode="add"><valItem ident="high"/><valItem ident="medium"/><valItem ident="low"/></valList></attDef>
+              <attDef ident="resp" mode="change"><desc xml:lang="ja">注釈の出どころ。#morph-auto は自動、#morph-reference は人の手の版から写したもの、#zp は ⲍ・ⲯ を補った語（未注釈の文書）。</desc><desc xml:lang="en">Source of the analysis: #morph-auto automatic, #morph-reference copied from the hand-annotated edition, #zp a word with restored ⲍ/ⲯ (unannotated texts).</desc><valList type="closed" mode="add"><valItem ident="#morph-auto"/><valItem ident="#morph-reference"/><valItem ident="#zp"/></valList></attDef>
+            </attList>
+          </elementSpec>
+          <elementSpec ident="s" mode="change">
+            <attList>
+              <attDef ident="type" mode="change"><desc xml:lang="ja">incipit・colophon（冒頭・奥書）。</desc><desc xml:lang="en">incipit, colophon.</desc><valList type="closed" mode="add"><valItem ident="incipit"/><valItem ident="colophon"/></valList></attDef>
+              <attDef ident="cert" mode="change"><desc xml:lang="ja">対応づけの確度（『国家』のギリシア語の暫定整列）。</desc><desc xml:lang="en">Certainty of an alignment (the provisional alignment of the Greek of the Republic).</desc><valList type="closed" mode="add"><valItem ident="high"/><valItem ident="medium"/><valItem ident="low"/></valList></attDef>
+            </attList>
+          </elementSpec>
+          <elementSpec ident="supplied" mode="change">
+            <attList>
+              <attDef ident="reason" mode="change"><valList type="closed" mode="add"><valItem ident="lost-in-source-file"/></valList></attDef>
+              <attDef ident="resp" mode="change"><valList type="closed" mode="add"><valItem ident="#zp"/></valList></attDef>
+              <attDef ident="cert" mode="change"><valList type="closed" mode="add"><valItem ident="high"/><valItem ident="medium"/></valList></attDef>
+            </attList>
+          </elementSpec>
+          <elementSpec ident="gap" mode="change">
+            <attList>
+              <attDef ident="reason" mode="change"><valList type="closed" mode="add"><valItem ident="lacuna"/><valItem ident="unclear"/></valList></attDef>
+              <attDef ident="unit" mode="change"><valList type="closed" mode="add"><valItem ident="line"/><valItem ident="page"/></valList></attDef>
+              <attDef ident="extent" mode="change"><valList type="closed" mode="add"><valItem ident="unknown"/></valList></attDef>
+            </attList>
+          </elementSpec>
+          <elementSpec ident="pb" mode="change">
+            <attList>
+              <attDef ident="break" mode="change"><valList type="closed" mode="add"><valItem ident="no"/></valList></attDef>
+            </attList>
+          </elementSpec>
+          <elementSpec ident="lb" mode="change">
+            <attList>
+              <attDef ident="break" mode="change"><valList type="closed" mode="add"><valItem ident="no"/></valList></attDef>
+            </attList>
+          </elementSpec>
+          <elementSpec ident="ab" mode="change">
+            <attList>
+              <attDef ident="type" mode="change"><valList type="closed" mode="add"><valItem ident="text"/><valItem ident="subscript"/><valItem ident="title"/><valItem ident="colophon"/><valItem ident="fragment"/></valList></attDef>
+            </attList>
+          </elementSpec>
+          <elementSpec ident="interpGrp" mode="change">
+            <attList>
+              <attDef ident="type" mode="change"><valList type="closed" mode="add"><valItem ident="gloss"/></valList></attDef>
+            </attList>
+          </elementSpec>
+          <elementSpec ident="linkGrp" mode="change">
+            <attList>
+              <attDef ident="type" mode="change"><valList type="closed" mode="add"><valItem ident="parallel"/></valList></attDef>
+              <attDef ident="subtype" mode="change"><valList type="closed" mode="add"><valItem ident="witness"/><valItem ident="rewriting"/></valList></attDef>
+            </attList>
+          </elementSpec>
+          <elementSpec ident="link" mode="change">
+            <attList>
+              <attDef ident="cert" mode="change"><valList type="closed" mode="add"><valItem ident="high"/><valItem ident="medium"/><valItem ident="low"/></valList></attDef>
+              <attDef ident="resp" mode="change"><valList type="closed" mode="add"><valItem ident="#align"/></valList></attDef>
+            </attList>
+          </elementSpec>
+        </schemaSpec>
+      </div>
+    </body>
+  </text>
+</TEI>
