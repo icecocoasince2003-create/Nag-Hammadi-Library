@@ -1,8 +1,8 @@
 {
   "_comment": "版の情報。サイトの引用表記（project.html の引用欄、ビュワーの〈この箇所を引用〉〈この文書を引用〉）と HOME のフッターがこれを読む。CITATION.cff と .zenodo.json はこれに合わせて書き、scripts/check_release.py が一致を確かめる（GitHub の自動チェックでも走る）。version は版番号、date はリリースの日（YYYY-MM-DD。リリースを作るまで空）、doi はその版の DOI（Zenodo が発行。例 10.5281/zenodo.1234567）、doi_all_versions はすべての版をまとめる DOI、url はサイトの公開 URL。手順は README の「版とリリースの作り方」。",
   "version": "0.1.0",
-  "date": "",
-  "doi": "",
-  "doi_all_versions": "",
+  "date": "2026-11-23",
+  "doi": "10.5281/zenodo.24454947",
+  "doi_all_versions": "10.5281/zenodo.24454946",
   "url": "https://sheneset.vercel.app/"
 }
