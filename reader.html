@@ -258,11 +258,11 @@ function renderText(){
           const i=MS.push(m)-1, pre=m.pre.map(brHTML).join('');
           let inner='<span class="f">'+m.html+'</span>';
           if(O.inter){ const g=(gk==='ja'?(m.ja||m.en):(m.en||m.ja))||'';
-            inner+='<span class="il"><span class="p">'+esc(m.type)+'</span><span class="gl">'+esc(g)+'</span></span>'; }
+            inner+='<span class="il" lang="'+gk+'"><span class="p">'+esc(m.type)+'</span><span class="gl">'+esc(g)+'</span></span>'; }
           return pre+'<span class="m'+(m.type==='X'?' x':'')+(m.cert?' c-'+m.cert:'')+'" data-i="'+i+'">'+inner+'</span>';
         }).join('')+'</span>';
       }).join(' ');
-      return '<p class="seg" id="seg-'+esc(s.id)+'"><a class="sn" href="#seg-'+esc(s.id)+'" aria-haspopup="dialog" title="この箇所を引用 / Cite this passage">§'+esc(s.n)+'</a> <span class="tx">'+body+'</span></p>';
+      return '<p class="seg" id="seg-'+esc(s.id)+'"><a class="sn" href="#seg-'+esc(s.id)+'" aria-haspopup="dialog" title="この箇所を引用 / Cite this passage">§'+esc(s.n)+'</a> <span class="tx" lang="cop">'+body+'</span></p>';
     }).join('');
     return '<section class="ab ab-'+esc(ab.type)+'">'+(AB[ab.type]?'<h3>'+AB[ab.type]+'</h3>':'')+segs+'</section>';
   }).join('');
@@ -363,9 +363,9 @@ function showCard(el){
   const certT={high:tri('high — 参考本文との一致などによる','high — e.g. agrees with the annotated reference text','high — p. ex. accord avec le texte de référence'),
     medium:tri('medium — 語彙表・規則による仮の判定','medium — from the core word list or rules','medium — liste de base ou règles'),
     low:tri('low — 推定。要確認','low — a guess; needs checking','low — conjecture, à vérifier')}[m.cert]||esc(m.cert);
-  const rows=[[tri('形態素','Morpheme','Morphème'),'<span class="cop">'+m.html+'</span>']];
+  const rows=[[tri('形態素','Morpheme','Morphème'),'<span class="cop" lang="cop">'+m.html+'</span>']];
   if(D.st.typed){
-    rows.push([tri('レンマ','Lemma','Lemme'), m.lemma?'<span class="cop">'+esc(m.lemma)+'</span>':'<span class="na">'+tri('なし（未判定）','none (unresolved)','aucun (non résolu)')+'</span>']);
+    rows.push([tri('レンマ','Lemma','Lemme'), m.lemma?'<span class="cop" lang="cop">'+esc(m.lemma)+'</span>':'<span class="na">'+tri('なし（未判定）','none (unresolved)','aucun (non résolu)')+'</span>']);
     rows.push([tri('品詞','Part of speech','Catégorie'), m.type?posName(m.type)+' <code>'+esc(m.type)+'</code>':'<span class="na">—</span>']);
     if(m.ja||m.en) rows.push([tri('語義（自動）','Gloss (automatic)','Glose (automatique)'), [m.ja,m.en].filter(Boolean).map(esc).join(' ／ ')]);
     if(m.cert) rows.push([tri('確度','Certainty','Certitude'), certT]);
@@ -377,7 +377,7 @@ function showCard(el){
     :tri('ⲍ・ⲯ を補った語。確度 A（語形と文脈から決まるもの）','ⲍ/ⲯ restored; certainty A (determined by word form and context)','ⲍ/ⲯ restitué ; certitude A (forme et contexte)')]);
   const q=m.lemma?'lemma="'+m.lemma+'"':'tok="'+m.form+'"';
   card.innerHTML='<button type="button" class="x" aria-label="close">×</button>'+
-    '<div class="grp cop">'+grp.map(x=>x===m?'<b>'+x.html+'</b>':x.html).join('<span class="dot">·</span>')+'</div>'+
+    '<div class="grp cop" lang="cop">'+grp.map(x=>x===m?'<b>'+x.html+'</b>':x.html).join('<span class="dot">·</span>')+'</div>'+
     '<dl>'+rows.map(r=>'<dt>'+r[0]+'</dt><dd>'+r[1]+'</dd>').join('')+'</dl>'+
     '<p class="lk"><a href="search.html?doc='+encodeURIComponent(DOC.key)+'&amp;kind=aql&amp;q='+encodeURIComponent(q)+'">'+tri('この文書で検索','Search this text','Chercher dans ce texte')+' ('+esc(q)+') →</a></p>';
   card.hidden=false; card.dataset.i=el.dataset.i;
