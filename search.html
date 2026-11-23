@@ -267,6 +267,9 @@ table.kw td.rc{color:var(--s-mut); white-space:nowrap; overflow:hidden; max-widt
 .empty{padding:28px 0; color:var(--s-mut); font-size:.9rem}
 .notice{border-left:3px solid var(--s-warn); border-radius:0 8px 8px 0; background:var(--s-bg2); padding:10px 14px; font-size:.84rem; margin:16px 0}
 .notice code{font-size:.8rem}
+/* ?scope=all（全文書）で開いたときの、全文テキストの読み込みの進み具合 */
+.allprog{border-left-color:var(--s-link, var(--lapis)); display:flex; flex-wrap:wrap; align-items:center; gap:6px 14px}
+.allprog progress{flex:1 1 12em; max-width:22em; height:8px; accent-color:var(--gold)}
 .notice .fail{display:flex; gap:14px; align-items:center; flex:1 1 100%; min-width:0}
 .notice .fail img{flex:none; width:92px; height:92px}
 .notice .fail>div{min-width:0}
@@ -334,6 +337,22 @@ table.kw td.rc{color:var(--s-mut); white-space:nowrap; overflow:hidden; max-widt
 .sv-tbl{margin:12px 0 0; max-width:980px}
 .sv-tbl table.st td.barc{width:24%}
 .sv-tbl.narrow{max-width:420px}
+/* 写本全体の比較（data/fulltext_stats.json）。棒は .sv-bar を使い、リコポリス方言の文書は色を変える */
+.cmp-ctl{display:flex; flex-wrap:wrap; align-items:center; gap:8px 18px; margin:14px 0 0; font-size:.8rem; color:var(--s-mut)}
+.cmp-ctl select{background:var(--s-bg2); color:var(--s-ink); border:1px solid var(--s-rule2); border-radius:8px; padding:3px 8px; font:inherit}
+.cmp-ctl .ord{display:inline-flex; border:1px solid var(--s-rule2); border-radius:8px; overflow:hidden}
+.cmp-ctl .ord button{appearance:none; background:none; border:0; color:var(--s-mut); font:inherit; padding:3px 10px; cursor:pointer}
+.cmp-ctl .ord button[aria-pressed="true"]{background:var(--s-bg2); color:var(--s-ink); font-weight:600}
+.cmp-key{display:inline-flex; gap:12px; font-size:.74rem; color:var(--s-faint)}
+.cmp-key i{display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:4px; vertical-align:-1px; background:var(--s-bar)}
+.cmp-key i.ly, .sv-bar.ly .track i{background:linear-gradient(90deg,#3f8f86,#69c1b4)}
+.cmp-warn{border-left:3px solid var(--s-warn); padding:6px 12px; background:var(--s-bg2); border-radius:0 8px 8px 0; color:var(--s-mut)}
+.cmp-bars .sv-bar{grid-template-columns:minmax(150px,300px) minmax(0,1fr) 64px}
+.cmp-bars .sv-bar .lab small{color:var(--s-faint); font-size:.7rem; margin-left:5px}
+.cmp-bars .sv-bar .lab .sig{color:var(--s-faint); font-variant-numeric:tabular-nums; margin-right:5px}
+.cmp-bars .sv-bar.na .ct{color:var(--s-faint)}
+h3.cmp-h{font-size:.78rem; font-weight:700; color:var(--s-mut); margin:18px 0 0}
+@media (max-width:640px){ .cmp-bars .sv-bar{grid-template-columns:minmax(110px,1fr) minmax(60px,.8fr) 52px} }
 
 /* ---- チュートリアルのパネル（#guidePanel。右側。eugnostos.html の並行箇所のパネルと同じ作り） ----
    html[data-guide="open"] のときだけ出す（〈検索〉を表示している間だけ。applyGuide()）。
@@ -539,6 +558,8 @@ html[data-mode="light"] .tour .tour-acts .tour-next, html[data-mode="light"] .to
     </div>
 
     <div class="notice" id="loadwarn" hidden></div>
+    <!-- ?scope=all で開いたとき、全文テキストを読み込んでいる間の進み具合（renderProgress） -->
+    <div class="notice allprog" id="allProg" role="status" hidden></div>
 
     <!-- ═══════ 検索 ═══════ -->
     <div id="viewSearch" role="tabpanel" aria-labelledby="tabSearch">
@@ -1031,6 +1052,9 @@ const I18N = {
   rawTotal: {ja:(d,n)=>d+" 文書 · "+n+" 語", en:(d,n)=>d+" texts · "+n+" tokens", fr:(d,n)=>d+" textes · "+n+" occurrences"},
   rawOn:    {ja:(a,d)=>d+" 文書中 "+a+" 文書を選択中", en:(a,d)=>a+" of "+d+" texts selected", fr:(a,d)=>a+" texte"+(a==="1"?"":"s")+" sur "+d+" sélectionné"+(a==="1"?"":"s")},
   rawBusy:  {ja:n=>n+" 文書を読み込み中…", en:n=>"Loading "+n+" text"+(n==="1"?"":"s")+"…", fr:n=>"Chargement de "+n+" texte"+(n==="1"?"":"s")+"…"},
+  allLoading:{ja:(a,n)=>"全文書を対象にするため、全文テキストを読み込んでいます… "+a+" / "+n+" 文書", en:(a,n)=>"Loading the full texts to search all documents… "+a+" of "+n, fr:(a,n)=>"Chargement des textes intégraux pour chercher dans tous les documents… "+a+" sur "+n},
+  allFail:  {ja:n=>n+" 文書を読み込めませんでした。左の〈全文テキスト（作業用）〉で選び直すと再試行します。", en:n=>n+" text"+(n==="1"?"":"s")+" could not be loaded. Select them again under “Full text” on the left to retry.", fr:n=>n+" texte"+(n==="1"?"":"s")+" n’ont pas pu être chargés. Resélectionnez-les sous « Texte intégral » à gauche pour réessayer."},
+  dLex:     {ja:"辞書の項目", en:"Lexicon entry", fr:"Entrée du lexique"},
   rawFail:  {ja:"読み込めませんでした（選び直すと再試行）", en:"could not be loaded (select again to retry)", fr:"chargement impossible (resélectionnez pour réessayer)"},
   rawDup:   {ja:"注釈つきの版が上にあります", en:"annotated edition listed above", fr:"édition annotée ci-dessus"},
   rawDraft: {ja:"自動注釈（暫定）", en:"automatic annotation (draft)", fr:"annotation automatique (provisoire)"},
@@ -1212,6 +1236,8 @@ const ST = {
   wits: [],            // {i, id, label, short, doc, segs:[{id, n, tokens:[tokIdx], breaks:[欠損の位置]}], groups:[[tokIdx] | GAP], ntok, nseg, pages, lines, gaps:Map(reason → 件数)}
                        //  読み込んだ順に並ぶ（i はこの配列での番号）。表示の順はカタログの順＝witOrder()
   lazyQueue: Promise.resolve(),   // 未注釈の本文の読み込みと、それに続く選択の変更を、押した順に1つずつ処理する
+  scopeAll: "",        // "pending": ?scope=all で開き、全文テキストを読み込んでいる間（URL は scope=all のまま）
+  progress: null,      // ?scope=all の読み込みの進み具合 {done, total, failed}（終われば null）
   toks: [],            // {w, s, g, form, lemma, pos, grc, msd, ana, gl, key}
   groups: new Map(),   // key(lemma\tpos) → {key, lemma, pos, toks:[], ents:[], amb, wgl:Map, grc, itypes:[], gsearch:[]}
   lex: new Map(),      // lemma → [entry]
@@ -1377,7 +1403,8 @@ function lazyDocsInURL(){
 function fetchLazy(docs){
   return Promise.all(docs.map(d => {
     d.state = "loading";
-    return fetchXML(d.xml, "no-cache").then(x => { d.fetched = x; }, e => { d.state = "error"; console.warn("search: " + e.message); });
+    return fetchXML(d.xml, "no-cache").then(x => { d.fetched = x; }, e => { d.state = "error"; console.warn("search: " + e.message); })
+      .then(() => { if(ST.progress){ ST.progress.done++; if(d.state === "error") ST.progress.failed++; renderProgress(); } });
   }));
 }
 /* 取得できた本文をカタログの順に取り込む。1つでも取り込んだら true */
@@ -1408,6 +1435,52 @@ function useLazy(docs, apply){
   }).catch(e => { console.error(e); render(); });
 }
 
+/* ---------- 全文書（?scope=all）----------
+   HOME と辞書のページの検索窓は search.html?q=…&scope=all を開く。注釈つきの版（既定の選択）に加えて、〈全文テキスト（作業用）〉の
+   文書をすべて選んだ状態にする（〈すべて選択〉と同じく、注釈つきの版が選ばれている証本 III,3・VI,5 は二重に数えないよう除く）。
+   全文テキストは合わせて約 28 MB（gzip で約 2 MB）で、読み込みの進み具合を #allProg に出す。w= があるときは w= を優先する。
+   選択が「全文書」のままなら、URL には w= の長い一覧ではなく scope=all と書く（isAllScope）。 */
+function wantAllScope(){
+  const p = new URLSearchParams(location.search);
+  return p.get("scope") === "all" && !p.has("w") && !p.has("doc");
+}
+function loadAllScope(){
+  const docs = lazyDocs().filter(lazyBulk).filter(d => d.state !== "loaded");
+  if(!docs.length){ ST.scopeAll = ""; render(); return; }
+  ST.progress = {done: 0, total: docs.length, failed: 0};
+  $("#rawBox").open = true;
+  renderProgress();
+  useLazy(docs, ds => {
+    lazyOn(ds);
+    const failed = ST.progress ? ST.progress.failed : 0;
+    ST.scopeAll = ""; ST.progress = null;
+    renderProgress(failed);
+  });
+}
+function renderProgress(failed){
+  const box = $("#allProg"), P = ST.progress;
+  if(P){
+    box.hidden = false;
+    box.innerHTML = '<span>' + esc(t("allLoading", fmt(P.done), fmt(P.total))) + '</span><progress max="' + P.total + '" value="' + P.done + '"></progress>';
+  } else if(failed){
+    box.hidden = false; box.textContent = t("allFail", fmt(failed));
+  } else { box.hidden = true; box.textContent = ""; }
+}
+/* 選択が「全文書」（注釈つきの全証本と、二重にならない全文テキストすべて。すべて読み込み済み）と同じか */
+function isAllScope(){
+  if(ST.scopeAll === "pending") return true;
+  const eager = eagerWits();
+  if(!eager.length || !eager.every(w => ST.sel.has(w.id))) return false;
+  const lazy = lazyDocs().filter(d => { const o = overlapOf(d); return !(o && ST.sel.has(o.id)); });
+  if(!lazy.length || !lazy.every(d => d.state === "loaded" && d.wits.length && d.wits.every(w => ST.sel.has(w.id)))) return false;
+  return ST.sel.size === eager.length + lazy.reduce((a, d) => a + d.wits.length, 0);
+}
+/* URL に選択を書く: 全文書なら scope=all、既定（注釈つきの全証本）なら書かない、ほかは w= */
+function setSelParam(p){
+  if(isAllScope()){ p.set("scope", "all"); return; }
+  const w = selParam(); if(w !== null) p.set("w", w);
+}
+
 async function load(){
   $("#listHead").textContent = t("loading");
   $("#sections").innerHTML = '<p class="empty">' + esc(t("loading")) + '</p>';
@@ -1423,8 +1496,11 @@ async function load(){
     readURL();
     if(lazyDocs().some(d => d.wits.some(w => ST.sel.has(w.id)))) $("#rawBox").open = true;
     ST.ready = true;
+    const all = wantAllScope();
+    if(all) ST.scopeAll = "pending";
     render();
     gotoHash();
+    if(all) loadAllScope();
     if(ST.view === "search" && !ST.guide && !tourSeen()) startTour();   // 初めて開いたときは操作案内を出す
   }catch(e){
     const w = $("#loadwarn"); w.hidden = false;
@@ -1479,7 +1555,7 @@ function writeURL(){
   if($("#mode").value !== "part") p.set("m", $("#mode").value);
   const f = ($("#fForm").checked ? "f" : "") + ($("#fLemma").checked ? "l" : "") + ($("#fGloss").checked ? "g" : "");
   if(f !== "flg") p.set("f", f);
-  const w = selParam(); if(w !== null) p.set("w", w);
+  setSelParam(p);
   if(ST.posOff.size) p.set("xpos", [...ST.posOff].join(","));
   const s = p.toString();
   history.replaceState(null, "", location.pathname + (s ? "?" + s : "") + viewHash());
@@ -1487,7 +1563,7 @@ function writeURL(){
 /* 〈統計〉のレンマから〈検索〉へ：そのレンマの完全一致（対象はレンマのみ）を、いまの絞り込みのまま開くリンク */
 function lemmaHref(lemma){
   const p = new URLSearchParams({q: lemma, m: "ex", f: "l"});
-  const w = selParam(); if(w !== null) p.set("w", w);
+  setSelParam(p);
   if(ST.posOff.size) p.set("xpos", [...ST.posOff].join(","));
   return "?" + p.toString();
 }
@@ -1965,7 +2041,8 @@ function detail(r, R){
       (g.ents.length > 1 || e.pos !== g.pos ? esc(posName(e.pos)) + " · " : "") +
       (parts.length ? parts.join(" &nbsp; ") : '<span class="u">' + esc(t("noGloss")) + '</span>') +
       (u ? ' <span class="u">(' + esc(u) + ')</span>' : "") +
-      (e.ref ? ' · <a href="' + esc(e.ref) + '" target="_blank" rel="noopener">' + esc(t("dCdo")) + '</a>' : "") + '</p>';
+      (e.ref ? ' · <a href="' + esc(e.ref) + '" target="_blank" rel="noopener">' + esc(t("dCdo")) + '</a>' : "") +
+      (e.id ? ' · <a href="lexicon.html#' + encodeURIComponent(e.id) + '">' + esc(t("dLex")) + ' →</a>' : "") + '</p>';
   }).join("") || '<p class="sense"><span class="u">' + esc(t("noGloss")) + '</span></p>';
   const wgl = g.wgl.size ? '<h4>' + esc(t("dWGloss")) + '</h4><p class="sense">' +
     [...g.wgl.entries()].sort((a, b) => b[1] - a[1]).map(([s, n]) => esc(s) + ' <span class="n">' + n + '</span>').join(", ") + '</p>' : "";
@@ -2182,13 +2259,104 @@ const SECTIONS = [
 }
 ];
 
+/* ══════════ 写本全体の比較（data/fulltext_stats.json）══════════
+   左の〈文書〉〈品詞〉の選択に関係なく、全文テキストの全文書と、参考に人の手で注釈した版（エウグノストス III,3・『国家』）を比べる。
+   数は scripts/build_fulltext_stats.py が前もって数えたもの（scripts/build_site.py を実行すると作り直す）で、ここでは割合を計算して
+   横棒にするだけ。暫定版の品詞・確度・借用語の印・語群は自動注釈の値で、人の目で確かめていない（その注意を必ず出す）。 */
+const CMP = {data: null, err: "", p: null, metric: "w", pos: "N", order: "codex"};
+const cmpPc = (a, b) => b ? a / b * 100 : 0;
+const CMP_M = {
+  w:   {lab: () => L3("語数（<w>）", "Tokens (<w>)", "Occurrences (<w>)"), val: d => d.w},
+  phr: {lab: () => L3("語群（<phr>）", "Bound groups (<phr>)", "Groupes (<phr>)"), val: d => d.phr, ok: d => d.w > 0 && d.wg === d.w},
+  s:   {lab: () => L3("セグメント（<s>）", "Segments (<s>)", "Segments (<s>)"), val: d => d.s},
+  gap: {lab: () => L3("欠損（<gap>）", "Lacunae (<gap>)", "Lacunes (<gap>)"), val: d => d.gap},
+  grc: {lab: () => L3("ギリシア語借用語の割合", "Share of Greek loanwords", "Part des emprunts grecs"), val: d => cmpPc(d.grc, d.w), pct: true, ok: d => d.status !== "text"},
+  low: {lab: () => L3("確度 low の割合", "Share of low certainty", "Part de certitude faible"), val: d => cmpPc(d.low, d.typed), pct: true, ok: d => d.status === "draft"},
+  X:   {lab: () => L3("品詞 X（未判定）の割合", "Share of X (unresolved)", "Part de X (non résolu)"), val: d => cmpPc(d.X, d.typed), pct: true, ok: d => d.status !== "text"},
+  pos: {lab: () => L3("品詞の割合", "Share of one part of speech", "Part d’une catégorie"), val: d => cmpPc((d.pos || {})[CMP.pos] || 0, d.typed), pct: true, ok: d => d.status !== "text"}
+};
+function loadCmp(){
+  if(!CMP.p) CMP.p = fetch("data/fulltext_stats.json", {cache: "no-cache"})
+    .then(r => r.ok ? r.json() : Promise.reject(new Error("data/fulltext_stats.json → HTTP " + r.status)))
+    .then(d => { CMP.data = d; }, e => { CMP.err = e.message || String(e); })
+    .then(() => { const box = document.getElementById("cmpBox"); if(box) box.innerHTML = cmpHTML(); });
+  return CMP.p;
+}
+function cmpHTML(){
+  if(CMP.err) return '<p class="sv-note">' + esc(L3("読み込めませんでした: ", "Could not load: ", "Chargement impossible : ") + CMP.err) + '</p>';
+  if(!CMP.data) return '<p class="sv-note">' + esc(t("loading")) + '</p>';
+  const L = UL(), M = CMP_M[CMP.metric] || CMP_M.w, ok = M.ok || (() => true);
+  const docs = CMP.data.docs || [], refs = CMP.data.reference || [];
+  const rows = docs.filter(ok).map(d => ({d, v: M.val(d)}));
+  const refRows = refs.filter(ok).map(d => ({d, v: M.val(d)}));
+  if(CMP.order === "value") rows.sort((a, b) => b.v - a.v);
+  const max = Math.max(0, ...rows.map(r => r.v), ...refRows.map(r => r.v)) || 1;
+  const val = v => M.pct ? v.toFixed(1) + "%" : fmt(v);
+  const st = d => d.status === "draft" ? L3("暫定", "draft", "provisoire") : d.status === "text" ? L3("未注釈", "text only", "texte seul") : L3("人手", "by hand", "à la main");
+  const dia = d => d.dialect === "lycopolitan" ? L3("リコポリス方言", "Lycopolitan", "lycopolitain") : d.dialect === "sahidic" ? L3("サヒド方言", "Sahidic", "sahidique") : "";
+  const bar = r => {
+    const d = r.d, name = (d.title && (d.title[L] || d.title.en || d.title.ja)) || d.key;
+    return '<div class="sv-bar' + (d.dialect === "lycopolitan" ? " ly" : "") + '" title="' + esc(d.siglum + " · " + name + " · " + dia(d) + " · " + st(d)) + '">' +
+      '<div class="lab"><a href="' + esc(d.reader) + '"><span class="sig">' + esc(d.siglum.replace(/^NHC\s*/, "")) + '</span>' + esc(name) + '</a><small>' + esc(st(d)) + '</small></div>' +
+      '<div class="track"><i style="width:' + (r.v / max * 100).toFixed(1) + '%"></i></div><div class="ct">' + esc(val(r.v)) + '</div></div>';
+  };
+  const posTags = [...new Set(docs.concat(refs).filter(d => d.status !== "text").flatMap(d => Object.keys(d.pos || {})))]
+    .sort((a, b) => (POS[a] ? 0 : 1) - (POS[b] ? 0 : 1) || a.localeCompare(b));
+  const left = docs.length - rows.length;
+  return '<div class="cmp-ctl">' +
+      '<label>' + esc(L3("指標", "Measure", "Mesure")) + ' <select id="cmpMetric">' + Object.keys(CMP_M).map(k =>
+        '<option value="' + k + '"' + (k === CMP.metric ? " selected" : "") + '>' + esc(CMP_M[k].lab()) + '</option>').join("") + '</select></label>' +
+      (CMP.metric === "pos" ? '<label>' + esc(L3("品詞", "Part of speech", "Catégorie")) + ' <select id="cmpPos">' + posTags.map(p =>
+        '<option value="' + esc(p) + '"' + (p === CMP.pos ? " selected" : "") + '>' + esc(posName(p) + (POS[p] ? " (" + p + ")" : "")) + '</option>').join("") + '</select></label>' : "") +
+      '<span class="ord" role="group" aria-label="' + esc(L3("並べ方", "Order", "Ordre")) + '">' +
+        '<button type="button" data-cmp-order="codex" aria-pressed="' + (CMP.order === "codex") + '">' + esc(L3("写本の順", "Codex order", "Ordre des codices")) + '</button>' +
+        '<button type="button" data-cmp-order="value" aria-pressed="' + (CMP.order === "value") + '">' + esc(L3("値の大きい順", "Largest first", "Valeurs décroissantes")) + '</button></span>' +
+      '<span class="cmp-key"><span><i></i>' + esc(L3("サヒド方言", "Sahidic", "sahidique")) + '</span><span><i class="ly"></i>' + esc(L3("リコポリス方言", "Lycopolitan", "lycopolitain")) + '</span></span>' +
+    '</div>' +
+    '<p class="sv-note cmp-warn">' + L3(
+      "<b>暫定版の値です。</b>全文テキストの品詞・確度・ギリシア語借用語の印・語群は自動で付けたもので、人の目で確かめていません。文書どうしの大まかな違いを見るための目安としてください。",
+      "<b>Draft values.</b> Parts of speech, certainty, Greek-loanword marks and bound groups in the full texts were assigned automatically and have not been checked by hand. Use them only as a rough guide to differences between texts.",
+      "<b>Valeurs provisoires.</b> Catégories, certitude, marques d’emprunt grec et groupes des textes intégraux ont été attribués automatiquement et n’ont pas été vérifiés. Ne les prenez que comme un repère approximatif des différences entre textes.") + '</p>' +
+    '<div class="sv-bars cmp-bars">' + rows.map(bar).join("") + '</div>' +
+    (left ? '<p class="sv-note">' + esc(L3(
+      left + " 文書はこの指標の対象外です（" + (CMP.metric === "low" ? "確度は自動注釈の暫定版にだけある" : "未注釈の文書には品詞・借用語の印・語群が無い") + "）。",
+      left + " texts are not covered by this measure (" + (CMP.metric === "low" ? "certainty exists only in the automatic drafts" : "the unannotated texts have no parts of speech, loanword marks or bound groups") + ").",
+      left + " textes ne sont pas couverts par cette mesure (" + (CMP.metric === "low" ? "la certitude n’existe que dans les brouillons automatiques" : "les textes non annotés n’ont ni catégories, ni marques d’emprunt, ni groupes") + ").")) + '</p>' : "") +
+    (refRows.length ? '<h3 class="cmp-h">' + esc(L3("参考: 人の手で注釈した版（同じ方法で数えたもの）", "For reference: the hand-annotated editions (counted the same way)", "Pour comparaison : les éditions annotées à la main (même méthode)")) + '</h3>' +
+      '<div class="sv-bars cmp-bars">' + refRows.map(bar).join("") + '</div>' : "") +
+    '<p class="sv-note">' + L3(
+      "この節は、左の〈文書〉〈品詞〉の選択に関係なく、全文テキストの " + fmt(docs.length) + " 文書すべてを比べます。数は <code>data/fulltext_stats.json</code>（<code>scripts/build_fulltext_stats.py</code> が TEI から数えたもの）。語数は <code>&lt;w&gt;</code> の数で、暫定版と人の手で注釈した版では形態素、未注釈の文書では元ファイルの語なので、両者はそのままでは比べられません。割合の分母は語数（確度・品詞は品詞の付いた語の数）。借用語は <code>xml:lang=\"grc\"</code> の付いた語だけを数えます。人の手で注釈したエウグノストスは冒頭だけが語群に分けてあるので、語群の比較からは外しています。文書名から本文ビュワーを開きます。",
+      "This section compares all " + fmt(docs.length) + " full texts, whatever is selected under Texts and Part of speech on the left. The figures come from <code>data/fulltext_stats.json</code>, counted from the TEI by <code>scripts/build_fulltext_stats.py</code>. Tokens are <code>&lt;w&gt;</code> elements: morphemes in the drafts and the hand-annotated editions, but the source file’s words in the unannotated texts, so the two cannot be compared directly. Shares are taken of the tokens (certainty and parts of speech: of the tokens with a part of speech). Loanwords are only the tokens marked <code>xml:lang=\"grc\"</code>. The hand-annotated Eugnostos has bound groups only at the beginning and is left out of the bound-group comparison. Click a title to open the text.",
+      "Cette section compare les " + fmt(docs.length) + " textes intégraux, quelle que soit la sélection de gauche (Textes, Partie du discours). Les chiffres viennent de <code>data/fulltext_stats.json</code>, calculés à partir du TEI par <code>scripts/build_fulltext_stats.py</code>. Les occurrences sont les <code>&lt;w&gt;</code> : morphèmes dans les brouillons et les éditions annotées à la main, mots du fichier source dans les textes non annotés, de sorte qu’on ne peut pas les comparer directement. Les parts sont calculées sur les occurrences (certitude et catégories : sur les occurrences munies d’une catégorie). Les emprunts sont seulement les occurrences marquées <code>xml:lang=\"grc\"</code>. L’Eugnoste annoté à la main n’a de groupes qu’au début et n’entre pas dans la comparaison des groupes. Cliquez sur un titre pour ouvrir le texte.") + '</p>';
+}
+SECTIONS.push({
+  id: "corpus", ja: "写本全体の比較", en: "Across the corpus", fr: "Ensemble du corpus", always: true,
+  sub: () => L3("左の選択に関係なく、全文テキストの全文書", "all full texts, whatever is selected on the left", "tous les textes intégraux, quelle que soit la sélection"),
+  render: () => { loadCmp(); return '<div id="cmpBox">' + cmpHTML() + '</div>'; }
+});
+document.addEventListener("change", e => {
+  if(e.target.id === "cmpMetric"){ CMP.metric = e.target.value; $("#cmpBox").innerHTML = cmpHTML(); }
+  else if(e.target.id === "cmpPos"){ CMP.pos = e.target.value; $("#cmpBox").innerHTML = cmpHTML(); }
+});
+document.addEventListener("click", e => {
+  const b = e.target.closest && e.target.closest("button[data-cmp-order]"); if(!b) return;
+  CMP.order = b.dataset.cmpOrder; $("#cmpBox").innerHTML = cmpHTML();
+});
+
 /* ---------- 描画 ---------- */
 function renderStatsView(){
   const st = computeStats();
   const box = $("#sections"), toc = $("#toc"), scope = $("#scopeStats"), L = UL();
   if(!st.wits.length){
-    scope.textContent = ""; toc.innerHTML = "";
-    box.innerHTML = '<p class="empty">' + esc(t("noSel")) + '</p>';
+    // 左の選択に左右されないセクション（写本全体の比較）だけは出す
+    const always = SECTIONS.filter(s => s.always);
+    scope.textContent = "";
+    toc.innerHTML = always.map(s => '<a href="#sec-' + s.id + '">' + esc(s[L] || s.ja) + '</a>').join("");
+    box.innerHTML = '<p class="empty">' + esc(t("noSel")) + '</p>' + always.map(s => {
+      const sub = s.sub ? s.sub(st) : "";
+      return '<section class="sv-sec" id="sec-' + s.id + '"><h2 class="sec">' + esc(s[L] || s.ja) +
+        (sub ? ' <small>' + esc(sub) + '</small>' : "") + '</h2>' + s.render(st) + '</section>';
+    }).join("");
     return;
   }
   scope.textContent = t("scope", fmt(st.wits.filter(w => w.ntok).length), fmt(st.all)) +

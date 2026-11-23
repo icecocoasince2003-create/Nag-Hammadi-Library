@@ -22,6 +22,10 @@ TEI のスキーマ（tei_all.rng）は「要素や属性の並びが正しい�
   8. 並行箇所（parallels.xml の <linkGrp type="parallel">）の <link> の @target が、2 つの <s> を指しているか
   9. 同じファイルの中を指すポインタ（<ref>・<ptr>・<relatedItem> の @target が "#…" のもの。カタログの文書どうしの関連など）の
      指す xml:id があるか
+ 10. 辞書の見出し（lexicon.xml の <orth>）と本文の <w> の @lemma に、コプト文字以外の文字が混じっていないか
+       コプト文字は Coptic のブロック（U+2C80–2CFF）と、ギリシア文字のブロックにあるコプト文字（U+03E2–03EF: ϣ ϥ ϩ ϫ ϭ ϯ など）。
+       見た目の似たラテン文字（o・e など）やギリシア文字（ο・ε など）、キリル文字の混入を見つける。上線などの合成記号、
+       欠損の記号（[ ] . …）、ハイフンは文字ではないので調べない。ギリシア語の本文のファイル（<TEI xml:lang="grc">）は対象外。
 
 --schema に tei_all.rng の場所を渡すと、xmllint によるスキーマ検証も続けて行います。
 
@@ -37,6 +41,7 @@ import glob
 import os
 import subprocess
 import sys
+import unicodedata
 import xml.etree.ElementTree as ET
 from collections import Counter
 
@@ -53,6 +58,17 @@ P_INSIDE_OK = {"exemplum", "item", "note", "q", "quote", "remarks", "said", "sp"
 
 def name(tag):
     return tag.split("}")[-1] if isinstance(tag, str) else ""
+
+
+def non_coptic(s):
+    """s の中の、コプト文字ではない文字（Unicode の文字＝カテゴリ L*）。合成記号・記号・数字・空白は数えない（10.）"""
+    return [ch for ch in s if unicodedata.category(ch).startswith("L")
+            and not (0x2C80 <= ord(ch) <= 0x2CFF or 0x03E2 <= ord(ch) <= 0x03EF)]
+
+
+def describe(chars):
+    """混じった文字の説明（「o = LATIN SMALL LETTER O」）"""
+    return "、".join("%s = %s" % (ch, unicodedata.name(ch, "U+%04X" % ord(ch))) for ch in dict.fromkeys(chars))
 
 
 def ids_of(path, cache={}):
@@ -212,6 +228,18 @@ def check(path):
             for p in (el.get("target") or "").split():
                 if p.startswith("#") and p[1:] not in local:
                     out.append("<%s> の @target の指す xml:id がありません: %s" % (name(el.tag), p))
+
+    # 10. 辞書の見出しと @lemma に混じった、コプト文字以外の文字（ギリシア語の本文のファイルは対象外）
+    if root.get(XLANG) != "grc":
+        for orth in root.iter(T + "orth"):
+            bad = non_coptic(orth.text or "")
+            if bad:
+                entry = next((a for a in ancestors(orth) if name(a.tag) == "entry"), None)
+                out.append("辞書の見出しにコプト文字以外の文字が混じっています: %s %s（%s）"
+                           % (entry.get(XID) if entry is not None else "", orth.text, describe(bad)))
+        lemmas = Counter(w.get("lemma") for w in root.iter(T + "w") if w.get("lemma") and non_coptic(w.get("lemma")))
+        out += ["<w> の @lemma にコプト文字以外の文字が混じっています: %s（%s）%d 語" % (l, describe(non_coptic(l)), n)
+                for l, n in sorted(lemmas.items())]
     return out
 
 

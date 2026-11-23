@@ -259,6 +259,8 @@ html[data-search="open"] aside{transform:none}
 .pop dd.ja{font-family:var(--ui)}
 .pop .none{font-size:.78rem; color:var(--chrome-faint); font-style:italic; margin-top:8px}
 .pop .grcnote{margin-top:9px; font-size:.66rem; color:var(--rose)}
+.pop .lexlink{margin-top:9px; padding-top:7px; border-top:1px solid var(--line); font-size:.74rem}
+.pop .lexlink a{color:var(--gold-bright); text-underline-offset:3px}
 .pop .hommark{margin-top:9px; font-size:.64rem; letter-spacing:.04em; color:var(--gold-bright,var(--gold))}
 .pop .senses{margin-top:7px; display:flex; flex-direction:column; gap:7px}
 .pop .sense{border-top:1px solid var(--line-2); padding-top:7px}
@@ -750,6 +752,15 @@ function wireWords(){
     el.addEventListener("keydown",ev=>{ if(ev.key==="Enter"||ev.key===" "){ev.preventDefault(); showPop(el);} });
   });
 }
+/* 辞書のページ（lexicon.html）の項目へのリンク。辞書に当たる語だけ（レンマと品詞で解決した項目）。
+   品詞の合う項目が無く候補が同形異義語のまとまり（lex-0255-1 など）のときは、まとまり全体（lex-0255）へ */
+function lexLinkHTML(w){
+  let id=w.defId||((w.senses||[])[0]||{}).id||"";
+  if(!id) return "";
+  const sup=/^(lex-\d+)-\d+$/.exec(id);
+  if(sup&&(w.how==="pos-miss"||w.how==="lemma")) id=sup[1];
+  return `<div class="lexlink"><a href="lexicon.html#${encodeURIComponent(id)}">${UL()==="en"?"Lexicon entry →":"辞書の項目 →"}</a></div>`;
+}
 function showPop(el){
   const seg=el.closest(".prow"); if(!seg) return; const segId=seg.dataset.id;
   const segData=SEGS_III.find(s=>s.id===segId);
@@ -791,7 +802,7 @@ function showPop(el){
       ${dl?`<dl>${dl}</dl>`:`<div class="none">${noneLbl()}</div>`}
       ${w.grc?`<div class="grcnote">⬥ ${loanLbl()}</div>`:""}${extra}`;
   }
-  pop.innerHTML=inner;
+  pop.innerHTML=inner+lexLinkHTML(w);
   const r=el.getBoundingClientRect();
   pop.classList.add("show");
   const pw=pop.offsetWidth, ph=pop.offsetHeight;

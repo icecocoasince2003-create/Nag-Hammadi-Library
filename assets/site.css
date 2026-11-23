@@ -74,14 +74,24 @@ html[data-mode="light"] .sb-mode .sb-moon { display: block; }
 .sb-mode:hover, .sb-mode:focus-visible {
   border-color: rgba(212, 175, 106, .45); color: var(--gold-bright, #e7c885); outline: none;
 }
-/* 切替ボタンの分だけナビが2段に折り返しやすくなるので、その分を詰める:
-   中くらいの幅ではリンクの間隔を少し狭め、ごく狭い画面では区切り線を省いて、ロゴと同じ行に収める */
-@media (min-width: 761px) and (max-width: 1100px) {
-  .sitebar:has(.sb-mode) .sb-links { column-gap: 14px; }
+/* ナビの項目と表示モードの切替ボタンの分だけ折り返しやすいので、中くらいの幅（761〜1340px）ではリンクの間隔と文字を
+   少し詰める。2026-11-23 の実測（8 項目、HOME、未ログイン）: 1 段に収まるのは日本語 1,080px・英語 1,092px・フランス語 1,236px 以上
+   （辞書・はじめての方へを足す前の 6 項目では、1,040px・1,040px・1,222px 以上）。項目やラベルを変えたら、1 段に収まる幅を
+   測り直して、下の 2 つの @media の幅も直すこと。ごく狭い画面では区切り線を省いて、ロゴと同じ行に収める */
+@media (min-width: 761px) and (max-width: 1340px) {
+  .sitebar .sb-links { column-gap: 10px; }
+  .sitebar .sb-link { font-size: .76rem; }
 }
-/* フランス語はリンクの文字が長く、もっと広い幅から折り返すので、その幅まで同じように詰める */
-@media (min-width: 1101px) and (max-width: 1260px) {
-  .sitebar:has(.sb-mode):has(.sb-lang[data-lang="fr"][aria-pressed="true"]) .sb-links { column-gap: 14px; }
+/* 1 段に収まらない幅では、リンクをロゴと言語切替の下の 2 段目にまとめる（スマホと同じ並び。ただし折り返しは許す）。
+   こうしないとリンクが言語切替の左の狭い所に押し込められて、762px ではフランス語で 8 段にもなる（以前の 6 項目でも 6 段）。
+   2026-11-23 の実測で、1 段に収まるのは日本語 1,080px・英語 1,092px・フランス語 1,236px 以上なので、その手前まで */
+@media (min-width: 761px) and (max-width: 1091px) {
+  .sb-links { order: 3; flex-basis: 100%; }
+  .sb-tools { margin-left: auto; }
+}
+@media (min-width: 1092px) and (max-width: 1235px) {
+  .sitebar:has(.sb-lang[data-lang="fr"][aria-pressed="true"]) .sb-links { order: 3; flex-basis: 100%; }
+  .sitebar:has(.sb-lang[data-lang="fr"][aria-pressed="true"]) .sb-tools { margin-left: auto; }
 }
 @media (max-width: 359px) {
   .sitebar .sb-tools:has(.sb-mode) { gap: 4px 8px; }
@@ -354,6 +364,24 @@ html[data-lang="en"] .prose li, html[data-lang="fr"] .prose li { line-height: 1.
 .btnlink { display: inline-flex; align-items: center; gap: 6px; color: var(--gold-bright); text-decoration: none;
   text-underline-offset: 5px; font-size: .88rem; }
 .btnlink:hover { text-decoration: underline; }
+/* 全文書を対象にした検索窓（HOME の導入文の下・辞書ページの上部）。search.html?q=…&f=f|l&scope=all を開く
+   入力欄の案内文は data-ph-ja / -en / -fr（assets/site.js が表示言語に合わせて placeholder にする） */
+.qbox { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; max-width: 640px; margin: 18px 0 0;
+  padding: 8px 8px 8px 14px; background: var(--panel, rgba(23,20,46,.78)); border: 1px solid var(--line-2, var(--line));
+  border-radius: 14px; font-family: var(--ui, "Inter", "Noto Sans JP", system-ui, sans-serif); font-size: .84rem; color: var(--ink-soft); }
+.qbox:focus-within { border-color: var(--gold); }
+.qbox .qbox-q { flex: 1 1 14em; min-width: 0; background: none; border: 0; outline: 0; color: var(--ink);
+  font-family: "Noto Sans Coptic", var(--ui, system-ui), sans-serif; font-size: 1rem; padding: 4px 0; }
+.qbox .qbox-q::placeholder { color: var(--ink-faint); font-family: var(--ui, system-ui, sans-serif); font-size: .84rem; }
+.qbox .qbox-f { display: inline-flex; gap: 4px 12px; white-space: nowrap; }
+.qbox .qbox-f label { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
+.qbox button { appearance: none; border: 1px solid var(--gold); background: var(--gold); color: var(--on-gold, #1a140a);
+  border-radius: 10px; padding: 6px 14px; font: inherit; font-weight: 600; cursor: pointer; }
+.qbox button:hover, .qbox button:focus-visible { filter: brightness(1.08); outline: none; }
+.qbox-note { margin: 6px 0 0; font-size: .74rem; color: var(--ink-faint); line-height: 1.6; max-width: 640px; }
+.qbox-note a { color: var(--lapis); text-underline-offset: 3px; }
+.vh { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+@media (max-width: 520px) { .qbox { padding: 8px 10px; } .qbox button { margin-left: auto; } }
 .site-foot { position: relative; z-index: 1; border-top: 1px solid var(--line); color: var(--ink-faint);
   font-size: .76rem; padding: 22px clamp(16px, 4vw, 40px) 46px; text-align: center; line-height: 1.8; }
 .site-foot a { color: var(--ink-soft); text-underline-offset: 4px; }

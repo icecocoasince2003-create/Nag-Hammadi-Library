@@ -24,7 +24,8 @@
   var NAV = [
     { id: "home",   href: "index.html",          ja: "HOME",            en: "Home",            fr: "Accueil" },
     { id: "corpus", href: "index.html#corpus",   ja: "文書一覧",         en: "Texts",           fr: "Textes" },
-    { id: "search", href: "search.html",         ja: "コーパス検索・統計", en: "Search & statistics", fr: "Recherche et statistiques" },
+    { id: "lexicon",href: "lexicon.html",        ja: "辞書",            en: "Lexicon",         fr: "Lexique" },
+    { id: "search", href: "search.html",         ja: "検索・統計",        en: "Search",          fr: "Recherche" },
     { id: "gnosis", href: "gnosticism.html",     ja: "グノーシス主義とは", en: "Gnosticism",      fr: "Le gnosticisme" },
     { id: "project",href: "project.html",        ja: "プロジェクト",     en: "About",           fr: "Le projet" },
     { id: "news",   href: "index.html#news",     ja: "NEWS",            en: "News",            fr: "Actualités" }
@@ -71,6 +72,16 @@
     if (!fullI18n()) return;
     var tt = v === "ja" ? (H.getAttribute("data-title-ja") || TITLE_JA) : H.getAttribute("data-title-" + v);
     if (tt) document.title = tt;
+  }
+
+  /* 入力欄の案内文（placeholder）は属性に書けるのが 1 つの言語だけなので、data-ph-ja / data-ph-en / data-ph-fr を持つ要素に
+     表示言語のものを入れる（三言語のページ。ほかの言語が無ければ英語、次に日本語） */
+  function applyPlaceholders(v) {
+    Array.prototype.forEach.call(document.querySelectorAll("[data-ph-ja]"), function (el) {
+      var p = el.getAttribute("data-ph-" + v) || el.getAttribute("data-ph-en") || el.getAttribute("data-ph-ja");
+      el.setAttribute("placeholder", p);
+      if (el.hasAttribute("data-ph-label")) el.setAttribute("aria-label", p);
+    });
   }
 
   /* 現在の表示言語（ナビの表示に使う） */
@@ -143,6 +154,8 @@
     if (p === "" || p === "index.html") return "home";
     if (p.indexOf("search") === 0) return "search";
     if (p.indexOf("stats") === 0) return "search";   // 旧 stats.html（search.html?view=stats への転送）
+    if (p.indexOf("lexicon") === 0) return "lexicon";
+    if (p.indexOf("guide") === 0) return "guide";
     if (p.indexOf("gnosticism") === 0) return "gnosis";
     if (p.indexOf("project") === 0) return "project";
     return "";
@@ -261,6 +274,7 @@
       H.setAttribute("data-lang", v);
       H.setAttribute("lang", v);
       applyTitle(v);
+      applyPlaceholders(v);
     } else {
       syncLegacy(v);
     }
@@ -292,7 +306,7 @@
 
     var v = cur = initialLang();
     if (fullI18n()) {
-      H.setAttribute("data-lang", v); H.setAttribute("lang", v); applyTitle(v);
+      H.setAttribute("data-lang", v); H.setAttribute("lang", v); applyTitle(v); applyPlaceholders(v);
     } else {
       // ページ本体のスクリプトが初期化を終えてから同期する（<head> の 1 行スクリプトが反映済みなら、ボタンは押さない）
       setTimeout(function () { syncLegacy(v); render(nav); }, 0);

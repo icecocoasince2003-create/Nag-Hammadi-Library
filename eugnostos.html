@@ -138,6 +138,8 @@ html[data-loan="on"] .wseg.grc::before{content:""; position:absolute; top:1px; r
 html[data-line="on"] .lbm{display:inline-block; font-family:var(--ui); font-size:.56rem; line-height:1;
   color:var(--lapis); vertical-align:.5em; margin:0 2px; padding:0 2px; border-left:1px solid var(--lapis);
   opacity:.8; font-variant-numeric:tabular-nums}
+/* 頁・行のアンカー（#p70.1）で開いたときの、その行（頁）の印（republic.html と同じ） */
+.lbm.hit, .pdm.hit{outline:2px solid var(--gold); outline-offset:1px; border-radius:3px}
 html[data-page="on"] .pdm{display:inline-block; font-family:var(--ui); font-size:.6rem; letter-spacing:.04em;
   color:#fff; background:var(--gold); border-radius:4px; padding:1px 6px; margin:0 5px; vertical-align:.15em;
   font-variant-numeric:tabular-nums; box-shadow:0 1px 3px rgba(0,0,0,.18)}
@@ -325,6 +327,8 @@ mark.pm{background:var(--hi); color:inherit; border-radius:2px; box-shadow:inset
 .pop dd.ja{font-family:var(--ui)}
 .pop .none{font-size:.78rem; color:var(--chrome-faint); font-style:italic; margin-top:8px}
 .pop .grcnote{margin-top:9px; font-size:.66rem; color:var(--rose)}
+.pop .lexlink{margin-top:9px; padding-top:7px; border-top:1px solid var(--line); font-size:.74rem}
+.pop .lexlink a{color:var(--gold-bright); text-underline-offset:3px}
 .pop .hommark{margin-top:9px; font-size:.64rem; letter-spacing:.04em; color:var(--gold-bright,var(--gold))}
 .pop .senses{margin-top:7px; display:flex; flex-direction:column; gap:7px}
 .pop .sense{border-top:1px solid var(--line-2); padding-top:7px}
@@ -579,8 +583,9 @@ async function load(){
   buildAll();
 }
 function buildAll(){
-  parse(); parsePar(); markerButtons(); render();
+  parse(); locIndex(SEGS_III); locIndex(SEGS_V); parsePar(); markerButtons(); render();
   buildCredit();
+  setTimeout(gotoPageLine, 0);
 }
 /* 〈ページ〉〈行〉は、本文に改頁（<pb>）・改行（<lb>）があるときだけ出す（いまのエウグノストスの本文には無い） */
 function markerButtons(){
@@ -796,6 +801,15 @@ function wireWords(){
     el.addEventListener("keydown",ev=>{ if(ev.key==="Enter"||ev.key===" "){ev.preventDefault(); showPop(el);} });
   });
 }
+/* 辞書のページ（lexicon.html）の項目へのリンク。辞書に当たる語だけ（レンマと品詞で解決した項目）。
+   品詞の合う項目が無く候補が同形異義語のまとまり（lex-0255-1 など）のときは、まとまり全体（lex-0255）へ */
+function lexLinkHTML(w){
+  let id=w.defId||((w.senses||[])[0]||{}).id||"";
+  if(!id) return "";
+  const sup=/^(lex-\d+)-\d+$/.exec(id);
+  if(sup&&(w.how==="pos-miss"||w.how==="lemma")) id=sup[1];
+  return `<div class="lexlink"><a href="lexicon.html#${encodeURIComponent(id)}">${UL()==="en"?"Lexicon entry →":"辞書の項目 →"}</a></div>`;
+}
 function showPop(el){
   const seg=el.closest(".seg"); const segId=seg.dataset.id;
   const segData=(curWit==="V"?SEGS_V:SEGS_III).find(s=>s.id===segId);
@@ -835,7 +849,7 @@ function showPop(el){
       ${dl?`<dl>${dl}</dl>`:`<div class="none">${noneLbl()}</div>`}
       ${w.grc?`<div class="grcnote">⬥ ${loanLbl()}</div>`:""}${extra}`;
   }
-  pop.innerHTML=inner;
+  pop.innerHTML=inner+lexLinkHTML(w);
   const r=el.getBoundingClientRect();
   pop.classList.add("show");
   const pw=pop.offsetWidth, ph=pop.offsetHeight;
@@ -1394,9 +1408,52 @@ function applyUILang(){
   }; }
 applyUILang();
 
+/* ---------- 頁・行（<pb>・<lb>）と、頁・行のアンカー（republic.html と同じ形） ----------
+   locIndex: 各セグメントの最初と最後の語が写本のどの頁・行にあるか（s.loc = {from:{pg,ln}, to:{pg,ln}}、
+   s.pg0 = セグメントの始まる前の頁）。頁・行の無い本文では s.loc は null（いまの III,3・V,1 には頁・行が無い）。
+   eugnostos.html?wit=III#p70.1 は、その写本の 70 頁 1 行を含む（最初の）セグメントへ、#p70 は 70 頁の語のある最初の
+   セグメントへ移り、そのセグメントと行（頁）の印を目立たせる（頁・行の番号も表示する）。引用文の URL にもこの形を使う。 */
+function locIndex(segs){
+  let pg="", ln="";
+  segs.forEach(s=>{
+    let from=null, to=null; s.pg0=pg;
+    (s.flow||[]).forEach(it=>{
+      if(it.k==="pd"){ pg=it.n; ln=""; }
+      else if(it.k==="lb"){ ln=it.n; }
+      else if(it.k==="w"){ const here={pg, ln}; if(!from) from=here; to=here; }
+    });
+    s.loc=from&&from.pg&&from.ln?{from, to}:null;
+  });
+}
+function locLabel(loc){
+  const a=loc.from, b=loc.to;
+  return a.pg===b.pg ? a.pg+","+a.ln+(b.ln!==a.ln?"–"+b.ln:"") : a.pg+","+a.ln+"–"+b.pg+","+b.ln;
+}
+function plCmp(a,b){ return (+a.pg - +b.pg)||(+a.ln - +b.ln); }
+function gotoPageLine(){
+  const m=/^#p(\d+)(?:\.(\d+))?$/.exec(location.hash); if(!m||curWit==="SYN") return;
+  const segs=curWit==="V"?SEGS_V:SEGS_III;
+  const pg=m[1], ln=m[2]==null?null:m[2], t={pg, ln};
+  const s=segs.find(x=>x.loc&&(ln==null ? +x.loc.from.pg<=+pg&&+x.loc.to.pg>=+pg : plCmp(x.loc.from,t)<=0&&plCmp(x.loc.to,t)>=0));
+  const row=s&&document.getElementById("seg-"+s.id); if(!row) return;
+  [["data-page","#pageBtn"],["data-line","#lineBtn"]].forEach(([a,b])=>{ H.setAttribute(a,"on"); const e=$(b); if(e) e.setAttribute("aria-pressed","true"); });
+  document.querySelectorAll(".lbm.hit,.pdm.hit").forEach(x=>x.classList.toggle("hit",false));
+  let cur=s.pg0, mark=null;
+  Array.from(row.querySelectorAll(".pdm,.lbm")).some(x=>{
+    if(x.classList.contains("pdm")){ cur=x.dataset.n; if(ln==null&&cur===pg){ mark=x; return true; } }
+    else if(ln!=null&&cur===pg&&x.dataset.n===ln){ mark=x; return true; }
+    return false;
+  });
+  if(mark) mark.classList.add("hit");
+  row.scrollIntoView({block:"center"});
+  row.classList.add("flash"); setTimeout(()=>row.classList.toggle("flash",false),2200);
+}
+window.addEventListener("hashchange",gotoPageLine);
+
 /* ---------- 引用（〈この箇所を引用〉〈この文書を引用〉。assets/viewer-tools.js） ----------
    セグメントの番号を押すと、その箇所の引用のメニューを開く。III,3 の箇所は eugnostos.html?wit=III#seg-…、
-   V,1 の枠（V-INCIPIT）は ?wit=V#seg-… を指す。この本文には頁・行が無いので、箇所は §（セグメントの番号）で示す。
+   V,1 の枠（V-INCIPIT）は ?wit=V#seg-… を指す。頁・行が入っていれば（s.loc）、箇所を写本の頁・行で示し（NHC III 70,1–5（§1））、
+   URL も頁・行のアンカーにする（republic.html と同じ）。頁・行の無いあいだは §（セグメントの番号）で示す。
    〈この文書を引用〉は、いま開いている写本（III,3 / V,1 / 対照）の文書としての引用で、本文の最終更新日を添える。 */
 const withTools=f=>{ if(window.NHCTools) f(window.NHCTools); else (window.NHCToolsQ=window.NHCToolsQ||[]).push(f); };
 const CITE_DOC={
@@ -1408,8 +1465,15 @@ document.addEventListener("click",e=>{
   const b=e.target.closest("button.no[data-cite]");
   if(b){
     const id=b.dataset.cite, inV=/^V-/.test(id), s=(inV?SEGS_V:SEGS_III).find(x=>x.id===id); if(!s) return;
+    const wit=inV?"V":"III";
+    if(s.loc){
+      const lab="NHC "+wit+" "+locLabel(s.loc);
+      withTools(t=>t.cite(b,{kind:"passage", path:"eugnostos.html?wit="+wit+"#p"+s.loc.from.pg+"."+s.loc.from.ln,
+        where:{ja:lab+"（§"+s.n+"）", en:lab+" (§"+s.n+")", fr:lab+" (§"+s.n+")"}}));
+      return;
+    }
     const where=(inV?"NHC V,1":"NHC III,3")+" §"+s.n;
-    withTools(t=>t.cite(b,{kind:"passage", path:"eugnostos.html?wit="+(inV?"V":"III")+"#seg-"+id, where:{ja:where, en:where, fr:where}}));
+    withTools(t=>t.cite(b,{kind:"passage", path:"eugnostos.html?wit="+wit+"#seg-"+id, where:{ja:where, en:where, fr:where}}));
     return;
   }
   const d=e.target.closest("#docCite");

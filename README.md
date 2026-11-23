@@ -25,7 +25,8 @@
 | `eugnostos.html` | エウグノストス。`?wit=III`（祝福されたエウグノストス）/ `?wit=V`（エウグノストス）/ `?wit=SYN`（対照） | 手作業 |
 | `republic.html` | 『国家』ビュワー | 手作業 |
 | `reader.html` | 本文ビュワー（暫定版・未注釈）。`?doc=II-6` のように文書を指定し、NHC 全文テキストの TEI（`source/nhc_fulltext_split/tei/`）を表示する。冒頭に、その文書で確かめていないことを示す。HOME の「暫定」「未注釈」の行と検索の用例がここへリンク | `python3 scripts/build_site.py` で生成 |
-| `search.html` | コーパス検索・統計。見出し下のタブで〈検索〉と〈統計〉を切替（`?view=stats` で統計を直接開く）。タブの右の〈チュートリアル〉で、使い方の説明を〈検索〉の右のパネルに開く（× で閉じる。`?view=tutorial` で開いた状態にできる。説明文は `#viewGuide` に三言語の HTML で書く）。初めて開いたときは操作案内（JS の `TOUR`）を出す。左の〈文書〉〈品詞〉の絞り込みは〈検索〉〈統計〉に共通。〈全文テキスト〉で NHC 全文（56文書）を選んで対象に加えられる。統計のセクションは JS 内の `SECTIONS` に追加 | 手作業 |
+| `lexicon.html` | コプト語辞書（日・英・仏）。`data/lexicon.xml` を読み、見出し（上線などと大文字・小文字を無視）・日英仏の語義・品詞で引く（部分一致・前方一致）。字母の索引、品詞・借用語・「語義のある項目だけ」（既定でオン）で絞り込む。件数は lexicon.xml から数える。見出しに欠損の記号を含む項目は一覧から外して下にまとめる。固定リンクは `lexicon.html#lex-0123`（項目の `xml:id`）。各項目から用例の検索（`search.html?q=…&m=ex&f=l&scope=all`）へ。上部に全文書の検索窓。品詞の名前は `data/pos_labels.json` | 手作業 |
+| `search.html` | コーパス検索・統計。見出し下のタブで〈検索〉と〈統計〉を切替（`?view=stats` で統計を直接開く）。タブの右の〈チュートリアル〉で、使い方の説明を〈検索〉の右のパネルに開く（× で閉じる。`?view=tutorial` で開いた状態にできる。説明文は `#viewGuide` に三言語の HTML で書く）。初めて開いたときは操作案内（JS の `TOUR`）を出す。左の〈文書〉〈品詞〉の絞り込みは〈検索〉〈統計〉に共通。〈全文テキスト〉で NHC 全文（56文書）を選んで対象に加えられる。`?scope=all` で開くと、注釈つきの版と全文テキストのすべて（注釈つきの版と重なる III,3・VI,5 を除く 54 文書）を選んだ状態で、読み込みの進み具合を出しながら開く（HOME と辞書のページの検索窓が使う）。統計のセクションは JS 内の `SECTIONS` に追加。〈統計〉の最後の「写本全体の比較」は、左の選択に関係なく全文テキストの全文書（と参考に人の手で注釈した版）を、指標を選んだ横棒グラフで比べる（写本の順／値の大きい順。数は `data/fulltext_stats.json`。暫定版の値であることを必ず出す） | 手作業 |
 | `stats.html` | 旧コーパス統計。`search.html?view=stats` への転送のみ（`?doc=…` は引き継ぐ） | 手作業 |
 | `profile.html` | プロフィール（ログイン中の利用者用）。表示名の変更、自分の投稿の確認と修正、ブックマーク、運営へのバグの報告・応援メッセージ | 手作業 |
 | `admin.html` | 投稿（コメント・注釈・誤りの指摘）の承認、公開済みの投稿への修正の申請の承認、運営へのメッセージの確認（運営用） | 手作業 |
@@ -90,6 +91,7 @@ nag_hammadi_library/
 ├─ index.html          ← 目次トップ(自動生成: scripts/build_site.py)
 ├─ eugnostos.html      ← エウグノストス・ビュワー(手作業管理)
 ├─ republic.html       ← プラトン『国家』断片ビュワー(手作業管理)
+├─ lexicon.html        ← コプト語辞書(手作業管理。data/lexicon.xml を読む)
 ├─ tractate.html       ← 準備中ページ(自動生成)
 ├─ reader.html         ← 本文ビュワー・暫定版(自動生成。?doc=II-6 など)
 ├─ sitemap.xml         ← 検索エンジン向けの URL の一覧(自動生成)
@@ -113,6 +115,8 @@ nag_hammadi_library/
 │   ├─ catalog.xml
 │   ├─ release.json       ← 版の情報(版番号・リリースの日・DOI・公開 URL)。下の「版とリリースの作り方」
 │   ├─ doc_dates.json     ← 文書ごとの最終更新日(scripts/build_site.py が git の履歴から書き出す)
+│   ├─ pos_labels.json    ← 品詞タグの三言語の名前と本文での出現数(scripts/build_site.py が書き出す。辞書のページなどが読む)
+│   ├─ fulltext_stats.json ← 全文テキストの文書ごとの数(scripts/build_fulltext_stats.py。build_site.py を実行すると作り直す)
 │   ├─ facsimile_links.json ← 写本ごとの写真(Claremont, Nag Hammadi Archive)へのリンク
 │   ├─ news.json・links.json  ← HOME の NEWS と関連サイト
 │   └─ republic_*.xml
@@ -124,9 +128,12 @@ nag_hammadi_library/
 └─ scripts/            ← スクリプト(通常触らない)
     ├─ build_tei.py        source/ の CSV から XML を試しに生成し、data/ と比べる(既定では data/ に書き込まない)
     ├─ sync_lexicon.py     source/lexicon.csv の変更を data/lexicon.xml に反映する(xml:id は変えない)
-    ├─ build_site.py       index.html / tractate.html / reader.html / sitemap.xml / robots.txt を生成
+    ├─ build_site.py       index.html / tractate.html / reader.html / sitemap.xml / robots.txt / data/doc_dates.json / data/pos_labels.json を生成
+    ├─ build_fulltext_stats.py  data/fulltext_stats.json(全文テキストの文書ごとの数)を生成。build_site.py からも呼ばれる
+    ├─ insert_breaks.py    写本の頁(<pb>)・行(<lb>)の区切りを TSV から TEI に入れる(既定は表示だけ、--write で書き込む)
+    ├─ split_segments.py   セグメント(<s>)を TSV で指定した位置で分ける(案。まだ実データには使わない)
     ├─ make_og_image.py    共有用の画像 image/og-image.png を作る(rsvg-convert が要る)
-    ├─ check_tei.py        TEI の点検(ポインタの切れ・以前の書き方など)。--schema でスキーマ検証も
+    ├─ check_tei.py        TEI の点検(ポインタの切れ・以前の書き方・見出しとレンマへのコプト文字以外の文字の混入など)。--schema でスキーマ検証も
     ├─ check_style.py      表記ゆれの点検(規則は style_rules.json)
     ├─ build_parallels.py  並行箇所(data/parallels.xml)を、文言の自動照合で作る
     └─ sync_nhc_catalog.py  NHC 全文テキスト(未注釈)の文書一覧を data/catalog.xml に書き出す
@@ -175,7 +182,10 @@ nag_hammadi_library/
 | `build_tei.py` | CSV から本文と辞書の XML を**試しに生成して `data/` と比べる**。既定では `data/` に書き込まない(下の「データの編集」)。 |
 | `build_parallels.py` | 並行箇所(`data/parallels.xml`)を文言の自動照合で作る。何も付けなければ要約の表示だけで、`--write` で書き込む。 |
 | `sync_lexicon.py` | `lexicon.csv` の変更を `data/lexicon.xml` に反映する。`xml:id` は変えない。何も付けなければ変更点の表示だけで、`--write` で書き込む。 |
-| `build_site.py` | `index.html`(目次)・`tractate.html`(準備中)・`reader.html`(本文ビュワー・暫定版)・`sitemap.xml`・`robots.txt` を生成。`<head>` の OGP(リンクのプレビュー)のタグもここで書く(`og_tags`)。 |
+| `build_site.py` | `index.html`(目次)・`tractate.html`(準備中)・`reader.html`(本文ビュワー・暫定版)・`sitemap.xml`・`robots.txt`・`data/doc_dates.json`・`data/pos_labels.json`(品詞タグの三言語の名前と出現数。名前は `POS_NAMES` が正) を生成。`<head>` の OGP(リンクのプレビュー)のタグもここで書く(`og_tags`)。 |
+| `build_fulltext_stats.py` | `data/fulltext_stats.json` を生成（`build_site.py` を実行すると一緒に作り直す。`--check` で最新かを調べるだけ）。`data/catalog.xml` の全文テキスト（暫定版・未注釈）の文書ごとに、本文の証本の中の `<w>`・`<phr>`（と、その中の `<w>`）・`<s>`・`<gap>`、`xml:lang="grc"` の `<w>`、品詞ごとの `<w>`、`@cert="low"`・品詞 `X` の `<w>` を数え、方言（`<textLang>`）と状態を添える。参考に、人の手で注釈した版（エウグノストス III,3・『国家』）も同じ方法で数える。割合は検索ページが計算する。 |
+| `insert_breaks.py` | 写本の頁（`<pb>`）・行（`<lb>`）の区切りを TSV から TEI に入れる。区切りの空要素を足すだけで、本文・語・`xml:id` は変えない。何も付けなければ入る位置の表示だけで、`--write` で書き込む。手順は下の「写本の頁・行の区切りを入れる」。 |
+| `split_segments.py` | セグメント（`<s>`）を TSV で指定した位置で分ける。最初の部分が元の `xml:id` と § を保ち、続きは `元の id_a`・`_b` …（§ は 15a・15b …）。**案**（`source/nhc_fulltext_split/proposals/README_ja.md`）。まだ実データには使わない。 |
 | `make_og_image.py` | リンクを共有したときのプレビュー画像 `image/og-image.png`(1200×630)を、アイコンとゲンゲンの SVG から作る。 |
 
 ## データの編集
@@ -230,6 +240,134 @@ python3 scripts/build_tei.py
 ### translations.csv（対訳）
 `seg_id`(本文セグメントのID。`eugnostos_source.tsv` のID、冒頭は `INCIPIT`)に対し
 `ja`/`en`/`fr` の対訳を書きます。空欄の言語は「準備中」と表示されます。
+
+### 写本の頁・行の区切りを入れる（`scripts/insert_breaks.py`）
+
+全文テキスト（`source/nhc_fulltext_split/tei/`）とエウグノストス（`data/eugnostos_tei.xml`）には、写本の頁・行の区切りが
+入っていません（元ファイルに無かったため。『国家』`data/republic_tei.xml` だけは入っています）。校訂本と照らし合わせて
+決めた区切りを TSV に書き、`scripts/insert_breaks.py` で TEI に入れます。
+
+- スクリプトは、区切りの空要素（改頁 `<pb n="…"/>`・改行 `<lb n="…"/>`）を足すだけです。本文の文字・語（`<w>`）・語群
+  （`<phr>`）・欠損（`<gap>`）・`xml:id`・属性には触れません。
+- XML を読み直して書き出すのではなく、元のファイルに区切りの文字列を差し込みます（字下げも周りに合わせる）。差分には
+  足した行だけが出ます。
+- 書き方は `data/republic_tei.xml` と同じです。
+
+#### TSV の書き方
+
+UTF-8（BOM なし）・改行 LF・タブ区切りで、1 行目に見出しを書きます。列の順は自由です。空行は読み飛ばします。
+
+| 列 | 必須 | 書くこと |
+|---|---|---|
+| `doc` | ○ | 文書。`data/catalog.xml` の `<bibl type="document" xml:id="doc-…">` から `doc-` を除いたもの（`II-2`、`V-2`、`eugnostos` など）。ファイルはカタログの `<ref type="xml">` で決まる |
+| `seg_id` | ○ | セグメント（`<s>`）の `xml:id`（本文ビュワーの § のリンク `#seg-…` の `…` の部分） |
+| `w` | ○ | 区切りを、そのセグメントの何番目の `<w>`（形態素）の前に入れるか。1 から数える。語群の中の `<w>` も 1 つずつ数える |
+| `type` | ○ | `pb`（改頁）か `lb`（改行） |
+| `n` | ○ | 頁番号・行番号（そのまま `@n` に入る） |
+| `char` |  | 語の途中で行（頁）が変わるとき、その `<w>` の何文字目の前で切れるか。0 から数える（1 以上、語の文字数未満）。上線などの合成記号は前の文字に含めて数える |
+| `place` |  | 欠損（`<gap>`）のすぐあとの `<w>` を指したとき、区切りを欠損の前に入れるなら `before-gap`。`w` を `end` にすると「セグメントの最後の欠損の前」 |
+| `phr` |  | 確認用。その `<w>` を含む語群が、セグメントの中の何番目の `<phr>` か。書けば照合する |
+| `form` |  | 確認用。その `<w>` の語形（復元した字 `<supplied>` も含めた形）。書けば照合する。番号の打ち間違いを見つけるのに役立つ |
+| `note` |  | メモ（校訂本の頁など）。スクリプトは使わない |
+
+例（II,2 の冒頭。数字は書き方の例で、実際の頁・行ではありません）:
+
+```
+doc	seg_id	w	type	n	char	place	phr	form	note
+II-2	II-7503903_2206	1	pb	32			1	ⲛⲁ	頁の最初
+II-2	II-7503903_2206	1	lb	10			1	ⲛⲁ
+II-2	II-7503903_2206	16	lb	11	3			ⲁϥⲥϩⲁⲓⲥ	語の途中で改行（ⲁϥⲥ|ϩⲁⲓⲥ）
+II-2	II-7503903_2206	22	lb	12			15	ⲁⲩⲱ
+```
+
+- **改頁のときは `pb` と `lb` の両方を書きます。** `pb` のあとに 1 行目の `lb` を自動では足しません（頁の途中から始まる
+  文書もあるため）。同じ位置の `pb` と `lb` は、行の順に関係なく `pb` が先に入ります。
+- `w` の番号は、TEI の `<s>` の中の `<w>` を上から数えた番号です（`source/nhc_fulltext_split/proposals/` の表にも、
+  同じ数え方の番号が書いてあります）。`form` を書いておくと、番号を 1 つずらして打っても、スクリプトが止めてくれます。
+  まず `form` だけを書いて何も付けずに実行し、表示される前後の語で位置を確かめてから `--write` を付けるのが安全です。
+
+#### 区切りが入る位置
+
+| 指した位置 | 入る場所 |
+|---|---|
+| 語群（`<phr>`）の最初の `<w>` | 語群の前（語群と語群のあいだ） |
+| 語群の途中の `<w>` | 語群の中、その `<w>` の前（`break` は付けない） |
+| 語群の無い文書（未注釈の 17 文書）の `<w>` | その `<w>` の前 |
+| セグメントの最初の `<w>` | `<s>` の中の先頭（セグメントのあいだ `</s>` と `<s>` のあいだには入れない） |
+| `char` を書いたとき | `<w>` の中。`break="no"` が付く（`pb` も同じ）。復元した字の `<supplied>` の中には入れない |
+| `place` が `before-gap` | 欠損（`<gap>`）の前 |
+
+```xml
+<s xml:id="II-7503903_2206" n="1">
+  <pb n="32"/>
+  <lb n="10"/>
+  <phr>
+    <w …>ⲛⲁ</w>
+    …
+  <phr>
+    <w …>ⲁϥⲥ<lb n="11" break="no"/>ϩⲁⲓⲥ</w>
+```
+
+#### 実行する（リポジトリのルートで）
+
+```
+python3 scripts/insert_breaks.py 区切り.tsv           # 入れる位置を表示するだけ（書き込まない）
+python3 scripts/insert_breaks.py 区切り.tsv --write   # 書き込む
+python3 scripts/check_tei.py source/nhc_fulltext_split/tei/02-2_gospel-of-thomas.xml   # 書き込んだファイルを点検する
+```
+
+- 何も付けずに実行すると、1 行ごとに入る場所と前後の語（`【…ⲑⲱⲙⲁⲥ |ⲁⲩⲱ ⲡⲉϫⲁϥ…】`）を表示し、書き込みはしません。
+  表示を見て、よければ `--write` を付けて実行し直します。
+- TSV はいくつ並べてもかまいません（文書が違っていてもよい）。
+- 1 つでも問題があれば、どのファイルにも書き込まず、終了コード 1 で終わります。問題が無ければ 0 です。
+- 同じ位置に同じ区切りがもう入っていれば、その行は何もしません。同じ TSV を 2 回実行してもファイルは変わりません
+  （途中まで入れた TSV に行を書き足して、もう一度実行できます）。
+
+#### スクリプトが確かめること
+
+止まるもの（何も書き込まない）:
+
+- 文書・セグメント・語が見つからない。`type`・`n`・`char`・`place` の書き方が違う。`phr`・`form` が実際と違う。
+- 同じ位置に、同じ種類の区切りが違う番号ですでにある。同じ TSV に、同じ位置・同じ種類の行が 2 つある。
+- `char` の位置が復元した字（`<supplied>`）の途中になる。
+- 書き込む前の検証で問題が見つかる: 整形式でない、区切りを除くと元のファイルと内容が違う（文字・語・語群・欠損・属性・
+  `xml:id` のどれかが変わった）、もとからあった区切りが無くなった、足した区切りが指定の位置に無い、
+  `scripts/check_tei.py` の点検で新しい問題が出る。
+
+注意として表示するもの（誤りとは限らない。終了コードは変わらない）:
+
+- 行番号が前の行の続きになっていない、頁番号が前の頁の続きになっていない（欠損で行や頁が抜けていれば番号は飛ぶ）。
+- 改頁（`pb`）と同じ位置に改行（`lb`）が無い。同じ頁番号の改頁がほかの位置にもある。番号が数字でない。
+
+#### 試すとき
+
+`--file 文書=ファイル` を付けると、カタログのファイルの代わりに、そのファイル（複製など）に入れます。
+
+```
+cp source/nhc_fulltext_split/tei/02-2_gospel-of-thomas.xml /tmp/thomas.xml
+python3 scripts/insert_breaks.py 区切り.tsv --file II-2=/tmp/thomas.xml --write
+```
+
+`tests/fixtures/` には、ビュワーの試験のために区切りを入れたファイルと、その TSV があります（II,2 の §1–8、V,2 の §1–6、
+エウグノストス III の最初の 5 セグメント）。**頁・行の値は試験用で、実際の写本の頁・行ではありません。** TSV の `doc` は
+カタログに無い名前（`test-II-2` など）にしてあるので、`--file` を付けないと本物のファイルには入りません。
+
+```
+python3 scripts/insert_breaks.py tests/fixtures/reader_breaks_draft.tsv --file test-II-2=tests/fixtures/reader_breaks_draft.xml
+```
+
+#### 注意
+
+- **全文テキストに入れる前に、`source/nhc_fulltext_split/scripts/verify_tei.py` を区切りに対応させてください。** 2026-11-23
+  の時点では、`<s>`・`<phr>`・`<w>` の中に `<pb>`・`<lb>` があると失敗します（README_ja.md §10・§11 の検証）。
+- 本文ビュワー（`reader.html`）とエウグノストスのビュワーは、区切りのある文書で頁・行を表示し、`reader.html?doc=II-2#p32.10`
+  のような頁・行のリンクと引用に使います（2026-11-23 のビュワーの変更。`tests/fixtures/` のファイルで試してある）。
+- 入れた区切りの TSV は、どの校訂本のどの頁から取ったかの記録として残しておくと、あとで確かめられます（置き場所は
+  決めていません。例 `source/nhc_fulltext_split/breaks/II-2.tsv`）。
+- 区切りを手で直すときも、上の「区切りが入る位置」の決まりに合わせてください。手で入れた区切りと同じものが TSV に
+  あれば、スクリプトは「もうある」として何もしません。
+
+セグメントの分け直し（`scripts/split_segments.py`）、トマスによる福音書の語録の区切り、300 形態素を超える長いセグメントの切れ目は、まだ案の段階です（`source/nhc_fulltext_split/proposals/README_ja.md` と、同じフォルダの TSV。生田目の確認待ち）。
 
 ## サイト構成と画面遷移
 
@@ -314,8 +452,9 @@ HOME のフッターの版番号は、このファイルを読みます。`CITAT
   `data/doc_dates.json` から入ります（`assets/viewer-tools.js`）。クリップボードが使えないときは、文を選べる形で出します。
 - **頁・行**: 頁・行の情報（`<pb>`・`<lb>`）がある本文（いまは『国家』だけ）では、〈ページ〉〈行〉で写本の頁と行の番号を出せ、
   `republic.html#p48.16`（48 頁 16 行を含む箇所）・`republic.html#p48`（48 頁の始まり）で、その箇所へ移って目立たせます。
-  箇所の引用も「NHC VI 48,16–17（§1）」とこのアンカーの URL で示します。頁・行の無い本文（エウグノストスなど）では、
-  〈ページ〉〈行〉のボタンを出しません。
+  箇所の引用も「NHC VI 48,16–17（§1）」とこのアンカーの URL で示します。本文ビュワー（`reader.html?doc=II-2#p32.10`）と
+  エウグノストス（`eugnostos.html?wit=III#p70.1`）も同じ仕組みで、区切りを入れればそのまま働きます（上の「写本の頁・行の
+  区切りを入れる」）。頁・行の無い本文（いまはエウグノストスと全文テキスト）では、〈ページ〉〈行〉のボタンを出しません。
 - **写本の写真**: 題の下に、Claremont Colleges Digital Library の Nag Hammadi Archive にある、その写本の写真（1970 年代の白黒写真）
   へのリンクがあります（`data/facsimile_links.json`。著作権は図書館にあるので、リンクだけです）。写本ファクシミリ（IIIF）のパネルは、
   `iiif/*.json` に画像の `source` を書いたときだけ出ます（`iiif/README.md`）。

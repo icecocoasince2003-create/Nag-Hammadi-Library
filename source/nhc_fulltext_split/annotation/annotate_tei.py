@@ -4,8 +4,21 @@ Source lexicon: eugnostos_tei.xml and republic_tei.xml. Additionally a small
 manually authored set of high-frequency Coptic morphemes is used. This is NOT
 an automatic published edition, and low-confidence assignments need checking.
 No source characters or segmentation IDs are changed.
+
+Usage: python annotate_tei.py SOURCE_DIR OUT_DIR ROOT_DIR [--ref PATH ...]
+SOURCE_DIR holds the bound-group TEI files (names beginning with NN-N_), OUT_DIR
+receives the annotated files and OUT_DIR/.. the report TSVs, and ROOT_DIR holds the
+references eugnostos_tei.xml and republic_tei.xml.
+
+--ref PATH (repeatable; added 2026-11-23 for the evaluation in ../evaluation/):
+use only the given annotated TEI file(s) as references, in the order given,
+instead of ROOT_DIR/eugnostos_tei.xml and ROOT_DIR/republic_tei.xml. They are the
+source of the reference lexicon (forms with their POS, lemma, xml:lang="grc" and
+glosses). Example (held-out check of VI,5): --ref data/eugnostos_tei.xml.
+Without --ref the behaviour and the output are byte for byte the same as before.
+The script uses no random numbers, and its output does not depend on hash order.
 """
-import re, csv, hashlib, sys
+import re, csv, hashlib, sys, argparse
 from collections import Counter, defaultdict
 from pathlib import Path
 from lxml import etree as E
@@ -13,9 +26,19 @@ from lxml import etree as E
 NS='http://www.tei-c.org/ns/1.0'; XML='http://www.w3.org/XML/1998/namespace'
 q=lambda a:'{'+NS+'}'+a
 ns={'t':NS}
-source_dir=Path(sys.argv[1]) if len(sys.argv)>1 else Path('/mnt/data/tei_annotation_work')
-out_dir=Path(sys.argv[2]) if len(sys.argv)>2 else Path('/mnt/data/tei_annotated_draft/xml')
-root_dir=Path(sys.argv[3]) if len(sys.argv)>3 else Path('/mnt/data')
+_ap=argparse.ArgumentParser(description='Provisional POS/lemma/gloss annotation of bound-group TEI files.')
+_ap.add_argument('source_dir',nargs='?',type=Path,default=Path('/mnt/data/tei_annotation_work'))
+_ap.add_argument('out_dir',nargs='?',type=Path,default=Path('/mnt/data/tei_annotated_draft/xml'))
+_ap.add_argument('root_dir',nargs='?',type=Path,default=Path('/mnt/data'))
+_ap.add_argument('--ref',action='append',type=Path,metavar='PATH',
+                 help='reference TEI file (repeatable); default: eugnostos_tei.xml and republic_tei.xml in ROOT_DIR')
+_args=_ap.parse_intermixed_args()
+for _p in _args.ref or []:
+    if not _p.is_file():_ap.error(f'--ref: no such file: {_p}')
+source_dir=_args.source_dir
+out_dir=_args.out_dir
+root_dir=_args.root_dir
+REF_FILES=_args.ref or [root_dir/name for name in ['eugnostos_tei.xml','republic_tei.xml']]
 out_dir.mkdir(parents=True,exist_ok=True)
 
 def txt(w): return ''.join(w.itertext()).strip()
@@ -206,8 +229,8 @@ LINKFORMS={'ⲛ','ⲙ','ⲉ','ⲛⲁ','ⲡⲉ','ⲧⲉ','ⲛⲉ','ⲟⲩ','ⲉ�
 
 def load_ref():
     catalog=defaultdict(Counter); lang=defaultdict(Counter); gloss=defaultdict(Counter)
-    for name in ['eugnostos_tei.xml','republic_tei.xml']:
-        r=E.parse(str(root_dir/name))
+    for path in REF_FILES:
+        r=E.parse(str(path))
         glossmap={v.get('{'+XML+'}id'): ''.join(v.itertext()).strip() for v in r.findall('.//t:interpGrp[@type="gloss"]/t:interp',ns)}
         for w in r.findall('.//t:body//t:w',ns):
             f=txt(w); t=w.get('type');lem=w.get('lemma')

@@ -1,0 +1,432 @@
+<!-- 辞書のページ（手作業管理）。data/lexicon.xml（コプト語辞書。source/lexicon.csv から scripts/sync_lexicon.py が書き出す）を
+     読み込んで、見出し・品詞・日英仏の語義で引けるようにする。品詞の名前は data/pos_labels.json（scripts/build_site.py が出力。
+     読めなければタグのまま出す）。件数はすべて lexicon.xml から数える（全項目＝<entry> の数、語義のある項目＝<sense> を持つ <entry> の数）。
+     固定リンクは lexicon.html#lex-0123（項目の xml:id。同形異義語のまとまりは <superEntry> の xml:id、その中の語義は lex-0255-1 など）。
+     見出しに欠損の記号（[ ] . …）を含む項目は、本文の欠損形がそのまま項目になったものなので、ふつうの一覧から外して下にまとめる。
+     上部の検索窓は辞書ではなく全文書の検索（search.html?q=…&f=f|l&scope=all）。 -->
+<!DOCTYPE html>
+<html lang="ja" data-lang="ja" data-i18n="full" data-mode="dark" data-modes="light dark" data-title-en="Coptic lexicon — Sheneset" data-title-fr="Lexique copte — Sheneset">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>/* 表示モード（ライト／ダーク）の保存値を描画前に反映（保存は assets/site.js） */try{if(localStorage.getItem("nhc-mode")==="light")document.documentElement.setAttribute("data-mode","light")}catch(e){}</script>
+<script>/* 表示言語（?lang= ＞ 保存値 ＞ ブラウザーの言語、ほかは英語）を描画前に反映（正式な処理と保存は assets/site.js） */(function(H){var L=["ja","en","fr"],m=/[?&]lang=([^&#]*)/i.exec(location.search),v=m?m[1].toLowerCase():null;if(L.indexOf(v)<0){v=null;try{v=localStorage.getItem("nhc-lang")}catch(e){}}if(L.indexOf(v)<0){v="en";var n=navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||""];for(var i=0;i<n.length;i++){var p=String(n[i]).toLowerCase().split(/[-_]/)[0];if(L.indexOf(p)>=0){v=p;break}}}if(H.getAttribute("data-i18n")==="full"){H.setAttribute("data-lang",v);H.setAttribute("lang",v)}else if(v!=="ja"){H.setAttribute("data-lang","en");H.setAttribute("lang","en");H.setAttribute("data-gl",v);H.setAttribute("data-tl",v)}})(document.documentElement)</script>
+<title>コプト語辞書 — Sheneset</title>
+<meta name="description" content="Sheneset のコプト語辞書。見出し語と品詞ごとの日本語・英語・フランス語の語義を引き、本文の用例を検索できる / The Coptic lexicon of Sheneset: Japanese, English and French senses by lemma and part of speech.">
+<!-- リンクを共有したときのプレビュー（OGP）。og:title・og:description は <title> と meta description と同じにする -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sheneset">
+<meta property="og:title" content="コプト語辞書 — Sheneset">
+<meta property="og:description" content="Sheneset のコプト語辞書。見出し語と品詞ごとの日本語・英語・フランス語の語義を引き、本文の用例を検索できる / The Coptic lexicon of Sheneset: Japanese, English and French senses by lemma and part of speech.">
+<meta property="og:url" content="https://sheneset.vercel.app/lexicon.html">
+<meta property="og:image" content="https://sheneset.vercel.app/image/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="fr_FR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="image/icon.svg">
+<link rel="alternate icon" type="image/png" sizes="32x32" href="image/favicon-32.png">
+<link rel="apple-touch-icon" href="image/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600&family=Noto+Sans+Coptic&display=swap" rel="stylesheet">
+<style>
+:root{ --ui:'Inter','Noto Sans JP',system-ui,sans-serif; --cop:'Noto Sans Coptic',serif; }
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
+.cop{font-family:var(--cop)}
+.lx-tools{margin:30px 0 0; padding:14px 16px; background:var(--panel); border:1px solid var(--line); border-radius:16px}
+.lx-row{display:flex; flex-wrap:wrap; align-items:center; gap:10px 16px}
+.lx-row + .lx-row{margin-top:10px}
+.lx-q{display:flex; align-items:center; gap:8px; flex:1 1 18em; min-width:0; border-bottom:1px solid var(--line-2); padding:4px 0}
+.lx-q svg{width:16px; height:16px; color:var(--ink-faint); flex:none}
+.lx-q input{flex:1; min-width:0; background:none; border:0; outline:0; color:var(--ink); font-family:var(--cop),var(--ui); font-size:1.02rem}
+.lx-q input::placeholder{color:var(--ink-faint); font-family:var(--ui); font-size:.86rem}
+.lx-tools select{background:var(--panel-2); color:var(--ink); border:1px solid var(--line-2); border-radius:8px; padding:4px 8px; font:inherit; font-size:.82rem; max-width:100%}
+.lx-tools label{display:inline-flex; align-items:center; gap:6px; font-size:.82rem; color:var(--ink-soft); cursor:pointer}
+.lx-tools .k{font-size:.74rem; color:var(--ink-faint)}
+.lx-alpha{display:flex; flex-wrap:wrap; gap:4px; margin:12px 0 0}
+.lx-alpha button{appearance:none; min-width:2.1em; padding:3px 6px; border-radius:8px; border:1px solid var(--line); background:none;
+ color:var(--ink-soft); font-family:var(--cop); font-size:1rem; line-height:1.3; cursor:pointer}
+.lx-alpha button.all{font-family:var(--ui); font-size:.76rem}
+.lx-alpha button:hover{border-color:var(--gold); color:var(--ink)}
+.lx-alpha button[aria-pressed="true"]{background:var(--gold); border-color:var(--gold); color:var(--on-gold)}
+.lx-count{margin:12px 0 0; font-size:.8rem; color:var(--ink-faint); line-height:1.7}
+.lx-count b{color:var(--ink-soft); font-variant-numeric:tabular-nums}
+.lx-list{margin:18px 0 0}
+.lx-e{padding:14px 4px 14px 2px; border-bottom:1px solid var(--line); scroll-margin-top:72px}
+.lx-e.hit{background:var(--hi); border-radius:10px; padding-left:12px; padding-right:12px}
+.lx-h{display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 12px}
+.lx-hw{font-family:var(--cop); font-size:1.42rem; color:var(--gold-bright); line-height:1.3; overflow-wrap:anywhere}
+.lx-pos{font-size:.8rem; color:var(--ink-soft)}
+.lx-pos code{font-size:.72rem; color:var(--ink-faint); margin-left:.3em}
+.lx-tag{font-size:.68rem; letter-spacing:.04em; padding:1px 8px; border-radius:999px; border:1px solid var(--line-2); color:var(--ink-soft); white-space:nowrap}
+.lx-tag.grc{border-color:var(--lapis); color:var(--lapis)}
+.lx-perma{margin-left:auto; font-size:.74rem; color:var(--ink-faint); text-decoration:none; padding:0 4px}
+.lx-perma:hover{color:var(--gold-bright); text-decoration:underline}
+.lx-sub{display:grid; grid-template-columns:auto minmax(0,1fr); gap:2px 10px; margin:8px 0 0; scroll-margin-top:72px}
+.lx-sub.hit{background:var(--hi); border-radius:8px}
+.lx-sub .n{font-family:'Spectral',Georgia,serif; color:var(--gold); font-weight:600; min-width:1.2em; text-align:right}
+.lx-sub .bd{min-width:0}
+.lx-sub .meta{display:flex; flex-wrap:wrap; align-items:baseline; gap:2px 10px}
+.lx-dl{display:grid; grid-template-columns:max-content minmax(0,1fr); gap:1px 10px; margin:4px 0 0; font-size:.9rem; color:var(--ink)}
+.lx-dl dt{font-size:.66rem; letter-spacing:.08em; color:var(--ink-faint); padding-top:.25em}
+.lx-dl dd{margin:0; line-height:1.6}
+html[data-lang="en"] .lx-dl dd, html[data-lang="fr"] .lx-dl dd{font-family:'Spectral',Georgia,serif; font-size:1rem}
+.lx-none{font-size:.84rem; color:var(--ink-faint); margin:4px 0 0}
+.lx-usg{font-size:.8rem; color:var(--ink-soft); margin:4px 0 0}
+.lx-usg .k{color:var(--ink-faint)}
+.lx-links{display:flex; flex-wrap:wrap; gap:4px 16px; margin:8px 0 0; font-size:.78rem}
+.lx-links a{color:var(--lapis); text-underline-offset:4px}
+.lx-more{margin:18px 0 0; text-align:center}
+.lx-more button, .lx-reset{appearance:none; background:var(--panel-2); color:var(--ink); border:1px solid var(--line-2); border-radius:10px;
+ padding:7px 16px; font:inherit; font-size:.84rem; cursor:pointer}
+.lx-more button:hover, .lx-reset:hover{border-color:var(--gold)}
+.lx-empty{color:var(--ink-faint); padding:30px 0; text-align:center}
+.lx-lac{margin:34px 0 0; border:1px solid var(--line); border-radius:14px; background:var(--panel); padding:4px 16px}
+.lx-lac > summary{cursor:pointer; padding:10px 0; font-size:.9rem; color:var(--ink)}
+.lx-lac > summary small{color:var(--ink-faint); margin-left:.5em}
+.lx-lac p.note{font-size:.84rem; color:var(--ink-soft); line-height:1.8; margin:0 0 6px; max-width:74ch}
+.lx-err{color:var(--rose)}
+.lx-about h2{margin-top:2.6em}
+</style>
+<link rel="stylesheet" href="assets/cosmos.css">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/community.css">
+<script defer src="assets/cosmos.js"></script>
+<script defer src="assets/site.js"></script>
+<script defer src="assets/analytics.js"></script>
+<script defer src="assets/community-config.js"></script>
+<script defer src="assets/community.js"></script>
+</head>
+<body>
+<nav id="sitebar" class="sitebar sticky"></nav>
+
+<main class="page">
+  <div class="eyebrow">Coptic lexicon</div>
+  <h1><span class="l-ja jp">コプト語辞書</span><span class="l-en">Coptic lexicon</span><span class="l-fr">Lexique copte</span></h1>
+  <p class="lede">
+    <span class="l-ja">本サイトの本文が使っている辞書です。見出し語（レンマ）と品詞の組ごとに 1 項目で、日本語・英語・フランス語の語義を付けています。語義は語ごとの短い訳語で、文脈で確かめた訳ではありません。語義がまだ無い項目も多く、作業中のデータです。</span>
+    <span class="l-en">The lexicon used by the texts on this site. There is one entry for each pair of headword (lemma) and part of speech, with Japanese, English and French senses. Senses are short equivalents for the word, not translations checked against a context. Many entries have no sense yet: this is work in progress.</span>
+    <span class="l-fr">Le lexique utilisé par les textes de ce site. Chaque entrée correspond à un couple vedette (lemme) et partie du discours, avec des sens en japonais, en anglais et en français. Ce sont de brèves équivalences pour le mot, non des traductions vérifiées en contexte. Beaucoup d’entrées n’ont pas encore de sens : les données sont en cours d’élaboration.</span>
+  </p>
+
+  <!-- 全文書の検索（辞書ではなく本文を探す）。search.html を、全文テキストをすべて選んだ状態で開く -->
+  <form class="qbox" action="search.html" method="get" role="search" aria-label="全文書を検索 / Search all texts">
+    <input type="hidden" name="scope" value="all">
+    <input class="qbox-q" name="q" type="search" required autocomplete="off" spellcheck="false" data-ph-label
+      data-ph-ja="全文書の本文を検索（例: ⲛⲟⲩⲧⲉ）" data-ph-en="Search the texts of all documents (e.g. ⲛⲟⲩⲧⲉ)" data-ph-fr="Chercher dans tous les textes (p. ex. ⲛⲟⲩⲧⲉ)">
+    <span class="qbox-f">
+      <label><input type="radio" name="f" value="f" checked><span class="l-ja">語形</span><span class="l-en">Word form</span><span class="l-fr">Forme</span></label>
+      <label><input type="radio" name="f" value="l"><span class="l-ja">レンマ</span><span class="l-en">Lemma</span><span class="l-fr">Lemme</span></label>
+    </span>
+    <button type="submit"><span class="l-ja">本文を検索</span><span class="l-en">Search texts</span><span class="l-fr">Chercher</span></button>
+  </form>
+  <p class="qbox-note"><span class="l-ja">コーパス検索のページで、全文書（人の手で注釈した版と、全文テキストの暫定版・未注釈の文書）を対象に探します。全文テキストは初めに読み込むので、少し時間がかかります。</span><span class="l-en">Opens the corpus search over all texts (the hand-annotated editions and the draft and unannotated full texts). The full texts are loaded first, which takes a moment.</span><span class="l-fr">Ouvre la recherche dans tout le corpus (éditions annotées à la main et textes intégraux provisoires ou non annotés). Les textes intégraux sont d’abord chargés, ce qui prend un peu de temps.</span></p>
+
+  <section class="lx-tools" aria-label="辞書の絞り込み / Filter the lexicon">
+    <div class="lx-row">
+      <div class="lx-q"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="lq" type="search" autocomplete="off" spellcheck="false" data-ph-label
+          data-ph-ja="辞書を引く（見出し・日英仏の語義・品詞）" data-ph-en="Look up (headword, Japanese/English/French sense, part of speech)" data-ph-fr="Chercher (vedette, sens japonais/anglais/français, catégorie)"></div>
+      <label><span class="k"><span class="l-ja">一致</span><span class="l-en">Match</span><span class="l-fr">Correspondance</span></span>
+        <select id="lm"><option value="part"></option><option value="pre"></option></select></label>
+    </div>
+    <div class="lx-row">
+      <label><span class="k"><span class="l-ja">品詞</span><span class="l-en">Part of speech</span><span class="l-fr">Catégorie</span></span>
+        <select id="lpos"><option value=""></option></select></label>
+      <label><input type="checkbox" id="lgrc"><span class="l-ja">ギリシア語からの借用語だけ</span><span class="l-en">Greek loanwords only</span><span class="l-fr">Emprunts grecs seulement</span></label>
+      <label><input type="checkbox" id="lsense" checked><span class="l-ja">語義のある項目だけ</span><span class="l-en">Entries with a sense only</span><span class="l-fr">Entrées avec un sens seulement</span></label>
+    </div>
+    <nav class="lx-alpha" id="alpha" aria-label="字母の索引 / Alphabetical index"></nav>
+    <p class="lx-count" id="lcount" role="status"><span class="l-ja">読み込み中…</span><span class="l-en">Loading…</span><span class="l-fr">Chargement…</span></p>
+  </section>
+
+  <div class="lx-list" id="lxlist"></div>
+  <div class="lx-more" id="lxmore"></div>
+
+  <details class="lx-lac" id="lacBox" hidden>
+    <summary><span class="l-ja">欠損のある語形</span><span class="l-en">Forms with lacunae</span><span class="l-fr">Formes lacunaires</span><small id="lacN"></small></summary>
+    <p class="note"><span class="l-ja">見出しに欠損の記号（[ ] . …）を含む項目です。本文の欠損した語形がそのまま項目になったもので、辞書の見出しとしては整っていないため、上の一覧には出していません（消してはいません）。</span><span class="l-en">Entries whose headword contains lacuna signs ([ ] . …). They are damaged word forms of the texts that became entries as they stood; since they are not proper headwords they are kept out of the list above (but not deleted).</span><span class="l-fr">Entrées dont la vedette contient des signes de lacune ([ ] . …). Ce sont des formes endommagées des textes, devenues entrées telles quelles ; n’étant pas de vraies vedettes, elles ne figurent pas dans la liste ci-dessus (sans être supprimées).</span></p>
+    <div id="lacList"></div>
+  </details>
+
+  <section class="lx-about prose">
+    <h2 id="about"><span class="l-ja">この辞書について</span><span class="l-en">About this lexicon</span><span class="l-fr">À propos de ce lexique</span></h2>
+    <ul>
+      <li><span class="l-ja"><b>項目の決め方</b>：見出し語（レンマ）と品詞の組で 1 項目です。本文の各語（<code>&lt;w&gt;</code>）は、<code>@lemma</code> と <code>@type</code>（品詞）の組でこの辞書を引きます。同じ綴りで意味の違う語（同形異義語）は、番号を付けて 1 か所に並べています。</span><span class="l-en"><b>Entries</b>: one entry per pair of headword (lemma) and part of speech. Every word of the texts (<code>&lt;w&gt;</code>) looks up the lexicon by its <code>@lemma</code> and <code>@type</code> (part of speech). Homographs, words spelled alike with different meanings, are numbered and listed together.</span><span class="l-fr"><b>Entrées</b> : une entrée par couple vedette (lemme) et partie du discours. Chaque mot des textes (<code>&lt;w&gt;</code>) consulte le lexique par son <code>@lemma</code> et son <code>@type</code> (catégorie). Les homographes, mots de même graphie et de sens différents, sont numérotés et regroupés.</span></li>
+      <li><span class="l-ja"><b>借用語</b>：ギリシア語からの借用語は、辞書のデータで印を付けたもの（<code>xml:lang="grc"</code>）だけを示します。語形から推し量ってはいません。</span><span class="l-en"><b>Loanwords</b>: Greek loanwords are marked only where the data says so (<code>xml:lang="grc"</code>); nothing is inferred from the form of the word.</span><span class="l-fr"><b>Emprunts</b> : les emprunts grecs ne sont signalés que là où les données l’indiquent (<code>xml:lang="grc"</code>) ; rien n’est déduit de la forme du mot.</span></li>
+      <li><span class="l-ja"><b>品詞</b>：品詞の名前と略号の意味は〈はじめての方へ〉の品詞の一覧にあります。品詞の決まっていない項目には品詞を出していません。</span><span class="l-en"><b>Parts of speech</b>: the tags are explained in the list of parts of speech on the “Getting started” page. Entries without a part of speech show none.</span><span class="l-fr"><b>Catégories</b> : les étiquettes sont expliquées dans la liste des catégories de la page « Premiers pas ». Les entrées sans catégorie n’en affichent aucune.</span></li>
+      <li><span class="l-ja"><b>用例</b>：各項目の〈用例を検索〉は、コーパス検索でそのレンマを全文書から探します（全文テキストの暫定版は、自動で付けた注釈によるものです）。</span><span class="l-en"><b>Examples</b>: “Search for examples” looks for the lemma in all texts with the corpus search (in the draft full texts the lemmas come from the automatic annotation).</span><span class="l-fr"><b>Exemples</b> : « Chercher des exemples » cherche le lemme dans tous les textes avec la recherche du corpus (dans les textes intégraux provisoires, les lemmes viennent de l’annotation automatique).</span></li>
+      <li><span class="l-ja"><b>外部の辞書</b>：Coptic Dictionary Online（Coptic Scriptorium）の項目へのリンクは、対応を確かめたものだけに付けています。</span><span class="l-en"><b>External dictionary</b>: links to Coptic Dictionary Online (Coptic Scriptorium) are given only where the correspondence has been checked.</span><span class="l-fr"><b>Dictionnaire externe</b> : les liens vers le Coptic Dictionary Online (Coptic Scriptorium) ne figurent que là où la correspondance a été vérifiée.</span></li>
+      <li><span class="l-ja"><b>データとライセンス</b>：辞書の XML（<a href="data/lexicon.xml" download>data/lexicon.xml</a>、TEI P5）をダウンロードできます。語義は本プロジェクトによるもので、CC BY 4.0 で公開しています。直し方は <a href="https://github.com/icecocoasince2003-create/Nag-Hammadi-Library/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">CONTRIBUTING.md</a> にあります。</span><span class="l-en"><b>Data and licence</b>: download the lexicon as XML (<a href="data/lexicon.xml" download>data/lexicon.xml</a>, TEI P5). The senses are this project’s own work, released under CC BY 4.0. How to correct them is described in <a href="https://github.com/icecocoasince2003-create/Nag-Hammadi-Library/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">CONTRIBUTING.md</a>.</span><span class="l-fr"><b>Données et licence</b> : le lexique est téléchargeable en XML (<a href="data/lexicon.xml" download>data/lexicon.xml</a>, TEI P5). Les sens sont l’œuvre du projet, publiés sous CC BY 4.0. La manière de les corriger est décrite dans <a href="https://github.com/icecocoasince2003-create/Nag-Hammadi-Library/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">CONTRIBUTING.md</a>.</span></li>
+    </ul>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <span class="l-ja">語義・辞書: CC BY 4.0（Sheneset）</span><span class="l-en">Senses and lexicon: CC BY 4.0 (Sheneset)</span><span class="l-fr">Sens et lexique : CC BY 4.0 (Sheneset)</span>
+  · <a href="index.html"><span class="l-ja">HOME</span><span class="l-en">Home</span><span class="l-fr">Accueil</span></a>
+  · <a href="project.html"><span class="l-ja">プロジェクトについて</span><span class="l-en">About</span><span class="l-fr">À propos</span></a>
+</footer>
+
+<script>
+(function(){
+"use strict";
+const H = document.documentElement;
+const TEI = "http://www.tei-c.org/ns/1.0", XMLNS = "http://www.w3.org/XML/1998/namespace";
+const $ = s => document.querySelector(s);
+const UL = () => { const l = H.getAttribute("data-lang"); return l === "en" || l === "fr" ? l : "ja"; };
+const L3 = (ja, en, fr) => { const l = UL(); return l === "en" ? en : l === "fr" ? fr : ja; };
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt = n => Number(n).toLocaleString("en-US");
+const kids = (el, n) => Array.from(el.children).filter(c => c.localName === n && c.namespaceURI === TEI);
+const xid = el => el.getAttributeNS(XMLNS, "id") || "";
+const xlang = el => el.getAttributeNS(XMLNS, "lang") || "";
+/* 照合用: 上線などの合成記号を外し、大文字・小文字をそろえる（search.html の norm と同じ考え方） */
+const norm = s => (s || "").normalize("NFD").replace(/[̀-ͯ︠-︯⳯-⳱]/g, "").normalize("NFC").toLowerCase();
+/* 字母の順: ギリシア文字に由来する字（ギリシア文字の順）に続けて、デモティックに由来する字。search.html の ALPHA と同じ */
+const ALPHA = "ⲁⲃⲅⲇⲉⲋⲍⲏⲑⲓⲕⲗⲙⲛⲝⲟⲡⲣⲥⲧⲩⲫⲭⲯⲱϣϥϧϩϫϭϯ";
+const RANK = new Map([...ALPHA].map((c, i) => [c, i]));
+const sortKey = s => [...norm(s)].map(c => RANK.has(c) ? String.fromCharCode(0x4e00 + RANK.get(c))
+  : /[\[\]\.…‐\-\s]/.test(c) ? "" : String.fromCharCode(0x6000 + (c.codePointAt(0) % 0x1000))).join("");
+const LACUNA = /[\[\].…]/;                         // 見出しに欠損の記号を含む項目
+const LIMIT_STEP = 200;
+
+const S = {items: [], lac: [], pos: {}, letter: "", limit: LIMIT_STEP, total: 0, withSense: 0, hit: ""};
+
+/* 品詞の名前（data/pos_labels.json の tags。無いタグはそのまま出す） */
+const posLabel = p => { const e = S.pos[p]; return e ? (e[UL()] || e.en || p) : p; };
+
+/* ---------- 読み込み ---------- */
+async function getText(url){
+  const r = await fetch(url, {cache: "no-cache"});
+  if(!r.ok) throw new Error(url + " — HTTP " + r.status);
+  return r.text();
+}
+function senseOf(e){
+  const s = kids(e, "sense")[0]; if(!s) return null;
+  const out = {};
+  kids(s, "cit").forEach(c => { const q = kids(c, "quote")[0]; const t = q ? q.textContent.trim() : ""; if(t) out[xlang(c)] = t; });
+  return out;
+}
+function readEntry(e){
+  const orth = e.getElementsByTagNameNS(TEI, "orth")[0];
+  const pos = e.getElementsByTagNameNS(TEI, "pos")[0];
+  const usg = {}; kids(e, "usg").forEach(u => { usg[xlang(u)] = u.textContent.trim(); });
+  const cdo = kids(e, "ref").find(r => r.getAttribute("type") === "cdo");
+  return {id: xid(e), n: e.getAttribute("n") || "", hw: orth ? orth.textContent.trim() : "",
+    pos: pos ? pos.textContent.trim() : "", grc: xlang(e) === "grc", hasSense: kids(e, "sense").length > 0,
+    sense: senseOf(e), usg, cdo: cdo ? cdo.getAttribute("target") || "" : ""};
+}
+function parse(xml){
+  const div = Array.from(xml.getElementsByTagNameNS(TEI, "div")).find(d => d.getAttribute("type") === "lexicon");
+  if(!div) throw new Error("data/lexicon.xml — <div type=\"lexicon\"> がありません");
+  const items = [];
+  Array.from(div.children).forEach(c => {
+    if(c.namespaceURI !== TEI) return;
+    if(c.localName === "entry"){ const e = readEntry(c); items.push({id: e.id, hw: e.hw, hom: false, subs: [e]}); }
+    else if(c.localName === "superEntry"){
+      const subs = kids(c, "entry").map(readEntry);
+      const f = kids(c, "form")[0], o = f && f.getElementsByTagNameNS(TEI, "orth")[0];
+      items.push({id: xid(c), hw: o ? o.textContent.trim() : (subs[0] || {}).hw || "", hom: true, subs});
+    }
+  });
+  S.total = xml.getElementsByTagNameNS(TEI, "entry").length;
+  S.withSense = Array.from(xml.getElementsByTagNameNS(TEI, "entry")).filter(e => kids(e, "sense").length).length;
+  items.forEach(it => {
+    it.key = sortKey(it.hw);
+    it.letter = [...norm(it.hw)].find(c => RANK.has(c)) || "";
+    it.nhw = norm(it.hw);
+    it.subs.forEach(s => {
+      s.fields = ["ja", "en", "fr"].map(l => s.sense && s.sense[l] ? norm(s.sense[l]) : "").filter(Boolean);
+    });
+  });
+  items.sort((a, b) => a.key < b.key ? -1 : a.key > b.key ? 1 : a.hw < b.hw ? -1 : a.hw > b.hw ? 1 : 0);
+  S.lac = items.filter(it => LACUNA.test(it.hw));
+  S.items = items.filter(it => !LACUNA.test(it.hw));
+}
+
+/* ---------- 絞り込み ---------- */
+const SEP = /[,;，、・\/／()（）「」『』〜～\s]+/;
+/* 品詞は、タグ（N・VSTAT など）か、どれかの言語の品詞名（名詞・noun・nom など）と全体が一致したときだけ当てる
+   （部分一致にすると「art」で article・particle の全項目が出てしまう） */
+function posMatch(p, qn){
+  if(!p) return false;
+  if(p.toLowerCase() === qn) return true;
+  const e = S.pos[p];
+  return !!e && ["ja", "en", "fr"].some(l => e[l] && norm(e[l]) === qn);
+}
+function textMatch(it, s, qn, mode){
+  if(!qn) return true;
+  const test = v => mode === "pre" ? v.startsWith(qn) : v.includes(qn);
+  if(test(it.nhw) || posMatch(s.pos, qn)) return true;
+  return s.fields.some(f => test(f) || (mode === "pre" && f.split(SEP).some(p => p && p.startsWith(qn))));
+}
+function subPass(s, f){
+  if(f.sense && !s.hasSense) return false;
+  if(f.grc && !s.grc) return false;
+  if(f.pos === "-" ? s.pos !== "" : f.pos && s.pos !== f.pos) return false;
+  return true;
+}
+function filters(){
+  return {q: norm($("#lq").value.trim()), mode: $("#lm").value, pos: $("#lpos").value,
+    grc: $("#lgrc").checked, sense: $("#lsense").checked, letter: S.letter};
+}
+/* 表示する項目と、その中で表示する語義（同形異義語のまとまりでは、条件に合う番号だけを出す） */
+function visible(list, f){
+  const out = [];
+  list.forEach(it => {
+    if(f.letter && it.letter !== f.letter) return;
+    const subs = it.subs.filter(s => subPass(s, f) && textMatch(it, s, f.q, f.mode));
+    if(subs.length) out.push({it, subs});
+  });
+  return out;
+}
+
+/* ---------- 描画 ---------- */
+const exHref = hw => "search.html?" + new URLSearchParams({q: hw, m: "ex", f: "l", scope: "all"}).toString();
+function senseHTML(s){
+  const order = {ja: ["ja", "en", "fr"], en: ["en", "ja", "fr"], fr: ["fr", "en", "ja"]}[UL()];
+  const rows = s.sense ? order.filter(l => s.sense[l]).map(l => '<dt>' + l.toUpperCase() + '</dt><dd' + (l === "ja" ? ' lang="ja"' : ' lang="' + l + '"') + '>' + esc(s.sense[l]) + '</dd>') : [];
+  const u = s.usg[UL()] || s.usg.en || s.usg.ja || "";
+  return (rows.length ? '<dl class="lx-dl">' + rows.join("") + '</dl>'
+      : '<p class="lx-none">' + esc(L3("語義未記入", "No sense yet", "Sens non renseigné")) + '</p>') +
+    (u ? '<p class="lx-usg"><span class="k">' + esc(L3("用法", "Usage", "Usage")) + '</span> ' + esc(u) + '</p>' : "");
+}
+function metaHTML(s){
+  return (s.pos && s.pos !== "X" ? '<span class="lx-pos">' + esc(posLabel(s.pos)) + '<code>' + esc(s.pos) + '</code></span>' : "") +
+    (s.grc ? '<span class="lx-tag grc" title="xml:lang=&quot;grc&quot;">' + esc(L3("ギリシア語からの借用語", "Greek loanword", "emprunt grec")) + '</span>' : "");
+}
+function itemHTML(v){
+  const it = v.it, perma = '<a class="lx-perma" href="#' + esc(it.id) + '" title="' + esc(L3("この項目へのリンク", "Link to this entry", "Lien vers cette entrée")) + '">#' + esc(it.id) + '</a>';
+  const cdo = it.subs.filter(s => s.cdo);
+  const links = '<p class="lx-links"><a href="' + esc(exHref(it.hw)) + '">' + esc(L3("用例を検索（全文書）", "Search for examples (all texts)", "Chercher des exemples (tous les textes)")) + ' →</a>' +
+    (cdo.length ? cdo.map(s => '<a href="' + esc(s.cdo) + '" target="_blank" rel="noopener">Coptic Dictionary Online' + (it.hom ? " (" + esc(s.n) + ")" : "") + ' ↗</a>').join("") : "") + '</p>';
+  if(!it.hom){
+    const s = v.subs[0];
+    return '<article class="lx-e" id="' + esc(it.id) + '"><div class="lx-h"><span class="lx-hw" lang="cop">' + esc(it.hw) + '</span>' + metaHTML(s) + perma + '</div>' +
+      senseHTML(s) + links + '</article>';
+  }
+  return '<article class="lx-e" id="' + esc(it.id) + '"><div class="lx-h"><span class="lx-hw" lang="cop">' + esc(it.hw) + '</span>' +
+    '<span class="lx-tag">' + esc(L3("同形異義語 " + it.subs.length + " 語", it.subs.length + " homographs", it.subs.length + " homographes")) + '</span>' + perma + '</div>' +
+    v.subs.map(s => '<div class="lx-sub" id="' + esc(s.id) + '"><span class="n">' + esc(s.n) + '</span><div class="bd"><div class="meta">' + metaHTML(s) + '</div>' + senseHTML(s) + '</div></div>').join("") +
+    links + '</article>';
+}
+function renderAlpha(){
+  const have = new Map();
+  S.items.forEach(it => { if(it.letter) have.set(it.letter, (have.get(it.letter) || 0) + 1); });
+  const letters = [...ALPHA].filter(c => have.has(c));
+  $("#alpha").innerHTML = '<button type="button" class="all" data-letter="" aria-pressed="' + (!S.letter) + '">' + esc(L3("すべて", "All", "Tout")) + '</button>' +
+    letters.map(c => '<button type="button" data-letter="' + c + '" aria-pressed="' + (S.letter === c) + '" title="' + esc(c + " · " + fmt(have.get(c))) + '" lang="cop">' + c + '</button>').join("");
+}
+function renderPosOptions(){
+  const sel = $("#lpos"), cur = sel.value;
+  const cnt = new Map(); let none = 0;
+  S.items.concat(S.lac).forEach(it => it.subs.forEach(s => { if(s.pos) cnt.set(s.pos, (cnt.get(s.pos) || 0) + 1); else none++; }));
+  const order = Object.keys(S.pos);
+  const tags = [...cnt.keys()].sort((a, b) => (order.indexOf(a) < 0 ? 999 : order.indexOf(a)) - (order.indexOf(b) < 0 ? 999 : order.indexOf(b)) || a.localeCompare(b));
+  sel.innerHTML = '<option value="">' + esc(L3("すべて", "All", "Toutes")) + '</option>' +
+    tags.map(p => '<option value="' + esc(p) + '">' + esc(posLabel(p) + (S.pos[p] ? " (" + p + ")" : "")) + ' · ' + fmt(cnt.get(p)) + '</option>').join("") +
+    (none ? '<option value="-">' + esc(L3("品詞なし", "No part of speech", "Sans catégorie")) + ' · ' + fmt(none) + '</option>' : "");
+  sel.value = cur;
+}
+function renderModes(){
+  const sel = $("#lm");
+  sel.options[0].textContent = L3("部分一致", "contains", "contient");
+  sel.options[1].textContent = L3("前方一致", "starts with", "commence par");
+}
+function render(){
+  const f = filters(), v = visible(S.items, f);
+  const shown = v.slice(0, S.limit), nEntries = v.reduce((a, x) => a + x.subs.length, 0);
+  $("#lxlist").innerHTML = shown.length ? shown.map(itemHTML).join("")
+    : '<p class="lx-empty">' + esc(L3("当てはまる項目がありません。", "No matching entry.", "Aucune entrée ne correspond.")) +
+      (f.sense ? '<br><small>' + esc(L3("〈語義のある項目だけ〉を外すと、語義のまだ無い項目も探せます。", "Untick “Entries with a sense only” to include entries without a sense.", "Décochez « Entrées avec un sens seulement » pour inclure les entrées sans sens.")) + '</small>' : "") + '</p>';
+  const left = v.length - shown.length;
+  $("#lxmore").innerHTML = left > 0 ? '<button type="button" id="moreBtn">' + esc(L3("さらに表示（残り " + fmt(left) + " 見出し）", "Show more (" + fmt(left) + " more headwords)", "Afficher plus (" + fmt(left) + " vedettes restantes)")) + '</button>' : "";
+  $("#lcount").innerHTML = L3(
+    '全 <b>' + fmt(S.total) + '</b> 項目 · 語義のある項目 <b>' + fmt(S.withSense) + '</b> · 表示中 <b>' + fmt(nEntries) + '</b> 項目（' + fmt(v.length) + ' 見出し）' +
+      (S.lac.length ? ' · 欠損のある語形 ' + fmt(S.lac.reduce((a, it) => a + it.subs.length, 0)) + ' 項目は下に別にまとめています' : ""),
+    '<b>' + fmt(S.total) + '</b> entries · <b>' + fmt(S.withSense) + '</b> with a sense · showing <b>' + fmt(nEntries) + '</b> entries (' + fmt(v.length) + ' headwords)' +
+      (S.lac.length ? ' · the ' + fmt(S.lac.reduce((a, it) => a + it.subs.length, 0)) + ' forms with lacunae are listed separately below' : ""),
+    '<b>' + fmt(S.total) + '</b> entrées · <b>' + fmt(S.withSense) + '</b> avec un sens · <b>' + fmt(nEntries) + '</b> affichées (' + fmt(v.length) + ' vedettes)' +
+      (S.lac.length ? ' · les ' + fmt(S.lac.reduce((a, it) => a + it.subs.length, 0)) + ' formes lacunaires sont regroupées plus bas' : ""));
+  $("#lacN").textContent = S.lac.length ? " " + fmt(S.lac.reduce((a, it) => a + it.subs.length, 0)) : "";
+  $("#lacBox").hidden = !S.lac.length;
+  $("#lacList").innerHTML = S.lac.map(it => itemHTML({it, subs: it.subs})).join("");
+  markHit();
+}
+function markHit(){
+  document.querySelectorAll(".lx-e.hit, .lx-sub.hit").forEach(x => x.classList.remove("hit"));
+  if(!S.hit) return;
+  const el = document.getElementById(S.hit);
+  if(el) el.classList.add("hit");
+}
+
+/* ---------- 固定リンク（lexicon.html#lex-0123）----------
+   その項目が絞り込みで隠れていても見えるように、条件を解いてから（字母はその項目の字に）移る */
+function findById(id){
+  const inList = list => list.find(it => it.id === id || it.subs.some(s => s.id === id));
+  const it = inList(S.items); if(it) return {it, lac: false};
+  const l = inList(S.lac); if(l) return {it: l, lac: true};
+  return null;
+}
+function gotoHash(){
+  const id = decodeURIComponent(location.hash.slice(1));
+  S.hit = "";
+  if(!/^lex-/.test(id)){ markHit(); return; }
+  const r = findById(id); if(!r){ markHit(); return; }
+  S.hit = id;
+  if(r.lac){ $("#lacBox").open = true; }
+  else {
+    $("#lq").value = ""; $("#lpos").value = ""; $("#lgrc").checked = false;
+    const sub = r.it.subs.find(s => s.id === id);
+    if(sub ? !sub.hasSense : !r.it.subs.some(s => s.hasSense)) $("#lsense").checked = false;
+    S.letter = r.it.letter;
+    const idx = visible(S.items, filters()).findIndex(x => x.it === r.it);
+    S.limit = Math.max(LIMIT_STEP, Math.ceil((idx + 1) / LIMIT_STEP) * LIMIT_STEP);
+    renderAlpha();
+  }
+  render();
+  const el = document.getElementById(id);
+  if(el) el.scrollIntoView({block: "start"});
+}
+
+/* ---------- 操作 ---------- */
+let qt = null;
+$("#lq").addEventListener("input", () => { clearTimeout(qt); qt = setTimeout(() => { S.limit = LIMIT_STEP; render(); }, 120); });
+["#lm", "#lpos", "#lgrc", "#lsense"].forEach(s => $(s).addEventListener("change", () => { S.limit = LIMIT_STEP; render(); }));
+$("#alpha").addEventListener("click", e => {
+  const b = e.target.closest("button[data-letter]"); if(!b) return;
+  S.letter = S.letter === b.dataset.letter ? "" : b.dataset.letter;
+  S.limit = LIMIT_STEP; renderAlpha(); render();
+});
+$("#lxmore").addEventListener("click", e => { if(e.target.closest("#moreBtn")){ S.limit += LIMIT_STEP; render(); } });
+window.addEventListener("hashchange", gotoHash);
+document.addEventListener("nhc:lang", () => { if(!S.items.length) return; renderModes(); renderAlpha(); renderPosOptions(); render(); });
+
+(async () => {
+  renderModes();
+  try{
+    const [xmlText, labels] = await Promise.all([getText("data/lexicon.xml"),
+      getText("data/pos_labels.json").then(t => JSON.parse(t)).catch(() => null)]);
+    if(labels && Array.isArray(labels.tags)) labels.tags.forEach(t => { S.pos[t.tag] = {ja: t.ja, en: t.en, fr: t.fr}; });
+    const xml = new DOMParser().parseFromString(xmlText, "application/xml");
+    if(xml.getElementsByTagName("parsererror").length) throw new Error("data/lexicon.xml — XML");
+    parse(xml);
+    const q = new URLSearchParams(location.search).get("q");
+    if(q) $("#lq").value = q;
+    renderAlpha(); renderPosOptions();
+    if(/^#lex-/.test(location.hash)) gotoHash(); else render();
+  }catch(e){
+    console.error(e);
+    $("#lcount").innerHTML = '<span class="lx-err">' + esc(L3("辞書を読み込めませんでした。", "Could not load the lexicon.", "Impossible de charger le lexique.")) + '</span> <small>' + esc(e.message) + '</small>';
+  }
+})();
+})();
+</script>
+</body>
+</html>
