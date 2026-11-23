@@ -5,6 +5,18 @@ Usage: python tei_boundgroup_convert.py --input-dir /path/to/xml --output-dir /p
 The training references must be present in input-dir: eugnostos_tei.xml, republic_tei.xml.
 The source XML files are selected by filenames beginning with NN-N_.
 
+--ref PATH (repeatable; added 2026-11-23 for the evaluation in ../evaluation/):
+use only the given annotated TEI file(s) as references, in the order given,
+instead of input-dir/eugnostos_tei.xml and input-dir/republic_tei.xml. They are
+the training data of the bound-group model and the source of the attested
+morpheme splits; the <phr>/<w> of III,3 are copied only from a reference named
+eugnostos_tei.xml, so none are copied when it is not among them. Example (held-out
+check of VI,5): --ref data/eugnostos_tei.xml, so that republic_tei.xml is not seen.
+Without --ref the behaviour and the output are byte for byte the same as before.
+The model is deterministic: LogisticRegression with the lbfgs solver (the
+scikit-learn default, now named explicitly) does not use random numbers;
+random_state=12 is kept from the original.
+
 No dictionary, lemma, POS or morphological correctness is claimed for inferred spans.
 Original <w> nodes and attributes are left intact outside the exact-reference matches.
 """
@@ -26,10 +38,17 @@ def plain_s(s):return ''.join(surface(w) for w in s.xpath('.//tei:w', namespaces
 STOP = {'ⲁⲩⲱ','ϫⲉ','ⲇⲉ','ⲅⲁⲣ','ⲁⲗⲗⲁ','ⲏ','ⲙⲉⲛ','ⲟⲩⲛ','ⲕⲁⲓ','ⲟⲩⲇⲉ','ⲧⲟⲧⲉ','ⲉⲡⲉⲓⲇⲏ','ⲉⲡⲓⲇⲏ','ϭⲉ'}
 SHORT = {'ⲁ','ⲉ','ⲛ','ⲙ','ⲡ','ⲧ','ⲟⲩ','ⲥ','ϥ','ⲩ','ⲕ','ⲛⲉ','ⲧⲉ','ⲙⲡ','ⲛⲧ','ⲛⲁ','ⲛϭⲓ','ⲉⲧ','ⲛⲧⲁ','ⲁⲩⲱ','ⲧⲛ','ⲉⲣⲟ','ⲙⲙⲟ','ⲙⲙⲉ'}
 
-def train_refs(folder):
+DEFAULT_REFS = ('eugnostos_tei.xml','republic_tei.xml')
+
+def ref_files(folder,ref_paths=None):
+    """The reference files: those given with --ref, else the two defaults in folder."""
+    return [Path(p) for p in ref_paths] if ref_paths else [folder/f for f in DEFAULT_REFS]
+
+def train_refs(folder,ref_paths=None):
     refs=[]; counts=defaultdict(Counter); groups=Counter()
-    for f in ('eugnostos_tei.xml','republic_tei.xml'):
-        root=ET.parse(str(folder/f))
+    for path in ref_files(folder,ref_paths):
+        f=path.name
+        root=ET.parse(str(path))
         for s in root.xpath('//tei:body//tei:s', namespaces=N):
             if not s.xpath('./tei:phr', namespaces=N): continue
             words=[];ends=[]
@@ -96,7 +115,7 @@ def make_model(refs,cats,groups):
         for i in range(len(words)-1):
             xx.append(features(words,i,cats,groups)); yy.append(int(ends[i]))
     dv=DictVectorizer(sparse=True)
-    mdl=LogisticRegression(max_iter=400,C=0.75, random_state=12)
+    mdl=LogisticRegression(max_iter=400,C=0.75, random_state=12, solver='lbfgs')
     mdl.fit(dv.fit_transform(xx),yy)
     return dv,mdl
 
@@ -105,8 +124,10 @@ def predict_words(words,vec,mdl,cats,groups):
     ff=[features(words,i,cats,groups) for i in range(len(words)-1)]
     return list(mdl.predict_proba(vec.transform(ff))[:,1])
 
-def reference_map(folder):
-    root=ET.parse(str(folder/'eugnostos_tei.xml'))
+def reference_map(folder,ref_paths=None):
+    eug=[p for p in ref_files(folder,ref_paths) if p.name=='eugnostos_tei.xml']
+    if not eug:return {}
+    root=ET.parse(str(eug[0]))
     ss=root.xpath('//tei:body//tei:s',namespaces=N)
     return {s_id(s):s for s in ss if s.xpath('./tei:phr',namespaces=N)}
 
@@ -190,7 +211,14 @@ def group_s(s,vec,mdl,cats,groups,review,doc,threshold=0.5):
             n_groups+=1;groupsizes.append(len(els)-start)
     return n_groups,uncertain,max(groupsizes or [0])
 
-def add_doc_notes(root,file):
+def add_doc_notes(root,file,ref_names=DEFAULT_REFS):
+    # ref_names: basenames of the references (--ref); the default gives the original wording.
+    ref_names=tuple(ref_names)
+    copy_ja=('eugnostos_tei.xml の本文が文字単位で一致する既注釈箇所だけ参考の <phr>/<w> を転用した。'
+             if 'eugnostos_tei.xml' in ref_names else '')
+    learn_ja=('それ以外は ' if copy_ja else '')+'・'.join(ref_names)+' の既注釈例から学習した分類器で、元の <w> 間にグループ境界を推定した。'
+    refs_en=('the two references' if ref_names==DEFAULT_REFS else
+             ('the references ' if len(ref_names)>1 else 'the reference ')+', '.join(ref_names))
     enc=root.find('./'+q('teiHeader')+'/'+q('encodingDesc'))
     if enc is None:
         header=root.find('./'+q('teiHeader'))
@@ -201,8 +229,7 @@ def add_doc_notes(root,file):
     if seg is None:seg=ET.SubElement(decl,q('segmentation'))
     p=ET.SubElement(seg,q('p'));p.set(f'{{{XML}}}lang','ja')
     p.text=('2026-11-18 暫定 bound-group 分析：<phr> はコプト語の正書法上のまとまり、<w> は形態素単位を表す。'
-            'eugnostos_tei.xml の本文が文字単位で一致する既注釈箇所だけ参考の <phr>/<w> を転用した。'
-            'それ以外は eugnostos_tei.xml・republic_tei.xml の既注釈例から学習した分類器で、元の <w> 間にグループ境界を推定した。'
+            +copy_ja+learn_ja+
             '元の <w> の切り方は原則維持し、元資料に含まれる誤分割・未分割を全面的に修正したものではない。'
             '人手による校正前の試案であり、分割結果を言語学上の確定事項と解釈しない。')
     # Mark methods as text-only: XML mentions of angle bracket in p.text escaped by serializer.
@@ -217,10 +244,10 @@ def add_doc_notes(root,file):
             title.text=re.sub(r' — segmented Coptic text without linguistic annotation \(working file\)$',
                ' — provisional bound-group and morpheme TEI segmentation (for review)',title.text or '')
     p2=ET.SubElement(seg,q('p'));p2.set(f'{{{XML}}}lang','en')
-    p2.text=('A small inventory of unambiguous surface forms is further split into morphemes based on the two references, but most source w segmentation remains unchanged. No broad morphological reanalysis or editorial collation has been performed; grouping is provisional.')
+    p2.text=('A small inventory of unambiguous surface forms is further split into morphemes based on '+refs_en+', but most source w segmentation remains unchanged. No broad morphological reanalysis or editorial collation has been performed; grouping is provisional.')
     # No lemmas/POS guessed where unavailable.
 
-def convert(rootfile,outfile,ref_map,vec,mdl,cats,groups,review,morph_splits):
+def convert(rootfile,outfile,ref_map,vec,mdl,cats,groups,review,morph_splits,ref_names=DEFAULT_REFS):
     parser=ET.XMLParser(remove_blank_text=True,resolve_entities=False,no_network=True)
     root=ET.parse(str(rootfile),parser)
     all_s=root.xpath('//tei:body//tei:s',namespaces=N)
@@ -237,7 +264,7 @@ def convert(rootfile,outfile,ref_map,vec,mdl,cats,groups,review,morph_splits):
         attested_splits+=split_attested_w(s,morph_splits)
         a,b,c=group_s(s,vec,mdl,cats,groups,review,rootfile.name)
         guess+=a;uncertain+=b;maxlen=max(maxlen,c)
-    add_doc_notes(root.getroot(),rootfile.name)
+    add_doc_notes(root.getroot(),rootfile.name,ref_names)
     # Account for the reference tokens whose morphological division differs from source input.
     measures=root.xpath('./tei:teiHeader/tei:fileDesc/tei:extent/tei:measure[@unit="token"]',namespaces=N)
     if not measures:measures=root.xpath('./teiHeader/fileDesc/extent/measure[@unit="token"]')
@@ -264,17 +291,22 @@ def main():
     ap=argparse.ArgumentParser()
     ap.add_argument('--input-dir',type=Path,default=Path('/mnt/data'))
     ap.add_argument('--output-dir',type=Path,default=Path('/mnt/data/tei_boundgroups_draft'))
+    ap.add_argument('--ref',action='append',type=Path,metavar='PATH',
+                    help='reference TEI file (repeatable); default: eugnostos_tei.xml and republic_tei.xml in --input-dir')
     args=ap.parse_args()
+    for p in args.ref or []:
+        if not p.is_file():ap.error(f'--ref: no such file: {p}')
+    ref_names=tuple(p.name for p in ref_files(args.input_dir,args.ref))
     args.output_dir.mkdir(parents=True,exist_ok=True)
-    refs,cats,groups=train_refs(args.input_dir)
+    refs,cats,groups=train_refs(args.input_dir,args.ref)
     vec,mdl=make_model(refs,cats,groups)
-    refmap=reference_map(args.input_dir)
+    refmap=reference_map(args.input_dir,args.ref)
     morph_splits=exact_splits(groups)
     reviews=[]; rows=[]
     sources=sorted(f for f in args.input_dir.glob('*.xml') if re.match(r'^\d\d-\d[a-z]?_',f.name))
     for fn in sources:
         outf=args.output_dir/fn.name
-        info=convert(fn,outf,refmap,vec,mdl,cats,groups,reviews,morph_splits)
+        info=convert(fn,outf,refmap,vec,mdl,cats,groups,reviews,morph_splits,ref_names)
         print(json.dumps(info,ensure_ascii=False))
         rows.append(info)
     with (args.output_dir/'conversion_report.tsv').open('w',encoding='utf-8',newline='') as f:
@@ -298,7 +330,9 @@ def main():
 使い方：本フォルダにあるXMLを必要に応じて修正・校訂してください。元ファイルは上書きしていません。
 再生成：tei_boundgroup_convert.py を入力 XML ファイル群と参考2件のあるディレクトリで実行してください。
   python tei_boundgroup_convert.py --input-dir ./input --output-dir ./output
-''' ,encoding='utf-8')
+'''+('' if not args.ref else
+     '\n参考（--ref）：この出力の学習に使った参考は '+'、'.join(str(p) for p in args.ref)+' だけです。'
+     '上の説明の参考2件（eugnostos_tei.xml、republic_tei.xml）は、この出力ではこれに置き換えて読んでください。\n'),encoding='utf-8')
     print('TOTAL',len(rows),'documents',sum(int(z['segments']) for z in rows),'segments',sum(int(z['output_w']) for z in rows),'w',sum(int(z['bound_groups']) for z in rows),'phr',len(reviews),'review flagged')
 
 if __name__=='__main__':main()

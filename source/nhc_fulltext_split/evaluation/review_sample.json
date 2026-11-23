@@ -1,0 +1,336 @@
+{
+ "description": "項目 13 の抜き取り表（自動注釈の 39 文書から、方言 × cert の 6 層に分けて無作為に抜き出した形態素）。sample_review.py が作り、score_review.py が読む。",
+ "script": "source/nhc_fulltext_split/evaluation/sample_review.py",
+ "seed": 20261123,
+ "selection": "random.Random(seed); for each stratum in the order below, sample(range(population), sample) over the stratum in file-name and document order; then shuffle(rows) with the same generator",
+ "python": "3.9.6",
+ "total": 400,
+ "context_groups_each_side": 4,
+ "allocation": "equal: total // 6 per stratum, one more for the (total % 6) largest strata",
+ "population": "every <w> with @cert in the files of tei/ whose <w> carry resp=\"#morph-auto\" or \"#morph-reference\"",
+ "strata": [
+  {
+   "label": "サヒド・high",
+   "dialect": "サヒド",
+   "cert": "high",
+   "population": 5222,
+   "sample": 66
+  },
+  {
+   "label": "サヒド・medium",
+   "dialect": "サヒド",
+   "cert": "medium",
+   "population": 89404,
+   "sample": 67
+  },
+  {
+   "label": "サヒド・low",
+   "dialect": "サヒド",
+   "cert": "low",
+   "population": 36721,
+   "sample": 67
+  },
+  {
+   "label": "リコポリス・high",
+   "dialect": "リコポリス",
+   "cert": "high",
+   "population": 1473,
+   "sample": 66
+  },
+  {
+   "label": "リコポリス・medium",
+   "dialect": "リコポリス",
+   "cert": "medium",
+   "population": 30245,
+   "sample": 67
+  },
+  {
+   "label": "リコポリス・low",
+   "dialect": "リコポリス",
+   "cert": "low",
+   "population": 17883,
+   "sample": 67
+  }
+ ],
+ "population_total": 180948,
+ "documents": [
+  {
+   "file": "01-2_apocryphon-of-james.xml",
+   "siglum": "I,2",
+   "dialect": "リコポリス",
+   "w_with_cert": 4221,
+   "sha256": "7faae7b4dc4a822b21d96fd98c9c15c208a218d65f2f3ca35075c520aa577a17"
+  },
+  {
+   "file": "01-3_gospel-of-truth.xml",
+   "siglum": "I,3",
+   "dialect": "リコポリス",
+   "w_with_cert": 6844,
+   "sha256": "1d004741d83fe6c0c22be182e91ff9bdbc4390ce87a78f9a1afb0c7c66820dbc"
+  },
+  {
+   "file": "01-4_treatise-on-the-resurrection.xml",
+   "siglum": "I,4",
+   "dialect": "リコポリス",
+   "w_with_cert": 1784,
+   "sha256": "92100c5bcd6fde9c5d3185071622760235014557f40349edc9942d04a86b3465"
+  },
+  {
+   "file": "01-5_tripartite-tractate.xml",
+   "siglum": "I,5",
+   "dialect": "リコポリス",
+   "w_with_cert": 24299,
+   "sha256": "cfcf9b559a781ea999e7d1fc6549e22785a50428143eeef4d0c93cdbfc253fb7"
+  },
+  {
+   "file": "02-1_apocryphon-of-john.xml",
+   "siglum": "II,1",
+   "dialect": "サヒド",
+   "w_with_cert": 10576,
+   "sha256": "ace82dbf51a9d0d0313275b0bfc4a6cca992d6fb3056562a2d33b67be3915170"
+  },
+  {
+   "file": "02-2_gospel-of-thomas.xml",
+   "siglum": "II,2",
+   "dialect": "サヒド",
+   "w_with_cert": 6583,
+   "sha256": "2010e28ae2f6af222a176b0cf1ae03e611124511c870e08db897c323dabe783f"
+  },
+  {
+   "file": "02-3_gospel-of-philip.xml",
+   "siglum": "II,3",
+   "dialect": "サヒド",
+   "w_with_cert": 11258,
+   "sha256": "88968e79801621c5c8d039607eb59f029db8636671560365b0da890c57d80150"
+  },
+  {
+   "file": "02-4_hypostasis-of-the-archons.xml",
+   "siglum": "II,4",
+   "dialect": "サヒド",
+   "w_with_cert": 3759,
+   "sha256": "bcdf9ac10ac264cf9ac32a8a5243736b3696bcc46ef5a2c5ad9674415d29fed7"
+  },
+  {
+   "file": "02-5_on-the-origin-of-the-world.xml",
+   "siglum": "II,5",
+   "dialect": "サヒド",
+   "w_with_cert": 9896,
+   "sha256": "d3987aa5aa54d5a872df64535401796aefe3b190b26f2bd68d93ee768776c490"
+  },
+  {
+   "file": "02-6_exegesis-on-the-soul.xml",
+   "siglum": "II,6",
+   "dialect": "サヒド",
+   "w_with_cert": 3423,
+   "sha256": "9686cde7d8115ca1ba205332bebe714aa772c253d001f841b1f07b1b5e45a4f4"
+  },
+  {
+   "file": "02-7_book-of-thomas-the-contender.xml",
+   "siglum": "II,7",
+   "dialect": "サヒド",
+   "w_with_cert": 3701,
+   "sha256": "1d4f3e75e4e98cb03656ef9a5b0068dfc217b132283136f9d3e52ff047c14c4b"
+  },
+  {
+   "file": "03-1_apocryphon-of-john.xml",
+   "siglum": "III,1",
+   "dialect": "サヒド",
+   "w_with_cert": 6884,
+   "sha256": "3080bd4311dd5dccfd3a59f48aa35fd033be7f973feab6ebe5d6887299e10912"
+  },
+  {
+   "file": "03-2_gospel-of-the-egyptians.xml",
+   "siglum": "III,2",
+   "dialect": "サヒド",
+   "w_with_cert": 4859,
+   "sha256": "dc7b503e5947c8fcbcd3f2ad487616a145d7978c6b7a4dc57ba57b932c11461e"
+  },
+  {
+   "file": "03-3_eugnostos.xml",
+   "siglum": "III,3",
+   "dialect": "サヒド",
+   "w_with_cert": 3184,
+   "sha256": "3e8e5613578ef6012c1fdc46e438772a14d0af49c5d97824fcea19c333ece240"
+  },
+  {
+   "file": "03-4_sophia-of-jesus-christ.xml",
+   "siglum": "III,4",
+   "dialect": "サヒド",
+   "w_with_cert": 4313,
+   "sha256": "cd8e2c941fb3d84c09aa021db636df490fd94ae5a9a6e991ed3a25cf945ac700"
+  },
+  {
+   "file": "03-5_dialogue-of-the-savior.xml",
+   "siglum": "III,5",
+   "dialect": "サヒド",
+   "w_with_cert": 4458,
+   "sha256": "6278126fa5567faa60c9a3a08a0a15703482b753c2257071950c4d532f348bd2"
+  },
+  {
+   "file": "04-1_apocryphon-of-john.xml",
+   "siglum": "IV,1",
+   "dialect": "サヒド",
+   "w_with_cert": 8771,
+   "sha256": "b8060a629371291d251b1fb9c9442a040cd4e8a99c14d640f47de3dd04331172"
+  },
+  {
+   "file": "07-4_teachings-of-silvanus.xml",
+   "siglum": "VII,4",
+   "dialect": "サヒド",
+   "w_with_cert": 7977,
+   "sha256": "ca01fcd5867da59921c58f8b8f66f7edefa9d8c09a490409b7db703bf6bf88ee"
+  },
+  {
+   "file": "07-5_three-steles-of-seth.xml",
+   "siglum": "VII,5",
+   "dialect": "サヒド",
+   "w_with_cert": 2119,
+   "sha256": "ef741a6af55a9cc61c1e0c05d73ac887f7e8c2104601c4844a05c6aef44395ee"
+  },
+  {
+   "file": "08-1_zostrianos.xml",
+   "siglum": "VIII,1",
+   "dialect": "サヒド",
+   "w_with_cert": 15907,
+   "sha256": "fff0131909e2d96891c8858cdd864fbd8b6f7ebb55492dec54d2be209bbc4660"
+  },
+  {
+   "file": "08-2_letter-of-peter-to-philip.xml",
+   "siglum": "VIII,2",
+   "dialect": "サヒド",
+   "w_with_cert": 1842,
+   "sha256": "c5903efd4b169f5f3a52b93350de453069d69e1cf14757e061b6fe0abee9d58b"
+  },
+  {
+   "file": "09-1_melchizedek.xml",
+   "siglum": "IX,1",
+   "dialect": "サヒド",
+   "w_with_cert": 2202,
+   "sha256": "32444aa3c803f566c878f544bb3251214e7ed4f6d007162ea472f857e6739f01"
+  },
+  {
+   "file": "09-2_thought-of-norea.xml",
+   "siglum": "IX,2",
+   "dialect": "サヒド",
+   "w_with_cert": 331,
+   "sha256": "7aa1678840ba5181502b18967cdb206642e78ae502bca00d49a095c072ad5806"
+  },
+  {
+   "file": "09-3_testimony-of-truth.xml",
+   "siglum": "IX,3",
+   "dialect": "サヒド",
+   "w_with_cert": 5281,
+   "sha256": "3bc6dde6793e057d2e984bbcdb00e300001bc7abb35c159f338582603c82752f"
+  },
+  {
+   "file": "10-1_marsanes.xml",
+   "siglum": "X,1",
+   "dialect": "リコポリス",
+   "w_with_cert": 4694,
+   "sha256": "c2a64f2a86af02c7d3d2b4200af9354d6ef3f0eee1201e20b7a5e6ddedfb629f"
+  },
+  {
+   "file": "11-1_interpretation-of-knowledge.xml",
+   "siglum": "XI,1",
+   "dialect": "リコポリス",
+   "w_with_cert": 4104,
+   "sha256": "34a47b32d039dbe2e83f1e94cb0a023539fcdcb437949662f4662d0bb7b776b8"
+  },
+  {
+   "file": "11-2_valentinian-exposition.xml",
+   "siglum": "XI,2",
+   "dialect": "リコポリス",
+   "w_with_cert": 2885,
+   "sha256": "34813fa6f0bd82876cc859cb996e07b1820db9904c9bfbe480a944636415e548"
+  },
+  {
+   "file": "11-2a_on-the-anointing.xml",
+   "siglum": "XI,2a",
+   "dialect": "リコポリス",
+   "w_with_cert": 135,
+   "sha256": "92a95730da1b17ad275a3c8ccb799975fbde3c4cc40858071475b094d52d5681"
+  },
+  {
+   "file": "11-2b_on-baptism-a.xml",
+   "siglum": "XI,2b",
+   "dialect": "リコポリス",
+   "w_with_cert": 229,
+   "sha256": "cb854b8e0f385be28574bb082e6a73752271256a6adac8c098e1d79f199dfc8f"
+  },
+  {
+   "file": "11-2c_on-baptism-b.xml",
+   "siglum": "XI,2c",
+   "dialect": "リコポリス",
+   "w_with_cert": 224,
+   "sha256": "27d8d7e9c41295d3100007c195db66a50297370c16e73404245d5745cf6f557e"
+  },
+  {
+   "file": "11-2d_on-the-eucharist-a.xml",
+   "siglum": "XI,2d",
+   "dialect": "リコポリス",
+   "w_with_cert": 95,
+   "sha256": "493fcf6c9e0b33f65c3b3aa37a0338fbc6039400b740175b2b8cfb0bec49068b"
+  },
+  {
+   "file": "11-2e_on-the-eucharist-b.xml",
+   "siglum": "XI,2e",
+   "dialect": "リコポリス",
+   "w_with_cert": 87,
+   "sha256": "5d4b27a66de6fc144901d15eef0332fe7230583393eb1b13104ef97461131a30"
+  },
+  {
+   "file": "11-3_allogenes.xml",
+   "siglum": "XI,3",
+   "dialect": "サヒド",
+   "w_with_cert": 5104,
+   "sha256": "9e705cb9697a95aa7f1195fe815a41cbc5ebb9265ef73b503ee85fe0eb1773a7"
+  },
+  {
+   "file": "11-4_hypsiphrone.xml",
+   "siglum": "XI,4",
+   "dialect": "サヒド",
+   "w_with_cert": 508,
+   "sha256": "1e3b14e122bcb1d2ea8d2ddd9702e392bfab75677e0e88ae30a663bf42f884fe"
+  },
+  {
+   "file": "12-1_sentences-of-sextus.xml",
+   "siglum": "XII,1",
+   "dialect": "サヒド",
+   "w_with_cert": 2084,
+   "sha256": "f449327377965c1216c8ff3782d12138a0bd2fa5b817071a4883cfea853714d9"
+  },
+  {
+   "file": "12-2_gospel-of-truth-fragments.xml",
+   "siglum": "XII,2",
+   "dialect": "サヒド",
+   "w_with_cert": 749,
+   "sha256": "58efcce1dc1fea8b99ebd90e18b537c2225f22fbee70bc650f9b63099d8a73df"
+  },
+  {
+   "file": "12-3_fragments.xml",
+   "siglum": "XII,3",
+   "dialect": "サヒド",
+   "w_with_cert": 229,
+   "sha256": "af1e5107178f726ac755f0def8738da14743e770f228284c649fe85f0284496d"
+  },
+  {
+   "file": "13-1_trimorphic-protennoia.xml",
+   "siglum": "XIII,1",
+   "dialect": "サヒド",
+   "w_with_cert": 5250,
+   "sha256": "b578d8dabb242844a607b54d99f4958d1b906c3418e4fc01407b814a4977bfec"
+  },
+  {
+   "file": "13-2_on-the-origin-of-the-world-fragment.xml",
+   "siglum": "XIII,2",
+   "dialect": "サヒド",
+   "w_with_cert": 99,
+   "sha256": "5ef5141db501d8995283192e5cee1f8824b876a5e5e7373dd7e67872073aeeb9"
+  }
+ ],
+ "tsv": {
+  "file": "review_sample.tsv",
+  "rows": 400,
+  "sha256": "d663421ebcc29a9fa6591647c852df2593d6edfac9f61c1d68f59ccc3bd94e41"
+ }
+}
