@@ -50,6 +50,7 @@ OUTDIR = os.path.dirname(_HERE) if os.path.basename(_HERE).lower() in ("source",
 #                <bibl subtype="draft"> の TEI。人の目で確かめていないことを reader.html が文書ごとに示す）
 #            U = 未注釈の全文（reader.html へリンク。本文は <bibl subtype="unannotated"> の TEI。品詞・語義なし）
 #            D・U のリンク先の文書は、ふつうは同じ番号（写本-番号）。番号が違うものは READER_DOC に書く。
+#   番号は通用の番号（data/catalog.xml・本文ビュワーと同じ）。一覧に出すが文書数に数えない行は UNCOUNTED に書く。
 A = "avail"; S = "soon"; D = "draft"; U = "text"
 CODICES = [
  ("I", 1, [
@@ -93,11 +94,11 @@ CODICES = [
    (2, "雷・全きヌース(完全なる心)", "The Thunder, Perfect Mind", "Le Tonnerre, intellect parfait", U),
    (3, "権威ある教え", "Authoritative Teaching", "Authentikos Logos", U),
    (4, "われらの大いなる力の概念", "The Concept of Our Great Power", "Le Concept de notre grande puissance", U),
-   (5, "プラトン『国家』588A–589B", "Plato, Republic 588a–589b", "Platon, République 588a–589b", A),
+   (5, "プラトン『国家』588b–589b", "Plato, Republic 588b–589b", "Platon, République 588b–589b", A),
    (6, "第八と第九についての講話", "The Discourse on the Eighth and Ninth", "L'Ogdoade et l'Ennéade", U),
    (7, "感謝の祈り", "The Prayer of Thanksgiving", "Prière d'action de grâces", U),
-   (8, "書記による覚書", "Scribal Note", "Note du scribe", U),
-   (9, "アスクレピオス 21–29", "Asclepius 21–29", "Asclépius 21–29", U),
+   ("7a", "書記による覚書", "Scribal Note", "Note du scribe", U),   # VI,7 の末尾の覚え書き。文書数には数えない（UNCOUNTED）
+   (8, "アスクレピオス 21–29", "Asclepius 21–29", "Asclépius 21–29", U),
  ]),
  ("VII", 7, [
    (1, "セームの釈義(パラフレイズ)", "The Paraphrase of Shem", "Paraphrase de Sem", U),
@@ -144,12 +145,14 @@ LINKS = {
 def esc(s): return html.escape(str(s), quote=True)
 def tid(roman, num): return f"{roman}-{num}"
 def locus(roman, num): return f"NHC&nbsp;{roman},{num}"
-# 全文テキスト（source/nhc_fulltext_split/）の文書番号が、この一覧の番号と違うもの（status D・U の行）。
-# 全文テキストは通用の番号に従い、書記の覚書を VI,7 の末尾（奥書）、アスクレピオスを VI,8 としている。
+# 全文テキスト（source/nhc_fulltext_split/）に同じ番号の文書が無い行（status D・U）のリンク先。
+# 書記の覚書（VI,7a）は、全文テキストでは VI,7『感謝の祈り』の末尾の奥書（<ab type="colophon">）にある。
 READER_DOC = {
-    ("VI", 8): "VI-7#seg-VI-7508309",   # 書記による覚書 → VI,7『感謝の祈り』の末尾の奥書
-    ("VI", 9): "VI-8",                  # アスクレピオス 21–29
+    ("VI", "7a"): "VI-7#seg-VI-7508309",
 }
+# 一覧に出すが、文書数（全体・status ごと・写本ごと）に数えない行。書記の覚書は独立した文書ではないので数えない
+# （標準の数え方では NHC は 52 文書。gnosticism.html の「重複を数えると 52」と同じ）。
+UNCOUNTED = {("VI", "7a")}
 def href_for(roman, num, status):
     if status == A and (roman, num) in LINKS: return LINKS[(roman, num)]
     if status in (D, U): return "reader.html?doc=" + READER_DOC.get((roman, num), tid(roman, num))
@@ -158,10 +161,16 @@ def tri(ja, en, fr):
     """三言語のスパン（site.css が html[data-lang] に応じて出し分ける）"""
     return f'<span class="l-ja">{ja}</span><span class="l-en">{en}</span><span class="l-fr">{fr}</span>'
 
-TOTAL = sum(len(t) for _,_,t in CODICES)
-AVAIL = sum(1 for _,_,t in CODICES for x in t if x[4] == A)
-DRAFT = sum(1 for _,_,t in CODICES for x in t if x[4] == D)
-PLAIN = sum(1 for _,_,t in CODICES for x in t if x[4] == U)
+# 文書数。status ごとの数の和が全体の数と合わないとき（status の書き誤りなど）は、生成せずに止める
+COUNTED = [x for r,_,t in CODICES for x in t if (r, x[0]) not in UNCOUNTED]
+TOTAL = len(COUNTED)
+AVAIL = sum(1 for x in COUNTED if x[4] == A)
+DRAFT = sum(1 for x in COUNTED if x[4] == D)
+PLAIN = sum(1 for x in COUNTED if x[4] == U)
+SOON  = sum(1 for x in COUNTED if x[4] == S)
+if AVAIL + DRAFT + PLAIN + SOON != TOTAL:
+    raise SystemExit("build_site.py: 公開 %d + 暫定 %d + 未注釈 %d + 準備中 %d が全 %d 文書と合いません（CODICES の status を確かめてください）"
+                     % (AVAIL, DRAFT, PLAIN, SOON, TOTAL))
 TODAY = datetime.date.today().isoformat()
 
 # --- shared head / theme ----------------------------------------------------
@@ -247,7 +256,7 @@ def codex_block(roman, no, tracts):
           f'<span class="sub">{tri(esc(en), esc(ja), esc(en))}</span></span>'
           f'<span class="loc">{locus(roman,num)}</span>{pill}'
           f'<span class="arr">→</span></a>')
-    n = len(tracts)
+    n = sum(1 for x in tracts if (roman, x[0]) not in UNCOUNTED)
     count = tri(f"{n} 文書", f"{n} tractate{'s' if n>1 else ''}", f"{n} traité{'s' if n>1 else ''}")
     return (f'<section class="codex" data-codex="{roman}">'
             f'<div class="chead"><span class="rn">{roman}</span>'
@@ -381,9 +390,9 @@ def build_index():
    <div class="eyebrow">Nag Hammadi Codices I–XIII</div>
    <h1><span class="cop">ϣⲉⲛⲉⲥⲏⲧ</span>Sheneset<span class="tag">{tri("ナグ・ハマディ写本コーパス", "A digital TEI edition of the Nag Hammadi Codices", "Édition numérique TEI des codices de Nag Hammadi")}</span></h1>
    <p class="lead">{tri(
-     f"ナグ・ハマディ写本(全13冊・約{TOTAL}文書)を、<b>形態素グロス・コプト語辞書・日英仏訳</b>を備えた TEI&nbsp;P5 デジタル版として整備するプロジェクトです。各語をクリックすると語義が表示され、写本どうしの対照や、他の文書の並行箇所の参照ができます。",
-     f"A digital TEI&nbsp;P5 edition of the Nag Hammadi Codices (13 codices, some {TOTAL} tractates), with <b>morpheme-level glosses, a Coptic lexicon and Japanese, English and French translations</b>. Click any word for its sense, compare the manuscript witnesses side by side and follow parallel passages into other texts.",
-     f"Une édition numérique TEI&nbsp;P5 des codices de Nag Hammadi (13 codices, quelque {TOTAL} traités), avec <b>gloses morphologiques, lexique copte et traductions japonaise, anglaise et française</b>. Cliquez sur un mot pour en voir le sens, comparez les témoins manuscrits et suivez les passages parallèles dans d’autres textes.")}</p>
+     f"ナグ・ハマディ写本(全13冊・{TOTAL}文書)を、<b>形態素グロス・コプト語辞書・日英仏訳</b>を備えた TEI&nbsp;P5 デジタル版として整備するプロジェクトです。各語をクリックすると語義が表示され、写本どうしの対照や、他の文書の並行箇所の参照ができます。",
+     f"A digital TEI&nbsp;P5 edition of the Nag Hammadi Codices (13 codices, {TOTAL} tractates), with <b>morpheme-level glosses, a Coptic lexicon and Japanese, English and French translations</b>. Click any word for its sense, compare the manuscript witnesses side by side and follow parallel passages into other texts.",
+     f"Une édition numérique TEI&nbsp;P5 des codices de Nag Hammadi (13 codices, {TOTAL} traités), avec <b>gloses morphologiques, lexique copte et traductions japonaise, anglaise et française</b>. Cliquez sur un mot pour en voir le sens, comparez les témoins manuscrits et suivez les passages parallèles dans d’autres textes.")}</p>
    <div class="more">
      <a href="gnosticism.html">{tri("グノーシス主義とは →", "What is Gnosticism? →", "Qu'est-ce que le gnosticisme ? →")}</a>
      <a href="project.html">{tri("このプロジェクトについて →", "About the project →", "À propos du projet →")}</a>
@@ -450,7 +459,7 @@ def build_index():
   <div class="sec-h"><h2>{tri("文書一覧", "The codices", "Les codices")}</h2><small>NHC I–XIII</small><span class="rule"></span></div>
   <div class="ctool"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
    <input id="q" type="search" autocomplete="off">
-   <span class="cnt">{tri(f"公開 {AVAIL} · 暫定 {DRAFT} · 未注釈 {PLAIN} / 全 {TOTAL} 文書", f"{AVAIL} online · {DRAFT} draft · {PLAIN} text only · {TOTAL} in all", f"{AVAIL} en ligne · {DRAFT} provisoires · {PLAIN} texte seul · {TOTAL} au total")}</span></div>
+   <span class="cnt">{tri(f"公開 {AVAIL} · 暫定 {DRAFT} · 未注釈 {PLAIN} · 準備中 {SOON} / 全 {TOTAL} 文書", f"{AVAIL} online · {DRAFT} draft · {PLAIN} text only · {SOON} soon · {TOTAL} in all", f"{AVAIL} en ligne · {DRAFT} provisoires · {PLAIN} texte seul · {SOON} à venir · {TOTAL} au total")}</span></div>
   <p class="legend">
    <span><span class="pill on">{tri("公開","Online","En ligne")}</span>{tri("人の手で注釈・訳を付けた版", "annotated and translated by hand", "annoté et traduit à la main")}</span>
    <span><span class="pill draft">{tri("暫定","Draft","Provisoire")}</span>{tri("自動注釈の全文。人の目で未確認・校訂本と未照合", "full text with automatic annotation, not checked or collated", "texte intégral annoté automatiquement, non vérifié ni collationné")}</span>
@@ -465,9 +474,9 @@ def build_index():
 </div>
 
 <footer><div class="wrap">
-  {tri(f"<b>{AVAIL}</b>&nbsp;文書を公開・<b>{DRAFT}</b>&nbsp;文書を暫定公開・<b>{PLAIN}</b>&nbsp;文書は未注釈の本文 / 全&nbsp;<b>{TOTAL}</b>&nbsp;文書(13写本)",
-       f"<b>{AVAIL}</b>&nbsp;online, <b>{DRAFT}</b>&nbsp;as drafts and <b>{PLAIN}</b>&nbsp;as text only, of&nbsp;<b>{TOTAL}</b>&nbsp;tractates (13 codices)",
-       f"<b>{AVAIL}</b>&nbsp;en ligne, <b>{DRAFT}</b>&nbsp;provisoires et <b>{PLAIN}</b>&nbsp;en texte seul sur&nbsp;<b>{TOTAL}</b> traités (13 codices)")}　·
+  {tri(f"<b>{AVAIL}</b>&nbsp;文書を公開・<b>{DRAFT}</b>&nbsp;文書を暫定公開・<b>{PLAIN}</b>&nbsp;文書は未注釈の本文・<b>{SOON}</b>&nbsp;文書は準備中 / 全&nbsp;<b>{TOTAL}</b>&nbsp;文書(13写本)",
+       f"<b>{AVAIL}</b>&nbsp;online, <b>{DRAFT}</b>&nbsp;as drafts, <b>{PLAIN}</b>&nbsp;as text only and <b>{SOON}</b>&nbsp;in preparation, of&nbsp;<b>{TOTAL}</b>&nbsp;tractates (13 codices)",
+       f"<b>{AVAIL}</b>&nbsp;en ligne, <b>{DRAFT}</b>&nbsp;provisoires, <b>{PLAIN}</b>&nbsp;en texte seul et <b>{SOON}</b>&nbsp;à venir sur&nbsp;<b>{TOTAL}</b> traités (13 codices)")}　·
   {tri("本文はパブリックドメイン、辞書・対訳は CC&nbsp;BY&nbsp;4.0",
        "Source texts: public domain · lexicon and translations: CC&nbsp;BY&nbsp;4.0",
        "Textes sources : domaine public · lexique et traductions : CC&nbsp;BY&nbsp;4.0")}　·
@@ -987,4 +996,5 @@ open(os.path.join(OUTDIR,"index.html"),"w",encoding="utf-8").write(_BANNER + bui
 open(os.path.join(OUTDIR,"tractate.html"),"w",encoding="utf-8").write(_BANNER + build_tractate())
 open(os.path.join(OUTDIR,"reader.html"),"w",encoding="utf-8").write(_BANNER + build_reader())
 print("wrote index.html (landing), tractate.html (placeholder) and reader.html (draft full texts)")
-print("codices:", len(CODICES), "| tractates:", TOTAL, "| available:", AVAIL, "| drafts:", DRAFT, "| text only:", PLAIN)
+print("codices:", len(CODICES), "| tractates:", TOTAL, "| available:", AVAIL, "| drafts:", DRAFT, "| text only:", PLAIN, "| soon:", SOON,
+      "| listed but not counted:", ", ".join("%s,%s" % k for k in sorted(UNCOUNTED)))

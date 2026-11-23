@@ -291,7 +291,7 @@ python3 scripts/verify_tei.py 出力フォルダ [tei_all.rng]
 - III,3 と VI,5 は、サイトに注釈つきの版（`data/eugnostos_tei.xml`、`data/republic_tei.xml`）がある。今回の 2 ファイルはそれを置き換えるものではない。III,3 の `<s>` の ID は既存の版と同じだが、冒頭（既存 `III-INCIPIT`、今回 `III-7505190_30`）と末尾（既存は `III-7505330` の 1 つ、今回は本文 `III-7505330_0` と奥書表題 `III-7505330_19`）が違う。
 - V,1 は、既存の `eugnostos_tei.xml` では枠だけ（`wit-V`）になっている。本文は今回の `05-1_eugnostos.xml` にある。
 - 並行する証本（『ヨハネのアポクリュフォン』II,1・III,1・IV,1 など）は 1 つにまとめず、別々のファイルにした。
-- 番号: サイトの文書一覧は VI,8 を「書記による覚書」、VI,9 を「アスクレピオス」としているが、ここでは通用の番号に従い、覚書は VI,7 の末尾（`<ab type="colophon">`）、アスクレピオスは VI,8 としている。XI,2a–2e はサイトの一覧にない。I,1 は元ファイルにないので TEI もない。
+- 番号: ここでは通用の番号に従い、覚書（VI,7a）は VI,7 の末尾（`<ab type="colophon">`）、アスクレピオスは VI,8 としている。サイトの文書一覧も 2026-11-23 から同じ番号（覚書は VI,7a として一覧に出すが、文書数には数えない）。XI,2a–2e はサイトの一覧にない。I,1 は元ファイルにないので TEI もない。
 
 **検証。** `scripts/verify_tei.py` で次を確かめた。
 
@@ -422,6 +422,6 @@ python3 scripts/verify_tei.py 出力フォルダ [tei_all.rng]
 
 **サイトでの見え方。**
 
-- 文書一覧（HOME）: 写本ごとの一覧で「暫定」と示した 33 文書が、本文ビュワー `reader.html?doc=II-6` へリンクする（XI,2a–2e は XI,2 の本文ビュワーの前後の移動から開ける）。III,3 は人の手で注釈した版（`eugnostos.html`）へのリンクのまま。未注釈の文書も「未注釈」（16 行）から同じビュワーで本文だけを読める（一覧の VI,8「書記による覚書」は VI,7 の末尾の奥書へ、VI,9「アスクレピオス」は VI,8 へつなぐ。`scripts/build_site.py` の `READER_DOC`）。HOME の印は `scripts/build_site.py` の `CODICES`（status `D`・`U`）。
+- 文書一覧（HOME）: 写本ごとの一覧で「暫定」と示した 33 文書が、本文ビュワー `reader.html?doc=II-6` へリンクする（XI,2a–2e は XI,2 の本文ビュワーの前後の移動から開ける）。III,3 は人の手で注釈した版（`eugnostos.html`）へのリンクのまま。未注釈の文書も「未注釈」（17 行。V,1 を含む）から同じビュワーで本文だけを読める（一覧の VI,7a「書記による覚書」は VI,7 の末尾の奥書へつなぐ。`scripts/build_site.py` の `READER_DOC`）。HOME の印は `scripts/build_site.py` の `CODICES`（status `D`・`U`）。
 - 本文ビュワー（`reader.html`。`scripts/build_site.py` が作る）: 冒頭に、その文書で確かめていないこと（`low` と `X` の割合、ⲍ・ⲯ を補った語の数など）を示す。語をクリックすると品詞・レンマ・語義・確度を出す。〈語義と品詞を重ねる〉〈確かでない注釈に印〉〈形態素の区切り〉を切り替えられる。
 - 検索ページ: 〈全文テキスト〉の一覧に「自動注釈（暫定）」と示し、品詞・レンマでも検索できる（結果は目安）。用例から本文ビュワーの該当セグメントへリンクする（未注釈の文書も同じ）。カタログでは `<bibl subtype="draft">`・`<bibl subtype="unannotated">` と `<ref type="reader">`（`scripts/sync_nhc_catalog.py`）。
