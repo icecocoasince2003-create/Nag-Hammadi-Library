@@ -1,5 +1,5 @@
 {
-  "_comment": "確認作業の画面（review.html）のキューの定義。画面と、書き出したファイルをまとめる scripts/merge_review.py の両方がこのファイルを読む。キューを足すときは queues に 1 項目足す（README の「確認作業の画面」）。kind: intros = data/intros.json の解題、judge = 決まった列に答えを書き込む表（tsv）、status = 1 行ずつ承認・却下などを決める表（tsv）。key は行を見分ける列（組み合わせて一意）。doc は TEI を読むための文書（column = 列の値、siglum = その値が「III,1」のような写本の番号、fixed = 決まった文書）。seg・w は文脈を出すためのセグメントの id と語の位置（その <s> の中で何番目の <w> か。1 から）。context: word = その語に印、break = その語の前に分け目の印（語群の最初の語だけ選べる）。show は表示する列、blind は答えを入れるまで隠す列。fields は書き込む列（type: pos = 品詞の一覧から、lemma = 辞書の見出しを候補に、text = 自由な文字、choice = 別の列の候補から選ぶ）。status は状態の列、pending はまだ判断していない行の値、values は選べる値、corrected は位置を直したときに書く列（末尾に足す）。reviewer は確認者の列（末尾に足す。intros では解題の項目のキー）。",
+  "_comment": "確認作業の画面（review.html）のキューの定義。画面と、書き出したファイルをまとめる scripts/merge_review.py の両方がこのファイルを読む。キューを足すときは queues に 1 項目足す（README の「確認作業の画面」）。kind: intros = data/intros.json の解題、judge = 決まった列に答えを書き込む表（tsv）、status = 1 行ずつ承認・却下などを決める表（tsv）。key は行を見分ける列（組み合わせて一意）。doc は TEI を読むための文書（column = 列の値、siglum = その値が「III,1」のような写本の番号、fixed = 決まった文書）。seg・w は文脈を出すためのセグメントの id と語の位置（その <s> の中で何番目の <w> か。1 から）。context: word = その語に印、break = その語の前に分け目の印（語群の最初の語だけ選べる）。show は表示する列、blind は答えを入れるまで隠す列。fields は書き込む列（type: pos = 品詞の一覧から、lemma = 辞書の見出しを候補に、text = 自由な文字（pattern = その形の値だけ受け付ける正規表現、hint = 添える説明）、choice = options に挙げた値から選ぶ。from があれば、その列に「 | 」で並べた値から選び、labels の列の同じ位置の値を添える。required: judge では答えが入れば済、status では承認に必須）。filter は、キューに入れる行の条件（[{列: [値…]}, …]。どれか 1 つの組で、すべての列の値が挙げた値のどれかなら入れる。同じファイルを行で分けて 2 つのキューにできる）。links は、その列の TLA 番号（C123）を、書いた URL の後ろに付けたリンクにする。status は状態の列、pending はまだ判断していない行の値、values は選べる値、corrected は位置を直したときに書く列（末尾に足す）。reviewer は確認者の列（末尾に足す。intros では解題の項目のキー）。",
   "status_values": {
     "approve": "承認",
     "approve_corrected": "修正して承認",
@@ -90,6 +90,40 @@
       "pending": "案（生田目の確認待ち）",
       "reviewer": "確認者",
       "note": {"ja": "統一案でよければ承認、変えないなら却下。変える品詞を直すときは「当てはめる変更」を書き換える（語形の行は「文書:今の品詞>新しい品詞」を「; 」で区切って、箇所の行は「今の品詞>新しい品詞」）。同じ変更を自動注釈の暫定版にも当てはめるなら「はい」。当てはめは scripts/apply_pos_decisions.py（承認した行だけ）。", "en": "Approve the proposal or reject it. To change the target tag, edit 当てはめる変更 (form rows: “doc:OLD>NEW” items separated by “; ”; place rows: “OLD>NEW”). Choose はい to apply the same change to the automatic drafts. Applied by scripts/apply_pos_decisions.py (approved rows only)."}
+    },
+    {
+      "id": "cdo",
+      "title": {"ja": "⑥ 辞書と CDO：候補が複数", "en": "⑥ Lexicon and CDO: several candidates"},
+      "kind": "status",
+      "file": "source/lexicon_cdo_matches.tsv",
+      "key": ["xml:id"],
+      "filter": [{"決まり方": ["候補が複数"]}],
+      "show": ["xml:id", "見出し", "品詞", "TLA番号の候補", "CCLの見出し", "CCLの品詞", "品詞の対応", "既存のcdo", "メモ"],
+      "links": {"TLA番号の候補": "https://coptic-dictionary.org/entry.py?tla=", "既存のcdo": "https://coptic-dictionary.org/entry.py?tla="},
+      "fields": [
+        {"column": "選んだTLA番号", "type": "choice", "from": "TLA番号の候補", "labels": ["CCLの見出し", "CCLの品詞", "品詞の対応"], "required": true}
+      ],
+      "status": "状態",
+      "pending": "案（生田目の確認待ち）",
+      "reviewer": "確認者",
+      "note": {"ja": "辞書の項目（見出しと品詞）に、CDO の項目の候補が 2 つ以上あるもの。候補の TLA 番号を押すと CDO の項目が開く。合うものを「選んだTLA番号」で選んで承認する（選ばないと承認できない）。どれも合わなければ却下。当てはめは scripts/match_cdo.py apply（承認した行だけ。README の「Coptic Dictionary Online（CDO）へのリンク」）。", "en": "Lexicon entries (headword and part of speech) with two or more candidate CDO entries. Each candidate TLA number opens its CDO entry. Pick the right one under 選んだTLA番号 (chosen TLA number) and approve; approving needs a choice. Reject if none fits. Applied by scripts/match_cdo.py apply (approved rows only; README, “Coptic Dictionary Online (CDO)”)."}
+    },
+    {
+      "id": "cdo-one",
+      "title": {"ja": "⑦ 辞書と CDO：1 つに決まった候補", "en": "⑦ Lexicon and CDO: single candidates"},
+      "kind": "status",
+      "file": "source/lexicon_cdo_matches.tsv",
+      "key": ["xml:id"],
+      "filter": [{"決まり方": ["品詞で絞った", "変化形"]}, {"決まり方": ["綴りで一意"], "品詞の対応": ["矛盾", "不明"]}],
+      "show": ["xml:id", "見出し", "品詞", "TLA番号の候補", "CCLの見出し", "CCLの品詞", "決まり方", "品詞の対応", "既存のcdo", "メモ"],
+      "links": {"TLA番号の候補": "https://coptic-dictionary.org/entry.py?tla=", "既存のcdo": "https://coptic-dictionary.org/entry.py?tla="},
+      "fields": [
+        {"column": "選んだTLA番号", "type": "text", "pattern": "C[0-9]+", "hint": {"ja": "候補と違う番号を使うときだけ書く（例 C1234）", "en": "Only to use a number other than the candidate (e.g. C1234)"}}
+      ],
+      "status": "状態",
+      "pending": "案（生田目の確認待ち）",
+      "reviewer": "確認者",
+      "note": {"ja": "候補は 1 つに決まったが、1 行ずつ承認が要るもの（品詞で絞った・変化形で当たった・品詞が合わないか分からない）。合っていれば承認、違えば却下。正しい番号が分かるときは「選んだTLA番号」に書いて承認する（そちらを使う）。綴りで一意に決まり品詞も合う行はここに出ない（一覧を確かめたあと、まとめて入れる）。", "en": "A single candidate, but each row needs a decision (narrowed by part of speech, matched through a variant form, or with a part of speech that conflicts or is unknown). Approve if right, reject if wrong. If you know the right number, type it under 選んだTLA番号 and approve; that number is used. Rows with a unique spelling match and an agreeing part of speech are not listed here (they go in together once the list has been checked)."}
     }
   ]
 }

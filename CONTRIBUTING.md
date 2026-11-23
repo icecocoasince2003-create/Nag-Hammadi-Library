@@ -10,6 +10,7 @@
 > `python3 -m unittest discover -s tests -p "test_*.py"`, `python3 scripts/check_style.py` and `python3 scripts/build_site.py --check`;
 > GitHub runs the same checks (and opens `tests/review.test.html` in headless Chrome). Pending decisions (introductions, the accuracy
 > sample, proposed breaks) are made in `review.html`, which downloads the decided file; `scripts/merge_review.py` combines several.
+> Lexicon links to Coptic Dictionary Online are TLA numbers only (`cdo` column); nothing else is copied from the CDO data.
 > Translations, glosses and notes are the project's own work (CC BY 4.0): do not copy published translations or
 > commentaries. If you use generative AI, say so: in the pull request description, or in the commit message
 > when you commit without a pull request. The annotation stops at text, word division, part of speech, lemma, gloss,
@@ -82,6 +83,10 @@ cd Nag-Hammadi-Library
 - **辞書は `source/lexicon.csv` を直してから `scripts/sync_lexicon.py` を実行する。** `data/lexicon.xml` を手で直すと、次の同期で
   食い違います。すでにある見出し語に 2 つ目以降の語義を足したとき（新しい同形異義語）は、`sync_lexicon.py` は報告するだけで
   書き込まないので、`<superEntry>` にまとめる作業は手で行います。
+- **Coptic Dictionary Online へのリンクは、`cdo` 列に TLA 番号（`C1234` など）だけを書く。** CDO のもとのデータ（Comprehensive Coptic
+  Lexicon。CC BY-SA 4.0）の語義・訳・用例・語源・文献は、辞書に写しません。番号の候補は `scripts/match_cdo.py` の照合表
+  `source/lexicon_cdo_matches.tsv` にあり、`review.html` の ⑥⑦ で承認した行を `match_cdo.py apply` で入れます（README の「Coptic Dictionary
+  Online（CDO）へのリンク」）。
 - **`data/catalog.xml` の `BEGIN nhc_fulltext_split`〜`END` の範囲は手で直さない**（`sync_nhc_catalog.py` の出力）。
 - `source/` の `translations.csv`・`eugnostos_source.tsv` を直しても、サイトには反映されません（[source/README.md](source/README.md)）。
 

@@ -159,6 +159,26 @@ class ScoreReviewReadsTheReviewerColumn(Tmp):
         self.assertIn("400 行", r.stdout.splitlines()[0])
 
 
+class QueuesThatShareAFile(Tmp):
+    def test_exports_of_the_two_cdo_queues_merge_into_one_file(self):
+        q6, q7 = QUEUES["cdo"], QUEUES["cdo-one"]
+        self.assertEqual(q6["file"], q7["file"])
+        base = mr.parse_tsv(read(os.path.join(ROOT, q6["file"])))
+        first = lambda how: next(i for i, r in enumerate(base["rows"]) if mr.cell(base, r, "決まり方") == how)
+        i6, i7 = first("候補が複数"), first("品詞で絞った")
+        key = lambda i: mr.SEP.join(mr.cell(base, base["rows"][i], c) for c in q6["key"])
+        tla = mr.cell(base, base["rows"][i6], "TLA番号の候補").split(" | ")[1]
+        a, b = self.path("a.tsv"), self.path("b.tsv")
+        write(a, mr.serialize_tsv(mr.apply_edits(base, {key(i6): {"選んだTLA番号": tla, "状態": "承認", "確認者": "A"}}, q6["key"], [q6["reviewer"]])))
+        write(b, mr.serialize_tsv(mr.apply_edits(base, {key(i7): {"状態": "却下", "確認者": "B"}}, q7["key"], [q7["reviewer"]])))
+        code, out = self.run_merge("cdo", [a, b])
+        self.assertEqual(code, 0)
+        t = mr.parse_tsv(out)
+        self.assertEqual(t["header"], base["header"], "the decision columns are already in the file")
+        self.assertEqual([mr.cell(t, t["rows"][i6], c) for c in ("選んだTLA番号", "状態", "確認者")], [tla, "承認", "A"])
+        self.assertEqual([mr.cell(t, t["rows"][i7], c) for c in ("状態", "確認者")], ["却下", "B"])
+
+
 class SplitSegmentsTakesOnlyApprovedRows(Tmp):
     def test_only_approved_rows_are_applied(self):
         q = QUEUES["breaks"]

@@ -32,7 +32,7 @@
 | `stats.html` | 旧コーパス統計。`search.html?view=stats` への転送のみ（`?doc=…` は引き継ぐ） | 手作業 |
 | `profile.html` | プロフィール（ログイン中の利用者用）。表示名の変更、自分の投稿の確認と修正、ブックマーク、運営へのバグの報告・応援メッセージ | 手作業 |
 | `admin.html` | 投稿（コメント・注釈・誤りの指摘）の承認、公開済みの投稿への修正の申請の承認、運営へのメッセージの確認（運営用） | 手作業 |
-| `review.html` | 確認作業の画面（日・英）。確認待ちの作業（解題・精度の抜き取り・語録の区切り・長いセグメントの切れ目・品詞をそろえる案）を 1 件ずつ判断し、結果をファイルとして書き出す。下の「確認作業の画面」。noindex、ナビ・sitemap に載せず、robots.txt で Disallow | 手作業。キューは `data/review_queues.json` |
+| `review.html` | 確認作業の画面（日・英）。確認待ちの作業（解題・精度の抜き取り・語録の区切り・長いセグメントの切れ目・品詞をそろえる案・辞書と CDO の対応）を 1 件ずつ判断し、結果をファイルとして書き出す。下の「確認作業の画面」。noindex、ナビ・sitemap に載せず、robots.txt で Disallow | 手作業。キューは `data/review_queues.json` |
 
 共通部品: `assets/cosmos.css`・`assets/cosmos.js`（配色と背景。ダーク＝宇宙テーマが既定、ライトモードの配色もここ）、
 `assets/site.css`・`assets/site.js`（上部ナビ・言語切替・表示モード切替・XML ダウンロードメニュー・ワイド表示）、
@@ -127,12 +127,14 @@ nag_hammadi_library/
 │   └─ republic_*.xml
 ├─ source/             ← CSV／TSV(サイトに反映できるのは、いまは lexicon.csv だけ。下の「データの編集」)
 │   ├─ lexicon.csv         辞書(1行=1語義／同形異義語は同じlemmaを複数行)
+│   ├─ lexicon_cdo_matches.tsv  辞書と Coptic Dictionary Online の TLA 番号の照合表(scripts/match_cdo.py が作る。確かめるのは review.html の ⑥⑦)
 │   ├─ translations.csv    対訳(seg_id, ja, en, fr)
 │   ├─ eugnostos_source.tsv  本文ソース(通常編集不要)
 │   └─ nhc_fulltext_split/   NHC 全文テキスト(56文書の作業用ファイル。39 文書は自動注釈の暫定版。同フォルダの README_ja.md)
 └─ scripts/            ← スクリプト(通常触らない)
     ├─ build_tei.py        source/ の CSV から XML を試しに生成し、data/ と比べる(既定では data/ に書き込まない)
     ├─ sync_lexicon.py     source/lexicon.csv の変更を data/lexicon.xml に反映する(xml:id は変えない)
+    ├─ match_cdo.py        辞書の見出しを CDO のデータ(CCL。リポジトリの外に置く)と突き合わせて TLA 番号の候補の表を作り、承認した番号を lexicon.csv に入れる
     ├─ build_site.py       index.html / tractate.html / reader.html / sitemap.xml / robots.txt / data/doc_dates.json / data/pos_labels.json を生成
     ├─ build_fulltext_stats.py  data/fulltext_stats.json(全文テキストの文書ごとの数)を生成。build_site.py からも呼ばれる
     ├─ insert_breaks.py    写本の頁(<pb>)・行(<lb>)の区切りを TSV から TEI に入れる(既定は表示だけ、--write で書き込む)
@@ -191,6 +193,7 @@ nag_hammadi_library/
 | `build_tei.py` | CSV から本文と辞書の XML を**試しに生成して `data/` と比べる**。既定では `data/` に書き込まない(下の「データの編集」)。 |
 | `build_parallels.py` | 並行箇所(`data/parallels.xml`)を文言の自動照合で作る。何も付けなければ要約の表示だけで、`--write` で書き込む。 |
 | `sync_lexicon.py` | `lexicon.csv` の変更を `data/lexicon.xml` に反映する。`xml:id` は変えない。何も付けなければ変更点の表示だけで、`--write` で書き込む。 |
+| `match_cdo.py` | 辞書の見出しを Coptic Dictionary Online のデータ（CCL。リポジトリの外に置く）と突き合わせ、TLA 番号の候補を `source/lexicon_cdo_matches.tsv` に書く。`apply` で、承認した番号だけを `lexicon.csv` の `cdo` 列に入れる（表示だけ、`--write` で書き込む）。下の「Coptic Dictionary Online（CDO）へのリンク」。 |
 | `build_site.py` | `index.html`(目次)・`tractate.html`(準備中)・`reader.html`(本文ビュワー・暫定版)・`sitemap.xml`・`robots.txt`・`data/doc_dates.json`・`data/pos_labels.json`(品詞タグの三言語の名前と出現数。名前は `POS_NAMES` が正) を生成。`<head>` の OGP(リンクのプレビュー)のタグもここで書く(`og_tags`)。 |
 | `build_fulltext_stats.py` | `data/fulltext_stats.json` を生成（`build_site.py` を実行すると一緒に作り直す。`--check` で最新かを調べるだけ）。`data/catalog.xml` の全文テキスト（暫定版・未注釈）の文書ごとに、本文の証本の中の `<w>`・`<phr>`（と、その中の `<w>`）・`<s>`・`<gap>`、`xml:lang="grc"` の `<w>`、品詞ごとの `<w>`、`@cert="low"`・品詞 `X` の `<w>` を数え、方言（`<textLang>`）と状態を添える。参考に、人の手で注釈した版（エウグノストス III,3・『国家』）も同じ方法で数える。割合は検索ページが計算する。 |
 | `insert_breaks.py` | 写本の頁（`<pb>`）・行（`<lb>`）の区切りを TSV から TEI に入れる。区切りの空要素を足すだけで、本文・語・`xml:id` は変えない。何も付けなければ入る位置の表示だけで、`--write` で書き込む。手順は下の「写本の頁・行の区切りを入れる」。 |
@@ -245,6 +248,53 @@ python3 scripts/build_tei.py
 - `pos` コード例:`N`名詞 `V`動詞 `ADJ`形容詞 `PREP`前置詞 `CONJ`接続詞 `PTC`不変化詞
   `NEG`否定 `NUM`数詞 `ART`冠詞 `PPER`人称代名詞 `POSS`所有冠詞 `COP`繋辞 `AUX`助動詞
   `PRET`過去辞 `NPROP`固有名詞 `INTERJ`間投詞。
+
+### Coptic Dictionary Online（CDO）へのリンク
+
+辞書の項目は、[Coptic Dictionary Online](https://coptic-dictionary.org/)（CDO。KELLIA）の項目に TLA 番号（`C6611` など）で結びます。
+`source/lexicon.csv` の `cdo` 列に番号を書くと、`scripts/sync_lexicon.py` が `data/lexicon.xml` に CDO へのリンク（`<ref type="cdo">`）を書き、
+辞書のページの項目に「Coptic Dictionary Online ↗」が出ます。2026-11-23 の時点で、リンクのある項目は 25 です。
+
+番号の候補は、CDO のもとになっている辞書データ *Comprehensive Coptic Lexicon: Including Loanwords from Ancient Greek*（CCL）v1.2
+（2020-07-16。Dylan M. Burns・Frank Feder・Katrin John・Maxim Kupreyev。BBAW「Strukturen und Transformationen des Wortschatzes der
+ägyptischen Sprache」と FU Berlin「Database and Dictionary of Greek Loanwords in Coptic」。DOI [10.17169/refubium-27566](https://doi.org/10.17169/refubium-27566)、
+[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)）と見出しを突き合わせて作ります（`scripts/match_cdo.py`）。CCL のファイルは
+このリポジトリには入れず、KELLIA の GitHub リポジトリを浅く clone して、リポジトリの外に置きます。2026-11-23 の照合には次のものを使いました。
+
+```
+git clone --depth 1 https://github.com/KELLIA/dictionary ../kellia-dictionary
+# commit f365e2d239bd12b6897f3a761487e40d384b2b24（2026-08-26）
+# ファイル xml/Comprehensive_Coptic_Lexicon-v1.2-2020.xml（SHA-256 ace84fce11b76386a6adb9888b2cb947056954fc9fe9c04aa0676b1f595fd43d）
+python3 scripts/match_cdo.py ../kellia-dictionary/xml/Comprehensive_Coptic_Lexicon-v1.2-2020.xml
+```
+
+見出しの綴りをそろえ（上線などの記号を除き、文字だけを小文字にする）、CCL の見出しと比べます。欠損の記号のある見出し（17）を除いた
+3,826 項目の結果は次のとおりです（どの綴りとも合わない 1,743 項目は表に入れません）。CCL の品詞のラベル（ドイツ語）と辞書の品詞タグの
+対応表は `python3 scripts/match_cdo.py --pos-table` で出ます。
+
+| 決まり方 | 意味 | 項目 | 入れ方 |
+|---|---|---|---|
+| 綴りで一意 | 見出しが CCL の 1 項目とだけ一致 | 1,286（品詞の対応: 一致 1,183・矛盾 100・不明 3） | 品詞が一致する行は、一覧を生田目が確かめたあとにまとめて。ほかは承認した行だけ |
+| 品詞で絞った | 見出しの一致が複数で、品詞の対応表で合うものが 1 つだけ | 393 | 承認した行だけ（確認作業の画面の ⑦） |
+| 変化形 | 見出しは一致せず、CCL の異形・変化形の 1 項目とだけ一致 | 124 | 承認した行だけ（⑦） |
+| 候補が複数 | 上のどれでもなく、候補が 2 つ以上 | 280 | 番号を選んで承認した行だけ（⑥） |
+
+結果は `source/lexicon_cdo_matches.tsv` に書きます（候補のある項目ごとに 1 行。列の説明はスクリプトの冒頭）。確かめる人は、確認作業の画面の
+⑥・⑦ で「状態」（と「選んだTLA番号」）を書きます。まとめて入れる行で違うものは、「状態」を「却下」にしておけば入りません。入れるときは:
+
+```
+python3 scripts/match_cdo.py apply source/lexicon_cdo_matches.tsv                          # 承認した行で書き込む内容を表示するだけ
+python3 scripts/match_cdo.py apply source/lexicon_cdo_matches.tsv --bulk-unique            # 綴りで一意・品詞が一致の行も
+python3 scripts/match_cdo.py apply source/lexicon_cdo_matches.tsv --bulk-unique --write    # source/lexicon.csv の cdo 列に書き込む
+python3 scripts/sync_lexicon.py                                                            # 変更点を確かめてから --write で data/lexicon.xml へ
+```
+
+`cdo` 列にすでに別の番号がある行は書き換えず、報告だけします（2026-11-23 の時点では ⲟⲩⲛⲧⲉ。既存は C5038、候補は C5039）。書き換えるのは
+`cdo` 列のセルだけです。照合をやり直したとき（CCL の版が変わったときなど）は、表の判断（選んだTLA番号・状態・確認者）を、候補が前と同じ行に
+引き継ぎます（引き継げなかった行は一覧を出します）。
+
+`lexicon.csv` と `lexicon.xml` に入るのは TLA 番号（CDO へのリンク）だけで、CCL の語義・訳・用例・語源・文献は写しません。照合表の
+「CCLの見出し」「CCLの品詞」の列は、確かめるために CCL から写したもので、CCL と同じ CC BY-SA 4.0 です（下の「ライセンス」）。
 
 ### translations.csv（対訳）
 `seg_id`(本文セグメントのID。`eugnostos_source.tsv` のID、冒頭は `INCIPIT`)に対し
@@ -392,6 +442,8 @@ python3 scripts/insert_breaks.py tests/fixtures/reader_breaks_draft.tsv --file t
 | ③ トマスの語録の区切り | `source/nhc_fulltext_split/proposals/thomas_sayings.tsv` | 承認・却下・保留。位置が違えば、本文の正しい語群を押す（修正して承認） | `状態`、`修正した位置`・`確認者`（末尾に足す） |
 | ④ 長いセグメントの切れ目 | `source/nhc_fulltext_split/proposals/long_segment_breaks.tsv` | 同上（承認 = ここで分ける） | 同上 |
 | ⑤ 品詞をそろえる | `source/nhc_fulltext_split/proposals/pos_harmonization.tsv` | 人の手の 2 版の品詞の付け方をそろえる案と、一覧に無いタグの直し方の案を、承認・却下 | `状態`・`当てはめる変更`・`暫定版にも当てはめるか`、`確認者`（末尾に足す） |
+| ⑥ 辞書と CDO：候補が複数 | `source/lexicon_cdo_matches.tsv`（決まり方が「候補が複数」の行） | 候補の TLA 番号（押すと CDO の項目が開く）から合うものを選んで承認。どれも合わなければ却下 | `選んだTLA番号`（承認には必須）・`状態`・`確認者` |
+| ⑦ 辞書と CDO：1 つに決まった候補 | 同じファイル（品詞で絞った・変化形・品詞が合わないか分からない行） | 合っていれば承認、違えば却下。正しい番号が分かれば書いて承認 | `選んだTLA番号`（書いたときだけ使う）・`状態`・`確認者` |
 
 **使い方。** 確認者の名前かイニシャルを入れ、キューを選んで 1 件ずつ判断します（名前を入れないと書き込めません。判断のたびに
 その行に記録します）。TSV のキューでは、その文書の TEI から該当のセグメントを出し、対象の語（②）や分け目の位置（③④）に印を
@@ -423,6 +475,8 @@ BOM の有無を、JSON はキーの順と字下げ 2 を元のまま。足す�
    **状態が「承認」か「修正して承認」の行だけ**を当てはめます（「修正した位置」があればそちらを使う。③ では種別が「語録の始まり」の行だけを
    分け目にする）。表示だけで確かめてから `--write` を付けます。ほかの状態の行は当てはめず、件数を表示します。
 6. ⑤ は、`python3 scripts/apply_pos_decisions.py`（表示だけ）→ `--write` で、承認した行の品詞だけを変えます（`source/nhc_fulltext_split/proposals/README_ja.md` の §6）。
+7. ⑥⑦ は同じファイルの違う行を扱います。1 人で両方を進めるときは、⑥ で書き出したファイルを ⑦ で読み込んでから続ける（書き出しに両方が入る）か、
+   2 つの書き出しを `merge_review.py cdo ⑥の書き出し ⑦の書き出し` でまとめます。反映は `python3 scripts/match_cdo.py apply`（上の「Coptic Dictionary Online（CDO）へのリンク」）。
 
 **キューを足す。** `data/review_queues.json` の `queues` に 1 項目足します（書き方はファイルの `_comment`）。表の形に合わせて
 `kind`（`judge` = 列に答えを書く、`status` = 承認・却下などを決める、`intros` = 解題）、行を見分ける `key`、文脈のための `doc`・`seg`・`w`・
@@ -430,7 +484,7 @@ BOM の有無を、JSON はキーの順と字下げ 2 を元のまま。足す�
 
 **試験。** `node --test tests/review-core.test.cjs`（読み書き）、`tests/review.test.html`（画面。ブラウザーで開くと結果が出る。GitHub の
 自動チェックではヘッドレスの Chrome で開く。ふだんの入力を消さないよう `review.html?ns=test` で開く）、
-`python3 -m unittest discover -s tests -p "test_*.py"`（`merge_review.py`・`score_review.py`・`split_segments.py`）。
+`python3 -m unittest discover -s tests -p "test_*.py"`（`merge_review.py`・`score_review.py`・`split_segments.py`・`apply_pos_decisions.py`・`match_cdo.py`）。
 
 ## サイト構成と画面遷移
 
@@ -756,11 +810,12 @@ python3 scripts/build_parallels.py --write   # data/parallels.xml に書き込�
 | ソースコード（HTML のマークアップ・CSS・JavaScript、`assets/`、`scripts/` の Python、`supabase/schema.sql`） | [MIT License](LICENSE) |
 | 本プロジェクトが作成したデータとテキスト（`data/`・`source/` の TEI 符号化・対訳・語釈・辞書・並行箇所の一覧、ページ内の解説文） | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.ja) |
 | コプト語本文、プラトン『国家』のギリシア語本文（OCT/Burnet） | パブリックドメイン |
+| `source/lexicon_cdo_matches.tsv` の「CCLの見出し」「CCLの品詞」の列（*Comprehensive Coptic Lexicon* v1.2、Burns・Feder・John・Kupreyev 2020 からの抜き書き。上の「Coptic Dictionary Online（CDO）へのリンク」） | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.ja) |
 | 第三者の資料（上記「辞書データの出典」の Coptic SCRIPTORIUM ほか、IIIF で表示する写本画像、外部のフォント・ライブラリ） | 各提供元の条件に従います |
 
 挿絵・アイコンなどの画像（`image/`）は本プロジェクトのオリジナル・アートワークで、上表のライセンスには含めていません。
 
-Code is released under the MIT License (see `LICENSE`). Data and texts created by the project are released under CC BY 4.0. The Coptic and Greek source texts are in the public domain.
+Code is released under the MIT License (see `LICENSE`). Data and texts created by the project are released under CC BY 4.0. The Coptic and Greek source texts are in the public domain. The columns CCLの見出し and CCLの品詞 of `source/lexicon_cdo_matches.tsv` are taken from the *Comprehensive Coptic Lexicon* v1.2 (CC BY-SA 4.0).
 
 ## 参考文献
 

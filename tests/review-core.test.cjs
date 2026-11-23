@@ -19,9 +19,33 @@ test("every TSV queue file is written back byte for byte when nothing changed", 
     assert.equal(R.serializeTSV(t), text, q.file);
     assert.equal(R.serializeTSV(R.applyEdits(t, {}, q.key, [q.corrected, q.reviewer].filter(Boolean))), text, q.file + " (no edits)");
     assert.equal(R.indexRows(t, q.key).size, t.rows.length, q.file + ": the key columns identify every row");
-    q.key.concat(q.seg ? [q.seg] : [], q.w ? [q.w] : [], q.show || [], q.blind || [], q.status ? [q.status] : [])
+    q.key.concat(q.seg ? [q.seg] : [], q.w ? [q.w] : [], q.show || [], q.blind || [], q.status ? [q.status] : [],
+      ...(q.filter || []).map(Object.keys), Object.keys(q.links || {}),
+      ...(q.fields || []).map(f => (f.from ? [f.from] : []).concat(f.labels || [])))
       .forEach(c => assert.ok(t.header.indexOf(c) >= 0, q.file + " has the column " + c));
+    if(q.filter) assert.ok(t.rows.some(r => R.matchesFilter(t, r, q.filter)), q.id + ": the filter keeps some rows");
   });
+});
+
+test("queues that share a file divide its rows by their filters", () => {
+  const byFile = {};
+  QUEUES.filter(q => q.filter).forEach(q => (byFile[q.file] = byFile[q.file] || []).push(q));
+  Object.keys(byFile).forEach(file => {
+    const t = R.parseTSV(read(file));
+    t.rows.forEach(r => assert.ok(byFile[file].filter(q => R.matchesFilter(t, r, q.filter)).length <= 1, file + ": a row in two queues"));
+  });
+});
+
+test("splitCell and matchesFilter", () => {
+  assert.deepEqual(R.splitCell("C1 | C22 |  | C3"), ["C1", "C22", "C3"]);
+  assert.deepEqual(R.splitCell(""), []);
+  const t = R.parseTSV("id\thow\tpos\n1\tA\tx\n2\tB\ty\n3\tB\tz\n");
+  const keep = f => t.rows.filter(r => R.matchesFilter(t, r, f)).map(r => r[0]).join(",");
+  assert.equal(keep(undefined), "1,2,3");
+  assert.equal(keep([]), "1,2,3");
+  assert.equal(keep([{how: ["A"]}]), "1");
+  assert.equal(keep([{how: ["B"], pos: ["z"]}]), "3", "all columns of a condition must match");
+  assert.equal(keep([{how: ["A"]}, {pos: ["y"]}]), "1,2", "any condition may match");
 });
 
 test("the intros JSON is written back byte for byte (Python indent=2 form)", () => {

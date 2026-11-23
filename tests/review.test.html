@@ -32,12 +32,13 @@ function clearNs(){ try { Object.keys(localStorage).filter(k => k.indexOf(PREFIX
 const text = url => fetch(url, {cache: "no-store"}).then(r => r.text());
 
 const frame = document.getElementById("app");
+const QIDS = ["intros", "sample", "thomas", "breaks", "pos", "cdo", "cdo-one"];
 let W, D, A;
 async function load(){
   frame.src = "../review.html?ns=test&lang=ja";
   await new Promise(r => { frame.onload = r; });
   W = frame.contentWindow; D = frame.contentDocument;
-  A = await waitFor(() => W.ReviewApp && ["sample", "intros", "thomas", "breaks", "pos"].every(k => W.ReviewApp.ST[k]) && W.ReviewApp, "app ready", 20000);
+  A = await waitFor(() => W.ReviewApp && QIDS.every(k => W.ReviewApp.ST[k]) && W.ReviewApp, "app ready", 20000);
 }
 function setWho(v){ const el = D.getElementById("reviewer"); el.value = v; el.dispatchEvent(new W.Event("input", {bubbles: true})); }
 const curItem = () => { const st = A.state(); return st.CUR.items[st.VIEW[st.VI]]; };
@@ -47,8 +48,8 @@ function setField(sel, value){ const el = D.querySelector(sel); ok(el, "field " 
 const T = [];
 const test = (name, fn) => T.push([name, fn]);
 
-test("an unchanged queue is written back byte for byte (all four files)", async () => {
-  for(const id of ["intros", "sample", "thomas", "breaks", "pos"]){
+test("an unchanged queue is written back byte for byte (every queue)", async () => {
+  for(const id of QIDS){
     const s = A.ST[id], raw = await text("../" + s.q.file);
     eq(A.exportText(s), raw, id);
     // 書き換えがあるときに通る道（読んで書き戻す）でも同じになること
@@ -166,6 +167,52 @@ test("⑤ a decision queue with fields: the choice and the status are written; a
   const place = s.items.find(x => W.ReviewCore.cell(s.table, s.table.rows[x.row], "種類") === "箇所");
   await openAt("pos", place.n);
   await waitFor(() => D.querySelector("#ctxBox .ctx mark"), "the word is marked in its segment");
+});
+
+test("⑥ only rows with several candidates; approving needs a chosen TLA number; candidates link to the CDO", async () => {
+  const s = A.ST.cdo, C = W.ReviewCore, cellOf = (r, c) => C.cell(s.table, r, c);
+  eq(s.items.length, s.table.rows.filter(r => cellOf(r, "決まり方") === "候補が複数").length, "the queue holds the rows with several candidates");
+  await openAt("cdo", 1);
+  const it = curItem(), cands = C.splitCell(cellOf(s.table.rows[it.row], "TLA番号の候補"));
+  ok(cands.length > 1, "several candidates");
+  const hrefs = [...D.querySelectorAll("#item table.kv a")].map(a => a.getAttribute("href"));
+  cands.forEach(c => ok(hrefs.indexOf("https://coptic-dictionary.org/entry.py?tla=" + c) >= 0, "a link to " + c));
+  ok([...D.querySelectorAll("#item table.kv a")].every(a => a.target === "_blank" && /noreferrer/.test(a.rel)), "links open apart, without a referrer");
+  A.setStatus("承認");
+  ok(!(s.edits[it.key] || {})["状態"], "not approved without a chosen number");
+  const sel = D.querySelector('#item select[data-col="選んだTLA番号"]');
+  eq([...sel.options].slice(1).map(o => o.value).join(","), cands.join(","), "the options are the candidates");
+  ok(sel.options[1].textContent.indexOf(C.splitCell(cellOf(s.table.rows[it.row], "CCLの見出し"))[0]) > 0, "an option shows the CCL headword");
+  setField('#item select[data-col="選んだTLA番号"]', cands[1]);
+  await sleep(150);
+  A.setStatus("承認");
+  eq(s.edits[it.key]["状態"], "承認", "approved");
+  const t = C.parseTSV(A.exportText(s)), orig = C.parseTSV(await text("../" + s.q.file)), row = t.rows[it.row];
+  eq(t.header.join("\t"), orig.header.join("\t"), "no column added (the file has the decision columns)");
+  eq(row[t.header.indexOf("選んだTLA番号")], cands[1], "chosen number");
+  eq(row[t.header.indexOf("状態")], "承認", "status");
+  eq(row[t.header.indexOf("確認者")], "T1", "reviewer");
+  t.rows.forEach((r, i) => { if(i !== it.row) eq(r.join("\t"), orig.rows[i].join("\t"), "row " + (i + 1) + " unchanged"); });
+  setField('#item select[data-col="選んだTLA番号"]', "");
+  await sleep(150);
+  ok(!s.edits[it.key], "clearing the choice takes the approval back too");
+});
+
+test("⑦ the other rows that need a decision; a number typed by hand must look like a TLA number", async () => {
+  const s = A.ST["cdo-one"], t = s.table, cellOf = (r, c) => W.ReviewCore.cell(t, r, c);
+  const want = t.rows.filter(r => ["品詞で絞った", "変化形"].indexOf(cellOf(r, "決まり方")) >= 0 || (cellOf(r, "決まり方") === "綴りで一意" && cellOf(r, "品詞の対応") !== "一致")).length;
+  eq(s.items.length, want, "the queue holds the single candidates that need a decision");
+  ok(s.items.every(x => A.ST.cdo.items.every(y => y.key !== x.key)), "no row is in both ⑥ and ⑦");
+  await openAt("cdo-one", 1);
+  const it = curItem();
+  setField('#item input[data-col="選んだTLA番号"]', "abc");
+  await sleep(120);
+  ok(!(s.edits[it.key] || {})["選んだTLA番号"], "refused");
+  setField('#item input[data-col="選んだTLA番号"]', "C123");
+  await sleep(120);
+  eq(s.edits[it.key]["選んだTLA番号"], "C123", "stored");
+  A.setStatus("承認");
+  eq(s.edits[it.key]["状態"], "承認", "approved without a required field");
 });
 
 test("the input survives a reload (localStorage, per queue and file hash)", async () => {
