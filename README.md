@@ -90,6 +90,8 @@ nag_hammadi_library/
 ├─ CONTRIBUTING.md     ← ★共同編集ガイド(招待を受けた方はまずこちら)
 ├─ .nojekyll           ← GitHub Pages 用
 ├─ .gitignore
+├─ .vercelignore       ← Vercel で配信しないもの(いまは design/ だけ)
+├─ design/             ← デザイン用の資料(アイコン・キャラクターシート・表情・配色案の PDF)。サイトからは使わず、配信しない
 ├─ image/
 │   └─ icon.svg         ← サイトのアイコン画像(各ページが読み込みます)
 ├─ data/               ← サイトが読むXML(手作業の修正が入っていて、source/ からは作り直せない)
