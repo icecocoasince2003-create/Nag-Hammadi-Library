@@ -486,6 +486,7 @@ def build_index():
      f"A digital TEI&nbsp;P5 edition of the Nag Hammadi Codices (13 codices, {TOTAL} tractates), with <b>morpheme-level glosses, a Coptic lexicon and Japanese, English and French translations</b>. Click any word for its sense, compare the manuscript witnesses side by side and follow parallel passages into other texts.",
      f"Une édition numérique TEI&nbsp;P5 des codices de Nag Hammadi (13 codices, {TOTAL} traités), avec <b>gloses morphologiques, lexique copte et traductions japonaise, anglaise et française</b>. Cliquez sur un mot pour en voir le sens, comparez les témoins manuscrits et suivez les passages parallèles dans d’autres textes.")}</p>
    <div class="more">
+     <a href="guide.html">{tri("はじめての方へ →", "Getting started →", "Premiers pas →")}</a>
      <a href="gnosticism.html">{tri("グノーシス主義とは →", "What is Gnosticism? →", "Qu'est-ce que le gnosticisme ? →")}</a>
      <a href="project.html">{tri("このプロジェクトについて →", "About the project →", "À propos du projet →")}</a>
      <a href="#corpus">{tri("文書一覧へ ↓", "Browse the codices ↓", "Parcourir les codices ↓")}</a>
@@ -1082,6 +1083,7 @@ function statusHTML(){
                 :tri('未注釈の作業用本文','Unannotated working text','Texte de travail non annoté');
   return '<section class="status"><h2>'+head+'</h2><ul>'+li.map(x=>'<li>'+x+'</li>').join('')+'</ul><p class="links">'+
     '<a href="'+esc(DOC.xml)+'" download>'+tri('TEI（XML）をダウンロード','Download the TEI (XML)','Télécharger le TEI (XML)')+'</a>'+
+    '<a href="guide.html#viewer">'+tri('本文ビュワーの読み方（はじめての方へ）','How to read this page (Getting started)','Lire cette page (Premiers pas)')+'</a>'+
     '<a href="'+esc(rel)+'" target="_blank" rel="noopener">'+tri('作り方と確かめたこと（README §10・§11）','How it was made and checked (README §10–11)','Méthode et vérifications (README §10–11)')+'</a>'+
     (ann?'<a href="'+esc(REPO+'tree/main/source/nhc_fulltext_split/annotation')+'" target="_blank" rel="noopener">'+tri('要確認の一覧','Review lists','Listes à vérifier')+'</a>':'')+
     '<a href="search.html?doc='+encodeURIComponent(DOC.key)+'">'+tri('この文書を検索','Search this text','Chercher dans ce texte')+'</a>'+
@@ -1272,7 +1274,7 @@ window.addEventListener('hashchange',gotoHash);
 
 # --- sitemap.xml・robots.txt -------------------------------------------------
 # 検索エンジン向けの URL の一覧。管理用（admin・profile）、転送だけの stats.html、準備中の案内 tractate.html は載せない。
-SITEMAP_PAGES = ["", "gnosticism.html", "project.html", "search.html", "lexicon.html",
+SITEMAP_PAGES = ["", "guide.html", "gnosticism.html", "project.html", "search.html", "lexicon.html",
                  "eugnostos.html?wit=III", "eugnostos.html?wit=SYN", "republic.html"]
 SITEMAP_TAIL = ["privacy.html", "terms.html"]
 

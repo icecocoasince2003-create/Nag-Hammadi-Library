@@ -20,6 +20,7 @@
 | ページ | 内容 | 管理方法 |
 |---|---|---|
 | `index.html` | HOME（日・英・仏、NEWS、関連サイト、文書一覧） | `python3 scripts/build_site.py` で生成。NEWS は `data/news.json`、関連サイトは `data/links.json` を編集し、`build_site.py` を実行し直す（生成のときに HTML に書き込むので、JS を動かさない読み手やリンクのプレビューにも出る。実行する前でも、ページを開いたときに JS が JSON を読み直して最新を出す） |
+| `guide.html` | 「はじめての方へ」（日・英・仏）。コプト文字の読み方（字母・上線・聖なる名の略記・借用語）、本文ビュワーの読み方、品詞タグの一覧（`data/pos_labels.json` から作る）、例文（エウグノストス III,3 の最初のセグメント。語群・形態素・レンマ・品詞・語義・訳はデータから読む）、記号の早見表。HOME の導入文の下・本文ビュワーとエウグノストスのビュワーの冒頭・検索のチュートリアルからリンク | 手作業 |
 | `gnosticism.html` | 解説「グノーシス主義とは」（日・英・仏） | 手作業 |
 | `project.html` | プロジェクト紹介。メンバー・資金協力は `data/project.json`（`public: true` のみ表示） | 手作業＋JSON |
 | `eugnostos.html` | エウグノストス。`?wit=III`（祝福されたエウグノストス）/ `?wit=V`（エウグノストス）/ `?wit=SYN`（対照） | 手作業 |
@@ -92,6 +93,7 @@ nag_hammadi_library/
 ├─ eugnostos.html      ← エウグノストス・ビュワー(手作業管理)
 ├─ republic.html       ← プラトン『国家』断片ビュワー(手作業管理)
 ├─ lexicon.html        ← コプト語辞書(手作業管理。data/lexicon.xml を読む)
+├─ guide.html          ← はじめての方へ(手作業管理。品詞の表は data/pos_labels.json、例文は data/eugnostos_tei.xml から)
 ├─ tractate.html       ← 準備中ページ(自動生成)
 ├─ reader.html         ← 本文ビュワー・暫定版(自動生成。?doc=II-6 など)
 ├─ sitemap.xml         ← 検索エンジン向けの URL の一覧(自動生成)

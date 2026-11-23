@@ -406,6 +406,8 @@ html[data-mode="light"] .app main .corpus-head, html[data-mode="light"] .app mai
 .doc-tools { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; margin: 8px 0 0;
   font-size: .8rem; line-height: 1.7; color: var(--ink-faint); }
 .doc-photos a { color: var(--gold-bright, var(--gold)); text-decoration: none; text-underline-offset: 4px; }
+.doc-guide { color: var(--gold-bright, var(--gold)); text-decoration: none; text-underline-offset: 4px; }
+.doc-guide:hover { text-decoration: underline; }
 .doc-photos a:hover { text-decoration: underline; }
 .doc-photos .dp-note { font-size: .72rem; margin-left: .3em; }
 .doc-cite { background: none; border: 1px solid var(--line-2, var(--line)); border-radius: 999px; color: var(--ink-soft);
