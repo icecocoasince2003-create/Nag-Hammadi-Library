@@ -1,0 +1,13 @@
+{
+  "_comment": "自動注釈の精度（実測）。approved が false のあいだは、どこにも表示しない。生田目が数値を選んで approved を true にすると、本文ビュワー（reader.html）の冒頭の説明に「品詞の正解率は約◯%（◯語の抜き取りで測定）」が、編集方針（edition.html）の「精度」に同じ数値が出る。数値は、抜き取りの集計（source/nhc_fulltext_split/evaluation/score_review.py。確認作業の画面 review.html のキュー②）か、『国家』での検証（evaluate_republic.py、republic_summary.md）から選ぶ。pos_accuracy・lemma_accuracy は百分率の数（例 69.2。レンマを出さないなら null）、n は測った語の数、method は「◯語の{method}で測定」に入る言葉（日・英・仏）、date は測った日。",
+  "approved": false,
+  "pos_accuracy": null,
+  "lemma_accuracy": null,
+  "n": null,
+  "method": {
+    "ja": "抜き取り",
+    "en": "a sample",
+    "fr": "un échantillon"
+  },
+  "date": null
+}

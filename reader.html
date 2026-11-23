@@ -114,6 +114,8 @@ let OPT={inter:false, cert:false, cuts:false, page:false, line:false};
 try{ Object.assign(OPT, JSON.parse(localStorage.getItem('nhc-reader')||'{}')); }catch(e){}
 const saveOpt=()=>{ try{ localStorage.setItem('nhc-reader', JSON.stringify(OPT)); }catch(e){} };
 let DOC=null, D=null, MS=[], NAV={prev:null, next:null};
+/* 実測の精度（data/accuracy.json）。approved が true のときだけ、冒頭の説明に出す */
+let ACC=null;
 
 async function getXML(url){
   const r=await fetch(url,{cache:'no-cache'});
@@ -285,6 +287,12 @@ function statusHTML(){
     li.push(tri('<b>語のまとまり（語群）</b>：自動で推定したものです。全文テキスト全体で、境目のおよそ 4 分の 1 が要確認の一覧に入っています。',
       '<b>Bound groups</b> (orthographic words): inferred automatically; across the full texts about a quarter of the boundaries are on the review list.',
       '<b>Groupes</b> (mots graphiques) : déduits automatiquement ; sur l’ensemble, environ un quart des limites figurent sur la liste à vérifier.'));
+    if(ACC&&ACC.approved===true&&ACC.pos_accuracy!=null&&ACC.n){
+      const mt=ACC.method||{};
+      li.push(tri('<b>精度</b>：品詞の正解率は約 '+esc(ACC.pos_accuracy)+'%（'+fmt(ACC.n)+' 語の'+esc(mt.ja||'抜き取り')+'で測定）'+(ACC.lemma_accuracy!=null?'、レンマは約 '+esc(ACC.lemma_accuracy)+'%':'')+'。',
+        '<b>Accuracy</b>: about '+esc(ACC.pos_accuracy)+'% of parts of speech are right (measured on '+esc(mt.en||'a sample')+' of '+fmt(ACC.n)+' words)'+(ACC.lemma_accuracy!=null?', and about '+esc(ACC.lemma_accuracy)+'% of lemmata':'')+'.',
+        '<b>Exactitude</b> : environ '+esc(String(ACC.pos_accuracy).replace('.',','))+' % des catégories sont justes (mesuré sur '+esc(mt.fr||'un échantillon')+' de '+fmt(ACC.n)+' mots)'+(ACC.lemma_accuracy!=null?', et environ '+esc(String(ACC.lemma_accuracy).replace('.',','))+' % des lemmes':'')+'.'));
+    }
     li.push(tri('<b>品詞・レンマ・語義</b>：自動で付けたものです。この文書では、確度 low が '+pct(s.low,s.m)+'%、品詞を決められなかった語（X）が '+pct(s.X,s.m)+'% あります。語義は短い辞書的な意味で、文脈で確かめた訳語ではありません。確度 high・medium でも正しいとは限りません。',
       '<b>Part of speech, lemma and gloss</b>: assigned automatically. In this text '+pct(s.low,s.m)+'% of the morphemes have low certainty and '+pct(s.X,s.m)+'% could not be classified (X). Glosses are short dictionary meanings, not translations checked against the context. High or medium certainty does not mean an analysis is correct.',
       '<b>Partie du discours, lemme et glose</b> : attribués automatiquement. Dans ce texte, '+pct(s.low,s.m)+' % des morphèmes ont une certitude faible et '+pct(s.X,s.m)+' % n’ont pas pu être classés (X). Les gloses sont de brèves équivalences de dictionnaire, non des traductions vérifiées en contexte. Une certitude « high » ou « medium » ne garantit pas l’analyse.'));
@@ -360,9 +368,10 @@ function lexTarget(ix,m){
 function showCard(el){
   const m=MS[+el.dataset.i]; if(!m) return;
   const g=el.closest('.g'), grp=g?Array.from(g.querySelectorAll('.m')).map(x=>MS[+x.dataset.i]):[m];
-  const certT={high:tri('high — 参考本文との一致などによる','high — e.g. agrees with the annotated reference text','high — p. ex. accord avec le texte de référence'),
-    medium:tri('medium — 語彙表・規則による仮の判定','medium — from the core word list or rules','medium — liste de base ou règles'),
-    low:tri('low — 推定。要確認','low — a guess; needs checking','low — conjecture, à vérifier')}[m.cert]||esc(m.cert);
+  /* 確度は 2 段で示す: low（要確認）と、それ以外。精度の検証で high が medium より確かとは言えなかった（high は区切りの一致が 47.6%、
+     medium は 84.3%。source/nhc_fulltext_split/evaluation/republic_summary.md の §4）ので、high と medium は分けない。TEI の @cert は 3 段のまま */
+  const certT=m.cert==='low'?tri('low（要確認）— 推定によるもの','low (to be checked) — a guess','low (à vérifier) — conjecture')
+    :tri('low 以外 — 自動の判定（high と medium は分けて示さない）','not low — automatic (high and medium are not shown apart)','autre que low — automatique (high et medium ne sont pas distingués)');
   const rows=[[tri('形態素','Morpheme','Morphème'),'<span class="cop" lang="cop">'+m.html+'</span>']];
   if(D.st.typed){
     rows.push([tri('レンマ','Lemma','Lemme'), m.lemma?'<span class="cop" lang="cop">'+esc(m.lemma)+'</span>':'<span class="na">'+tri('なし（未判定）','none (unresolved)','aucun (non résolu)')+'</span>']);
@@ -477,6 +486,7 @@ function fail(msg, detail){
 }
 (async()=>{
   try{
+    const accP=fetch('data/accuracy.json',{cache:'no-cache'}).then(r=>r.ok?r.json():null).catch(()=>null);
     const docs=readCatalog(await getXML('data/catalog.xml'));
     DOC=docs.find(d=>d.key===key && d.xml);
     if(!DOC){ fail(tri('文書が見つかりません','Text not found','Texte introuvable'), key||'—'); return; }
@@ -486,6 +496,7 @@ function fail(msg, detail){
     NAV={prev:i>0?withReader[i-1]:null, next:i>=0&&i<withReader.length-1?withReader[i+1]:null};
     shell.innerHTML='<p class="loading">'+tri('本文を読み込んでいます…','Loading the text…','Chargement du texte…')+'</p>';
     D=readTEI(await getXML(DOC.xml));
+    ACC=await accP;
     render();
   }catch(e){ console.error(e); fail(tri('読み込めませんでした','Could not load the text','Chargement impossible'), e.message); }
 })();

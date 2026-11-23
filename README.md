@@ -416,7 +416,8 @@ BOM の有無を、JSON はキーの順と字下げ 2 を元のまま。足す�
    ```
 3. ① は、`reviewed: true` にした解題が本文ビュワーの「この文書について」に出ます（公開されたとき）。
 4. ② は、`python3 source/nhc_fulltext_split/evaluation/score_review.py source/nhc_fulltext_split/evaluation/review_sample.tsv` で集計します
-   （`確認者` の列があっても読めます）。
+   （`確認者` の列があっても読めます）。サイトに出す数値を決めたら `data/accuracy.json` に書き、`approved` を `true` にすると、本文ビュワーの
+   冒頭の説明に「品詞の正解率は約◯%（◯語の抜き取りで測定）」が、編集方針のページの「精度」に同じ数値が出ます（`false` のあいだは出ない）。
 5. ③④ は、`python3 scripts/split_segments.py source/nhc_fulltext_split/proposals/long_segment_breaks.tsv`（③ は `--doc II-2` を付ける）で、
    **状態が「承認」か「修正して承認」の行だけ**を当てはめます（「修正した位置」があればそちらを使う。③ では種別が「語録の始まり」の行だけを
    分け目にする）。表示だけで確かめてから `--write` を付けます。ほかの状態の行は当てはめず、件数を表示します。
