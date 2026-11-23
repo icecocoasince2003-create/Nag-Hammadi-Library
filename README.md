@@ -137,7 +137,8 @@ nag_hammadi_library/
     ├─ insert_breaks.py    写本の頁(<pb>)・行(<lb>)の区切りを TSV から TEI に入れる(既定は表示だけ、--write で書き込む)
     ├─ split_segments.py   セグメント(<s>)を TSV で指定した位置で分ける(案。まだ実データには使わない)
     ├─ make_og_image.py    共有用の画像 image/og-image.png を作る(rsvg-convert が要る)
-    ├─ check_tei.py        TEI の点検(ポインタの切れ・以前の書き方・見出しとレンマへのコプト文字以外の文字の混入など)。--schema でスキーマ検証も
+    ├─ check_tei.py        TEI の点検(ポインタの切れ・以前の書き方・見出しとレンマへのコプト文字以外の文字の混入・語釈に使わない語など)。--schema でスキーマ検証も
+    ├─ gloss_rules.json    語釈と辞書の語義に使わない語の一覧(check_tei.py が読む。CONTRIBUTING.md の 10.)
     ├─ check_style.py      表記ゆれの点検(規則は style_rules.json)
     ├─ build_parallels.py  並行箇所(data/parallels.xml)を、文言の自動照合で作る
     └─ sync_nhc_catalog.py  NHC 全文テキスト(未注釈)の文書一覧を data/catalog.xml に書き出す
@@ -579,7 +580,8 @@ TEI に無い独自の要素・属性は使っていません。
 以前の書き方のファイルは `python3 scripts/migrate_tei_markup.py ファイル名 --write` で直せます（`--write` を付けなければ、何が変わるかを表示するだけです）。
 
 **点検のしかた。** データを直したら、次を実行してください。スキーマでは分からない誤り
-（訳や語釈の指す先が無い、同じ `<s>` に訳が 2 つある、以前の書き方が残っている、など）を報告します。
+（訳や語釈の指す先が無い、同じ `<s>` に訳が 2 つある、以前の書き方が残っている、語釈に使わない語
+（`scripts/gloss_rules.json`。この版は文法関係や目的語の標示を注釈しないので、それを表す語を語釈と辞書に入れない）が入っている、など）を報告します。
 
 ```
 python3 scripts/check_tei.py

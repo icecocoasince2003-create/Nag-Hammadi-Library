@@ -17,6 +17,17 @@ source of the reference lexicon (forms with their POS, lemma, xml:lang="grc" and
 glosses). Example (held-out check of VI,5): --ref data/eugnostos_tei.xml.
 Without --ref the behaviour and the output are byte for byte the same as before.
 The script uses no random numbers, and its output does not depend on hash order.
+
+Gloss ids (note added 2026-11-23 in the Sheneset repository): the xml:id of a gloss is
+'g-<lang>-' plus the first 12 hex digits of the SHA-1 of the gloss text (hashid()). On
+2026-11-23 the gloss of ⲙⲙⲟ in LEXICON below was reworded to describe the form only, and in
+the 29 annotated files in ../tei/ only the text of the existing <interp> elements was replaced.
+Their ids (g-en-6e102730a440, g-ja-de9db66af0eb) are hashes of the earlier wording and were
+kept, so that no @ana had to change. A new run of this script therefore writes the new wording
+under new ids (g-en-<hash of the new text>), which differ from the ids in the existing files.
+Do not re-id the existing files to match: when merging new output, map the new ids onto the
+existing ones. Glosses describe forms only; they name no grammatical relations and do not mark
+objects (edition.html, "What this edition does not annotate"; scripts/check_tei.py, check 11).
 """
 import re, csv, hashlib, sys, argparse
 from collections import Counter, defaultdict
@@ -80,7 +91,7 @@ LEXICON='''
 ϩⲙ|PREP|ϩⲛ|in|〜の中に
 ϩⲁ|PREP|ϩⲁ|under / before|〜の下に／前に
 ϩⲓⲧⲛ|PREP|ϩⲓⲧⲛ|by / through|〜によって／通して
-ⲙⲙⲟ|PREP|ⲙⲙⲟ|of / object marker|〜を（目的語標識）
+ⲙⲙⲟ|PREP|ⲙⲙⲟ|preposition n- (before suffixes)|前置詞 ⲛ- の代名詞形
 ⲉⲣⲟ|PREP|ⲉⲣⲟ|to / toward|〜へ／〜に
 ⲛⲥⲱ|PREP|ⲛⲥⲁ|after|〜の後に
 ⲕⲁⲧⲁ|PREP|ⲕⲁⲧⲁ|according to|〜に従って

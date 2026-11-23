@@ -10,7 +10,12 @@
 > `python3 scripts/check_style.py` and `python3 scripts/build_site.py --check`; GitHub runs the same checks.
 > Translations, glosses and notes are the project's own work (CC BY 4.0): do not copy published translations or
 > commentaries. If you use generative AI, say so: in the pull request description, or in the commit message
-> when you commit without a pull request. Contact: see the project page (`project.html`, “Join the team”).
+> when you commit without a pull request. The annotation stops at text, word division, part of speech, lemma, gloss,
+> translation and parallels: add no grammatical relations (subject, object, …) and no distinction of whether an
+> object takes ⲛ-/ⲙⲙⲟ=, which is always tagged by its form as a preposition (PREP) with a gloss that describes the form
+> (`scripts/check_tei.py` rejects banned gloss terms, listed in `scripts/gloss_rules.json`). Do not bring analysis data
+> or scripts from outside this repository into it; the editor decides whether anything is imported.
+> Contact: see the project page (`project.html`, “Join the team”).
 
 ## 1. はじめに
 
@@ -94,6 +99,12 @@ TEI の書き方の全体は README の「TEI設計の要点」と「TEI スキ�
   消しやすくなります）。置き換える前に、対象がちょうど 1 か所に当たることを確かめます。
 - 語群（bound group）は `<phr>`、対訳は `<div type="translation" xml:lang="…">` の中の `<seg corresp="#…">`、文脈上の語釈は
   `<w ana="#gl-…">` と `<interp xml:id="gl-…">` で書きます（以前の独自の書き方は使わない。`check_tei.py` が報告します）。
+- **注釈の範囲。** 注釈は、本文・語の区切り・品詞・レンマ・語釈・訳・並行箇所までです。主語・目的語などの文法関係や、
+  目的語に前置詞 ⲛ-／ⲙⲙⲟ= が付くかどうかの区別は、要素・属性・値・語釈のどの形でも加えません。ⲛ-／ⲙⲙⲟ= は使い方に
+  かかわらず形のとおり前置詞（`PREP`）とし、語釈は形の説明にとどめます（`ⲙⲙⲟ` は「前置詞 ⲛ- の代名詞形」）。
+  語釈と辞書の語義に使わない語は `check_tei.py` が点検します（10.）。
+- **外のデータやスクリプトを取り込まない。** このリポジトリの外にある分析用のデータやスクリプトを、取り込んだり、読み込んだり、
+  参照したりしないでください。取り込むかどうかは編集者が決めます。
 
 ## 5. 訳と注の約束
 
@@ -177,3 +188,23 @@ git push -u origin fix/lexicon-sense
 - **何を書くか:** 使ったツールと、使ったところ（たとえば、訳の下書き、語釈の候補、スクリプトの修正、データの点検）。
 - コミットのメッセージの末尾に `Co-Authored-By: Claude …` のような行（Claude Code などのツールが付けるもの）があれば、
   それもこの記載にあたります。このリポジトリのコミットにも、この行の付いたものがあります。
+
+## 10. 語釈に使わない語の点検
+
+語釈と辞書の語義に、この版で扱わない区別（4. の「注釈の範囲」）を表す語が入っていないかを、`python3 scripts/check_tei.py` が
+調べます（GitHub の自動チェックでも走ります）。使わない語は `scripts/gloss_rules.json` の `rules` にあり、規則を足すときは
+項目を 1 つ足すか、既存の項目の `terms` に語を足します。
+
+```json
+{
+  "terms": ["使わない語", "another term"],
+  "note": "なぜ使わないか"
+}
+```
+
+- 調べるのは語釈の文字列だけです: TEI の `<interp>`、辞書（`data/lexicon.xml`）の `<sense>`・`<usg>`、`source/lexicon.csv` の
+  語義と用法の列（`en`・`ja`・`fr`・`usg_ja`・`usg_en`）、自動注釈のスクリプト（`source/nhc_fulltext_split/annotation/annotate_tei.py`）の
+  語釈表とその出力の `core_glosses.tsv`、抜き取り表の「自動の語義」。編集方針のページなどの説明の文章は調べません。
+- 語釈の文字列にその語が含まれていれば失敗にします（正規表現ではありません）。大文字と小文字、全角と半角、`’` と `'` の違いは無視します。
+- 規則を足したら `python3 scripts/check_tei.py` を実行し、見つかった語釈を直してから一緒にコミットしてください。
+  規則が効くことは、語釈を 1 つわざと書き換えて失敗することを確かめ、元に戻して確かめます。

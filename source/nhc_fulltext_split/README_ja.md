@@ -387,7 +387,7 @@ python3 scripts/verify_tei.py 出力フォルダ [tei_all.rng]
 | `resp` | `#morph-auto`（自動）、`#morph-reference`（III,3 の 8 セグメント。注釈つきの版から写したもの） |
 | `xml:lang="grc"` | 手本でギリシア語借用語とされている語形 |
 
-**出どころ。** 2026-11-18 に `TEI_NagHammadi_39_annotated_draft.zip` として受け取った。このリポジトリの外で、同梱の `annotation/bound_group_converter.py`（§10 の変換スクリプトと同じもの。`11-2a_` のような名前も読むように 1 か所だけ違う）で VII–XIII の 22 文書に語群を付け（写本 I–IV の 17 文書は §10 の版をそのまま使った）、`annotation/annotate_tei.py` で注釈を付けたもの。受け取ったときの説明は `annotation/README_ja.txt` にそのまま置いてある。
+**出どころ。** 2026-11-18 に `TEI_NagHammadi_39_annotated_draft.zip` として受け取った。このリポジトリの外で、同梱の `annotation/bound_group_converter.py`（§10 の変換スクリプトと同じもの。`11-2a_` のような名前も読むように 1 か所だけ違う）で VII–XIII の 22 文書に語群を付け（写本 I–IV の 17 文書は §10 の版をそのまま使った）、`annotation/annotate_tei.py` で注釈を付けたもの。受け取ったときの説明は `annotation/README_ja.txt` にそのまま置いてある（末尾に 2026-11-23 の追記がある）。
 
 **作り方**（スクリプトから読み取れること）:
 
@@ -405,6 +405,8 @@ python3 scripts/verify_tei.py 出力フォルダ [tei_all.rng]
 - **使われていない語釈を除いた。** 各ファイルの `<standOff>` には語彙表全体が入っていて、どの `<w>` からも指されていない語釈が計 4,693 あった（`scripts/check_tei.py` がそれぞれを問題として報告する）。指されているものだけを残し、1 行 1 語釈にした。
 - **ヘッダー。** 「言語注釈はまだ付けていない」「品詞・レンマはまだ付けていない」など、注釈の前の記述（`<availability>`・`<projectDesc>`・`<interpretation>`）と英語の副題を直した。日本語だけだった注釈の説明に英語の段落を足し、III,3 には写した 8 セグメントのことを書いた。1 行に詰まっていた 2 つの `<respStmt>` を整え、`<revisionDesc>` を日付順にして、この作業の `<change>` を 1 行足した。XML 宣言の引用符を `"` にした。
 - `annotation/` の TSV の改行を CRLF から LF にした。
+
+**2026-11-23 の変更。** `ⲙⲙⲟ` の語釈を、形を説明するだけのもの（英 "preposition n- (before suffixes)"、日「前置詞 ⲛ- の代名詞形」）にした。29 文書の語釈表では `<interp>` の文字列だけを置き換え、id（`g-en-6e102730a440`・`g-ja-de9db66af0eb`）は残した（約 1,075 語の `@ana` はそのまま）。語釈の id は語釈の文字列のハッシュなので、`annotate_tei.py` で新しく注釈を付けると、この語釈の id は既存の文書と食い違う。既存の id は付け直さない（`annotation/README_ja.txt` の追記）。語釈は形の説明にとどめ、文法関係や目的語の標示を表す語を使わない（`scripts/check_tei.py` の 11. が点検する）。抜き取り表（`evaluation/review_sample.tsv`）は同じ種で作り直し、変わったのはこの語釈の 1 行と `review_sample.json` のハッシュだけ。
 
 **変わっていないもの・確かめたこと。** 各セグメントの文字列（語の区切りを除く）、`xml:id`・`@n`、`<ab>`、`<gap>` の位置は元のまま。写本 I–IV の 17 文書は語群と語の区切りも §10 のまま。`scripts/verify_tei.py` は 56 文書すべてで通る（`<supplied>` と注釈の属性を読むように直した。わざと壊した複製 7 通りで失敗することも確かめた）。リポジトリ直下の `scripts/check_tei.py` は `@ana` の指す先も確かめ、TEI P5 のスキーマ（tei_all.rng、P5 4.3.0）で 62 ファイル（`data/` の 6 と `tei/` の 56）すべてが妥当。並行箇所（`data/parallels.xml`）は作り直しても変わらない（`scripts/build_parallels.py` は `<supplied>` の中の字も読むように直した）。
 

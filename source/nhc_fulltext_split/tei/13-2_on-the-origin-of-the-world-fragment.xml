@@ -112,6 +112,7 @@
       <change when="2026-11-18">Provisional bound-group segmentation into &lt;phr&gt; containing morpheme &lt;w&gt;, with exact-match reference reuse where available and automatically inferred boundaries elsewhere; original text verified against input.</change>
       <change when="2026-11-18">Provisional POS/lemma, stand-off English/Japanese glosses, and explicit confidence markers added; original Coptic text and segmentation preserved.</change>
       <change when="2026-11-18">Added to the Sheneset repository and published as a draft: the restoration marks for ⲍ and ⲯ, which the annotation had overwritten, put back as &lt;supplied&gt; around the restored letters; glosses that no word points to removed; header statements about the annotation brought up to date.</change>
+      <change when="2026-11-23">Gloss of ⲙⲙⲟ (PREP) in the stand-off glossary reworded to describe the form only ("preposition n- (before suffixes)" / "前置詞 ⲛ- の代名詞形"); the ids g-en-6e102730a440 and g-ja-de9db66af0eb are kept, so no @ana changed.</change>
     </revisionDesc>
   </teiHeader>
   <text type="witness" xml:id="wit-XIII-2" n="NHC XIII,2" xml:lang="cop">
@@ -378,7 +379,7 @@
       <interp xml:id="g-en-60c1954afdb5">but / and</interp>
       <interp xml:id="g-en-60eb7e5f19f7">darkness</interp>
       <interp xml:id="g-en-6da8bc23c81b">every / all</interp>
-      <interp xml:id="g-en-6e102730a440">of / object marker</interp>
+      <interp xml:id="g-en-6e102730a440">preposition n- (before suffixes)</interp>
       <interp xml:id="g-en-8699e2abdc6b">do / make</interp>
       <interp xml:id="g-en-8f3926c4181b">call / name</interp>
       <interp xml:id="g-en-968259a3644f">world / cosmos</interp>
@@ -429,7 +430,7 @@
       <interp xml:id="g-ja-907beffcbe37">語る／言う</interp>
       <interp xml:id="g-ja-92c22639c94b">最初の</interp>
       <interp xml:id="g-ja-b44b917ef940">呼ぶ／名づける</interp>
-      <interp xml:id="g-ja-de9db66af0eb">〜を（目的語標識）</interp>
+      <interp xml:id="g-ja-de9db66af0eb">前置詞 ⲛ- の代名詞形</interp>
       <interp xml:id="g-ja-ec18d17e690b">全体の</interp>
       <interp xml:id="g-ja-ed327882f988">不定冠詞</interp>
       <interp xml:id="g-ja-f23ee6fc7489">あらゆる</interp>

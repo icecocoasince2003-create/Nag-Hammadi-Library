@@ -26,6 +26,14 @@ TEI のスキーマ（tei_all.rng）は「要素や属性の並びが正しい�
        コプト文字は Coptic のブロック（U+2C80–2CFF）と、ギリシア文字のブロックにあるコプト文字（U+03E2–03EF: ϣ ϥ ϩ ϫ ϭ ϯ など）。
        見た目の似たラテン文字（o・e など）やギリシア文字（ο・ε など）、キリル文字の混入を見つける。上線などの合成記号、
        欠損の記号（[ ] . …）、ハイフンは文字ではないので調べない。ギリシア語の本文のファイル（<TEI xml:lang="grc">）は対象外。
+ 11. 語釈に、使わない語（scripts/gloss_rules.json）が入っていないか
+       この版は文法関係や目的語の標示を注釈しない（edition.html「この版で扱わないこと」）。そのため、語釈と辞書の語義に
+       「目的語標識」「object marker」のような語を入れない。調べるのは語釈の文字列だけで、説明の文章は調べない:
+         - TEI の <interp>（語釈）、辞書（lexicon.xml）の <sense>・<usg>（点検するファイルそれぞれ）
+         - ファイルを指定しないで実行したときは、さらに source/lexicon.csv の語義と用法の列（en・ja・fr・usg_ja・usg_en）、
+           自動注釈のスクリプト（source/nhc_fulltext_split/annotation/annotate_tei.py）の語釈表と、その出力の
+           annotation/core_glosses.tsv、抜き取り表（evaluation/review_sample.tsv）の「自動の語義」
+       比べるときは、大文字と小文字、全角と半角、’ と ' の違いを無視する。規則の足し方は CONTRIBUTING.md の「10.」。
 
 --schema に tei_all.rng の場所を渡すと、xmllint によるスキーマ検証も続けて行います。
 
@@ -37,7 +45,9 @@ TEI のスキーマ（tei_all.rng）は「要素や属性の並びが正しい�
 問題が無ければ終了コード 0、あれば 1。ファイルは書き換えません。
 """
 import argparse
+import csv
 import glob
+import json
 import os
 import subprocess
 import sys
@@ -46,6 +56,8 @@ import xml.etree.ElementTree as ET
 from collections import Counter
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+GLOSS_RULES = os.path.join(ROOT, "scripts", "gloss_rules.json")
+NHC = os.path.join(ROOT, "source", "nhc_fulltext_split")
 T = "{http://www.tei-c.org/ns/1.0}"
 XID = "{http://www.w3.org/XML/1998/namespace}id"
 XLANG = "{http://www.w3.org/XML/1998/namespace}lang"
@@ -69,6 +81,60 @@ def non_coptic(s):
 def describe(chars):
     """混じった文字の説明（「o = LATIN SMALL LETTER O」）"""
     return "、".join("%s = %s" % (ch, unicodedata.name(ch, "U+%04X" % ord(ch))) for ch in dict.fromkeys(chars))
+
+
+def gloss_rules(cache=[]):
+    """語釈に使わない語（11.）。scripts/gloss_rules.json の rules[].terms を、正規化した形と組にして返す。"""
+    if not cache:
+        with open(GLOSS_RULES, encoding="utf-8") as f:
+            rules = json.load(f).get("rules", [])
+        for i, r in enumerate(rules, 1):
+            terms = r.get("terms")
+            if not terms or not all(isinstance(t, str) and fold(t) for t in terms):
+                sys.exit("gloss_rules.json の %d 番目の規則に terms（空でない文字列の配列）がありません" % i)
+            cache += [(t, fold(t)) for t in terms]
+    return cache
+
+
+def fold(s):
+    """比べるための形: NFKC（全角と半角をそろえる）、大文字と小文字を区別しない、’ ʼ を ' に、空白を 1 つに。"""
+    s = unicodedata.normalize("NFKC", s or "").casefold().replace("’", "'").replace("ʼ", "'")
+    return " ".join(s.split())
+
+
+def banned(text):
+    """text に入っている、語釈に使わない語（gloss_rules.json に書いたままの形）の一覧。"""
+    t = fold(text)
+    return [term for term, f in gloss_rules() if f in t]
+
+
+def check_gloss_sources():
+    """11. のうち TEI 以外のもの（辞書の CSV・注釈のスクリプトの語釈表など）。{ファイル: [問題]} を返す。"""
+    out = {}
+
+    def add(path, line, column, text):
+        for term in banned(text):
+            out.setdefault(path, []).append("%d 行目（%s）: 語釈に使わない語「%s」が入っています: %s" % (line, column, term, text))
+
+    def tsv_columns(path, columns, delimiter="\t"):
+        if not os.path.exists(path):
+            return
+        with open(path, encoding="utf-8-sig", newline="") as f:
+            for no, row in enumerate(csv.DictReader(f, delimiter=delimiter), 2):
+                for c in columns:
+                    add(path, no, c, row.get(c) or "")
+
+    tsv_columns(os.path.join(ROOT, "source", "lexicon.csv"), ("en", "ja", "fr", "usg_ja", "usg_en"), ",")
+    tsv_columns(os.path.join(NHC, "annotation", "core_glosses.tsv"), ("English", "日本語"))
+    tsv_columns(os.path.join(NHC, "evaluation", "review_sample.tsv"), ("自動の語義",))
+    script = os.path.join(NHC, "annotation", "annotate_tei.py")
+    if os.path.exists(script):                          # 語釈表 LEXICON の行（語形|品詞|レンマ|英語|日本語）
+        with open(script, encoding="utf-8") as f:
+            for no, line in enumerate(f, 1):
+                cols = line.rstrip("\n").split("|")
+                if len(cols) == 5:
+                    add(script, no, "語釈表", cols[3] + " | " + cols[4])
+    return out
 
 
 def ids_of(path, cache={}):
@@ -240,6 +306,17 @@ def check(path):
         lemmas = Counter(w.get("lemma") for w in root.iter(T + "w") if w.get("lemma") and non_coptic(w.get("lemma")))
         out += ["<w> の @lemma にコプト文字以外の文字が混じっています: %s（%s）%d 語" % (l, describe(non_coptic(l)), n)
                 for l, n in sorted(lemmas.items())]
+
+    # 11. 語釈に使わない語（語釈 <interp>、辞書の <sense>・<usg>。入れ子の <sense> は外側でまとめて調べる）
+    for el in root.iter():
+        tag = name(el.tag)
+        if tag not in ("interp", "sense", "usg") or (tag == "sense" and any(name(a.tag) == "sense" for a in ancestors(el))):
+            continue
+        pieces = [t for t in (" ".join(x.split()) for x in el.itertext()) if t]   # <sense> では言語ごとの <quote>
+        for term in banned(" ".join(pieces)):
+            entry = el if tag == "interp" else next((a for a in ancestors(el) if name(a.tag) in ("entry", "superEntry")), el)
+            out.append("語釈に使わない語「%s」が入っています（scripts/gloss_rules.json）: <%s> %s「%s」"
+                       % (term, tag, entry.get(XID) or "", " | ".join(pieces)[:100]))
     return out
 
 
@@ -265,11 +342,21 @@ def main():
                 print("   - " + p)
             if len(problems) > 40:
                 print("   …ほか %d 件" % (len(problems) - 40))
+    n = len(files)
+    if not args.files:                                  # 11. の TEI 以外のもの（ファイルを指定しないときだけ）
+        n += 4                                          # lexicon.csv・annotate_tei.py・core_glosses.tsv・review_sample.tsv
+        for path, problems in sorted(check_gloss_sources().items()):
+            bad += 1
+            print("!! %s: %d 件" % (os.path.relpath(path, ROOT), len(problems)))
+            for p in problems[:40]:
+                print("   - " + p)
+            if len(problems) > 40:
+                print("   …ほか %d 件" % (len(problems) - 40))
     what = "点検" + ("とスキーマ検証" if args.schema else "")
     if bad:
-        print("\n%d / %d ファイルに問題があります（%s）" % (bad, len(files), what))
+        print("\n%d / %d ファイルに問題があります（%s）" % (bad, n, what))
         return 1
-    print("%d ファイル: 問題は見つかりませんでした（%s）" % (len(files), what))
+    print("%d ファイル: 問題は見つかりませんでした（%s）" % (n, what))
     if not args.schema:
         print("（スキーマ検証は行っていません。--schema に tei_all.rng の場所を渡すと行います）")
     return 0

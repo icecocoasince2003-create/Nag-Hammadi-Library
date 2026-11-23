@@ -115,6 +115,7 @@
       <change when="2026-11-18">Provisional bound-group segmentation into &lt;phr&gt; containing morpheme &lt;w&gt;, with exact-match reference reuse where available and automatically inferred boundaries elsewhere; original text verified against input.</change>
       <change when="2026-11-18">Provisional POS/lemma, stand-off English/Japanese glosses, and explicit confidence markers added; original Coptic text and segmentation preserved.</change>
       <change when="2026-11-18">Added to the Sheneset repository and published as a draft: the restoration marks for ⲍ and ⲯ, which the annotation had overwritten, put back as &lt;supplied&gt; around the restored letters; glosses that no word points to removed; header statements about the annotation brought up to date.</change>
+      <change when="2026-11-23">Gloss of ⲙⲙⲟ (PREP) in the stand-off glossary reworded to describe the form only ("preposition n- (before suffixes)" / "前置詞 ⲛ- の代名詞形"); the ids g-en-6e102730a440 and g-ja-de9db66af0eb are kept, so no @ana changed.</change>
     </revisionDesc>
   </teiHeader>
   <text type="witness" xml:id="wit-XIII-1" n="NHC XIII,1" xml:lang="cop">
@@ -11934,7 +11935,7 @@
       <interp xml:id="g-en-6b6996256d05">know / understand</interp>
       <interp xml:id="g-en-6ccf720ae2a6">those</interp>
       <interp xml:id="g-en-6da8bc23c81b">every / all</interp>
-      <interp xml:id="g-en-6e102730a440">of / object marker</interp>
+      <interp xml:id="g-en-6e102730a440">preposition n- (before suffixes)</interp>
       <interp xml:id="g-en-6f8f8e9f7673">then</interp>
       <interp xml:id="g-en-710dbed86a7d">causative infinitive marker</interp>
       <interp xml:id="g-en-7226de2cb7c5">take / receive</interp>
@@ -12125,7 +12126,7 @@
       <interp xml:id="g-ja-d32e6696ecdc">言葉／ロゴス</interp>
       <interp xml:id="g-ja-d4db32292afe">上方へ／外へ</interp>
       <interp xml:id="g-ja-d5f9f24ba5e7">これら</interp>
-      <interp xml:id="g-ja-de9db66af0eb">〜を（目的語標識）</interp>
+      <interp xml:id="g-ja-de9db66af0eb">前置詞 ⲛ- の代名詞形</interp>
       <interp xml:id="g-ja-e0742de158f3">使役不定詞標識</interp>
       <interp xml:id="g-ja-e1b7d5621057">彼の</interp>
       <interp xml:id="g-ja-e55beffe6f67">他の</interp>
