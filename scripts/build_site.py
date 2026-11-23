@@ -826,6 +826,13 @@ h1{font-family:var(--disp); font-weight:600; line-height:1.12; font-size:clamp(1
 .text.cuts:not(.inter) .g .m + .m::before{content:"·"; color:var(--ink-faint); margin:0 .04em}
 .text.cert .m.c-low .f{box-shadow:inset 0 -.38em 0 rgba(207,147,166,.32)}
 .text.cert .m.x .f{text-decoration:underline wavy var(--rose); text-underline-offset:.25em}
+/* 頁・行の印（<pb>・<lb>）。〈ページ〉〈行〉で出す。見た目はエウグノストス・『国家』のビュワーの .pdm・.lbm と同じ */
+.lbm,.pbm{display:none; user-select:none}
+.text.lines .lbm{display:inline-block; font-family:var(--ui); font-size:.56rem; line-height:1; color:var(--lapis); vertical-align:.5em;
+ margin:0 2px; padding:0 2px; border-left:1px solid var(--lapis); opacity:.85; font-variant-numeric:tabular-nums; white-space:nowrap}
+.text.pages .pbm{display:inline-block; font-family:var(--ui); font-size:.62rem; letter-spacing:.04em; color:var(--on-gold,#1a140a); background:var(--gold);
+ border-radius:4px; padding:1px 6px; margin:0 5px; vertical-align:.15em; font-variant-numeric:tabular-nums; white-space:nowrap}
+.lbm.hit,.pbm.hit{outline:2px solid var(--gold); outline-offset:1px; border-radius:3px}
 .text.inter .seg{line-height:1.25; margin-bottom:1em}
 .text.inter .g{display:inline-flex; gap:0 .14em; vertical-align:top; margin:0 .5em .55em 0; white-space:normal}
 .text.inter .m{display:inline-flex; flex-direction:column; align-items:flex-start}
@@ -872,7 +879,7 @@ const posName=p=>{ const e=POS[p]; return e?tri(esc(e[0]),esc(e[1]),esc(e[2])):e
 const withTools=f=>{ if(window.NHCTools) f(window.NHCTools); else (window.NHCToolsQ=window.NHCToolsQ||[]).push(f); };
 const key=new URLSearchParams(location.search).get('doc')||'';
 const shell=$('#shell'), card=$('#card');
-let OPT={inter:false, cert:false, cuts:false};
+let OPT={inter:false, cert:false, cuts:false, page:false, line:false};
 try{ Object.assign(OPT, JSON.parse(localStorage.getItem('nhc-reader')||'{}')); }catch(e){}
 const saveOpt=()=>{ try{ localStorage.setItem('nhc-reader', JSON.stringify(OPT)); }catch(e){} };
 let DOC=null, D=null, MS=[], NAV={prev:null, next:null};
@@ -894,19 +901,32 @@ function readCatalog(x){
             siglum:sig?sig.textContent.trim():'', xml:ref.xml||'', reader:ref.reader||''};
   });
 }
-/* 形態素 1 つ。ⲍ・ⲯ を補った字は <supplied resp="#zp">（注釈を付けた版）か <w resp="#zp">（未注釈の版） */
+/* 頁・行の区切り（<pb n>・<lb n>。語の中の改行は <lb break="no"/>）。st に数を足す */
+function brk(el, st){
+  const k=el.localName==='pb'?'pb':'lb';
+  st[k]++;
+  return {k, n:el.getAttribute('n')||'', nobr:el.getAttribute('break')==='no'};
+}
+const brHTML=b=>b.k==='pb'
+  ?'<span class="pbm" data-n="'+esc(b.n)+'" title="'+esc((UL()==='ja'?'頁 ':'page ')+b.n)+'">p.'+esc(b.n)+'</span>'
+  :'<span class="lbm" data-n="'+esc(b.n)+'" title="'+esc((UL()==='ja'?'行 ':'line ')+b.n)+'">'+esc(b.n)+'</span>';
+/* 形態素 1 つ。ⲍ・ⲯ を補った字は <supplied resp="#zp">（注釈を付けた版）か <w resp="#zp">（未注釈の版）。
+   語の中の改行（<lb break="no"/>）は、その位置に行の印を置き、mid に記録する（位置の計算に使う） */
 function morph(w, gl, st){
   let html='', form='', sup='';
+  const mid=[];
   w.childNodes.forEach(n=>{
     if(n.nodeType===3){ form+=n.nodeValue; html+=esc(n.nodeValue); }
-    else if(n.nodeType===1){ const c=n.textContent;
+    else if(n.nodeType===1){
+      if(n.localName==='lb'||n.localName==='pb'){ const b=brk(n,st); mid.push(b); html+=brHTML(b); return; }
+      const c=n.textContent;
       if(n.localName==='supplied'){ sup=n.getAttribute('cert')||'high'; html+='<span class="sup'+(sup==='medium'?' b':'')+'">'+esc(c)+'</span>'; }
       else html+=esc(c);
       form+=c; }
   });
   const resp=w.getAttribute('resp')||'', cert=w.getAttribute('cert')||'';
   const m={form:form.trim(), html:html.trim(), type:w.getAttribute('type')||'', lemma:w.getAttribute('lemma')||'',
-           grc:xlang(w)==='grc', en:'', ja:'', cert:'', src:'', sup};
+           grc:xlang(w)==='grc', en:'', ja:'', cert:'', src:'', sup, mid, pre:[]};
   if(resp==='#zp'){ m.sup=cert||'high'; m.html='<span class="sup'+(m.sup==='medium'?' b':'')+'">'+m.html+'</span>'; }
   else if(resp){ m.cert=cert; m.src=resp.replace(/^#/,''); }
   (w.getAttribute('ana')||'').split(/\\s+/).forEach(p=>{ const g=gl[p.replace(/^#/,'')]; if(g && !m[g.l]) m[g.l]=g.t; });
@@ -920,23 +940,77 @@ function readTEI(x){
     const l=xlang(g); all(g,'interp').forEach(i=>{ gl[xid(i)]={l, t:i.textContent.trim()}; }); });
   const wit=all(x,'text').find(t=>t.getAttribute('type')==='witness');
   if(!wit) throw new Error('TEI: <text type="witness"> がありません');
-  const st={m:0, g:0, typed:0, X:0, low:0, ref:0, rw:0, rwB:0, segs:0, gaps:0}, abs=[];
+  const st={m:0, g:0, typed:0, X:0, low:0, ref:0, rw:0, rwB:0, segs:0, gaps:0, pb:0, lb:0}, abs=[];
+  /* 頁・行の区切りは、<s> の中（語群のあいだ・語群の中・語の中）にも、<ab> の中の <s> のあいだにも置ける。
+     <s> の外のものは、次のセグメントの頭に置く（pend） */
+  let pend=[];
   all(wit,'ab').forEach(ab=>{
     const segs=[];
-    kids(ab,'s').forEach(s=>{
-      const items=[];
+    Array.from(ab.children).forEach(s=>{
+      if(s.localName==='pb'||s.localName==='lb'){ pend.push(brk(s,st)); return; }
+      if(s.localName!=='s') return;
+      const items=pend.map(b=>({br:b})); pend=[];
       Array.from(s.children).forEach(c=>{
-        if(c.localName==='phr'){ const g={ms:kids(c,'w').map(w=>morph(w,gl,st))}; if(g.ms.length){ items.push(g); st.g++; } }
-        else if(c.localName==='w'){ items.push({ms:[morph(c,gl,st)]}); st.g++; }
-        else if(c.localName==='gap'){ items.push({gap:true}); st.gaps++; }
+        const ln=c.localName;
+        if(ln==='phr'){
+          const ms=[]; let pre=[];
+          Array.from(c.children).forEach(k=>{
+            if(k.localName==='w'){ const m=morph(k,gl,st); m.pre=pre; pre=[]; ms.push(m); }
+            else if(k.localName==='pb'||k.localName==='lb') pre.push(brk(k,st));
+          });
+          if(ms.length){ items.push({ms}); st.g++; }
+          pre.forEach(b=>items.push({br:b}));            // 語群の最後の語のあとの区切り（ふつうは無い）
+        }
+        else if(ln==='w'){ items.push({ms:[morph(c,gl,st)]}); st.g++; }
+        else if(ln==='gap'){ items.push({gap:true}); st.gaps++; }
+        else if(ln==='pb'||ln==='lb') items.push({br:brk(c,st)});
       });
       segs.push({id:xid(s), n:s.getAttribute('n')||'', items}); st.segs++;
     });
     abs.push({type:ab.getAttribute('type')||'text', segs});
   });
   const locus=all(x,'locus')[0], lang=all(x,'textLang')[0];
-  return {abs, st, locus:locus?locus.textContent.trim():'', lang:lang?lang.textContent.trim():''};
+  const out={abs, st, locus:locus?locus.textContent.trim():'', lang:lang?lang.textContent.trim():''};
+  locIndex(out);
+  return out;
 }
+/* 各セグメントが写本のどの頁・行で始まり、どこで終わるか（s.loc = {from:{pg,ln}, to:{pg,ln}}。頁・行の無い本文では null）。
+   s.pg0 はセグメントが始まる前の頁。語の中の改行（mid）は、その語の終わりの位置に効く。
+   reader.html?doc=II-2#p32.10 は 32 頁 10 行を含む（最初の）セグメントへ、#p32 は 32 頁に語のある最初のセグメントへ移る。
+   republic.html と同じ形（指示書 A の項目 10）で、引用の URL にも使う */
+function locIndex(d){
+  let pg='', ln='';
+  const step=b=>{ if(b.k==='pb'){ pg=b.n; ln=''; } else ln=b.n; };
+  d.abs.forEach(ab=>ab.segs.forEach(s=>{
+    let from=null, to=null; s.pg0=pg;
+    s.items.forEach(it=>{
+      if(it.br){ step(it.br); return; }
+      (it.ms||[]).forEach(m=>{
+        m.pre.forEach(step);
+        if(!from) from={pg, ln};
+        m.mid.forEach(step);
+        to={pg, ln};
+      });
+    });
+    s.loc=from&&from.pg?{from, to}:null;
+  }));
+}
+const plNum=v=>/^\\d+$/.test(v)?+v:NaN;
+function plCmp(a,b){
+  const x=plNum(a.pg), y=plNum(b.pg);
+  const c=(isNaN(x)||isNaN(y))?String(a.pg).localeCompare(String(b.pg)):x-y;
+  if(c) return c;
+  if(b.ln===''||b.ln==null||a.ln==='') return 0;
+  const p=plNum(a.ln), q=plNum(b.ln);
+  return (isNaN(p)||isNaN(q))?String(a.ln).localeCompare(String(b.ln)):p-q;
+}
+/* 「32,10–15」「32,10–33,4」（行の無い本文は「32」「32–33」） */
+function locLabel(loc){
+  const a=loc.from, b=loc.to, w=x=>x.pg+(x.ln?','+x.ln:'');
+  if(!a.ln||!b.ln) return a.pg===b.pg?a.pg:a.pg+'–'+b.pg;
+  return a.pg===b.pg ? w(a)+(b.ln!==a.ln?'–'+b.ln:'') : w(a)+'–'+w(b);
+}
+const locHash=loc=>'#p'+loc.from.pg+(loc.from.ln?'.'+loc.from.ln:'');
 
 const AB={title:tri('表題','Title','Titre'), subscript:tri('奥書表題','Subscript title','Titre final'),
   colophon:tri('写字生の奥書・覚え書き','Scribal colophon or note','Colophon du scribe'), fragment:tri('未配置の断片','Unplaced fragments','Fragments non situés')};
@@ -948,12 +1022,13 @@ function renderText(){
     const segs=ab.segs.map(s=>{
       const body=s.items.map(it=>{
         if(it.gap) return '<span class="gap" title="'+esc(UL()==='ja'?'元ファイルに欠損の注記があった位置':'lacuna noted in the source file')+'">〔…〕</span>';
+        if(it.br) return brHTML(it.br);
         return '<span class="g">'+it.ms.map(m=>{
-          const i=MS.push(m)-1;
+          const i=MS.push(m)-1, pre=m.pre.map(brHTML).join('');
           let inner='<span class="f">'+m.html+'</span>';
           if(O.inter){ const g=(gk==='ja'?(m.ja||m.en):(m.en||m.ja))||'';
             inner+='<span class="il"><span class="p">'+esc(m.type)+'</span><span class="gl">'+esc(g)+'</span></span>'; }
-          return '<span class="m'+(m.type==='X'?' x':'')+(m.cert?' c-'+m.cert:'')+'" data-i="'+i+'">'+inner+'</span>';
+          return pre+'<span class="m'+(m.type==='X'?' x':'')+(m.cert?' c-'+m.cert:'')+'" data-i="'+i+'">'+inner+'</span>';
         }).join('')+'</span>';
       }).join(' ');
       return '<p class="seg" id="seg-'+esc(s.id)+'"><a class="sn" href="#seg-'+esc(s.id)+'" aria-haspopup="dialog" title="この箇所を引用 / Cite this passage">§'+esc(s.n)+'</a> <span class="tx">'+body+'</span></p>';
@@ -961,16 +1036,20 @@ function renderText(){
     return '<section class="ab ab-'+esc(ab.type)+'">'+(AB[ab.type]?'<h3>'+AB[ab.type]+'</h3>':'')+segs+'</section>';
   }).join('');
   const box=$('#text');
-  box.className='text'+(O.inter?' inter':'')+(O.cert?' cert':'')+(O.cuts?' cuts':'');
+  box.className='text'+(O.inter?' inter':'')+(O.cert?' cert':'')+(O.cuts?' cuts':'')+
+    (OPT.page&&D.st.pb?' pages':'')+(OPT.line&&D.st.lb?' lines':'');
   box.innerHTML=html;
   hideCard();
 }
 function statusHTML(){
   const s=D.st, ann=s.typed>0, rel=REPO+'blob/main/source/nhc_fulltext_split/README_ja.md';
   const li=[];
-  li.push(tri('<b>本文</b>：提供された全文テキストを下処理した作業用の本文です。校訂本や写本とは照合していません。上線、復元された文字の区別、頁と行の区切りは入っておらず、§ は元ファイルの行（セグメント）の番号です。〔…〕は元ファイルに欠損の注記があった位置です。',
+  if(!s.pb&&!s.lb) li.push(tri('<b>本文</b>：提供された全文テキストを下処理した作業用の本文です。校訂本や写本とは照合していません。上線、復元された文字の区別、頁と行の区切りは入っておらず、§ は元ファイルの行（セグメント）の番号です。〔…〕は元ファイルに欠損の注記があった位置です。',
     '<b>Text</b>: a working text prepared from a supplied full-text file, not collated with the critical editions or the manuscript. It has no supralinear strokes, no marking of restored text and no page or line breaks; § numbers are the rows (segments) of the source file, and 〔…〕 marks where the source noted a lacuna.',
     '<b>Texte</b> : texte de travail tiré d’un fichier fourni, non collationné avec les éditions critiques ni avec le manuscrit. Sans traits suscrits, sans distinction des restitutions, sans coupures de page ni de ligne ; les § sont les lignes (segments) du fichier source et 〔…〕 signale une lacune notée dans la source.'));
+  else li.push(tri('<b>本文</b>：提供された全文テキストを下処理した作業用の本文です。本文の文字は校訂本や写本と照合していません。上線と、復元された文字の区別は入っていません。写本の頁と行の区切りは、校訂本に合わせて入れたものです（〈ページ〉〈行〉で表示）。§ は元ファイルの行（セグメント）の番号です。〔…〕は元ファイルに欠損の注記があった位置です。',
+    '<b>Text</b>: a working text prepared from a supplied full-text file; its letters have not been collated with the critical editions or the manuscript. It has no supralinear strokes and no marking of restored text. The page and line breaks of the codex follow an edition (show them with Pages and Lines). § numbers are the rows (segments) of the source file, and 〔…〕 marks where the source noted a lacuna.',
+    '<b>Texte</b> : texte de travail tiré d’un fichier fourni ; ses lettres n’ont pas été collationnées avec les éditions critiques ni avec le manuscrit. Sans traits suscrits ni distinction des restitutions. Les coupures de page et de ligne du codex suivent une édition (à afficher avec Pages et Lignes). Les § sont les lignes (segments) du fichier source et 〔…〕 signale une lacune notée dans la source.'));
   if(ann){
     li.push(tri('<b>語のまとまり（語群）</b>：自動で推定したものです。全文テキスト全体で、境目のおよそ 4 分の 1 が要確認の一覧に入っています。',
       '<b>Bound groups</b> (orthographic words): inferred automatically; across the full texts about a quarter of the boundaries are on the review list.',
@@ -1073,10 +1152,35 @@ function showCard(el){
   });
 }
 function gotoHash(){
-  document.querySelectorAll('.seg.hit').forEach(x=>x.classList.remove('hit'));
+  document.querySelectorAll('.seg.hit, .lbm.hit, .pbm.hit').forEach(x=>x.classList.remove('hit'));
+  const p=/^#p([^.]+)(?:\.(.+))?$/.exec(location.hash);
+  if(p){ gotoPageLine(decodeURIComponent(p[1]), p[2]==null?null:decodeURIComponent(p[2])); return; }
   if(!/^#seg-/.test(location.hash)) return;
   const el=document.getElementById(decodeURIComponent(location.hash.slice(1)));
   if(el){ el.classList.add('hit'); el.scrollIntoView({block:'center'}); }
+}
+/* #p32.10（32 頁 10 行）・#p32（32 頁）: その行（頁）を含む最初のセグメントへ移り、頁・行の番号を表示して、その印を目立たせる */
+function gotoPageLine(pg, ln){
+  if(!D) return;
+  const t={pg, ln:ln==null?'':ln};
+  const s=D.abs.flatMap(ab=>ab.segs).find(x=>x.loc&&(ln==null
+    ? plCmp({pg:x.loc.from.pg,ln:''},{pg,ln:''})<=0&&plCmp({pg:x.loc.to.pg,ln:''},{pg,ln:''})>=0
+    : plCmp(x.loc.from,t)<=0&&plCmp(x.loc.to,t)>=0));
+  const row=s&&document.getElementById('seg-'+s.id); if(!row) return;
+  if(!(OPT.page||!D.st.pb)||!(OPT.line||!D.st.lb)){
+    OPT.page=OPT.page||!!D.st.pb; OPT.line=OPT.line||!!D.st.lb;   // 表示するだけ（保存はしない）
+    ['oPage','oLine'].forEach(id=>{ const e=document.getElementById(id); if(e) e.checked=OPT[id==='oPage'?'page':'line']; });
+    renderText();
+  }
+  const r=document.getElementById('seg-'+s.id);
+  let cur=s.pg0, mark=null;
+  Array.from(r.querySelectorAll('.pbm,.lbm')).some(x=>{
+    if(x.classList.contains('pbm')){ cur=x.dataset.n; if(ln==null&&cur===pg){ mark=x; return true; } }
+    else if(ln!=null&&cur===pg&&x.dataset.n===ln){ mark=x; return true; }
+    return false;
+  });
+  r.classList.add('hit'); if(mark) mark.classList.add('hit');
+  r.scrollIntoView({block:'center'});
 }
 function render(){
   const s=D.st, ann=s.typed>0;
@@ -1088,25 +1192,38 @@ function render(){
     '<div class="doc-tools"><button type="button" class="doc-cite" id="docCite" aria-haspopup="dialog">'+tri('この文書を引用','Cite this text','Citer ce texte')+'</button>'+
       (m?'<span class="doc-photos" data-codices="'+esc(m[1])+'" hidden></span>':'')+'</div>'+
     statusHTML()+
-    (ann?'<div class="tools">'+
-      '<label><input type="checkbox" id="oInter"'+(OPT.inter?' checked':'')+'>'+tri('語義と品詞を重ねる','Show glosses and POS','Afficher gloses et catégories')+'</label>'+
+    (ann||s.pb||s.lb?'<div class="tools">'+
+      (ann?'<label><input type="checkbox" id="oInter"'+(OPT.inter?' checked':'')+'>'+tri('語義と品詞を重ねる','Show glosses and POS','Afficher gloses et catégories')+'</label>'+
       '<label><input type="checkbox" id="oCert"'+(OPT.cert?' checked':'')+'>'+tri('確かでない注釈に印','Mark uncertain analyses','Signaler les analyses incertaines')+'</label>'+
-      '<label><input type="checkbox" id="oCuts"'+(OPT.cuts?' checked':'')+'>'+tri('形態素の区切り','Morpheme boundaries','Limites des morphèmes')+'</label>'+
-      '<span class="lg">'+tri('語をクリックすると注釈を表示','Click a word for its analysis','Cliquez sur un mot pour son analyse')+'</span>'+
+      '<label><input type="checkbox" id="oCuts"'+(OPT.cuts?' checked':'')+'>'+tri('形態素の区切り','Morpheme boundaries','Limites des morphèmes')+'</label>':'')+
+      /* 写本の頁・行（エウグノストス・『国家』のビュワーの〈ページ〉〈行〉と同じ） */
+      (s.pb?'<label><input type="checkbox" id="oPage"'+(OPT.page?' checked':'')+'>'+tri('ページ','Pages','Pages')+'</label>':'')+
+      (s.lb?'<label><input type="checkbox" id="oLine"'+(OPT.line?' checked':'')+'>'+tri('行','Lines','Lignes')+'</label>':'')+
+      (ann?'<span class="lg">'+tri('語をクリックすると注釈を表示','Click a word for its analysis','Cliquez sur un mot pour son analyse')+'</span>':'')+
     '</div>':'<div style="height:14px"></div>')+
     '<article id="text" class="text"></article>'+navHTML();
   const bind=(id,k)=>{ const e=document.getElementById(id); if(e) e.addEventListener('change',()=>{ OPT[k]=e.checked; saveOpt(); renderText(); }); };
-  bind('oInter','inter'); bind('oCert','cert'); bind('oCuts','cuts');
+  bind('oInter','inter'); bind('oCert','cert'); bind('oCuts','cuts'); bind('oPage','page'); bind('oLine','line');
   renderText(); setTitle(); gotoHash();
   withTools(t=>t.fill(shell));
 }
 /* 引用（assets/viewer-tools.js）。§ を押すと、これまでどおりその箇所へ移る（ハッシュの更新）のに加えて、引用のメニューを開く。
    文書の引用（冒頭の〈この文書を引用〉）には、その文書の最終更新日（data/doc_dates.json）を添える */
 const docStatus=()=>D&&D.st.typed>0?'draft':'text';
+/* 頁・行のある文書では、箇所を写本の頁・行で示し（NHC II 32,10–15（§3、暫定版））、URL も頁・行のアンカーにする
+   （reader.html?doc=II-2#p32.10。republic.html と同じ形）。頁・行の無い文書は NHC II,2 §3（暫定版）と #seg-… */
+const ST_WORD={draft:{ja:'暫定版',en:'draft',fr:'provisoire'}, text:{ja:'未注釈',en:'unannotated',fr:'non annoté'}};
 function citeSeg(a){
   const id=decodeURIComponent((a.getAttribute('href')||'').replace(/^#seg-/,''));
   const s=D?D.abs.flatMap(ab=>ab.segs).find(x=>x.id===id):null; if(!s) return;
-  const base=DOC.siglum+' §'+s.n, st=docStatus();
+  const st=docStatus(), cx=/^NHC\s+([IVXLC]+),/.exec(DOC.siglum);
+  if(s.loc&&cx){
+    const lab='NHC '+cx[1]+' '+locLabel(s.loc), w=ST_WORD[st]||{};
+    withTools(t=>t.cite(a,{kind:'passage', path:'reader.html?doc='+encodeURIComponent(DOC.key)+locHash(s.loc),
+      where:{ja:lab+'（§'+s.n+(w.ja?'、'+w.ja:'')+'）', en:lab+' (§'+s.n+(w.en?', '+w.en:'')+')', fr:lab+' (§'+s.n+(w.fr?', '+w.fr:'')+')'}}));
+    return;
+  }
+  const base=DOC.siglum+' §'+s.n;
   withTools(t=>t.cite(a,{kind:'passage', path:'reader.html?doc='+encodeURIComponent(DOC.key)+'#seg-'+encodeURIComponent(id),
     where:{ja:t.withStatus('ja',base,st), en:t.withStatus('en',base,st), fr:t.withStatus('fr',base,st)}}));
 }
