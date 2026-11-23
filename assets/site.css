@@ -45,20 +45,55 @@ html[data-lang="fr"] .l-en { display: none; }
 .sb-sep { width: 1px; height: 14px; background: var(--line-2, rgba(190,180,230,.22)); }
 
 /* 文字のみ・ホバー時に下線 */
-.sb-link, .sb-lang, .sb-auth {
+.sb-link, .sb-langbtn, .sb-auth {
   appearance: none; background: none; border: 0; padding: 4px 0; cursor: pointer;
   font: inherit; font-size: .8rem; letter-spacing: .02em; white-space: nowrap;
   color: var(--chrome-ink, #ede8dc);
   text-decoration: none; text-underline-offset: 6px; text-decoration-thickness: 1px;
 }
-.sb-link:hover, .sb-lang:hover, .sb-auth:hover,
-.sb-link:focus-visible, .sb-lang:focus-visible, .sb-auth:focus-visible {
+.sb-link:hover, .sb-auth:hover, .sb-langbtn:hover .sb-langcur,
+.sb-link:focus-visible, .sb-auth:focus-visible, .sb-langbtn:focus-visible .sb-langcur {
   text-decoration: underline; text-decoration-color: var(--gold, #d4af6a); outline: none;
 }
 .sb-link[aria-current="page"] { color: var(--gold-bright, #e7c885); }
-.sb-lang { font-size: .74rem; color: var(--chrome-faint, #8a85a6); }
-.sb-lang[aria-pressed="true"] { color: var(--gold-bright, #e7c885); }
 .sb-auth { color: var(--gold-bright, #e7c885); }
+/* 表示言語のプルダウン（site.js の langMenuHtml）。ボタンは〈地球の印・選択中の言語・▾〉で、ほかの項目と同じく文字のみ。
+   押すとボタンの下に一覧（日本語 / English / Français）が重なって開く。一覧は右端をボタンにそろえる（ナビの右端にあるので） */
+.sb-langsel { position: relative; flex: none; display: flex; align-items: center; }
+.sb-langbtn { position: relative; display: inline-flex; align-items: center; gap: 5px; margin: 0; font-size: .76rem; }
+.sb-langbtn::after { content: ""; position: absolute; inset: -8px -4px; }   /* 押せる範囲を広げる */
+.sb-langbtn:focus-visible { outline: none; }
+.sb-langbtn .sb-globe { display: block; flex: none; width: 15px; height: 15px; color: var(--chrome-faint, #8a85a6); }
+.sb-langbtn .sb-caret { display: block; flex: none; width: 8px; height: 5px; margin-left: 1px; opacity: .75; }
+.sb-langbtn:hover .sb-globe, .sb-langbtn:focus-visible .sb-globe,
+.sb-langbtn[aria-expanded="true"] .sb-globe { color: var(--gold-bright, #e7c885); }
+.sb-langbtn[aria-expanded="true"] .sb-caret { transform: rotate(180deg); }
+.sb-langmenu {
+  position: absolute; z-index: 1; top: calc(100% + 12px); right: -10px;
+  min-width: 150px; margin: 0; padding: 6px;
+  background: var(--raise, #1d1938); color: var(--chrome-ink, #ede8dc);
+  border: 1px solid rgba(212, 175, 106, .3); border-radius: 12px;
+  box-shadow: 0 14px 40px rgba(2, 1, 10, .6);
+}
+.sb-langmenu[hidden] { display: none; }
+html[data-mode="light"] .sb-langmenu { box-shadow: 0 12px 32px rgba(40, 30, 70, .28); }   /* パピルス色の地には薄い影 */
+.sb-langopt {
+  appearance: none; display: flex; align-items: center; gap: 10px; width: 100%;
+  margin: 0; padding: 7px 16px 7px 10px;
+  background: none; border: 0; border-radius: 8px; cursor: pointer;
+  font: inherit; font-size: .8rem; line-height: 1.4; letter-spacing: .02em; text-align: left; white-space: nowrap;
+  color: var(--chrome-ink, #ede8dc);
+}
+.sb-langopt:hover, .sb-langopt:focus-visible { background: rgba(212, 175, 106, .13); outline: none; }
+.sb-langopt[aria-checked="true"] { color: var(--gold-bright, #e7c885); }
+.sb-langopt .sb-check { display: block; flex: none; width: 12px; height: 12px; visibility: hidden; }
+.sb-langopt[aria-checked="true"] .sb-check { visibility: visible; }
+@media (pointer: coarse) { .sb-langopt { padding-top: 10px; padding-bottom: 10px; } }
+@media (prefers-reduced-motion: no-preference) {
+  .sb-langbtn .sb-caret { transition: transform .15s ease; }
+  .sb-langmenu { transition: opacity .12s ease, transform .12s ease; }
+  @starting-style { .sb-langmenu { opacity: 0; transform: translateY(-4px); } }
+}
 /* 表示モード（ライト／ダーク）の切替ボタン。対応ページ（<html data-modes="light dark">）でだけ site.js が描画する。
    絵は「押すと切り替わる先」: ダーク表示中は太陽、ライト表示中は月 */
 .sb-mode {
@@ -75,23 +110,25 @@ html[data-mode="light"] .sb-mode .sb-moon { display: block; }
   border-color: rgba(212, 175, 106, .45); color: var(--gold-bright, #e7c885); outline: none;
 }
 /* ナビの項目と表示モードの切替ボタンの分だけ折り返しやすいので、中くらいの幅（761〜1340px）ではリンクの間隔と文字を
-   少し詰める。2026-11-23 の実測（8 項目、HOME、未ログイン）: 1 段に収まるのは日本語 1,080px・英語 1,092px・フランス語 1,236px 以上
-   （辞書・はじめての方へを足す前の 6 項目では、1,040px・1,040px・1,222px 以上）。項目やラベルを変えたら、1 段に収まる幅を
-   測り直して、下の 2 つの @media の幅も直すこと。ごく狭い画面では区切り線を省いて、ロゴと同じ行に収める */
+   少し詰める。2026-11-23 の実測（8 項目、言語はプルダウン、HOME、未ログイン）: 1 段に収まるのは日本語 1,056px・英語 1,072px・
+   フランス語 1,224px 以上（言語を 日本語 / EN / FR の横並びで選んでいたときは 1,080px・1,092px・1,236px 以上、辞書・はじめての方へを
+   足す前の 6 項目では 1,040px・1,040px・1,222px 以上）。項目やラベルを変えたら、1 段に収まる幅を測り直して、下の 2 つの @media の
+   幅も直すこと。ごく狭い画面では区切り線を省いて、ロゴと同じ行に収める */
 @media (min-width: 761px) and (max-width: 1340px) {
   .sitebar .sb-links { column-gap: 10px; }
   .sitebar .sb-link { font-size: .76rem; }
 }
 /* 1 段に収まらない幅では、リンクをロゴと言語切替の下の 2 段目にまとめる（スマホと同じ並び。ただし折り返しは許す）。
    こうしないとリンクが言語切替の左の狭い所に押し込められて、762px ではフランス語で 8 段にもなる（以前の 6 項目でも 6 段）。
-   2026-11-23 の実測で、1 段に収まるのは日本語 1,080px・英語 1,092px・フランス語 1,236px 以上なので、その手前まで */
-@media (min-width: 761px) and (max-width: 1091px) {
+   2026-11-23 の実測で、1 段に収まるのは日本語 1,056px・英語 1,072px・フランス語 1,224px 以上なので、1px の余裕を見てその幅まで
+   （測る環境で 1px ほど違うことがある。横並びのときの値は、同じ方法で測ると英語・フランス語が 1px 小さく出た） */
+@media (min-width: 761px) and (max-width: 1072px) {
   .sb-links { order: 3; flex-basis: 100%; }
   .sb-tools { margin-left: auto; }
 }
-@media (min-width: 1092px) and (max-width: 1235px) {
-  .sitebar:has(.sb-lang[data-lang="fr"][aria-pressed="true"]) .sb-links { order: 3; flex-basis: 100%; }
-  .sitebar:has(.sb-lang[data-lang="fr"][aria-pressed="true"]) .sb-tools { margin-left: auto; }
+@media (min-width: 1073px) and (max-width: 1224px) {
+  .sitebar:has(.sb-langbtn[data-lang="fr"]) .sb-links { order: 3; flex-basis: 100%; }
+  .sitebar:has(.sb-langbtn[data-lang="fr"]) .sb-tools { margin-left: auto; }
 }
 @media (max-width: 359px) {
   .sitebar .sb-tools:has(.sb-mode) { gap: 4px 8px; }
@@ -268,7 +305,7 @@ body > .app > header #tlBtn::after {
   content: ""; flex: none; width: 14px; height: 14px; margin-left: auto; opacity: .8;
   background: center / 14px 14px no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%238a85a6' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M13.3 6.4A5.5 5.5 0 0 0 3.4 4.9M2.7 9.6a5.5 5.5 0 0 0 9.9 1.5'/%3E%3Cpath d='M3.3 2.3v2.8h2.8M12.7 13.7v-2.8H9.9'/%3E%3C/svg%3E");
 }
-/* 画面の言語は上部ナビ（日本語 / EN / FR）に一本化。#langBtn は site.js が内部で押すので DOM には残す */
+/* 画面の言語は上部ナビの言語プルダウンに一本化。#langBtn は site.js が内部で押すので DOM には残す */
 body > .app > header #langBtn { display: none; }
 
 /* ツール: 行頭の記号（.ic）を同じ幅にそろえる */

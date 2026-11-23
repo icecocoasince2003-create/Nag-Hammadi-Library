@@ -2,7 +2,7 @@
    site.js — サイト共通スクリプト
    - 全ページの最上部に共通ナビ（#sitebar）を描画します。
      ナビ項目を増やすときは下の NAV に1行足すだけで全ページに反映されます。
-   - 表示言語（日本語 / English / Français）を localStorage に保存し、
+   - 表示言語（日本語 / English / Français）はナビ右側のプルダウン（〈地球の印 日本語 ▾〉）で選び、localStorage に保存して
      ページ間で引き継ぎます。最初に開くときの言語は、URL の ?lang=（ja・en・fr）＞ 保存値 ＞ ブラウザーの言語の順で決めます
      （ブラウザーの言語が ja・en・fr のどれでもなければ英語）。各ページの <head> の 1 行スクリプトが、同じ順で描画前に反映します。
        * 三言語対応ページ（<html data-i18n="full">）: html[data-lang] を ja/en/fr に切替
@@ -150,6 +150,96 @@
     applyMode();
   }
 
+  /* ---- 表示言語のプルダウン ----
+     ナビ右側のボタン〈地球の印・選択中の言語・▾〉を押すと、その下に 日本語 / English / Français の一覧が開く。
+     WAI-ARIA のメニューボタンの作法に従う: ボタンは aria-expanded、一覧は role="menu"、各言語は role="menuitemradio"
+     （選択中は aria-checked="true"）。開くと選択中の言語にフォーカスし、↑↓・Home・End で移動、Enter・Space で選ぶ。
+     Esc で閉じてボタンに戻り、Tab や一覧の外を押しても閉じる。選ぶと setLang がナビを描き直すので、フォーカスは新しいボタンに戻す。
+     見た目は assets/site.css の .sb-langsel。 */
+  var LANG_NAME = { ja: "日本語", en: "English", fr: "Français" };
+  var LANG_LABEL = { ja: "表示言語", en: "Language", fr: "Langue" };
+  var LANG_COLON = { ja: "：", en: ": ", fr: " : " };   // 読み上げ用の「表示言語：日本語」の区切り
+  var GLOBE_ICON =
+    '<svg class="sb-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">' +
+      '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9S9.6 5.5 12 3z"/></svg>';
+  var CARET_ICON =
+    '<svg class="sb-caret" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      '<path d="M1 1l4 4 4-4"/></svg>';
+  var CHECK_ICON =
+    '<svg class="sb-check" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      '<path d="M2.4 6.3l2.4 2.4 4.8-5.2"/></svg>';
+  function langMenuHtml(L) {
+    var lab = LANG_LABEL[L] || LANG_LABEL.ja;
+    return '<div class="sb-langsel">' +
+      '<button type="button" class="sb-langbtn" id="sbLang" data-lang="' + L + '" aria-haspopup="true" aria-expanded="false" aria-controls="sbLangMenu" title="' + esc(lab) + '">' +
+        GLOBE_ICON + '<span class="vh">' + esc(lab + (LANG_COLON[L] || ": ")) + '</span>' +
+        '<span class="sb-langcur" lang="' + L + '">' + esc(LANG_NAME[L]) + '</span>' + CARET_ICON + '</button>' +
+      '<div class="sb-langmenu" id="sbLangMenu" role="menu" aria-label="' + esc(lab) + '" hidden>' +
+        LANGS.map(function (v) {
+          return '<button type="button" class="sb-langopt" role="menuitemradio" tabindex="-1" data-lang="' + v + '" lang="' + v +
+            '" aria-checked="' + (v === L) + '">' + CHECK_ICON + '<span>' + esc(LANG_NAME[v]) + '</span></button>';
+        }).join("") +
+      '</div></div>';
+  }
+  function langMenuOpen() { var m = document.getElementById("sbLangMenu"); return !!m && !m.hidden; }
+  function openLangMenu() {
+    var b = document.getElementById("sbLang"), m = document.getElementById("sbLangMenu");
+    if (!b || !m) return;
+    m.hidden = false;
+    b.setAttribute("aria-expanded", "true");
+    var it = m.querySelector('[aria-checked="true"]') || m.querySelector('[role="menuitemradio"]');
+    if (it) it.focus();
+  }
+  function closeLangMenu(refocus) {
+    var b = document.getElementById("sbLang"), m = document.getElementById("sbLangMenu");
+    if (!b || !m || m.hidden) return;
+    m.hidden = true;
+    b.setAttribute("aria-expanded", "false");
+    if (refocus) b.focus();
+  }
+  function wireLangMenu(nav) {
+    var b = nav.querySelector("#sbLang"), m = nav.querySelector("#sbLangMenu");
+    if (!b || !m) return;
+    var items = Array.prototype.slice.call(m.querySelectorAll('[role="menuitemradio"]'));
+    b.addEventListener("click", function () { if (m.hidden) openLangMenu(); else closeLangMenu(false); });
+    b.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); openLangMenu(); }
+    });
+    m.addEventListener("keydown", function (e) {
+      var i = items.indexOf(document.activeElement), n = items.length, j = -1;
+      if (e.key === "ArrowDown") j = (i + 1) % n;
+      else if (e.key === "ArrowUp") j = i < 0 ? n - 1 : (i - 1 + n) % n;
+      else if (e.key === "Home") j = 0;
+      else if (e.key === "End") j = n - 1;
+      else if (e.key === "Escape") {
+        // ビュワーのドロワーなど、Esc で閉じるほかのものには渡さない（閉じるのは一覧だけ）
+        e.preventDefault(); e.stopPropagation(); closeLangMenu(true); return;
+      } else if (e.key === "Tab") { closeLangMenu(false); return; }
+      if (j >= 0) { e.preventDefault(); items[j].focus(); }
+    });
+    items.forEach(function (it) {
+      it.addEventListener("click", function () {
+        var v = it.getAttribute("data-lang");
+        closeLangMenu(true);   // フォーカスをボタンに戻す。setLang でナビを描き直しても、render が新しいボタンに戻す
+        if (v !== lang()) setLang(v);
+      });
+    });
+  }
+  /* 一覧の外を押す・フォーカスが外に出る・Esc で閉じる（ナビは描き直されるので、document で一度だけ受ける）。
+     タップでも閉じるよう click ではなく pointerdown で見る（iOS では文字の上のタップで click が document まで届かない） */
+  function wireLangMenuGlobal() {
+    function outside(t) { var w = document.querySelector("#sitebar .sb-langsel"); return !w || !w.contains(t); }
+    document.addEventListener(window.PointerEvent ? "pointerdown" : "mousedown", function (e) {
+      if (langMenuOpen() && outside(e.target)) closeLangMenu(false);
+    });
+    document.addEventListener("focusin", function (e) {
+      if (langMenuOpen() && outside(e.target)) closeLangMenu(false);
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && langMenuOpen()) closeLangMenu(!outside(document.activeElement));
+    });
+  }
+
   function pageId() {
     var p = (location.pathname.split("/").pop() || "index.html").toLowerCase();
     if (p === "" || p === "index.html") return "home";
@@ -164,6 +254,9 @@
 
   function render(nav) {
     var L = lang(), S = SITE[L] || SITE.ja, cur = pageId();
+    // 描き直す前にナビの中のボタン（id のあるもの）にフォーカスがあれば、描き直した後も同じボタンに戻す
+    // （言語を選んだ後。日英のビュワーでは #langBtn の処理がもう一度描き直す）
+    var ae = document.activeElement, keep = ae && ae.id && nav.contains(ae) ? ae.id : "";
     nav.setAttribute("aria-label", S.nav);
     nav.innerHTML =
       (panel ? '<button type="button" class="sb-panel" id="sbPanel" aria-controls="' + esc(panel.id) + '" aria-expanded="' + panelShown() +
@@ -175,25 +268,22 @@
         return '<a class="sb-link" data-nav="' + n.id + '" href="' + n.href + '"' + (n.id === cur ? ' aria-current="page"' : "") + '>' + esc(n[L] || n.ja) + '</a>';
       }).join("") + '</div>' +
       '<div class="sb-tools">' +
-        LANGS.map(function (v) {
-          var lab = { ja: "日本語", en: "EN", fr: "FR" }[v];
-          return '<button type="button" class="sb-lang" data-lang="' + v + '" aria-pressed="' + (v === L) + '" lang="' + v + '">' + lab + '</button>';
-        }).join("") +
+        langMenuHtml(L) +
         // 表示モードの切替は言語と同じ「表示の設定」なので、言語の隣に区切り線なしで置く（ナビの幅も節約できる）
         (hasModes() ? '<button type="button" class="sb-mode" id="sbMode" aria-label="' + esc(modeLabel()) + '" title="' + esc(modeLabel()) + '">' +
           MODE_ICONS + '</button>' : "") +
         '<span class="sb-sep" aria-hidden="true"></span>' +
         '<a class="sb-auth" id="sbAuth" href="#" hidden></a>' +
       '</div>';
-    Array.prototype.forEach.call(nav.querySelectorAll(".sb-lang"), function (b) {
-      b.addEventListener("click", function () { setLang(b.getAttribute("data-lang")); });
-    });
+    wireLangMenu(nav);
     var mb = nav.querySelector(".sb-mode");
     if (mb) mb.addEventListener("click", function () { setMode(curMode === "light" ? "dark" : "light"); });
     if (panel) {
       panel.setAttribute("aria-label", S.panel);
       nav.querySelector(".sb-panel").addEventListener("click", togglePanel);
     }
+    var kept = keep && document.getElementById(keep);
+    if (kept && nav.contains(kept)) { try { kept.focus({ preventScroll: true }); } catch (e) { kept.focus(); } }
     document.dispatchEvent(new CustomEvent("nhc:sitebar"));
   }
 
@@ -328,6 +418,7 @@
       });
     }
     render(nav);
+    wireLangMenuGlobal();
     wireXmlMenus();
     followSegHash();
   }
