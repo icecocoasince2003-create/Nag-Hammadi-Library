@@ -1,5 +1,5 @@
 {
-  "_comment": "サイトの更新情報（HOME の NEWS 欄）。新しい項目を items の先頭に追加してください。date は YYYY-MM-DD、ja/en/fr は HTML 可、link は任意。",
+  "_comment": "サイトの更新情報（HOME の NEWS 欄）。新しい項目を items の先頭に追加してください。date は YYYY-MM-DD、ja/en/fr は HTML 可、link は任意。追加・修正したら python3 scripts/build_site.py を実行して index.html に書き込みます（JS を動かさない読み手やリンクのプレビューにも出るように。実行する前でも、ページを開いたときに JS が読み直して最新を出します）。",
   "items": [
     {
       "date": "2026-11-18",

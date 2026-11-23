@@ -1,0 +1,6 @@
+# robots.txt — scripts/build_site.py が出力します（直接編集しない）
+User-agent: *
+Disallow: /admin.html
+Disallow: /profile.html
+
+Sitemap: https://sheneset.vercel.app/sitemap.xml

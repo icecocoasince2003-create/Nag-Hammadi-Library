@@ -17,8 +17,11 @@
   * HOME は日本語・英語・フランス語の三言語表示です（上部ナビで切替）。
     題名は CODICES の ja / en / fr 列、その他の文言はこのファイル内の
     <span class="l-ja">…</span><span class="l-en">…</span><span class="l-fr">…</span> を編集します。
-  * NEWS（更新情報）は data/news.json、関連サイトは data/links.json を編集します
-    （HTML の再生成は不要。ページ表示時に読み込まれます）。
+  * NEWS（更新情報）は data/news.json、関連サイトは data/links.json を編集し、このスクリプトを実行し直します。
+    生成のときに index.html へ HTML として書き込むので、JS を動かさない読み手（リンクのプレビュー、一部の検索エンジン、
+    リーダー表示など）にも出ます。作り直す前でも、ページを開いたときに JSON を読み直して最新を出します。
+  * index.html・tractate.html・reader.html の <head> には、OGP と Twitter カードのタグを書き込みます（og_tags）。
+    共有用の画像は image/og-image.png（scripts/make_og_image.py が作る）。sitemap.xml と robots.txt もこのスクリプトが出力します。
   * 上部ナビの項目は assets/site.js の NAV で全ページ共通に管理しています。
   * HOME と準備中ページは、ほかのページと同じく表示モード（ライト／ダーク）に対応しています。
     上部ナビの ☀／☾ で切り替わり、配色は assets/cosmos.css の「ライトモード」、
@@ -42,6 +45,31 @@ import html, datetime, os, json
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 OUTDIR = os.path.dirname(_HERE) if os.path.basename(_HERE).lower() in ("source", "build", "src", "scripts") else _HERE
+
+# --- 公開 URL と、リンクを共有したときのプレビュー（OGP） -----------------------------
+# 独自ドメインに移すときは、ここと、手作業管理のページの <head> の og:url・og:image を直す。
+SITE_URL = "https://sheneset.vercel.app/"
+OG_IMAGE = "image/og-image.png"          # 1200×630 の PNG（og:image に SVG は使えない）。scripts/make_og_image.py が作る
+
+def og_tags(path, title, desc):
+    """OGP と Twitter カードのタグ。Facebook などのクローラーは JS を実行しないので、静的な HTML として書く。
+    og:title・og:description は、そのページの <title> と meta description と同じ内容にする（head_meta）。"""
+    e = lambda s: html.escape(s, quote=True)
+    return ('<meta property="og:type" content="website">'
+            '<meta property="og:site_name" content="Sheneset">'
+            f'<meta property="og:title" content="{e(title)}">'
+            f'<meta property="og:description" content="{e(desc)}">'
+            f'<meta property="og:url" content="{e(SITE_URL + path)}">'
+            f'<meta property="og:image" content="{e(SITE_URL + OG_IMAGE)}">'
+            '<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">'
+            '<meta property="og:locale" content="ja_JP">'
+            '<meta property="og:locale:alternate" content="en_US"><meta property="og:locale:alternate" content="fr_FR">'
+            '<meta name="twitter:card" content="summary_large_image">')
+
+def head_meta(path, title, desc):
+    """<title>・meta description・OGP を、同じ題と説明でまとめて書く"""
+    return (f"<title>{html.escape(title, quote=False)}</title>"
+            f'<meta name="description" content="{html.escape(desc, quote=True)}">' + og_tags(path, title, desc))
 
 # --- 文書カタログ -------------------------------------------------------------
 # 形式: (ローマ数字, コーデックス番号, [(文書番号, 日本語題, 英語題, フランス語題, status), ...])
@@ -379,8 +407,51 @@ html[data-mode="light"] .feat, html[data-mode="light"] .codex, html[data-mode="l
  box-shadow:0 1px 2px rgba(60,45,20,.05)}
 """
 
+# --- NEWS と関連サイト（data/news.json・data/links.json）を、index.html の JS と同じ形の HTML にする ----------
+# JS を動かさない読み手（リンクのプレビュー、一部の検索エンジン、リーダー表示など）にも見えるように、生成のときに書き込む。
+# ページを開いたときは JS が JSON を読み直し、内容が違えば（生成のあとで JSON を直したとき）書き換える。
+# 下の _esc・_tri・NEWS_SHOW と HTML の形は、build_index の <script> の esc・tri・SHOW と同じにしておくこと。
+NEWS_SHOW = 6          # 最初に出す件数（それより古いものは〈過去の更新をすべて表示〉で出す）
+
+def _load_json(rel):
+    with open(os.path.join(OUTDIR, rel), encoding="utf-8") as f:
+        return json.load(f)
+
+def _esc(s):
+    """JS の esc() と同じ（& < > " を文字参照に）"""
+    return str("" if s is None else s).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
+
+def _tri(o):
+    """JS の tri() と同じ（その言語が無ければ英語、次に日本語）。中身は HTML のまま"""
+    return "".join('<span class="l-%s">%s</span>' % (l, o.get(l) or o.get("en") or o.get("ja") or "") for l in ("ja", "en", "fr"))
+
+def news_html():
+    items = sorted(_load_json("data/news.json").get("items", []), key=lambda it: it.get("date") or "", reverse=True)
+    lis = "".join('<li' + (' class="old" hidden' if i >= NEWS_SHOW else '') + '><time datetime="' + _esc(it.get("date")) + '">' +
+                  _esc(it.get("date")) + '</time><span class="tx">' + _tri({"ja": it.get("ja"), "en": it.get("en"), "fr": it.get("fr")}) +
+                  (' <a href="' + _esc(it["link"]) + '">→</a>' if it.get("link") else '') + '</span></li>'
+                  for i, it in enumerate(items))
+    more = ('<li style="display:block;border:0"><button class="more-news" id="moreNews">' +
+            _tri({"ja": "過去の更新をすべて表示", "en": "Show all updates", "fr": "Afficher toutes les mises à jour"}) + '</button></li>'
+            if len(items) > NEWS_SHOW else '')
+    return lis + more
+
+def links_html():
+    from urllib.parse import urlsplit
+    out = []
+    for it in _load_json("data/links.json").get("items", []):
+        host = urlsplit(it.get("url") or "").netloc
+        out.append('<a class="relsite" href="' + _esc(it.get("url")) + '" target="_blank" rel="noopener">' +
+                   '<div class="k">' + _tri(it.get("kind") or {}) + '</div>' +
+                   '<div class="t">' + ('<span class="cop">' + _esc(it["cop"]) + '</span>' if it.get("cop") else '') + _tri(it.get("title") or {}) + '</div>' +
+                   '<div class="u">' + _esc(host) + '</div>' +
+                   '<p>' + _tri(it.get("desc") or {}) + '</p>' +
+                   '<span class="go">' + _tri({"ja": "サイトを開く ↗", "en": "Visit site ↗", "fr": "Visiter le site ↗"}) + '</span></a>')
+    return "".join(out)
+
 def build_index():
     blocks = "\n".join(codex_block(r,n,t) for r,n,t in CODICES)
+    news, rel = news_html(), links_html()
     body = f"""
 <nav id="sitebar" class="sitebar sticky"></nav>
 
@@ -447,11 +518,11 @@ def build_index():
  <div class="two">
   <section id="news">
    <div class="sec-h"><h2>News</h2><small>{tri("サイトの更新情報", "Site updates", "Mises à jour du site")}</small><span class="rule"></span></div>
-   <ul class="news" id="newsList"><li><span></span><span class="tx">…</span></li></ul>
+   <ul class="news" id="newsList">{news}</ul>
   </section>
   <section id="related">
    <div class="sec-h"><h2>{tri("関連サイト", "Related", "Sites liés")}</h2><span class="rule"></span></div>
-   <div id="relList"></div>
+   <div id="relList">{rel}</div>
   </section>
  </div>
 
@@ -509,21 +580,31 @@ function filter(){{
 q.addEventListener('input',filter); ph();
 document.addEventListener('nhc:lang',ph);
 
-/* ---- NEWS（data/news.json）---- */
-const SHOW=6;
+/* ---- NEWS（data/news.json）----
+   build_site.py が生成のときに同じ形の HTML を書き込んである（JS を動かさない読み手にも見えるように）。
+   ここでは JSON を読み直し、内容が違うとき（生成のあとで news.json を直したとき）だけ書き換える。読めなければ書き込んだ内容のまま。
+   HTML の形と SHOW は build_site.py の news_html()・NEWS_SHOW と同じにしておくこと */
+const SHOW={NEWS_SHOW};
+const newsUl=document.getElementById('newsList');
+/* 書き込んだ HTML が、いまの表示と同じかどうか（ブラウザーが組み立て直した形どうしで比べる） */
+const sameHTML=(el,html)=>{{ const t=document.createElement(el.tagName); t.innerHTML=html; return t.innerHTML===el.innerHTML; }};
+function wireMore(){{
+  const mb=document.getElementById('moreNews');
+  if(mb) mb.onclick=()=>{{ newsUl.querySelectorAll('li.old').forEach(x=>x.hidden=false); mb.parentNode.remove(); }};
+}}
+wireMore();
 fetch('data/news.json',{{cache:'no-store'}}).then(r=>r.ok?r.json():Promise.reject(r.status)).then(d=>{{
   const items=(d.items||[]).slice().sort((a,b)=>(b.date||'').localeCompare(a.date||''));
   const li=(it,i)=>'<li'+(i>=SHOW?' class="old" hidden':'')+'><time datetime="'+esc(it.date)+'">'+esc(it.date)+'</time><span class="tx">'+
      tri({{ja:it.ja,en:it.en,fr:it.fr}})+(it.link?' <a href="'+esc(it.link)+'">→</a>':'')+'</span></li>';
-  const ul=document.getElementById('newsList');
-  ul.innerHTML=items.map(li).join('')+(items.length>SHOW?'<li style="display:block;border:0"><button class="more-news" id="moreNews">'+tri({{ja:'過去の更新をすべて表示',en:'Show all updates',fr:'Afficher toutes les mises à jour'}})+'</button></li>':'');
-  const mb=document.getElementById('moreNews');
-  if(mb) mb.onclick=()=>{{ ul.querySelectorAll('li.old').forEach(x=>x.hidden=false); mb.parentNode.remove(); }};
-}}).catch(()=>{{ document.getElementById('newsList').innerHTML=''; }});
+  const html=items.map(li).join('')+(items.length>SHOW?'<li style="display:block;border:0"><button class="more-news" id="moreNews">'+tri({{ja:'過去の更新をすべて表示',en:'Show all updates',fr:'Afficher toutes les mises à jour'}})+'</button></li>':'');
+  if(!sameHTML(newsUl,html)){{ newsUl.innerHTML=html; wireMore(); }}
+}}).catch(()=>{{}});
 
-/* ---- 関連サイト（data/links.json）---- */
+/* ---- 関連サイト（data/links.json）。NEWS と同じく、書き込んである HTML と違うときだけ書き換える（build_site.py の links_html()）---- */
 fetch('data/links.json',{{cache:'no-store'}}).then(r=>r.ok?r.json():Promise.reject(r.status)).then(d=>{{
-  document.getElementById('relList').innerHTML=(d.items||[]).map(it=>{{
+  const relList=document.getElementById('relList');
+  const html=(d.items||[]).map(it=>{{
     let host=''; try{{ host=new URL(it.url).host; }}catch(e){{}}
     return '<a class="relsite" href="'+esc(it.url)+'" target="_blank" rel="noopener">'+
       '<div class="k">'+tri(it.kind||{{}})+'</div>'+
@@ -532,6 +613,7 @@ fetch('data/links.json',{{cache:'no-store'}}).then(r=>r.ok?r.json():Promise.reje
       '<p>'+tri(it.desc||{{}})+'</p>'+
       '<span class="go">'+tri({{ja:'サイトを開く ↗',en:'Visit site ↗',fr:'Visiter le site ↗'}})+'</span></a>';
   }}).join('');
+  if(!sameHTML(relList,html)) relList.innerHTML=html;
 }}).catch(()=>{{}});
 }})();
 </script>
@@ -541,8 +623,8 @@ fetch('data/links.json',{{cache:'no-store'}}).then(r=>r.ok?r.json():Promise.reje
             " data-title-fr=\"Sheneset — édition numérique TEI des codices de Nag Hammadi\"><head><meta charset=\"utf-8\">"
             "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
             f"{MODE_BOOT}"
-            "<title>Sheneset — ナグ・ハマディ写本コーパス</title>"
-            "<meta name=\"description\" content=\"ナグ・ハマディ写本のTEI P5デジタル版（コプト語本文・形態素グロス・辞書・注釈・日英仏訳）/ A digital TEI edition of the Nag Hammadi Codices.\">"
+            + head_meta("", "Sheneset — ナグ・ハマディ写本コーパス",
+                        "ナグ・ハマディ写本のTEI P5デジタル版（コプト語本文・形態素グロス・辞書・注釈・日英仏訳）/ A digital TEI edition of the Nag Hammadi Codices.") +
             f"{FONTS}<style>{THEME}{INDEX_CSS}</style></head><body>{body}</body></html>")
 
 # --- tractate.html (placeholder) -------------------------------------------
@@ -628,7 +710,8 @@ if(!t){
     return ("<!doctype html><html lang=\"ja\" data-lang=\"ja\" data-i18n=\"full\" data-mode=\"dark\" data-modes=\"light dark\"><head><meta charset=\"utf-8\">"
             "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
             f"{MODE_BOOT}"
-            "<title>準備中 — Sheneset</title>"
+            + head_meta("tractate.html", "準備中 — Sheneset",
+                        "ナグ・ハマディ写本のうち、本文をまだ表示できない文書の案内 / A Nag Hammadi tractate whose text is not yet available.") +
             f"{FONTS}<style>{css}</style></head><body>{body}</body></html>")
 
 # --- reader.html (full-text reader for the draft texts) ----------------------
@@ -986,15 +1069,53 @@ window.addEventListener('hashchange',gotoHash);
     return ("<!doctype html><html lang=\"ja\" data-lang=\"ja\" data-i18n=\"full\" data-mode=\"dark\" data-modes=\"light dark\"><head><meta charset=\"utf-8\">"
             "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
             f"{MODE_BOOT}"
-            "<title>本文（暫定版） — Sheneset</title>"
-            "<meta name=\"description\" content=\"ナグ・ハマディ写本の全文テキスト（自動注釈の暫定版）/ Nag Hammadi Codices: full text with a draft automatic annotation.\">"
+            + head_meta("reader.html", "本文（暫定版） — Sheneset",
+                        "ナグ・ハマディ写本の全文テキスト（自動注釈の暫定版）/ Nag Hammadi Codices: full text with a draft automatic annotation.") +
             f"{FONTS}<script defer src=\"assets/viewer-tools.js\"></script><style>{css}</style></head><body>{body}</body></html>")
+
+# --- sitemap.xml・robots.txt -------------------------------------------------
+# 検索エンジン向けの URL の一覧。管理用（admin・profile）、転送だけの stats.html、準備中の案内 tractate.html は載せない。
+SITEMAP_PAGES = ["", "gnosticism.html", "project.html", "search.html",
+                 "eugnostos.html?wit=III", "eugnostos.html?wit=SYN", "republic.html"]
+SITEMAP_TAIL = ["privacy.html", "terms.html"]
+
+def catalog_readers():
+    """data/catalog.xml の暫定版・未注釈の文書（<bibl subtype="draft|unannotated">）の reader.html?doc=… を、カタログの順に"""
+    import xml.etree.ElementTree as ET
+    T = "{http://www.tei-c.org/ns/1.0}"
+    out = []
+    for b in ET.parse(os.path.join(OUTDIR, "data", "catalog.xml")).getroot().iter(T + "bibl"):
+        if b.get("type") != "document" or b.get("subtype") not in ("draft", "unannotated"):
+            continue
+        out += [r.get("target") for r in b.findall(T + "ref") if r.get("type") == "reader" and (r.get("target") or "").startswith("reader.html?doc=")]
+    return out
+
+def build_sitemap():
+    paths = SITEMAP_PAGES + catalog_readers() + SITEMAP_TAIL
+    if len(set(paths)) != len(paths):
+        raise SystemExit("build_site.py: sitemap.xml の URL が重複しています")
+    urls = "".join("  <url><loc>%s</loc></url>\n" % html.escape(SITE_URL + p, quote=False) for p in paths)
+    return ('<?xml version="1.0" encoding="UTF-8"?>\n'
+            '<!-- 自動生成ファイル: scripts/build_site.py が出力します（直接編集しない）。暫定版・未注釈の文書は data/catalog.xml から -->\n'
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + urls + '</urlset>\n'), len(paths)
+
+def build_robots():
+    return ("# robots.txt — scripts/build_site.py が出力します（直接編集しない）\n"
+            "User-agent: *\n"
+            "Disallow: /admin.html\n"
+            "Disallow: /profile.html\n"
+            "\n"
+            f"Sitemap: {SITE_URL}sitemap.xml\n")
 
 # --- write ------------------------------------------------------------------
 _BANNER = "<!-- 自動生成ファイル: scripts/build_site.py が出力します。直接編集せず、スクリプトの CODICES を編集して再実行してください。 -->\n"
 open(os.path.join(OUTDIR,"index.html"),"w",encoding="utf-8").write(_BANNER + build_index())
 open(os.path.join(OUTDIR,"tractate.html"),"w",encoding="utf-8").write(_BANNER + build_tractate())
 open(os.path.join(OUTDIR,"reader.html"),"w",encoding="utf-8").write(_BANNER + build_reader())
+_sitemap, _n_urls = build_sitemap()
+open(os.path.join(OUTDIR,"sitemap.xml"),"w",encoding="utf-8").write(_sitemap)
+open(os.path.join(OUTDIR,"robots.txt"),"w",encoding="utf-8").write(build_robots())
 print("wrote index.html (landing), tractate.html (placeholder) and reader.html (draft full texts)")
+print("wrote sitemap.xml (%d URLs) and robots.txt" % _n_urls)
 print("codices:", len(CODICES), "| tractates:", TOTAL, "| available:", AVAIL, "| drafts:", DRAFT, "| text only:", PLAIN, "| soon:", SOON,
       "| listed but not counted:", ", ".join("%s,%s" % k for k in sorted(UNCOUNTED)))

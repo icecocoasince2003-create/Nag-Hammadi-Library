@@ -19,7 +19,7 @@
 
 | ページ | 内容 | 管理方法 |
 |---|---|---|
-| `index.html` | HOME（日・英・仏、NEWS、関連サイト、文書一覧） | `python3 scripts/build_site.py` で生成。NEWS は `data/news.json`、関連サイトは `data/links.json` を編集 |
+| `index.html` | HOME（日・英・仏、NEWS、関連サイト、文書一覧） | `python3 scripts/build_site.py` で生成。NEWS は `data/news.json`、関連サイトは `data/links.json` を編集し、`build_site.py` を実行し直す（生成のときに HTML に書き込むので、JS を動かさない読み手やリンクのプレビューにも出る。実行する前でも、ページを開いたときに JS が JSON を読み直して最新を出す） |
 | `gnosticism.html` | 解説「グノーシス主義とは」（日・英・仏） | 手作業 |
 | `project.html` | プロジェクト紹介。メンバー・資金協力は `data/project.json`（`public: true` のみ表示） | 手作業＋JSON |
 | `eugnostos.html` | エウグノストス。`?wit=III`（祝福されたエウグノストス）/ `?wit=V`（エウグノストス）/ `?wit=SYN`（対照） | 手作業 |
@@ -86,6 +86,8 @@ nag_hammadi_library/
 ├─ republic.html       ← プラトン『国家』断片ビュワー(手作業管理)
 ├─ tractate.html       ← 準備中ページ(自動生成)
 ├─ reader.html         ← 本文ビュワー・暫定版(自動生成。?doc=II-6 など)
+├─ sitemap.xml         ← 検索エンジン向けの URL の一覧(自動生成)
+├─ robots.txt          ← 管理用ページ(admin・profile)を検索エンジンから外し、sitemap.xml を示す(自動生成)
 ├─ README.md           ← この文書
 ├─ CONTRIBUTING.md     ← ★共同編集ガイド(招待を受けた方はまずこちら)
 ├─ .nojekyll           ← GitHub Pages 用
@@ -93,7 +95,8 @@ nag_hammadi_library/
 ├─ .vercelignore       ← Vercel で配信しないもの(いまは design/ だけ)
 ├─ design/             ← デザイン用の資料(アイコン・キャラクターシート・表情・配色案の PDF)。サイトからは使わず、配信しない
 ├─ image/
-│   └─ icon.svg         ← サイトのアイコン画像(各ページが読み込みます)
+│   ├─ icon.svg         ← サイトのアイコン画像(各ページが読み込みます)
+│   └─ og-image.png     ← リンクを共有したときのプレビュー画像(1200×630。scripts/make_og_image.py が作る)
 ├─ data/               ← サイトが読むXML(手作業の修正が入っていて、source/ からは作り直せない)
 │   ├─ eugnostos_tei.xml
 │   ├─ lexicon.xml
@@ -108,7 +111,8 @@ nag_hammadi_library/
 └─ scripts/            ← スクリプト(通常触らない)
     ├─ build_tei.py        source/ の CSV から XML を試しに生成し、data/ と比べる(既定では data/ に書き込まない)
     ├─ sync_lexicon.py     source/lexicon.csv の変更を data/lexicon.xml に反映する(xml:id は変えない)
-    ├─ build_site.py       index.html / tractate.html / reader.html を生成
+    ├─ build_site.py       index.html / tractate.html / reader.html / sitemap.xml / robots.txt を生成
+    ├─ make_og_image.py    共有用の画像 image/og-image.png を作る(rsvg-convert が要る)
     ├─ build_parallels.py  並行箇所(data/parallels.xml)を、文言の自動照合で作る
     └─ sync_nhc_catalog.py  NHC 全文テキスト(未注釈)の文書一覧を data/catalog.xml に書き出す
 ```
@@ -156,7 +160,8 @@ nag_hammadi_library/
 | `build_tei.py` | CSV から本文と辞書の XML を**試しに生成して `data/` と比べる**。既定では `data/` に書き込まない(下の「データの編集」)。 |
 | `build_parallels.py` | 並行箇所(`data/parallels.xml`)を文言の自動照合で作る。何も付けなければ要約の表示だけで、`--write` で書き込む。 |
 | `sync_lexicon.py` | `lexicon.csv` の変更を `data/lexicon.xml` に反映する。`xml:id` は変えない。何も付けなければ変更点の表示だけで、`--write` で書き込む。 |
-| `build_site.py` | `index.html`(目次)・`tractate.html`(準備中)・`reader.html`(本文ビュワー・暫定版)を生成。 |
+| `build_site.py` | `index.html`(目次)・`tractate.html`(準備中)・`reader.html`(本文ビュワー・暫定版)・`sitemap.xml`・`robots.txt` を生成。`<head>` の OGP(リンクのプレビュー)のタグもここで書く(`og_tags`)。 |
+| `make_og_image.py` | リンクを共有したときのプレビュー画像 `image/og-image.png`(1200×630)を、アイコンとゲンゲンの SVG から作る。 |
 
 ## データの編集
 
