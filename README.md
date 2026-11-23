@@ -121,6 +121,7 @@ nag_hammadi_library/
 │   ├─ pos_labels.json    ← 品詞タグの三言語の名前と本文での出現数(scripts/build_site.py が書き出す。辞書のページなどが読む)
 │   ├─ fulltext_stats.json ← 全文テキストの文書ごとの数(scripts/build_fulltext_stats.py。build_site.py を実行すると作り直す)
 │   ├─ facsimile_links.json ← 写本ごとの写真(Claremont, Nag Hammadi Archive)へのリンク
+│   ├─ intros.json      ← 文書ごとの解題(三言語。下書きで、reviewed: true にした項目だけをビュワーが表示する)
 │   ├─ news.json・links.json  ← HOME の NEWS と関連サイト
 │   └─ republic_*.xml
 ├─ source/             ← CSV／TSV(サイトに反映できるのは、いまは lexicon.csv だけ。下の「データの編集」)
@@ -458,6 +459,11 @@ HOME のフッターの版番号は、このファイルを読みます。`CITAT
   箇所の引用も「NHC VI 48,16–17（§1）」とこのアンカーの URL で示します。本文ビュワー（`reader.html?doc=II-2#p32.10`）と
   エウグノストス（`eugnostos.html?wit=III#p70.1`）も同じ仕組みで、区切りを入れればそのまま働きます（上の「写本の頁・行の
   区切りを入れる」）。頁・行の無い本文（いまはエウグノストスと全文テキスト）では、〈ページ〉〈行〉のボタンを出しません。
+- **解題**: 題の下に、折りたためる「この文書について（解題）」（要約・写本と頁・ほかの写し・言語と方言・潮流・文献）を出します。
+  内容は `data/intros.json` にあり、生田目が確かめて `reviewed` を `true` にした項目だけを表示します（2026-11-23 の時点では
+  全項目が下書きで、何も表示されません）。III,3・V,1 はエウグノストスの、VI,5 は『国家』の項目を使います（`"see"`）。
+  潮流は gnosticism.html III の表の分類、文献は同 VII の推薦文献から選び、確かでない点は各項目の `todo` に書いてあります。
+  表示は `assets/viewer-tools.js`、見た目は `assets/site.css`（`.doc-intro`）。
 - **写本の写真**: 題の下に、Claremont Colleges Digital Library の Nag Hammadi Archive にある、その写本の写真（1970 年代の白黒写真）
   へのリンクがあります（`data/facsimile_links.json`。著作権は図書館にあるので、リンクだけです）。写本ファクシミリ（IIIF）のパネルは、
   `iiif/*.json` に画像の `source` を書いたときだけ出ます（`iiif/README.md`）。

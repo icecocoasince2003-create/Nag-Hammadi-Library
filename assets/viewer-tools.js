@@ -19,6 +19,11 @@
          で、押した要素の下に小さなメニュー（〈リンクをコピー〉〈引用をコピー〉）を開く。もう一度押すか、外を押すか、Esc で閉じる。
          クリップボードが使えないときは、コピーする文を選べる形で出す。
        - status は "draft"（暫定版）・"text"（未注釈）・""（人の手で注釈した版）。文書単位の引用には、その文書の最終更新日を添える。
+   3) 文書ごとの解題（data/intros.json）
+       <div class="doc-intro" data-intro="II-2" hidden></div> を置くと、data/intros.json の texts["II-2"] が reviewed: true の
+       ときだけ、折りたためる「この文書について」を書き込んで表示する（要約・写本と頁・ほかの写し・言語と方言・潮流・文献）。
+       {"see": "eugnostos"} の項目は、その項目を使う。reviewed が true でないとき・JSON を読めないときは隠したまま。
+       下書き（reviewed: false）は表示しない。描くのは 1) と同じく fill()。
    ページ側のスクリプトは、このファイル（defer）より先に動くことがあるので、次の形で呼ぶ:
        (window.NHCTools ? f(window.NHCTools) : (window.NHCToolsQ = window.NHCToolsQ || []).push(f))
    文言は三言語の span（.l-ja / .l-en / .l-fr。表示の切替は assets/site.css）で書く。見た目は assets/site.css の 6)。
@@ -72,10 +77,56 @@
     });
   }
 
+  /* ---- 3) 文書ごとの解題（data/intros.json）---- */
+  var LABEL = {
+    summary: ["要約", "Summary", "Résumé"], pages: ["写本と頁", "Codex and pages", "Codex et pages"],
+    copies: ["ほかの写し", "Other copies", "Autres copies"], language: ["言語・方言", "Language and dialect", "Langue et dialecte"],
+    current: ["潮流", "Current", "Courant"], refs: ["文献", "Literature", "Bibliographie"]
+  };
+  var CUR_ANCHOR = { ja: "ja-schools", en: "en-schools", fr: "fr-schools" };
+  function introHTML(d, e) {
+    var tr = function (o) { o = o || {}; return tri(esc(o.ja || ""), esc(o.en || o.ja || ""), esc(o.fr || o.en || o.ja || "")); };
+    var has = function (o) { return o && (o.ja || o.en || o.fr); };
+    var rows = [];
+    if (has(e.summary)) rows.push(["summary", tr(e.summary)]);
+    if (has(e.pages)) rows.push(["pages", tr(e.pages)]);
+    if (has(e.copies)) rows.push(["copies", tr(e.copies)]);
+    if (has(e.language)) rows.push(["language", tr(e.language)]);
+    var cur = e.current && d.currents && d.currents[e.current];
+    if (cur) rows.push(["current", tri('<a href="gnosticism.html#' + CUR_ANCHOR.ja + '">' + esc(cur.ja) + "</a>",
+      '<a href="gnosticism.html#' + CUR_ANCHOR.en + '">' + esc(cur.en || cur.ja) + "</a>", '<a href="gnosticism.html#' + CUR_ANCHOR.fr + '">' + esc(cur.fr || cur.en || cur.ja) + "</a>")]);
+    var refs = (e.refs || []).map(function (r) {
+      var c = d.references && d.references[r.key]; if (!c) return "";
+      /* vol は、全巻をまとめた書誌のうち、その文書を収める巻（書誌の末尾の句読点のあとに付くので括弧に入れる） */
+      return "<li>" + esc(c) + (r.vol ? tri("（第" + esc(r.vol) + "巻に収録）", " (in vol. " + esc(r.vol) + ")", " (dans le vol. " + esc(r.vol) + ")") : "") + "</li>";
+    }).filter(Boolean);
+    if (refs.length) rows.push(["refs", '<ul class="di-refs">' + refs.join("") + "</ul>"]);
+    if (!rows.length) return "";
+    return '<details class="doc-intro-box"><summary>' + tri("この文書について（解題）", "About this text", "À propos de ce texte") + "</summary><dl>" +
+      rows.map(function (r) { var l = LABEL[r[0]]; return "<dt>" + tri(l[0], l[1], l[2]) + "</dt><dd>" + r[1] + "</dd>"; }).join("") + "</dl>" +
+      '<p class="di-note">' + tri("解題は本プロジェクトによる短い紹介で、本文の解釈ではありません。",
+        "A short introduction written by the project, not an interpretation of the text.",
+        "Courte présentation rédigée par le projet, non une interprétation du texte.") + "</p></details>";
+  }
+  function intro(el) {
+    var key = el.getAttribute("data-intro");
+    if (!key) return Promise.resolve();
+    return once("data/intros.json").then(function (d) {
+      var texts = (d && d.texts) || {}, e = texts[key], seen = 0;
+      while (e && e.see && texts[e.see] && seen++ < 3) e = texts[e.see];   // {"see": "eugnostos"} は参照先の項目を使う
+      if (!e || e.reviewed !== true) { el.hidden = true; return; }        // 生田目が確かめたもの（reviewed: true）だけを出す
+      var h = introHTML(d, e);
+      if (!h) { el.hidden = true; return; }
+      el.innerHTML = h; el.hidden = false;
+    });
+  }
+
   /* root の中の、まだ描いていない要素を描く */
   function fill(root) {
     var els = (root || document).querySelectorAll(".doc-photos[data-codices]:not([data-filled])");
     Array.prototype.forEach.call(els, function (el) { el.setAttribute("data-filled", ""); photoLinks(el); });
+    var ins = (root || document).querySelectorAll(".doc-intro[data-intro]:not([data-filled])");
+    Array.prototype.forEach.call(ins, function (el) { el.setAttribute("data-filled", ""); intro(el); });
   }
 
   /* ---- 2) 引用 ---- */

@@ -423,6 +423,8 @@ function render(){
     '<div class="meta">'+esc(D.lang)+' · '+tri(fmt(s.segs)+' セグメント · '+fmt(s.m)+' 形態素'+(ann?' · '+fmt(s.g)+' 語群':''), fmt(s.segs)+' segments · '+fmt(s.m)+' morphemes'+(ann?' · '+fmt(s.g)+' bound groups':''), fmt(s.segs)+' segments · '+fmt(s.m)+' morphèmes'+(ann?' · '+fmt(s.g)+' groupes':''))+'</div>'+
     '<div class="doc-tools"><button type="button" class="doc-cite" id="docCite" aria-haspopup="dialog">'+tri('この文書を引用','Cite this text','Citer ce texte')+'</button>'+
       (m?'<span class="doc-photos" data-codices="'+esc(m[1])+'" hidden></span>':'')+'</div>'+
+    /* 文書ごとの解題（data/intros.json。reviewed: true のものだけ表示。assets/viewer-tools.js） */
+    '<div class="doc-intro" data-intro="'+esc(DOC.key)+'" hidden></div>'+
     statusHTML()+
     (ann||s.pb||s.lb?'<div class="tools">'+
       (ann?'<label><input type="checkbox" id="oInter"'+(OPT.inter?' checked':'')+'>'+tri('語義と品詞を重ねる','Show glosses and POS','Afficher gloses et catégories')+'</label>'+

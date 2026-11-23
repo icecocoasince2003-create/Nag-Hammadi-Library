@@ -410,6 +410,18 @@ html[data-mode="light"] .app main .corpus-head, html[data-mode="light"] .app mai
 .doc-guide:hover { text-decoration: underline; }
 .doc-photos a:hover { text-decoration: underline; }
 .doc-photos .dp-note { font-size: .72rem; margin-left: .3em; }
+/* 文書ごとの解題（data/intros.json の reviewed: true のものだけ。assets/viewer-tools.js） */
+.doc-intro { margin: 10px 0 0; max-width: 78ch; }
+.doc-intro-box { border: 1px solid var(--line-2, var(--line)); border-radius: 12px; padding: 4px 14px; background: var(--panel, transparent);
+  font-size: .84rem; line-height: 1.75; color: var(--ink-soft); }
+.doc-intro-box > summary { cursor: pointer; padding: 6px 0; color: var(--ink); font-size: .84rem; }
+.doc-intro-box dl { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 14px; margin: 4px 0 8px; }
+.doc-intro-box dt { color: var(--ink-faint); font-size: .74rem; padding-top: .2em; white-space: nowrap; }
+.doc-intro-box dd { margin: 0; }
+.doc-intro-box a { color: var(--lapis); }
+.doc-intro-box .di-refs { margin: 0; padding-left: 1.1em; }
+.doc-intro-box .di-note { margin: 0 0 8px; font-size: .72rem; color: var(--ink-faint); }
+@media (max-width: 560px) { .doc-intro-box dl { grid-template-columns: 1fr; } .doc-intro-box dt { padding-top: .4em; } }
 .doc-cite { background: none; border: 1px solid var(--line-2, var(--line)); border-radius: 999px; color: var(--ink-soft);
   font: inherit; font-size: .76rem; line-height: 1.5; padding: 1px 10px; cursor: pointer; }
 .doc-cite:hover, .doc-cite[aria-expanded="true"] { border-color: var(--gold); color: var(--ink); }
