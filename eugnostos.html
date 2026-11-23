@@ -5,7 +5,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>/* 表示モード（ライト／ダーク）の保存値を描画前に反映（保存は assets/site.js） */try{if(localStorage.getItem("nhc-mode")==="light")document.documentElement.setAttribute("data-mode","light")}catch(e){}</script>
+<script>/* 表示言語（?lang= ＞ 保存値 ＞ ブラウザーの言語、ほかは英語）を描画前に反映（正式な処理と保存は assets/site.js） */(function(H){var L=["ja","en","fr"],m=/[?&]lang=([^&#]*)/i.exec(location.search),v=m?m[1].toLowerCase():null;if(L.indexOf(v)<0){v=null;try{v=localStorage.getItem("nhc-lang")}catch(e){}}if(L.indexOf(v)<0){v="en";var n=navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||""];for(var i=0;i<n.length;i++){var p=String(n[i]).toLowerCase().split(/[-_]/)[0];if(L.indexOf(p)>=0){v=p;break}}}if(H.getAttribute("data-i18n")==="full"){H.setAttribute("data-lang",v);H.setAttribute("lang",v)}else if(v!=="ja"){H.setAttribute("data-lang","en");H.setAttribute("lang","en");H.setAttribute("data-gl",v);H.setAttribute("data-tl",v)}})(document.documentElement)</script>
 <title>エウグノストス — Eugnostos (NHC III,3 / V,1)</title>
+<meta name="description" content="エウグノストス（NHC III,3 / V,1）のコプト語本文。語ごとの語義と品詞、日英仏の対訳、V,1 との対照、他の文書の並行箇所 / Eugnostos (NHC III,3 / V,1): the Coptic text with word-by-word glosses, Japanese, English and French translations, a synopsis with V,1 and parallels in other texts.">
+<!-- リンクを共有したときのプレビュー（OGP）。og:title・og:description は <title> と meta description と同じにする -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sheneset">
+<meta property="og:title" content="エウグノストス — Eugnostos (NHC III,3 / V,1)">
+<meta property="og:description" content="エウグノストス（NHC III,3 / V,1）のコプト語本文。語ごとの語義と品詞、日英仏の対訳、V,1 との対照、他の文書の並行箇所 / Eugnostos (NHC III,3 / V,1): the Coptic text with word-by-word glosses, Japanese, English and French translations, a synopsis with V,1 and parallels in other texts.">
+<meta property="og:url" content="https://sheneset.vercel.app/eugnostos.html">
+<meta property="og:image" content="https://sheneset.vercel.app/image/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="fr_FR">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22 role=%22img%22 aria-label=%22Sheneset%22%3E %3Cdefs%3E%3CradialGradient id=%22bg%22 cx=%2250%25%22 cy=%2242%25%22 r=%2278%25%22%3E%3Cstop offset=%220%22 stop-color=%22%232b2856%22/%3E%3Cstop offset=%22.55%22 stop-color=%22%231b1937%22/%3E%3Cstop offset=%221%22 stop-color=%22%230e0d20%22/%3E%3C/radialGradient%3E%3ClinearGradient id=%22gold%22 gradientUnits=%22userSpaceOnUse%22 x1=%220%22 y1=%2256%22 x2=%220%22 y2=%22456%22%3E%3Cstop offset=%220%22 stop-color=%22%23f7e9ad%22/%3E%3Cstop offset=%22.5%22 stop-color=%22%23d8b863%22/%3E%3Cstop offset=%221%22 stop-color=%22%23a37e30%22/%3E%3C/linearGradient%3E%3CradialGradient id=%22spark%22%3E%3Cstop offset=%220%22 stop-color=%22%23fff8e0%22/%3E%3Cstop offset=%22.38%22 stop-color=%22%23f4e3a0%22/%3E%3Cstop offset=%22.72%22 stop-color=%22%23d8b863%22/%3E%3Cstop offset=%221%22 stop-color=%22%23caa241%22 stop-opacity=%220%22/%3E%3C/radialGradient%3E%3CradialGradient id=%22glow%22%3E%3Cstop offset=%220%22 stop-color=%22%239d8be0%22 stop-opacity=%22.36%22/%3E%3Cstop offset=%221%22 stop-color=%22%239d8be0%22 stop-opacity=%220%22/%3E%3C/radialGradient%3E%3C/defs%3E %3Ccircle cx=%22256%22 cy=%22256%22 r=%22246%22 fill=%22url(%23bg)%22/%3E%3Ccircle cx=%22256%22 cy=%22256%22 r=%22236%22 fill=%22none%22 stroke=%22%23efe4c6%22 stroke-opacity=%22.2%22 stroke-width=%222%22/%3E%3Ccircle cx=%22256%22 cy=%22256%22 r=%22176%22 fill=%22url(%23glow)%22/%3E %3Ccircle cx=%22256%22 cy=%22256%22 r=%22150%22 fill=%22none%22 stroke=%22%23efe4c6%22 stroke-opacity=%22.14%22 stroke-width=%221.5%22/%3E %3Ccircle cx=%22313.4%22 cy=%22117.42%22 r=%225%22 fill=%22url(%23gold)%22 fill-opacity=%220.8%22/%3E%3Ccircle cx=%22394.58%22 cy=%22198.6%22 r=%225%22 fill=%22url(%23gold)%22 fill-opacity=%220.8%22/%3E%3Ccircle cx=%22394.58%22 cy=%22313.4%22 r=%225%22 fill=%22url(%23gold)%22 fill-opacity=%220.8%22/%3E%3Ccircle cx=%22313.4%22 cy=%22394.58%22 r=%225%22 fill=%22url(%23gold)%22 fill-opacity=%220.8%22/%3E%3Ccircle cx=%22198.6%22 cy=%22394.58%22 r=%225%22 fill=%22url(%23gold)%22 fill-opacity=%220.8%22/%3E%3Ccircle cx=%22117.42%22 cy=%22313.4%22 r=%225%22 fill=%22url(%23gold)%22 fill-opacity=%220.8%22/%3E%3Ccircle cx=%22117.42%22 cy=%22198.6%22 r=%225%22 fill=%22url(%23gold)%22 fill-opacity=%220.8%22/%3E%3Ccircle cx=%22198.6%22 cy=%22117.42%22 r=%225%22 fill=%22url(%23gold)%22 fill-opacity=%220.8%22/%3E %3Cpath d=%22M 339.29,85.23 A 190 190 0 1 1 102.29,144.32%22 fill=%22none%22 stroke=%22url(%23gold)%22 stroke-width=%2220%22/%3E%3Cpath d=%22M 92.17,141.28 L 98.46,132.92 L 105.23,124.94 L 112.43,117.35 L 120.03,110.19 L 128.01,103.47 L 136.34,97.2 L 144.98,91.41 L 153.92,86.11 L 163.11,81.3 L 172.54,77.01 L 182.16,73.25 L 191.96,70.01 L 201.9,67.32 L 211.94,65.17 L 222.07,63.58 L 232.24,62.53 L 242.44,62.03 L 252.62,62.09 L 262.75,62.69 L 272.81,63.83 L 282.77,65.51 L 292.6,67.71 L 302.27,70.43 L 301.66,72.86 L 291.91,71.27 L 282.11,70.19 L 272.31,69.62 L 262.51,69.54 L 252.75,69.97 L 243.06,70.89 L 233.44,72.3 L 223.94,74.2 L 214.57,76.56 L 205.36,79.4 L 196.32,82.69 L 187.49,86.42 L 178.87,90.59 L 170.49,95.18 L 162.37,100.17 L 154.52,105.56 L 146.97,111.31 L 139.73,117.43 L 132.81,123.89 L 126.22,130.68 L 119.98,137.76 L 114.1,145.13 L 108.55,152.76 Z%22 fill=%22url(%23gold)%22/%3E%3Cpath d=%22M 339.29,85.23 A 190 190 0 1 1 102.29,144.32%22 fill=%22none%22 stroke=%22%236b4d17%22 stroke-opacity=%22.5%22 stroke-width=%222.6%22 stroke-linecap=%22round%22 stroke-dasharray=%22.1 11.8%22/%3E%3Cpath d=%22M 341.72,97.14 C 329.55,100.59 319.71,97.62 311.92,92.36 C 302.18,85.78 293.23,77.06 292.06,66.93 C 299.46,59.92 311.93,59 323.62,60.22 C 332.97,61.2 342.41,65.24 349.52,75.71 Z%22 fill=%22url(%23gold)%22/%3E%3Ccircle cx=%22311.6%22 cy=%2282.77%22 r=%223.1%22 fill=%22%231b1937%22/%3E%3Ccircle cx=%22317.21%22 cy=%2267.36%22 r=%223.1%22 fill=%22%231b1937%22/%3E %3Cpolygon points=%22239.93,217.2 256,138 272.07,217.2 339.44,172.56 294.8,239.93 374,256 294.8,272.07 339.44,339.44 272.07,294.8 256,374 239.93,294.8 172.56,339.44 217.2,272.07 138,256 217.2,239.93 172.56,172.56%22 fill=%22url(%23gold)%22/%3E%3Cpath d=%22M 256,256 L 256,138 L 272.07,217.2 Z M 256,256 L 339.44,172.56 L 294.8,239.93 Z M 256,256 L 374,256 L 294.8,272.07 Z M 256,256 L 339.44,339.44 L 272.07,294.8 Z M 256,256 L 256,374 L 239.93,294.8 Z M 256,256 L 172.56,339.44 L 217.2,272.07 Z M 256,256 L 138,256 L 217.2,239.93 Z M 256,256 L 172.56,172.56 L 239.93,217.2 Z%22 fill=%22%235a3f12%22 fill-opacity=%220.28%22/%3E %3Ccircle cx=%22256%22 cy=%22256%22 r=%2231%22 fill=%22%2315142c%22/%3E %3Ccircle cx=%22256%22 cy=%22256%22 r=%2231%22 fill=%22none%22 stroke=%22url(%23gold)%22 stroke-width=%223%22/%3E %3Ccircle cx=%22256%22 cy=%22256%22 r=%2217%22 fill=%22url(%23spark)%22/%3E %3C/svg%3E"><link rel="alternate icon" type="image/png" sizes="32x32" href="data:image/png;base64,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"><link rel="apple-touch-icon" href="image/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -96,6 +111,10 @@ main{grid-area:main; overflow-y:auto; padding:34px clamp(18px,4vw,60px) 120px; s
 .seg .no{position:absolute; left:8px; top:15px; width:34px; text-align:right; font-family:var(--disp);
   font-size:.82rem; color:var(--ink-faint); font-variant-numeric:tabular-nums; user-select:none}
 .seg.incipit .no, .seg.colophon .no{color:var(--gold)}
+/* § の番号はボタン（押すと〈この箇所を引用〉のメニュー。assets/viewer-tools.js）。見た目は上の .no のまま */
+button.no{-webkit-appearance:none; appearance:none; background:none; border:0; padding:0; margin:0;
+  font:inherit; color:inherit; line-height:inherit; letter-spacing:inherit; cursor:pointer}
+button.no:hover, button.no[aria-expanded="true"]{color:var(--gold)}
 .seg:target, .seg.flash{background:var(--hi)}
 .seg.par-active{background:var(--sel); box-shadow:inset 3px 0 0 var(--lapis)}
 .coptic{font-family:var(--copt); font-size:1.46rem; line-height:1.95; direction:ltr; color:var(--ink); word-spacing:.04em}
@@ -344,10 +363,10 @@ html[data-lang="en"] .l-en{display:revert}
 <script>/* 左の文書パネルを折りたたんだ状態（assets/site.js が保存）を描画前に反映 */try{if(localStorage.getItem("nhc-panel")==="off")document.documentElement.setAttribute("data-panel","off")}catch(e){}</script>
 <script defer src="assets/cosmos.js"></script>
 <script defer src="assets/site.js"></script>
+<script defer src="assets/viewer-tools.js"></script>
 <script defer src="assets/analytics.js"></script>
 <script defer src="assets/community-config.js"></script>
 <script defer src="assets/community.js"></script>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.1/openseadragon.min.js"></script>
 </head>
 <body data-doc="eugnostos">
 <div class="app">
@@ -371,8 +390,8 @@ html[data-lang="en"] .l-en{display:revert}
       <div class="seg-ctl">
         <button class="chip" id="ilBtn" aria-pressed="true" title="語釈を本文に重ねて表示 / Show interlinear glosses"><span class="l-ja">語釈</span><span class="l-en">Interlinear</span></button>
         <button class="chip" id="loanBtn" aria-pressed="false" title="ギリシア語借用語をマーキング / Mark Greek loanwords"><span class="l-ja">借用語</span><span class="l-en">Loanwords</span><span id="loanN" class="loann"></span></button>
-        <button class="chip" id="pageBtn" aria-pressed="false" title="写本のページ番号を表示 / Show codex page numbers"><span class="l-ja">ページ</span><span class="l-en">Pages</span></button>
-        <button class="chip" id="lineBtn" aria-pressed="false" title="写本の行番号を表示 / Show manuscript line numbers"><span class="l-ja">行</span><span class="l-en">Lines</span></button>
+        <button class="chip" id="pageBtn" aria-pressed="false" title="写本のページ番号を表示 / Show codex page numbers" hidden><span class="l-ja">ページ</span><span class="l-en">Pages</span></button>
+        <button class="chip" id="lineBtn" aria-pressed="false" title="写本の行番号を表示 / Show manuscript line numbers" hidden><span class="l-ja">行</span><span class="l-en">Lines</span></button>
         <button class="chip" id="tlBtn" aria-pressed="false" title="語釈・対訳・注解の言語 / Language of glosses, translation and notes">訳: 日</button>
         <button class="chip" id="langBtn" title="Language / 言語">English</button>
       </div>
@@ -403,12 +422,13 @@ html[data-lang="en"] .l-en{display:revert}
     <div class="doc-head">
       <div class="kick" id="docKick">Nag Hammadi Codex III,3 · pp. 70–90</div>
       <h1 id="docH1"><span class="cop">ⲉⲩⲅⲛⲱⲥⲧⲟⲥ ⲡⲙⲁⲕⲁⲣⲓⲟⲥ</span><br><span class="l-ja">祝福されたエウグノストス</span><span class="l-en">Eugnostos the Blessed</span></h1>
+      <div class="doc-tools"><button type="button" class="doc-cite" id="docCite" aria-haspopup="dialog"><span class="l-ja">この文書を引用</span><span class="l-en">Cite this text</span></button><span class="doc-photos" data-codices="III V" hidden></span></div>
       <p class="meta"><span class="l-ja">前1〜2世紀のギリシア語原典に遡るとされる、非キリスト教的な思弁的宇宙生成論。語りえぬ第一原理から、先在の父・自生者・不死の人間・人の子(救済者)・ソフィアと諸アイオーンが流出する次第を、書簡の体裁で説く。各形態素をクリックすると語義が表示されます。他の文書にも同じ文言がある箇所には訳の後ろに <span class="pref" aria-hidden="true">‖ V,1</span> のような印があり、押すと右のパネルに並行箇所が表示されます。</span><span class="l-en">A non-Christian speculative cosmogony, held to go back to a Greek original of the 1st–2nd c. BCE. In epistolary form it expounds how, from the ineffable First Principle, there emanate the pre-existent Father, the Self-Begotten, the Immortal Man, the Son of Man (the Saviour), Sophia and the Aeons. Click any morpheme for its sense. Where the same wording also occurs in another text, a mark such as <span class="pref" aria-hidden="true">‖ V,1</span> follows the translation; select it to see the parallel passage in the side panel.</span></p>
     </div>
-        <section class="facsimile" id="facsimile" aria-label="写本ファクシミリ / Facsimile">
+        <section class="facsimile" id="facsimile" aria-label="写本ファクシミリ / Facsimile" hidden>
       <div class="fx-head">
         <span class="fx-title">Facsimile · IIIF</span>
-        <span class="fx-sub" id="fxStatus">iiif/eugnostos.json</span>
+        <span class="fx-sub" id="fxStatus"></span>
         <button class="chip" id="fxPrev" hidden>‹</button>
         <span class="fx-sub" id="fxPage" hidden style="flex:none"></span>
         <button class="chip" id="fxNext" hidden>›</button>
@@ -559,8 +579,15 @@ async function load(){
   buildAll();
 }
 function buildAll(){
-  parse(); parsePar(); render();
+  parse(); parsePar(); markerButtons(); render();
   buildCredit();
+}
+/* 〈ページ〉〈行〉は、本文に改頁（<pb>）・改行（<lb>）があるときだけ出す（いまのエウグノストスの本文には無い） */
+function markerButtons(){
+  const segs=SEGS_III.concat(SEGS_V), has=k=>segs.some(s=>(s.flow||[]).some(it=>it.k===k));
+  const pb=$("#pageBtn"), lb=$("#lineBtn");
+  if(pb) pb.hidden=!has("pd");
+  if(lb) lb.hidden=!has("lb");
 }
 function showLoadError(base, diag){
   const url=base+"data/eugnostos_tei.xml";
@@ -685,7 +712,7 @@ function segHTML(s){
   if(!tr) tr = pendingText();
   const sub=s.sub?(" "+s.sub):"";
   return `<div class="seg${sub}" id="seg-${s.id}" data-id="${s.id}">
-    <div class="no">${s.n||""}</div>
+    <button type="button" class="no" data-cite="${s.id}" aria-haspopup="dialog" title="この箇所を引用 / Cite this passage">${s.n||""}</button>
     <div class="coptic">${words}</div>
     <div class="${trCls}">${escapeHTML(tr)}${parRefsHTML(s)}</div>
   </div>`;
@@ -697,12 +724,15 @@ function render(){
   box.className="col";
   const segs = curWit==="III" ? SEGS_III : SEGS_V;
   if(curWit==="V"){
-    const wv=Array.from(T(DOC_MAIN,"text")).find(x=>getId(x)==="wit-V");
-    const editorial = (wv?(T(wv,"note")[0]||{}).textContent:"")||"";
-    const vpar = PAR_GROUPS.some(g=>g.subtype==="witness")
-      ? (UL()==="en" ? " The text of V,1 itself (the unannotated working text) can be read beside III,3 in the Synopsis tab and in the parallels panel."
-                     : " V,1 の本文（未注釈の作業用テキスト）は、〈対照〉と〈並行箇所〉で III,3 と並べて読めます。") : "";
-    box.innerHTML = `<div class="notice" style="border-left-color:var(--rose)">⬥ <b>写本 V,1 は並行証本の枠組みです。</b> ${escapeHTML(editorial)}${escapeHTML(vpar)}</div>`+
+    // V,1 には語ごとの注釈がまだ無い（data/eugnostos_tei.xml の wit-V は III,3 と対応づけた枠だけ）。
+    // TEI の編集者向けの注（<note type="editorial">）は読者には出さず、本文の読める場所を案内する
+    const en=UL()==="en", vpar=PAR_GROUPS.some(g=>g.subtype==="witness");
+    const rd=`<a href="reader.html?doc=V-1">${en?"the text reader":"本文ビュワー"}</a>`;
+    box.innerHTML = `<div class="notice" style="border-left-color:var(--rose)">⬥ `+(en
+      ? `<b>V,1 has no word-by-word annotation yet.</b> The text of V,1 (an unannotated working text) can be read `+
+        (vpar?`beside III,3 in the Synopsis tab and in the parallels panel, and also in ${rd}.`:`in ${rd}.`)
+      : `<b>V,1 には語ごとの注釈がまだありません。</b>V,1 の本文（未注釈の作業用テキスト）は`+
+        (vpar?`〈対照〉と〈並行箇所〉で III,3 と並べて読めるほか、${rd}でも読めます。`:`${rd}で読めます。`))+`</div>`+
       segs.map(segHTML).join("");
   } else {
     box.innerHTML = segs.map(segHTML).join("");
@@ -714,7 +744,7 @@ function render(){
    一致する文字に印を付ける（並行箇所のパネルと同じ照合）。 */
 function synLeftHTML(s,html){
   const tr=pickTrans(s);
-  return `<div class="lseg"><div class="no" style="position:static;color:var(--gold)">${escapeHTML(s.n)}</div>`+
+  return `<div class="lseg"><button type="button" class="no" data-cite="${s.id}" aria-haspopup="dialog" title="この箇所を引用 / Cite this passage" style="position:static;color:var(--gold)">${escapeHTML(s.n)}</button>`+
     `<div class="coptic" style="font-size:1.16rem">${html}</div>${tr?`<div class="trans">${escapeHTML(tr)}</div>`:""}</div>`;
 }
 function renderSyn(box){
@@ -1364,6 +1394,29 @@ function applyUILang(){
   }; }
 applyUILang();
 
+/* ---------- 引用（〈この箇所を引用〉〈この文書を引用〉。assets/viewer-tools.js） ----------
+   セグメントの番号を押すと、その箇所の引用のメニューを開く。III,3 の箇所は eugnostos.html?wit=III#seg-…、
+   V,1 の枠（V-INCIPIT）は ?wit=V#seg-… を指す。この本文には頁・行が無いので、箇所は §（セグメントの番号）で示す。
+   〈この文書を引用〉は、いま開いている写本（III,3 / V,1 / 対照）の文書としての引用で、本文の最終更新日を添える。 */
+const withTools=f=>{ if(window.NHCTools) f(window.NHCTools); else (window.NHCToolsQ=window.NHCToolsQ||[]).push(f); };
+const CITE_DOC={
+  III:{siglum:"NHC III,3", title:{ja:"祝福されたエウグノストス", en:"Eugnostos the Blessed", fr:"Eugnoste le Bienheureux"}, status:""},
+  V:{siglum:"NHC V,1", title:{ja:"エウグノストス", en:"Eugnostos", fr:"Eugnoste"}, status:"text"},
+  SYN:{siglum:"NHC III,3 / V,1", title:{ja:"エウグノストス", en:"Eugnostos", fr:"Eugnoste"}, status:""}};
+document.addEventListener("click",e=>{
+  if(!e.target.closest) return;
+  const b=e.target.closest("button.no[data-cite]");
+  if(b){
+    const id=b.dataset.cite, inV=/^V-/.test(id), s=(inV?SEGS_V:SEGS_III).find(x=>x.id===id); if(!s) return;
+    const where=(inV?"NHC V,1":"NHC III,3")+" §"+s.n;
+    withTools(t=>t.cite(b,{kind:"passage", path:"eugnostos.html?wit="+(inV?"V":"III")+"#seg-"+id, where:{ja:where, en:where, fr:where}}));
+    return;
+  }
+  const d=e.target.closest("#docCite");
+  if(d){ const w=CITE_DOC[curWit]||CITE_DOC.III;
+    withTools(t=>t.cite(d,{kind:"document", path:"eugnostos.html?wit="+(CITE_DOC[curWit]?curWit:"III"), doc:Object.assign({key:"eugnostos"},w)})); }
+});
+
 /* ---------- credit ---------- */
 function buildCredit(){
   $("#credit").innerHTML=`
@@ -1375,60 +1428,72 @@ function buildCredit(){
 load();
 </script>
 <script>
-/* ---- IIIFファクシミリパネル（iiif/FX_DOC.json を読み込み、初回展開時に初期化） ---- */
+/* ---- 写本ファクシミリ（IIIF）のパネル ----
+   ページを開いた時点で iiif/FX_DOC.json を読み、pages[] のうち source（IIIF Image API の info.json の URL）の
+   あるページだけを、この順にパネルで送れるようにする（書き方は iiif/README.md）。
+   source のあるページが 1 つも無いとき（2026-11 時点）と、JSON を読めないときは、パネル（#facsimile）を出さない。
+   source を書き込めば、コードを変えずにパネルが出る。attribution（画像の提供元）はパネルの下に出す。
+   画像ビュワー OpenSeadragon は、初めて〈開く〉を押したときに読み込む。 */
 (function(){
   var FX_DOC = "eugnostos";
-  var cfg = null, viewer = null, pageIdx = 0;
+  var OSD = "https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.1/";
   var $ = function(s){ return document.querySelector(s); };
-  var btn = $("#fxToggle"), body = $("#fxBody"), status = $("#fxStatus"), note = $("#fxNote");
+  var sec = $("#facsimile"), btn = $("#fxToggle"), body = $("#fxBody"), status = $("#fxStatus"), note = $("#fxNote");
   var prev = $("#fxPrev"), next = $("#fxNext"), pageLbl = $("#fxPage");
-  if(!btn) return;
+  if(!sec || !btn) return;
+  var pages = [], attribution = "", viewer = null, pageIdx = 0, osdLoading = null;
+  function msg(ja, en){ return '<span class="l-ja">' + ja + '</span><span class="l-en">' + en + '</span>'; }
 
-  function sourceFor(i){
-    var p = cfg.pages && cfg.pages[i];
-    return (p && p.source) ? p.source : null;
+  fetch("iiif/" + FX_DOC + ".json", {cache:"no-cache"})
+    .then(function(r){ if(!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    .then(function(cfg){
+      pages = (cfg.pages || []).filter(function(p){ return p && p.source; });
+      if(!pages.length) return;
+      attribution = cfg.attribution || "";
+      status.textContent = cfg.label || "";
+      sec.hidden = false;
+    })
+    .catch(function(){});
+  function loadOSD(){
+    if(window.OpenSeadragon) return Promise.resolve();
+    if(!osdLoading) osdLoading = new Promise(function(ok, ng){
+      var s = document.createElement("script");
+      s.src = OSD + "openseadragon.min.js";
+      s.onload = ok;
+      s.onerror = function(){ osdLoading = null; ng(); };
+      document.head.appendChild(s);
+    });
+    return osdLoading;
   }
   function openPage(i){
-    if(!viewer || !cfg) return;
     pageIdx = i;
-    var src = sourceFor(i) || cfg.demoTileSource;
-    viewer.open(src);
-    var p = cfg.pages && cfg.pages[i];
-    pageLbl.textContent = p ? ("p. " + p.page + "  (" + (i+1) + "/" + cfg.pages.length + ")") : "";
-    var isDemo = !sourceFor(i);
-    note.textContent = isDemo
-      ? "デモ画像を表示中です。実際の写本画像を表示するには iiif/" + FX_DOC + ".json の pages[].source に IIIF info.json のURLを記入してください。"
-      : (cfg.attribution || "");
+    viewer.open(pages[i].source);
+    pageLbl.textContent = "p. " + pages[i].page + "  (" + (i+1) + "/" + pages.length + ")";
+    note.textContent = attribution;
   }
   function init(){
     if(viewer) return;
-    if(typeof OpenSeadragon === "undefined"){
-      note.textContent = "OpenSeadragon を読み込めませんでした（オフラインの可能性）。";
-      return;
-    }
-    fetch("iiif/" + FX_DOC + ".json", {cache:"no-store"})
-      .then(function(r){ if(!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
-      .catch(function(){ return { label:"", pages:[], demoTileSource:"https://openseadragon.github.io/example-images/duomo/duomo.dzi" }; })
-      .then(function(c){
-        cfg = c;
-        viewer = OpenSeadragon({
-          id: "osdView",
-          prefixUrl: "https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.1/images/",
-          showNavigator: true,
-          navigatorPosition: "BOTTOM_RIGHT",
-          crossOriginPolicy: "Anonymous"
-        });
-        viewer.addHandler("open-failed", function(){
-          note.textContent = "画像を読み込めませんでした。iiif/" + FX_DOC + ".json の source を確認してください。";
-        });
-        if(cfg.pages && cfg.pages.length > 1){
-          prev.hidden = next.hidden = pageLbl.hidden = false;
-          prev.onclick = function(){ openPage((pageIdx - 1 + cfg.pages.length) % cfg.pages.length); };
-          next.onclick = function(){ openPage((pageIdx + 1) % cfg.pages.length); };
-        }
-        openPage(0);
-        if(cfg.label) status.textContent = cfg.label;
+    loadOSD().then(function(){
+      if(viewer) return;
+      viewer = OpenSeadragon({
+        id: "osdView",
+        prefixUrl: OSD + "images/",
+        showNavigator: true,
+        navigatorPosition: "BOTTOM_RIGHT",
+        crossOriginPolicy: "Anonymous"
       });
+      viewer.addHandler("open-failed", function(){
+        note.innerHTML = msg("画像を読み込めませんでした。", "The image could not be loaded.");
+      });
+      if(pages.length > 1){
+        prev.hidden = next.hidden = pageLbl.hidden = false;
+        prev.onclick = function(){ openPage((pageIdx - 1 + pages.length) % pages.length); };
+        next.onclick = function(){ openPage((pageIdx + 1) % pages.length); };
+      }
+      openPage(0);
+    }, function(){
+      note.innerHTML = msg("画像ビュワーを読み込めませんでした（オフラインの可能性があります）。", "The image viewer could not be loaded (you may be offline).");
+    });
   }
   btn.onclick = function(){
     var open = !body.hidden;

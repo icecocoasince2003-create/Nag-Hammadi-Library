@@ -5,7 +5,7 @@
 （神学的解釈の注と『国家』の釈義・注解は、2026-11-18 に削除しました。代わりに、他の文書に同じ文言がある箇所を
 並行箇所として結び、本文の印から横のパネルで読めるようにしています。下の「並行箇所」）
 現在は『祝福されたエウグノストス』(Eugnostos the Blessed, NHC III,3 / V,1)を公開し、
-**全13写本・約53文書へ拡張できる目次トップとページ遷移**を備えています。
+**全13写本・52文書の目次トップとページ遷移**を備えています。
 
 コーパス検索は単語に加え、形態素の**品詞列**（例: `ART N`）、**ANNISを参考にした詳細式**
 （例: `pos="ART" .1,3 pos=/N.*/`）、**正規表現**（例: `lemma=/.*ⲛⲟⲩⲧ.*/`）に対応します。
@@ -19,7 +19,7 @@
 
 | ページ | 内容 | 管理方法 |
 |---|---|---|
-| `index.html` | HOME（日・英・仏、NEWS、関連サイト、文書一覧） | `python3 scripts/build_site.py` で生成。NEWS は `data/news.json`、関連サイトは `data/links.json` を編集 |
+| `index.html` | HOME（日・英・仏、NEWS、関連サイト、文書一覧） | `python3 scripts/build_site.py` で生成。NEWS は `data/news.json`、関連サイトは `data/links.json` を編集し、`build_site.py` を実行し直す（生成のときに HTML に書き込むので、JS を動かさない読み手やリンクのプレビューにも出る。実行する前でも、ページを開いたときに JS が JSON を読み直して最新を出す） |
 | `gnosticism.html` | 解説「グノーシス主義とは」（日・英・仏） | 手作業 |
 | `project.html` | プロジェクト紹介。メンバー・資金協力は `data/project.json`（`public: true` のみ表示） | 手作業＋JSON |
 | `eugnostos.html` | エウグノストス。`?wit=III`（祝福されたエウグノストス）/ `?wit=V`（エウグノストス）/ `?wit=SYN`（対照） | 手作業 |
@@ -37,6 +37,12 @@
 上部ナビの項目は `assets/site.js` の `NAV` を編集すれば全ページに反映されます。
 全ページで、上部ナビの ☀／☾ からライト／ダークの表示モードを選べます（既定はダーク、選択は全ページ共通）。
 仕組みと、新しいページを対応させる手順は `COSMOS_REDESIGN.md` の末尾にあります。
+表示言語は上部ナビで切り替えるほか、URL に `?lang=ja`・`?lang=en`・`?lang=fr` を付けて指定できます（例 `search.html?view=stats&lang=en`）。
+最初に開くときの言語は「URL の `lang` ＞ 保存値（`localStorage` の `nhc-lang`）＞ ブラウザーの言語」の順で決め、
+ブラウザーの言語が日・英・仏のどれでもなければ英語にします。URL で指定した言語は保存値にも入り、ほかのページでも続きます
+（言語を切り替えても URL は書き換えません）。日英だけのビュワー（`eugnostos.html`・`republic.html`）でフランス語を選ぶと、
+画面は英語、語釈と対訳はフランス語です。仕組みは `assets/site.js`（`initialLang`）と、各ページの `<head>` の 1 行スクリプト
+（`scripts/build_site.py` の `LANG_BOOT` と同じもの。描画前に言語を反映して、日本語が一瞬出るのを防ぐ）です。
 
 **同形異義語の参照**: 本文の `<w>` は `@lemma` と `@type`（品詞）の組で `lexicon.xml` を引きます。
 `@ana="#lex-…"` があればそれが最優先、品詞が一致する項目がない場合だけレンマ一致の全項目を候補として表示します。
@@ -59,9 +65,12 @@
   作業用の本文であることも同じ箇所に明記しています。
   `<phr>` のあるファイルは、TEI を作るスクリプト（`make_tei.py`）が作り直さないようにしてあります。
 - **文書一覧（HOME）と本文ビュワーから読めます。** HOME の写本ごとの一覧で、暫定版は「暫定」（33 行）、未注釈の文書は「未注釈」
-  （16 行）と示し、どちらも本文ビュワー `reader.html?doc=II-6` へリンクしています（XI,2a–2e は XI,2 の前後の移動から開けます。
-  一覧の VI,8「書記による覚書」は全文テキストの VI,7 の末尾の奥書へ、VI,9「アスクレピオス」は VI,8 へつないでいます。
-  III,3・V,1・VI,5 は専用のビュワーへのリンクのままで、I,1 は元ファイルにないので「準備中」です）。本文ビュワーは、冒頭にその文書で確かめていないこと（確度 low と `X` の割合、
+  （17 行）と示し、どちらも本文ビュワー `reader.html?doc=II-6` へリンクしています（XI,2a–2e は XI,2 の前後の移動から開けます。
+  番号は通用の番号で、一覧の VI,7a「書記による覚書」は全文テキストの VI,7 の末尾の奥書へつないでいます。VI,7a は一覧に出しますが、
+  文書数には数えません（HOME の件数は全 52 文書。`scripts/build_site.py` の `UNCOUNTED`）。
+  III,3・VI,5 は専用のビュワーへのリンクのままです。V,1 は語ごとの注釈がまだ無い（`eugnostos.html` の V,1 は III,3 と対応づけた枠だけ）ので
+  「未注釈」とし、本文ビュワーへリンクしています（エウグノストスのビュワーの〈対照〉でも III,3 と並べて読めます）。
+  I,1 は元ファイルにないので「準備中」です）。本文ビュワーは、冒頭にその文書で確かめていないこと（確度 low と `X` の割合、
   ⲍ・ⲯ を補った語の数など）を示し、語をクリックすると品詞・レンマ・語義・確度を出します。
 - **コーパス検索・統計から使えます。** `search.html` の左欄〈全文テキスト〉に 56 文書が写本ごとに並び、
   選んだ文書だけを読み込んで検索・統計の対象に加えます。既定では選択も読み込みもしないので、
@@ -83,17 +92,29 @@ nag_hammadi_library/
 ├─ republic.html       ← プラトン『国家』断片ビュワー(手作業管理)
 ├─ tractate.html       ← 準備中ページ(自動生成)
 ├─ reader.html         ← 本文ビュワー・暫定版(自動生成。?doc=II-6 など)
+├─ sitemap.xml         ← 検索エンジン向けの URL の一覧(自動生成)
+├─ robots.txt          ← 管理用ページ(admin・profile)を検索エンジンから外し、sitemap.xml を示す(自動生成)
 ├─ README.md           ← この文書
 ├─ CONTRIBUTING.md     ← ★共同編集ガイド(招待を受けた方はまずこちら)
+├─ .github/workflows/check.yml ← Pull Request と main への push のたびに走る自動チェック
 ├─ .nojekyll           ← GitHub Pages 用
 ├─ .gitignore
+├─ .vercelignore       ← Vercel で配信しないもの(いまは design/ だけ)
+├─ CITATION.cff        ← 引用のための情報(GitHub の「Cite this repository」)。版番号は data/release.json と同じにする
+├─ .zenodo.json        ← Zenodo の記録の情報(GitHub のリリースから DOI を発行するとき)。版番号は data/release.json と同じにする
+├─ design/             ← デザイン用の資料(アイコン・キャラクターシート・表情・配色案の PDF)。サイトからは使わず、配信しない
 ├─ image/
-│   └─ icon.svg         ← サイトのアイコン画像(各ページが読み込みます)
+│   ├─ icon.svg         ← サイトのアイコン画像(各ページが読み込みます)
+│   └─ og-image.png     ← リンクを共有したときのプレビュー画像(1200×630。scripts/make_og_image.py が作る)
 ├─ data/               ← サイトが読むXML(手作業の修正が入っていて、source/ からは作り直せない)
 │   ├─ eugnostos_tei.xml
 │   ├─ lexicon.xml
 │   ├─ parallels.xml      ← 並行箇所(scripts/build_parallels.py が作る)
 │   ├─ catalog.xml
+│   ├─ release.json       ← 版の情報(版番号・リリースの日・DOI・公開 URL)。下の「版とリリースの作り方」
+│   ├─ doc_dates.json     ← 文書ごとの最終更新日(scripts/build_site.py が git の履歴から書き出す)
+│   ├─ facsimile_links.json ← 写本ごとの写真(Claremont, Nag Hammadi Archive)へのリンク
+│   ├─ news.json・links.json  ← HOME の NEWS と関連サイト
 │   └─ republic_*.xml
 ├─ source/             ← CSV／TSV(サイトに反映できるのは、いまは lexicon.csv だけ。下の「データの編集」)
 │   ├─ lexicon.csv         辞書(1行=1語義／同形異義語は同じlemmaを複数行)
@@ -103,7 +124,10 @@ nag_hammadi_library/
 └─ scripts/            ← スクリプト(通常触らない)
     ├─ build_tei.py        source/ の CSV から XML を試しに生成し、data/ と比べる(既定では data/ に書き込まない)
     ├─ sync_lexicon.py     source/lexicon.csv の変更を data/lexicon.xml に反映する(xml:id は変えない)
-    ├─ build_site.py       index.html / tractate.html / reader.html を生成
+    ├─ build_site.py       index.html / tractate.html / reader.html / sitemap.xml / robots.txt を生成
+    ├─ make_og_image.py    共有用の画像 image/og-image.png を作る(rsvg-convert が要る)
+    ├─ check_tei.py        TEI の点検(ポインタの切れ・以前の書き方など)。--schema でスキーマ検証も
+    ├─ check_style.py      表記ゆれの点検(規則は style_rules.json)
     ├─ build_parallels.py  並行箇所(data/parallels.xml)を、文言の自動照合で作る
     └─ sync_nhc_catalog.py  NHC 全文テキスト(未注釈)の文書一覧を data/catalog.xml に書き出す
 ```
@@ -111,7 +135,7 @@ nag_hammadi_library/
 - **`data/` の XML は、`source/` の CSV から作り直せる状態ではありません(2026-11 時点)。** 生成したあとに手作業で直した内容が
   `data/` にだけあるためです。`python3 scripts/build_tei.py` は、既定では `data/` に書き込まず、生成結果を `build/tei/` に出して
   `data/` との違いを表示するだけです。どこを直せばよいかは、下の「データの編集」にあります。
-- 共同編集の手順(ブランチ・Pull Request・競合の解決)は **CONTRIBUTING.md** を参照してください。
+- 共同編集の手順(どのファイルを直すか、符号化と訳の約束、確かめ方、ブランチ・Pull Request・競合の解決)は **[CONTRIBUTING.md](CONTRIBUTING.md)** を参照してください。
 - 目次トップ(`index.html`)とビュワー(`eugnostos.html`)は `data/` のXMLと `image/icon.svg` を読み込みます。
 - **サイトのアイコン**は `image/icon.svg`。お好きな画像に差し替えてください(同じ名前にすれば各ページが自動で読み込みます)。
 
@@ -151,7 +175,8 @@ nag_hammadi_library/
 | `build_tei.py` | CSV から本文と辞書の XML を**試しに生成して `data/` と比べる**。既定では `data/` に書き込まない(下の「データの編集」)。 |
 | `build_parallels.py` | 並行箇所(`data/parallels.xml`)を文言の自動照合で作る。何も付けなければ要約の表示だけで、`--write` で書き込む。 |
 | `sync_lexicon.py` | `lexicon.csv` の変更を `data/lexicon.xml` に反映する。`xml:id` は変えない。何も付けなければ変更点の表示だけで、`--write` で書き込む。 |
-| `build_site.py` | `index.html`(目次)・`tractate.html`(準備中)・`reader.html`(本文ビュワー・暫定版)を生成。 |
+| `build_site.py` | `index.html`(目次)・`tractate.html`(準備中)・`reader.html`(本文ビュワー・暫定版)・`sitemap.xml`・`robots.txt` を生成。`<head>` の OGP(リンクのプレビュー)のタグもここで書く(`og_tags`)。 |
+| `make_og_image.py` | リンクを共有したときのプレビュー画像 `image/og-image.png`(1200×630)を、アイコンとゲンゲンの SVG から作る。 |
 
 ## データの編集
 
@@ -209,7 +234,7 @@ python3 scripts/build_tei.py
 ## サイト構成と画面遷移
 
 ```
-index.html(目次:全53文書)
+index.html(目次:全52文書)
    ├─ 公開済み ──▶ eugnostos.html(ビュワー) ──▶ ← 一覧 で index.html へ
    └─ 準備中   ──▶ tractate.html?id=II-5 など(準備中の案内) ──▶ ← 一覧 で index.html へ
 ```
@@ -243,9 +268,26 @@ index.html(目次:全53文書)
 読み込みます。オフライン公開する場合はこれらをローカルにセルフホストしてください
 (Coptic字形が無い環境では汎用セリフにフォールバックします)。
 
+## 版とリリースの作り方
+
+版の情報は `data/release.json` にまとめています（版番号 `version`、リリースの日 `date`、その版の DOI `doi`、すべての版をまとめる DOI
+`doi_all_versions`、公開 URL `url`）。サイトの引用表記（`project.html` の引用欄、ビュワーの〈この箇所を引用〉〈この文書を引用〉）と、
+HOME のフッターの版番号は、このファイルを読みます。`CITATION.cff`（GitHub の「Cite this repository」）と `.zenodo.json`（Zenodo の記録の情報）
+は手で同じ内容に合わせ、`python3 scripts/check_release.py` で確かめます（GitHub の自動チェックでも走り、`CITATION.cff` は cffconvert でも検証します）。
+2 つのファイルが両方あると、Zenodo は `.zenodo.json` だけを使います。
+
+1. `data/release.json` の `version`（と、決まっていれば `date`）を新しい版にし、`CITATION.cff` の `version`（と `date-released`）、
+   `.zenodo.json` の `version` も同じにする。`python3 scripts/check_release.py` と `python3 scripts/build_site.py` を実行してコミットし、`main` に入れる。
+2. GitHub でリリースを作る（タグは `v0.1.0` の形）。
+3. Zenodo の GitHub 連携でこのリポジトリを有効にしてあれば、Zenodo がリリースから記録を作り、DOI を発行する（`.zenodo.json` の情報を使う）。
+4. 発行された DOI を `data/release.json` の `doi` に（最初のリリースでは、すべての版をまとめる DOI も `doi_all_versions` に）書き、
+   `CITATION.cff` に `doi:` を足す。`check_release.py` で確かめてコミットする。DOI が入ると、引用表記の URL の前に DOI が入り、
+   `project.html` の引用欄に Zenodo の記録へのリンク（全データの一括ダウンロード）が出る。
+
 ## ビュワーの使い方
 
-- **写本タブ**「III,3 本文 / V,1 / 対照」で証本を切替。〈対照〉は左に III,3、右に V,1 の本文(未注釈の作業用テキスト)を、
+- **写本タブ**「III,3 本文 / V,1 / 対照」で証本を切替。V,1 には語ごとの注釈がまだ無いので、〈V,1〉はそのことと、本文を読める場所
+  (〈対照〉〈並行箇所〉、本文ビュワー `reader.html?doc=V-1`)の案内だけを出します。〈対照〉は左に III,3、右に V,1 の本文(未注釈の作業用テキスト)を、
   並行箇所の対応で並べます。一致する文字に色が付きます。対応の見つからないセグメントが続くところは 1 行にまとめ、
   前後の対応のあいだにある V,1 の本文を「対応は未確認」として示します。
 - **形態素をクリック**→ 語義カード(語形・レンマ・品詞・日英仏語釈・借用語表示)。
@@ -266,6 +308,17 @@ index.html(目次:全53文書)
     リンク)と、箇所は結んでいないが関連する文書(カタログの `<relatedItem>`。『世界の起源について』など)を開けます。
 - **検索**=コプト語形・レンマ・英語/日本語語釈・対訳を横断検索。
 - **上部ナビの ☀／☾** で表示モード（ライト／ダーク）を切替（全ページ共通）。
+- **引用**: セグメントの番号（§）を押すと、〈リンクをコピー〉〈引用をコピー〉の小さなメニューが開きます（本文ビュワー `reader.html` では、
+  これまでどおりその箇所への移動（`#seg-…`）もします）。題の下の〈この文書を引用〉は、文書単位の引用（版番号と、その文書の
+  最終更新日つき）です。書式は `project.html` の引用欄と同じで、版番号・DOI は `data/release.json`、最終更新日は
+  `data/doc_dates.json` から入ります（`assets/viewer-tools.js`）。クリップボードが使えないときは、文を選べる形で出します。
+- **頁・行**: 頁・行の情報（`<pb>`・`<lb>`）がある本文（いまは『国家』だけ）では、〈ページ〉〈行〉で写本の頁と行の番号を出せ、
+  `republic.html#p48.16`（48 頁 16 行を含む箇所）・`republic.html#p48`（48 頁の始まり）で、その箇所へ移って目立たせます。
+  箇所の引用も「NHC VI 48,16–17（§1）」とこのアンカーの URL で示します。頁・行の無い本文（エウグノストスなど）では、
+  〈ページ〉〈行〉のボタンを出しません。
+- **写本の写真**: 題の下に、Claremont Colleges Digital Library の Nag Hammadi Archive にある、その写本の写真（1970 年代の白黒写真）
+  へのリンクがあります（`data/facsimile_links.json`。著作権は図書館にあるので、リンクだけです）。写本ファクシミリ（IIIF）のパネルは、
+  `iiif/*.json` に画像の `source` を書いたときだけ出ます（`iiif/README.md`）。
 
 ## TEI設計の要点（ファイルの分離）
 

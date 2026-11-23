@@ -20,6 +20,8 @@ TEI のスキーマ（tei_all.rng）は「要素や属性の並びが正しい�
        （@subtype には @type が要る、<ab> や <p> を入れ子にしない、@target を持つ <relatedItem> は空、など。
          xmllint は Schematron を実行しないので、ここで同じ内容を調べます）
   8. 並行箇所（parallels.xml の <linkGrp type="parallel">）の <link> の @target が、2 つの <s> を指しているか
+  9. 同じファイルの中を指すポインタ（<ref>・<ptr>・<relatedItem> の @target が "#…" のもの。カタログの文書どうしの関連など）の
+     指す xml:id があるか
 
 --schema に tei_all.rng の場所を渡すと、xmllint によるスキーマ検証も続けて行います。
 
@@ -203,6 +205,13 @@ def check(path):
                     out.append("並行箇所の <link> が指すファイルを読めません: %s" % p)
                 elif other.get(frag) != "s":
                     out.append("並行箇所の <link> の指す <s> がありません: %s" % p)
+
+    # 9. 同じファイルの中を指すポインタ
+    for el in root.iter():
+        if name(el.tag) in ("ref", "ptr", "relatedItem"):
+            for p in (el.get("target") or "").split():
+                if p.startswith("#") and p[1:] not in local:
+                    out.append("<%s> の @target の指す xml:id がありません: %s" % (name(el.tag), p))
     return out
 
 

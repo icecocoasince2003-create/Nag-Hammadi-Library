@@ -5,6 +5,7 @@
    3) 三言語表示 (.l-ja / .l-en / .l-fr)
    4) 広い画面でのビュワー本文幅の拡張
    5) 解説ページ（gnosticism / project / admin）の共通部品
+   6) 本文ビュワー（reader / eugnostos / republic）の冒頭の〈この文書を引用〉と写本の写真へのリンク、引用のメニュー（assets/viewer-tools.js）
    ============================================================ */
 
 /* ---------- 3) 言語表示 ---------- */
@@ -372,3 +373,28 @@ html[data-mode="light"] .app main .corpus-head, html[data-mode="light"] .app mai
   .app > .sitebar { min-width: 0; }
   .app { max-width: 100vw; overflow-x: hidden; }
 }
+
+/* ---------- 6) 本文ビュワーの冒頭の〈この文書を引用〉と写本の写真へのリンク、引用のメニュー（assets/viewer-tools.js） ---------- */
+.doc-tools { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; margin: 8px 0 0;
+  font-size: .8rem; line-height: 1.7; color: var(--ink-faint); }
+.doc-photos a { color: var(--gold-bright, var(--gold)); text-decoration: none; text-underline-offset: 4px; }
+.doc-photos a:hover { text-decoration: underline; }
+.doc-photos .dp-note { font-size: .72rem; margin-left: .3em; }
+.doc-cite { background: none; border: 1px solid var(--line-2, var(--line)); border-radius: 999px; color: var(--ink-soft);
+  font: inherit; font-size: .76rem; line-height: 1.5; padding: 1px 10px; cursor: pointer; }
+.doc-cite:hover, .doc-cite[aria-expanded="true"] { border-color: var(--gold); color: var(--ink); }
+.cite-pop { position: fixed; z-index: 60; min-width: 220px; max-width: min(420px, calc(100vw - 16px)); background: var(--raise);
+  color: var(--ink); border: 1px solid var(--line-2, var(--line)); border-radius: 12px; box-shadow: var(--shadow);
+  padding: 10px 12px; font-family: var(--ui, system-ui, sans-serif); font-size: .82rem; line-height: 1.5; }
+.cite-pop .cp-h { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 8px;
+  color: var(--ink-faint); font-size: .74rem; letter-spacing: .04em; }
+.cite-pop .cp-x { background: none; border: 0; color: var(--ink-faint); font-size: 1.1rem; line-height: 1; padding: 0 2px; cursor: pointer; }
+.cite-pop .cp-acts { display: flex; flex-wrap: wrap; gap: 6px; }
+.cite-pop .cp-acts button { background: var(--hi); border: 1px solid var(--line-2, var(--line)); border-radius: 8px; color: var(--ink);
+  font: inherit; padding: 4px 10px; cursor: pointer; }
+.cite-pop .cp-acts button:hover { border-color: var(--gold); }
+.cite-pop .cp-msg { margin: 8px 0 0; color: var(--ink-soft); font-size: .76rem; }
+.cite-pop .cp-msg:empty { display: none; }
+.cite-pop .cp-text { display: block; width: 100%; margin: 6px 0 0; padding: 6px 8px; font: inherit; font-size: .76rem; color: var(--ink);
+  background: transparent; border: 1px solid var(--line-2, var(--line)); border-radius: 8px; resize: vertical; }
+.cite-pop .cp-text[hidden] { display: none; }

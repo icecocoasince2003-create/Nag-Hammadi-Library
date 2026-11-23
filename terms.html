@@ -4,7 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>/* 表示モード（ライト／ダーク）の保存値を描画前に反映（保存は assets/site.js） */try{if(localStorage.getItem("nhc-mode")==="light")document.documentElement.setAttribute("data-mode","light")}catch(e){}</script>
+<script>/* 表示言語（?lang= ＞ 保存値 ＞ ブラウザーの言語、ほかは英語）を描画前に反映（正式な処理と保存は assets/site.js） */(function(H){var L=["ja","en","fr"],m=/[?&]lang=([^&#]*)/i.exec(location.search),v=m?m[1].toLowerCase():null;if(L.indexOf(v)<0){v=null;try{v=localStorage.getItem("nhc-lang")}catch(e){}}if(L.indexOf(v)<0){v="en";var n=navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||""];for(var i=0;i<n.length;i++){var p=String(n[i]).toLowerCase().split(/[-_]/)[0];if(L.indexOf(p)>=0){v=p;break}}}if(H.getAttribute("data-i18n")==="full"){H.setAttribute("data-lang",v);H.setAttribute("lang",v)}else if(v!=="ja"){H.setAttribute("data-lang","en");H.setAttribute("lang","en");H.setAttribute("data-gl",v);H.setAttribute("data-tl",v)}})(document.documentElement)</script>
 <title>利用規約 — Sheneset</title>
+<meta name="description" content="Sheneset（ナグ・ハマディ写本コーパス）の利用規約 / Terms of use of Sheneset, a digital edition of the Nag Hammadi Codices.">
+<!-- リンクを共有したときのプレビュー（OGP）。og:title・og:description は <title> と meta description と同じにする -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sheneset">
+<meta property="og:title" content="利用規約 — Sheneset">
+<meta property="og:description" content="Sheneset（ナグ・ハマディ写本コーパス）の利用規約 / Terms of use of Sheneset, a digital edition of the Nag Hammadi Codices.">
+<meta property="og:url" content="https://sheneset.vercel.app/terms.html">
+<meta property="og:image" content="https://sheneset.vercel.app/image/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="fr_FR">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/svg+xml" href="image/icon.svg">
 <link rel="alternate icon" type="image/png" sizes="32x32" href="image/favicon-32.png">
 <link rel="apple-touch-icon" href="image/apple-touch-icon.png">

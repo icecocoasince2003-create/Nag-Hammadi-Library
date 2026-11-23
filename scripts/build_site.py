@@ -9,16 +9,21 @@
   実行方法（リポジトリのルートで）:
 
       python3 scripts/build_site.py
+      python3 scripts/build_site.py --check   生成ファイルが最新かを調べるだけ（書き込まない。CI で使う）
 
-  出力される index.html・tractate.html・reader.html は自動生成なので直接編集しない
-  でください。目次の内容を変えたいときは、下の CODICES テーブルを編集して
+  出力される index.html・tractate.html・reader.html・sitemap.xml・robots.txt・data/doc_dates.json は自動生成なので
+  直接編集しないでください。--check は、いまのスクリプトとデータから作り直したものとファイルを比べ、違えば終了コード 1 で
+  ファイル名を表示します（index.html のフッターの「生成」の日付は、作り直すたびに変わるので比べません）。目次の内容を変えたいときは、下の CODICES テーブルを編集して
   再実行します。
 
   * HOME は日本語・英語・フランス語の三言語表示です（上部ナビで切替）。
     題名は CODICES の ja / en / fr 列、その他の文言はこのファイル内の
     <span class="l-ja">…</span><span class="l-en">…</span><span class="l-fr">…</span> を編集します。
-  * NEWS（更新情報）は data/news.json、関連サイトは data/links.json を編集します
-    （HTML の再生成は不要。ページ表示時に読み込まれます）。
+  * NEWS（更新情報）は data/news.json、関連サイトは data/links.json を編集し、このスクリプトを実行し直します。
+    生成のときに index.html へ HTML として書き込むので、JS を動かさない読み手（リンクのプレビュー、一部の検索エンジン、
+    リーダー表示など）にも出ます。作り直す前でも、ページを開いたときに JSON を読み直して最新を出します。
+  * index.html・tractate.html・reader.html の <head> には、OGP と Twitter カードのタグを書き込みます（og_tags）。
+    共有用の画像は image/og-image.png（scripts/make_og_image.py が作る）。sitemap.xml と robots.txt もこのスクリプトが出力します。
   * 上部ナビの項目は assets/site.js の NAV で全ページ共通に管理しています。
   * HOME と準備中ページは、ほかのページと同じく表示モード（ライト／ダーク）に対応しています。
     上部ナビの ☀／☾ で切り替わり、配色は assets/cosmos.css の「ライトモード」、
@@ -38,10 +43,40 @@
   文書ごとに冒頭に示します。
 ==============================================================================
 """
-import html, datetime, os, json
+import html, datetime, os, json, re, sys
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 OUTDIR = os.path.dirname(_HERE) if os.path.basename(_HERE).lower() in ("source", "build", "src", "scripts") else _HERE
+
+# --- 版の情報と公開 URL（data/release.json）、リンクを共有したときのプレビュー（OGP） -------------
+# 版番号は HOME のフッターに出す。引用表記（project.html・ビュワー）も同じファイルを読む（assets/viewer-tools.js）。
+# 独自ドメインに移すときは、release.json の url と、手作業管理のページの <head> の og:url・og:image、
+# CITATION.cff・.zenodo.json の URL を直す（scripts/check_release.py が release.json との食い違いを報告する）。
+with open(os.path.join(OUTDIR, "data", "release.json"), encoding="utf-8") as _f:
+    RELEASE = json.load(_f)
+VERSION = RELEASE.get("version", "")
+SITE_URL = RELEASE.get("url") or "https://sheneset.vercel.app/"
+OG_IMAGE = "image/og-image.png"          # 1200×630 の PNG（og:image に SVG は使えない）。scripts/make_og_image.py が作る
+
+def og_tags(path, title, desc):
+    """OGP と Twitter カードのタグ。Facebook などのクローラーは JS を実行しないので、静的な HTML として書く。
+    og:title・og:description は、そのページの <title> と meta description と同じ内容にする（head_meta）。"""
+    e = lambda s: html.escape(s, quote=True)
+    return ('<meta property="og:type" content="website">'
+            '<meta property="og:site_name" content="Sheneset">'
+            f'<meta property="og:title" content="{e(title)}">'
+            f'<meta property="og:description" content="{e(desc)}">'
+            f'<meta property="og:url" content="{e(SITE_URL + path)}">'
+            f'<meta property="og:image" content="{e(SITE_URL + OG_IMAGE)}">'
+            '<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">'
+            '<meta property="og:locale" content="ja_JP">'
+            '<meta property="og:locale:alternate" content="en_US"><meta property="og:locale:alternate" content="fr_FR">'
+            '<meta name="twitter:card" content="summary_large_image">')
+
+def head_meta(path, title, desc):
+    """<title>・meta description・OGP を、同じ題と説明でまとめて書く"""
+    return (f"<title>{html.escape(title, quote=False)}</title>"
+            f'<meta name="description" content="{html.escape(desc, quote=True)}">' + og_tags(path, title, desc))
 
 # --- 文書カタログ -------------------------------------------------------------
 # 形式: (ローマ数字, コーデックス番号, [(文書番号, 日本語題, 英語題, フランス語題, status), ...])
@@ -50,6 +85,7 @@ OUTDIR = os.path.dirname(_HERE) if os.path.basename(_HERE).lower() in ("source",
 #                <bibl subtype="draft"> の TEI。人の目で確かめていないことを reader.html が文書ごとに示す）
 #            U = 未注釈の全文（reader.html へリンク。本文は <bibl subtype="unannotated"> の TEI。品詞・語義なし）
 #            D・U のリンク先の文書は、ふつうは同じ番号（写本-番号）。番号が違うものは READER_DOC に書く。
+#   番号は通用の番号（data/catalog.xml・本文ビュワーと同じ）。一覧に出すが文書数に数えない行は UNCOUNTED に書く。
 A = "avail"; S = "soon"; D = "draft"; U = "text"
 CODICES = [
  ("I", 1, [
@@ -80,8 +116,9 @@ CODICES = [
    (2, "エジプト人の福音書", "The Gospel of the Egyptians", "Évangile des Égyptiens", U),
  ]),
  ("V", 5, [
-   # III,3 は末尾標題「祝福されたエウグノストス」、V,1 は標題「エウグノストス」のみが残る
-   (1, "エウグノストス", "Eugnostos", "Eugnoste", A),
+   # III,3 は末尾標題「祝福されたエウグノストス」、V,1 は標題「エウグノストス」のみが残る。
+   # V,1 は語ごとの注釈がまだ無い（eugnostos.html の V,1 は III,3 と対応づけた枠だけ）ので「未注釈」とし、本文ビュワーへリンクする
+   (1, "エウグノストス", "Eugnostos", "Eugnoste", U),
    (2, "パウロの黙示録", "The Apocalypse of Paul", "Apocalypse de Paul", U),
    (3, "ヤコブの黙示録(第一)", "The (First) Apocalypse of James", "Première apocalypse de Jacques", U),
    (4, "ヤコブの黙示録(第二)", "The (Second) Apocalypse of James", "Seconde apocalypse de Jacques", U),
@@ -92,11 +129,11 @@ CODICES = [
    (2, "雷・全きヌース(完全なる心)", "The Thunder, Perfect Mind", "Le Tonnerre, intellect parfait", U),
    (3, "権威ある教え", "Authoritative Teaching", "Authentikos Logos", U),
    (4, "われらの大いなる力の概念", "The Concept of Our Great Power", "Le Concept de notre grande puissance", U),
-   (5, "プラトン『国家』588A–589B", "Plato, Republic 588a–589b", "Platon, République 588a–589b", A),
+   (5, "プラトン『国家』588b–589b", "Plato, Republic 588b–589b", "Platon, République 588b–589b", A),
    (6, "第八と第九についての講話", "The Discourse on the Eighth and Ninth", "L'Ogdoade et l'Ennéade", U),
    (7, "感謝の祈り", "The Prayer of Thanksgiving", "Prière d'action de grâces", U),
-   (8, "書記による覚書", "Scribal Note", "Note du scribe", U),
-   (9, "アスクレピオス 21–29", "Asclepius 21–29", "Asclépius 21–29", U),
+   ("7a", "書記による覚書", "Scribal Note", "Note du scribe", U),   # VI,7 の末尾の覚え書き。文書数には数えない（UNCOUNTED）
+   (8, "アスクレピオス 21–29", "Asclepius 21–29", "Asclépius 21–29", U),
  ]),
  ("VII", 7, [
    (1, "セームの釈義(パラフレイズ)", "The Paraphrase of Shem", "Paraphrase de Sem", U),
@@ -137,19 +174,20 @@ CODICES = [
 # 公開文書のリンク先（status A の行）
 LINKS = {
     ("III", 3): "eugnostos.html?wit=III",
-    ("V", 1):   "eugnostos.html?wit=V",
     ("VI", 5):  "republic.html",
 }
 
 def esc(s): return html.escape(str(s), quote=True)
 def tid(roman, num): return f"{roman}-{num}"
 def locus(roman, num): return f"NHC&nbsp;{roman},{num}"
-# 全文テキスト（source/nhc_fulltext_split/）の文書番号が、この一覧の番号と違うもの（status D・U の行）。
-# 全文テキストは通用の番号に従い、書記の覚書を VI,7 の末尾（奥書）、アスクレピオスを VI,8 としている。
+# 全文テキスト（source/nhc_fulltext_split/）に同じ番号の文書が無い行（status D・U）のリンク先。
+# 書記の覚書（VI,7a）は、全文テキストでは VI,7『感謝の祈り』の末尾の奥書（<ab type="colophon">）にある。
 READER_DOC = {
-    ("VI", 8): "VI-7#seg-VI-7508309",   # 書記による覚書 → VI,7『感謝の祈り』の末尾の奥書
-    ("VI", 9): "VI-8",                  # アスクレピオス 21–29
+    ("VI", "7a"): "VI-7#seg-VI-7508309",
 }
+# 一覧に出すが、文書数（全体・status ごと・写本ごと）に数えない行。書記の覚書は独立した文書ではないので数えない
+# （標準の数え方では NHC は 52 文書。gnosticism.html の「重複を数えると 52」と同じ）。
+UNCOUNTED = {("VI", "7a")}
 def href_for(roman, num, status):
     if status == A and (roman, num) in LINKS: return LINKS[(roman, num)]
     if status in (D, U): return "reader.html?doc=" + READER_DOC.get((roman, num), tid(roman, num))
@@ -158,10 +196,16 @@ def tri(ja, en, fr):
     """三言語のスパン（site.css が html[data-lang] に応じて出し分ける）"""
     return f'<span class="l-ja">{ja}</span><span class="l-en">{en}</span><span class="l-fr">{fr}</span>'
 
-TOTAL = sum(len(t) for _,_,t in CODICES)
-AVAIL = sum(1 for _,_,t in CODICES for x in t if x[4] == A)
-DRAFT = sum(1 for _,_,t in CODICES for x in t if x[4] == D)
-PLAIN = sum(1 for _,_,t in CODICES for x in t if x[4] == U)
+# 文書数。status ごとの数の和が全体の数と合わないとき（status の書き誤りなど）は、生成せずに止める
+COUNTED = [x for r,_,t in CODICES for x in t if (r, x[0]) not in UNCOUNTED]
+TOTAL = len(COUNTED)
+AVAIL = sum(1 for x in COUNTED if x[4] == A)
+DRAFT = sum(1 for x in COUNTED if x[4] == D)
+PLAIN = sum(1 for x in COUNTED if x[4] == U)
+SOON  = sum(1 for x in COUNTED if x[4] == S)
+if AVAIL + DRAFT + PLAIN + SOON != TOTAL:
+    raise SystemExit("build_site.py: 公開 %d + 暫定 %d + 未注釈 %d + 準備中 %d が全 %d 文書と合いません（CODICES の status を確かめてください）"
+                     % (AVAIL, DRAFT, PLAIN, SOON, TOTAL))
 TODAY = datetime.date.today().isoformat()
 
 # --- shared head / theme ----------------------------------------------------
@@ -206,6 +250,19 @@ MODE_BOOT = ('<script>/* 表示モード（ライト／ダーク）の保存値�
              'try{if(localStorage.getItem("nhc-mode")==="light")'
              'document.documentElement.setAttribute("data-mode","light")}catch(e){}</script>')
 
+# 表示言語を描画前に反映する 1 行スクリプト（日本語が一瞬出るのを防ぐ）。決め方は URL の ?lang=（ja・en・fr）＞ 保存値
+# （localStorage "nhc-lang"）＞ ブラウザーの言語（どれにも当たらなければ英語）。正式な処理（URL の言語の保存など）は
+# assets/site.js の initialLang。三言語のページ（data-i18n="full"）は html[data-lang] を、日英だけのビュワーは
+# data-lang（ja / en）と語釈・対訳の言語（data-gl・data-tl）を設定する。手作業管理のページの <head> にも同じ文字列を入れてある。
+LANG_BOOT = ('<script>/* 表示言語（?lang= ＞ 保存値 ＞ ブラウザーの言語、ほかは英語）を描画前に反映（正式な処理と保存は assets/site.js） */'
+             '(function(H){var L=["ja","en","fr"],m=/[?&]lang=([^&#]*)/i.exec(location.search),v=m?m[1].toLowerCase():null;'
+             'if(L.indexOf(v)<0){v=null;try{v=localStorage.getItem("nhc-lang")}catch(e){}}'
+             'if(L.indexOf(v)<0){v="en";var n=navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||""];'
+             'for(var i=0;i<n.length;i++){var p=String(n[i]).toLowerCase().split(/[-_]/)[0];if(L.indexOf(p)>=0){v=p;break}}}'
+             'if(H.getAttribute("data-i18n")==="full"){H.setAttribute("data-lang",v);H.setAttribute("lang",v)}'
+             'else if(v!=="ja"){H.setAttribute("data-lang","en");H.setAttribute("lang","en");H.setAttribute("data-gl",v);H.setAttribute("data-tl",v)}'
+             '})(document.documentElement)</script>')
+
 THEME = """
 :root{
  --bg:#f3eede; --panel:#fbf8f1; --panel-2:#f6f1e6;
@@ -247,7 +304,7 @@ def codex_block(roman, no, tracts):
           f'<span class="sub">{tri(esc(en), esc(ja), esc(en))}</span></span>'
           f'<span class="loc">{locus(roman,num)}</span>{pill}'
           f'<span class="arr">→</span></a>')
-    n = len(tracts)
+    n = sum(1 for x in tracts if (roman, x[0]) not in UNCOUNTED)
     count = tri(f"{n} 文書", f"{n} tractate{'s' if n>1 else ''}", f"{n} traité{'s' if n>1 else ''}")
     return (f'<section class="codex" data-codex="{roman}">'
             f'<div class="chead"><span class="rn">{roman}</span>'
@@ -370,8 +427,51 @@ html[data-mode="light"] .feat, html[data-mode="light"] .codex, html[data-mode="l
  box-shadow:0 1px 2px rgba(60,45,20,.05)}
 """
 
+# --- NEWS と関連サイト（data/news.json・data/links.json）を、index.html の JS と同じ形の HTML にする ----------
+# JS を動かさない読み手（リンクのプレビュー、一部の検索エンジン、リーダー表示など）にも見えるように、生成のときに書き込む。
+# ページを開いたときは JS が JSON を読み直し、内容が違えば（生成のあとで JSON を直したとき）書き換える。
+# 下の _esc・_tri・NEWS_SHOW と HTML の形は、build_index の <script> の esc・tri・SHOW と同じにしておくこと。
+NEWS_SHOW = 6          # 最初に出す件数（それより古いものは〈過去の更新をすべて表示〉で出す）
+
+def _load_json(rel):
+    with open(os.path.join(OUTDIR, rel), encoding="utf-8") as f:
+        return json.load(f)
+
+def _esc(s):
+    """JS の esc() と同じ（& < > " を文字参照に）"""
+    return str("" if s is None else s).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
+
+def _tri(o):
+    """JS の tri() と同じ（その言語が無ければ英語、次に日本語）。中身は HTML のまま"""
+    return "".join('<span class="l-%s">%s</span>' % (l, o.get(l) or o.get("en") or o.get("ja") or "") for l in ("ja", "en", "fr"))
+
+def news_html():
+    items = sorted(_load_json("data/news.json").get("items", []), key=lambda it: it.get("date") or "", reverse=True)
+    lis = "".join('<li' + (' class="old" hidden' if i >= NEWS_SHOW else '') + '><time datetime="' + _esc(it.get("date")) + '">' +
+                  _esc(it.get("date")) + '</time><span class="tx">' + _tri({"ja": it.get("ja"), "en": it.get("en"), "fr": it.get("fr")}) +
+                  (' <a href="' + _esc(it["link"]) + '">→</a>' if it.get("link") else '') + '</span></li>'
+                  for i, it in enumerate(items))
+    more = ('<li style="display:block;border:0"><button class="more-news" id="moreNews">' +
+            _tri({"ja": "過去の更新をすべて表示", "en": "Show all updates", "fr": "Afficher toutes les mises à jour"}) + '</button></li>'
+            if len(items) > NEWS_SHOW else '')
+    return lis + more
+
+def links_html():
+    from urllib.parse import urlsplit
+    out = []
+    for it in _load_json("data/links.json").get("items", []):
+        host = urlsplit(it.get("url") or "").netloc
+        out.append('<a class="relsite" href="' + _esc(it.get("url")) + '" target="_blank" rel="noopener">' +
+                   '<div class="k">' + _tri(it.get("kind") or {}) + '</div>' +
+                   '<div class="t">' + ('<span class="cop">' + _esc(it["cop"]) + '</span>' if it.get("cop") else '') + _tri(it.get("title") or {}) + '</div>' +
+                   '<div class="u">' + _esc(host) + '</div>' +
+                   '<p>' + _tri(it.get("desc") or {}) + '</p>' +
+                   '<span class="go">' + _tri({"ja": "サイトを開く ↗", "en": "Visit site ↗", "fr": "Visiter le site ↗"}) + '</span></a>')
+    return "".join(out)
+
 def build_index():
     blocks = "\n".join(codex_block(r,n,t) for r,n,t in CODICES)
+    news, rel = news_html(), links_html()
     body = f"""
 <nav id="sitebar" class="sitebar sticky"></nav>
 
@@ -381,9 +481,9 @@ def build_index():
    <div class="eyebrow">Nag Hammadi Codices I–XIII</div>
    <h1><span class="cop">ϣⲉⲛⲉⲥⲏⲧ</span>Sheneset<span class="tag">{tri("ナグ・ハマディ写本コーパス", "A digital TEI edition of the Nag Hammadi Codices", "Édition numérique TEI des codices de Nag Hammadi")}</span></h1>
    <p class="lead">{tri(
-     f"ナグ・ハマディ写本(全13冊・約{TOTAL}文書)を、<b>形態素グロス・コプト語辞書・日英仏訳</b>を備えた TEI&nbsp;P5 デジタル版として整備するプロジェクトです。各語をクリックすると語義が表示され、写本どうしの対照や、他の文書の並行箇所の参照ができます。",
-     f"A digital TEI&nbsp;P5 edition of the Nag Hammadi Codices (13 codices, some {TOTAL} tractates), with <b>morpheme-level glosses, a Coptic lexicon and Japanese, English and French translations</b>. Click any word for its sense, compare the manuscript witnesses side by side and follow parallel passages into other texts.",
-     f"Une édition numérique TEI&nbsp;P5 des codices de Nag Hammadi (13 codices, quelque {TOTAL} traités), avec <b>gloses morphologiques, lexique copte et traductions japonaise, anglaise et française</b>. Cliquez sur un mot pour en voir le sens, comparez les témoins manuscrits et suivez les passages parallèles dans d’autres textes.")}</p>
+     f"ナグ・ハマディ写本(全13冊・{TOTAL}文書)を、<b>形態素グロス・コプト語辞書・日英仏訳</b>を備えた TEI&nbsp;P5 デジタル版として整備するプロジェクトです。各語をクリックすると語義が表示され、写本どうしの対照や、他の文書の並行箇所の参照ができます。",
+     f"A digital TEI&nbsp;P5 edition of the Nag Hammadi Codices (13 codices, {TOTAL} tractates), with <b>morpheme-level glosses, a Coptic lexicon and Japanese, English and French translations</b>. Click any word for its sense, compare the manuscript witnesses side by side and follow parallel passages into other texts.",
+     f"Une édition numérique TEI&nbsp;P5 des codices de Nag Hammadi (13 codices, {TOTAL} traités), avec <b>gloses morphologiques, lexique copte et traductions japonaise, anglaise et française</b>. Cliquez sur un mot pour en voir le sens, comparez les témoins manuscrits et suivez les passages parallèles dans d’autres textes.")}</p>
    <div class="more">
      <a href="gnosticism.html">{tri("グノーシス主義とは →", "What is Gnosticism? →", "Qu'est-ce que le gnosticisme ? →")}</a>
      <a href="project.html">{tri("このプロジェクトについて →", "About the project →", "À propos du projet →")}</a>
@@ -404,7 +504,7 @@ def build_index():
          "III,3 <i>Eugnostos the Blessed</i> / V,1 <i>Eugnostos</i> · two witnesses, three translations",
          "III,3 <i>Eugnoste le Bienheureux</i> / V,1 <i>Eugnoste</i> · deux témoins, trois traductions")}</div>
        <div class="acts"><a class="go" href="eugnostos.html?wit=III">{tri("III,3 を読む →", "Read III,3 →", "Lire III,3 →")}</a>
-        <a href="eugnostos.html?wit=V">{tri("V,1 を読む", "Read V,1", "Lire V,1")}</a>
+        <a href="reader.html?doc=V-1">{tri("V,1 を読む（未注釈）", "Read V,1 (text only)", "Lire V,1 (texte seul)")}</a>
         <a href="eugnostos.html?wit=SYN">{tri("対照表示", "Synopsis", "Synopse")}</a>
         <a href="search.html?doc=eugnostos">{tri("検索", "Search", "Recherche")}</a>
         <a href="search.html?doc=eugnostos&amp;view=stats">{tri("統計", "Statistics", "Statistiques")}</a></div>
@@ -414,7 +514,7 @@ def build_index():
      <div>
        <div class="k">NHC VI,5</div>
        <div class="ttl"><span class="cop">ⲡⲟⲗⲓⲧⲉⲓⲁ</span>{tri("プラトン『国家』588b–589b", "Plato, <i>Republic</i> 588b–589b", "Platon, <i>République</i> 588b–589b")}</div>
-       <div class="loc">{tri("ギリシア語原文対照・IIIFファクシミリ", "Greek parallel text · IIIF facsimile", "Texte grec en regard · fac-similé IIIF")}</div>
+       <div class="loc">{tri("ギリシア語原文対照", "Greek parallel text", "Texte grec en regard")}</div>
        <div class="acts"><a class="go" href="republic.html">{tri("全文を読む →", "Read the text →", "Lire le texte →")}</a>
         <a href="search.html?doc=republic">{tri("検索", "Search", "Recherche")}</a>
         <a href="search.html?doc=republic&amp;view=stats">{tri("統計", "Statistics", "Statistiques")}</a></div>
@@ -429,7 +529,7 @@ def build_index():
          "A draft with bound groups, parts of speech, lemmata and glosses assigned automatically. Nothing has been checked by hand and the text has not been collated with the editions; each text lists what is unchecked at the top.",
          "Version provisoire : groupes, parties du discours, lemmes et gloses attribués automatiquement. Rien n’a été vérifié et le texte n’a pas été collationné avec les éditions ; chaque texte indique en tête ce qui reste à vérifier.")}</div>
        <div class="acts"><a class="go" href="#corpus">{tri("文書一覧から選ぶ ↓", "Choose from the list ↓", "Choisir dans la liste ↓")}</a>
-        <a href="reader.html?doc=II-2">{tri("例：トマスによる福音書", "e.g. the Gospel of Thomas", "p. ex. l’Évangile selon Thomas")}</a>
+        <a href="reader.html?doc=III-4">{tri("例：イエス・キリストの知恵", "e.g. the Sophia of Jesus Christ", "p. ex. la Sagesse de Jésus-Christ")}</a>
         <a href="search.html">{tri("検索（〈全文テキスト〉）", "Search (“Full text”)", "Recherche (« Texte intégral »)")}</a></div>
      </div>
    </div>
@@ -438,11 +538,11 @@ def build_index():
  <div class="two">
   <section id="news">
    <div class="sec-h"><h2>News</h2><small>{tri("サイトの更新情報", "Site updates", "Mises à jour du site")}</small><span class="rule"></span></div>
-   <ul class="news" id="newsList"><li><span></span><span class="tx">…</span></li></ul>
+   <ul class="news" id="newsList">{news}</ul>
   </section>
   <section id="related">
    <div class="sec-h"><h2>{tri("関連サイト", "Related", "Sites liés")}</h2><span class="rule"></span></div>
-   <div id="relList"></div>
+   <div id="relList">{rel}</div>
   </section>
  </div>
 
@@ -450,7 +550,7 @@ def build_index():
   <div class="sec-h"><h2>{tri("文書一覧", "The codices", "Les codices")}</h2><small>NHC I–XIII</small><span class="rule"></span></div>
   <div class="ctool"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
    <input id="q" type="search" autocomplete="off">
-   <span class="cnt">{tri(f"公開 {AVAIL} · 暫定 {DRAFT} · 未注釈 {PLAIN} / 全 {TOTAL} 文書", f"{AVAIL} online · {DRAFT} draft · {PLAIN} text only · {TOTAL} in all", f"{AVAIL} en ligne · {DRAFT} provisoires · {PLAIN} texte seul · {TOTAL} au total")}</span></div>
+   <span class="cnt">{tri(f"公開 {AVAIL} · 暫定 {DRAFT} · 未注釈 {PLAIN} · 準備中 {SOON} / 全 {TOTAL} 文書", f"{AVAIL} online · {DRAFT} draft · {PLAIN} text only · {SOON} soon · {TOTAL} in all", f"{AVAIL} en ligne · {DRAFT} provisoires · {PLAIN} texte seul · {SOON} à venir · {TOTAL} au total")}</span></div>
   <p class="legend">
    <span><span class="pill on">{tri("公開","Online","En ligne")}</span>{tri("人の手で注釈・訳を付けた版", "annotated and translated by hand", "annoté et traduit à la main")}</span>
    <span><span class="pill draft">{tri("暫定","Draft","Provisoire")}</span>{tri("自動注釈の全文。人の目で未確認・校訂本と未照合", "full text with automatic annotation, not checked or collated", "texte intégral annoté automatiquement, non vérifié ni collationné")}</span>
@@ -465,9 +565,9 @@ def build_index():
 </div>
 
 <footer><div class="wrap">
-  {tri(f"<b>{AVAIL}</b>&nbsp;文書を公開・<b>{DRAFT}</b>&nbsp;文書を暫定公開・<b>{PLAIN}</b>&nbsp;文書は未注釈の本文 / 全&nbsp;<b>{TOTAL}</b>&nbsp;文書(13写本)",
-       f"<b>{AVAIL}</b>&nbsp;online, <b>{DRAFT}</b>&nbsp;as drafts and <b>{PLAIN}</b>&nbsp;as text only, of&nbsp;<b>{TOTAL}</b>&nbsp;tractates (13 codices)",
-       f"<b>{AVAIL}</b>&nbsp;en ligne, <b>{DRAFT}</b>&nbsp;provisoires et <b>{PLAIN}</b>&nbsp;en texte seul sur&nbsp;<b>{TOTAL}</b> traités (13 codices)")}　·
+  {tri(f"<b>{AVAIL}</b>&nbsp;文書を公開・<b>{DRAFT}</b>&nbsp;文書を暫定公開・<b>{PLAIN}</b>&nbsp;文書は未注釈の本文・<b>{SOON}</b>&nbsp;文書は準備中 / 全&nbsp;<b>{TOTAL}</b>&nbsp;文書(13写本)",
+       f"<b>{AVAIL}</b>&nbsp;online, <b>{DRAFT}</b>&nbsp;as drafts, <b>{PLAIN}</b>&nbsp;as text only and <b>{SOON}</b>&nbsp;in preparation, of&nbsp;<b>{TOTAL}</b>&nbsp;tractates (13 codices)",
+       f"<b>{AVAIL}</b>&nbsp;en ligne, <b>{DRAFT}</b>&nbsp;provisoires, <b>{PLAIN}</b>&nbsp;en texte seul et <b>{SOON}</b>&nbsp;à venir sur&nbsp;<b>{TOTAL}</b> traités (13 codices)")}　·
   {tri("本文はパブリックドメイン、辞書・対訳は CC&nbsp;BY&nbsp;4.0",
        "Source texts: public domain · lexicon and translations: CC&nbsp;BY&nbsp;4.0",
        "Textes sources : domaine public · lexique et traductions : CC&nbsp;BY&nbsp;4.0")}　·
@@ -475,7 +575,7 @@ def build_index():
   <a href="privacy.html">{tri("プライバシーポリシー", "Privacy", "Confidentialité")}</a>　·　
   <a href="terms.html">{tri("利用規約", "Terms", "Conditions")}</a>　·　
   <a href="https://github.com/icecocoasince2003-create/Nag-Hammadi-Library" target="_blank" rel="noopener">GitHub</a>　·
-  {tri("生成", "built", "généré")} {TODAY}
+  {"v" + VERSION + " · " if VERSION else ""}{tri("生成", "built", "généré")} {TODAY}
 </div></footer>
 
 <script>
@@ -500,21 +600,31 @@ function filter(){{
 q.addEventListener('input',filter); ph();
 document.addEventListener('nhc:lang',ph);
 
-/* ---- NEWS（data/news.json）---- */
-const SHOW=6;
+/* ---- NEWS（data/news.json）----
+   build_site.py が生成のときに同じ形の HTML を書き込んである（JS を動かさない読み手にも見えるように）。
+   ここでは JSON を読み直し、内容が違うとき（生成のあとで news.json を直したとき）だけ書き換える。読めなければ書き込んだ内容のまま。
+   HTML の形と SHOW は build_site.py の news_html()・NEWS_SHOW と同じにしておくこと */
+const SHOW={NEWS_SHOW};
+const newsUl=document.getElementById('newsList');
+/* 書き込んだ HTML が、いまの表示と同じかどうか（ブラウザーが組み立て直した形どうしで比べる） */
+const sameHTML=(el,html)=>{{ const t=document.createElement(el.tagName); t.innerHTML=html; return t.innerHTML===el.innerHTML; }};
+function wireMore(){{
+  const mb=document.getElementById('moreNews');
+  if(mb) mb.onclick=()=>{{ newsUl.querySelectorAll('li.old').forEach(x=>x.hidden=false); mb.parentNode.remove(); }};
+}}
+wireMore();
 fetch('data/news.json',{{cache:'no-store'}}).then(r=>r.ok?r.json():Promise.reject(r.status)).then(d=>{{
   const items=(d.items||[]).slice().sort((a,b)=>(b.date||'').localeCompare(a.date||''));
   const li=(it,i)=>'<li'+(i>=SHOW?' class="old" hidden':'')+'><time datetime="'+esc(it.date)+'">'+esc(it.date)+'</time><span class="tx">'+
      tri({{ja:it.ja,en:it.en,fr:it.fr}})+(it.link?' <a href="'+esc(it.link)+'">→</a>':'')+'</span></li>';
-  const ul=document.getElementById('newsList');
-  ul.innerHTML=items.map(li).join('')+(items.length>SHOW?'<li style="display:block;border:0"><button class="more-news" id="moreNews">'+tri({{ja:'過去の更新をすべて表示',en:'Show all updates',fr:'Afficher toutes les mises à jour'}})+'</button></li>':'');
-  const mb=document.getElementById('moreNews');
-  if(mb) mb.onclick=()=>{{ ul.querySelectorAll('li.old').forEach(x=>x.hidden=false); mb.parentNode.remove(); }};
-}}).catch(()=>{{ document.getElementById('newsList').innerHTML=''; }});
+  const html=items.map(li).join('')+(items.length>SHOW?'<li style="display:block;border:0"><button class="more-news" id="moreNews">'+tri({{ja:'過去の更新をすべて表示',en:'Show all updates',fr:'Afficher toutes les mises à jour'}})+'</button></li>':'');
+  if(!sameHTML(newsUl,html)){{ newsUl.innerHTML=html; wireMore(); }}
+}}).catch(()=>{{}});
 
-/* ---- 関連サイト（data/links.json）---- */
+/* ---- 関連サイト（data/links.json）。NEWS と同じく、書き込んである HTML と違うときだけ書き換える（build_site.py の links_html()）---- */
 fetch('data/links.json',{{cache:'no-store'}}).then(r=>r.ok?r.json():Promise.reject(r.status)).then(d=>{{
-  document.getElementById('relList').innerHTML=(d.items||[]).map(it=>{{
+  const relList=document.getElementById('relList');
+  const html=(d.items||[]).map(it=>{{
     let host=''; try{{ host=new URL(it.url).host; }}catch(e){{}}
     return '<a class="relsite" href="'+esc(it.url)+'" target="_blank" rel="noopener">'+
       '<div class="k">'+tri(it.kind||{{}})+'</div>'+
@@ -523,6 +633,7 @@ fetch('data/links.json',{{cache:'no-store'}}).then(r=>r.ok?r.json():Promise.reje
       '<p>'+tri(it.desc||{{}})+'</p>'+
       '<span class="go">'+tri({{ja:'サイトを開く ↗',en:'Visit site ↗',fr:'Visiter le site ↗'}})+'</span></a>';
   }}).join('');
+  if(!sameHTML(relList,html)) relList.innerHTML=html;
 }}).catch(()=>{{}});
 }})();
 </script>
@@ -531,9 +642,9 @@ fetch('data/links.json',{{cache:'no-store'}}).then(r=>r.ok?r.json():Promise.reje
             " data-title-en=\"Sheneset — a digital TEI edition of the Nag Hammadi Codices\""
             " data-title-fr=\"Sheneset — édition numérique TEI des codices de Nag Hammadi\"><head><meta charset=\"utf-8\">"
             "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
-            f"{MODE_BOOT}"
-            "<title>Sheneset — ナグ・ハマディ写本コーパス</title>"
-            "<meta name=\"description\" content=\"ナグ・ハマディ写本のTEI P5デジタル版（コプト語本文・形態素グロス・辞書・注釈・日英仏訳）/ A digital TEI edition of the Nag Hammadi Codices.\">"
+            f"{MODE_BOOT}{LANG_BOOT}"
+            + head_meta("", "Sheneset — ナグ・ハマディ写本コーパス",
+                        "ナグ・ハマディ写本のTEI P5デジタル版（コプト語本文・形態素グロス・辞書・注釈・日英仏訳）/ A digital TEI edition of the Nag Hammadi Codices.") +
             f"{FONTS}<style>{THEME}{INDEX_CSS}</style></head><body>{body}</body></html>")
 
 # --- tractate.html (placeholder) -------------------------------------------
@@ -618,8 +729,9 @@ if(!t){
     body = body.replace("__CATALOG__", json.dumps(cat, ensure_ascii=False))
     return ("<!doctype html><html lang=\"ja\" data-lang=\"ja\" data-i18n=\"full\" data-mode=\"dark\" data-modes=\"light dark\"><head><meta charset=\"utf-8\">"
             "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
-            f"{MODE_BOOT}"
-            "<title>準備中 — Sheneset</title>"
+            f"{MODE_BOOT}{LANG_BOOT}"
+            + head_meta("tractate.html", "準備中 — Sheneset",
+                        "ナグ・ハマディ写本のうち、本文をまだ表示できない文書の案内 / A Nag Hammadi tractate whose text is not yet available.") +
             f"{FONTS}<style>{css}</style></head><body>{body}</body></html>")
 
 # --- reader.html (full-text reader for the draft texts) ----------------------
@@ -653,7 +765,9 @@ POS_NAMES = {
 }
 REPO_URL = "https://github.com/icecocoasince2003-create/Nag-Hammadi-Library/"
 # 全文テキストの文書のうち、専用のビュワーもあるもの（reader.html がリンクを示す。キーは data/catalog.xml の doc-… から）
-EDITIONS = {"III-3": "eugnostos.html?wit=III", "V-1": "eugnostos.html?wit=V", "VI-5": "republic.html"}
+EDITIONS = {"III-3": "eugnostos.html?wit=III", "VI-5": "republic.html"}
+# 専用のビュワーの〈対照〉で、注釈つきの別の写本と並べて読める文書（V,1 は語ごとの注釈が無く、エウグノストスの〈対照〉で III,3 と並ぶ）
+SYNOPSES = {"V-1": "eugnostos.html?wit=SYN"}
 
 def build_reader():
     """reader.html?doc=II-6 — data/catalog.xml の文書の TEI（source/nhc_fulltext_split/tei/）を表示する。
@@ -727,7 +841,7 @@ h1{font-family:var(--disp); font-weight:600; line-height:1.12; font-size:clamp(1
 <main class="shell" id="shell"><p class="loading">…</p></main>
 <div class="mcard" id="card" role="dialog" aria-live="polite" hidden></div>
 <script>
-const POS=__POS__, REPO=__REPO__, EDITIONS=__EDITIONS__;
+const POS=__POS__, REPO=__REPO__, EDITIONS=__EDITIONS__, SYNOPSES=__SYNOPSES__;
 const H=document.documentElement, T='http://www.tei-c.org/ns/1.0', XNS='http://www.w3.org/XML/1998/namespace';
 const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -740,6 +854,8 @@ const xlang=el=>el.getAttributeNS(XNS,'lang')||'';
 const fmt=n=>Number(n).toLocaleString('en-US');
 const pct=(a,b)=>b?Math.round(a/b*100):0;
 const posName=p=>{ const e=POS[p]; return e?tri(esc(e[0]),esc(e[1]),esc(e[2])):esc(p); };
+/* assets/viewer-tools.js（写本の写真へのリンクなど）。defer で読み込むので、まだ無いときは読み込み後に呼んでもらう */
+const withTools=f=>{ if(window.NHCTools) f(window.NHCTools); else (window.NHCToolsQ=window.NHCToolsQ||[]).push(f); };
 const key=new URLSearchParams(location.search).get('doc')||'';
 const shell=$('#shell'), card=$('#card');
 let OPT={inter:false, cert:false, cuts:false};
@@ -826,7 +942,7 @@ function renderText(){
           return '<span class="m'+(m.type==='X'?' x':'')+(m.cert?' c-'+m.cert:'')+'" data-i="'+i+'">'+inner+'</span>';
         }).join('')+'</span>';
       }).join(' ');
-      return '<p class="seg" id="seg-'+esc(s.id)+'"><a class="sn" href="#seg-'+esc(s.id)+'">§'+esc(s.n)+'</a> <span class="tx">'+body+'</span></p>';
+      return '<p class="seg" id="seg-'+esc(s.id)+'"><a class="sn" href="#seg-'+esc(s.id)+'" aria-haspopup="dialog" title="この箇所を引用 / Cite this passage">§'+esc(s.n)+'</a> <span class="tx">'+body+'</span></p>';
     }).join('');
     return '<section class="ab ab-'+esc(ab.type)+'">'+(AB[ab.type]?'<h3>'+AB[ab.type]+'</h3>':'')+segs+'</section>';
   }).join('');
@@ -854,10 +970,13 @@ function statusHTML(){
       '<b>Word division</b>: as in the source file; prefixes and articles are sometimes separate and sometimes joined to the word.',
       '<b>Découpage</b> : celui du fichier source ; préfixes et articles sont tantôt séparés, tantôt joints au mot.'));
   }
-  const ed=EDITIONS[DOC.key];
+  const ed=EDITIONS[DOC.key], syn=SYNOPSES[DOC.key];
   if(ed && !s.ref) li.push(tri('<b>専用のビュワー</b>：この文書は <a href="'+esc(ed)+'">専用のビュワー</a>でも読めます。',
     '<b>Dedicated reader</b>: this text can also be read in its <a href="'+esc(ed)+'">own reader</a>.',
     '<b>Visionneuse dédiée</b> : ce texte se lit aussi dans sa <a href="'+esc(ed)+'">propre visionneuse</a>.'));
+  if(syn) li.push(tri('<b>III,3 との対照</b>：エウグノストスのビュワーの<a href="'+esc(syn)+'">〈対照〉</a>で、III,3 と並べて読めます（同じ文言の箇所を自動で照合して並べたものです）。',
+    '<b>Synopsis with III,3</b>: the <a href="'+esc(syn)+'">Synopsis</a> of the Eugnostos reader sets this text beside III,3 (aligned automatically by shared wording).',
+    '<b>Synopse avec III,3</b> : la <a href="'+esc(syn)+'">synopse</a> de la visionneuse d’Eugnoste présente ce texte en regard de III,3 (alignement automatique sur la formulation commune).'));
   if(s.rw) li.push(tri('<b>ⲍ・ⲯ</b>：元ファイルで落ちていた字を、語形と文脈から補いました（点線の下線、'+s.rw+' 語）。'+(s.rwB?'このうち確度 B の '+s.rwB+' 語（破線）は、固有名などで校訂本での確認が必要です。':'校訂本とは照合していません。'),
     '<b>ⲍ and ⲯ</b>: letters lost in the source file were restored from the word form and context (dotted underline; '+s.rw+' words).'+(s.rwB?' The '+s.rwB+' of certainty B (dashed), names and the like, still need checking against the editions.':' None has been collated with the editions.'),
     '<b>ⲍ et ⲯ</b> : lettres perdues dans le fichier source, restituées d’après la forme et le contexte (soulignement pointillé ; '+s.rw+' mots).'+(s.rwB?' Les '+s.rwB+' de certitude B (tirets), noms propres notamment, restent à vérifier.':' Aucune n’a été collationnée.')));
@@ -924,6 +1043,8 @@ function render(){
     '<div class="eyebrow" style="margin-top:18px">'+(m?'Codex '+m[1]+' · ':'')+esc(DOC.siglum)+(D.locus?' · '+esc(D.locus):'')+'</div>'+
     '<h1>'+tri(esc(DOC.ja),esc(DOC.en),esc(DOC.fr))+'</h1><div class="alt">'+tri(esc(DOC.en),esc(DOC.ja),esc(DOC.en))+'</div>'+
     '<div class="meta">'+esc(D.lang)+' · '+tri(fmt(s.segs)+' セグメント · '+fmt(s.m)+' 形態素'+(ann?' · '+fmt(s.g)+' 語群':''), fmt(s.segs)+' segments · '+fmt(s.m)+' morphemes'+(ann?' · '+fmt(s.g)+' bound groups':''), fmt(s.segs)+' segments · '+fmt(s.m)+' morphèmes'+(ann?' · '+fmt(s.g)+' groupes':''))+'</div>'+
+    '<div class="doc-tools"><button type="button" class="doc-cite" id="docCite" aria-haspopup="dialog">'+tri('この文書を引用','Cite this text','Citer ce texte')+'</button>'+
+      (m?'<span class="doc-photos" data-codices="'+esc(m[1])+'" hidden></span>':'')+'</div>'+
     statusHTML()+
     (ann?'<div class="tools">'+
       '<label><input type="checkbox" id="oInter"'+(OPT.inter?' checked':'')+'>'+tri('語義と品詞を重ねる','Show glosses and POS','Afficher gloses et catégories')+'</label>'+
@@ -935,6 +1056,21 @@ function render(){
   const bind=(id,k)=>{ const e=document.getElementById(id); if(e) e.addEventListener('change',()=>{ OPT[k]=e.checked; saveOpt(); renderText(); }); };
   bind('oInter','inter'); bind('oCert','cert'); bind('oCuts','cuts');
   renderText(); setTitle(); gotoHash();
+  withTools(t=>t.fill(shell));
+}
+/* 引用（assets/viewer-tools.js）。§ を押すと、これまでどおりその箇所へ移る（ハッシュの更新）のに加えて、引用のメニューを開く。
+   文書の引用（冒頭の〈この文書を引用〉）には、その文書の最終更新日（data/doc_dates.json）を添える */
+const docStatus=()=>D&&D.st.typed>0?'draft':'text';
+function citeSeg(a){
+  const id=decodeURIComponent((a.getAttribute('href')||'').replace(/^#seg-/,''));
+  const s=D?D.abs.flatMap(ab=>ab.segs).find(x=>x.id===id):null; if(!s) return;
+  const base=DOC.siglum+' §'+s.n, st=docStatus();
+  withTools(t=>t.cite(a,{kind:'passage', path:'reader.html?doc='+encodeURIComponent(DOC.key)+'#seg-'+encodeURIComponent(id),
+    where:{ja:t.withStatus('ja',base,st), en:t.withStatus('en',base,st), fr:t.withStatus('fr',base,st)}}));
+}
+function citeDoc(b){
+  withTools(t=>t.cite(b,{kind:'document', path:'reader.html?doc='+encodeURIComponent(DOC.key),
+    doc:{key:DOC.key, siglum:DOC.siglum, title:{ja:DOC.ja, en:DOC.en, fr:DOC.fr}, status:docStatus()}}));
 }
 function fail(msg, detail){
   shell.innerHTML='<div class="eyebrow">Nag Hammadi Codices</div><h1>'+msg+'</h1>'+(detail?'<p class="err">'+esc(detail)+'</p>':'')+
@@ -956,6 +1092,8 @@ function fail(msg, detail){
 })();
 document.addEventListener('click',e=>{
   if(e.target.closest('#card .x')){ hideCard(); return; }
+  const sn=e.target.closest('#text .sn'); if(sn){ citeSeg(sn); return; }
+  const dc=e.target.closest('#docCite'); if(dc){ citeDoc(dc); return; }
   const m=e.target.closest('#text .m'); if(m) showCard(m);
 });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') hideCard(); });
@@ -964,18 +1102,125 @@ window.addEventListener('hashchange',gotoHash);
 </script>
 """
     body = (body.replace("__POS__", json.dumps(POS_NAMES, ensure_ascii=False)).replace("__REPO__", json.dumps(REPO_URL))
-                .replace("__EDITIONS__", json.dumps(EDITIONS)))
+                .replace("__EDITIONS__", json.dumps(EDITIONS)).replace("__SYNOPSES__", json.dumps(SYNOPSES)))
     return ("<!doctype html><html lang=\"ja\" data-lang=\"ja\" data-i18n=\"full\" data-mode=\"dark\" data-modes=\"light dark\"><head><meta charset=\"utf-8\">"
             "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
-            f"{MODE_BOOT}"
-            "<title>本文（暫定版） — Sheneset</title>"
-            "<meta name=\"description\" content=\"ナグ・ハマディ写本の全文テキスト（自動注釈の暫定版）/ Nag Hammadi Codices: full text with a draft automatic annotation.\">"
-            f"{FONTS}<style>{css}</style></head><body>{body}</body></html>")
+            f"{MODE_BOOT}{LANG_BOOT}"
+            + head_meta("reader.html", "本文（暫定版） — Sheneset",
+                        "ナグ・ハマディ写本の全文テキスト（自動注釈の暫定版）/ Nag Hammadi Codices: full text with a draft automatic annotation.") +
+            f"{FONTS}<script defer src=\"assets/viewer-tools.js\"></script><style>{css}</style></head><body>{body}</body></html>")
+
+# --- sitemap.xml・robots.txt -------------------------------------------------
+# 検索エンジン向けの URL の一覧。管理用（admin・profile）、転送だけの stats.html、準備中の案内 tractate.html は載せない。
+SITEMAP_PAGES = ["", "gnosticism.html", "project.html", "search.html",
+                 "eugnostos.html?wit=III", "eugnostos.html?wit=SYN", "republic.html"]
+SITEMAP_TAIL = ["privacy.html", "terms.html"]
+
+def catalog_readers():
+    """data/catalog.xml の暫定版・未注釈の文書（<bibl subtype="draft|unannotated">）の reader.html?doc=… を、カタログの順に"""
+    import xml.etree.ElementTree as ET
+    T = "{http://www.tei-c.org/ns/1.0}"
+    out = []
+    for b in ET.parse(os.path.join(OUTDIR, "data", "catalog.xml")).getroot().iter(T + "bibl"):
+        if b.get("type") != "document" or b.get("subtype") not in ("draft", "unannotated"):
+            continue
+        out += [r.get("target") for r in b.findall(T + "ref") if r.get("type") == "reader" and (r.get("target") or "").startswith("reader.html?doc=")]
+    return out
+
+def build_sitemap():
+    paths = SITEMAP_PAGES + catalog_readers() + SITEMAP_TAIL
+    if len(set(paths)) != len(paths):
+        raise SystemExit("build_site.py: sitemap.xml の URL が重複しています")
+    urls = "".join("  <url><loc>%s</loc></url>\n" % html.escape(SITE_URL + p, quote=False) for p in paths)
+    return ('<?xml version="1.0" encoding="UTF-8"?>\n'
+            '<!-- 自動生成ファイル: scripts/build_site.py が出力します（直接編集しない）。暫定版・未注釈の文書は data/catalog.xml から -->\n'
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + urls + '</urlset>\n'), len(paths)
+
+def build_robots():
+    return ("# robots.txt — scripts/build_site.py が出力します（直接編集しない）\n"
+            "User-agent: *\n"
+            "Disallow: /admin.html\n"
+            "Disallow: /profile.html\n"
+            "\n"
+            f"Sitemap: {SITE_URL}sitemap.xml\n")
+
+# --- data/doc_dates.json（文書ごとの最終更新日）---------------------------------
+# ビュワーの〈この文書を引用〉が、引用表記に添える日付（assets/viewer-tools.js）。data/catalog.xml の文書のうち本文の XML
+# （<ref type="xml">）を持つものについて、その XML を最後に変えたコミットの日付（git log -1 --format=%cs -- ファイル）を書く。
+# まだコミットしていない変更のあるファイルは今日の日付にする（直したその日にコミットすれば、コミットの日付と同じになる）。
+# git を使えないときは日付を空にする。--check では、文書とファイルの対応だけを比べる（日付はコミットのたびに変わるので比べない）。
+def git_dates(paths):
+    import subprocess
+    try:
+        run = lambda *a: subprocess.run(("git",) + a, cwd=OUTDIR, capture_output=True, text=True, check=True).stdout
+        dirty = {line[3:].strip() for line in run("status", "--porcelain", "--", *paths).splitlines()}
+        dates, cur = {}, None
+        for line in run("log", "--format=@%cs", "--name-only", "--", *paths).splitlines():
+            if line.startswith("@"):
+                cur = line[1:]
+            elif line and line not in dates:
+                dates[line] = cur
+        return {p: (TODAY if p in dirty else dates.get(p, "")) for p in paths}
+    except (OSError, subprocess.CalledProcessError):
+        return {p: "" for p in paths}
+
+def build_doc_dates():
+    import xml.etree.ElementTree as ET
+    T, XID = "{http://www.tei-c.org/ns/1.0}", "{http://www.w3.org/XML/1998/namespace}id"
+    files = {}
+    for b in ET.parse(os.path.join(OUTDIR, "data", "catalog.xml")).getroot().iter(T + "bibl"):
+        ref = next((r.get("target") for r in b.findall(T + "ref") if r.get("type") == "xml"), None)
+        if b.get("type") == "document" and ref and b.get(XID, "").startswith("doc-"):
+            files[b.get(XID)[4:]] = ref
+    dates = git_dates(sorted(set(files.values())))
+    comment = ("自動生成ファイル: scripts/build_site.py が出力します（直接編集しない）。文書ごとの最終更新日"
+               "（本文の XML を最後に変えたコミットの日付）。ビュワーの〈この文書を引用〉が読む。")
+    rows = [json.dumps(k, ensure_ascii=False) + ": " + json.dumps({"file": f, "updated": dates.get(f, "")}, ensure_ascii=False)
+            for k, f in files.items()]
+    return ('{\n  "_comment": ' + json.dumps(comment, ensure_ascii=False) + ',\n  "docs": {\n    ' +
+            ",\n    ".join(rows) + "\n  }\n}\n")   # 1 文書 1 行（日付が変わったときの差分が 1 行で済む）
+
+def _doc_files(text):
+    """--check 用: doc_dates.json の文書とファイルの対応（日付は除く）"""
+    try:
+        return {k: v.get("file") for k, v in json.loads(text).get("docs", {}).items()}
+    except ValueError:
+        return None
 
 # --- write ------------------------------------------------------------------
 _BANNER = "<!-- 自動生成ファイル: scripts/build_site.py が出力します。直接編集せず、スクリプトの CODICES を編集して再実行してください。 -->\n"
-open(os.path.join(OUTDIR,"index.html"),"w",encoding="utf-8").write(_BANNER + build_index())
-open(os.path.join(OUTDIR,"tractate.html"),"w",encoding="utf-8").write(_BANNER + build_tractate())
-open(os.path.join(OUTDIR,"reader.html"),"w",encoding="utf-8").write(_BANNER + build_reader())
+_sitemap, _n_urls = build_sitemap()
+OUTPUTS = {"index.html": _BANNER + build_index(), "tractate.html": _BANNER + build_tractate(),
+           "reader.html": _BANNER + build_reader(), "sitemap.xml": _sitemap, "robots.txt": build_robots(),
+           os.path.join("data", "doc_dates.json"): build_doc_dates()}
+# 生成の日付（index.html のフッターの「生成 …」）は作り直すたびに変わるので、--check では比べない
+_BUILT = re.compile(r'(<span class="l-fr">généré</span>) \d{4}-\d{2}-\d{2}')
+
+if "--check" in sys.argv[1:]:
+    stale = []
+    for name, text in OUTPUTS.items():
+        try:
+            with open(os.path.join(OUTDIR, name), encoding="utf-8") as f:
+                current = f.read()
+        except OSError:
+            stale.append(name + "（ファイルがありません）")
+            continue
+        if name.endswith("doc_dates.json"):
+            if _doc_files(current) != _doc_files(text):
+                stale.append(name)
+        elif _BUILT.sub(r"\1", current) != _BUILT.sub(r"\1", text):
+            stale.append(name)
+    if stale:
+        print("生成ファイルが、いまのスクリプトとデータから作り直したものと違います: " + "、".join(stale))
+        print("python3 scripts/build_site.py を実行して、作り直したファイルをコミットしてください。")
+        sys.exit(1)
+    print("生成ファイルは最新です（%s）" % "・".join(OUTPUTS))
+    sys.exit(0)
+
+for name, text in OUTPUTS.items():
+    with open(os.path.join(OUTDIR, name), "w", encoding="utf-8") as f:
+        f.write(text)
 print("wrote index.html (landing), tractate.html (placeholder) and reader.html (draft full texts)")
-print("codices:", len(CODICES), "| tractates:", TOTAL, "| available:", AVAIL, "| drafts:", DRAFT, "| text only:", PLAIN)
+print("wrote sitemap.xml (%d URLs), robots.txt and data/doc_dates.json" % _n_urls)
+print("codices:", len(CODICES), "| tractates:", TOTAL, "| available:", AVAIL, "| drafts:", DRAFT, "| text only:", PLAIN, "| soon:", SOON,
+      "| listed but not counted:", ", ".join("%s,%s" % k for k in sorted(UNCOUNTED)))

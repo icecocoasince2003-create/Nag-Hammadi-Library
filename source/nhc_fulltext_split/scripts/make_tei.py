@@ -44,7 +44,7 @@ KINDS = ('title', 'text', 'subscript', 'colophon', 'fragment')
 CERT = {'A': 'high', 'B': 'medium'}
 
 # 題名（日・英・仏）。サイトの文書一覧（scripts/build_site.py の CODICES）と data/catalog.xml に合わせた。
-# VI,8 はサイトの一覧では「VI,9」の行（アスクレピオス）。XI,2a–2e はサイトの一覧にないので、ここで付けた。
+# サイトの一覧も通用の番号（VI,8 = アスクレピオス。覚書は VI,7a）。XI,2a–2e はサイトの一覧にないので、ここで付けた。
 TITLES = {
  'I,2': ('ヤコブのアポクリュフォン(秘密の書)', 'The Apocryphon of James', 'Épître apocryphe de Jacques'),
  'I,3': ('真理の福音', 'The Gospel of Truth', 'Évangile de la Vérité'),

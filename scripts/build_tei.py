@@ -296,9 +296,11 @@ def emit_witness_V(segs):
     out.append('        <body>')
     out.append('          <div type="tractate" n="Eugnostos" subtype="codexV">')
     out.append('            <head xml:lang="en">Eugnostos the Blessed — Nag Hammadi Codex V,1 (pp. 1–17, parallel witness)</head>')
-    out.append('            <note type="editorial" xml:lang="ja">この証本(V,1)は III,3 と対応づけられた並行版の枠組みです。'
-               'V,1 の本文(コプト語形態素・グロス)は校訂版(Parrott, NHS 27, Brill 1991)に拠って補充してください。'
-               '各 &lt;s&gt; は III,3 の対応セグメントへ @corresp で結ばれます。</note>')
+    out.append('            <note type="editorial" xml:lang="ja">この証本(V,1)は III,3 と対応づけた並行証本の枠で、語ごとの注釈(コプト語形態素・グロス)はまだ入っていません。'
+               '各 &lt;s&gt; は III,3 の対応セグメントへ @corresp で結びます。'
+               'V,1 の本文は、未注釈の全文テキスト source/nhc_fulltext_split/tei/05-1_eugnostos.xml にあります(本文ビュワー reader.html?doc=V-1)。'
+               'III,3 と同じ文言の箇所は data/parallels.xml で結んであり、ビュワーの〈対照〉と〈並行箇所〉に出ます。'
+               'ここに V,1 の注釈を入れるときは、校訂版(Parrott, NHS 27, Brill 1991)と照合してください。</note>')
     # demonstrate alignment on the incipit only (text is lacunose in V)
     out.append('            <s xml:id="V-INCIPIT" n="1" corresp="#III-INCIPIT" subtype="incipit" '
                'transJa="（V,1 冒頭は大きく欠損。標題のみ「エウグノストス」と末尾に残る）" '
