@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="cop">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title xml:lang="en">The Apocalypse of Paul</title>
+        <title xml:lang="ja">パウロの黙示録</title>
+        <title xml:lang="fr">Apocalypse de Paul</title>
+        <title type="sub" xml:lang="en">Test fixture: segments 1–6 of Nag Hammadi Codex V,2 with test page and line breaks (not real values) — segmented Coptic text without linguistic annotation</title>
+        <respStmt>
+          <resp>TEI encoding; division of the corpus into tractates; removal of conversion residue</resp>
+          <name>Sheneset project</name>
+        </respStmt>
+        <respStmt xml:id="zp">
+          <resp>restoration of the letters ⲍ and ⲯ lost in the source file (see editorialDecl/correction)</resp>
+          <name>Sheneset project</name>
+        </respStmt>
+        <respStmt>
+          <resp>source text (tokenised Coptic)</resp>
+          <name>supplied corpus (Marcion segment ids)</name>
+        </respStmt>
+      </titleStmt>
+      <extent>
+        <measure unit="segment" quantity="6">6 segments</measure>
+        <measure unit="token" quantity="135">135 tokens</measure>
+        <measure unit="gap" quantity="1">1 gap marker</measure>
+      </extent>
+      <publicationStmt>
+        <authority>Sheneset — TEI corpus of the Nag Hammadi Codices</authority>
+        <availability status="free">
+          <licence target="https://creativecommons.org/licenses/by/4.0/">
+            <p xml:lang="en">The Coptic text is in the public domain. The TEI encoding and the preparation of the text (division into tractates, removal of conversion residue, restoration of ⲍ and ⲯ) are the work of the Sheneset project and are released under the Creative Commons Attribution 4.0 International licence (CC BY 4.0).</p>
+            <p xml:lang="ja">コプト語本文はパブリックドメイン。TEI 符号化と本文の下処理（文書の分割、変換の残骸の除去、ⲍ・ⲯ の復元）は Sheneset プロジェクトによるもので、クリエイティブ・コモンズ 表示 4.0 国際（CC BY 4.0）で提供する。</p>
+          </licence>
+          <p xml:lang="en">Published as a working text. It has not been collated with the critical editions and carries no linguistic annotation yet; see projectDesc and editorialDecl for what was changed and what is missing.</p>
+          <p xml:lang="ja">作業用の本文として公開している。校訂本との照合は済んでおらず、言語注釈もまだ付けていない。加えた変更と欠けている情報は projectDesc と editorialDecl を参照。</p>
+        </availability>
+        <date when="2026-11-17">2026-11-17</date>
+      </publicationStmt>
+      <notesStmt>
+        <note xml:lang="ja">テスト用の頁・行（実際の写本の頁・行ではない）。このファイルはビュワーの試験のためのもので、<gi>pb</gi>・<gi>lb</gi> の値は scripts/insert_breaks.py で tests/fixtures/reader_breaks_plain.tsv から入れた試験用の値であり、写本や校訂本の頁・行とは関係がない。元のファイルの最初の 6 セグメント（§1–6）だけを収めた。本文・注釈・ID は元のファイル（source/nhc_fulltext_split/tei/05-2_apocalypse-of-paul.xml）のまま。</note>
+        <note xml:lang="en">Test page and line numbers (not the real page and line numbers of the manuscript). This file is a fixture for testing the viewers: the values of <gi>pb</gi> and <gi>lb</gi> were inserted with scripts/insert_breaks.py from tests/fixtures/reader_breaks_plain.tsv and have nothing to do with the pages and lines of the manuscript or of any edition. Only the first six segments (§1–6) of the source file are included. The text, annotation and ids are those of source/nhc_fulltext_split/tei/05-2_apocalypse-of-paul.xml.</note>
+      </notesStmt>
+      <sourceDesc>
+        <bibl xml:id="src">
+          <title>Nag_Hammadi.txt</title>
+          <note xml:lang="en">Supplied plain-text file of the Nag Hammadi Codices: one segment per row (row ids 7500001–7513228), the Coptic text divided into tokens by spaces. This file contains rows 7506464–7506532.</note>
+          <note xml:lang="ja">提供されたナグ・ハマディ写本全文のテキストファイル。1 行が 1 セグメント（行 ID 7500001–7513228）で、コプト語本文は空白でトークンに区切られている。この文書は行 7506464–7506532 にあたる。</note>
+        </bibl>
+        <msDesc>
+          <msIdentifier>
+            <settlement>Cairo</settlement>
+            <repository>Coptic Museum</repository>
+            <idno>NHC V</idno>
+            <msName>Nag Hammadi Codex V</msName>
+          </msIdentifier>
+          <msContents>
+            <msItem n="2">
+              <locus from="17" to="24">pp. 17,19–24,9</locus>
+              <title xml:lang="en">The Apocalypse of Paul</title>
+              <textLang mainLang="cop">Coptic (Sahidic)</textLang>
+              <note xml:lang="en">Page and line numbers are those in common use (as in The Nag Hammadi Library in English); they were not taken from the source file.</note>
+            </msItem>
+          </msContents>
+          <history>
+            <origin>
+              <origDate notBefore="0300" notAfter="0400">4th c. CE</origDate>
+              <origPlace>Egypt</origPlace>
+            </origin>
+          </history>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc>
+        <p xml:lang="ja">提供されたナグ・ハマディ写本全文のテキストファイルを文書ごとに分け、サイト掲載に向けて下処理したものの TEI 版。訳、語釈、品詞、レンマはまだ付けていない。下処理（文書の分割、変換の残骸の除去、ⲍ・ⲯ の復元）と TEI 化には生成 AI（Claude）を使い、結果が元ファイルと対応することを検証スクリプト（scripts/verify.py、scripts/verify_tei.py）で確かめた。</p>
+        <p xml:lang="en">TEI version of the supplied full text of the Nag Hammadi Codices, divided into tractates and preprocessed for publication on the site. No translation, gloss, part of speech or lemma has been added yet. The preprocessing (division into tractates, removal of conversion residue, restoration of ⲍ and ⲯ) and the TEI conversion were carried out with a generative AI model (Claude); the result was checked against the source file with the verification scripts (scripts/verify.py, scripts/verify_tei.py).</p>
+      </projectDesc>
+      <editorialDecl>
+        <segmentation>
+          <p xml:lang="ja"><gi>s</gi> は元ファイルの 1 行（1 セグメント）。行が文書の境目や表題の境目をまたぐときだけ分けた。<att>xml:id</att> は「写本番号-行 ID」で、分けた行には「_開始トークン位置」（元ファイルの行の中での位置、0 始まり）を付けた。<att>n</att> は文書内の通し番号。<gi>w</gi> は元ファイルの空白区切り（形態素解析器の出力とみられる）のままで、切り直していない。ⲍ・ⲯ を戻した語が途中で切れていたときだけ 1 つにつないだ。<gi>ab</gi> の <att>type</att> は <val>title</val>（冒頭表題）、<val>text</val>（本文）、<val>subscript</val>（奥書表題）、<val>colophon</val>（写字生の奥書・覚え書き）、<val>fragment</val>（未配置断片）。</p>
+          <p xml:lang="en">Each <gi>s</gi> is one row (segment) of the source file; a row is split only where it straddles the boundary of a tractate or of a title. <att>xml:id</att> is the codex number followed by the row id; for split rows the position of the first token within the source row (counted from 0) is added after an underscore. <att>n</att> numbers the segments within the tractate. Each <gi>w</gi> is a token of the source file (apparently the output of a morphological segmenter) and has not been re-segmented, except that tokens were joined where a restored ⲍ or ⲯ fell inside a word that the segmenter had split. The <att>type</att> of <gi>ab</gi> is <val>title</val> (opening title), <val>text</val>, <val>subscript</val> (subscript title), <val>colophon</val> (scribal colophon or note) or <val>fragment</val> (unplaced fragments).</p>
+        </segmentation>
+        <correction method="markup">
+          <p xml:lang="ja">元ファイルでは ⲝ がすべて ⲯ になっていたので、ⲝ に戻した（この文書では 3 字）。元ファイルで落ちていた ⲍ と ⲯ は、語形と文脈から語が決まる箇所で戻した（この文書では 16 語）。戻した語の <gi>w</gi> には <att>resp</att>="#zp" と <att>cert</att> を付けた。<val>high</val>（16 語）は語形と文脈から決まるもの、<val>medium</val>（0 語）は固有名など、校訂本や翻訳で知られている読みを当てたもの。どちらも校訂本とは照合していない。英語の編集注記が文字化けして残っていた箇所は、欠損の注記なので <gi>gap</gi> に置き換えた。変更は 1 か所ずつ、同梱の changes.tsv と restored_letters.tsv に記録してある。</p>
+          <p xml:lang="en">In the source file every ⲝ had been converted to ⲯ; these were changed back to ⲝ (3 letters in this file). The letters ⲍ and ⲯ, lost throughout the source file, were restored where the word could be identified from its form and context (16 words in this file). These words carry <att>resp</att>="#zp" and <att>cert</att> on <gi>w</gi>: <val>high</val> (16) = determined by word form and context; <val>medium</val> (0) = proper names and similar words, restored following readings known from editions and translations. None has been collated with the printed editions. Garbled residue of English editorial notes, which reported lost text, was replaced by <gi>gap</gi>. Every change is listed in the accompanying files changes.tsv and restored_letters.tsv.</p>
+        </correction>
+        <interpretation>
+          <p xml:lang="ja">品詞（<att>type</att>）、レンマ（<att>lemma</att>）、語釈、訳、ギリシア語借用語の印（<att>xml:lang</att>="grc"）はまだ付けていない。<gi>gap</gi>（<att>reason</att>="lacuna"）は、元ファイルに行・頁単位の欠損の注記があった位置を示す（この文書では 2 箇所）。それ以外の欠損と校訂者による復元の区別、下点、上線、句読点、頁と行の区切りは元ファイルになく、符号化していない。</p>
+          <p xml:lang="en">No part of speech (<att>type</att>), lemma (<att>lemma</att>), gloss, translation or loanword marking (<att>xml:lang</att>="grc") has been added yet. <gi>gap</gi> with <att>reason</att>="lacuna" marks the places where the source file had an editorial note reporting lost lines or pages (2 in this file). The source file does not distinguish other lacunae from editorial restorations and has no sublinear dots, supralinear strokes, punctuation, or page and line breaks; none of these is encoded.</p>
+        </interpretation>
+      </editorialDecl>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="cop">Coptic (Sahidic)</language>
+        <language ident="en">English (header)</language>
+        <language ident="ja">Japanese (header)</language>
+        <language ident="fr">French (title)</language>
+      </langUsage>
+    </profileDesc>
+    <revisionDesc>
+      <change when="2026-11-17">TEI file generated from the preprocessed text (scripts/make_tei.py).</change>
+      <change when="2026-11-17">Published in the Sheneset repository and made searchable in the corpus search; publisher, licence and date stated in publicationStmt.</change>
+      <change when="2026-11-23">Test fixture made from source/nhc_fulltext_split/tei/05-2_apocalypse-of-paul.xml (segments 1–6); test page and line breaks (not real values) inserted with scripts/insert_breaks.py from tests/fixtures/reader_breaks_plain.tsv.</change>
+    </revisionDesc>
+  </teiHeader>
+  <text type="witness" xml:id="wit-V-2" n="NHC V,2" xml:lang="cop">
+    <body>
+      <div type="tractate" n="The Apocalypse of Paul" subtype="codexV">
+        <head xml:lang="en">The Apocalypse of Paul — Nag Hammadi Codex V,2 (pp. 17,19–24,9)</head>
+        <ab type="title">
+          <s xml:id="V-7506464_1" n="1">
+            <pb n="17"/>
+            <lb n="19"/>
+            <w cert="high" resp="#zp">ⲧⲁⲡⲟⲕⲁⲗⲩⲯⲓⲥ</w>
+            <w>ⲙ</w>
+            <w>ⲡⲁⲩⲗⲟⲥ</w>
+          </s>
+        </ab>
+        <ab type="text">
+          <s xml:id="V-7506464_4" n="2">
+            <lb n="20"/>
+            <w>ⲩ</w>
+            <w>ⲛϭⲓ</w>
+            <w>ⲡ</w>
+            <w>ⲉ</w>
+            <w>ⲩ</w>
+            <lb n="21"/>
+            <gap reason="lacuna" unit="line" extent="unknown"/>
+            <w>ϣⲉ</w>
+            <w>ⲇⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲁ</w>
+            <w>ⲛ</w>
+            <w>ⲧⲉ</w>
+            <w>ϩⲓⲏ</w>
+            <w>ⲁ<lb n="22" break="no"/>ⲩⲱ</w>
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ⲟⲩⲱϣⲃ</w>
+            <w>ⲛⲁ</w>
+            <w>ϥ</w>
+            <w>ⲉ</w>
+            <lb n="23"/>
+            <w>ϥ</w>
+            <w>ϫⲱ</w>
+            <w>ⲙⲙⲟ</w>
+            <w>ⲥ</w>
+            <w>ϫⲉ</w>
+            <w>ⲉ</w>
+            <w>ⲓ</w>
+            <lb n="24"/>
+            <w>ⲛⲁ</w>
+            <w>ⲃⲱⲕ</w>
+            <w>ϩⲛ</w>
+            <w>ⲁϣ</w>
+            <w>ⲛ</w>
+            <w>ϩⲓ</w>
+            <w>ⲉϩⲣⲁⲓ</w>
+            <lb n="25"/>
+            <w>ⲉ</w>
+            <w>ⲑⲓⲏⲙ</w>
+          </s>
+          <s xml:id="V-7506465" n="3">
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ⲟⲩⲱϣⲃ</w>
+            <w>ⲛϭⲓ</w>
+            <w>ⲡ</w>
+            <lb n="26"/>
+            <w>ⲕⲟⲩⲉⲓ</w>
+            <w>ϣⲏⲙ</w>
+            <w>ⲉ</w>
+            <w>ϥ</w>
+            <w>ϫⲱ</w>
+            <w>ⲙⲙⲟ</w>
+            <w>ⲥ</w>
+            <lb n="27"/>
+            <w>ϫⲉ</w>
+            <w>ⲁ</w>
+            <w>ϫⲓ</w>
+            <w>ⲡⲉⲕ</w>
+            <w>ⲣⲁⲛ</w>
+            <w>ϫⲉⲕⲁⲁⲥ</w>
+            <w>ⲉⲓⲉ</w>
+            <lb n="28"/>
+            <w>ⲧⲁⲙⲟ</w>
+            <w>ⲙ</w>
+            <w>ⲙⲟⲕ</w>
+            <w>ⲉ</w>
+            <w>ⲧⲉ</w>
+            <w>ϩⲓⲏ</w>
+          </s>
+          <s xml:id="V-7506466" n="4">
+            <w>ⲛⲉⲣⲉ</w>
+            <lb n="29"/>
+            <w>ⲡ</w>
+            <w>ⲕⲟⲩⲉⲓ</w>
+            <w>ϣⲏⲙ</w>
+            <w>ⲛⲉ</w>
+            <w>ϥ</w>
+            <w>ⲥⲟⲟⲩⲛ</w>
+            <w>ⲙ</w>
+            <lb n="30"/>
+            <w>ⲡⲁⲩⲗⲟⲥ</w>
+            <w>ϫⲉ</w>
+            <w>ⲛⲓⲙ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ⲟⲩⲱϣ</w>
+            <pb n="18"/>
+            <lb n="1"/>
+            <w>ⲉ</w>
+            <w>ⲣ</w>
+            <w>ϣⲃⲏⲣ</w>
+            <w>ⲛ</w>
+            <w>ϣⲁϫⲉ</w>
+            <w>ⲛⲙ</w>
+            <w>ⲙⲁ</w>
+            <lb n="2"/>
+            <w>ϥ</w>
+            <w>ϩⲛ</w>
+            <w>ⲛⲉϥ</w>
+            <w>ϣⲁϫⲉ</w>
+            <w>ϩⲓ</w>
+            <w>ⲛⲁ</w>
+            <w>ϫⲉ</w>
+            <lb n="3"/>
+            <w>ⲉϥ</w>
+            <w>ⲛⲁ</w>
+            <w>ϭⲓⲛⲉ</w>
+            <w>ⲛⲛⲟⲩⲗⲁⲉⲓϭⲉ</w>
+            <w>ⲛ</w>
+            <w>ϣⲁϫⲉ</w>
+            <w>ⲛⲙⲙⲁϥ</w>
+          </s>
+          <s xml:id="V-7506467" n="5">
+            <lb n="4"/>
+            <w>ⲁ</w>
+            <w>ϥ</w>
+            <w>ⲟⲩⲱϣⲃ</w>
+            <w>ⲛϭⲓ</w>
+            <w>ⲡ</w>
+            <w>ⲕⲟⲩⲉⲓ</w>
+            <w>ϣⲏⲙ</w>
+            <lb n="5"/>
+            <w>ⲉ</w>
+            <w>ϥ</w>
+            <w>ϫⲱ</w>
+            <w>ⲙⲙⲟ</w>
+            <w>ⲥ</w>
+            <w>ϫⲉ</w>
+            <w>ϯ</w>
+            <lb n="6"/>
+            <w>ⲥⲟⲟⲩⲛ</w>
+            <w>ⲙⲙⲟ</w>
+            <w>ⲕ</w>
+            <w>ⲡⲁⲩⲗⲟⲥ</w>
+            <w>ϫⲉ</w>
+            <w>ⲛⲧⲕ</w>
+            <w>ⲛⲓⲙ</w>
+          </s>
+          <s xml:id="V-7506468" n="6">
+            <lb n="7"/>
+            <w>ϫⲉ</w>
+            <w>ⲛⲧⲟⲕ</w>
+            <w>ⲡⲉ</w>
+            <w>ⲛ</w>
+            <w>ⲧⲁ</w>
+            <w>ⲩ</w>
+            <w>ⲥⲙⲟⲩ</w>
+            <lb n="8"/>
+            <w>ⲉⲣⲟ</w>
+            <w>ⲕ</w>
+            <w>ϫⲓⲛ</w>
+            <w>ϩⲛ</w>
+            <w>ⲑ</w>
+            <w>ⲏ</w>
+            <w>ⲛⲧⲉϥ</w>
+            <lb n="9"/>
+            <w>ⲙⲁⲁⲩ</w>
+          </s>
+        </ab>
+      </div>
+    </body>
+  </text>
+</TEI>

@@ -130,6 +130,8 @@ nag_hammadi_library/
     ├─ sync_lexicon.py     source/lexicon.csv の変更を data/lexicon.xml に反映する(xml:id は変えない)
     ├─ build_site.py       index.html / tractate.html / reader.html / sitemap.xml / robots.txt / data/doc_dates.json / data/pos_labels.json を生成
     ├─ build_fulltext_stats.py  data/fulltext_stats.json(全文テキストの文書ごとの数)を生成。build_site.py からも呼ばれる
+    ├─ insert_breaks.py    写本の頁(<pb>)・行(<lb>)の区切りを TSV から TEI に入れる(既定は表示だけ、--write で書き込む)
+    ├─ split_segments.py   セグメント(<s>)を TSV で指定した位置で分ける(案。まだ実データには使わない)
     ├─ make_og_image.py    共有用の画像 image/og-image.png を作る(rsvg-convert が要る)
     ├─ check_tei.py        TEI の点検(ポインタの切れ・以前の書き方・見出しとレンマへのコプト文字以外の文字の混入など)。--schema でスキーマ検証も
     ├─ check_style.py      表記ゆれの点検(規則は style_rules.json)
@@ -182,6 +184,8 @@ nag_hammadi_library/
 | `sync_lexicon.py` | `lexicon.csv` の変更を `data/lexicon.xml` に反映する。`xml:id` は変えない。何も付けなければ変更点の表示だけで、`--write` で書き込む。 |
 | `build_site.py` | `index.html`(目次)・`tractate.html`(準備中)・`reader.html`(本文ビュワー・暫定版)・`sitemap.xml`・`robots.txt`・`data/doc_dates.json`・`data/pos_labels.json`(品詞タグの三言語の名前と出現数。名前は `POS_NAMES` が正) を生成。`<head>` の OGP(リンクのプレビュー)のタグもここで書く(`og_tags`)。 |
 | `build_fulltext_stats.py` | `data/fulltext_stats.json` を生成（`build_site.py` を実行すると一緒に作り直す。`--check` で最新かを調べるだけ）。`data/catalog.xml` の全文テキスト（暫定版・未注釈）の文書ごとに、本文の証本の中の `<w>`・`<phr>`（と、その中の `<w>`）・`<s>`・`<gap>`、`xml:lang="grc"` の `<w>`、品詞ごとの `<w>`、`@cert="low"`・品詞 `X` の `<w>` を数え、方言（`<textLang>`）と状態を添える。参考に、人の手で注釈した版（エウグノストス III,3・『国家』）も同じ方法で数える。割合は検索ページが計算する。 |
+| `insert_breaks.py` | 写本の頁（`<pb>`）・行（`<lb>`）の区切りを TSV から TEI に入れる。区切りの空要素を足すだけで、本文・語・`xml:id` は変えない。何も付けなければ入る位置の表示だけで、`--write` で書き込む。手順は下の「写本の頁・行の区切りを入れる」。 |
+| `split_segments.py` | セグメント（`<s>`）を TSV で指定した位置で分ける。最初の部分が元の `xml:id` と § を保ち、続きは `元の id_a`・`_b` …（§ は 15a・15b …）。**案**（`source/nhc_fulltext_split/proposals/README_ja.md`）。まだ実データには使わない。 |
 | `make_og_image.py` | リンクを共有したときのプレビュー画像 `image/og-image.png`(1200×630)を、アイコンとゲンゲンの SVG から作る。 |
 
 ## データの編集
@@ -236,6 +240,134 @@ python3 scripts/build_tei.py
 ### translations.csv（対訳）
 `seg_id`(本文セグメントのID。`eugnostos_source.tsv` のID、冒頭は `INCIPIT`)に対し
 `ja`/`en`/`fr` の対訳を書きます。空欄の言語は「準備中」と表示されます。
+
+### 写本の頁・行の区切りを入れる（`scripts/insert_breaks.py`）
+
+全文テキスト（`source/nhc_fulltext_split/tei/`）とエウグノストス（`data/eugnostos_tei.xml`）には、写本の頁・行の区切りが
+入っていません（元ファイルに無かったため。『国家』`data/republic_tei.xml` だけは入っています）。校訂本と照らし合わせて
+決めた区切りを TSV に書き、`scripts/insert_breaks.py` で TEI に入れます。
+
+- スクリプトは、区切りの空要素（改頁 `<pb n="…"/>`・改行 `<lb n="…"/>`）を足すだけです。本文の文字・語（`<w>`）・語群
+  （`<phr>`）・欠損（`<gap>`）・`xml:id`・属性には触れません。
+- XML を読み直して書き出すのではなく、元のファイルに区切りの文字列を差し込みます（字下げも周りに合わせる）。差分には
+  足した行だけが出ます。
+- 書き方は `data/republic_tei.xml` と同じです。
+
+#### TSV の書き方
+
+UTF-8（BOM なし）・改行 LF・タブ区切りで、1 行目に見出しを書きます。列の順は自由です。空行は読み飛ばします。
+
+| 列 | 必須 | 書くこと |
+|---|---|---|
+| `doc` | ○ | 文書。`data/catalog.xml` の `<bibl type="document" xml:id="doc-…">` から `doc-` を除いたもの（`II-2`、`V-2`、`eugnostos` など）。ファイルはカタログの `<ref type="xml">` で決まる |
+| `seg_id` | ○ | セグメント（`<s>`）の `xml:id`（本文ビュワーの § のリンク `#seg-…` の `…` の部分） |
+| `w` | ○ | 区切りを、そのセグメントの何番目の `<w>`（形態素）の前に入れるか。1 から数える。語群の中の `<w>` も 1 つずつ数える |
+| `type` | ○ | `pb`（改頁）か `lb`（改行） |
+| `n` | ○ | 頁番号・行番号（そのまま `@n` に入る） |
+| `char` |  | 語の途中で行（頁）が変わるとき、その `<w>` の何文字目の前で切れるか。0 から数える（1 以上、語の文字数未満）。上線などの合成記号は前の文字に含めて数える |
+| `place` |  | 欠損（`<gap>`）のすぐあとの `<w>` を指したとき、区切りを欠損の前に入れるなら `before-gap`。`w` を `end` にすると「セグメントの最後の欠損の前」 |
+| `phr` |  | 確認用。その `<w>` を含む語群が、セグメントの中の何番目の `<phr>` か。書けば照合する |
+| `form` |  | 確認用。その `<w>` の語形（復元した字 `<supplied>` も含めた形）。書けば照合する。番号の打ち間違いを見つけるのに役立つ |
+| `note` |  | メモ（校訂本の頁など）。スクリプトは使わない |
+
+例（II,2 の冒頭。数字は書き方の例で、実際の頁・行ではありません）:
+
+```
+doc	seg_id	w	type	n	char	place	phr	form	note
+II-2	II-7503903_2206	1	pb	32			1	ⲛⲁ	頁の最初
+II-2	II-7503903_2206	1	lb	10			1	ⲛⲁ
+II-2	II-7503903_2206	16	lb	11	3			ⲁϥⲥϩⲁⲓⲥ	語の途中で改行（ⲁϥⲥ|ϩⲁⲓⲥ）
+II-2	II-7503903_2206	22	lb	12			15	ⲁⲩⲱ
+```
+
+- **改頁のときは `pb` と `lb` の両方を書きます。** `pb` のあとに 1 行目の `lb` を自動では足しません（頁の途中から始まる
+  文書もあるため）。同じ位置の `pb` と `lb` は、行の順に関係なく `pb` が先に入ります。
+- `w` の番号は、TEI の `<s>` の中の `<w>` を上から数えた番号です（`source/nhc_fulltext_split/proposals/` の表にも、
+  同じ数え方の番号が書いてあります）。`form` を書いておくと、番号を 1 つずらして打っても、スクリプトが止めてくれます。
+  まず `form` だけを書いて何も付けずに実行し、表示される前後の語で位置を確かめてから `--write` を付けるのが安全です。
+
+#### 区切りが入る位置
+
+| 指した位置 | 入る場所 |
+|---|---|
+| 語群（`<phr>`）の最初の `<w>` | 語群の前（語群と語群のあいだ） |
+| 語群の途中の `<w>` | 語群の中、その `<w>` の前（`break` は付けない） |
+| 語群の無い文書（未注釈の 17 文書）の `<w>` | その `<w>` の前 |
+| セグメントの最初の `<w>` | `<s>` の中の先頭（セグメントのあいだ `</s>` と `<s>` のあいだには入れない） |
+| `char` を書いたとき | `<w>` の中。`break="no"` が付く（`pb` も同じ）。復元した字の `<supplied>` の中には入れない |
+| `place` が `before-gap` | 欠損（`<gap>`）の前 |
+
+```xml
+<s xml:id="II-7503903_2206" n="1">
+  <pb n="32"/>
+  <lb n="10"/>
+  <phr>
+    <w …>ⲛⲁ</w>
+    …
+  <phr>
+    <w …>ⲁϥⲥ<lb n="11" break="no"/>ϩⲁⲓⲥ</w>
+```
+
+#### 実行する（リポジトリのルートで）
+
+```
+python3 scripts/insert_breaks.py 区切り.tsv           # 入れる位置を表示するだけ（書き込まない）
+python3 scripts/insert_breaks.py 区切り.tsv --write   # 書き込む
+python3 scripts/check_tei.py source/nhc_fulltext_split/tei/02-2_gospel-of-thomas.xml   # 書き込んだファイルを点検する
+```
+
+- 何も付けずに実行すると、1 行ごとに入る場所と前後の語（`【…ⲑⲱⲙⲁⲥ |ⲁⲩⲱ ⲡⲉϫⲁϥ…】`）を表示し、書き込みはしません。
+  表示を見て、よければ `--write` を付けて実行し直します。
+- TSV はいくつ並べてもかまいません（文書が違っていてもよい）。
+- 1 つでも問題があれば、どのファイルにも書き込まず、終了コード 1 で終わります。問題が無ければ 0 です。
+- 同じ位置に同じ区切りがもう入っていれば、その行は何もしません。同じ TSV を 2 回実行してもファイルは変わりません
+  （途中まで入れた TSV に行を書き足して、もう一度実行できます）。
+
+#### スクリプトが確かめること
+
+止まるもの（何も書き込まない）:
+
+- 文書・セグメント・語が見つからない。`type`・`n`・`char`・`place` の書き方が違う。`phr`・`form` が実際と違う。
+- 同じ位置に、同じ種類の区切りが違う番号ですでにある。同じ TSV に、同じ位置・同じ種類の行が 2 つある。
+- `char` の位置が復元した字（`<supplied>`）の途中になる。
+- 書き込む前の検証で問題が見つかる: 整形式でない、区切りを除くと元のファイルと内容が違う（文字・語・語群・欠損・属性・
+  `xml:id` のどれかが変わった）、もとからあった区切りが無くなった、足した区切りが指定の位置に無い、
+  `scripts/check_tei.py` の点検で新しい問題が出る。
+
+注意として表示するもの（誤りとは限らない。終了コードは変わらない）:
+
+- 行番号が前の行の続きになっていない、頁番号が前の頁の続きになっていない（欠損で行や頁が抜けていれば番号は飛ぶ）。
+- 改頁（`pb`）と同じ位置に改行（`lb`）が無い。同じ頁番号の改頁がほかの位置にもある。番号が数字でない。
+
+#### 試すとき
+
+`--file 文書=ファイル` を付けると、カタログのファイルの代わりに、そのファイル（複製など）に入れます。
+
+```
+cp source/nhc_fulltext_split/tei/02-2_gospel-of-thomas.xml /tmp/thomas.xml
+python3 scripts/insert_breaks.py 区切り.tsv --file II-2=/tmp/thomas.xml --write
+```
+
+`tests/fixtures/` には、ビュワーの試験のために区切りを入れたファイルと、その TSV があります（II,2 の §1–8、V,2 の §1–6、
+エウグノストス III の最初の 5 セグメント）。**頁・行の値は試験用で、実際の写本の頁・行ではありません。** TSV の `doc` は
+カタログに無い名前（`test-II-2` など）にしてあるので、`--file` を付けないと本物のファイルには入りません。
+
+```
+python3 scripts/insert_breaks.py tests/fixtures/reader_breaks_draft.tsv --file test-II-2=tests/fixtures/reader_breaks_draft.xml
+```
+
+#### 注意
+
+- **全文テキストに入れる前に、`source/nhc_fulltext_split/scripts/verify_tei.py` を区切りに対応させてください。** 2026-11-23
+  の時点では、`<s>`・`<phr>`・`<w>` の中に `<pb>`・`<lb>` があると失敗します（README_ja.md §10・§11 の検証）。
+- 本文ビュワー（`reader.html`）とエウグノストスのビュワーは、区切りのある文書で頁・行を表示し、`reader.html?doc=II-2#p32.10`
+  のような頁・行のリンクと引用に使います（2026-11-23 のビュワーの変更。`tests/fixtures/` のファイルで試してある）。
+- 入れた区切りの TSV は、どの校訂本のどの頁から取ったかの記録として残しておくと、あとで確かめられます（置き場所は
+  決めていません。例 `source/nhc_fulltext_split/breaks/II-2.tsv`）。
+- 区切りを手で直すときも、上の「区切りが入る位置」の決まりに合わせてください。手で入れた区切りと同じものが TSV に
+  あれば、スクリプトは「もうある」として何もしません。
+
+セグメントの分け直し（`scripts/split_segments.py`）、トマスによる福音書の語録の区切り、300 形態素を超える長いセグメントの切れ目は、まだ案の段階です（`source/nhc_fulltext_split/proposals/README_ja.md` と、同じフォルダの TSV。生田目の確認待ち）。
 
 ## サイト構成と画面遷移
 
