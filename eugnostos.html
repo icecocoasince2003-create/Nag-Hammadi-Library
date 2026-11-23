@@ -698,12 +698,15 @@ function render(){
   box.className="col";
   const segs = curWit==="III" ? SEGS_III : SEGS_V;
   if(curWit==="V"){
-    const wv=Array.from(T(DOC_MAIN,"text")).find(x=>getId(x)==="wit-V");
-    const editorial = (wv?(T(wv,"note")[0]||{}).textContent:"")||"";
-    const vpar = PAR_GROUPS.some(g=>g.subtype==="witness")
-      ? (UL()==="en" ? " The text of V,1 itself (the unannotated working text) can be read beside III,3 in the Synopsis tab and in the parallels panel."
-                     : " V,1 の本文（未注釈の作業用テキスト）は、〈対照〉と〈並行箇所〉で III,3 と並べて読めます。") : "";
-    box.innerHTML = `<div class="notice" style="border-left-color:var(--rose)">⬥ <b>写本 V,1 は並行証本の枠組みです。</b> ${escapeHTML(editorial)}${escapeHTML(vpar)}</div>`+
+    // V,1 には語ごとの注釈がまだ無い（data/eugnostos_tei.xml の wit-V は III,3 と対応づけた枠だけ）。
+    // TEI の編集者向けの注（<note type="editorial">）は読者には出さず、本文の読める場所を案内する
+    const en=UL()==="en", vpar=PAR_GROUPS.some(g=>g.subtype==="witness");
+    const rd=`<a href="reader.html?doc=V-1">${en?"the text reader":"本文ビュワー"}</a>`;
+    box.innerHTML = `<div class="notice" style="border-left-color:var(--rose)">⬥ `+(en
+      ? `<b>V,1 has no word-by-word annotation yet.</b> The text of V,1 (an unannotated working text) can be read `+
+        (vpar?`beside III,3 in the Synopsis tab and in the parallels panel, and also in ${rd}.`:`in ${rd}.`)
+      : `<b>V,1 には語ごとの注釈がまだありません。</b>V,1 の本文（未注釈の作業用テキスト）は`+
+        (vpar?`〈対照〉と〈並行箇所〉で III,3 と並べて読めるほか、${rd}でも読めます。`:`${rd}で読めます。`))+`</div>`+
       segs.map(segHTML).join("");
   } else {
     box.innerHTML = segs.map(segHTML).join("");

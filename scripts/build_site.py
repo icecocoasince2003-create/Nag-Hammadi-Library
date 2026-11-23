@@ -80,8 +80,9 @@ CODICES = [
    (2, "エジプト人の福音書", "The Gospel of the Egyptians", "Évangile des Égyptiens", U),
  ]),
  ("V", 5, [
-   # III,3 は末尾標題「祝福されたエウグノストス」、V,1 は標題「エウグノストス」のみが残る
-   (1, "エウグノストス", "Eugnostos", "Eugnoste", A),
+   # III,3 は末尾標題「祝福されたエウグノストス」、V,1 は標題「エウグノストス」のみが残る。
+   # V,1 は語ごとの注釈がまだ無い（eugnostos.html の V,1 は III,3 と対応づけた枠だけ）ので「未注釈」とし、本文ビュワーへリンクする
+   (1, "エウグノストス", "Eugnostos", "Eugnoste", U),
    (2, "パウロの黙示録", "The Apocalypse of Paul", "Apocalypse de Paul", U),
    (3, "ヤコブの黙示録(第一)", "The (First) Apocalypse of James", "Première apocalypse de Jacques", U),
    (4, "ヤコブの黙示録(第二)", "The (Second) Apocalypse of James", "Seconde apocalypse de Jacques", U),
@@ -137,7 +138,6 @@ CODICES = [
 # 公開文書のリンク先（status A の行）
 LINKS = {
     ("III", 3): "eugnostos.html?wit=III",
-    ("V", 1):   "eugnostos.html?wit=V",
     ("VI", 5):  "republic.html",
 }
 
@@ -404,7 +404,7 @@ def build_index():
          "III,3 <i>Eugnostos the Blessed</i> / V,1 <i>Eugnostos</i> · two witnesses, three translations",
          "III,3 <i>Eugnoste le Bienheureux</i> / V,1 <i>Eugnoste</i> · deux témoins, trois traductions")}</div>
        <div class="acts"><a class="go" href="eugnostos.html?wit=III">{tri("III,3 を読む →", "Read III,3 →", "Lire III,3 →")}</a>
-        <a href="eugnostos.html?wit=V">{tri("V,1 を読む", "Read V,1", "Lire V,1")}</a>
+        <a href="reader.html?doc=V-1">{tri("V,1 を読む（未注釈）", "Read V,1 (text only)", "Lire V,1 (texte seul)")}</a>
         <a href="eugnostos.html?wit=SYN">{tri("対照表示", "Synopsis", "Synopse")}</a>
         <a href="search.html?doc=eugnostos">{tri("検索", "Search", "Recherche")}</a>
         <a href="search.html?doc=eugnostos&amp;view=stats">{tri("統計", "Statistics", "Statistiques")}</a></div>
@@ -653,7 +653,9 @@ POS_NAMES = {
 }
 REPO_URL = "https://github.com/icecocoasince2003-create/Nag-Hammadi-Library/"
 # 全文テキストの文書のうち、専用のビュワーもあるもの（reader.html がリンクを示す。キーは data/catalog.xml の doc-… から）
-EDITIONS = {"III-3": "eugnostos.html?wit=III", "V-1": "eugnostos.html?wit=V", "VI-5": "republic.html"}
+EDITIONS = {"III-3": "eugnostos.html?wit=III", "VI-5": "republic.html"}
+# 専用のビュワーの〈対照〉で、注釈つきの別の写本と並べて読める文書（V,1 は語ごとの注釈が無く、エウグノストスの〈対照〉で III,3 と並ぶ）
+SYNOPSES = {"V-1": "eugnostos.html?wit=SYN"}
 
 def build_reader():
     """reader.html?doc=II-6 — data/catalog.xml の文書の TEI（source/nhc_fulltext_split/tei/）を表示する。
@@ -727,7 +729,7 @@ h1{font-family:var(--disp); font-weight:600; line-height:1.12; font-size:clamp(1
 <main class="shell" id="shell"><p class="loading">…</p></main>
 <div class="mcard" id="card" role="dialog" aria-live="polite" hidden></div>
 <script>
-const POS=__POS__, REPO=__REPO__, EDITIONS=__EDITIONS__;
+const POS=__POS__, REPO=__REPO__, EDITIONS=__EDITIONS__, SYNOPSES=__SYNOPSES__;
 const H=document.documentElement, T='http://www.tei-c.org/ns/1.0', XNS='http://www.w3.org/XML/1998/namespace';
 const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -856,10 +858,13 @@ function statusHTML(){
       '<b>Word division</b>: as in the source file; prefixes and articles are sometimes separate and sometimes joined to the word.',
       '<b>Découpage</b> : celui du fichier source ; préfixes et articles sont tantôt séparés, tantôt joints au mot.'));
   }
-  const ed=EDITIONS[DOC.key];
+  const ed=EDITIONS[DOC.key], syn=SYNOPSES[DOC.key];
   if(ed && !s.ref) li.push(tri('<b>専用のビュワー</b>：この文書は <a href="'+esc(ed)+'">専用のビュワー</a>でも読めます。',
     '<b>Dedicated reader</b>: this text can also be read in its <a href="'+esc(ed)+'">own reader</a>.',
     '<b>Visionneuse dédiée</b> : ce texte se lit aussi dans sa <a href="'+esc(ed)+'">propre visionneuse</a>.'));
+  if(syn) li.push(tri('<b>III,3 との対照</b>：エウグノストスのビュワーの<a href="'+esc(syn)+'">〈対照〉</a>で、III,3 と並べて読めます（同じ文言の箇所を自動で照合して並べたものです）。',
+    '<b>Synopsis with III,3</b>: the <a href="'+esc(syn)+'">Synopsis</a> of the Eugnostos reader sets this text beside III,3 (aligned automatically by shared wording).',
+    '<b>Synopse avec III,3</b> : la <a href="'+esc(syn)+'">synopse</a> de la visionneuse d’Eugnoste présente ce texte en regard de III,3 (alignement automatique sur la formulation commune).'));
   if(s.rw) li.push(tri('<b>ⲍ・ⲯ</b>：元ファイルで落ちていた字を、語形と文脈から補いました（点線の下線、'+s.rw+' 語）。'+(s.rwB?'このうち確度 B の '+s.rwB+' 語（破線）は、固有名などで校訂本での確認が必要です。':'校訂本とは照合していません。'),
     '<b>ⲍ and ⲯ</b>: letters lost in the source file were restored from the word form and context (dotted underline; '+s.rw+' words).'+(s.rwB?' The '+s.rwB+' of certainty B (dashed), names and the like, still need checking against the editions.':' None has been collated with the editions.'),
     '<b>ⲍ et ⲯ</b> : lettres perdues dans le fichier source, restituées d’après la forme et le contexte (soulignement pointillé ; '+s.rw+' mots).'+(s.rwB?' Les '+s.rwB+' de certitude B (tirets), noms propres notamment, restent à vérifier.':' Aucune n’a été collationnée.')));
@@ -968,7 +973,7 @@ window.addEventListener('hashchange',gotoHash);
 </script>
 """
     body = (body.replace("__POS__", json.dumps(POS_NAMES, ensure_ascii=False)).replace("__REPO__", json.dumps(REPO_URL))
-                .replace("__EDITIONS__", json.dumps(EDITIONS)))
+                .replace("__EDITIONS__", json.dumps(EDITIONS)).replace("__SYNOPSES__", json.dumps(SYNOPSES)))
     return ("<!doctype html><html lang=\"ja\" data-lang=\"ja\" data-i18n=\"full\" data-mode=\"dark\" data-modes=\"light dark\"><head><meta charset=\"utf-8\">"
             "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
             f"{MODE_BOOT}"

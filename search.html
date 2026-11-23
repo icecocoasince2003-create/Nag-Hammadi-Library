@@ -1041,7 +1041,11 @@ const I18N = {
   only:     {ja:"のみ", en:"only", fr:"seul"},
   planned:  {ja:"準備中", en:"in preparation", fr:"en préparation"},
   scope:    {ja:(w,n)=>"対象: "+w+" 証本 · 延べ "+n+" 語", en:(w,n)=>"Scope: "+w+" witness"+(w==="1"?"":"es")+" · "+n+" tokens", fr:(w,n)=>"Périmètre : "+w+" témoin"+(w==="1"?"":"s")+" · "+n+" occurrences"},
-  noText:   {ja:"本文未入力", en:"text not yet entered", fr:"texte non encore saisi"},
+  // 注釈つきの本文の無い証本（エウグノストスの V,1 は III,3 と対応づけた枠だけ）。本文が〈全文テキスト（作業用）〉にあればそれを案内する
+  noText:   {ja:"注釈なし", en:"no annotation", fr:"sans annotation"},
+  noTextRaw:{ja:s=>"注釈なし（本文は〈全文テキスト（作業用）〉の "+s+" で検索できます）",
+             en:s=>"no annotation (its text can be searched as "+s+" under “Full text (working files)”)",
+             fr:s=>"sans annotation (le texte se cherche sous « Texte intégral (fichiers de travail) », "+s+")"},
   noSel:    {ja:"選択中の文書には検索できる本文がありません。左の一覧から文書を選んでください。", en:"The selected texts contain no searchable text yet. Select a text on the left.", fr:"Les textes sélectionnés ne contiennent pas encore de texte. Choisissez un texte à gauche."},
   listAll:  {ja:"レンマ一覧", en:"Lemmas", fr:"Lemmes"},
   listHit:  {ja:"検索結果", en:"Results", fr:"Résultats"},
@@ -1777,6 +1781,12 @@ function rawWarning(){
     (dup.length ? " " + t("rawDupNote", dup.map(w => w.label).join(L3("・", ", ", ", "))) : "");
 }
 
+/* 注釈つきの本文の無い証本の注記。同じ略号の文書が〈全文テキスト（作業用）〉にあれば、そちらで検索できると添える */
+function noTextNote(w){
+  const twin = ST.docs.find(d => d.lazy && d.siglum === w.label);
+  return twin ? t("noTextRaw", w.short) : t("noText");
+}
+
 function renderSide(){
   const L = UL();
   const name = d => d[L] || d.ja;
@@ -1797,7 +1807,7 @@ function renderSide(){
     if(d.wits.length < 2) return '<li>' + head + '</li>';
     return '<li>' + head + '<ul class="sub">' + d.wits.map(w =>
       '<li><label class="opt' + (w.ntok ? "" : " nodata") + '"><input type="checkbox" data-wit="' + esc(w.id) + '"' + (ST.sel.has(w.id) ? " checked" : "") + '>' +
-      '<span class="nm">' + esc(w.label) + (w.ntok ? "" : '<small>' + esc(t("noText")) + '</small>') + '</span>' +
+      '<span class="nm">' + esc(w.label) + (w.ntok ? "" : '<small>' + esc(noTextNote(w)) + '</small>') + '</span>' +
       (w.ntok ? '<button type="button" class="only" data-only-wit="' + esc(w.id) + '">' + esc(t("only")) + '</button>' : "") +
       '<span class="ct">' + fmt(w.ntok) + '</span></label></li>').join("") + '</ul></li>';
   }).join("");
@@ -2081,7 +2091,7 @@ const SECTIONS = [
       (st.per.length > 1 ? '<tfoot>' + row(esc(t("total")), {tokens: st.tokens, lemmas: st.distinctLemmas, hapax: st.hapax, grc: st.grcTokens}, "") + '</tfoot>' : "") +
       '</table></div>' +
       (st.skipped.length ? '<p class="sv-note">' + esc(st.skipped.map(witName).join(L3("、", ", ", ", "))) +
-        L3(" は本文未入力のため、集計に含めていません。", ": text not yet entered, so not counted.", " : texte non encore saisi, non pris en compte.") + '</p>' : "");
+        L3(" は注釈つきの本文がないため、集計に含めていません。", ": no annotated text, so not counted.", " : pas de texte annoté, non pris en compte.") + '</p>' : "");
   }
 },
 {
