@@ -64,7 +64,7 @@ cd Nag-Hammadi-Library
 
 守ってほしいこと:
 
-- **生成ファイルは直接直さない。** `index.html`・`tractate.html`・`reader.html`・`sitemap.xml`・`robots.txt`・`data/doc_dates.json`・`data/pos_labels.json` は
+- **生成ファイルは直接直さない。** `index.html`・`tractate.html`・`reader.html`・`sitemap.xml`・`robots.txt`・`data/doc_dates.json`・`data/pos_labels.json`・`data/fulltext_stats.json` は
   `scripts/build_site.py` の出力です。スクリプトかデータを直してから作り直します（直接直しても、次に作り直したときに消えます）。
 - **`data/` の XML は `scripts/build_tei.py` で上書きしない。** `data/` の XML には、生成したあとに手作業で直した内容が入っていて、
   `source/` の CSV からは作り直せません。`build_tei.py` は、何も付けなければ `data/` に書き込まず、違いを表示するだけです。
@@ -141,7 +141,7 @@ git push -u origin fix/lexicon-sense
 
 **競合（conflict）が起きたら。** `main` を取り込んで（`git pull origin main` など）競合したときは、次のように解きます。
 
-- **生成ファイル**（`index.html`・`tractate.html`・`reader.html`・`sitemap.xml`・`robots.txt`・`data/doc_dates.json`・`data/pos_labels.json`）: 手で解かず、どちらかを採ってから
+- **生成ファイル**（`index.html`・`tractate.html`・`reader.html`・`sitemap.xml`・`robots.txt`・`data/doc_dates.json`・`data/pos_labels.json`・`data/fulltext_stats.json`）: 手で解かず、どちらかを採ってから
   `python3 scripts/build_site.py` で作り直します（もとのスクリプトやデータの競合を先に解く）。
 - **`data/` の本文の XML**: 手で解きます。`build_tei.py` で作り直してはいけません（3.）。解いたら `python3 scripts/check_tei.py`。
 - **辞書**: `source/lexicon.csv` の競合を解いてから、`main` の `data/lexicon.xml` に対して `python3 scripts/sync_lexicon.py --write` を

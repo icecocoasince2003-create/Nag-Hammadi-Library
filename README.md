@@ -26,7 +26,7 @@
 | `republic.html` | 『国家』ビュワー | 手作業 |
 | `reader.html` | 本文ビュワー（暫定版・未注釈）。`?doc=II-6` のように文書を指定し、NHC 全文テキストの TEI（`source/nhc_fulltext_split/tei/`）を表示する。冒頭に、その文書で確かめていないことを示す。HOME の「暫定」「未注釈」の行と検索の用例がここへリンク | `python3 scripts/build_site.py` で生成 |
 | `lexicon.html` | コプト語辞書（日・英・仏）。`data/lexicon.xml` を読み、見出し（上線などと大文字・小文字を無視）・日英仏の語義・品詞で引く（部分一致・前方一致）。字母の索引、品詞・借用語・「語義のある項目だけ」（既定でオン）で絞り込む。件数は lexicon.xml から数える。見出しに欠損の記号を含む項目は一覧から外して下にまとめる。固定リンクは `lexicon.html#lex-0123`（項目の `xml:id`）。各項目から用例の検索（`search.html?q=…&m=ex&f=l&scope=all`）へ。上部に全文書の検索窓。品詞の名前は `data/pos_labels.json` | 手作業 |
-| `search.html` | コーパス検索・統計。見出し下のタブで〈検索〉と〈統計〉を切替（`?view=stats` で統計を直接開く）。タブの右の〈チュートリアル〉で、使い方の説明を〈検索〉の右のパネルに開く（× で閉じる。`?view=tutorial` で開いた状態にできる。説明文は `#viewGuide` に三言語の HTML で書く）。初めて開いたときは操作案内（JS の `TOUR`）を出す。左の〈文書〉〈品詞〉の絞り込みは〈検索〉〈統計〉に共通。〈全文テキスト〉で NHC 全文（56文書）を選んで対象に加えられる。`?scope=all` で開くと、注釈つきの版と全文テキストのすべて（注釈つきの版と重なる III,3・VI,5 を除く 54 文書）を選んだ状態で、読み込みの進み具合を出しながら開く（HOME と辞書のページの検索窓が使う）。統計のセクションは JS 内の `SECTIONS` に追加 | 手作業 |
+| `search.html` | コーパス検索・統計。見出し下のタブで〈検索〉と〈統計〉を切替（`?view=stats` で統計を直接開く）。タブの右の〈チュートリアル〉で、使い方の説明を〈検索〉の右のパネルに開く（× で閉じる。`?view=tutorial` で開いた状態にできる。説明文は `#viewGuide` に三言語の HTML で書く）。初めて開いたときは操作案内（JS の `TOUR`）を出す。左の〈文書〉〈品詞〉の絞り込みは〈検索〉〈統計〉に共通。〈全文テキスト〉で NHC 全文（56文書）を選んで対象に加えられる。`?scope=all` で開くと、注釈つきの版と全文テキストのすべて（注釈つきの版と重なる III,3・VI,5 を除く 54 文書）を選んだ状態で、読み込みの進み具合を出しながら開く（HOME と辞書のページの検索窓が使う）。統計のセクションは JS 内の `SECTIONS` に追加。〈統計〉の最後の「写本全体の比較」は、左の選択に関係なく全文テキストの全文書（と参考に人の手で注釈した版）を、指標を選んだ横棒グラフで比べる（写本の順／値の大きい順。数は `data/fulltext_stats.json`。暫定版の値であることを必ず出す） | 手作業 |
 | `stats.html` | 旧コーパス統計。`search.html?view=stats` への転送のみ（`?doc=…` は引き継ぐ） | 手作業 |
 | `profile.html` | プロフィール（ログイン中の利用者用）。表示名の変更、自分の投稿の確認と修正、ブックマーク、運営へのバグの報告・応援メッセージ | 手作業 |
 | `admin.html` | 投稿（コメント・注釈・誤りの指摘）の承認、公開済みの投稿への修正の申請の承認、運営へのメッセージの確認（運営用） | 手作業 |
@@ -116,6 +116,7 @@ nag_hammadi_library/
 │   ├─ release.json       ← 版の情報(版番号・リリースの日・DOI・公開 URL)。下の「版とリリースの作り方」
 │   ├─ doc_dates.json     ← 文書ごとの最終更新日(scripts/build_site.py が git の履歴から書き出す)
 │   ├─ pos_labels.json    ← 品詞タグの三言語の名前と本文での出現数(scripts/build_site.py が書き出す。辞書のページなどが読む)
+│   ├─ fulltext_stats.json ← 全文テキストの文書ごとの数(scripts/build_fulltext_stats.py。build_site.py を実行すると作り直す)
 │   ├─ facsimile_links.json ← 写本ごとの写真(Claremont, Nag Hammadi Archive)へのリンク
 │   ├─ news.json・links.json  ← HOME の NEWS と関連サイト
 │   └─ republic_*.xml
@@ -128,6 +129,7 @@ nag_hammadi_library/
     ├─ build_tei.py        source/ の CSV から XML を試しに生成し、data/ と比べる(既定では data/ に書き込まない)
     ├─ sync_lexicon.py     source/lexicon.csv の変更を data/lexicon.xml に反映する(xml:id は変えない)
     ├─ build_site.py       index.html / tractate.html / reader.html / sitemap.xml / robots.txt / data/doc_dates.json / data/pos_labels.json を生成
+    ├─ build_fulltext_stats.py  data/fulltext_stats.json(全文テキストの文書ごとの数)を生成。build_site.py からも呼ばれる
     ├─ make_og_image.py    共有用の画像 image/og-image.png を作る(rsvg-convert が要る)
     ├─ check_tei.py        TEI の点検(ポインタの切れ・以前の書き方・見出しとレンマへのコプト文字以外の文字の混入など)。--schema でスキーマ検証も
     ├─ check_style.py      表記ゆれの点検(規則は style_rules.json)
@@ -179,6 +181,7 @@ nag_hammadi_library/
 | `build_parallels.py` | 並行箇所(`data/parallels.xml`)を文言の自動照合で作る。何も付けなければ要約の表示だけで、`--write` で書き込む。 |
 | `sync_lexicon.py` | `lexicon.csv` の変更を `data/lexicon.xml` に反映する。`xml:id` は変えない。何も付けなければ変更点の表示だけで、`--write` で書き込む。 |
 | `build_site.py` | `index.html`(目次)・`tractate.html`(準備中)・`reader.html`(本文ビュワー・暫定版)・`sitemap.xml`・`robots.txt`・`data/doc_dates.json`・`data/pos_labels.json`(品詞タグの三言語の名前と出現数。名前は `POS_NAMES` が正) を生成。`<head>` の OGP(リンクのプレビュー)のタグもここで書く(`og_tags`)。 |
+| `build_fulltext_stats.py` | `data/fulltext_stats.json` を生成（`build_site.py` を実行すると一緒に作り直す。`--check` で最新かを調べるだけ）。`data/catalog.xml` の全文テキスト（暫定版・未注釈）の文書ごとに、本文の証本の中の `<w>`・`<phr>`（と、その中の `<w>`）・`<s>`・`<gap>`、`xml:lang="grc"` の `<w>`、品詞ごとの `<w>`、`@cert="low"`・品詞 `X` の `<w>` を数え、方言（`<textLang>`）と状態を添える。参考に、人の手で注釈した版（エウグノストス III,3・『国家』）も同じ方法で数える。割合は検索ページが計算する。 |
 | `make_og_image.py` | リンクを共有したときのプレビュー画像 `image/og-image.png`(1200×630)を、アイコンとゲンゲンの SVG から作る。 |
 
 ## データの編集

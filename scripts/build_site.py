@@ -11,7 +11,8 @@
       python3 scripts/build_site.py
       python3 scripts/build_site.py --check   生成ファイルが最新かを調べるだけ（書き込まない。CI で使う）
 
-  出力される index.html・tractate.html・reader.html・sitemap.xml・robots.txt・data/doc_dates.json・data/pos_labels.json は自動生成なので
+  出力される index.html・tractate.html・reader.html・sitemap.xml・robots.txt・data/doc_dates.json・data/pos_labels.json・
+  data/fulltext_stats.json（scripts/build_fulltext_stats.py の数え方）は自動生成なので
   直接編集しないでください。--check は、いまのスクリプトとデータから作り直したものとファイルを比べ、違えば終了コード 1 で
   ファイル名を表示します（index.html のフッターの「生成」の日付は、作り直すたびに変わるので比べません）。目次の内容を変えたいときは、下の CODICES テーブルを編集して
   再実行します。
@@ -1391,11 +1392,15 @@ def _doc_files(text):
 
 # --- write ------------------------------------------------------------------
 _BANNER = "<!-- 自動生成ファイル: scripts/build_site.py が出力します。直接編集せず、スクリプトの CODICES を編集して再実行してください。 -->\n"
+# 全文テキストの文書ごとの数（search.html の〈統計〉の「写本全体の比較」が読む）。数え方は scripts/build_fulltext_stats.py
+sys.path.insert(0, _HERE)
+import build_fulltext_stats
 _sitemap, _n_urls = build_sitemap()
 OUTPUTS = {"index.html": _BANNER + build_index(), "tractate.html": _BANNER + build_tractate(),
            "reader.html": _BANNER + build_reader(), "sitemap.xml": _sitemap, "robots.txt": build_robots(),
            os.path.join("data", "doc_dates.json"): build_doc_dates(),
-           os.path.join("data", "pos_labels.json"): build_pos_labels()}
+           os.path.join("data", "pos_labels.json"): build_pos_labels(),
+           build_fulltext_stats.OUT: build_fulltext_stats.build()}
 # 生成の日付（index.html のフッターの「生成 …」）は作り直すたびに変わるので、--check では比べない
 _BUILT = re.compile(r'(<span class="l-fr">généré</span>) \d{4}-\d{2}-\d{2}')
 
@@ -1424,6 +1429,6 @@ for name, text in OUTPUTS.items():
     with open(os.path.join(OUTDIR, name), "w", encoding="utf-8") as f:
         f.write(text)
 print("wrote index.html (landing), tractate.html (placeholder) and reader.html (draft full texts)")
-print("wrote sitemap.xml (%d URLs), robots.txt, data/doc_dates.json and data/pos_labels.json" % _n_urls)
+print("wrote sitemap.xml (%d URLs), robots.txt, data/doc_dates.json, data/pos_labels.json and data/fulltext_stats.json" % _n_urls)
 print("codices:", len(CODICES), "| tractates:", TOTAL, "| available:", AVAIL, "| drafts:", DRAFT, "| text only:", PLAIN, "| soon:", SOON,
       "| listed but not counted:", ", ".join("%s,%s" % k for k in sorted(UNCOUNTED)))
