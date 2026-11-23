@@ -13,5 +13,8 @@ window.NHC_COMMUNITY_CONFIG = {
   supabaseUrl: "https://ngzzklrjbkzsnegozpps.supabase.co",
   supabaseAnonKey: "sb_publishable__9_fU-JrN7-IVd8dBsPQ-A_E5bIriZR",
   providers: { google: true, email: true },
-  supabaseJs: "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+  // Supabase のライブラリ（supabase-js）。正確な版に固定し、ファイルが変わっていないことを確かめるハッシュ（SRI）を添える。
+  // 版を上げるときは URL とハッシュを一緒に変える（README「外部のスクリプトの版とハッシュ」）
+  supabaseJs: "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2/dist/umd/supabase.js",
+  supabaseJsIntegrity: "sha384-A97u3Qnt9GZHURO9YJZRe7VQgGUeFzcv6I1oIGnUTxQrCxnpQMwR0/G8F2zt9abZ"
 };

@@ -89,9 +89,13 @@ window.NHC_COMMUNITY_CONFIG = {
   supabaseUrl: "https://ngzzklrjbkzsnegozpps.supabase.co",
   supabaseAnonKey: "sb_publishable_xxxx",   // 公開してよい鍵（Publishable key / anon key）。Secret key は書かない
   providers: { google: true, email: true },
-  supabaseJs: "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+  supabaseJs: "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2/dist/umd/supabase.js",
+  supabaseJsIntegrity: "sha384-A97u3Qnt9GZHURO9YJZRe7VQgGUeFzcv6I1oIGnUTxQrCxnpQMwR0/G8F2zt9abZ"
 };
 ```
+
+`supabaseJs` と `supabaseJsIntegrity` は、Supabase のライブラリの版と、そのファイルのハッシュ（SRI）です。
+版を上げるときは両方を一緒に変えます（README の「外部のスクリプトの版とハッシュ」）。
 
 コミットして公開すると、上部ナビに〈ログイン〉、ビュワーに投稿ボタンが表示されます。
 

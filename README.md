@@ -411,6 +411,22 @@ index.html(目次:全52文書)
 読み込みます。オフライン公開する場合はこれらをローカルにセルフホストしてください
 (Coptic字形が無い環境では汎用セリフにフォールバックします)。
 
+### 外部のスクリプトの版とハッシュ
+
+CDN から読み込むスクリプトは、正確な版に固定し、ファイルのハッシュ（SRI、`integrity`）と `crossorigin="anonymous"` を付けて読み込みます。
+CDN のファイルが差し替えられても、ハッシュが合わなければブラウザーは実行しません（2026-11-23 に固定）。
+
+| スクリプト | 版・URL | 読み込む場所 | ハッシュを書く場所 |
+|---|---|---|---|
+| supabase-js（ログイン・投稿） | 2.119.2（`https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2/dist/umd/supabase.js`。それまでの `@2` がこの日に指していた版） | `assets/community.js`（ログインの機能を使うページ） | `assets/community-config.js` の `supabaseJsIntegrity`（`community.js` の既定値も同じ） |
+| OpenSeadragon（写本の写真のパネル） | 4.1.1（cdnjs） | `eugnostos.html`・`republic.html`（パネルを初めて開いたとき） | 各ページの `loadOSD()` |
+
+版を上げるときは、URL とハッシュを一緒に変えます。ハッシュは、その版のファイルを取得して
+`openssl dgst -sha384 -binary ファイル | openssl base64 -A` で求め、先頭に `sha384-` を付けます（jsDelivr の
+`https://data.jsdelivr.com/v1/packages/npm/<パッケージ>@<版>?structure=flat` や cdnjs の API が示すハッシュと照らし合わせると確かです）。
+jsDelivr は、版だけの URL（`…@2.119.2`）では自動で縮小したファイルを返すので、パッケージに入っているファイルの名前まで書きます。
+Google アナリティクス（`gtag.js`）と Google Fonts の CSS は、配信元が中身を随時変えるため、ハッシュを付けられません。
+
 ## 版とリリースの作り方
 
 版の情報は `data/release.json` にまとめています（版番号 `version`、リリースの日 `date`、その版の DOI `doi`、すべての版をまとめる DOI

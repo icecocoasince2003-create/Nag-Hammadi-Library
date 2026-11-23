@@ -1236,6 +1236,8 @@ load();
     if(!osdLoading) osdLoading = new Promise(function(ok, ng){
       var s = document.createElement("script");
       s.src = OSD + "openseadragon.min.js";
+      // 版を固定した URL に、ファイルのハッシュ（SRI）を添える。版を変えるときは OSD とハッシュを一緒に変える（README「外部のスクリプトの版とハッシュ」）
+      s.integrity = "sha384-EbkVpG0IkiFUuXVRLTsKxufXh9tmEiR/zRhLk47HnFM7MsdVF7Xa6vXzr8RsTs2C"; s.crossOrigin = "anonymous";
       s.onload = ok;
       s.onerror = function(){ osdLoading = null; ng(); };
       document.head.appendChild(s);
