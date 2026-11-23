@@ -55,7 +55,7 @@
         </relatedItem>
         <relatedItem type="corpus">
           <bibl>
-            <ref target="#doc-thomas"/>
+            <ref target="#doc-II-2"/>
             <note xml:lang="ja">次の比較対象（同一パイプラインでの計測を予定）</note>
             <note xml:lang="en">Next comparandum (same measurement pipeline planned)</note>
           </bibl>
@@ -141,20 +141,6 @@
             <ref target="https://coptic-dictionary.org/"/>
           </bibl>
         </relatedItem>
-      </bibl>
-
-      <!-- ═══════════ トマス福音書（準備中） ═══════════ -->
-      <bibl type="document" subtype="planned" xml:id="doc-thomas">
-        <title xml:lang="cop">ⲡⲉⲩⲁⲅⲅⲉⲗⲓⲟⲛ ⲡⲕⲁⲧⲁ ⲑⲱⲙⲁⲥ</title>
-        <title xml:lang="ja">トマス福音書（準備中）</title>
-        <title xml:lang="en">Gospel of Thomas (in preparation)</title>
-        <idno type="siglum">NHC II,2</idno>
-        <note type="genre" xml:lang="ja">語録集。ギリシア語断片（P.Oxy. 1, 654, 655）との比較対象。</note>
-        <note type="genre" xml:lang="en">Sayings collection; comparandum with the Greek fragments (P.Oxy. 1, 654, 655).</note>
-        <note type="lang">cop (Sahidic) ‖ grc (fragments)</note>
-        <note type="desc" xml:lang="ja">翻訳普遍性の同一パイプラインを適用する次の対象。公開時期未定。</note>
-        <note type="desc" xml:lang="en">Next target for the same translation-universals pipeline; publication date TBD.</note>
-        <relatedItem type="corpus" target="#doc-republic"/>
       </bibl>
 
       <!-- BEGIN nhc_fulltext_split — 自動生成: scripts/sync_nhc_catalog.py が書き出す範囲（END までは手で編集しない）

@@ -438,7 +438,7 @@ def build_index():
          "A draft with bound groups, parts of speech, lemmata and glosses assigned automatically. Nothing has been checked by hand and the text has not been collated with the editions; each text lists what is unchecked at the top.",
          "Version provisoire : groupes, parties du discours, lemmes et gloses attribués automatiquement. Rien n’a été vérifié et le texte n’a pas été collationné avec les éditions ; chaque texte indique en tête ce qui reste à vérifier.")}</div>
        <div class="acts"><a class="go" href="#corpus">{tri("文書一覧から選ぶ ↓", "Choose from the list ↓", "Choisir dans la liste ↓")}</a>
-        <a href="reader.html?doc=II-2">{tri("例：トマスによる福音書", "e.g. the Gospel of Thomas", "p. ex. l’Évangile selon Thomas")}</a>
+        <a href="reader.html?doc=III-4">{tri("例：イエス・キリストの知恵", "e.g. the Sophia of Jesus Christ", "p. ex. la Sagesse de Jésus-Christ")}</a>
         <a href="search.html">{tri("検索（〈全文テキスト〉）", "Search (“Full text”)", "Recherche (« Texte intégral »)")}</a></div>
      </div>
    </div>

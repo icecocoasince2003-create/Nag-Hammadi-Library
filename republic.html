@@ -860,7 +860,7 @@ function catTitle(b, lang){
   Array.from(b.children).filter(t=>t.localName==="title").forEach(t=>{ if(t.getAttribute("type")) return; const l=getLang(t);
     if(l==="cop") out.cop=t.textContent.trim();
     else if(l==="en") out.en=t.textContent.trim();
-    else out.ja=t.textContent.trim(); });
+    else if(l==="ja"||!l) out.ja=t.textContent.trim(); });   // フランス語などの題名（xml:lang="fr"）で日本語の題名を上書きしない
   const main = lang==="en" ? (out.en||out.ja) : (out.ja||out.en);
   return {cop:out.cop, main};
 }
