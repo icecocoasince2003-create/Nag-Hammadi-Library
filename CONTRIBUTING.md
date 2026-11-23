@@ -9,7 +9,8 @@
 > Before opening a pull request, run `python3 scripts/check_tei.py`, `node --test tests/corpus-query.test.cjs`,
 > `python3 scripts/check_style.py` and `python3 scripts/build_site.py --check`; GitHub runs the same checks.
 > Translations, glosses and notes are the project's own work (CC BY 4.0): do not copy published translations or
-> commentaries. Contact: see the project page (`project.html`, “Join the team”).
+> commentaries. If you use generative AI, say so: in the pull request description, or in the commit message
+> when you commit without a pull request. Contact: see the project page (`project.html`, “Join the team”).
 
 ## 1. はじめに
 
@@ -166,3 +167,12 @@ git push -u origin fix/lexicon-sense
 - 点検するのは HTML・JS・Python・JSON のファイルです（`.md` と XML は見ません）。
 - 規則を足したら `python3 scripts/check_style.py` を実行し、見つかった箇所を直してから一緒にコミットしてください
   （直さずに規則だけを入れると、自動チェックが失敗します）。
+
+## 9. 生成 AI を使うとき
+
+生成 AI（文章・訳・語釈・コードなどを作る AI のツール）を使ったときは、そのことを記載してください。
+
+- **どこに書くか:** Pull Request の説明に書きます。Pull Request を通さずにコミットするときは、コミットのメッセージに書きます。
+- **何を書くか:** 使ったツールと、使ったところ（たとえば、訳の下書き、語釈の候補、スクリプトの修正、データの点検）。
+- コミットのメッセージの末尾に `Co-Authored-By: Claude …` のような行（Claude Code などのツールが付けるもの）があれば、
+  それもこの記載にあたります。このリポジトリのコミットにも、この行の付いたものがあります。
