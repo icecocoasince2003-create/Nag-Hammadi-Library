@@ -32,7 +32,7 @@
 | `stats.html` | 旧コーパス統計。`search.html?view=stats` への転送のみ（`?doc=…` は引き継ぐ） | 手作業 |
 | `profile.html` | プロフィール（ログイン中の利用者用）。表示名の変更、自分の投稿の確認と修正、ブックマーク、運営へのバグの報告・応援メッセージ | 手作業 |
 | `admin.html` | 投稿（コメント・注釈・誤りの指摘）の承認、公開済みの投稿への修正の申請の承認、運営へのメッセージの確認（運営用） | 手作業 |
-| `review.html` | 確認作業の画面（日・英）。確認待ちの作業（解題・精度の抜き取り・語録の区切り・長いセグメントの切れ目）を 1 件ずつ判断し、結果をファイルとして書き出す。下の「確認作業の画面」。noindex、ナビ・sitemap に載せず、robots.txt で Disallow | 手作業。キューは `data/review_queues.json` |
+| `review.html` | 確認作業の画面（日・英）。確認待ちの作業（解題・精度の抜き取り・語録の区切り・長いセグメントの切れ目・品詞をそろえる案）を 1 件ずつ判断し、結果をファイルとして書き出す。下の「確認作業の画面」。noindex、ナビ・sitemap に載せず、robots.txt で Disallow | 手作業。キューは `data/review_queues.json` |
 
 共通部品: `assets/cosmos.css`・`assets/cosmos.js`（配色と背景。ダーク＝宇宙テーマが既定、ライトモードの配色もここ）、
 `assets/site.css`・`assets/site.js`（上部ナビ・言語切替・表示モード切替・XML ダウンロードメニュー・ワイド表示）、
@@ -136,7 +136,9 @@ nag_hammadi_library/
     ├─ build_site.py       index.html / tractate.html / reader.html / sitemap.xml / robots.txt / data/doc_dates.json / data/pos_labels.json を生成
     ├─ build_fulltext_stats.py  data/fulltext_stats.json(全文テキストの文書ごとの数)を生成。build_site.py からも呼ばれる
     ├─ insert_breaks.py    写本の頁(<pb>)・行(<lb>)の区切りを TSV から TEI に入れる(既定は表示だけ、--write で書き込む)
-    ├─ split_segments.py   セグメント(<s>)を TSV で指定した位置で分ける(案。まだ実データには使わない)
+    ├─ split_segments.py   セグメント(<s>)を TSV で指定した位置で分ける(提案の表は承認した行だけ。まだ実データには使わない)
+    ├─ merge_review.py     確認作業の画面(review.html)で何人かが書き出したファイルを 1 つにまとめる
+    ├─ apply_pos_decisions.py  品詞をそろえる判断表(proposals/pos_harmonization.tsv)のうち、承認した行だけを TEI に当てはめる
     ├─ make_og_image.py    共有用の画像 image/og-image.png を作る(rsvg-convert が要る)
     ├─ check_tei.py        TEI の点検(ポインタの切れ・以前の書き方・見出しとレンマへのコプト文字以外の文字の混入・語釈に使わない語など)。--schema でスキーマ検証も
     ├─ gloss_rules.json    語釈と辞書の語義に使わない語の一覧(check_tei.py が読む。CONTRIBUTING.md の 10.)
@@ -388,6 +390,7 @@ python3 scripts/insert_breaks.py tests/fixtures/reader_breaks_draft.tsv --file t
 | ② 精度の抜き取り | `source/nhc_fulltext_split/evaluation/review_sample.tsv` | 対象の形態素の正しい品詞とレンマ。**自動の答え（品詞・レンマ・語義・確度）は、両方を入れるまで隠す**（先に見ると判断が引きずられ、精度が高めに出るため） | `正しい品詞`・`正しいレンマ`・`メモ`、`確認者`（末尾に足す） |
 | ③ トマスの語録の区切り | `source/nhc_fulltext_split/proposals/thomas_sayings.tsv` | 承認・却下・保留。位置が違えば、本文の正しい語群を押す（修正して承認） | `状態`、`修正した位置`・`確認者`（末尾に足す） |
 | ④ 長いセグメントの切れ目 | `source/nhc_fulltext_split/proposals/long_segment_breaks.tsv` | 同上（承認 = ここで分ける） | 同上 |
+| ⑤ 品詞をそろえる | `source/nhc_fulltext_split/proposals/pos_harmonization.tsv` | 人の手の 2 版の品詞の付け方をそろえる案と、一覧に無いタグの直し方の案を、承認・却下 | `状態`・`当てはめる変更`・`暫定版にも当てはめるか`、`確認者`（末尾に足す） |
 
 **使い方。** 確認者の名前かイニシャルを入れ、キューを選んで 1 件ずつ判断します（名前を入れないと書き込めません。判断のたびに
 その行に記録します）。TSV のキューでは、その文書の TEI から該当のセグメントを出し、対象の語（②）や分け目の位置（③④）に印を
@@ -417,6 +420,7 @@ BOM の有無を、JSON はキーの順と字下げ 2 を元のまま。足す�
 5. ③④ は、`python3 scripts/split_segments.py source/nhc_fulltext_split/proposals/long_segment_breaks.tsv`（③ は `--doc II-2` を付ける）で、
    **状態が「承認」か「修正して承認」の行だけ**を当てはめます（「修正した位置」があればそちらを使う。③ では種別が「語録の始まり」の行だけを
    分け目にする）。表示だけで確かめてから `--write` を付けます。ほかの状態の行は当てはめず、件数を表示します。
+6. ⑤ は、`python3 scripts/apply_pos_decisions.py`（表示だけ）→ `--write` で、承認した行の品詞だけを変えます（`source/nhc_fulltext_split/proposals/README_ja.md` の §6）。
 
 **キューを足す。** `data/review_queues.json` の `queues` に 1 項目足します（書き方はファイルの `_comment`）。表の形に合わせて
 `kind`（`judge` = 列に答えを書く、`status` = 承認・却下などを決める、`intros` = 解題）、行を見分ける `key`、文脈のための `doc`・`seg`・`w`・
