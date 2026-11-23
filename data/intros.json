@@ -1,0 +1,2484 @@
+{
+  "_comment": "文書ごとの解題（短い紹介）の下書き。キーは data/catalog.xml の文書 id から「doc-」を除いたもの。本文ビュワー（assets/viewer-tools.js）は reviewed が true の項目だけを表示する。生田目が内容を確認したものだけを true にすること。解題は文書の形式と内容を短く紹介するもので、本文の解釈ではない（2026-11-18 に外した神学的解釈の注とは別のもの）。currents は gnosticism.html 第III節の表の名称、references は同第VII節「推薦参考文献」（日本語の一覧）の書誌をタグを除いてそのまま写したもの（nhs11 と bcnh11 は、論文を収める巻の部分だけを同じ書誌から抜き出した）。refs の vol は第VII節に巻が書かれているときだけ入れ、確かめられないものは空欄にする。同じ作品の別の写し（III,3・V,1・VI,5）は、see に参照先のキー（eugnostos・republic）を書き、その項目を使う。項目を足すときは texts に同じ形で加え、reviewed は false のまま、確かでない点や空欄の理由を todo に書く。",
+  "currents": {
+    "sethian": {
+      "ja": "セツ派",
+      "en": "Sethian",
+      "fr": "Séthien"
+    },
+    "valentinian": {
+      "ja": "ヴァレンティノス派",
+      "en": "Valentinian",
+      "fr": "Valentinien"
+    },
+    "thomasine": {
+      "ja": "トマス系の伝承",
+      "en": "Thomasine",
+      "fr": "Tradition thomasienne"
+    },
+    "hermetic": {
+      "ja": "ヘルメス文書",
+      "en": "Hermetic",
+      "fr": "Hermétisme"
+    }
+  },
+  "references": {
+    "iwanami_nh": "荒井献・大貫隆・小林稔・筒井賢治 訳『ナグ・ハマディ文書』全4巻（I 救済神話／II 福音書／III 説教・書簡／IV 黙示録）、岩波書店、1997–98年。",
+    "arai_thomas": "荒井献『トマスによる福音書』講談社学術文庫、1994年。",
+    "cgl2000": "J. M. Robinson (gen. ed.), The Coptic Gnostic Library: A Complete Edition of the Nag Hammadi Codices, 5 vols., Brill, 2000.",
+    "meyer2007": "M. Meyer (ed.), The Nag Hammadi Scriptures: The International Edition, HarperOne, 2007.",
+    "pleiade2007": "J.-P. Mahé et P.-H. Poirier (dir.), Écrits gnostiques : La bibliothèque de Nag Hammadi, Gallimard, « Bibliothèque de la Pléiade », 2007.",
+    "nhs27": "D. M. Parrott (ed.), Nag Hammadi Codices III,3–4 and V,1 with Papyrus Berolinensis 8502,3 and Oxyrhynchus Papyrus 1081: Eugnostos and the Sophia of Jesus Christ (Nag Hammadi Studies 27), Brill, 1991.",
+    "pasquier": "A. Pasquier, Eugnoste (NH III,3 et V,1) : Lettre sur le Dieu transcendant (BCNH, « Textes » 26), 2000；同 Commentaire (BCNH, « Textes » 33), 2010.",
+    "brashler1979": "J. Brashler, “Plato, Republic 588b–589b”, in D. M. Parrott (ed.), Nag Hammadi Codices V,2–5 and VI with Papyrus Berolinensis 8502,1 and 4 (Nag Hammadi Studies 11), Brill, 1979.",
+    "nhs11": "D. M. Parrott (ed.), Nag Hammadi Codices V,2–5 and VI with Papyrus Berolinensis 8502,1 and 4 (Nag Hammadi Studies 11), Brill, 1979.",
+    "painchaud1983": "L. Painchaud, Fragment de la République de Platon (NH VI,5), in P.-H. Poirier, Les Sentences de Sextus (NH XII,1) ; Fragments (NH XII,3) (BCNH, « Textes » 11), Presses de l’Université Laval, 1983.",
+    "bcnh11": "P.-H. Poirier, Les Sentences de Sextus (NH XII,1) ; Fragments (NH XII,3) (BCNH, « Textes » 11), Presses de l’Université Laval, 1983."
+  },
+  "texts": {
+    "republic": {
+      "reviewed": false,
+      "summary": {
+        "ja": "プラトン『国家』第9巻 588b–589b の一節をコプト語に訳したもの。魂を、多くの頭をもつ獣と獅子と人間とを一つに合わせた像にたとえる箇所にあたる。本サイトの版では、ギリシア語原文（OCT/Burnet）と文ごとに対応させて示している。",
+        "en": "A Coptic translation of a passage from Plato’s Republic, book IX, 588b–589b. It is the passage that likens the soul to a single image combining a many-headed beast, a lion and a human being. The edition on this site aligns it sentence by sentence with the Greek text (OCT/Burnet).",
+        "fr": "Traduction copte d’un passage de la République de Platon, livre IX, 588b–589b. Il s’agit du passage qui compare l’âme à une image unique réunissant une bête à plusieurs têtes, un lion et un homme. L’édition de ce site le met en regard, phrase par phrase, du texte grec (OCT/Burnet)."
+      },
+      "pages": {
+        "ja": "NHC VI, 48,16–51,23",
+        "en": "NHC VI, 48,16–51,23",
+        "fr": "NHC VI, p. 48,16–51,23"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本内にほかの写しはない。ギリシア語の原文は、プラトン『国家』の本文として伝わる。",
+        "en": "There is no other copy in the Nag Hammadi Codices. The Greek original survives as part of the text of Plato’s Republic.",
+        "fr": "Il n’y a pas d’autre copie dans les codices de Nag Hammadi. L’original grec est conservé dans le texte de la République de Platon."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        },
+        {
+          "key": "brashler1979"
+        },
+        {
+          "key": "painchaud1983"
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "要約: 「魂の像」の記述はプラトンの当該箇所の内容による。コプト語訳がギリシア語と異なる点には触れていない",
+        "頁: data/republic_tei.xml の citedRange による（catalog.xml の idno は pp. 48–51）",
+        "潮流: gnosticism.html 第III節の表に名がないので空欄",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』に収録されているか要確認（第VII節からは確かめられないので載せていない）"
+      ]
+    },
+    "eugnostos": {
+      "reviewed": false,
+      "summary": {
+        "ja": "エウグノストスが「自分に属する者たち」に宛てた書簡の形をとる。世界の秩序についての三つの説（ひとりでに動く、摂理による、運命による）をいずれも退けたのち、言い表すことのできない「生まれざる父」を否定の言葉を重ねて描く。続いて、そこから「不死の人間」「人の子」「救い主」などの存在が現れ、それぞれに属するアイオーンや天の世界が生じる次第を順に述べる。",
+        "en": "Written as a letter from Eugnostos “to those who are his”. After rejecting three views of how the world is ordered (that it moves by itself, that it is ruled by providence, or by fate), it portrays the ineffable “unbegotten Father” through a series of negations. It then sets out in order how beings such as the “Immortal Man”, the “Son of Man” and the “Saviour” come forth, and how the aeons and heavenly realms belonging to each come into being.",
+        "fr": "Le texte prend la forme d’une lettre d’Eugnoste « à ceux qui sont à lui ». Après avoir écarté trois opinions sur l’ordre du monde (il se meut de lui-même, il est régi par la providence, ou par le destin), il décrit par une suite de négations le « Père inengendré », ineffable. Il expose ensuite dans l’ordre comment apparaissent des êtres tels que l’« Homme immortel », le « Fils de l’Homme » et le « Sauveur », et comment naissent les éons et les régions célestes propres à chacun."
+      },
+      "pages": {
+        "ja": "NHC III, 70,1–90,11 と NHC V, 1,1–17,17（V は欠損が多い）",
+        "en": "NHC III, 70,1–90,11 and NHC V, 1,1–17,17 (V largely lacunose)",
+        "fr": "NHC III, p. 70,1–90,11 et NHC V, p. 1,1–17,17 (V très lacunaire)"
+      },
+      "copies": {
+        "ja": "NHC III,3 と V,1 の二つの写しがあり、本サイトの版は両方を収める。写本外の写しは知られていない。III,4『イエス・キリストの知恵』（ベルリン写本 BG 8502,3 にも写しがある）は、文言の多くが重なる別の作品である。",
+        "en": "Two copies survive, NHC III,3 and V,1; the edition on this site includes both. No copy is known outside the Nag Hammadi Codices. The Sophia of Jesus Christ (III,4, also copied in the Berlin Codex BG 8502,3) is a separate work that shares much of its wording.",
+        "fr": "Deux copies sont conservées, NHC III,3 et V,1 ; l’édition de ce site comprend les deux. Aucune copie n’est connue en dehors des codices de Nag Hammadi. La Sagesse de Jésus-Christ (III,4, copiée aussi dans le Codex de Berlin BG 8502,3) est une œuvre distincte qui en partage une grande partie de la formulation."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        },
+        {
+          "key": "nhs27"
+        },
+        {
+          "key": "pasquier"
+        },
+        {
+          "key": "iwanami_nh",
+          "vol": "III"
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "頁: data/eugnostos_tei.xml の locus（III 70,1–90,11、V 1,1–17,17）に従った。全文テキストの TEI ヘッダ（03-3: 70,1–90,13、05-1: 1,1–17,18）とは末尾が食い違う（差の理由は未確認）。どちらに揃えるか要確認",
+        "要約: III,3 と V,1 の違いには触れていない",
+        "潮流: gnosticism.html 第III節の表に名がないので空欄",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）"
+      ]
+    },
+    "I-2": {
+      "reviewed": false,
+      "summary": {
+        "ja": "ヤコブが、名の一部しか残っていない相手に宛てた書簡の形をとり、主が自分とペテロに明かした「秘密の書」を送ると述べる。書の中では、十二人の弟子が救い主の言葉を思い起こして書き記していたところに救い主が現れ、ヤコブとペテロを他の弟子から離して教えを授ける。教えは問答、訓戒、たとえからなる。終わりに救い主は去り、二人は心を天に向けて昇ろうとするが、ほかの弟子たちに呼ばれて中断する。",
+        "en": "Written as a letter from James to an addressee whose name is only partly preserved, saying that he is sending a “secret book” that the Lord revealed to him and to Peter. In it, the Saviour appears while the twelve disciples are recalling his words and writing them down, takes James and Peter aside from the others, and instructs them. The teaching consists of dialogue, exhortation and parables. At the end the Saviour departs; the two try to send their hearts up to heaven, but are interrupted when the other disciples call them.",
+        "fr": "Le texte prend la forme d’une lettre de Jacques à un destinataire dont le nom n’est conservé qu’en partie ; il dit envoyer un « livre secret » que le Seigneur lui a révélé, à lui et à Pierre. Dans ce livre, le Sauveur apparaît alors que les douze disciples se remémorent ses paroles et les mettent par écrit ; il prend à part Jacques et Pierre et les instruit. L’enseignement se compose de dialogues, d’exhortations et de paraboles. À la fin, le Sauveur s’en va ; les deux disciples tentent d’élever leur cœur vers le ciel, mais sont interrompus par les autres disciples qui les appellent."
+      },
+      "pages": {
+        "ja": "NHC I, 1,1–16,30",
+        "en": "NHC I, 1,1–16,30",
+        "fr": "NHC I, p. 1,1–16,30"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本の内外に、ほかの写しは知られていない。",
+        "en": "No other copy is known, either in the Nag Hammadi Codices or elsewhere.",
+        "fr": "Aucune autre copie n’est connue, ni dans les codices de Nag Hammadi ni ailleurs."
+      },
+      "language": {
+        "ja": "コプト語（リコポリス方言）",
+        "en": "Coptic (Lycopolitan)",
+        "fr": "copte (lycopolitain)"
+      },
+      "current": "",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "要約: 受取人の名は欠損のため一部しか残らない（研究上の復元名は書いていない）",
+        "潮流: gnosticism.html 第III節の表に名がないので空欄",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）"
+      ]
+    },
+    "I-3": {
+      "reviewed": false,
+      "summary": {
+        "ja": "写本に表題はなく、冒頭の「真理の福音は喜びである」という言葉から今の名で呼ばれる。説教のような文体で、父を知らないことから「迷い」が生じたこと、そしてイエス・キリストを通じて父が知られるようになる次第を語る。「生きた書物」、父の名、安息などのイメージが繰り返し用いられる。",
+        "en": "The manuscript gives no title; the text is named after its opening words, “The gospel of truth is joy”. In a homily-like style it tells how “Error” arose from ignorance of the Father, and how the Father came to be known through Jesus Christ. Images such as the “living book”, the name of the Father and rest recur throughout.",
+        "fr": "Le manuscrit ne donne pas de titre ; le texte est nommé d’après ses premiers mots : « L’Évangile de vérité est joie ». Dans un style proche de l’homélie, il raconte comment l’« Erreur » est née de l’ignorance du Père, et comment le Père a été connu par Jésus-Christ. Des images comme le « livre vivant », le nom du Père et le repos y reviennent souvent."
+      },
+      "pages": {
+        "ja": "NHC I, 16,31–43,24",
+        "en": "NHC I, 16,31–43,24",
+        "fr": "NHC I, p. 16,31–43,24"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本内では、XII,2 にサヒド方言の写しの断片が残る。写本外の写しは知られていない。",
+        "en": "Within the Nag Hammadi Codices, fragments of a Sahidic copy survive as XII,2. No copy is known outside the codices.",
+        "fr": "Dans les codices de Nag Hammadi, des fragments d’une copie en sahidique subsistent en XII,2. Aucune copie n’est connue en dehors des codices."
+      },
+      "language": {
+        "ja": "コプト語（リコポリス方言）",
+        "en": "Coptic (Lycopolitan)",
+        "fr": "copte (lycopolitain)"
+      },
+      "current": "valentinian",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）",
+        "文献: Layton『The Gnostic Scriptures』に収録されているか要確認"
+      ]
+    },
+    "I-4": {
+      "reviewed": false,
+      "summary": {
+        "ja": "書き手が「わが子レギノス」に宛てて、復活について説き明かす短い書簡。救い主が死に打ち勝ったこと、信じる者がどのように復活にあずかるのかを、「使徒」の言葉の引用も交えて述べる。結びでは、分かりにくい点があれば尋ねてほしいと述べ、挨拶で終わる。",
+        "en": "A short letter in which the writer explains the resurrection to “my son Rheginos”. It sets out how the Saviour overcame death and how believers share in the resurrection, quoting words of “the Apostle” along the way. At the close the writer offers to explain anything that is unclear if asked, and ends with greetings.",
+        "fr": "Courte lettre dans laquelle l’auteur explique la résurrection à « mon fils Rhéginos ». Il expose comment le Sauveur a vaincu la mort et comment les croyants ont part à la résurrection, en citant au passage des paroles de « l’Apôtre ». En conclusion, l’auteur propose d’expliquer, si on le lui demande, ce qui resterait obscur, et termine par des salutations."
+      },
+      "pages": {
+        "ja": "NHC I, 43,25–50,18",
+        "en": "NHC I, 43,25–50,18",
+        "fr": "NHC I, p. 43,25–50,18"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本の内外に、ほかの写しは知られていない。",
+        "en": "No other copy is known, either in the Nag Hammadi Codices or elsewhere.",
+        "fr": "Aucune autre copie n’est connue, ni dans les codices de Nag Hammadi ni ailleurs."
+      },
+      "language": {
+        "ja": "コプト語（リコポリス方言）",
+        "en": "Coptic (Lycopolitan)",
+        "fr": "copte (lycopolitain)"
+      },
+      "current": "valentinian",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）",
+        "文献: Layton『The Gnostic Scriptures』に収録されているか要確認"
+      ]
+    },
+    "I-5": {
+      "reviewed": false,
+      "summary": {
+        "ja": "写本に表題はなく、全体が三つの部分に分かれていることから、現代の研究者が今の名で呼ぶ長い論述。第一部は、父・子・教会と、そこから生じるアイオーンたちの世界、そしてアイオーンの一つであるロゴスのふるまいから下の世界が生じる次第を述べる。第二部は人間の創造と楽園の出来事を、第三部は霊的・魂的・物質的という人間の三つの種類、救い主の到来、万物の回復を扱う。",
+        "en": "A long treatise with no title in the manuscript; modern scholars named it after its division into three parts. The first part describes the Father, the Son and the Church, the world of the aeons that comes from them, and how the lower world arises from the conduct of one of the aeons, the Logos. The second part deals with the creation of humankind and the events in paradise; the third with the three kinds of human beings (spiritual, psychic and material), the coming of the Saviour and the restoration of all things.",
+        "fr": "Long traité sans titre dans le manuscrit ; les chercheurs modernes l’ont nommé d’après sa division en trois parties. La première partie décrit le Père, le Fils et l’Église, le monde des éons qui en procède, et la manière dont le monde inférieur naît de la conduite de l’un des éons, le Logos. La deuxième traite de la création de l’homme et des événements du paradis ; la troisième, des trois sortes d’hommes (spirituels, psychiques et matériels), de la venue du Sauveur et de la restauration de toutes choses."
+      },
+      "pages": {
+        "ja": "NHC I, 51,1–138,27",
+        "en": "NHC I, 51,1–138,27",
+        "fr": "NHC I, p. 51,1–138,27"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本の内外に、ほかの写しは知られていない。",
+        "en": "No other copy is known, either in the Nag Hammadi Codices or elsewhere.",
+        "fr": "Aucune autre copie n’est connue, ni dans les codices de Nag Hammadi ni ailleurs."
+      },
+      "language": {
+        "ja": "コプト語（リコポリス方言）",
+        "en": "Coptic (Lycopolitan)",
+        "fr": "copte (lycopolitain)"
+      },
+      "current": "valentinian",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "要約: 三部の区分と各部の内容の対応を本文で要確認",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）",
+        "文献: Layton『The Gnostic Scriptures』に収録されているか要確認"
+      ]
+    },
+    "II-1": {
+      "reviewed": false,
+      "summary": {
+        "ja": "救い主が去ったのち、ゼベダイの子ヨハネが神殿でファリサイ派の男に問い詰められて悲しんでいると、救い主が現れて秘密の教えを授ける、という枠をもつ啓示文書。救い主は、目に見えない霊（父）とバルベーロー、光のアイオーンたちの成り立ちを語り、ソフィアの過失からヤルダバオートが生まれ、アルコーンたちとともに世界と人間を造ったことを述べる。後半では、ヨハネの問いに答えて、人間の魂の行く末と救いについて語る。",
+        "en": "A revelation text with the following frame: after the Saviour has gone away, John the son of Zebedee is challenged by a Pharisee in the temple and grieves, and the Saviour appears and gives him secret teaching. The Saviour describes the invisible Spirit (the Father), Barbelo and the formation of the aeons of light, and relates how Yaldabaoth was born from Sophia’s fault and, with the archons, made the world and humankind. In the latter part, answering John’s questions, he speaks about the fate of human souls and their salvation.",
+        "fr": "Texte de révélation dont le cadre est le suivant : après le départ du Sauveur, Jean, fils de Zébédée, interpellé au Temple par un pharisien, est dans l’affliction ; le Sauveur lui apparaît et lui donne un enseignement secret. Le Sauveur décrit l’Esprit invisible (le Père), Barbélô et la formation des éons de lumière, et raconte comment Yaldabaoth est né de la faute de Sophia et a façonné, avec les archontes, le monde et l’homme. Dans la dernière partie, répondant aux questions de Jean, il parle du sort des âmes humaines et de leur salut."
+      },
+      "pages": {
+        "ja": "NHC II, 1,1–32,9",
+        "en": "NHC II, 1,1–32,9",
+        "fr": "NHC II, p. 1,1–32,9"
+      },
+      "copies": {
+        "ja": "同じ作品の写しが四つある。II,1 は IV,1 とともに長い版にあたり、短い版は III,1 と、写本外のベルリン写本（BG 8502,2）に残る。",
+        "en": "Four copies of the work survive. II,1 and IV,1 represent the long version; the short version survives in III,1 and, outside the Nag Hammadi Codices, in the Berlin Codex (BG 8502,2).",
+        "fr": "L’œuvre est conservée en quatre copies. II,1 et IV,1 représentent la version longue ; la version brève est conservée en III,1 et, hors des codices de Nag Hammadi, dans le Codex de Berlin (BG 8502,2)."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "sethian",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）",
+        "文献: Layton『The Gnostic Scriptures』に収録されているか要確認"
+      ]
+    },
+    "II-2": {
+      "reviewed": false,
+      "summary": {
+        "ja": "「生けるイエス」が語り、ディデュモス・ユダ・トマスが書き記したという「隠された言葉」を集めた語録で、物語の枠はほとんどない。言葉の多くは「イエスが言った」で始まり、弟子たちとの短い問答も含まれる。現代の研究では言葉に 1 から 114 までの番号を付けて引用することが多く、共観福音書と並行する言葉も多い。",
+        "en": "A collection of “hidden sayings” which, according to its opening, the living Jesus spoke and Didymos Judas Thomas wrote down; it has almost no narrative frame. Most sayings begin “Jesus said”, and there are short exchanges with disciples. Modern scholarship usually cites the sayings by numbers from 1 to 114, and many of them have parallels in the Synoptic Gospels.",
+        "fr": "Recueil de « paroles cachées » que, selon son prologue, Jésus le Vivant a prononcées et que Didyme Jude Thomas a mises par écrit ; il n’a presque pas de cadre narratif. La plupart des paroles commencent par « Jésus a dit », et l’on y trouve de brefs échanges avec des disciples. Les études modernes citent généralement les paroles par des numéros de 1 à 114, et beaucoup ont des parallèles dans les Évangiles synoptiques."
+      },
+      "pages": {
+        "ja": "NHC II, 32,10–51,28",
+        "en": "NHC II, 32,10–51,28",
+        "fr": "NHC II, p. 32,10–51,28"
+      },
+      "copies": {
+        "ja": "ギリシア語の断片が、オクシリンコス出土のパピルス 3 点（P.Oxy. 1、654、655）に残る。ナグ・ハマディ写本内にほかの写しはない。",
+        "en": "Greek fragments survive in three papyri from Oxyrhynchus (P.Oxy. 1, 654 and 655). There is no other copy in the Nag Hammadi Codices.",
+        "fr": "Des fragments grecs sont conservés dans trois papyrus d’Oxyrhynque (P.Oxy. 1, 654 et 655). Il n’y a pas d’autre copie dans les codices de Nag Hammadi."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "thomasine",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        },
+        {
+          "key": "arai_thomas"
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・BCNH 叢書の該当巻を要確認（第VII節からは確かめられないので載せていない）",
+        "文献: Layton『The Gnostic Scriptures』に収録されているか要確認"
+      ]
+    },
+    "II-3": {
+      "reviewed": false,
+      "summary": {
+        "ja": "物語の筋をもたず、短い言葉、たとえ、聖書の解釈、考察などを連ねた文書。洗礼・塗油・聖餐・贖い・婚礼の部屋の五つを「秘義」として挙げる箇所があり、これらの儀礼のほか、名前と真理、この世と来るべき世などが繰り返し取り上げられる。表題は末尾に記された「フィリポによる福音書」によるもので、本文でフィリポの名が出るのは一か所だけである。",
+        "en": "A text without a narrative line, made up of short sayings, analogies, interpretations of scripture and reflections. One passage lists five “mysteries”: baptism, chrism, eucharist, redemption and bridal chamber; besides these rites, recurring topics include names and truth, and this world and the world to come. The title comes from the subscript, “The Gospel according to Philip”; Philip is named only once in the text.",
+        "fr": "Texte sans fil narratif, fait de courtes paroles, de comparaisons, d’interprétations de l’Écriture et de réflexions. Un passage énumère cinq « mystères » : le baptême, le chrême, l’eucharistie, la rédemption et la chambre nuptiale ; outre ces rites, il revient souvent sur les noms et la vérité, et sur ce monde et le monde à venir. Le titre vient de la souscription, « L’Évangile selon Philippe » ; Philippe n’est nommé qu’une fois dans le texte."
+      },
+      "pages": {
+        "ja": "NHC II, 51,29–86,19",
+        "en": "NHC II, 51,29–86,19",
+        "fr": "NHC II, p. 51,29–86,19"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本の内外に、ほかの写しは知られていない。",
+        "en": "No other copy is known, either in the Nag Hammadi Codices or elsewhere.",
+        "fr": "Aucune autre copie n’est connue, ni dans les codices de Nag Hammadi ni ailleurs."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "valentinian",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）",
+        "文献: Layton『The Gnostic Scriptures』に収録されているか要確認"
+      ]
+    },
+    "II-4": {
+      "reviewed": false,
+      "summary": {
+        "ja": "「大いなる使徒」の言葉を引いたのち、「権威たちの実体」について尋ねた相手にこれを書き送る、と述べて始まる。前半は、盲目の首長アルコーンの思い上がり、アルコーンたちによるアダムの創造、エバと蛇、カインとアベル、セツとノレアの誕生、洪水など、創世記にもとづく物語を語る。後半では、天使エレレートがノレアに現れ、アルコーンたちの起源と、終わりの時に起こることを明かす。",
+        "en": "It opens by quoting “the great apostle” and says that the writer is sending this to someone who has asked about the reality of the authorities. The first part tells a story based on Genesis: the arrogance of the blind chief archon, the archons’ creation of Adam, Eve and the serpent, Cain and Abel, the births of Seth and Norea, and the flood. In the second part the angel Eleleth appears to Norea and reveals the origin of the archons and what will happen at the end of time.",
+        "fr": "Le texte commence par citer « le grand apôtre » et dit envoyer cet écrit à quelqu’un qui s’interrogeait sur la réalité des puissances. La première partie raconte une histoire fondée sur la Genèse : l’orgueil de l’archonte en chef, qui est aveugle, la création d’Adam par les archontes, Ève et le serpent, Caïn et Abel, la naissance de Seth et de Noréa, le déluge. Dans la seconde, l’ange Éléleth apparaît à Noréa et lui révèle l’origine des archontes et ce qui arrivera à la fin des temps."
+      },
+      "pages": {
+        "ja": "NHC II, 86,20–97,23",
+        "en": "NHC II, 86,20–97,23",
+        "fr": "NHC II, p. 86,20–97,23"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本の内外に、ほかの写しは知られていない。",
+        "en": "No other copy is known, either in the Nag Hammadi Codices or elsewhere.",
+        "fr": "Aucune autre copie n’est connue, ni dans les codices de Nag Hammadi ni ailleurs."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "潮流: 表に名がないので空欄。セツ派に数えられることが多い文書なので、表との関係を要確認（ここでは決めていない）",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）",
+        "文献: Layton『The Gnostic Scriptures』に収録されているか要確認"
+      ]
+    },
+    "II-5": {
+      "reviewed": false,
+      "summary": {
+        "ja": "写本に表題はなく、神々も人間も「混沌の前には何も存在しなかった」と言うが、自分はそれが誤りであることを示す、と述べて始まる論述。ピスティス・ソフィアの働き、首長アルコーンであるヤルダバオートの誕生とその支配、サバオートの悔い改め、アダムとエバの創造と楽園の出来事を順に語り、世の終わりの描写で結ばれる。不死鳥（フェニックス）をはじめ聖書以外の伝承や、ほかの書物への言及も多い。",
+        "en": "A treatise with no title in the manuscript. It begins by saying that gods and humans alike claim that nothing existed before chaos, and that the writer will show them to be wrong. It goes on to describe the activity of Pistis Sophia, the birth and rule of the chief archon Yaldabaoth, the repentance of Sabaoth, the creation of Adam and Eve and the events in paradise, and ends with a description of the end of the world. It refers to many traditions from outside the Bible, such as the phoenix, and to other books.",
+        "fr": "Traité sans titre dans le manuscrit. Il commence en disant que les dieux comme les hommes affirment que rien n’existait avant le chaos, et que l’auteur va montrer qu’ils se trompent. Il décrit ensuite l’action de Pistis Sophia, la naissance et le règne de l’archonte en chef Yaldabaoth, le repentir de Sabaoth, la création d’Adam et d’Ève et les événements du paradis, et s’achève sur une description de la fin du monde. Il mentionne de nombreuses traditions extérieures à la Bible, comme le phénix, ainsi que d’autres livres."
+      },
+      "pages": {
+        "ja": "NHC II, 97,24–127,17",
+        "en": "NHC II, 97,24–127,17",
+        "fr": "NHC II, p. 97,24–127,17"
+      },
+      "copies": {
+        "ja": "冒頭の十行ほどが XIII,2 にも残る。",
+        "en": "The opening lines (about ten) also survive as XIII,2.",
+        "fr": "Les premières lignes (une dizaine) subsistent aussi en XIII,2."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "ほかの写し: 大英図書館 Or. 4926(1) にこの文書の一部があるとされる。確かめてから記入",
+        "潮流: gnosticism.html 第III節の表に名がないので空欄",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）"
+      ]
+    },
+    "II-6": {
+      "reviewed": false,
+      "summary": {
+        "ja": "女性として描かれる魂が、父のもとを離れて体の中に落ち、多くの者に身を汚されたのち、悔い改めて父に助けを求め、父から遣わされた花婿と結ばれて元の場所に帰る次第を物語る。物語の合間に、預言者たち（エレミヤ、ホセアなど）や詩編、パウロの手紙、ホメロスの詩句（オデュッセウスとヘレネー）からの引用が置かれる。結びでは、悔い改めと祈りが勧められる。",
+        "en": "It tells how the soul, portrayed as a woman, leaves the Father, falls into a body and is defiled by many lovers, then repents, calls on the Father for help, is united with the bridegroom whom the Father sends, and returns to her former place. Between the episodes stand quotations from the prophets (Jeremiah, Hosea and others), the Psalms, Paul’s letters, and lines of Homer (on Odysseus and Helen). It closes with an exhortation to repentance and prayer.",
+        "fr": "Le texte raconte comment l’âme, représentée comme une femme, quitte le Père, tombe dans un corps et se laisse souiller par de nombreux amants, puis se repent, appelle le Père à l’aide, s’unit à l’époux que le Père lui envoie et retourne à son lieu d’origine. Entre les épisodes sont placées des citations des prophètes (Jérémie, Osée, etc.), des Psaumes, des lettres de Paul et de vers d’Homère (sur Ulysse et Hélène). Il se termine par une exhortation au repentir et à la prière."
+      },
+      "pages": {
+        "ja": "NHC II, 127,18–137,27",
+        "en": "NHC II, 127,18–137,27",
+        "fr": "NHC II, p. 127,18–137,27"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本の内外に、ほかの写しは知られていない。",
+        "en": "No other copy is known, either in the Nag Hammadi Codices or elsewhere.",
+        "fr": "Aucune autre copie n’est connue, ni dans les codices de Nag Hammadi ni ailleurs."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "潮流: gnosticism.html 第III節の表に名がないので空欄",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）"
+      ]
+    },
+    "II-7": {
+      "reviewed": false,
+      "summary": {
+        "ja": "救い主がユダ・トマスに語った秘密の言葉を、二人の話を聞きながらマタイアスが書き記したもの、と冒頭で名乗る。前半は救い主とトマスの問答で、自分を知ること、体と情欲、火による裁きなどが語られる。後半は救い主の長い説教となり、「災いだ」で始まる言葉が続いたのち、祝福の言葉で結ばれる。",
+        "en": "It presents itself at the outset as the secret words that the Saviour spoke to Judas Thomas, written down by Mathaias as he listened to them talking. The first part is a dialogue between the Saviour and Thomas about knowing oneself, the body and its passions, and judgement by fire. The second part becomes a long discourse of the Saviour: a series of sayings beginning “Woe to you” is followed by closing blessings.",
+        "fr": "Il se présente d’emblée comme les paroles secrètes que le Sauveur a adressées à Jude Thomas, mises par écrit par Mathaïas qui les écoutait parler. La première partie est un dialogue entre le Sauveur et Thomas sur la connaissance de soi, le corps et ses passions, et le jugement par le feu. La seconde devient un long discours du Sauveur : une série de paroles commençant par « Malheur à vous » est suivie de béatitudes finales."
+      },
+      "pages": {
+        "ja": "NHC II, 138,1–145,19（＋奥書 145,20–23）",
+        "en": "NHC II, 138,1–145,19 (+ colophon 145,20–23)",
+        "fr": "NHC II, p. 138,1–145,19 (+ colophon 145,20–23)"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本の内外に、ほかの写しは知られていない。",
+        "en": "No other copy is known, either in the Nag Hammadi Codices or elsewhere.",
+        "fr": "Aucune autre copie n’est connue, ni dans les codices de Nag Hammadi ni ailleurs."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "thomasine",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "頁: 括弧内は TEI ヘッダの「+ colophon」（写字生の奥書）。訳語を要確認",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）",
+        "文献: Layton『The Gnostic Scriptures』に収録されているか要確認"
+      ]
+    },
+    "III-1": {
+      "reviewed": false,
+      "summary": {
+        "ja": "救い主が去ったのちに悲しんでいたヨハネのもとに救い主が現れ、秘密の教えを授けるという枠をもつ啓示文書で、II,1・IV,1 と同じ作品の短い版にあたる。救い主は、目に見えない霊（父）とバルベーロー、光のアイオーンたちの成り立ちを語り、ソフィアの過失からヤルダバオートが生まれ、アルコーンたちとともに世界と人間を造ったことを述べる。後半では、ヨハネの問いに答えて、人間の魂の行く末と救いについて語る。冒頭部分には欠損がある。",
+        "en": "A revelation text in which the Saviour appears to John, who is grieving after the Saviour’s departure, and gives him secret teaching; it is the short version of the work also found in II,1 and IV,1. The Saviour describes the invisible Spirit (the Father), Barbelo and the formation of the aeons of light, and relates how Yaldabaoth was born from Sophia’s fault and, with the archons, made the world and humankind. In the latter part, answering John’s questions, he speaks about the fate of human souls and their salvation. The opening is damaged.",
+        "fr": "Texte de révélation dans lequel le Sauveur apparaît à Jean, affligé après le départ du Sauveur, et lui donne un enseignement secret ; c’est la version brève de l’œuvre que l’on trouve aussi en II,1 et IV,1. Le Sauveur décrit l’Esprit invisible (le Père), Barbélô et la formation des éons de lumière, et raconte comment Yaldabaoth est né de la faute de Sophia et a façonné, avec les archontes, le monde et l’homme. Dans la dernière partie, répondant aux questions de Jean, il parle du sort des âmes humaines et de leur salut. Le début est endommagé."
+      },
+      "pages": {
+        "ja": "NHC III, 1,1–40,11",
+        "en": "NHC III, 1,1–40,11",
+        "fr": "NHC III, p. 1,1–40,11"
+      },
+      "copies": {
+        "ja": "同じ作品の写しが四つある。III,1 はベルリン写本（BG 8502,2）とともに短い版にあたり、長い版は II,1 と IV,1 に残る。",
+        "en": "Four copies of the work survive. III,1 and the Berlin Codex (BG 8502,2) represent the short version; the long version survives in II,1 and IV,1.",
+        "fr": "L’œuvre est conservée en quatre copies. III,1 et le Codex de Berlin (BG 8502,2) représentent la version brève ; la version longue est conservée en II,1 et IV,1."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "sethian",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "要約: 冒頭の欠損の範囲を本文で要確認",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）",
+        "文献: Layton『The Gnostic Scriptures』に収録されているか要確認"
+      ]
+    },
+    "III-2": {
+      "reviewed": false,
+      "summary": {
+        "ja": "「エジプト人の、大いなる見えざる霊についての聖なる書」と始まり、その名を口にできない父である大いなる見えざる霊から、父・母（バルベーロー）・子の三つ組、自生者、四つの光などの光の存在が次々に現れる次第を述べる。続いて、大いなるセツとその子孫の由来、サクラスらアルコーンによる世界の支配、セツが降って洗礼によって救いをもたらすことが語られ、祈りと賛歌が置かれる。末尾では、この書は大いなるセツが記して高い山に納めたものだとされる。「エジプト人の福音書」という題は、III,2 の末尾にある奥書の冒頭に見える。",
+        "en": "It opens “The holy book of the Egyptians about the great invisible Spirit” and describes how beings of light come forth one after another from the great invisible Spirit, the Father whose name cannot be spoken: a triad of Father, Mother (Barbelo) and Son, the Self-Begotten, the four Luminaries and others. It goes on to the origin of the great Seth and his seed, the rule of the world by Saklas and other archons, and Seth’s descent to bring salvation through baptism, followed by prayers and hymns. At the end the book is said to have been written by the great Seth and placed on a high mountain. The title “The Gospel of the Egyptians” appears at the beginning of the colophon at the end of III,2.",
+        "fr": "Le texte commence par « Le livre sacré des Égyptiens sur le grand Esprit invisible » et décrit comment des êtres de lumière procèdent l’un après l’autre du grand Esprit invisible, le Père dont le nom est indicible : une triade, le Père, la Mère (Barbélô) et le Fils, l’Autogène, les quatre Luminaires et d’autres. Il traite ensuite de l’origine du grand Seth et de sa descendance, de la domination du monde par Saklas et d’autres archontes, et de la descente de Seth qui apporte le salut par le baptême, suivie de prières et d’hymnes. À la fin, il est dit que ce livre a été écrit par le grand Seth et déposé sur une haute montagne. Le titre « Évangile des Égyptiens » figure au début du colophon qui termine III,2."
+      },
+      "pages": {
+        "ja": "NHC III, 40,12–69,20",
+        "en": "NHC III, 40,12–69,20",
+        "fr": "NHC III, p. 40,12–69,20"
+      },
+      "copies": {
+        "ja": "同じ作品のもう一つの写しが IV,2 に残る。アレクサンドリアのクレメンスが引用する、同名の『エジプト人の福音書』とは別の作品である。",
+        "en": "Another copy of the work survives as IV,2. It is a different work from the Gospel of the Egyptians quoted by Clement of Alexandria.",
+        "fr": "Une autre copie de l’œuvre subsiste en IV,2. Il s’agit d’une œuvre différente de l’Évangile des Égyptiens cité par Clément d’Alexandrie."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "sethian",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）",
+        "文献: Layton『The Gnostic Scriptures』に収録されているか要確認"
+      ]
+    },
+    "III-3": {
+      "see": "eugnostos",
+      "reviewed": false,
+      "todo": [
+        "下書き。III,3 と V,1 は同じ作品なので、内容は eugnostos の項目にまとめた。参照先を確認"
+      ]
+    },
+    "III-4": {
+      "reviewed": false,
+      "summary": {
+        "ja": "復活ののち、十二人の弟子と七人の女性の弟子がガリラヤの山に集まると、救い主が大いなる光の天使のような姿で現れ、弟子たちの問いに答えるという対話の形をとる。救い主は、生まれざる父、不死の人間、人の子などの光の存在と、それらに属する世界について語る。終わりに救い主は姿を消し、弟子たちは福音を宣べ始める。",
+        "en": "A dialogue: after the resurrection, the twelve disciples and seven women disciples gather on a mountain in Galilee, and the Saviour appears to them in a form like a great angel of light and answers their questions. He speaks about beings of light such as the unbegotten Father, the Immortal Man and the Son of Man, and about the realms that belong to them. At the end he disappears, and the disciples begin to preach the gospel.",
+        "fr": "Dialogue : après la résurrection, les douze disciples et sept femmes disciples se réunissent sur une montagne de Galilée ; le Sauveur leur apparaît sous l’aspect d’un grand ange de lumière et répond à leurs questions. Il parle d’êtres de lumière comme le Père inengendré, l’Homme immortel et le Fils de l’Homme, et des mondes qui leur appartiennent. À la fin, il disparaît, et les disciples commencent à prêcher l’Évangile."
+      },
+      "pages": {
+        "ja": "NHC III, 90,14–119,18",
+        "en": "NHC III, 90,14–119,18",
+        "fr": "NHC III, p. 90,14–119,18"
+      },
+      "copies": {
+        "ja": "写本外では、ベルリン写本（BG 8502,3）にコプト語の写しが、オクシリンコス出土のパピルス（P.Oxy. 1081）にギリシア語の断片が残る。また、同じ写本 III で直前に置かれた『エウグノストス』（III,3。V,1 にも写しがある）と、文言の多くが重なる。",
+        "en": "Outside the Nag Hammadi Codices, a Coptic copy survives in the Berlin Codex (BG 8502,3) and a Greek fragment in a papyrus from Oxyrhynchus (P.Oxy. 1081). Much of its wording is also shared with Eugnostos (III,3, also copied in V,1), which immediately precedes it in Codex III.",
+        "fr": "Hors des codices de Nag Hammadi, une copie copte est conservée dans le Codex de Berlin (BG 8502,3) et un fragment grec dans un papyrus d’Oxyrhynque (P.Oxy. 1081). Une grande partie de sa formulation se retrouve aussi dans Eugnoste (III,3, copié aussi en V,1), qui le précède immédiatement dans le codex III."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        },
+        {
+          "key": "nhs27"
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "潮流: gnosticism.html 第III節の表に名がないので空欄",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）"
+      ]
+    },
+    "III-5": {
+      "reviewed": false,
+      "summary": {
+        "ja": "救い主（主）と、ユダ、マタイ、マリアムを中心とする弟子たちとの問答からなる文書。冒頭近くに救い主の教えと祈りの言葉があり、途中には、宇宙の成り立ちについての短い叙述や、弟子たちに幻が示される場面が挟まれる。光と闇、体と霊、「場所」、「安息」などをめぐる問いと答えが続く。",
+        "en": "A text made up of exchanges between the Saviour (the Lord) and his disciples, chiefly Judas, Matthew and Mariam. Near the beginning come the Saviour’s teaching and words of prayer; further on, a short account of how the cosmos came to be and a scene in which a vision is shown to the disciples are inserted. Questions and answers follow about light and darkness, body and spirit, “the place”, “rest” and other topics.",
+        "fr": "Texte composé d’échanges entre le Sauveur (le Seigneur) et ses disciples, principalement Judas, Matthieu et Mariam. Au début se trouvent un enseignement du Sauveur et des paroles de prière ; plus loin s’insèrent un bref récit de la formation du cosmos et une scène où une vision est montrée aux disciples. Suivent des questions et des réponses sur la lumière et les ténèbres, le corps et l’esprit, « le lieu », « le repos », entre autres."
+      },
+      "pages": {
+        "ja": "NHC III, 120,1–147,23",
+        "en": "NHC III, 120,1–147,23",
+        "fr": "NHC III, p. 120,1–147,23"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本の内外に、ほかの写しは知られていない。",
+        "en": "No other copy is known, either in the Nag Hammadi Codices or elsewhere.",
+        "fr": "Aucune autre copie n’est connue, ni dans les codices de Nag Hammadi ni ailleurs."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "要約: 宇宙の成り立ちの叙述と幻の場面の位置・範囲を本文で要確認",
+        "潮流: gnosticism.html 第III節の表に名がないので空欄",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）"
+      ]
+    },
+    "IV-1": {
+      "reviewed": false,
+      "summary": {
+        "ja": "救い主が去ったのちに悲しんでいたヨハネのもとに救い主が現れ、秘密の教えを授けるという枠をもつ啓示文書で、II,1 と同じ長い版にあたる。救い主は、目に見えない霊（父）とバルベーロー、光のアイオーンたちの成り立ちを語り、ソフィアの過失からヤルダバオートが生まれ、アルコーンたちとともに世界と人間を造ったことを述べる。後半では、ヨハネの問いに答えて、人間の魂の行く末と救いについて語る。写本の損傷が大きく、欠けている箇所が多い。",
+        "en": "A revelation text in which the Saviour appears to John, who is grieving after the Saviour’s departure, and gives him secret teaching; it is the long version, as in II,1. The Saviour describes the invisible Spirit (the Father), Barbelo and the formation of the aeons of light, and relates how Yaldabaoth was born from Sophia’s fault and, with the archons, made the world and humankind. In the latter part, answering John’s questions, he speaks about the fate of human souls and their salvation. The manuscript is badly damaged and many passages are missing.",
+        "fr": "Texte de révélation dans lequel le Sauveur apparaît à Jean, affligé après le départ du Sauveur, et lui donne un enseignement secret ; c’est la version longue, comme en II,1. Le Sauveur décrit l’Esprit invisible (le Père), Barbélô et la formation des éons de lumière, et raconte comment Yaldabaoth est né de la faute de Sophia et a façonné, avec les archontes, le monde et l’homme. Dans la dernière partie, répondant aux questions de Jean, il parle du sort des âmes humaines et de leur salut. Le manuscrit est très endommagé et de nombreux passages manquent."
+      },
+      "pages": {
+        "ja": "NHC IV, 1,1–49,28",
+        "en": "NHC IV, 1,1–49,28",
+        "fr": "NHC IV, p. 1,1–49,28"
+      },
+      "copies": {
+        "ja": "同じ作品の写しが四つある。IV,1 は II,1 とともに長い版にあたり、短い版は III,1 と、写本外のベルリン写本（BG 8502,2）に残る。",
+        "en": "Four copies of the work survive. IV,1 and II,1 represent the long version; the short version survives in III,1 and, outside the Nag Hammadi Codices, in the Berlin Codex (BG 8502,2).",
+        "fr": "L’œuvre est conservée en quatre copies. IV,1 et II,1 représentent la version longue ; la version brève est conservée en III,1 et, hors des codices de Nag Hammadi, dans le Codex de Berlin (BG 8502,2)."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "sethian",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）",
+        "文献: Layton『The Gnostic Scriptures』に収録されているか要確認"
+      ]
+    },
+    "IV-2": {
+      "reviewed": false,
+      "summary": {
+        "ja": "「エジプト人の、大いなる見えざる霊についての聖なる書」と始まり、その名を口にできない父である大いなる見えざる霊から、父・母（バルベーロー）・子の三つ組、自生者、四つの光などの光の存在が次々に現れる次第を述べる。続いて、大いなるセツとその子孫の由来、サクラスらアルコーンによる世界の支配、セツが降って洗礼によって救いをもたらすことが語られ、祈りと賛歌が置かれる。末尾では、この書は大いなるセツが記して高い山に納めたものだとされる。写本の損傷による欠損がある。",
+        "en": "It opens “The holy book of the Egyptians about the great invisible Spirit” and describes how beings of light come forth one after another from the great invisible Spirit, the Father whose name cannot be spoken: a triad of Father, Mother (Barbelo) and Son, the Self-Begotten, the four Luminaries and others. It goes on to the origin of the great Seth and his seed, the rule of the world by Saklas and other archons, and Seth’s descent to bring salvation through baptism, followed by prayers and hymns. At the end the book is said to have been written by the great Seth and placed on a high mountain. Parts are lost through damage to the manuscript.",
+        "fr": "Le texte commence par « Le livre sacré des Égyptiens sur le grand Esprit invisible » et décrit comment des êtres de lumière procèdent l’un après l’autre du grand Esprit invisible, le Père dont le nom est indicible : une triade, le Père, la Mère (Barbélô) et le Fils, l’Autogène, les quatre Luminaires et d’autres. Il traite ensuite de l’origine du grand Seth et de sa descendance, de la domination du monde par Saklas et d’autres archontes, et de la descente de Seth qui apporte le salut par le baptême, suivie de prières et d’hymnes. À la fin, il est dit que ce livre a été écrit par le grand Seth et déposé sur une haute montagne. Certaines parties sont perdues à cause de l’état du manuscrit."
+      },
+      "pages": {
+        "ja": "NHC IV, 50,1–81,2",
+        "en": "NHC IV, 50,1–81,2",
+        "fr": "NHC IV, p. 50,1–81,2"
+      },
+      "copies": {
+        "ja": "同じ作品のもう一つの写しが III,2 に残る。アレクサンドリアのクレメンスが引用する、同名の『エジプト人の福音書』とは別の作品である。",
+        "en": "Another copy of the work survives as III,2. It is a different work from the Gospel of the Egyptians quoted by Clement of Alexandria.",
+        "fr": "Une autre copie de l’œuvre subsiste en III,2. Il s’agit d’une œuvre différente de l’Évangile des Égyptiens cité par Clément d’Alexandrie."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "sethian",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）",
+        "文献: Layton『The Gnostic Scriptures』に収録されているか要確認"
+      ]
+    },
+    "V-1": {
+      "see": "eugnostos",
+      "reviewed": false,
+      "todo": [
+        "下書き。III,3 と V,1 は同じ作品なので、内容は eugnostos の項目にまとめた。参照先を確認"
+      ]
+    },
+    "V-2": {
+      "reviewed": false,
+      "summary": {
+        "ja": "小さな子どもの姿で現れた霊に導かれ、パウロが天を一つずつ昇っていく次第を描く黙示文書。第四の天では魂が裁かれて罰を受ける場面を見、第七の天では玉座に座る老人に行き先を問われるが、しるしを示して先へ進む。十二使徒とともに第八・第九の天を通り、第十の天に至って仲間の霊たちに挨拶するところで終わる。",
+        "en": "An apocalypse describing how Paul, guided by the Spirit, who appears in the form of a small child, ascends through the heavens one after another. In the fourth heaven he sees a soul being judged and punished; in the seventh an old man seated on a throne asks him where he is going, but Paul shows him a sign and passes on. With the twelve apostles he passes through the eighth and ninth heavens, and the text ends as he reaches the tenth heaven and greets his fellow spirits.",
+        "fr": "Apocalypse qui décrit comment Paul, guidé par l’Esprit apparu sous la forme d’un petit enfant, monte de ciel en ciel. Au quatrième ciel, il voit une âme jugée et châtiée ; au septième, un vieillard assis sur un trône lui demande où il va, mais Paul lui montre un signe et poursuit sa route. Avec les douze apôtres, il traverse les huitième et neuvième cieux, et le texte s’achève lorsqu’il atteint le dixième ciel et salue ses compagnons spirituels."
+      },
+      "pages": {
+        "ja": "NHC V, 17,19–24,9",
+        "en": "NHC V, 17,19–24,9",
+        "fr": "NHC V, p. 17,19–24,9"
+      },
+      "copies": {
+        "ja": "ほかの写しは知られていない。ギリシア語・ラテン語などで伝わる同名の『パウロの黙示録』とは別の作品である。",
+        "en": "No other copy is known. It is a different work from the Apocalypse of Paul transmitted in Greek, Latin and other languages.",
+        "fr": "Aucune autre copie n’est connue. C’est une œuvre différente de l’Apocalypse de Paul transmise en grec, en latin et en d’autres langues."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        },
+        {
+          "key": "nhs11"
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "潮流: gnosticism.html 第III節の表に名がないので空欄",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）"
+      ]
+    },
+    "V-3": {
+      "reviewed": false,
+      "summary": {
+        "ja": "主とその「兄弟」ヤコブとの対話の形をとる啓示文書。主は自らの受難と、ヤコブに迫る苦難を予告し、受難ののちに再び現れて、死後に魂が昇るとき行く手をさえぎる「取り立て人」たちにどう答えるかをヤコブに教える。対話の中では、教えを後に伝える人（アダイ）や、主に従った女性たち（サロメ、マリアム、マルタ、アルシノエ）にも触れられる。写本の損傷により読めない箇所が多い。",
+        "en": "A revelation text in the form of a dialogue between the Lord and James, his “brother”. The Lord foretells his own passion and the sufferings that await James; after the passion he appears again and teaches James how to answer the “toll collectors” who will block the way of his soul as it ascends after death. The dialogue also mentions the person who is to hand on the teaching (Addai) and the women who followed the Lord (Salome, Mariam, Martha and Arsinoe). Damage to the manuscript leaves many passages illegible.",
+        "fr": "Texte de révélation en forme de dialogue entre le Seigneur et Jacques, son « frère ». Le Seigneur annonce sa propre passion et les souffrances qui attendent Jacques ; après la passion, il apparaît de nouveau et enseigne à Jacques comment répondre aux « percepteurs » qui barreront la route à son âme lorsqu’elle montera après la mort. Le dialogue mentionne aussi celui qui doit transmettre l’enseignement (Addaï) et les femmes qui ont suivi le Seigneur (Salomé, Mariam, Marthe et Arsinoé). Le mauvais état du manuscrit rend de nombreux passages illisibles."
+      },
+      "pages": {
+        "ja": "NHC V, 24,10–44,10",
+        "en": "NHC V, 24,10–44,10",
+        "fr": "NHC V, p. 24,10–44,10"
+      },
+      "copies": {
+        "ja": "写本外では、チャコス写本に同じ作品の別の写し（題は「ヤコブ」）が残る。",
+        "en": "Outside the Nag Hammadi Codices, another copy of the same work survives in Codex Tchacos (with the title “James”).",
+        "fr": "Hors des codices de Nag Hammadi, une autre copie de la même œuvre est conservée dans le Codex Tchacos (sous le titre « Jacques »)."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        },
+        {
+          "key": "nhs11"
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "ほかの写し: ギリシア語の断片（オクシリンコス出土）が報告されているとされる。番号と刊行を確かめてから記入",
+        "要約: 「取り立て人」（ギリシア語からの借用語 telōnēs）の訳語を要確認",
+        "潮流: gnosticism.html 第III節の表に名がないので空欄",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）"
+      ]
+    },
+    "V-4": {
+      "reviewed": false,
+      "summary": {
+        "ja": "義人ヤコブがエルサレムで語った説教を、祭司の一人マレイムが書き記した、と冒頭で述べる。ヤコブは、主が自分に現れて語った言葉と、自らが受けた啓示を人々に伝える。終わりには、ヤコブが群衆に捕らえられて神殿の高みから投げ落とされ、石で打たれる次第と、死の前の祈りが語られる。",
+        "en": "It states at the outset that it is the discourse which James the Just delivered in Jerusalem, written down by Mareim, one of the priests. James passes on to the people the words the Lord spoke when he appeared to him, and the revelation he himself received. At the end it tells how James is seized by the crowd, thrown down from the height of the temple and stoned, and gives his prayer before his death.",
+        "fr": "Le texte déclare d’emblée être le discours que Jacques le Juste a prononcé à Jérusalem, mis par écrit par Mareim, l’un des prêtres. Jacques transmet au peuple les paroles que le Seigneur lui a dites en lui apparaissant, ainsi que la révélation qu’il a lui-même reçue. À la fin, il raconte comment Jacques est saisi par la foule, précipité du haut du Temple et lapidé, et rapporte sa prière avant sa mort."
+      },
+      "pages": {
+        "ja": "NHC V, 44,11–63,32",
+        "en": "NHC V, 44,11–63,32",
+        "fr": "NHC V, p. 44,11–63,32"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本の内外に、ほかの写しは知られていない。",
+        "en": "No other copy is known, either in the Nag Hammadi Codices or elsewhere.",
+        "fr": "Aucune autre copie n’est connue, ni dans les codices de Nag Hammadi ni ailleurs."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        },
+        {
+          "key": "nhs11"
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "潮流: gnosticism.html 第III節の表に名がないので空欄",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）"
+      ]
+    },
+    "V-5": {
+      "reviewed": false,
+      "summary": {
+        "ja": "アダムが七百歳のときに息子セツに教えた啓示、と冒頭で名乗る。アダムは、アイオーンと力たちの支配者である神の怒りを受けて、エバとともにもとの栄光と知識を失った次第と、その後に現れた三人の人物から知らされたことを語る。続いて、洪水や火による滅びを越えてセツの子孫が守られること、光をもたらす者（フォーステール）が来ること、その由来について十三の王国と「王のない世代」がそれぞれの説明を述べることを予告する。",
+        "en": "It presents itself as the revelation that Adam taught his son Seth in his seven hundredth year. Adam tells how he and Eve lost their former glory and knowledge through the wrath of the god who rules the aeons and the powers, and what three men who then appeared to him made known. He then foretells that Seth’s descendants will be preserved through destructions by flood and fire, that an Illuminator (phōstēr) will come, and that thirteen kingdoms and “the generation without a king” will each give their account of his origin.",
+        "fr": "Le texte se présente comme la révélation qu’Adam a enseignée à son fils Seth en sa sept-centième année. Adam raconte comment Ève et lui ont perdu leur gloire et leur connaissance premières à cause de la colère du dieu qui domine les éons et les puissances, et ce que trois hommes, apparus ensuite, lui ont fait connaître. Il annonce ensuite que la descendance de Seth sera préservée à travers les destructions par le déluge et par le feu, qu’un Illuminateur (phôstèr) viendra, et que treize royaumes ainsi que « la génération sans roi » donneront chacun leur explication de son origine."
+      },
+      "pages": {
+        "ja": "NHC V, 64,1–85,32",
+        "en": "NHC V, 64,1–85,32",
+        "fr": "NHC V, p. 64,1–85,32"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本の内外に、ほかの写しは知られていない。",
+        "en": "No other copy is known, either in the Nag Hammadi Codices or elsewhere.",
+        "fr": "Aucune autre copie n’est connue, ni dans les codices de Nag Hammadi ni ailleurs."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "sethian",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        },
+        {
+          "key": "nhs11"
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）",
+        "文献: Layton『The Gnostic Scriptures』に収録されているか要確認"
+      ]
+    },
+    "VI-1": {
+      "reviewed": false,
+      "summary": {
+        "ja": "ペテロと使徒たちが船出してたどり着いた町で、真珠を売り歩くリタルゴエールという男に出会う物語。使徒たちは彼の町へ向かう険しい道のりを歩き通し、やがて医者の姿で現れたリタルゴエールが、自分はイエスであると明かす。イエスは使徒たちに薬の箱を与え、町に戻って病人をいやし、貧しい人々の世話をするよう命じる。",
+        "en": "A story in which Peter and the apostles, having set sail, reach a city where they meet a man named Lithargoel who goes about selling pearls. The apostles complete the hard journey to his city; later Lithargoel appears dressed as a physician and reveals that he is Jesus. Jesus gives the apostles a case of medicines and tells them to return to the city, heal the sick and care for the poor.",
+        "fr": "Récit dans lequel Pierre et les apôtres, ayant pris la mer, arrivent dans une ville où ils rencontrent un homme nommé Lithargoël qui colporte des perles. Les apôtres accomplissent le chemin difficile qui mène à sa ville ; plus tard, Lithargoël apparaît sous les traits d’un médecin et révèle qu’il est Jésus. Jésus donne aux apôtres une trousse de remèdes et leur ordonne de retourner dans la ville, de guérir les malades et de prendre soin des pauvres."
+      },
+      "pages": {
+        "ja": "NHC VI, 1,1–12,22",
+        "en": "NHC VI, 1,1–12,22",
+        "fr": "NHC VI, p. 1,1–12,22"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本の内外に、ほかの写しは知られていない。",
+        "en": "No other copy is known, either in the Nag Hammadi Codices or elsewhere.",
+        "fr": "Aucune autre copie n’est connue, ni dans les codices de Nag Hammadi ni ailleurs."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        },
+        {
+          "key": "nhs11"
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "潮流: gnosticism.html 第III節の表に名がないので空欄",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）"
+      ]
+    },
+    "VI-2": {
+      "reviewed": false,
+      "summary": {
+        "ja": "女性の声による一人称の語りで、物語の枠はない。語り手は「力」から遣わされたと述べ、「わたしは初めの者であり、終わりの者である」のように、互いに相反する事柄を一つに結ぶ自己紹介の言葉を重ねる。その合間に、聞く者たちに向かって、自分に耳を傾け、自分を見落とさないよう呼びかける。",
+        "en": "A first-person speech in a woman’s voice, with no narrative frame. The speaker says she was sent from the Power, and piles up self-descriptions that join opposites, such as “I am the first and the last”. In between she calls on her hearers to listen to her and not to overlook her.",
+        "fr": "Discours à la première personne, dans une voix de femme, sans cadre narratif. La locutrice dit avoir été envoyée par la Puissance, et accumule des présentations d’elle-même qui unissent les contraires, comme « Je suis la première et la dernière ». Entre-temps, elle appelle ceux qui l’écoutent à lui prêter l’oreille et à ne pas la négliger."
+      },
+      "pages": {
+        "ja": "NHC VI, 13,1–21,32",
+        "en": "NHC VI, 13,1–21,32",
+        "fr": "NHC VI, p. 13,1–21,32"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本の内外に、ほかの写しは知られていない。",
+        "en": "No other copy is known, either in the Nag Hammadi Codices or elsewhere.",
+        "fr": "Aucune autre copie n’est connue, ni dans les codices de Nag Hammadi ni ailleurs."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        },
+        {
+          "key": "nhs11"
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "潮流: gnosticism.html 第III節の表に名がないので空欄",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）"
+      ]
+    },
+    "VI-3": {
+      "reviewed": false,
+      "summary": {
+        "ja": "魂を中心にすえた論述で、体の中に投げ込まれた霊的な魂が、欲望や敵の誘惑と戦い、やがて花婿に迎えられて本来の場所で安息を得ることを語る。たとえを多く用い、たとえば魂を狙う敵は、さまざまな餌で魚を釣る漁師にたとえられる。神を尋ね求めない者たちへの非難も含む。表題は末尾に「アウテンティコス・ロゴス」と記される。",
+        "en": "A discourse centred on the soul: a spiritual soul cast into a body struggles against desire and against the enticements of an enemy, until she is received by her bridegroom and finds rest in her true place. It uses many images; for instance, the enemy who preys on the soul is compared to a fisherman who uses various baits. It also includes reproaches against those who do not inquire after God. The title, “Authentikos Logos”, is written at the end.",
+        "fr": "Discours centré sur l’âme : une âme spirituelle, jetée dans un corps, lutte contre le désir et contre les séductions d’un ennemi, jusqu’à ce qu’elle soit accueillie par son époux et trouve le repos en son vrai lieu. Il recourt à de nombreuses images ; par exemple, l’ennemi qui guette l’âme est comparé à un pêcheur qui emploie divers appâts. Il contient aussi des reproches contre ceux qui ne cherchent pas Dieu. Le titre, « Authentikos Logos », est écrit à la fin."
+      },
+      "pages": {
+        "ja": "NHC VI, 22,1–35,24",
+        "en": "NHC VI, 22,1–35,24",
+        "fr": "NHC VI, p. 22,1–35,24"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本の内外に、ほかの写しは知られていない。",
+        "en": "No other copy is known, either in the Nag Hammadi Codices or elsewhere.",
+        "fr": "Aucune autre copie n’est connue, ni dans les codices de Nag Hammadi ni ailleurs."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        },
+        {
+          "key": "nhs11"
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "潮流: gnosticism.html 第III節の表に名がないので空欄",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）"
+      ]
+    },
+    "VI-4": {
+      "reviewed": false,
+      "summary": {
+        "ja": "冒頭で、「われらの大いなる力」を知る者は見えない者となり、火に焼かれることがないと告げる。続いて、洪水で終わる「肉のアイオーン」、大いなる力を知る一人の人物が現れてたとえで教える「魂のアイオーン」、その終わりに来る混乱と火による滅び、そして来たるべきアイオーンを順に語る。",
+        "en": "It opens by declaring that whoever knows “our great Power” will become invisible and that fire will not be able to consume him. It then describes in turn the “aeon of the flesh”, which ends with the flood; the “psychic aeon”, in which a man who knows the great Power appears and teaches in parables; the turmoil and destruction by fire at its end; and the aeon to come.",
+        "fr": "Il commence par déclarer que celui qui connaîtra « notre grande Puissance » deviendra invisible et que le feu ne pourra le consumer. Il décrit ensuite tour à tour l’« éon de la chair », qui s’achève par le déluge ; l’« éon psychique », où paraît un homme qui connaît la grande Puissance et enseigne en paraboles ; le désordre et la destruction par le feu qui le terminent ; et l’éon à venir."
+      },
+      "pages": {
+        "ja": "NHC VI, 36,1–48,15",
+        "en": "NHC VI, 36,1–48,15",
+        "fr": "NHC VI, p. 36,1–48,15"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本の内外に、ほかの写しは知られていない。",
+        "en": "No other copy is known, either in the Nag Hammadi Codices or elsewhere.",
+        "fr": "Aucune autre copie n’est connue, ni dans les codices de Nag Hammadi ni ailleurs."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        },
+        {
+          "key": "nhs11"
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "要約: 「肉のアイオーン」「魂のアイオーン」の訳語と、後半（終わりの時の叙述）のまとめ方を要確認",
+        "潮流: gnosticism.html 第III節の表に名がないので空欄",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）"
+      ]
+    },
+    "VI-5": {
+      "see": "republic",
+      "reviewed": false,
+      "todo": [
+        "下書き。VI,5 は本サイトの『国家』の版と同じ文書なので、内容は republic の項目にまとめた。参照先を確認"
+      ]
+    },
+    "VI-6": {
+      "reviewed": false,
+      "summary": {
+        "ja": "師と弟子が互いを「父」「子」と呼び合う対話の形をとる（師は本文中で「トリスメギストス」と呼ばれる）。子は第八と第九の領域についての知を求め、二人は祈りと、母音の連なりを含む賛歌をささげ、その領域を幻のうちに見たことを語る。終わりに師は、この書をディオスポリスの神殿のために、ヒエログリフで石碑に刻むよう命じる。",
+        "en": "A dialogue in which teacher and pupil address each other as “father” and “son” (the teacher is called “Trismegistus” in the text). The son asks for knowledge of the Eighth and the Ninth; the two offer prayers and hymns that include sequences of vowels, and speak of what they see of those realms in vision. At the end the teacher orders the book to be inscribed in hieroglyphic characters on steles for the temple at Diospolis.",
+        "fr": "Dialogue dans lequel le maître et le disciple s’appellent « père » et « fils » (le maître est appelé « Trismégiste » dans le texte). Le fils demande la connaissance de l’Ogdoade et de l’Ennéade ; tous deux adressent des prières et des hymnes comprenant des suites de voyelles, et disent ce qu’ils voient de ces régions en vision. À la fin, le maître ordonne de graver le livre en caractères hiéroglyphiques sur des stèles destinées au temple de Diospolis."
+      },
+      "pages": {
+        "ja": "NHC VI, 52,1–63,32",
+        "en": "NHC VI, 52,1–63,32",
+        "fr": "NHC VI, p. 52,1–63,32"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本の内外に、ほかの写しは知られていない。",
+        "en": "No other copy is known, either in the Nag Hammadi Codices or elsewhere.",
+        "fr": "Aucune autre copie n’est connue, ni dans les codices de Nag Hammadi ni ailleurs."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "hermetic",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        },
+        {
+          "key": "nhs11"
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "要約: 師をヘルメスと書かず、本文の呼び名（トリスメギストス）にした。ヘルメスと書くか要確認",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）",
+        "文献: 荒井・柴田『ヘルメス文書』に収録されているか要確認",
+        "文献: 第VII節の仏語の一覧にある Mahé『Hermès en Haute-Égypte』（BCNH « Textes » 3・7、注記「Les textes hermétiques du Codex VI」）は日本語の一覧にないので references に入れていない。加えるか要確認"
+      ]
+    },
+    "VI-7": {
+      "reviewed": false,
+      "summary": {
+        "ja": "神から知性（ヌース）、言葉（ロゴス）、知識（グノーシス）を授けられたことに感謝をささげる短い祈り。祈りのあとに、祈った者たちが互いに抱擁し、血を含まない聖なる食事をとりに行ったことが記される。続いて、写字生がどの文書を写したかについて記した短い覚え書きがある。",
+        "en": "A short prayer giving thanks to God for the gift of mind (nous), word (logos) and knowledge (gnōsis). After the prayer it is recorded that those who prayed embraced one another and went to eat their holy food, which contains no blood. A short note follows in which the scribe comments on which texts he copied.",
+        "fr": "Courte prière d’action de grâces à Dieu pour le don de l’intellect (noûs), de la parole (logos) et de la connaissance (gnôsis). Après la prière, il est rapporté que ceux qui avaient prié s’embrassèrent et allèrent prendre leur nourriture sainte, qui ne contient pas de sang. Suit une courte note dans laquelle le copiste s’explique sur les textes qu’il a copiés."
+      },
+      "pages": {
+        "ja": "NHC VI, 63,33–65,7（＋写字生の覚え書き 65,8–14）",
+        "en": "NHC VI, 63,33–65,7 (+ scribal note 65,8–14)",
+        "fr": "NHC VI, p. 63,33–65,7 (+ note du copiste 65,8–14)"
+      },
+      "copies": {
+        "ja": "同じ祈りのギリシア語版がパピルス・ミモー（魔術パピルスの一つ）に、ラテン語版が『アスクレピオス』41 章に残る。",
+        "en": "The same prayer survives in Greek in the Papyrus Mimaut (one of the magical papyri) and in Latin in chapter 41 of the Asclepius.",
+        "fr": "La même prière est conservée en grec dans le papyrus Mimaut (l’un des papyrus magiques) et en latin au chapitre 41 de l’Asclépius."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "hermetic",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        },
+        {
+          "key": "nhs11"
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "頁: 括弧内は TEI ヘッダの「+ scribal note」（サイトの文書一覧で VI,7a として出している覚書）。訳語を要確認",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）",
+        "文献: 荒井・柴田『ヘルメス文書』に収録されているか要確認",
+        "文献: 第VII節の仏語の一覧にある Mahé『Hermès en Haute-Égypte』（BCNH « Textes » 3・7、注記「Les textes hermétiques du Codex VI」）は日本語の一覧にないので references に入れていない。加えるか要確認"
+      ]
+    },
+    "VI-8": {
+      "reviewed": false,
+      "summary": {
+        "ja": "トリスメギストスがアスクレピオスに語る教えで、ラテン語で伝わる『アスクレピオス』の 21–29 章にあたる部分。男女の交わりを秘儀にたとえる話、人間が神々の像をつくること、エジプトに臨む荒廃と神による世界の回復の予言、死後の魂の裁きなどを扱う。",
+        "en": "Teaching given by Trismegistus to Asclepius, corresponding to chapters 21–29 of the Asclepius known in Latin. It deals with the union of male and female as an image of a mystery, the making of statues of gods by human beings, a prophecy of the desolation of Egypt and of God’s restoration of the world, and the judgement of souls after death.",
+        "fr": "Enseignement de Trismégiste à Asclépius, correspondant aux chapitres 21–29 de l’Asclépius connu en latin. Il traite de l’union du mâle et de la femelle comme image d’un mystère, de la fabrication par les hommes de statues de dieux, d’une prophétie de la désolation de l’Égypte et de la restauration du monde par Dieu, et du jugement des âmes après la mort."
+      },
+      "pages": {
+        "ja": "NHC VI, 65,15–78,43",
+        "en": "NHC VI, 65,15–78,43",
+        "fr": "NHC VI, p. 65,15–78,43"
+      },
+      "copies": {
+        "ja": "ラテン語で全体が伝わる『アスクレピオス』の 21–29 章にあたる。",
+        "en": "It corresponds to chapters 21–29 of the Asclepius, which survives complete in Latin.",
+        "fr": "Il correspond aux chapitres 21–29 de l’Asclépius, conservé en entier en latin."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "hermetic",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        },
+        {
+          "key": "nhs11"
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "要約: 本文では師は「トリスメギストス」と呼ばれ、ヘルメスの名は出ない。「ヘルメス・トリスメギストス」と書くか要確認",
+        "ほかの写し: ギリシア語原典の断片的な引用（他の著作に引かれたもの）に触れるか要確認",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）",
+        "文献: 荒井・柴田『ヘルメス文書』に収録されているか要確認",
+        "文献: 第VII節の仏語の一覧にある Mahé『Hermès en Haute-Égypte』（BCNH « Textes » 3・7、注記「Les textes hermétiques du Codex VI」）は日本語の一覧にないので references に入れていない。加えるか要確認"
+      ]
+    },
+    "VII-1": {
+      "reviewed": false,
+      "summary": {
+        "ja": "セームが一人称で、眠りのうちのように思いが体から離れて高みに運ばれ、限りない光の子デルデケアスから啓示を受けたと語る。啓示は、光と闇とその間にある霊から始まり、闇の側から生じた「自然」との争い、洪水やソドムの出来事、デルデケアスがたびたび下ってくることなどを述べる。水による洗礼を批判する箇所を含む。",
+        "en": "Shem relates in the first person how, as if in sleep, his thought was separated from his body and carried up, and how he received a revelation from Derdekeas, the son of the infinite Light. The revelation begins with Light, Darkness and the Spirit between them, and goes on to the conflict with “Nature”, which arose on the side of darkness, the flood and the events of Sodom, and the repeated descents of Derdekeas. It includes passages critical of baptism in water.",
+        "fr": "Sem raconte à la première personne comment, comme dans le sommeil, sa pensée fut séparée de son corps et emportée vers le haut, et comment il reçut une révélation de Derdekeas, fils de la Lumière infinie. La révélation part de la Lumière, des Ténèbres et de l’Esprit qui est entre elles, puis traite du conflit avec la « Nature », issue du côté des ténèbres, du déluge et des événements de Sodome, et des descentes répétées de Derdekeas. Elle contient des passages critiques à l’égard du baptême d’eau."
+      },
+      "pages": {
+        "ja": "NHC VII, 1,1–49,9",
+        "en": "NHC VII, 1,1–49,9",
+        "fr": "NHC VII, p. 1,1–49,9"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本の内外に、ほかの写しは知られていない。",
+        "en": "No other copy is known, either in the Nag Hammadi Codices or elsewhere.",
+        "fr": "Aucune autre copie n’est connue, ni dans les codices de Nag Hammadi ni ailleurs."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "潮流: gnosticism.html 第III節の表に名がないので空欄",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）"
+      ]
+    },
+    "VII-2": {
+      "reviewed": false,
+      "summary": {
+        "ja": "キリストが一人称で語る説教の形をとり、自らが上の世界から下って、アルコーンたちの支配する世界で人の体に入った次第と、その後の受難を語る。十字架の場面については、胆汁と酢を飲み、十字架を担いだのは別の者であり、自分は彼らの無知を笑っていたと語られる。アダム、アブラハム、イサク、ヤコブ、ダビデ、ソロモン、モーセ、そして自分が神だと言ったアルコーンなどを、次々に「笑いもの」と呼ぶ箇所がある。表題は末尾にだけ記され、本文にセツの名は出てこない。",
+        "en": "A discourse in which Christ speaks in the first person about his descent from the world above, his entry into a human body in the world ruled by the archons, and the passion that followed. Of the crucifixion he says that it was another who drank the gall and vinegar and carried the cross, while he was laughing at their ignorance. In one passage Adam, Abraham, Isaac, Jacob, David, Solomon, Moses and the archon who said that he was God, among others, are called “laughingstocks” one after another. The title appears only at the end, and Seth is not named in the text.",
+        "fr": "Discours dans lequel le Christ parle à la première personne de sa descente depuis le monde d’en haut, de son entrée dans un corps humain dans le monde gouverné par les archontes, et de la passion qui a suivi. De la crucifixion, il dit que c’est un autre qui a bu le fiel et le vinaigre et porté la croix, tandis que lui riait de leur ignorance. Dans un passage, Adam, Abraham, Isaac, Jacob, David, Salomon, Moïse et l’archonte qui disait être Dieu, entre autres, sont tour à tour qualifiés de « risée ». Le titre figure seulement à la fin, et Seth n’est pas nommé dans le texte."
+      },
+      "pages": {
+        "ja": "NHC VII, 49,10–70,12",
+        "en": "NHC VII, 49,10–70,12",
+        "fr": "NHC VII, p. 49,10–70,12"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本の内外に、ほかの写しは知られていない。",
+        "en": "No other copy is known, either in the Nag Hammadi Codices or elsewhere.",
+        "fr": "Aucune autre copie n’est connue, ni dans les codices de Nag Hammadi ni ailleurs."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "潮流: gnosticism.html 第III節の表に名がないので空欄",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）"
+      ]
+    },
+    "VII-3": {
+      "reviewed": false,
+      "summary": {
+        "ja": "神殿に座る救い主がペテロに語る言葉と、ペテロが見る幻とその説明からなる黙示文書。祭司たちと民衆が二人を殺そうと迫る幻ののち、ペテロは十字架の場面を見て、木の上で喜び笑っている者と、手足に釘を打たれている者とが別であると救い主から説明される。また、のちに現れて人々を惑わす者たち（自分を「司教」「執事」と呼ぶ者を含む）について予告を受ける。終わりにペテロは我に返る。",
+        "en": "An apocalypse made up of what the Saviour, seated in the temple, says to Peter, the visions Peter sees and their explanation. After a vision of priests and people rushing at them as if to kill them, Peter sees the crucifixion and is told by the Saviour that the one glad and laughing on the tree is not the one whose hands and feet are being nailed. He is also told in advance of people who will come later and lead others astray, including some who call themselves “bishop” and “deacons”. At the end Peter comes to himself.",
+        "fr": "Apocalypse composée des paroles que le Sauveur, assis dans le Temple, adresse à Pierre, des visions que voit Pierre et de leur explication. Après une vision où les prêtres et le peuple se précipitent sur eux comme pour les tuer, Pierre voit la crucifixion, et le Sauveur lui explique que celui qui, sur le bois, est joyeux et rit n’est pas celui dont on cloue les mains et les pieds. Il lui annonce aussi la venue de gens qui égareront les autres, dont certains se font appeler « évêque » et « diacres ». À la fin, Pierre revient à lui."
+      },
+      "pages": {
+        "ja": "NHC VII, 70,13–84,14",
+        "en": "NHC VII, 70,13–84,14",
+        "fr": "NHC VII, p. 70,13–84,14"
+      },
+      "copies": {
+        "ja": "ほかの写しは知られていない。ギリシア語とエチオピア語で伝わる同名の『ペテロの黙示録』とは別の作品である。",
+        "en": "No other copy is known. It is a different work from the Apocalypse of Peter transmitted in Greek and Ethiopic.",
+        "fr": "Aucune autre copie n’est connue. C’est une œuvre différente de l’Apocalypse de Pierre transmise en grec et en éthiopien."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "潮流: gnosticism.html 第III節の表に名がないので空欄",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）"
+      ]
+    },
+    "VII-4": {
+      "reviewed": false,
+      "summary": {
+        "ja": "師が「わが子よ」と繰り返し呼びかけて教えを説く、知恵文学の形をとる文書。情欲や悪しき力に屈せず、理性（ヌース）と知恵に導かれて生きるよう勧め、キリストを知恵・光・教師として繰り返し語る。神の偉大さと、人がどのように神を知りうるかについての考察も含む。",
+        "en": "A wisdom text in which a teacher gives instruction, repeatedly addressing “my son”. It urges the reader not to yield to the passions and evil powers but to live guided by mind (nous) and wisdom, and speaks again and again of Christ as wisdom, light and teacher. It also contains reflections on the greatness of God and on how human beings can know God.",
+        "fr": "Texte de sagesse dans lequel un maître donne son enseignement en s’adressant sans cesse à « mon fils ». Il exhorte à ne pas céder aux passions et aux puissances mauvaises, mais à vivre guidé par l’intellect (noûs) et la sagesse, et parle à maintes reprises du Christ comme sagesse, lumière et maître. Il contient aussi des réflexions sur la grandeur de Dieu et sur la manière dont l’homme peut le connaître."
+      },
+      "pages": {
+        "ja": "NHC VII, 84,15–118,7（＋奥書 118,8–9）",
+        "en": "NHC VII, 84,15–118,7 (+ colophon 118,8–9)",
+        "fr": "NHC VII, p. 84,15–118,7 (+ colophon 118,8–9)"
+      },
+      "copies": {
+        "ja": "",
+        "en": "",
+        "fr": ""
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "ほかの写し: 一節が大英図書館所蔵の羊皮紙一葉に大アントニオスの言葉として伝わるとされる。所蔵番号と範囲を確かめてから記入（それまで空欄）",
+        "頁: 括弧内は TEI ヘッダの「+ colophon」（写字生の奥書）。訳語を要確認",
+        "潮流: gnosticism.html 第III節の表に名がないので空欄",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）"
+      ]
+    },
+    "VII-5": {
+      "reviewed": false,
+      "summary": {
+        "ja": "「生ける揺るがぬ種族の父」セツの三つの碑について、ドシテオスが見て理解し、読んで覚え、伝えた啓示である、と冒頭で述べる。第一の碑は（ピ）ゲラダマス、第二の碑は男性的な処女バルベーロー、第三の碑は真に先在する者に向けた賛美で、いずれも祈りと賛歌の形をとる。終わりに、これらの賛美を用いて上昇し、また下降する仕方が述べられる。",
+        "en": "It states at the outset that it is the revelation of Dositheos about the three steles of Seth, “the father of the living and unshakable race”, which Dositheos saw and understood, read and remembered, and passed on. The first stele is a praise addressed to (Pi)geradamas, the second to the male virgin Barbelo, and the third to the One who truly pre-exists; all take the form of prayers and hymns. At the end it describes how these praises are used for ascending and descending again.",
+        "fr": "Le texte déclare d’emblée être la révélation de Dosithée sur les trois stèles de Seth, « le père de la race vivante et inébranlable », que Dosithée a vues et comprises, lues et retenues, puis transmises. La première stèle est une louange adressée à (Pi)géradamas, la deuxième à Barbélô, la vierge mâle, et la troisième à Celui qui préexiste véritablement ; toutes prennent la forme de prières et d’hymnes. À la fin est décrite la manière d’employer ces louanges pour monter puis redescendre."
+      },
+      "pages": {
+        "ja": "NHC VII, 118,10–127,27（＋奥書 127,28–32）",
+        "en": "NHC VII, 118,10–127,27 (+ colophon 127,28–32)",
+        "fr": "NHC VII, p. 118,10–127,27 (+ colophon 127,28–32)"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本の内外に、ほかの写しは知られていない。",
+        "en": "No other copy is known, either in the Nag Hammadi Codices or elsewhere.",
+        "fr": "Aucune autre copie n’est connue, ni dans les codices de Nag Hammadi ni ailleurs."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "sethian",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "頁: 括弧内は TEI ヘッダの「+ colophon」（写字生の奥書）。訳語を要確認",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）",
+        "文献: Layton『The Gnostic Scriptures』に収録されているか要確認"
+      ]
+    },
+    "VIII-1": {
+      "reviewed": false,
+      "summary": {
+        "ja": "ゾストリアノスが一人称で、思い悩んでいたときに永遠の光の知識の天使に出会い、体を地上に残して天に昇っていく次第を語る啓示文書。上昇の途中、彼は段階ごとに洗礼を受け、天の存在たちから、バルベーローのアイオーン（カリュプトス、プロトファネース、アウトゲネース）や見えざる霊についての教えを受ける。最後に地上に戻り、知ったことを三枚の板に書き記して残し、迷っている人々に目覚めるよう呼びかける。写本の損傷がきわめて大きい。",
+        "en": "A revelation text in which Zostrianos tells in the first person how, while troubled in mind, he met the angel of the knowledge of the eternal light, left his body on earth and ascended through the heavens. On the way up he is baptized at each stage and receives teaching from heavenly beings about the aeon of Barbelo (Kalyptos, Protophanes, Autogenes) and the invisible Spirit. Finally he returns to earth, writes what he has learned on three tablets, and calls on erring people to awaken. The manuscript is very badly damaged.",
+        "fr": "Texte de révélation dans lequel Zostrien raconte à la première personne comment, l’esprit troublé, il rencontra l’ange de la connaissance de la lumière éternelle, laissa son corps sur la terre et monta à travers les cieux. Au cours de l’ascension, il reçoit un baptême à chaque étape et est instruit par des êtres célestes sur l’éon de Barbélô (Kalyptos, Protophanès, Autogène) et sur l’Esprit invisible. Enfin il redescend sur la terre, écrit ce qu’il a appris sur trois tablettes et appelle à s’éveiller les gens qui errent. Le manuscrit est très endommagé."
+      },
+      "pages": {
+        "ja": "NHC VIII, 1,1–132,9",
+        "en": "NHC VIII, 1,1–132,9",
+        "fr": "NHC VIII, p. 1,1–132,9"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本の内外に、ほかの写しは知られていない。",
+        "en": "No other copy is known, either in the Nag Hammadi Codices or elsewhere.",
+        "fr": "Aucune autre copie n’est connue, ni dans les codices de Nag Hammadi ni ailleurs."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "sethian",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）",
+        "文献: Layton『The Gnostic Scriptures』に収録されているか要確認"
+      ]
+    },
+    "VIII-2": {
+      "reviewed": false,
+      "summary": {
+        "ja": "「ペテロがフィリポに送った手紙」という表題で始まり、ペテロがフィリポに、使徒たちのもとに戻るよう求める手紙が置かれる。続いて使徒たちはオリーブ山に集まって祈り、大いなる光の中から聞こえる声が、アイオーンの欠けやアルコーンたちとどう戦うかといった問いに答える。その後、ペテロが受難について語り、使徒たちは聖霊に満たされて宣教に出ていく。",
+        "en": "It opens with the title “The letter of Peter which he sent to Philip”, followed by a letter in which Peter asks Philip to rejoin the apostles. The apostles then gather on the Mount of Olives and pray, and a voice from a great light answers their questions, for example about the deficiency of the aeons and how to fight the archons. After this Peter speaks about the passion, and the apostles, filled with the Holy Spirit, go out to preach.",
+        "fr": "Le texte commence par le titre « La lettre de Pierre qu’il envoya à Philippe », suivi d’une lettre dans laquelle Pierre demande à Philippe de rejoindre les apôtres. Les apôtres se réunissent ensuite sur le mont des Oliviers et prient ; une voix venant d’une grande lumière répond à leurs questions, par exemple sur la déficience des éons et sur la manière de combattre les archontes. Puis Pierre parle de la passion, et les apôtres, remplis de l’Esprit saint, partent prêcher."
+      },
+      "pages": {
+        "ja": "NHC VIII, 132,10–140,27",
+        "en": "NHC VIII, 132,10–140,27",
+        "fr": "NHC VIII, p. 132,10–140,27"
+      },
+      "copies": {
+        "ja": "写本外では、チャコス写本に同じ作品の別の写しが残る。",
+        "en": "Outside the Nag Hammadi Codices, another copy survives in Codex Tchacos.",
+        "fr": "Hors des codices de Nag Hammadi, une autre copie est conservée dans le Codex Tchacos."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "潮流: gnosticism.html 第III節の表に名がないので空欄",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）"
+      ]
+    },
+    "IX-1": {
+      "reviewed": false,
+      "summary": {
+        "ja": "祭司メルキゼデクが、天から遣わされたガマリエールから啓示を受ける文書。イエス・キリストの到来、受難と復活が予告され、イエスは生まれず、食べず、苦しまず、復活しなかったと言う者たちが現れることも告げられる。メルキゼデクは、天の存在たちに賛美と祈りをささげる。写本の損傷が大きく、読めない箇所が多い。",
+        "en": "A text in which the priest Melchizedek receives a revelation from Gamaliel, who has been sent from above. It foretells the coming of Jesus Christ, his passion and his resurrection, and announces that some will say he was not begotten, did not eat, did not suffer and did not rise. Melchizedek offers praise and prayer to heavenly beings. The manuscript is badly damaged and many passages are illegible.",
+        "fr": "Texte dans lequel le prêtre Melchisédek reçoit une révélation de Gamaliel, envoyé d’en haut. Il annonce la venue de Jésus-Christ, sa passion et sa résurrection, et prédit que certains diront qu’il n’a pas été engendré, qu’il n’a pas mangé, qu’il n’a pas souffert et qu’il n’est pas ressuscité. Melchisédek adresse louanges et prières à des êtres célestes. Le manuscrit est très endommagé et de nombreux passages sont illisibles."
+      },
+      "pages": {
+        "ja": "NHC IX, 1,1–27,10",
+        "en": "NHC IX, 1,1–27,10",
+        "fr": "NHC IX, p. 1,1–27,10"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本の内外に、ほかの写しは知られていない。",
+        "en": "No other copy is known, either in the Nag Hammadi Codices or elsewhere.",
+        "fr": "Aucune autre copie n’est connue, ni dans les codices de Nag Hammadi ni ailleurs."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "潮流: 表に名がないので空欄。セツ派に数えられることが多い文書なので、表との関係を要確認（ここでは決めていない）",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）",
+        "文献: Layton『The Gnostic Scriptures』に収録されているか要確認"
+      ]
+    },
+    "IX-2": {
+      "reviewed": false,
+      "summary": {
+        "ja": "写本で二頁ほどの短い文書で、「すべての父」、光のエンノイア、高みに住むヌースなどへの呼びかけで始まる。それらに向かって叫ぶノレアの声が聞き入れられ、ノレアが本来の場所に迎え入れられることを語る。",
+        "en": "A short text of about two manuscript pages, which opens by invoking the “Father of the All”, the Ennoia of the light, the Nous dwelling in the heights and others. It tells how Norea cries out to them, is heard, and is received into her own place.",
+        "fr": "Court texte d’environ deux pages du manuscrit, qui commence par invoquer le « Père du Tout », l’Ennoia de la lumière, le Noûs qui habite les hauteurs et d’autres. Il raconte comment Noréa crie vers eux, est entendue et est accueillie en son propre lieu."
+      },
+      "pages": {
+        "ja": "NHC IX, 27,11–29,5",
+        "en": "NHC IX, 27,11–29,5",
+        "fr": "NHC IX, p. 27,11–29,5"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本の内外に、ほかの写しは知られていない。",
+        "en": "No other copy is known, either in the Nag Hammadi Codices or elsewhere.",
+        "fr": "Aucune autre copie n’est connue, ni dans les codices de Nag Hammadi ni ailleurs."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "潮流: 表に名がないので空欄。セツ派に数えられることが多い文書なので、表との関係を要確認（ここでは決めていない）",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）",
+        "文献: Layton『The Gnostic Scriptures』に収録されているか要確認"
+      ]
+    },
+    "IX-3": {
+      "reviewed": false,
+      "summary": {
+        "ja": "「体の耳ではなく心の耳で聞くことのできる者たち」に向けて語り始める、説教と論争の性格をもつ文書。律法と真理を対比し、人の子の到来とヨルダン川の場面を語り、殉教によって救われると考える者たちを批判する。創世記の楽園の蛇の物語を取り上げて論じる部分があり、ヴァレンティノス、バシレイデース、イシドロス、シモン派など、ほかの教師や集団への批判も含む。後半は損傷が大きい。",
+        "en": "A text of homiletic and polemical character, which begins by addressing “those who know how to hear not with the ears of the body but with the ears of the heart”. It contrasts the Law with the truth, speaks of the coming of the Son of Man and the scene at the Jordan, and criticizes those who think they are saved through martyrdom. One section takes up the story of the serpent in the paradise of Genesis, and the text also criticizes other teachers and groups, among them Valentinus, Basilides, Isidore and the Simonians. The latter part is badly damaged.",
+        "fr": "Texte de caractère homilétique et polémique, qui commence en s’adressant à « ceux qui savent entendre non avec les oreilles du corps, mais avec les oreilles du cœur ». Il oppose la Loi à la vérité, parle de la venue du Fils de l’Homme et de la scène du Jourdain, et critique ceux qui pensent être sauvés par le martyre. Une section reprend l’histoire du serpent dans le paradis de la Genèse, et le texte critique aussi d’autres maîtres et groupes, dont Valentin, Basilide, Isidore et les simoniens. La dernière partie est très endommagée."
+      },
+      "pages": {
+        "ja": "NHC IX, 29,6–74,30",
+        "en": "NHC IX, 29,6–74,30",
+        "fr": "NHC IX, p. 29,6–74,30"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本の内外に、ほかの写しは知られていない。",
+        "en": "No other copy is known, either in the Nag Hammadi Codices or elsewhere.",
+        "fr": "Aucune autre copie n’est connue, ni dans les codices de Nag Hammadi ni ailleurs."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "要約: 後半の損傷部分の内容は書いていない。末尾には写本 IX の未同定断片が混じっている可能性がある（source/nhc_fulltext_split/README_ja.md）",
+        "潮流: gnosticism.html 第III節の表に名がないので空欄",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）"
+      ]
+    },
+    "X-1": {
+      "reviewed": false,
+      "summary": {
+        "ja": "末尾に「マルサネス」の題をもつ、一人称の啓示文書。語り手は、自らが知った天の世界の段階（十三の「封印」として数えられる）と、上昇して見たものを語る。中ほどには、アルファベットの母音と子音の種類や組み合わせを、魂や天の存在と結びつけて論じる長い部分がある。写本の損傷がきわめて大きく、筋をたどれない箇所が多い。",
+        "en": "A first-person revelation text that bears the title “Marsanes” at its end. The speaker describes the levels of the heavenly world he has come to know (counted as thirteen “seals”) and what he saw in his ascent. In the middle is a long section that discusses the kinds and combinations of vowels and consonants of the alphabet, relating them to the soul and to heavenly beings. The manuscript is very badly damaged, and in many places the thread cannot be followed.",
+        "fr": "Texte de révélation à la première personne, qui porte à la fin le titre « Marsanès ». Le locuteur décrit les degrés du monde céleste qu’il a connus (comptés comme treize « sceaux ») et ce qu’il a vu au cours de son ascension. Au milieu se trouve une longue section qui traite des espèces et des combinaisons des voyelles et des consonnes de l’alphabet, en les rapportant à l’âme et aux êtres célestes. Le manuscrit est très endommagé, et en bien des endroits on ne peut suivre le fil du texte."
+      },
+      "pages": {
+        "ja": "NHC X, 1,1–68,18",
+        "en": "NHC X, 1,1–68,18",
+        "fr": "NHC X, p. 1,1–68,18"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本の内外に、ほかの写しは知られていない。",
+        "en": "No other copy is known, either in the Nag Hammadi Codices or elsewhere.",
+        "fr": "Aucune autre copie n’est connue, ni dans les codices de Nag Hammadi ni ailleurs."
+      },
+      "language": {
+        "ja": "コプト語（リコポリス方言）",
+        "en": "Coptic (Lycopolitan)",
+        "fr": "copte (lycopolitain)"
+      },
+      "current": "sethian",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "要約: 損傷が大きいので、読み取れる部分（封印、母音と子音）に限って書いた",
+        "本文: 末尾の題のあとに未配置の断片が 3 つある（README_ja.md）。頁の表記に含めるか要確認",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）",
+        "文献: Layton『The Gnostic Scriptures』に収録されているか要確認"
+      ]
+    },
+    "XI-1": {
+      "reviewed": false,
+      "summary": {
+        "ja": "信者の共同体に向けた説教の形をとる文書。前半は、救い主の到来と教え、十字架について、教師や頭といったイメージを用いて語る。後半は、霊の賜物をめぐってねたみや分裂が生じている共同体に向けて、一つの体とその部分の比喩を用いて一致を勧める。写本の損傷が大きい。",
+        "en": "A text in the form of a sermon addressed to a community of believers. The first part speaks of the Saviour’s coming, his teaching and the cross, using images such as the teacher and the head. The second part, addressing a community in which spiritual gifts have given rise to envy and division, urges unity by means of the image of one body and its members. The manuscript is badly damaged.",
+        "fr": "Texte en forme de sermon adressé à une communauté de croyants. La première partie parle de la venue du Sauveur, de son enseignement et de la croix, au moyen d’images comme celles du maître et de la tête. La seconde, adressée à une communauté où les dons spirituels ont suscité jalousie et division, exhorte à l’unité au moyen de l’image d’un seul corps et de ses membres. Le manuscrit est très endommagé."
+      },
+      "pages": {
+        "ja": "NHC XI, 1,1–21,35",
+        "en": "NHC XI, 1,1–21,35",
+        "fr": "NHC XI, p. 1,1–21,35"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本の内外に、ほかの写しは知られていない。",
+        "en": "No other copy is known, either in the Nag Hammadi Codices or elsewhere.",
+        "fr": "Aucune autre copie n’est connue, ni dans les codices de Nag Hammadi ni ailleurs."
+      },
+      "language": {
+        "ja": "コプト語（リコポリス方言）",
+        "en": "Coptic (Lycopolitan)",
+        "fr": "copte (lycopolitain)"
+      },
+      "current": "",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "潮流: 表に名がないので空欄。ヴァレンティノス派に数えられることが多い文書なので、表との関係を要確認（ここでは決めていない）",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）",
+        "文献: Layton『The Gnostic Scriptures』に収録されているか要確認"
+      ]
+    },
+    "XI-2": {
+      "reviewed": false,
+      "summary": {
+        "ja": "冒頭近くで「わたしの秘義を、わたしに属する者たちと、これから属する者たちに語ろう」と述べる、世界と救いの成り立ちについての解説。すべての根である父から子とアイオーンたちが生じてプレーローマを成すこと、境界（ホロス）、ソフィアの苦しみ、イエスによる被造世界の形成、造物主による人間の創造、カインとアベルなどを順に述べる。写本の損傷が大きい。このあとに、塗油・洗礼・聖餐についての短い文（XI,2a–2e）が続く。",
+        "en": "An exposition of how the world and salvation came to be; near the beginning it says: “I shall speak my mystery to those who are mine and to those who will be mine.” It describes in turn how the Son and the aeons come forth from the Father, the root of the All, and form the Pleroma; the Limit (Horos); the suffering of Sophia; the shaping of the created world by Jesus; the creation of humankind by the demiurge; Cain and Abel; and other topics. The manuscript is badly damaged. It is followed by short texts on anointing, baptism and the eucharist (XI,2a–2e).",
+        "fr": "Exposé sur l’origine du monde et du salut ; près du début, il déclare : « Je dirai mon mystère à ceux qui sont miens et à ceux qui seront miens. » Il décrit successivement comment le Fils et les éons procèdent du Père, racine du Tout, et forment le Plérôme ; la Limite (Horos) ; la souffrance de Sophia ; la formation du monde créé par Jésus ; la création de l’homme par le démiurge ; Caïn et Abel, entre autres. Le manuscrit est très endommagé. Il est suivi de courts textes sur l’onction, le baptême et l’eucharistie (XI,2a–2e)."
+      },
+      "pages": {
+        "ja": "NHC XI, 22,1–39,39",
+        "en": "NHC XI, 22,1–39,39",
+        "fr": "NHC XI, p. 22,1–39,39"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本の内外に、ほかの写しは知られていない。",
+        "en": "No other copy is known, either in the Nag Hammadi Codices or elsewhere.",
+        "fr": "Aucune autre copie n’est connue, ni dans les codices de Nag Hammadi ni ailleurs."
+      },
+      "language": {
+        "ja": "コプト語（リコポリス方言）",
+        "en": "Coptic (Lycopolitan)",
+        "fr": "copte (lycopolitain)"
+      },
+      "current": "valentinian",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）",
+        "文献: Layton『The Gnostic Scriptures』に収録されているか要確認"
+      ]
+    },
+    "XI-2a": {
+      "reviewed": false,
+      "summary": {
+        "ja": "XI,2（ヴァレンティノス派の講解）のあとに置かれた、塗油にかかわる短い文（写本の一頁足らず）。子イエス・キリストを遣わして「わたしたち」に油を注いでほしいと願う言葉を含む。欠損がある。",
+        "en": "A short text on anointing, placed after XI,2 (A Valentinian Exposition), less than one manuscript page long. It contains a request that the Son, Jesus Christ, be sent to anoint “us”. There are lacunae.",
+        "fr": "Court texte sur l’onction, placé après XI,2 (Exposé valentinien), qui occupe moins d’une page du manuscrit. Il contient la demande que le Fils, Jésus-Christ, soit envoyé pour « nous » oindre. Il présente des lacunes."
+      },
+      "pages": {
+        "ja": "NHC XI, 40,1–29",
+        "en": "NHC XI, 40,1–29",
+        "fr": "NHC XI, p. 40,1–29"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本の内外に、ほかの写しは知られていない。",
+        "en": "No other copy is known, either in the Nag Hammadi Codices or elsewhere.",
+        "fr": "Aucune autre copie n’est connue, ni dans les codices de Nag Hammadi ni ailleurs."
+      },
+      "language": {
+        "ja": "コプト語（リコポリス方言）",
+        "en": "Coptic (Lycopolitan)",
+        "fr": "copte (lycopolitain)"
+      },
+      "current": "",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "要約: 書き出しと目立つ語だけに基づく最小限の記述。要確認",
+        "潮流: 表には XI,2（ヴァレンティノス派の講解）の名しかないので空欄。XI,2 に従わせるか要確認",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: Meyer と Pléiade は第VII節の「全文書の訳」に従って挙げた。この部分がどう訳されているか（独立に訳されているか）要確認",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）"
+      ]
+    },
+    "XI-2b": {
+      "reviewed": false,
+      "summary": {
+        "ja": "XI,2 のあとに置かれた、洗礼にかかわる短い文。「最初の洗礼」は罪の赦しである、と述べる箇所がある。欠損がある。",
+        "en": "A short text on baptism, placed after XI,2. One passage states that “the first baptism” is the forgiveness of sins. There are lacunae.",
+        "fr": "Court texte sur le baptême, placé après XI,2. Un passage affirme que « le premier baptême » est la rémission des péchés. Il présente des lacunes."
+      },
+      "pages": {
+        "ja": "NHC XI, 40,30–41,38",
+        "en": "NHC XI, 40,30–41,38",
+        "fr": "NHC XI, p. 40,30–41,38"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本の内外に、ほかの写しは知られていない。",
+        "en": "No other copy is known, either in the Nag Hammadi Codices or elsewhere.",
+        "fr": "Aucune autre copie n’est connue, ni dans les codices de Nag Hammadi ni ailleurs."
+      },
+      "language": {
+        "ja": "コプト語（リコポリス方言）",
+        "en": "Coptic (Lycopolitan)",
+        "fr": "copte (lycopolitain)"
+      },
+      "current": "",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "要約: 書き出しと目立つ語だけに基づく最小限の記述。要確認",
+        "潮流: 表には XI,2（ヴァレンティノス派の講解）の名しかないので空欄。XI,2 に従わせるか要確認",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: Meyer と Pléiade は第VII節の「全文書の訳」に従って挙げた。この部分がどう訳されているか（独立に訳されているか）要確認",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）"
+      ]
+    },
+    "XI-2c": {
+      "reviewed": false,
+      "summary": {
+        "ja": "XI,2 のあとに置かれた、洗礼にかかわるもう一つの短い文。「この世からヨルダンへ」「肉的なものから霊的なものへ」のように、移り変わりを並べる箇所がある。欠損がある。",
+        "en": "Another short text on baptism, placed after XI,2. One passage lists transitions such as “from the world into the Jordan” and “from the carnal into the spiritual”. There are lacunae.",
+        "fr": "Autre court texte sur le baptême, placé après XI,2. Un passage énumère des transitions telles que « du monde au Jourdain » et « du charnel au spirituel ». Il présente des lacunes."
+      },
+      "pages": {
+        "ja": "NHC XI, 42,1–43,19",
+        "en": "NHC XI, 42,1–43,19",
+        "fr": "NHC XI, p. 42,1–43,19"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本の内外に、ほかの写しは知られていない。",
+        "en": "No other copy is known, either in the Nag Hammadi Codices or elsewhere.",
+        "fr": "Aucune autre copie n’est connue, ni dans les codices de Nag Hammadi ni ailleurs."
+      },
+      "language": {
+        "ja": "コプト語（リコポリス方言）",
+        "en": "Coptic (Lycopolitan)",
+        "fr": "copte (lycopolitain)"
+      },
+      "current": "",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "要約: 書き出しと目立つ語だけに基づく最小限の記述。要確認",
+        "潮流: 表には XI,2（ヴァレンティノス派の講解）の名しかないので空欄。XI,2 に従わせるか要確認",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: Meyer と Pléiade は第VII節の「全文書の訳」に従って挙げた。この部分がどう訳されているか（独立に訳されているか）要確認",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）"
+      ]
+    },
+    "XI-2d": {
+      "reviewed": false,
+      "summary": {
+        "ja": "XI,2 のあとに置かれた、聖餐にかかわる短い文。父に感謝をささげ、子イエス・キリストを思い起こす祈りで、「アーメン」で結ばれる。",
+        "en": "A short text on the eucharist, placed after XI,2. It is a prayer that gives thanks to the Father and remembers his Son Jesus Christ, ending with “Amen”.",
+        "fr": "Court texte sur l’eucharistie, placé après XI,2. C’est une prière qui rend grâces au Père et fait mémoire de son Fils Jésus-Christ ; elle se termine par « Amen »."
+      },
+      "pages": {
+        "ja": "NHC XI, 43,20–38",
+        "en": "NHC XI, 43,20–38",
+        "fr": "NHC XI, p. 43,20–38"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本の内外に、ほかの写しは知られていない。",
+        "en": "No other copy is known, either in the Nag Hammadi Codices or elsewhere.",
+        "fr": "Aucune autre copie n’est connue, ni dans les codices de Nag Hammadi ni ailleurs."
+      },
+      "language": {
+        "ja": "コプト語（リコポリス方言）",
+        "en": "Coptic (Lycopolitan)",
+        "fr": "copte (lycopolitain)"
+      },
+      "current": "",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "要約: 書き出しと目立つ語だけに基づく最小限の記述。要確認",
+        "潮流: 表には XI,2（ヴァレンティノス派の講解）の名しかないので空欄。XI,2 に従わせるか要確認",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: Meyer と Pléiade は第VII節の「全文書の訳」に従って挙げた。この部分がどう訳されているか（独立に訳されているか）要確認",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）"
+      ]
+    },
+    "XI-2e": {
+      "reviewed": false,
+      "summary": {
+        "ja": "XI,2 のあとに置かれた、聖餐にかかわるもう一つの短い文（写本の一頁）。欠損がある。",
+        "en": "Another short text on the eucharist, placed after XI,2 (one manuscript page). There are lacunae.",
+        "fr": "Autre court texte sur l’eucharistie, placé après XI,2 (une page du manuscrit). Il présente des lacunes."
+      },
+      "pages": {
+        "ja": "NHC XI, 44,1–37",
+        "en": "NHC XI, 44,1–37",
+        "fr": "NHC XI, p. 44,1–37"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本の内外に、ほかの写しは知られていない。",
+        "en": "No other copy is known, either in the Nag Hammadi Codices or elsewhere.",
+        "fr": "Aucune autre copie n’est connue, ni dans les codices de Nag Hammadi ni ailleurs."
+      },
+      "language": {
+        "ja": "コプト語（リコポリス方言）",
+        "en": "Coptic (Lycopolitan)",
+        "fr": "copte (lycopolitain)"
+      },
+      "current": "",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "要約: 書き出しと目立つ語だけに基づく最小限の記述。要確認",
+        "潮流: 表には XI,2（ヴァレンティノス派の講解）の名しかないので空欄。XI,2 に従わせるか要確認",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: Meyer と Pléiade は第VII節の「全文書の訳」に従って挙げた。この部分がどう訳されているか（独立に訳されているか）要確認",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）"
+      ]
+    },
+    "XI-3": {
+      "reviewed": false,
+      "summary": {
+        "ja": "アロゲネスが息子メッソスに宛てて、自らが受けた啓示を書き記すという形をとる。前半では女性の啓示者ユエールが、三重の力をもつ者やバルベーローのアイオーンについて語る。後半では、アロゲネスが百年の準備ののちに上昇し、光の存在たちから、知ることのできない者について否定の言葉を重ねて語る教えを受ける。終わりに、この書を山の上に置き、見張りの者を呼び出すよう命じられる。",
+        "en": "Allogenes writes down for his son Messos the revelations he has received. In the first part the female revealer Youel speaks about the Triple-Powered One and the aeon of Barbelo. In the second, after a hundred years of preparation, Allogenes ascends and receives from beings of light a teaching about the Unknowable One, expressed through a long series of negations. At the end he is told to place this book on a mountain and to invoke its guardian.",
+        "fr": "Allogène met par écrit pour son fils Messos les révélations qu’il a reçues. Dans la première partie, la révélatrice Youël parle du Triple-Puissant et de l’éon de Barbélô. Dans la seconde, après cent ans de préparation, Allogène monte et reçoit d’êtres de lumière un enseignement sur l’Inconnaissable, exprimé par une longue suite de négations. À la fin, il lui est ordonné de déposer ce livre sur une montagne et d’invoquer son gardien."
+      },
+      "pages": {
+        "ja": "NHC XI, 45,1–69,20",
+        "en": "NHC XI, 45,1–69,20",
+        "fr": "NHC XI, p. 45,1–69,20"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本の内外に、ほかの写しは知られていない。",
+        "en": "No other copy is known, either in the Nag Hammadi Codices or elsewhere.",
+        "fr": "Aucune autre copie n’est connue, ni dans les codices de Nag Hammadi ni ailleurs."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "sethian",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "ほかの写し: チャコス写本にあるアロゲネスを主人公とする文書は別の作品とされる。触れるか要確認",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）",
+        "文献: Layton『The Gnostic Scriptures』に収録されているか要確認"
+      ]
+    },
+    "XI-4": {
+      "reviewed": false,
+      "summary": {
+        "ja": "「ヒュプシフロネが、その処女性の場所で示されて見たことについての書」という書き出しで始まる短い文書（写本で約四頁）。ヒュプシフロネが一人称で、処女性の場所を出て世に下ったことを語り、ファイノプスという名の者が登場する。損傷が大きく、内容の多くは読み取れない。",
+        "en": "A short text (about four manuscript pages) that begins: “The book concerning the things that were seen by Hypsiphrone, being revealed in the place of her virginity.” Hypsiphrone tells in the first person how she left the place of her virginity and went down into the world, and a figure named Phainops appears. The text is badly damaged and most of its content cannot be read.",
+        "fr": "Court texte (environ quatre pages du manuscrit) qui commence ainsi : « Le livre au sujet des choses qu’a vues Hypsiphroné, qui lui furent révélées dans le lieu de sa virginité. » Hypsiphroné raconte à la première personne comment elle quitta le lieu de sa virginité et descendit dans le monde, et un personnage nommé Phainops apparaît. Le texte est très endommagé et la plus grande partie de son contenu est illisible."
+      },
+      "pages": {
+        "ja": "NHC XI, 69,21–72,33",
+        "en": "NHC XI, 69,21–72,33",
+        "fr": "NHC XI, p. 69,21–72,33"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本の内外に、ほかの写しは知られていない。",
+        "en": "No other copy is known, either in the Nag Hammadi Codices or elsewhere.",
+        "fr": "Aucune autre copie n’est connue, ni dans les codices de Nag Hammadi ni ailleurs."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "要約: 書き出しと冒頭部分の文言だけに基づく。要確認",
+        "潮流: gnosticism.html 第III節の表に名がないので空欄",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）"
+      ]
+    },
+    "XII-1": {
+      "reviewed": false,
+      "summary": {
+        "ja": "神を敬うこと、節制、言葉の慎み、賢者のあり方などを短い格言の形で説く『セクストスの金言』のコプト語訳。写本 XII には、その一部だけが断片的に残る。",
+        "en": "A Coptic translation of the Sentences of Sextus, which teach piety towards God, self-control, restraint in speech, the character of the wise person and similar topics in the form of short maxims. Only part of it survives, in fragmentary form, in Codex XII.",
+        "fr": "Traduction copte des Sentences de Sextus, qui enseignent sous forme de courtes maximes la piété envers Dieu, la maîtrise de soi, la retenue dans la parole, le caractère du sage, entre autres. Seule une partie en est conservée, de manière fragmentaire, dans le codex XII."
+      },
+      "pages": {
+        "ja": "NHC XII, 15,1–16,28 と 27,1–34,28",
+        "en": "NHC XII, 15,1–16,28 and 27,1–34,28",
+        "fr": "NHC XII, p. 15,1–16,28 et 27,1–34,28"
+      },
+      "copies": {
+        "ja": "ギリシア語の本文が伝わり、ルフィヌスによるラテン語訳、シリア語訳などもある。ナグ・ハマディ写本内にほかの写しはない。",
+        "en": "The Greek text survives, as do a Latin translation by Rufinus, a Syriac version and others. There is no other copy in the Nag Hammadi Codices.",
+        "fr": "Le texte grec est conservé, ainsi qu’une traduction latine de Rufin, une version syriaque et d’autres. Il n’y a pas d’autre copie dans les codices de Nag Hammadi."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        },
+        {
+          "key": "bcnh11"
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "要約: 写本 XII に残る範囲（どの金言が残るか）は書いていない",
+        "潮流: gnosticism.html 第III節の表に名がないので空欄",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』に収録されているか要確認（第VII節からは確かめられないので載せていない）"
+      ]
+    },
+    "XII-2": {
+      "reviewed": false,
+      "summary": {
+        "ja": "『真理の福音』（I,3）のサヒド方言による写しの断片。I,3 の一部の箇所にあたる文言が、写本の数頁にわたって断片的に残る。",
+        "en": "Fragments of a Sahidic copy of the Gospel of Truth (I,3). Wording corresponding to some passages of I,3 survives in fragmentary form over several manuscript pages.",
+        "fr": "Fragments d’une copie en sahidique de l’Évangile de la Vérité (I,3). Des passages correspondant à certaines parties de I,3 subsistent de manière fragmentaire sur quelques pages du manuscrit."
+      },
+      "pages": {
+        "ja": "NHC XII, 53,19–60,30",
+        "en": "NHC XII, 53,19–60,30",
+        "fr": "NHC XII, p. 53,19–60,30"
+      },
+      "copies": {
+        "ja": "主な写しは I,3（リコポリス方言）で、XII,2 はその一部にあたる断片である。写本外の写しは知られていない。",
+        "en": "The main copy is I,3 (Lycopolitan); XII,2 consists of fragments corresponding to parts of it. No copy is known outside the Nag Hammadi Codices.",
+        "fr": "La copie principale est I,3 (en lycopolitain) ; XII,2 se compose de fragments correspondant à certaines de ses parties. Aucune copie n’est connue en dehors des codices de Nag Hammadi."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "valentinian",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "潮流: 『真理の福音』の写しなので I,3 と同じくヴァレンティノス派にした。断片も主項目に従わせてよいか要確認",
+        "本文: XII,2 と XII,3 の境目には決め手がない（source/nhc_fulltext_split/README_ja.md）",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: Meyer と Pléiade は第VII節の「全文書の訳」に従って挙げた。この部分がどう訳されているか（独立に訳されているか）要確認",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）",
+        "文献: Layton『The Gnostic Scriptures』に収録されているか要確認"
+      ]
+    },
+    "XII-3": {
+      "reviewed": false,
+      "summary": {
+        "ja": "写本 XII に残る、どの作品に属するか特定されていない小さな断片。",
+        "en": "Small fragments of Codex XII that have not been identified as belonging to any known work.",
+        "fr": "Petits fragments du codex XII, qui n’ont été rattachés à aucune œuvre connue."
+      },
+      "pages": {
+        "ja": "",
+        "en": "",
+        "fr": ""
+      },
+      "copies": {
+        "ja": "",
+        "en": "",
+        "fr": ""
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        },
+        {
+          "key": "bcnh11"
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "要約: 同定されていない断片なので、内容は書いていない",
+        "頁: TEI ヘッダに locus が無いので空欄。写本 XII での位置を要確認",
+        "ほかの写し: 断片が同定されていないので空欄",
+        "本文: XII,2 と XII,3 の境目には決め手がない（source/nhc_fulltext_split/README_ja.md）",
+        "潮流: gnosticism.html 第III節の表に名がないので空欄",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: Meyer と Pléiade は第VII節の「全文書の訳」に従って挙げた。この部分がどう訳されているか（独立に訳されているか）要確認",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』に収録されているか要確認（第VII節からは確かめられないので載せていない）"
+      ]
+    },
+    "XIII-1": {
+      "reviewed": false,
+      "summary": {
+        "ja": "プロテンノイア（「最初の思考」）が一人称で、自らが三度にわたって異なるかたちで下り、闇の中にいる者たちに現れたことを語る啓示文書。三つの部分からなり、それぞれの終わりに部分の題が記される。光の世界の成り立ち、アルコーンたちとその支配、「五つの封印」などについて述べ、最後の部分では、言葉（ロゴス）として現れたプロテンノイアがイエスを身にまとったことが語られる。",
+        "en": "A revelation text in which Protennoia (“First Thought”) tells in the first person how she descended three times, in different forms, and appeared to those in darkness. It has three parts, each with its own title at its end. It speaks of the formation of the world of light, the archons and their rule, the “Five Seals” and other matters; in the last part it is said that Protennoia, appearing as the Word (Logos), put on Jesus.",
+        "fr": "Texte de révélation dans lequel la Prôtennoia (« Première Pensée ») raconte à la première personne comment elle est descendue trois fois, sous des formes différentes, et s’est manifestée à ceux qui sont dans les ténèbres. Il comprend trois parties, chacune portant son propre titre à la fin. Il traite de la formation du monde de lumière, des archontes et de leur domination, des « Cinq Sceaux », entre autres ; dans la dernière partie, il est dit que la Prôtennoia, apparue comme le Verbe (Logos), a revêtu Jésus."
+      },
+      "pages": {
+        "ja": "NHC XIII, 35,1–50,24",
+        "en": "NHC XIII, 35,1–50,24",
+        "fr": "NHC XIII, p. 35,1–50,24"
+      },
+      "copies": {
+        "ja": "ナグ・ハマディ写本の内外に、ほかの写しは知られていない。",
+        "en": "No other copy is known, either in the Nag Hammadi Codices or elsewhere.",
+        "fr": "Aucune autre copie n’est connue, ni dans les codices de Nag Hammadi ni ailleurs."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "sethian",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）",
+        "文献: Layton『The Gnostic Scriptures』に収録されているか要確認"
+      ]
+    },
+    "XIII-2": {
+      "reviewed": false,
+      "summary": {
+        "ja": "写本 XIII で『三形態の原初思想』の直後、同じ頁に書かれた十行ほどの文で、『世界の起源について』（II,5）の冒頭部分にあたる。",
+        "en": "About ten lines written on the same page directly after the Trimorphic Protennoia in Codex XIII, corresponding to the opening of On the Origin of the World (II,5).",
+        "fr": "Une dizaine de lignes écrites sur la même page, immédiatement après la Prôtennoia trimorphe, dans le codex XIII ; elles correspondent au début de l’Écrit sans titre (L’Origine du monde, II,5)."
+      },
+      "pages": {
+        "ja": "NHC XIII, 50,25–34",
+        "en": "NHC XIII, 50,25–34",
+        "fr": "NHC XIII, p. 50,25–34"
+      },
+      "copies": {
+        "ja": "作品の全体は II,5 に残る。",
+        "en": "The whole work survives as II,5.",
+        "fr": "L’œuvre entière est conservée en II,5."
+      },
+      "language": {
+        "ja": "コプト語（サヒド方言）",
+        "en": "Coptic (Sahidic)",
+        "fr": "copte (sahidique)"
+      },
+      "current": "",
+      "refs": [
+        {
+          "key": "meyer2007"
+        },
+        {
+          "key": "pleiade2007"
+        },
+        {
+          "key": "cgl2000",
+          "vol": ""
+        }
+      ],
+      "todo": [
+        "下書き。全体を確認",
+        "ほかの写し: 大英図書館 Or. 4926(1) に II,5 の一部があるとされる。確かめてから記入",
+        "潮流: gnosticism.html 第III節の表に名がないので空欄",
+        "文献: Coptic Gnostic Library（Brill 2000）の収録巻を要確認（第VII節に巻の記載がないので vol は空欄）",
+        "文献: Meyer と Pléiade は第VII節の「全文書の訳」に従って挙げた。この部分がどう訳されているか（独立に訳されているか）要確認",
+        "文献: 岩波『ナグ・ハマディ文書』（I〜IV）・『グノーシスの変容』、BCNH 叢書の該当巻に収録されているか要確認（第VII節からは確かめられないので載せていない）"
+      ]
+    }
+  }
+}

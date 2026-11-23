@@ -1,0 +1,387 @@
+<!-- 〈はじめての方へ〉（手作業管理）。コプト文字の読み方、本文ビュワーの読み方、品詞タグの一覧、例文、記号の早見表。
+     品詞タグの表は data/pos_labels.json（scripts/build_site.py が POS_NAMES から書き出す）を読んで作る。
+     例文はエウグノストス III,3 の最初のセグメント（data/eugnostos_tei.xml の wit-III）で、形態素・レンマ・品詞・語義（data/lexicon.xml）・
+     訳はデータから読む。形態素ごとの説明（#exNotes）だけは手で書いてあるので、そのセグメントの注釈を直したら見直すこと。
+     字母表の音価などは標準的な文法書（下の「文献」）の記述に沿って書いた。確かでない細部は書かない。 -->
+<!DOCTYPE html>
+<html lang="ja" data-lang="ja" data-i18n="full" data-mode="dark" data-modes="light dark" data-title-en="Getting started — Sheneset" data-title-fr="Premiers pas — Sheneset">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>/* 表示モード（ライト／ダーク）の保存値を描画前に反映（保存は assets/site.js） */try{if(localStorage.getItem("nhc-mode")==="light")document.documentElement.setAttribute("data-mode","light")}catch(e){}</script>
+<script>/* 表示言語（?lang= ＞ 保存値 ＞ ブラウザーの言語、ほかは英語）を描画前に反映（正式な処理と保存は assets/site.js） */(function(H){var L=["ja","en","fr"],m=/[?&]lang=([^&#]*)/i.exec(location.search),v=m?m[1].toLowerCase():null;if(L.indexOf(v)<0){v=null;try{v=localStorage.getItem("nhc-lang")}catch(e){}}if(L.indexOf(v)<0){v="en";var n=navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||""];for(var i=0;i<n.length;i++){var p=String(n[i]).toLowerCase().split(/[-_]/)[0];if(L.indexOf(p)>=0){v=p;break}}}if(H.getAttribute("data-i18n")==="full"){H.setAttribute("data-lang",v);H.setAttribute("lang",v)}else if(v!=="ja"){H.setAttribute("data-lang","en");H.setAttribute("lang","en");H.setAttribute("data-gl",v);H.setAttribute("data-tl",v)}})(document.documentElement)</script>
+<title>はじめての方へ — Sheneset</title>
+<meta name="description" content="コプト文字の読み方、本文ビュワーの見方、品詞タグの一覧と例文で、ナグ・ハマディ写本のコプト語原文を読み始めるための案内 / How to start reading the Coptic text of the Nag Hammadi Codices on Sheneset.">
+<!-- リンクを共有したときのプレビュー（OGP）。og:title・og:description は <title> と meta description と同じにする -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sheneset">
+<meta property="og:title" content="はじめての方へ — Sheneset">
+<meta property="og:description" content="コプト文字の読み方、本文ビュワーの見方、品詞タグの一覧と例文で、ナグ・ハマディ写本のコプト語原文を読み始めるための案内 / How to start reading the Coptic text of the Nag Hammadi Codices on Sheneset.">
+<meta property="og:url" content="https://sheneset.vercel.app/guide.html">
+<meta property="og:image" content="https://sheneset.vercel.app/image/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="fr_FR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="image/icon.svg">
+<link rel="alternate icon" type="image/png" sizes="32x32" href="image/favicon-32.png">
+<link rel="apple-touch-icon" href="image/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600&family=Noto+Sans+Coptic&display=swap" rel="stylesheet">
+<style>
+:root{ --ui:'Inter','Noto Sans JP',system-ui,sans-serif; --cop:'Noto Sans Coptic',serif; }
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
+.cop{font-family:var(--cop)}
+/* 案内役のゲンゲン（節の頭に小さく。ページのアイコンには使わない） */
+img.gg{float:right; width:72px; height:72px; border-radius:50%; object-fit:cover; object-position:center 22%;
+  border:1px solid rgba(212,175,106,.45); margin:4px 0 10px 16px}
+.gwrap{overflow-x:auto; margin:12px 0 0; -webkit-overflow-scrolling:touch}
+table.gt{border-collapse:collapse; font-size:.86rem; min-width:min(100%,520px)}
+table.gt th, table.gt td{text-align:left; padding:6px 12px 6px 0; border-bottom:1px solid var(--line); vertical-align:top; color:var(--ink-soft); line-height:1.6}
+table.gt th{font-weight:600; color:var(--ink-faint); font-size:.76rem; letter-spacing:.02em; white-space:nowrap}
+table.gt td.num, table.gt th.num{text-align:right; font-variant-numeric:tabular-nums; padding-left:12px}
+table.gt td.lt{font-family:var(--cop); font-size:1.5rem; color:var(--gold-bright); line-height:1.2; white-space:nowrap}
+table.gt td.cop, table.gt span.cop{font-family:var(--cop); color:var(--ink); font-size:1.08rem}
+table.gt code{font-size:.8rem; color:var(--gold-bright)}
+table.gt tr.grp td{border-top:1px solid var(--line-2)}
+.prose .gnote{font-size:.84rem; color:var(--ink-faint); line-height:1.8; max-width:74ch}
+.prose ul.tight li{line-height:1.8; margin-bottom:.15em}
+.pill{display:inline-block; font-size:.66rem; letter-spacing:.06em; padding:2px 9px; border-radius:999px; margin-right:6px;
+  background:var(--hi); color:var(--ink-faint); border:1px solid var(--line); white-space:nowrap; vertical-align:.1em}
+.pill.on{background:var(--gold); color:var(--on-gold); border-color:var(--gold); font-weight:600}
+.pill.draft{background:transparent; color:var(--lapis); border-color:var(--lapis); font-weight:600}
+.pill.plain{background:transparent; color:var(--ink-soft); border-color:var(--ink-faint)}
+/* 例文 */
+.prose p.ex-line{font-family:var(--cop); font-size:1.5rem; line-height:1.9; color:var(--ink); margin:14px 0 4px; overflow-wrap:anywhere; max-width:none}
+.ex-line .ms{color:var(--ink-faint); margin:0 .04em}
+.prose p.ex-tr{margin:6px 0 0; color:var(--ink-soft); font-size:.92rem; line-height:1.7}
+.ex-tr b{color:var(--ink-faint); font-weight:500; font-size:.76rem; margin-right:.6em}
+.prose ol.exn li{margin-bottom:.5em}
+.prose ol.exn .cop{font-size:1.06rem}
+.load, .prose p.load{color:var(--ink-faint); font-size:.86rem}
+.mark-sample{font-family:var(--cop); font-size:1.08rem; color:var(--ink)}
+.mark-sample .amb{text-decoration:underline dotted var(--gold-soft); text-decoration-thickness:1.5px; text-underline-offset:3px}
+.mark-sample .low{box-shadow:inset 0 -.38em 0 rgba(207,147,166,.32)}
+.mark-sample .x{text-decoration:underline wavy var(--rose); text-underline-offset:.25em}
+.mark-sample .supA{text-decoration:underline dotted var(--gold); text-underline-offset:.22em}
+.mark-sample .supB{text-decoration:underline dashed var(--rose)}
+.mark-sample .pg{display:inline-block; font-family:var(--ui); font-size:.62rem; color:var(--on-gold); background:var(--gold); border-radius:4px; padding:1px 6px}
+.mark-sample .ln{display:inline-block; font-family:var(--ui); font-size:.58rem; color:var(--lapis); border-left:1px solid var(--lapis); padding:0 2px; vertical-align:.5em}
+.mark-sample .grc{font-family:var(--ui); font-size:.66rem; color:var(--lapis); vertical-align:super; letter-spacing:.04em}
+.mark-sample .par{font-family:var(--ui); font-size:.76rem; color:var(--gold-bright); border:1px solid var(--line-2); border-radius:999px; padding:0 7px}
+@media (max-width:600px){ img.gg{width:58px; height:58px} table.gt td.lt{font-size:1.3rem} }
+</style>
+<link rel="stylesheet" href="assets/cosmos.css">
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/community.css">
+<script defer src="assets/cosmos.js"></script>
+<script defer src="assets/site.js"></script>
+<script defer src="assets/analytics.js"></script>
+<script defer src="assets/community-config.js"></script>
+<script defer src="assets/community.js"></script>
+</head>
+<body>
+<nav id="sitebar" class="sitebar sticky"></nav>
+
+<main class="page prose">
+  <div class="eyebrow">Getting started</div>
+  <h1><span class="l-ja jp">はじめての方へ</span><span class="l-en">Getting started</span><span class="l-fr">Premiers pas</span></h1>
+  <img class="gg" src="image/web/gengen_guide.svg" alt="" width="72" height="72" loading="lazy">
+  <p class="lede">
+    <span class="l-ja">このページは、ナグ・ハマディ写本のコプト語の原文を、本サイトで読み始めるための案内です。コプト文字の読み方、本文ビュワーの見方、品詞の略号を説明し、エウグノストスの冒頭を例に、語釈を手がかりに 1 文を読んでみます。写本や文書の背景は〈<a href="gnosticism.html">グノーシス主義とは</a>〉にあります。</span>
+    <span class="l-en">This page helps you start reading the Coptic text of the Nag Hammadi Codices on this site. It explains how to read Coptic letters, how the text readers work and what the part-of-speech tags mean, then reads one sentence from the opening of Eugnostos with the help of the glosses. For the background of the codices and texts, see “<a href="gnosticism.html">Gnosticism</a>”.</span>
+    <span class="l-fr">Cette page aide à commencer la lecture du texte copte des codices de Nag Hammadi sur ce site. Elle explique comment lire l’alphabet copte, comment fonctionnent les visionneuses et ce que signifient les étiquettes de catégories, puis lit une phrase du début d’Eugnoste à l’aide des gloses. Pour le contexte des codices et des textes, voir « <a href="gnosticism.html">Le gnosticisme</a> ».</span>
+  </p>
+  <nav class="toc">
+    <a href="#letters"><span class="l-ja">I コプト文字の読み方</span><span class="l-en">I Reading Coptic letters</span><span class="l-fr">I Lire l’alphabet copte</span></a>
+    <a href="#viewer"><span class="l-ja">II 本文ビュワーの読み方</span><span class="l-en">II Using the text readers</span><span class="l-fr">II Utiliser les visionneuses</span></a>
+    <a href="#pos"><span class="l-ja">III 品詞タグの一覧</span><span class="l-en">III Part-of-speech tags</span><span class="l-fr">III Étiquettes de catégories</span></a>
+    <a href="#example"><span class="l-ja">IV 例文を一つ読む</span><span class="l-en">IV Reading one sentence</span><span class="l-fr">IV Lire une phrase</span></a>
+    <a href="#symbols"><span class="l-ja">V 記号と表示の早見表</span><span class="l-en">V Signs at a glance</span><span class="l-fr">V Signes en bref</span></a>
+  </nav>
+
+  <!-- ═══════ I ═══════ -->
+  <h2 id="letters"><span class="num">I</span><span class="l-ja">コプト文字の読み方</span><span class="l-en">Reading Coptic letters</span><span class="l-fr">Lire l’alphabet copte</span></h2>
+  <p><span class="l-ja">コプト語は、エジプト語のいちばん新しい段階の言語です。ギリシア文字に、エジプトの文字（デモティック）から取った字を加えて書きます。ナグ・ハマディ写本の多くはサイード方言（サヒド方言）で、一部はリコポリス方言です。サイード方言では、ギリシア文字の 24 字に、デモティックに由来する 6 字（ϣ ϥ ϩ ϫ ϭ ϯ）を加えて使います。</span>
+  <span class="l-en">Coptic is the latest stage of the Egyptian language. It is written in the Greek alphabet with some letters taken from Egyptian Demotic script. Most of the Nag Hammadi Codices are in the Sahidic dialect and some in Lycopolitan. Sahidic uses the 24 Greek letters plus six letters of Demotic origin (ϣ ϥ ϩ ϫ ϭ ϯ).</span>
+  <span class="l-fr">Le copte est le dernier stade de la langue égyptienne. Il s’écrit avec l’alphabet grec augmenté de quelques lettres empruntées à l’écriture démotique. La plupart des codices de Nag Hammadi sont en dialecte sahidique, quelques-uns en lycopolitain. Le sahidique emploie les 24 lettres grecques et six lettres d’origine démotique (ϣ ϥ ϩ ϫ ϭ ϯ).</span></p>
+
+  <h3><span class="l-ja">字母</span><span class="l-en">The alphabet</span><span class="l-fr">L’alphabet</span></h3>
+  <p class="gnote"><span class="l-ja">名前は文法書で一般的なもの、転写は一つの例です（文献によって書き方が違います）。音は当時の発音をおおよそ示すもので、細かい点にはさまざまな説があります。</span><span class="l-en">Names are those usual in grammars; the transliteration is one common scheme (others exist). Sounds are rough indications of the ancient pronunciation, the details of which are debated.</span><span class="l-fr">Les noms sont ceux des grammaires ; la translittération n’est qu’un système parmi d’autres. Les sons indiquent approximativement la prononciation ancienne, dont le détail est discuté.</span></p>
+  <div class="gwrap"><table class="gt" id="alphaTable">
+    <thead><tr><th><span class="l-ja">字</span><span class="l-en">Letter</span><span class="l-fr">Lettre</span></th><th><span class="l-ja">名前</span><span class="l-en">Name</span><span class="l-fr">Nom</span></th><th><span class="l-ja">転写</span><span class="l-en">Translit.</span><span class="l-fr">Translitt.</span></th><th><span class="l-ja">おおよその音</span><span class="l-en">Approximate sound</span><span class="l-fr">Son approximatif</span></th></tr></thead>
+    <tbody>
+      <tr><td class="lt">ⲁ</td><td>alpha</td><td>a</td><td>a</td></tr>
+      <tr><td class="lt">ⲃ</td><td>beta</td><td>b</td><td><span class="l-ja">b（v に近い音とも）</span><span class="l-en">b (perhaps close to v)</span><span class="l-fr">b (peut-être proche de v)</span></td></tr>
+      <tr><td class="lt">ⲅ</td><td>gamma</td><td>g</td><td><span class="l-ja">g（主にギリシア語からの借用語）</span><span class="l-en">g (mainly in Greek loanwords)</span><span class="l-fr">g (surtout dans les emprunts grecs)</span></td></tr>
+      <tr><td class="lt">ⲇ</td><td>delta</td><td>d</td><td><span class="l-ja">d（主に借用語）</span><span class="l-en">d (mainly in loanwords)</span><span class="l-fr">d (surtout dans les emprunts)</span></td></tr>
+      <tr><td class="lt">ⲉ</td><td>epsilon (ei)</td><td>e</td><td><span class="l-ja">短い e</span><span class="l-en">short e</span><span class="l-fr">e bref</span></td></tr>
+      <tr><td class="lt">ⲍ</td><td>zeta</td><td>z</td><td><span class="l-ja">z（主に借用語）</span><span class="l-en">z (mainly in loanwords)</span><span class="l-fr">z (surtout dans les emprunts)</span></td></tr>
+      <tr><td class="lt">ⲏ</td><td>eta</td><td>ē</td><td><span class="l-ja">長い（または広い）e</span><span class="l-en">long (or open) e</span><span class="l-fr">e long (ou ouvert)</span></td></tr>
+      <tr><td class="lt">ⲑ</td><td>theta</td><td>th</td><td><span class="l-ja">t＋h（ⲧ と ϩ が続いた音を 1 字で書くことが多い）</span><span class="l-en">t + h (often ⲧ followed by ϩ, written as one letter)</span><span class="l-fr">t + h (souvent ⲧ suivi de ϩ, écrit en une lettre)</span></td></tr>
+      <tr><td class="lt">ⲓ</td><td>iota</td><td>i</td><td><span class="l-ja">i、または半母音 y</span><span class="l-en">i, or the semivowel y</span><span class="l-fr">i, ou la semi-voyelle y</span></td></tr>
+      <tr><td class="lt">ⲕ</td><td>kappa</td><td>k</td><td>k</td></tr>
+      <tr><td class="lt">ⲗ</td><td>lambda</td><td>l</td><td>l</td></tr>
+      <tr><td class="lt">ⲙ</td><td>mu</td><td>m</td><td>m</td></tr>
+      <tr><td class="lt">ⲛ</td><td>nu</td><td>n</td><td>n</td></tr>
+      <tr><td class="lt">ⲝ</td><td>xi</td><td>ks</td><td>ks</td></tr>
+      <tr><td class="lt">ⲟ</td><td>omicron</td><td>o</td><td><span class="l-ja">短い o</span><span class="l-en">short o</span><span class="l-fr">o bref</span></td></tr>
+      <tr><td class="lt">ⲡ</td><td>pi</td><td>p</td><td>p</td></tr>
+      <tr><td class="lt">ⲣ</td><td>rho</td><td>r</td><td>r</td></tr>
+      <tr><td class="lt">ⲥ</td><td>sigma</td><td>s</td><td>s</td></tr>
+      <tr><td class="lt">ⲧ</td><td>tau</td><td>t</td><td>t</td></tr>
+      <tr><td class="lt">ⲩ</td><td>upsilon</td><td>u / y</td><td><span class="l-ja">ⲟⲩ と組んで u・w。単独では主に借用語</span><span class="l-en">with ⲟ as ⲟⲩ: u or w; alone mainly in loanwords</span><span class="l-fr">avec ⲟ (ⲟⲩ) : u ou w ; seul, surtout dans les emprunts</span></td></tr>
+      <tr><td class="lt">ⲫ</td><td>phi</td><td>ph</td><td><span class="l-ja">p＋h（借用語ではギリシア語の φ）</span><span class="l-en">p + h (in loanwords Greek φ)</span><span class="l-fr">p + h (dans les emprunts, φ grec)</span></td></tr>
+      <tr><td class="lt">ⲭ</td><td>chi</td><td>kh</td><td><span class="l-ja">k＋h（借用語ではギリシア語の χ）</span><span class="l-en">k + h (in loanwords Greek χ)</span><span class="l-fr">k + h (dans les emprunts, χ grec)</span></td></tr>
+      <tr><td class="lt">ⲯ</td><td>psi</td><td>ps</td><td>ps</td></tr>
+      <tr><td class="lt">ⲱ</td><td>omega</td><td>ō</td><td><span class="l-ja">長い（または広い）o</span><span class="l-en">long (or open) o</span><span class="l-fr">o long (ou ouvert)</span></td></tr>
+      <tr class="grp"><td class="lt">ϣ</td><td>shai</td><td>š</td><td><span class="l-ja">「シュ」の音（英語の sh）</span><span class="l-en">sh</span><span class="l-fr">ch (comme dans « chat »)</span></td></tr>
+      <tr><td class="lt">ϥ</td><td>fai</td><td>f</td><td>f</td></tr>
+      <tr><td class="lt">ϩ</td><td>hori</td><td>h</td><td>h</td></tr>
+      <tr><td class="lt">ϫ</td><td>janja</td><td>j</td><td><span class="l-ja">「ジャ」「チャ」に近い音とされる（諸説あり）</span><span class="l-en">close to j or ch, it is thought (views differ)</span><span class="l-fr">proche de dj ou tch, pense-t-on (avis partagés)</span></td></tr>
+      <tr><td class="lt">ϭ</td><td>kyima</td><td>ky / č</td><td><span class="l-ja">「キャ」「チャ」に近い音とされる（諸説あり）</span><span class="l-en">close to ky or ch, it is thought (views differ)</span><span class="l-fr">proche de ky ou tch, pense-t-on (avis partagés)</span></td></tr>
+      <tr><td class="lt">ϯ</td><td>ti</td><td>ti</td><td><span class="l-ja">t＋i を 1 字で書いたもの</span><span class="l-en">t + i written as one letter</span><span class="l-fr">t + i écrit en une lettre</span></td></tr>
+    </tbody>
+  </table></div>
+  <ul class="tight">
+    <li><span class="l-ja"><b>ⲟⲩ</b> は 2 字で u（または w）の音、<b>ⲉⲓ</b> は 2 字で i（または y）の音を表すことが多いです。</span><span class="l-en"><b>ⲟⲩ</b> usually stands for u (or w), and <b>ⲉⲓ</b> often for i (or y).</span><span class="l-fr"><b>ⲟⲩ</b> note en général u (ou w), et <b>ⲉⲓ</b> souvent i (ou y).</span></li>
+    <li><span class="l-ja"><b>ⲑ ⲫ ⲭ</b> は、コプト語の語では ⲧ・ⲡ・ⲕ に ϩ が続いたものを表すことが多いです（例: ⲑⲉ「（その）仕方」＝ ⲧ「その」＋ ϩⲉ「仕方」。辞書の ϩⲉ の項目も参照）。</span><span class="l-en">In Coptic words, <b>ⲑ ⲫ ⲭ</b> often stand for ⲧ, ⲡ, ⲕ followed by ϩ (e.g. ⲑⲉ “the manner” = ⲧ “the” + ϩⲉ “manner”; see the lexicon entry ϩⲉ).</span><span class="l-fr">Dans les mots coptes, <b>ⲑ ⲫ ⲭ</b> notent souvent ⲧ, ⲡ, ⲕ suivis de ϩ (p. ex. ⲑⲉ « la manière » = ⲧ « la » + ϩⲉ « manière » ; voir l’entrée ϩⲉ du lexique).</span></li>
+    <li><span class="l-ja">本サイトでは、コプト文字に Noto Sans Coptic という書体を使っています。小文字も大文字に似た形で表示されますが、データは小文字で書いてあります。</span><span class="l-en">This site displays Coptic in the Noto Sans Coptic typeface, whose lower-case letters look much like capitals; the data are in lower case.</span><span class="l-fr">Le site affiche le copte avec la police Noto Sans Coptic, dont les minuscules ressemblent à des majuscules ; les données sont en minuscules.</span></li>
+  </ul>
+
+  <h3><span class="l-ja">上線</span><span class="l-en">The supralinear stroke</span><span class="l-fr">Le trait suscrit</span></h3>
+  <p><span class="l-ja">写本では、字の上に横線を引くことがあります。主な使い方は二つです。一つは、子音（または子音のまとまり）の上に引いて、その子音だけで音節になることを示すもの（例: ⲛ̄「〜に・〜の」、ⲙ̄ⲙⲟϥ「彼を」）。もう一つは、略記や数を示すもので、下の「聖なる名の略記」がその例です。</span>
+  <span class="l-en">Manuscripts often draw a line over letters. It has two main uses. Over a consonant (or a group of consonants) it shows that the consonant forms a syllable on its own (e.g. ⲛ̄ “to, of”, ⲙ̄ⲙⲟϥ “him”). It also marks abbreviations and numbers, as in the sacred names below.</span>
+  <span class="l-fr">Les manuscrits tracent souvent un trait au-dessus des lettres. Il a deux usages principaux. Au-dessus d’une consonne (ou d’un groupe de consonnes), il indique qu’elle forme à elle seule une syllabe (p. ex. ⲛ̄ « à, de », ⲙ̄ⲙⲟϥ « le »). Il signale aussi les abréviations et les nombres, comme dans les noms sacrés ci-dessous.</span></p>
+
+  <h3><span class="l-ja">聖なる名の略記</span><span class="l-en">Abbreviated sacred names</span><span class="l-fr">Noms sacrés abrégés</span></h3>
+  <p><span class="l-ja">「イエス」「キリスト」「霊」などのよく出る語は、最初と最後の字などだけを書き、上に線を引いて略します。</span><span class="l-en">Frequent words such as “Jesus”, “Christ” and “spirit” are abbreviated to a few letters, usually the first and the last, with a line over them.</span><span class="l-fr">Des mots fréquents comme « Jésus », « Christ » et « esprit » sont abrégés en quelques lettres, en général la première et la dernière, surmontées d’un trait.</span></p>
+  <div class="gwrap"><table class="gt">
+    <thead><tr><th><span class="l-ja">略記</span><span class="l-en">Abbreviation</span><span class="l-fr">Abréviation</span></th><th><span class="l-ja">略さずに書くと</span><span class="l-en">In full</span><span class="l-fr">En entier</span></th><th><span class="l-ja">意味</span><span class="l-en">Meaning</span><span class="l-fr">Sens</span></th></tr></thead>
+    <tbody>
+      <tr><td class="cop">ⲓ̅ⲥ̅</td><td class="cop">ⲓⲏⲥⲟⲩⲥ</td><td><span class="l-ja">イエス</span><span class="l-en">Jesus</span><span class="l-fr">Jésus</span></td></tr>
+      <tr><td class="cop">ⲭ̅ⲥ̅</td><td class="cop">ⲭⲣⲓⲥⲧⲟⲥ</td><td><span class="l-ja">キリスト</span><span class="l-en">Christ</span><span class="l-fr">Christ</span></td></tr>
+      <tr><td class="cop">ⲡ̅ⲛ̅ⲁ̅</td><td class="cop">ⲡⲛⲉⲩⲙⲁ</td><td><span class="l-ja">霊</span><span class="l-en">spirit</span><span class="l-fr">esprit</span></td></tr>
+    </tbody>
+  </table></div>
+  <p class="callout"><span class="l-ja"><b>本サイトの本文には、いまのところ上線が入っていません。</b>全文テキスト（暫定版・未注釈）の元ファイルに上線が無いためで、人の手で注釈した版も上線を記録していません。そのため、たとえば「イエス」は暫定版の本文では <span class="cop">ⲓⲥ</span>（「イエスは言った」は <span class="cop">ⲡⲉϫⲉ ⲓⲥ</span>）と表示されます。</span><span class="l-en"><b>The texts on this site have no supralinear strokes for now.</b> The source file of the full texts (draft and unannotated) has none, and the hand-annotated editions do not record them either. “Jesus”, for example, appears in the drafts as <span class="cop">ⲓⲥ</span> (“Jesus said” as <span class="cop">ⲡⲉϫⲉ ⲓⲥ</span>).</span><span class="l-fr"><b>Les textes du site n’ont pas encore de traits suscrits.</b> Le fichier source des textes intégraux (provisoires et non annotés) n’en contient pas, et les éditions annotées à la main ne les notent pas non plus. « Jésus », par exemple, apparaît dans les brouillons sous la forme <span class="cop">ⲓⲥ</span> (« Jésus dit » : <span class="cop">ⲡⲉϫⲉ ⲓⲥ</span>).</span></p>
+
+  <h3><span class="l-ja">ギリシア語からの借用語</span><span class="l-en">Greek loanwords</span><span class="l-fr">Emprunts grecs</span></h3>
+  <p><span class="l-ja">コプト語には、ギリシア語から入った語がたくさんあります。名詞・形容詞・動詞のほか、<span class="cop">ⲇⲉ</span>（しかし）や <span class="cop">ⲅⲁⲣ</span>（なぜなら）のような小さな語もよく使われます。ギリシア語の動詞は、ふつう一つの決まった形で使われます。本サイトでは、借用語に <code>xml:lang="grc"</code> の印を付け、辞書・検索・ビュワーで「grc」や色で示します。借用語かどうかは、この印の付いた語だけで数えています（語の形から推し量ってはいません）。</span>
+  <span class="l-en">Coptic has many words borrowed from Greek: nouns, adjectives and verbs, and also small words such as <span class="cop">ⲇⲉ</span> “but” and <span class="cop">ⲅⲁⲣ</span> “for”. Greek verbs are usually used in a single fixed form. On this site loanwords carry the mark <code>xml:lang="grc"</code>, shown as “grc” or by colour in the lexicon, the search and the readers. Only words with this mark are counted as loanwords; nothing is guessed from the form.</span>
+  <span class="l-fr">Le copte compte beaucoup de mots empruntés au grec : noms, adjectifs, verbes, mais aussi de petits mots comme <span class="cop">ⲇⲉ</span> « mais » et <span class="cop">ⲅⲁⲣ</span> « car ». Les verbes grecs s’emploient en général sous une seule forme fixe. Sur ce site, les emprunts portent la marque <code>xml:lang="grc"</code>, affichée « grc » ou en couleur dans le lexique, la recherche et les visionneuses. Seuls les mots ainsi marqués sont comptés comme emprunts ; rien n’est déduit de la forme.</span></p>
+
+  <!-- ═══════ II ═══════ -->
+  <h2 id="viewer"><span class="num">II</span><span class="l-ja">本文ビュワーの読み方</span><span class="l-en">Using the text readers</span><span class="l-fr">Utiliser les visionneuses</span></h2>
+  <h3><span class="l-ja">文書の状態</span><span class="l-en">What the labels mean</span><span class="l-fr">Ce que signifient les étiquettes</span></h3>
+  <p><span class="l-ja">HOME の文書一覧では、文書ごとに状態を示しています。</span><span class="l-en">The list of texts on the Home page labels each text.</span><span class="l-fr">La liste des textes de l’accueil indique l’état de chaque texte.</span></p>
+  <ul class="tight">
+    <li><span class="pill on"><span class="l-ja">公開</span><span class="l-en">Online</span><span class="l-fr">En ligne</span></span><span class="l-ja">人の手で形態素ごとに注釈し、日・英・仏の訳を付けた版です（エウグノストス III,3 と、プラトン『国家』VI,5）。</span><span class="l-en">Annotated morpheme by morpheme and translated into Japanese, English and French by hand (Eugnostos III,3 and Plato’s Republic VI,5).</span><span class="l-fr">Annoté morphème par morphème et traduit en japonais, anglais et français à la main (Eugnoste III,3 et la République de Platon VI,5).</span></li>
+    <li><span class="pill draft"><span class="l-ja">暫定</span><span class="l-en">Draft</span><span class="l-fr">Provisoire</span></span><span class="l-ja">全文に、語群・品詞・レンマ・語義を自動で付けた版です。人の目では確かめておらず、本文も校訂本と照合していません。訳はまだありません。</span><span class="l-en">The full text with bound groups, parts of speech, lemmata and glosses added automatically. Nothing has been checked by hand, the text has not been collated with the editions, and there is no translation yet.</span><span class="l-fr">Le texte intégral avec groupes, catégories, lemmes et gloses ajoutés automatiquement. Rien n’a été vérifié, le texte n’a pas été collationné avec les éditions et il n’y a pas encore de traduction.</span></li>
+    <li><span class="pill plain"><span class="l-ja">未注釈</span><span class="l-en">Text only</span><span class="l-fr">Texte seul</span></span><span class="l-ja">本文だけの作業用テキストです。品詞や語義は付いておらず、校訂本とも照合していません。</span><span class="l-en">A working text only, with no parts of speech or glosses, not collated with the editions.</span><span class="l-fr">Un texte de travail seul, sans catégories ni gloses, non collationné avec les éditions.</span></li>
+    <li><span class="pill"><span class="l-ja">準備中</span><span class="l-en">Soon</span><span class="l-fr">À venir</span></span><span class="l-ja">本文はまだ表示できません。</span><span class="l-en">The text cannot be shown yet.</span><span class="l-fr">Le texte n’est pas encore disponible.</span></li>
+  </ul>
+
+  <h3><span class="l-ja">人の手で注釈した版（エウグノストス・『国家』のビュワー）</span><span class="l-en">The hand-annotated editions (Eugnostos and Republic readers)</span><span class="l-fr">Les éditions annotées à la main (visionneuses d’Eugnoste et de la République)</span></h3>
+  <ul class="tight">
+    <li><span class="l-ja"><b>語群と形態素。</b>本文は、続けて書かれるまとまり（語群）ごとに空白で区切り、語群の中の形態素を「-」でつないで示します。</span><span class="l-en"><b>Bound groups and morphemes.</b> The text is divided by spaces into bound groups (the units written together), and the morphemes inside a group are joined by “-”.</span><span class="l-fr"><b>Groupes et morphèmes.</b> Le texte est divisé par des espaces en groupes (les unités écrites d’un seul tenant) ; les morphèmes d’un groupe sont reliés par « - ».</span></li>
+    <li><span class="l-ja"><b>〈語釈〉</b>をオンにすると、各形態素の下に語義が小さく出ます。辞書の語義（レンマと品詞で引いたもの）で、文脈で確かめた訳ではありません。</span><span class="l-en"><b>Interlinear</b> shows a short gloss under each morpheme. It is the lexicon’s sense (looked up by lemma and part of speech), not a translation checked against the context.</span><span class="l-fr"><b>Interlinéaire</b> affiche une glose sous chaque morphème : le sens du lexique (cherché par lemme et catégorie), non une traduction vérifiée en contexte.</span></li>
+    <li><span class="l-ja"><b>語を押す</b>と、レンマ・品詞・日英仏の語義を出します。同じ綴りで意味の違う語（同形異義語）は候補を並べ、どれを採ったかを示します（本文では点線の下線と ⁝ の印）。〈辞書の項目〉から<a href="lexicon.html">辞書</a>の項目へ移れます。</span><span class="l-en"><b>Click a word</b> to see its lemma, part of speech and senses. For homographs (same spelling, different words) the candidates are listed and the one chosen is marked (in the text: a dotted underline and ⁝). “Lexicon entry” opens the entry in the <a href="lexicon.html">lexicon</a>.</span><span class="l-fr"><b>Cliquez sur un mot</b> pour voir son lemme, sa catégorie et ses sens. Pour les homographes (même graphie, mots différents), les candidats sont listés et le choix retenu est signalé (dans le texte : soulignement pointillé et ⁝). « Entrée du lexique » ouvre l’entrée du <a href="lexicon.html">lexique</a>.</span></li>
+    <li><span class="l-ja"><b>〈借用語〉</b>をオンにすると、ギリシア語からの借用語に色が付きます。</span><span class="l-en"><b>Loanwords</b> highlights the Greek loanwords.</span><span class="l-fr"><b>Emprunts</b> met en couleur les emprunts grecs.</span></li>
+    <li><span class="l-ja"><b>訳。</b>各セグメントの下に訳が出ます。言語は上部ナビか〈訳〉で切り替えます。</span><span class="l-en"><b>Translation.</b> Each segment is followed by its translation; switch the language in the top bar or with the translation button.</span><span class="l-fr"><b>Traduction.</b> Chaque segment est suivi de sa traduction ; changez de langue dans la barre du haut ou avec le bouton de traduction.</span></li>
+    <li><span class="l-ja"><b>並行箇所。</b>訳の後ろの <span class="mark-sample"><span class="par">‖ V,1</span></span> のような印を押すと、ほかの文書の同じ文言の箇所を右のパネルに出します。文言を機械で照らし合わせて見つけたものです。</span><span class="l-en"><b>Parallels.</b> A mark such as <span class="mark-sample"><span class="par">‖ V,1</span></span> after a translation opens, in the side panel, the place in another text with the same wording, found by comparing the wording automatically.</span><span class="l-fr"><b>Parallèles.</b> Une marque comme <span class="mark-sample"><span class="par">‖ V,1</span></span> après une traduction ouvre, dans le panneau latéral, le passage d’un autre texte à la même formulation, repéré par une comparaison automatique.</span></li>
+    <li><span class="l-ja"><b>〈対照〉</b>（エウグノストス）では、写本 III,3 と V,1 を並べて読めます。</span><span class="l-en"><b>Synopsis</b> (Eugnostos) sets codex III,3 beside V,1.</span><span class="l-fr"><b>Synopse</b> (Eugnoste) place le codex III,3 en regard de V,1.</span></li>
+    <li><span class="l-ja"><b>投稿とブックマーク。</b>ログインすると、文書全体・セグメント・語について、コメント・注釈・誤りの指摘を投稿でき、ブックマークを付けられます。投稿は運営が確かめてから公開します。</span><span class="l-en"><b>Posts and bookmarks.</b> After signing in you can post comments, notes and corrections on the whole text, a segment or a word, and add bookmarks. Posts appear once the editors have checked them.</span><span class="l-fr"><b>Contributions et signets.</b> Une fois connecté, vous pouvez publier commentaires, notes et signalements d’erreurs sur le texte entier, un segment ou un mot, et ajouter des signets. Les contributions paraissent après vérification par l’équipe.</span></li>
+  </ul>
+
+  <h3><span class="l-ja">暫定版・未注釈の本文（本文ビュワー）</span><span class="l-en">Draft and unannotated texts (the text reader)</span><span class="l-fr">Textes provisoires et non annotés (la visionneuse de textes)</span></h3>
+  <ul class="tight">
+    <li><span class="l-ja"><b>冒頭の枠</b>に、その文書で確かめていないこと（自動注釈の確度 low の割合、品詞を決められなかった語 X の割合など）を書いています。まずここを読んでください。</span><span class="l-en"><b>The box at the top</b> lists what has not been checked in that text (the share of low-certainty analyses, of words left as X, and so on). Please read it first.</span><span class="l-fr"><b>L’encadré du haut</b> indique ce qui n’a pas été vérifié dans ce texte (part des analyses de faible certitude, des mots laissés en X, etc.). Lisez-le d’abord.</span></li>
+    <li><span class="l-ja"><b>〈語義と品詞を重ねる〉</b>で、各形態素の下に品詞タグと自動の語義を出します。<b>〈形態素の区切り〉</b>で、語群の中の形態素のあいだに「·」を出します。</span><span class="l-en"><b>Show glosses and POS</b> puts the tag and the automatic gloss under each morpheme; <b>Morpheme boundaries</b> puts “·” between the morphemes of a group.</span><span class="l-fr"><b>Afficher gloses et catégories</b> place l’étiquette et la glose automatique sous chaque morphème ; <b>Limites des morphèmes</b> insère « · » entre les morphèmes d’un groupe.</span></li>
+    <li><span class="l-ja"><b>〈確かでない注釈に印〉</b>で、自動注釈の確度が low の形態素に薄い色を、品詞を決められなかった語（X）に波線を付けます。確度 high・medium でも正しいとは限りません。</span><span class="l-en"><b>Mark uncertain analyses</b> shades the morphemes whose automatic analysis has low certainty and puts a wavy line under words left as X. High or medium certainty does not mean an analysis is right.</span><span class="l-fr"><b>Signaler les analyses incertaines</b> colore les morphèmes de faible certitude et souligne d’une vague les mots laissés en X. Une certitude « high » ou « medium » ne garantit pas l’analyse.</span></li>
+    <li><span class="l-ja"><b>語を押す</b>と、形態素・レンマ・品詞・自動の語義・確度を出します。辞書に項目のある語には〈辞書の項目〉のリンクが付きます。</span><span class="l-en"><b>Click a word</b> for the morpheme, lemma, part of speech, automatic gloss and certainty; words with a lexicon entry get a “Lexicon entry” link.</span><span class="l-fr"><b>Cliquez sur un mot</b> pour le morphème, le lemme, la catégorie, la glose automatique et la certitude ; les mots présents au lexique ont un lien « Entrée du lexique ».</span></li>
+    <li><span class="l-ja"><b>点線・破線の下線</b>は、元ファイルで落ちていた ⲍ・ⲯ を補った語です（点線は語形と文脈から決まるもの、破線は固有名などで校訂本での確認が必要なもの）。<b>〔…〕</b>は、元ファイルに欠損の注記があった位置です。</span><span class="l-en"><b>Dotted and dashed underlines</b> mark words in which a ⲍ or ⲯ lost in the source file was restored (dotted: settled by form and context; dashed: names and the like that need checking against the editions). <b>〔…〕</b> marks where the source file noted a lacuna.</span><span class="l-fr"><b>Les soulignements pointillé et tireté</b> signalent les mots où un ⲍ ou un ⲯ perdu dans le fichier source a été restitué (pointillé : établi par la forme et le contexte ; tireté : noms propres, etc., à vérifier dans les éditions). <b>〔…〕</b> marque une lacune notée dans le fichier source.</span></li>
+    <li><span class="l-ja">未注釈の文書は本文だけで、語の区切りも元ファイルのままです。</span><span class="l-en">Unannotated texts show the text only, with the word division of the source file.</span><span class="l-fr">Les textes non annotés n’affichent que le texte, avec le découpage du fichier source.</span></li>
+  </ul>
+
+  <h3><span class="l-ja">どのビュワーにも共通のこと</span><span class="l-en">In every reader</span><span class="l-fr">Dans toutes les visionneuses</span></h3>
+  <ul class="tight">
+    <li><span class="l-ja"><b>§ とセグメントの番号。</b>本文はセグメント（§）に分けてあります。番号を押すと〈リンクをコピー〉〈引用をコピー〉が出ます。写本の頁・行が入っている本文では、〈ページ〉〈行〉で頁と行の番号を出せ、引用も「NHC VI 48,16–17」のように頁・行で示します。</span><span class="l-en"><b>§ and segment numbers.</b> The text is divided into segments (§). Click a number for “Copy link” and “Copy citation”. Where the codex pages and lines are recorded, Pages and Lines show their numbers and citations use them (e.g. “NHC VI 48,16–17”).</span><span class="l-fr"><b>§ et numéros de segment.</b> Le texte est divisé en segments (§). Cliquez sur un numéro pour « Copier le lien » et « Copier la citation ». Là où les pages et lignes du codex sont notées, Pages et Lignes affichent leurs numéros et les citations les utilisent (p. ex. « NHC VI 48,16–17 »).</span></li>
+    <li><span class="l-ja"><b>〈この文書を引用〉</b>は、文書全体の引用です（最終更新日つき）。</span><span class="l-en"><b>Cite this text</b> gives a citation of the whole text, with its last update.</span><span class="l-fr"><b>Citer ce texte</b> donne une citation du texte entier, avec sa date de mise à jour.</span></li>
+    <li><span class="l-ja"><b>XML。</b>本文の TEI（XML）をダウンロードできます（ビュワーの〈⤓ XML〉、本文ビュワーの冒頭のリンク）。</span><span class="l-en"><b>XML.</b> You can download the TEI (XML) of the text (the readers’ “⤓ XML” menu, the link at the top of the text reader).</span><span class="l-fr"><b>XML.</b> Le TEI (XML) du texte est téléchargeable (menu « ⤓ XML » des visionneuses, lien en tête de la visionneuse de textes).</span></li>
+    <li><span class="l-ja"><b>検索。</b>語を全文書から探すときは<a href="search.html">コーパス検索</a>へ。語の意味から引くときは<a href="lexicon.html">辞書</a>へ。</span><span class="l-en"><b>Search.</b> To find a word in all texts use the <a href="search.html">corpus search</a>; to look a word up by meaning, the <a href="lexicon.html">lexicon</a>.</span><span class="l-fr"><b>Recherche.</b> Pour trouver un mot dans tous les textes, la <a href="search.html">recherche du corpus</a> ; pour chercher un mot par son sens, le <a href="lexicon.html">lexique</a>.</span></li>
+  </ul>
+
+  <!-- ═══════ III ═══════ -->
+  <h2 id="pos"><span class="num">III</span><span class="l-ja">品詞タグの一覧</span><span class="l-en">Part-of-speech tags</span><span class="l-fr">Étiquettes de catégories</span></h2>
+  <p><span class="l-ja">本文の各形態素（<code>&lt;w&gt;</code>）の <code>@type</code> に書く略号です。ビュワーの語のカード、本文ビュワーの〈語義と品詞を重ねる〉、検索の〈品詞〉で使います。数は本文の中に現れる回数で、「人の手」はエウグノストスと『国家』、「暫定版」は自動注釈の 39 文書です（暫定版の品詞は自動で付けたもので、人の目で確かめていません）。</span>
+  <span class="l-en">The abbreviations used in the <code>@type</code> of every morpheme (<code>&lt;w&gt;</code>), in the word cards, under “Show glosses and POS” in the text reader and in the search’s Part of speech list. Counts are occurrences in the texts: “by hand” are Eugnostos and the Republic, “draft” the 39 automatically annotated texts (whose tags have not been checked by hand).</span>
+  <span class="l-fr">Les abréviations employées dans l’<code>@type</code> de chaque morphème (<code>&lt;w&gt;</code>), dans les fiches de mots, sous « Afficher gloses et catégories » et dans la liste des catégories de la recherche. Les nombres sont des occurrences : « à la main » pour Eugnoste et la République, « provisoire » pour les 39 textes annotés automatiquement (dont les étiquettes n’ont pas été vérifiées).</span></p>
+  <div class="gwrap"><table class="gt" id="posTable">
+    <thead><tr><th><span class="l-ja">タグ</span><span class="l-en">Tag</span><span class="l-fr">Étiquette</span></th><th><span class="l-ja">名前</span><span class="l-en">Name</span><span class="l-fr">Nom</span></th><th class="num"><span class="l-ja">人の手</span><span class="l-en">By hand</span><span class="l-fr">À la main</span></th><th class="num"><span class="l-ja">暫定版</span><span class="l-en">Draft</span><span class="l-fr">Provisoire</span></th></tr></thead>
+    <tbody><tr><td colspan="4" class="load"><span class="l-ja">読み込み中…</span><span class="l-en">Loading…</span><span class="l-fr">Chargement…</span></td></tr></tbody>
+  </table></div>
+  <p class="gnote" id="posNote"></p>
+
+  <!-- ═══════ IV ═══════ -->
+  <h2 id="example"><span class="num">IV</span><span class="l-ja">例文を一つ読む</span><span class="l-en">Reading one sentence</span><span class="l-fr">Lire une phrase</span></h2>
+  <img class="gg" src="image/web/gengen_smile.svg" alt="" width="72" height="72" loading="lazy">
+  <p><span class="l-ja">エウグノストス（写本 III,3）の最初のセグメントを読んでみます。人の手で注釈した本文で、語群・形態素・レンマ・品詞・語義・訳は、本サイトのデータからそのまま出しています。ビュワーでは <a href="eugnostos.html?wit=III#seg-III-INCIPIT">エウグノストスの § 1</a> にあたります。</span>
+  <span class="l-en">Let us read the first segment of Eugnostos (codex III,3). It is hand-annotated, and the groups, morphemes, lemmata, parts of speech, glosses and translation below come straight from the site’s data. In the reader it is <a href="eugnostos.html?wit=III#seg-III-INCIPIT">§ 1 of Eugnostos</a>.</span>
+  <span class="l-fr">Lisons le premier segment d’Eugnoste (codex III,3). Il est annoté à la main ; groupes, morphèmes, lemmes, catégories, gloses et traduction ci-dessous proviennent directement des données du site. Dans la visionneuse, c’est le <a href="eugnostos.html?wit=III#seg-III-INCIPIT">§ 1 d’Eugnoste</a>.</span></p>
+  <div id="exBox"><p class="load"><span class="l-ja">読み込み中…</span><span class="l-en">Loading…</span><span class="l-fr">Chargement…</span></p></div>
+  <h3><span class="l-ja">語群ごとに</span><span class="l-en">Group by group</span><span class="l-fr">Groupe par groupe</span></h3>
+  <ol class="exn" id="exNotes">
+    <li><span class="cop">ⲉⲩⲅⲛⲱⲥⲧⲟⲥ</span> — <span class="l-ja">人名「エウグノストス」。ギリシア語の名前なので、借用語の印（grc）が付いています。</span><span class="l-en">the name Eugnostos; a Greek name, so it carries the loanword mark (grc).</span><span class="l-fr">le nom Eugnoste ; nom grec, d’où la marque d’emprunt (grc).</span></li>
+    <li><span class="cop">ⲡ-ⲙⲁⲕⲁⲣⲓⲟⲥ</span> — <span class="l-ja">ⲡ は男性・単数の定冠詞、ⲙⲁⲕⲁⲣⲓⲟⲥ はギリシア語からの借用語で「祝福された」。冠詞は次の語と続けて書かれるので、二つの形態素で一つの語群になります。前の名前に続けて「祝福された（者）」。</span><span class="l-en">ⲡ is the masculine singular definite article and ⲙⲁⲕⲁⲣⲓⲟⲥ the Greek loanword “blessed”. The article is written together with the next word, so the two morphemes make one bound group: “the blessed (one)”, following the name.</span><span class="l-fr">ⲡ est l’article défini masculin singulier, ⲙⲁⲕⲁⲣⲓⲟⲥ l’emprunt grec « bienheureux ». L’article s’écrit avec le mot suivant : les deux morphèmes forment un groupe, « le bienheureux », à la suite du nom.</span></li>
+    <li><span class="cop">ⲛ-ⲛ-ⲉⲧⲉ</span> — <span class="l-ja">前置詞 ⲛ（〜に）、複数の定冠詞 ⲛ、関係変換詞 ⲉⲧⲉ（〜であるところの）の三つ。同じ字 ⲛ が、ここでは二つの違う形態素です。「〜である者たちに」。</span><span class="l-en">three morphemes: the preposition ⲛ “to”, the plural definite article ⲛ and the relative converter ⲉⲧⲉ “who (are)”. The same letter ⲛ is two different morphemes here: “to those who …”.</span><span class="l-fr">trois morphèmes : la préposition ⲛ « à », l’article défini pluriel ⲛ et le convertisseur relatif ⲉⲧⲉ « qui (sont) ». La même lettre ⲛ représente ici deux morphèmes différents : « à ceux qui … ».</span></li>
+    <li><span class="cop">ⲛⲟⲩ-ϥ ⲛⲉ</span> — <span class="l-ja">ⲛⲟⲩ は「〜に属するもの（複数）」を表す形で（本サイトの語釈では “those of”）、ϥ（彼）が付いて「彼に属する者たち」。ⲛⲉ は複数の繋辞（〜である）。前の ⲉⲧⲉ から続けて「彼に属する者たちである（人々）に」。</span><span class="l-en">ⲛⲟⲩ expresses “those belonging to” (the site’s gloss: “those of”); with ϥ “him”, “his (people)”. ⲛⲉ is the plural copula “(they) are”. Continuing from ⲉⲧⲉ: “to those who are his”.</span><span class="l-fr">ⲛⲟⲩ exprime « ceux qui appartiennent à » (glose du site : “those of”) ; avec ϥ « lui » : « les siens ». ⲛⲉ est la copule plurielle « (ils) sont ». À la suite de ⲉⲧⲉ : « à ceux qui sont siens ».</span></li>
+    <li><span class="cop">ϫⲉ ⲣⲁϣⲉ</span> — <span class="l-ja">ϫⲉ は、言葉や内容を導く接続詞で、ここでは挨拶の言葉を導きます。ⲣⲁϣⲉ は「喜ぶ」で、ここでは「喜べ」と訳しています。</span><span class="l-en">ϫⲉ is a conjunction that introduces words or content, here the greeting; ⲣⲁϣⲉ “rejoice”, translated here as “rejoice!”.</span><span class="l-fr">ϫⲉ est une conjonction qui introduit des paroles ou un contenu, ici la salutation ; ⲣⲁϣⲉ « se réjouir », traduit ici « réjouissez-vous ».</span></li>
+    <li><span class="cop">ϩⲛ-ⲛⲉⲉⲓ</span> — <span class="l-ja">前置詞 ϩⲛ（〜の中で）と、指示詞 ⲛⲉⲉⲓ（これら）。ⲛⲉⲉⲓ は辞書では ⲛⲁⲓ の見出しで引きます（レンマが ⲛⲁⲓ）。綴りが違っても、同じ語は同じレンマで数えます。</span><span class="l-en">the preposition ϩⲛ “in” and the demonstrative ⲛⲉⲉⲓ “these”, which the lexicon lists under ⲛⲁⲓ (its lemma): different spellings of the same word share one lemma.</span><span class="l-fr">la préposition ϩⲛ « dans » et le démonstratif ⲛⲉⲉⲓ « ceux-ci », que le lexique range sous ⲛⲁⲓ (son lemme) : les graphies d’un même mot partagent un lemme.</span></li>
+  </ol>
+  <p class="gnote"><span class="l-ja">この説明は本サイトの注釈（品詞・レンマ・語義）と訳にもとづきます。もっと先を読むときは、<a href="eugnostos.html?wit=III">エウグノストスのビュワー</a>で〈語釈〉をオンにし、語を押して確かめながら進めてください。</span><span class="l-en">This reading follows the site’s annotation (parts of speech, lemmata, glosses) and translation. To read on, open the <a href="eugnostos.html?wit=III">Eugnostos reader</a>, turn on Interlinear and click words as you go.</span><span class="l-fr">Cette lecture suit l’annotation (catégories, lemmes, gloses) et la traduction du site. Pour poursuivre, ouvrez la <a href="eugnostos.html?wit=III">visionneuse d’Eugnoste</a>, activez Interlinéaire et cliquez sur les mots au fil de la lecture.</span></p>
+
+  <!-- ═══════ V ═══════ -->
+  <h2 id="symbols"><span class="num">V</span><span class="l-ja">記号と表示の早見表</span><span class="l-en">Signs at a glance</span><span class="l-fr">Signes en bref</span></h2>
+  <div class="gwrap"><table class="gt">
+    <thead><tr><th><span class="l-ja">表示</span><span class="l-en">Sign</span><span class="l-fr">Signe</span></th><th><span class="l-ja">意味</span><span class="l-en">Meaning</span><span class="l-fr">Sens</span></th><th><span class="l-ja">どこで</span><span class="l-en">Where</span><span class="l-fr">Où</span></th></tr></thead>
+    <tbody>
+      <tr><td class="mark-sample">ⲡ-ⲙⲁⲕⲁⲣⲓⲟⲥ</td><td><span class="l-ja">「-」は語群の中の形態素の区切り。空白は語群の区切り</span><span class="l-en">“-” joins the morphemes of a bound group; spaces separate groups</span><span class="l-fr">« - » relie les morphèmes d’un groupe ; les espaces séparent les groupes</span></td><td><span class="l-ja">人の手で注釈した版</span><span class="l-en">hand-annotated editions</span><span class="l-fr">éditions annotées à la main</span></td></tr>
+      <tr><td class="mark-sample">ⲡ·ⲙⲁⲕⲁⲣⲓⲟⲥ</td><td><span class="l-ja">「·」は形態素の区切り（〈形態素の区切り〉）</span><span class="l-en">“·” marks morpheme boundaries (Morpheme boundaries)</span><span class="l-fr">« · » marque les limites des morphèmes (Limites des morphèmes)</span></td><td><span class="l-ja">本文ビュワー</span><span class="l-en">text reader</span><span class="l-fr">visionneuse de textes</span></td></tr>
+      <tr><td class="mark-sample"><span class="amb">ⲛⲉ</span>⁝</td><td><span class="l-ja">同形異義語（同じ綴りで意味の違う語）。候補から一つを採ってある</span><span class="l-en">homograph (same spelling, different words); one candidate has been chosen</span><span class="l-fr">homographe (même graphie, mots différents) ; un candidat a été retenu</span></td><td><span class="l-ja">人の手で注釈した版</span><span class="l-en">hand-annotated editions</span><span class="l-fr">éditions annotées à la main</span></td></tr>
+      <tr><td class="mark-sample">ⲙⲁⲕⲁⲣⲓⲟⲥ<span class="grc">grc</span></td><td><span class="l-ja">ギリシア語からの借用語（<code>xml:lang="grc"</code>）。ビュワーでは〈借用語〉で色が付く</span><span class="l-en">Greek loanword (<code>xml:lang="grc"</code>); coloured by Loanwords in the readers</span><span class="l-fr">emprunt grec (<code>xml:lang="grc"</code>) ; coloré par Emprunts dans les visionneuses</span></td><td><span class="l-ja">辞書・検索・ビュワー</span><span class="l-en">lexicon, search, readers</span><span class="l-fr">lexique, recherche, visionneuses</span></td></tr>
+      <tr><td class="mark-sample"><span class="low">ⲁⲩⲱ</span></td><td><span class="l-ja">自動注釈の確度 low（〈確かでない注釈に印〉）</span><span class="l-en">low certainty of the automatic analysis (Mark uncertain analyses)</span><span class="l-fr">faible certitude de l’analyse automatique (Signaler les analyses incertaines)</span></td><td><span class="l-ja">本文ビュワー（暫定版）</span><span class="l-en">text reader (drafts)</span><span class="l-fr">visionneuse (brouillons)</span></td></tr>
+      <tr><td class="mark-sample"><span class="x">ⲁⲩⲱ</span>　X</td><td><span class="l-ja">品詞を決められなかった語（未判定）</span><span class="l-en">part of speech could not be determined (unresolved)</span><span class="l-fr">catégorie non déterminée (non résolu)</span></td><td><span class="l-ja">本文ビュワー・検索</span><span class="l-en">text reader, search</span><span class="l-fr">visionneuse, recherche</span></td></tr>
+      <tr><td class="mark-sample"><span class="supA">ⲍ</span>ⲱⲏ　<span class="supB">ⲯ</span>…</td><td><span class="l-ja">元ファイルで落ちていた ⲍ・ⲯ を補った語（点線: 語形と文脈から決まる／破線: 校訂本での確認が必要）</span><span class="l-en">ⲍ or ⲯ lost in the source file and restored (dotted: settled by form and context; dashed: to be checked in the editions)</span><span class="l-fr">ⲍ ou ⲯ perdu dans le fichier source et restitué (pointillé : établi par la forme et le contexte ; tireté : à vérifier dans les éditions)</span></td><td><span class="l-ja">本文ビュワー</span><span class="l-en">text reader</span><span class="l-fr">visionneuse de textes</span></td></tr>
+      <tr><td class="mark-sample">〔…〕</td><td><span class="l-ja">欠損（本文ビュワーでは、元ファイルに欠損の注記があった位置）</span><span class="l-en">lacuna (in the text reader: where the source file noted one)</span><span class="l-fr">lacune (dans la visionneuse de textes : signalée par le fichier source)</span></td><td><span class="l-ja">すべてのビュワー</span><span class="l-en">all readers</span><span class="l-fr">toutes les visionneuses</span></td></tr>
+      <tr><td class="mark-sample">⸢…⸣</td><td><span class="l-ja">判読できない箇所</span><span class="l-en">illegible</span><span class="l-fr">illisible</span></td><td><span class="l-ja">人の手で注釈した版</span><span class="l-en">hand-annotated editions</span><span class="l-fr">éditions annotées à la main</span></td></tr>
+      <tr><td class="mark-sample"><span class="par">‖ V,1</span></td><td><span class="l-ja">並行箇所（ほかの文書の同じ文言の箇所）</span><span class="l-en">parallel passage (same wording in another text)</span><span class="l-fr">passage parallèle (même formulation dans un autre texte)</span></td><td><span class="l-ja">エウグノストスのビュワー</span><span class="l-en">Eugnostos reader</span><span class="l-fr">visionneuse d’Eugnoste</span></td></tr>
+      <tr><td class="mark-sample">§3</td><td><span class="l-ja">セグメントの番号。押すと引用のメニュー</span><span class="l-en">segment number; click for the citation menu</span><span class="l-fr">numéro de segment ; cliquez pour le menu de citation</span></td><td><span class="l-ja">すべてのビュワー</span><span class="l-en">all readers</span><span class="l-fr">toutes les visionneuses</span></td></tr>
+      <tr><td class="mark-sample"><span class="pg">p.48</span> <span class="ln">16</span></td><td><span class="l-ja">写本の頁と行の番号（〈ページ〉〈行〉）</span><span class="l-en">codex page and line numbers (Pages, Lines)</span><span class="l-fr">numéros de page et de ligne du codex (Pages, Lignes)</span></td><td><span class="l-ja">頁・行の入っている本文</span><span class="l-en">texts with pages and lines</span><span class="l-fr">textes avec pages et lignes</span></td></tr>
+      <tr><td class="mark-sample">*</td><td><span class="l-ja">品詞の合う辞書の項目が無いので、同じレンマの項目をすべて出している</span><span class="l-en">no lexicon entry with this part of speech, so all entries for the lemma are shown</span><span class="l-fr">aucune entrée du lexique pour cette catégorie : toutes les entrées du lemme sont affichées</span></td><td><span class="l-ja">検索の一覧</span><span class="l-en">search results</span><span class="l-fr">résultats de recherche</span></td></tr>
+    </tbody>
+  </table></div>
+
+  <h2 id="refs"><span class="l-ja">文献</span><span class="l-en">References</span><span class="l-fr">Références</span></h2>
+  <p class="gnote"><span class="l-ja">I の文字と上線の説明は、次のような標準的な文法書の記述に沿って、本プロジェクトの言葉で短くまとめたものです。詳しくはこれらを見てください。</span><span class="l-en">The account of the letters and the supralinear stroke in section I summarises, in the project’s own words, what standard grammars such as these say; see them for details.</span><span class="l-fr">La présentation des lettres et du trait suscrit (section I) résume, en nos propres termes, ce qu’exposent des grammaires de référence comme celles-ci ; s’y reporter pour le détail.</span></p>
+  <ul class="reflist">
+    <li>Th. O. Lambdin, <i>Introduction to Sahidic Coptic</i>, Mercer University Press, 1983.</li>
+    <li>B. Layton, <i>Coptic in 20 Lessons: Introduction to Sahidic Coptic with Exercises and Vocabularies</i>, Peeters, 2007.</li>
+    <li>B. Layton, <i>A Coptic Grammar, with Chrestomathy and Glossary: Sahidic Dialect</i>, 3rd ed., Harrassowitz, 2011.</li>
+  </ul>
+</main>
+
+<footer class="site-foot">
+  <a href="index.html"><span class="l-ja">HOME</span><span class="l-en">Home</span><span class="l-fr">Accueil</span></a>
+  · <a href="lexicon.html"><span class="l-ja">辞書</span><span class="l-en">Lexicon</span><span class="l-fr">Lexique</span></a>
+  · <a href="search.html"><span class="l-ja">検索・統計</span><span class="l-en">Search</span><span class="l-fr">Recherche</span></a>
+  · <a href="project.html"><span class="l-ja">プロジェクトについて</span><span class="l-en">About</span><span class="l-fr">À propos</span></a>
+</footer>
+
+<script>
+(function(){
+"use strict";
+const H = document.documentElement;
+const TEI = "http://www.tei-c.org/ns/1.0", XMLNS = "http://www.w3.org/XML/1998/namespace";
+const $ = s => document.querySelector(s);
+const UL = () => { const l = H.getAttribute("data-lang"); return l === "en" || l === "fr" ? l : "ja"; };
+const L3 = (ja, en, fr) => { const l = UL(); return l === "en" ? en : l === "fr" ? fr : ja; };
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt = n => Number(n).toLocaleString("en-US");
+const T = (el, n) => Array.from(el.getElementsByTagNameNS(TEI, n));
+const kids = (el, n) => Array.from(el.children).filter(c => c.localName === n && c.namespaceURI === TEI);
+const xid = el => el.getAttributeNS(XMLNS, "id") || "";
+const xlang = el => el.getAttributeNS(XMLNS, "lang") || "";
+const getText = url => fetch(url, {cache: "no-cache"}).then(r => r.ok ? r.text() : Promise.reject(new Error(url + " — HTTP " + r.status)));
+const getXML = url => getText(url).then(t => { const x = new DOMParser().parseFromString(t, "application/xml");
+  if(x.getElementsByTagName("parsererror").length) throw new Error(url + " — XML"); return x; });
+
+let POSL = null, EX = null;
+const posName = p => { const e = POSL && POSL.byTag[p]; return e ? (e[UL()] || e.en) : p; };
+
+/* ---------- III 品詞タグの表（data/pos_labels.json）---------- */
+function renderPos(){
+  const tb = $("#posTable tbody");
+  if(!POSL){ return; }
+  tb.innerHTML = POSL.tags.map(t => '<tr><td><code>' + esc(t.tag) + '</code></td><td>' + esc(t[UL()] || t.en) + '</td>' +
+    '<td class="num">' + fmt(t.hand) + '</td><td class="num">' + fmt(t.draft) + '</td></tr>').join("");
+  $("#posNote").innerHTML = L3(
+    "全 " + POSL.tags.length + " 種類。表は <code>data/pos_labels.json</code>（<code>scripts/build_site.py</code> が品詞の名前の表 <code>POS_NAMES</code> から書き出す）から作っています。X は、品詞を決められなかった語の仮の印です。",
+    POSL.tags.length + " tags. The table is built from <code>data/pos_labels.json</code>, written by <code>scripts/build_site.py</code> from its list of names, <code>POS_NAMES</code>. X is a provisional mark for words whose part of speech could not be determined.",
+    POSL.tags.length + " étiquettes. Le tableau provient de <code>data/pos_labels.json</code>, écrit par <code>scripts/build_site.py</code> à partir de sa liste de noms <code>POS_NAMES</code>. X est une marque provisoire pour les mots dont la catégorie n’a pas pu être déterminée.");
+}
+
+/* ---------- IV 例文（エウグノストス III,3 の最初のセグメント）----------
+   本文・訳は data/eugnostos_tei.xml、語義は data/lexicon.xml（レンマと品詞の組で引く。品詞の合う項目が無いときは語義を出さず、
+   リンクだけそのレンマの項目（同形異義語ならそのまとまり）へ）、文脈上の語釈は本文の @ana が指す <interp>。 */
+const EX_SEG = "III-INCIPIT";
+function readExample(tei, lex){
+  const ix = new Map();
+  T(lex, "entry").forEach(e => {
+    const o = T(e, "orth")[0]; if(!o) return;
+    const lem = o.textContent.trim(), pos = (T(e, "pos")[0] || {}).textContent || "";
+    const sense = {}; T(e, "cit").forEach(c => { const q = T(c, "quote")[0]; if(q && q.textContent.trim()) sense[xlang(c)] = q.textContent.trim(); });
+    const par = e.parentNode;
+    if(!ix.has(lem)) ix.set(lem, []);
+    ix.get(lem).push({id: xid(e), pos, sense, sup: par && par.localName === "superEntry" ? xid(par) : ""});
+  });
+  const interp = {}; T(tei, "interp").forEach(i => { const g = i.parentNode; interp[xid(i)] = {l: xlang(g) || xlang(i), t: i.textContent.trim()}; });
+  const s = T(tei, "s").find(x => xid(x) === EX_SEG); if(!s) throw new Error("data/eugnostos_tei.xml — " + EX_SEG);
+  const groups = kids(s, "phr").map(p => kids(p, "w").map(w => {
+    const lemma = w.getAttribute("lemma") || w.textContent.trim(), type = w.getAttribute("type") || "";
+    const es = ix.get(lemma) || [], ent = es.find(e => e.pos === type) || null;
+    const link = ent ? ent.id : es.length ? (es[0].sup || es[0].id) : "";
+    const ctx = (w.getAttribute("ana") || "").split(/\s+/).map(a => interp[a.replace(/^#/, "")]).filter(Boolean);
+    return {form: w.textContent.trim(), lemma, type, grc: xlang(w) === "grc", ent, link, miss: !ent && es.length > 0, ctx};
+  }));
+  const tr = {};
+  T(tei, "div").filter(d => d.getAttribute("type") === "translation").forEach(d => {
+    const seg = T(d, "seg").find(g => (g.getAttribute("corresp") || "").split(/\s+/).includes("#" + EX_SEG));
+    if(seg) tr[xlang(d)] = seg.textContent.replace(/\s+/g, " ").trim();
+  });
+  return {groups, tr};
+}
+function renderExample(){
+  const box = $("#exBox"); if(!EX) return;
+  const L = UL();
+  const line = EX.groups.map(g => g.map(m => esc(m.form)).join('<span class="ms">-</span>')).join(" ");
+  const rows = EX.groups.map((g, gi) => g.map((m, mi) => {
+    const sense = m.ent && m.ent.sense ? (m.ent.sense[L] || m.ent.sense.en || m.ent.sense.ja || "") : "";
+    const ctx = m.ctx.map(c => c.t).join(" / ");
+    return '<tr' + (mi === 0 && gi > 0 ? ' class="grp"' : "") + '>' +
+      '<td class="num">' + (mi === 0 ? gi + 1 : "") + '</td>' +
+      '<td><span class="cop">' + esc(m.form) + '</span>' + (m.grc ? ' <small title="xml:lang=&quot;grc&quot;">grc</small>' : "") + '</td>' +
+      '<td><span class="cop">' + esc(m.lemma) + '</span></td>' +
+      '<td>' + esc(posName(m.type)) + ' <code>' + esc(m.type) + '</code></td>' +
+      '<td>' + (sense ? esc(sense) : m.miss ? '<small>' + esc(L3("（辞書にこの品詞の項目は無い）", "(no lexicon entry with this part of speech)", "(pas d’entrée du lexique pour cette catégorie)")) + '</small>' : "") +
+        (ctx ? '<br><small>' + esc(L3("文脈上の語釈: ", "in context: ", "en contexte : ") + ctx) + '</small>' : "") +
+        (m.link ? ' <a href="lexicon.html#' + encodeURIComponent(m.link) + '">' + esc(L3("辞書", "lexicon", "lexique")) + '</a>' : "") + '</td></tr>';
+  }).join("")).join("");
+  const order = {ja: ["ja", "en", "fr"], en: ["en", "ja", "fr"], fr: ["fr", "en", "ja"]}[L];
+  box.innerHTML = '<p class="ex-line" lang="cop">' + line + '</p>' +
+    order.filter(l => EX.tr[l]).map(l => '<p class="ex-tr"><b>' + l.toUpperCase() + '</b>' + esc(EX.tr[l]) + '</p>').join("") +
+    '<div class="gwrap"><table class="gt"><thead><tr><th class="num">' + esc(L3("語群", "Group", "Groupe")) + '</th><th>' + esc(L3("形態素", "Morpheme", "Morphème")) +
+    '</th><th>' + esc(L3("レンマ", "Lemma", "Lemme")) + '</th><th>' + esc(L3("品詞", "Part of speech", "Catégorie")) + '</th><th>' +
+    esc(L3("語義（辞書）", "Sense (lexicon)", "Sens (lexique)")) + '</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
+}
+
+document.addEventListener("nhc:lang", () => { renderPos(); renderExample(); });
+
+getText("data/pos_labels.json").then(t => JSON.parse(t)).then(d => {
+  POSL = {tags: d.tags || [], byTag: {}};
+  POSL.tags.forEach(t => { POSL.byTag[t.tag] = t; });
+  renderPos(); renderExample();
+}).catch(e => { console.error(e); $("#posTable tbody").innerHTML = '<tr><td colspan="4">' + esc(e.message) + '</td></tr>'; });
+
+Promise.all([getXML("data/eugnostos_tei.xml"), getXML("data/lexicon.xml")]).then(([tei, lex]) => {
+  EX = readExample(tei, lex); renderExample();
+}).catch(e => { console.error(e); $("#exBox").innerHTML = '<p class="load">' + esc(e.message) + '</p>'; });
+})();
+</script>
+</body>
+</html>

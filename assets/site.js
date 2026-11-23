@@ -26,6 +26,7 @@
     { id: "corpus", href: "index.html#corpus",   ja: "文書一覧",         en: "Texts",           fr: "Textes" },
     { id: "lexicon",href: "lexicon.html",        ja: "辞書",            en: "Lexicon",         fr: "Lexique" },
     { id: "search", href: "search.html",         ja: "検索・統計",        en: "Search",          fr: "Recherche" },
+    { id: "guide",  href: "guide.html",          ja: "はじめての方へ",    en: "Getting started", fr: "Premiers pas" },
     { id: "gnosis", href: "gnosticism.html",     ja: "グノーシス主義とは", en: "Gnosticism",      fr: "Le gnosticisme" },
     { id: "project",href: "project.html",        ja: "プロジェクト",     en: "About",           fr: "Le projet" },
     { id: "news",   href: "index.html#news",     ja: "NEWS",            en: "News",            fr: "Actualités" }

@@ -20,7 +20,9 @@
 | ページ | 内容 | 管理方法 |
 |---|---|---|
 | `index.html` | HOME（日・英・仏、NEWS、関連サイト、文書一覧） | `python3 scripts/build_site.py` で生成。NEWS は `data/news.json`、関連サイトは `data/links.json` を編集し、`build_site.py` を実行し直す（生成のときに HTML に書き込むので、JS を動かさない読み手やリンクのプレビューにも出る。実行する前でも、ページを開いたときに JS が JSON を読み直して最新を出す） |
+| `guide.html` | 「はじめての方へ」（日・英・仏）。コプト文字の読み方（字母・上線・聖なる名の略記・借用語）、本文ビュワーの読み方、品詞タグの一覧（`data/pos_labels.json` から作る）、例文（エウグノストス III,3 の最初のセグメント。語群・形態素・レンマ・品詞・語義・訳はデータから読む）、記号の早見表。HOME の導入文の下・本文ビュワーとエウグノストスのビュワーの冒頭・検索のチュートリアルからリンク | 手作業 |
 | `gnosticism.html` | 解説「グノーシス主義とは」（日・英・仏） | 手作業 |
+| `edition.html` | 編集方針（日・英・仏）。本文の出典、表記の約束、注釈の体系（語釈の付け方を含む）、状態の定義、自動注釈の作り方と限界、生成 AI の利用、引用・ライセンス・版、更新の記録、デジタル校訂版の書評の観点（RIDE）との対応。**下書き**: 【要記入】【要確認】が残っている間は、ナビ・HOME・`sitemap.xml` からリンクせず、`<meta name="robots" content="noindex">` を付けてある。埋まったら noindex を外し、`project.html` の「目的」の節とフッター、`scripts/build_site.py` の `SITEMAP_PAGES` に足す | 手作業 |
 | `project.html` | プロジェクト紹介。メンバー・資金協力は `data/project.json`（`public: true` のみ表示） | 手作業＋JSON |
 | `eugnostos.html` | エウグノストス。`?wit=III`（祝福されたエウグノストス）/ `?wit=V`（エウグノストス）/ `?wit=SYN`（対照） | 手作業 |
 | `republic.html` | 『国家』ビュワー | 手作業 |
@@ -92,6 +94,7 @@ nag_hammadi_library/
 ├─ eugnostos.html      ← エウグノストス・ビュワー(手作業管理)
 ├─ republic.html       ← プラトン『国家』断片ビュワー(手作業管理)
 ├─ lexicon.html        ← コプト語辞書(手作業管理。data/lexicon.xml を読む)
+├─ guide.html          ← はじめての方へ(手作業管理。品詞の表は data/pos_labels.json、例文は data/eugnostos_tei.xml から)
 ├─ tractate.html       ← 準備中ページ(自動生成)
 ├─ reader.html         ← 本文ビュワー・暫定版(自動生成。?doc=II-6 など)
 ├─ sitemap.xml         ← 検索エンジン向けの URL の一覧(自動生成)
@@ -118,6 +121,7 @@ nag_hammadi_library/
 │   ├─ pos_labels.json    ← 品詞タグの三言語の名前と本文での出現数(scripts/build_site.py が書き出す。辞書のページなどが読む)
 │   ├─ fulltext_stats.json ← 全文テキストの文書ごとの数(scripts/build_fulltext_stats.py。build_site.py を実行すると作り直す)
 │   ├─ facsimile_links.json ← 写本ごとの写真(Claremont, Nag Hammadi Archive)へのリンク
+│   ├─ intros.json      ← 文書ごとの解題(三言語。下書きで、reviewed: true にした項目だけをビュワーが表示する)
 │   ├─ news.json・links.json  ← HOME の NEWS と関連サイト
 │   └─ republic_*.xml
 ├─ source/             ← CSV／TSV(サイトに反映できるのは、いまは lexicon.csv だけ。下の「データの編集」)
@@ -455,6 +459,11 @@ HOME のフッターの版番号は、このファイルを読みます。`CITAT
   箇所の引用も「NHC VI 48,16–17（§1）」とこのアンカーの URL で示します。本文ビュワー（`reader.html?doc=II-2#p32.10`）と
   エウグノストス（`eugnostos.html?wit=III#p70.1`）も同じ仕組みで、区切りを入れればそのまま働きます（上の「写本の頁・行の
   区切りを入れる」）。頁・行の無い本文（いまはエウグノストスと全文テキスト）では、〈ページ〉〈行〉のボタンを出しません。
+- **解題**: 題の下に、折りたためる「この文書について（解題）」（要約・写本と頁・ほかの写し・言語と方言・潮流・文献）を出します。
+  内容は `data/intros.json` にあり、生田目が確かめて `reviewed` を `true` にした項目だけを表示します（2026-11-23 の時点では
+  全項目が下書きで、何も表示されません）。III,3・V,1 はエウグノストスの、VI,5 は『国家』の項目を使います（`"see"`）。
+  潮流は gnosticism.html III の表の分類、文献は同 VII の推薦文献から選び、確かでない点は各項目の `todo` に書いてあります。
+  表示は `assets/viewer-tools.js`、見た目は `assets/site.css`（`.doc-intro`）。
 - **写本の写真**: 題の下に、Claremont Colleges Digital Library の Nag Hammadi Archive にある、その写本の写真（1970 年代の白黒写真）
   へのリンクがあります（`data/facsimile_links.json`。著作権は図書館にあるので、リンクだけです）。写本ファクシミリ（IIIF）のパネルは、
   `iiif/*.json` に画像の `source` を書いたときだけ出ます（`iiif/README.md`）。

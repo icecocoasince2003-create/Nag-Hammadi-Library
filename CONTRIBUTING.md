@@ -57,8 +57,9 @@ cd Nag-Hammadi-Library
 | 並行箇所 | （自動で作る） | `python3 scripts/build_parallels.py` で要約を確かめ、`--write` で `data/parallels.xml` に書き込む |
 | 全文テキスト（`source/nhc_fulltext_split/`）の文書一覧 | （自動で作る） | `python3 scripts/sync_nhc_catalog.py --write`（`data/catalog.xml` の `BEGIN`〜`END nhc_fulltext_split` の範囲） |
 | 全文テキストのうち、自動注釈の暫定版の 39 文書 | `source/nhc_fulltext_split/tei/` の XML を直接 | `python3 scripts/check_tei.py`（[source/nhc_fulltext_split/README_ja.md](source/nhc_fulltext_split/README_ja.md) の §10・§11） |
-| ビュワー・検索ページなどの画面（`eugnostos.html`・`republic.html`・`search.html`・`lexicon.html`・`gnosticism.html`・`project.html` など） | その HTML を直接（手作業で管理しているページ） | ブラウザーで確かめる（6.） |
+| ビュワー・検索ページなどの画面（`eugnostos.html`・`republic.html`・`search.html`・`lexicon.html`・`guide.html`・`gnosticism.html`・`project.html` など） | その HTML を直接（手作業で管理しているページ） | ブラウザーで確かめる（6.） |
 | 写本の写真へのリンク | `data/facsimile_links.json`（アーカイブで実際に開いて確かめた URL だけを書く） | — |
+| 文書ごとの解題（ビュワーの「この文書について」） | `data/intros.json`（確かめた項目の `reviewed` を `true` にすると表示される。確かでない点は `todo` に書く） | `python3 -m json.tool data/intros.json > /dev/null`、ブラウザーで確かめる |
 | 写本ファクシミリ（IIIF）の画像 | `iiif/<文書名>.json` の `pages[].source`（[iiif/README.md](iiif/README.md)） | — |
 | 版番号・DOI | `data/release.json`・`CITATION.cff`・`.zenodo.json`（README の「版とリリースの作り方」） | `python3 scripts/check_release.py`・`python3 scripts/build_site.py` |
 
