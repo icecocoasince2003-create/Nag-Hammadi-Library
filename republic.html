@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>/* 表示モード（ライト／ダーク）の保存値を描画前に反映（保存は assets/site.js） */try{if(localStorage.getItem("nhc-mode")==="light")document.documentElement.setAttribute("data-mode","light")}catch(e){}</script>
-<script>/* 表示言語（?lang= ＞ 保存値 ＞ ブラウザーの言語、ほかは英語）を描画前に反映（正式な処理と保存は assets/site.js） */(function(H){var L=["ja","en","fr"],m=/[?&]lang=([^&#]*)/i.exec(location.search),v=m?m[1].toLowerCase():null;if(L.indexOf(v)<0){v=null;try{v=localStorage.getItem("nhc-lang")}catch(e){}}if(L.indexOf(v)<0){v="en";var n=navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||""];for(var i=0;i<n.length;i++){var p=String(n[i]).toLowerCase().split(/[-_]/)[0];if(L.indexOf(p)>=0){v=p;break}}}if(H.getAttribute("data-i18n")==="full"){H.setAttribute("data-lang",v);H.setAttribute("lang",v)}else if(v!=="ja"){H.setAttribute("data-lang","en");H.setAttribute("lang","en");H.setAttribute("data-gl",v);H.setAttribute("data-tl",v)}})(document.documentElement)</script>
+<script>/* 表示言語（?lang= ＞ 保存値 ＞ ブラウザーの言語、ほかは英語）を描画前に反映（正式な処理と保存は assets/site.js）。このビュワーは画面も三言語なので、日本語以外では data-lang・lang も選んだ言語（en・fr）にする。build_site.py の LANG_BOOT（日英だけのビュワー向け。fr でも data-lang="en"）とはこの点だけわざと違う（eugnostos.html・republic.html の 2 か所） */(function(H){var L=["ja","en","fr"],m=/[?&]lang=([^&#]*)/i.exec(location.search),v=m?m[1].toLowerCase():null;if(L.indexOf(v)<0){v=null;try{v=localStorage.getItem("nhc-lang")}catch(e){}}if(L.indexOf(v)<0){v="en";var n=navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||""];for(var i=0;i<n.length;i++){var p=String(n[i]).toLowerCase().split(/[-_]/)[0];if(L.indexOf(p)>=0){v=p;break}}}if(H.getAttribute("data-i18n")==="full"){H.setAttribute("data-lang",v);H.setAttribute("lang",v)}else if(v!=="ja"){H.setAttribute("data-lang",v);H.setAttribute("lang",v);H.setAttribute("data-gl",v);H.setAttribute("data-tl",v)}})(document.documentElement)</script>
 <title>プラトン『国家』588b–589b (NHC VI,5)</title>
 <meta name="description" content="プラトン『国家』588b–589b のコプト語訳（NHC VI,5）。語ごとの語義と品詞、ギリシア語原文との対照 / Plato, Republic 588b–589b in Coptic (NHC VI,5), with word-by-word glosses and the Greek text in parallel.">
 <!-- リンクを共有したときのプレビュー（OGP）。og:title・og:description は <title> と meta description と同じにする -->
@@ -302,10 +302,16 @@ html[data-search="open"] aside{transform:none}
 html[data-drag="on"] #drop-hint{display:flex}
 #drop-hint[hidden]{display:none}
 html:not([data-drag="on"]) #drop-hint{display:none}
-/* ---- UI language toggle (JA/EN) ---- */
+/* ---- UI language toggle (JA/EN/FR。assets/site.css の 3) と同じ) ---- */
 .l-en{display:none}
 html[data-lang="en"] .l-ja{display:none}
 html[data-lang="en"] .l-en{display:revert}
+.l-fr{display:none}
+html[data-lang="fr"] .l-ja{display:none}
+html[data-lang="fr"] .l-fr{display:revert}
+/* 左の文書パネルのグループの見出しは assets/site.css の 2) が日英で付ける。フランス語はここで */
+html[data-lang="fr"] body > .app > header .seg-ctl::before{content:"Affichage"}
+html[data-lang="fr"] body > .app > header .nav-ctl::before{content:"Outils"}
 
 /* ---- related panel (data/catalog.xml) ---- */
 #relBack{display:none}
@@ -345,39 +351,39 @@ a.relcard:hover{border-color:var(--gold)}
 <div class="app">
   <nav id="sitebar" class="sitebar"></nav>
   <header>
-    <a class="chip homelink" href="index.html" title="Index / 一覧へ"><span class="l-ja">← 一覧</span><span class="l-en">← Index</span></a>
+    <a class="chip homelink" href="index.html" title="Index / 一覧へ / Tous les textes"><span class="l-ja">← 一覧</span><span class="l-en">← Index</span><span class="l-fr">← Tous les textes</span></a>
     <div class="brand">
       <img class="brandlogo" src="image/icon.svg" alt="" width="30" height="30" onerror="this.style.display='none'">
       <div class="brandtext">
-        <div class="t"><span class="cop">ⲡⲟⲗⲓⲧⲉⲓⲁ</span> <span class="l-ja">プラトン『国家』</span><span class="l-en">Plato, Republic</span></div>
+        <div class="t"><span class="cop" lang="cop">ⲡⲟⲗⲓⲧⲉⲓⲁ</span> <span class="l-ja">プラトン『国家』</span><span class="l-en">Plato, Republic</span><span class="l-fr">Platon, République</span></div>
         <div class="s">Plato, Republic 588b–589b · NHC VI,5</div>
       </div>
     </div>
     <div class="controls">
       <div class="seg-ctl">
-        <button class="chip" id="ilBtn" aria-pressed="true" title="語釈を本文に重ねて表示 / Show interlinear glosses"><span class="l-ja">語釈</span><span class="l-en">Interlinear</span></button>
-        <button class="chip" id="loanBtn" aria-pressed="false" title="ギリシア語借用語をマーキング / Mark Greek loanwords"><span class="l-ja">借用語</span><span class="l-en">Loanwords</span><span id="loanN" class="loann"></span></button>
-        <button class="chip" id="pageBtn" aria-pressed="false" title="写本のページ番号を表示 / Show codex page numbers"><span class="l-ja">ページ</span><span class="l-en">Pages</span></button>
-        <button class="chip" id="lineBtn" aria-pressed="false" title="写本の行番号を表示 / Show manuscript line numbers"><span class="l-ja">行</span><span class="l-en">Lines</span></button>
-        <button class="chip" id="tlBtn" aria-pressed="false" title="語釈・対訳の言語 / Language of glosses and translation">訳: 日</button>
-        <button class="chip" id="langBtn" title="Language / 言語">English</button>
+        <button class="chip" id="ilBtn" aria-pressed="true" title="語釈を本文に重ねて表示 / Show interlinear glosses / Afficher les gloses interlinéaires"><span class="l-ja">語釈</span><span class="l-en">Interlinear</span><span class="l-fr">Interlinéaire</span></button>
+        <button class="chip" id="loanBtn" aria-pressed="false" title="ギリシア語借用語をマーキング / Mark Greek loanwords / Signaler les emprunts grecs"><span class="l-ja">借用語</span><span class="l-en">Loanwords</span><span class="l-fr">Emprunts</span><span id="loanN" class="loann"></span></button>
+        <button class="chip" id="pageBtn" aria-pressed="false" title="写本のページ番号を表示 / Show codex page numbers / Afficher les numéros de page du codex"><span class="l-ja">ページ</span><span class="l-en">Pages</span><span class="l-fr">Pages</span></button>
+        <button class="chip" id="lineBtn" aria-pressed="false" title="写本の行番号を表示 / Show manuscript line numbers / Afficher les numéros de ligne du manuscrit"><span class="l-ja">行</span><span class="l-en">Lines</span><span class="l-fr">Lignes</span></button>
+        <button class="chip" id="tlBtn" aria-pressed="false" title="語釈・対訳の言語 / Language of glosses and translation / Langue des gloses et de la traduction">訳: 日</button>
+        <button class="chip" id="langBtn" title="Language / 言語 / Langue">English</button>
       </div>
       <div class="nav-ctl">
-        <a class="chip statslink" href="search.html?doc=republic&amp;view=stats" title="コーパス統計 / Corpus statistics"><span class="ic" aria-hidden="true">∑</span><span class="l-ja">統計</span><span class="l-en">Stats</span></a>
-        <a class="chip searchlink" href="search.html?doc=republic" title="コーパス検索 / Corpus search"><span class="ic" aria-hidden="true">⌕</span><span class="l-ja">コーパス検索</span><span class="l-en">Corpus search</span></a>
-        <button class="chip" id="relBtn" title="関連文書・リソース / Related documents &amp; resources"><span class="ic" aria-hidden="true">⇄</span><span class="l-ja">関連</span><span class="l-en">Related</span></button>
-        <button class="chip" id="modeBtn" aria-pressed="false" title="表示モード / Display mode">◐ アイオーン</button>
+        <a class="chip statslink" href="search.html?doc=republic&amp;view=stats" title="コーパス統計 / Corpus statistics / Statistiques du corpus"><span class="ic" aria-hidden="true">∑</span><span class="l-ja">統計</span><span class="l-en">Stats</span><span class="l-fr">Statistiques</span></a>
+        <a class="chip searchlink" href="search.html?doc=republic" title="コーパス検索 / Corpus search / Recherche du corpus"><span class="ic" aria-hidden="true">⌕</span><span class="l-ja">コーパス検索</span><span class="l-en">Corpus search</span><span class="l-fr">Recherche du corpus</span></a>
+        <button class="chip" id="relBtn" title="関連文書・リソース / Related documents &amp; resources / Documents et ressources liés"><span class="ic" aria-hidden="true">⇄</span><span class="l-ja">関連</span><span class="l-en">Related</span><span class="l-fr">Liens</span></button>
+        <button class="chip" id="modeBtn" aria-pressed="false" title="表示モード / Display mode / Mode d’affichage">◐ アイオーン</button>
         <div class="xmlmenu">
-          <button class="chip xmlmenu-btn" id="xmlBtn" aria-haspopup="true" aria-expanded="false" title="このページが参照している XML をダウンロード / Download the XML used by this page"><span class="ic" aria-hidden="true">⤓</span>XML</button>
+          <button class="chip xmlmenu-btn" id="xmlBtn" aria-haspopup="true" aria-expanded="false" title="このページが参照している XML をダウンロード / Download the XML used by this page / Télécharger le XML utilisé par cette page"><span class="ic" aria-hidden="true">⤓</span>XML</button>
           <div class="xmlmenu-pop" id="xmlMenu" hidden>
-            <div class="xm-h"><span class="l-ja">このページが参照している XML</span><span class="l-en">XML used by this page</span></div>
-            <a href="data/republic_tei.xml" download><code>republic_tei.xml</code><span class="l-ja">コプト語本文</span><span class="l-en">Coptic text</span><small data-size></small></a>
-            <a href="data/republic_greek.xml" download><code>republic_greek.xml</code><span class="l-ja">ギリシア語原文</span><span class="l-en">Greek text</span><small data-size></small></a>
-            <a href="data/lexicon.xml" download><code>lexicon.xml</code><span class="l-ja">コプト語辞書</span><span class="l-en">Coptic lexicon</span><small data-size></small></a>
-            <a href="data/catalog.xml" download><code>catalog.xml</code><span class="l-ja">文書カタログ</span><span class="l-en">catalogue</span><small data-size></small></a>
+            <div class="xm-h"><span class="l-ja">このページが参照している XML</span><span class="l-en">XML used by this page</span><span class="l-fr">XML utilisé par cette page</span></div>
+            <a href="data/republic_tei.xml" download><code>republic_tei.xml</code><span class="l-ja">コプト語本文</span><span class="l-en">Coptic text</span><span class="l-fr">texte copte</span><small data-size></small></a>
+            <a href="data/republic_greek.xml" download><code>republic_greek.xml</code><span class="l-ja">ギリシア語原文</span><span class="l-en">Greek text</span><span class="l-fr">texte grec</span><small data-size></small></a>
+            <a href="data/lexicon.xml" download><code>lexicon.xml</code><span class="l-ja">コプト語辞書</span><span class="l-en">Coptic lexicon</span><span class="l-fr">lexique copte</span><small data-size></small></a>
+            <a href="data/catalog.xml" download><code>catalog.xml</code><span class="l-ja">文書カタログ</span><span class="l-en">catalogue</span><span class="l-fr">catalogue</span><small data-size></small></a>
             <hr>
-            <button type="button" id="pickTop"><span class="l-ja">手元の XML を読み込んで表示…</span><span class="l-en">Open a local XML file…</span></button>
-            <div class="xm-h"><span class="l-ja">TEI P5 · UTF-8 · 本文はパブリックドメイン、辞書・対訳は CC BY 4.0</span><span class="l-en">TEI P5 · UTF-8 · texts public domain; lexicon, translations CC BY 4.0</span></div>
+            <button type="button" id="pickTop"><span class="l-ja">手元の XML を読み込んで表示…</span><span class="l-en">Open a local XML file…</span><span class="l-fr">Ouvrir un fichier XML local…</span></button>
+            <div class="xm-h"><span class="l-ja">TEI P5 · UTF-8 · 本文はパブリックドメイン、辞書・対訳は CC BY 4.0</span><span class="l-en">TEI P5 · UTF-8 · texts public domain; lexicon, translations CC BY 4.0</span><span class="l-fr">TEI P5 · UTF-8 · textes : domaine public ; lexique, traductions : CC BY 4.0</span></div>
           </div>
         </div>
       </div>
@@ -391,19 +397,19 @@ a.relcard:hover{border-color:var(--gold)}
   <main id="main" tabindex="-1">
     <div class="doc-head">
       <div class="kick">Nag Hammadi Codex VI,5 · pp. 48–51</div>
-      <h1><span class="cop">ⲡⲟⲗⲓⲧⲉⲓⲁ</span><br><span class="l-ja">プラトン『国家』588b–589b</span><span class="l-en">Plato, Republic 588b–589b</span></h1>
-      <div class="doc-tools"><button type="button" class="doc-cite" id="docCite" aria-haspopup="dialog"><span class="l-ja">この文書を引用</span><span class="l-en">Cite this text</span></button><span class="doc-photos" data-codices="VI" hidden></span></div>
+      <h1><span class="cop" lang="cop">ⲡⲟⲗⲓⲧⲉⲓⲁ</span><br><span class="l-ja">プラトン『国家』588b–589b</span><span class="l-en">Plato, Republic 588b–589b</span><span class="l-fr">Platon, République 588b–589b</span></h1>
+      <div class="doc-tools"><button type="button" class="doc-cite" id="docCite" aria-haspopup="dialog"><span class="l-ja">この文書を引用</span><span class="l-en">Cite this text</span><span class="l-fr">Citer ce texte</span></button><span class="doc-photos" data-codices="VI" hidden></span></div>
       <div class="doc-intro" data-intro="republic" hidden></div>
-      <p class="meta"><span class="l-ja">プラトン『国家』第9巻 588b–589b のコプト語訳（NHC VI,5）と、対応するギリシア語原文の対訳。左にコプト語本文、右にギリシア語原文（OCT/Burnet）を並べています。各形態素をクリックすると品詞・語義・辞書が表示され、〈借用語〉ボタンでギリシア語からの借用語が左本文上にマーキングされます。</span><span class="l-en">A Coptic translation of Plato’s Republic, Book IX 588b–589b (NHC VI,5), set in parallel with the Greek original (OCT/Burnet): Coptic on the left, Greek on the right. Click any morpheme for its part of speech, sense and dictionary entry; the “Loanwords” button marks Greek loanwords within the Coptic text.</span></p>
+      <p class="meta"><span class="l-ja">プラトン『国家』第9巻 588b–589b のコプト語訳（NHC VI,5）と、対応するギリシア語原文の対訳。左にコプト語本文、右にギリシア語原文（OCT/Burnet）を並べています。各形態素をクリックすると品詞・語義・辞書が表示され、〈借用語〉ボタンでギリシア語からの借用語が左本文上にマーキングされます。</span><span class="l-en">A Coptic translation of Plato’s Republic, Book IX 588b–589b (NHC VI,5), set in parallel with the Greek original (OCT/Burnet): Coptic on the left, Greek on the right. Click any morpheme for its part of speech, sense and dictionary entry; the “Loanwords” button marks Greek loanwords within the Coptic text.</span><span class="l-fr">Traduction copte de la République de Platon, livre IX, 588b–589b (NHC VI,5), en regard de l’original grec (OCT/Burnet) : le copte à gauche, le grec à droite. Cliquez sur un morphème pour voir sa catégorie, son sens et son entrée de dictionnaire ; le bouton « Emprunts » signale les emprunts grecs dans le texte copte.</span></p>
     </div>
-        <section class="facsimile" id="facsimile" aria-label="写本ファクシミリ / Facsimile" hidden>
+        <section class="facsimile" id="facsimile" aria-label="写本ファクシミリ / Facsimile / Fac-similé" hidden>
       <div class="fx-head">
         <span class="fx-title">Facsimile · IIIF</span>
         <span class="fx-sub" id="fxStatus"></span>
         <button class="chip" id="fxPrev" hidden>‹</button>
         <span class="fx-sub" id="fxPage" hidden style="flex:none"></span>
         <button class="chip" id="fxNext" hidden>›</button>
-        <button class="chip" id="fxToggle" aria-expanded="false"><span class="l-ja">開く</span><span class="l-en">Open</span></button>
+        <button class="chip" id="fxToggle" aria-expanded="false"><span class="l-ja">開く</span><span class="l-en">Open</span><span class="l-fr">Ouvrir</span></button>
       </div>
       <div class="fx-body" id="fxBody" hidden>
         <div id="osdView"></div>
@@ -414,32 +420,32 @@ a.relcard:hover{border-color:var(--gold)}
     <div id="drop-hint" hidden>ここに <b>republic_tei.xml</b> をドロップ</div>
     <input id="file" type="file" accept=".xml,application/xml,text/xml" multiple hidden>
     <div class="corpus-head" id="corpusHead" hidden>
-      <div class="ch ccol"><span class="lbl"><span class="cop">ⲙⲛ̄ⲧⲣⲙ̄ⲛ̄ⲕⲏⲙⲉ</span> <span class="l-ja">コプト語</span><span class="l-en">Coptic</span></span><span class="sub">NHC VI,5</span></div>
-      <div class="ch gcol"><span class="lbl">Ἑλληνικά <span class="l-ja">ギリシア語</span><span class="l-en">Greek</span></span><span class="sub">Plato · OCT / Burnet</span></div>
+      <div class="ch ccol"><span class="lbl"><span class="cop" lang="cop">ⲙⲛ̄ⲧⲣⲙ̄ⲛ̄ⲕⲏⲙⲉ</span> <span class="l-ja">コプト語</span><span class="l-en">Coptic</span><span class="l-fr">Copte</span></span><span class="sub">NHC VI,5</span></div>
+      <div class="ch gcol"><span class="lbl"><span lang="grc">Ἑλληνικά</span> <span class="l-ja">ギリシア語</span><span class="l-en">Greek</span><span class="l-fr">Grec</span></span><span class="sub">Plato · OCT / Burnet</span></div>
     </div>
     <div id="reading" class="col"></div>
     <div class="credit" id="credit"></div>
   </main>
 
-  <aside aria-label="検索結果 / Search" id="searchAside">
+  <aside aria-label="検索結果 / Search / Résultats" id="searchAside">
     <div class="aside-tabs">
-      <span class="at-title"><span class="l-ja">検索結果</span><span class="l-en">Search</span></span>
-      <button class="at-close" id="searchClose" aria-label="閉じる / Close" title="閉じる / Close">×</button>
+      <span class="at-title"><span class="l-ja">検索結果</span><span class="l-en">Search</span><span class="l-fr">Résultats</span></span>
+      <button class="at-close" id="searchClose" aria-label="閉じる / Close / Fermer" title="閉じる / Close / Fermer">×</button>
     </div>
     <div class="aside-body">
-      <div id="results"><p class="empty"><span class="l-ja">上の検索窓に入力してください。</span><span class="l-en">Type a query in the search box above.</span></p></div>
+      <div id="results"><p class="empty"><span class="l-ja">上の検索窓に入力してください。</span><span class="l-en">Type a query in the search box above.</span><span class="l-fr">Saisissez une recherche dans le champ ci-dessus.</span></p></div>
     </div>
   </aside>
 </div>
 
-<div class="pop" id="pop" role="dialog" aria-label="形態素の語義 / Morpheme gloss"></div>
+<div class="pop" id="pop" role="dialog" aria-label="形態素の語義 / Morpheme gloss / Glose du morphème"></div>
 
 <div class="modal-back" id="relBack"></div>
-<div class="modal" id="relModal" role="dialog" aria-modal="true" aria-label="関連文書・リソース / Related documents &amp; resources">
+<div class="modal" id="relModal" role="dialog" aria-modal="true" aria-label="関連文書・リソース / Related documents &amp; resources / Documents et ressources liés">
   <div class="modal-head">
-    <h2><span class="l-ja">関連文書・リソース</span><span class="l-en">Related documents &amp; resources</span></h2>
+    <h2><span class="l-ja">関連文書・リソース</span><span class="l-en">Related documents &amp; resources</span><span class="l-fr">Documents et ressources liés</span></h2>
     <span class="sub">data/catalog.xml</span>
-    <button class="x" id="relClose" aria-label="閉じる / Close" title="閉じる / Close">×</button>
+    <button class="x" id="relClose" aria-label="閉じる / Close / Fermer" title="閉じる / Close / Fermer">×</button>
   </div>
   <div class="modal-body" id="relBody"></div>
 </div>
@@ -451,18 +457,20 @@ const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>Array.from(r.quer
 const H=document.documentElement;
 function escapeHTML(s){ return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
 
-const POS={ART:["冠詞","article"],N:["名詞","noun"],NPROP:["固有名詞","proper noun"],V:["動詞","verb"],
- VSTAT:["状態動詞","stative"],PREP:["前置詞","preposition"],PPER:["人称代名詞","pronoun"],
- PPOS:["所有詞","possessive"],PDEM:["指示詞","demonstrative"],CONJ:["接続詞","conjunction"],
- PTC:["不変化詞","particle"],NEG:["否定辞","negation"],NUM:["数詞","numeral"],ADV:["副詞","adverb"],
- ADJ:["形容詞","adjective"],REL:["関係詞","relative"],CONV:["変換詞","converter"],FUT:["未来辞","future"],
- PRET:["過去辞","past"],COP:["繋辞","copula"],PFX:["接頭辞","prefix"],INTERJ:["間投詞","interjection"],
- AUX:["助動詞","auxiliary"],POSS:["所有冠詞","possessive art."],
- EXIST:["存在詞","existential"],PINT:["疑問詞","interrogative"],FM:["外来語句","foreign material"],
- APST:["過去接頭","past prefix"],AOPT:["願望辞","optative"],CREL:["関係変換","relative conv."],
- CFOC:["焦点変換","focalizer"],PPERI:["独立人称代名詞","independent pron."],VBD:["動詞","verb"],
- A:["助動詞","auxiliary"],UNKNOWN:["不明","unknown"],
- X:["未注","unglossed"]};
+/* 品詞タグの名前 [日, 英, 仏]。仏は data/pos_labels.json（scripts/build_site.py の POS_NAMES）の fr。POS_NAMES に無い PPERI・A・UNKNOWN と、
+   日英を「動詞」にしてある VBD は、日英に合わせて仏を付けた */
+const POS={ART:["冠詞","article","article"],N:["名詞","noun","nom"],NPROP:["固有名詞","proper noun","nom propre"],V:["動詞","verb","verbe"],
+ VSTAT:["状態動詞","stative","statif"],PREP:["前置詞","preposition","préposition"],PPER:["人称代名詞","pronoun","pronom personnel"],
+ PPOS:["所有詞","possessive","possessif"],PDEM:["指示詞","demonstrative","démonstratif"],CONJ:["接続詞","conjunction","conjonction"],
+ PTC:["不変化詞","particle","particule"],NEG:["否定辞","negation","négation"],NUM:["数詞","numeral","numéral"],ADV:["副詞","adverb","adverbe"],
+ ADJ:["形容詞","adjective","adjectif"],REL:["関係詞","relative","relatif"],CONV:["変換詞","converter","convertisseur"],FUT:["未来辞","future","futur"],
+ PRET:["過去辞","past","prétérit"],COP:["繋辞","copula","copule"],PFX:["接頭辞","prefix","préfixe"],INTERJ:["間投詞","interjection","interjection"],
+ AUX:["助動詞","auxiliary","auxiliaire"],POSS:["所有冠詞","possessive art.","article possessif"],
+ EXIST:["存在詞","existential","existentiel"],PINT:["疑問詞","interrogative","interrogatif"],FM:["外来語句","foreign material","matériel étranger"],
+ APST:["過去接頭","past prefix","auxiliaire du parfait"],AOPT:["願望辞","optative","auxiliaire de l’optatif"],CREL:["関係変換","relative conv.","convertisseur relatif"],
+ CFOC:["焦点変換","focalizer","convertisseur focalisant"],PPERI:["独立人称代名詞","independent pron.","pronom personnel indépendant"],VBD:["動詞","verb","verbe"],
+ A:["助動詞","auxiliary","auxiliaire"],UNKNOWN:["不明","unknown","inconnu"],
+ X:["未注","unglossed","non résolu"]};
 
 let DOC_MAIN=null, DOC_LEX=null, DOC_GREEK=null, DOC_CAT=null, LEXMAP=new Map(), GREEKMAP=new Map();
 let SEGS_III=[], SEGS_V=[], curWit="III";
@@ -662,34 +670,37 @@ function isProvisional(cert){ return cert==="low"||cert==="prov"; }
 function curTL(){ return H.getAttribute("data-tl")||"ja"; }
 function curGL(){ return H.getAttribute("data-gl")||"ja"; }
 function pickGloss(w){ const l=curGL(); return (l==="fr"?(w.glossFr||w.gloss):l==="en"?w.gloss:w.glossJa)||""; }
+/* 語釈の言語（lang 属性に使う）。フランス語の語釈が無く英語で補ったときは en */
+function glossLang(w){ const l=curGL(); return l==="fr"&&!w.glossFr&&w.gloss?"en":l; }
 function pickTrans(s){ const l=curTL(); return (l==="fr"?s.transFr:l==="en"?s.transEn:s.transJa)||""; }
 function pendingText(){ const l=curTL(); return l==="fr"?"— traduction à venir —":l==="en"?"translation pending":"—訳は準備中—"; }
 function wordHTML(w,i){
   const cls="wseg"+(w.grc?" grc":"")+(w.amb?" amb":"")+((!w.senses||w.senses.length===0)?" x":"");
   const g = pickGloss(w)||"·";
-  return `<span class="${cls}" tabindex="0" role="button" data-i="${i}">${escapeHTML(w.form)}<span class="g">${escapeHTML(g)}</span></span>`;
+  return `<span class="${cls}" tabindex="0" role="button" data-i="${i}">${escapeHTML(w.form)}<span class="g" lang="${glossLang(w)}">${escapeHTML(g)}</span></span>`;
 }
 /* Greek cell for one segment (grc text + JA/EN of the Greek, following the trans-language toggle) */
 function grcCellHTML(s){
   if(!s.grc){
-    return `<div class="grc-empty">${UL()==="en"?"(no corresponding Greek)":"（対応するギリシア語なし）"}</div>`;
+    return `<div class="grc-empty">${L3("（対応するギリシア語なし）","(no corresponding Greek)","(pas de grec correspondant)")}</div>`;
   }
   const badge = isProvisional(s.grcCert)
-    ? `<span class="grc-prov" title="${UL()==='en'?'provisional alignment — verify against Burnet/OCT':'暫定整列 — 要 Burnet/OCT 校訂'}">${UL()==='en'?'prov.':'暫定'}</span>`
+    ? `<span class="grc-prov" lang="${UL()}" title="${L3('暫定整列 — 要 Burnet/OCT 校訂','provisional alignment — verify against Burnet/OCT','alignement provisoire — à vérifier sur Burnet/OCT')}">${L3('暫定','prov.','prov.')}</span>`
     : "";
-  const en=curTL()==="en";
+  const en=curTL()!=="ja";   // ギリシア語の訳は日英だけ。フランス語の訳を選んでいるときは英訳を出す
   const gt=en?s.grcEn:s.grcJa;
-  return `<div class="grcline">${escapeHTML(s.grc)}${badge}</div>`+
-    (gt?`<div class="${en?'grcen':'grcja'}">${escapeHTML(gt)}</div>`:"");
+  return `<div class="grcline" lang="grc">${escapeHTML(s.grc)}${badge}</div>`+
+    (gt?`<div class="${en?'grcen':'grcja'}" lang="${en?'en':'ja'}">${escapeHTML(gt)}</div>`:"");
 }
 /* lacuna / unclear marker (always visible so the damage is legible) */
 function gapHTML(it){
   const lac = it.reason==="lacuna";
   const txt = lac ? "〔…〕" : "⸢…⸣";
   const tip = lac
-    ? (UL()==="en" ? "lacuna"+(it.unit?` (${it.unit})`:"")+(it.extent?`, extent ${it.extent}`:"") : "欠損"+(it.unit==="line"?"（行単位）":"")+(it.extent==="unknown"?"・範囲不明":""))
-    : (UL()==="en" ? "unclear / illegible" : "判読不能");
-  return `<span class="gapm ${lac?'lac':'unc'}" title="${escapeHTML(tip)}" aria-label="${escapeHTML(tip)}">${txt}</span>`;
+    ? (UL()==="fr" ? "lacune"+(it.unit==="line"?" (en lignes)":it.unit?` (${it.unit})`:"")+(it.extent==="unknown"?", étendue inconnue":it.extent?`, étendue ${it.extent}`:"")
+       : UL()==="en" ? "lacuna"+(it.unit?` (${it.unit})`:"")+(it.extent?`, extent ${it.extent}`:"") : "欠損"+(it.unit==="line"?"（行単位）":"")+(it.extent==="unknown"?"・範囲不明":""))
+    : (L3("判読不能","unclear / illegible","incertain / illisible"));
+  return `<span class="gapm ${lac?'lac':'unc'}" lang="${UL()}" title="${escapeHTML(tip)}" aria-label="${escapeHTML(tip)}">${txt}</span>`;
 }
 function segHTML(s){
   const flow = (s.flow&&s.flow.length) ? s.flow : s.words.map((_,i)=>({k:"w",i}));
@@ -703,8 +714,8 @@ function segHTML(s){
       cop+=wordHTML(w,it.i); prevForm=w.form; prevW=true; continue;
     }
     // line / page markers do NOT break a morpheme group (so words stay joined when hidden)
-    if(it.k==="lb"){ cop+=`<span class="lbm" data-n="${escapeHTML(it.n)}" title="${UL()==='en'?'line':'行'} ${escapeHTML(it.n)}">${escapeHTML(it.n)}</span>`; continue; }
-    if(it.k==="pd"){ cop+=`<span class="pdm" data-n="${escapeHTML(it.n)}" title="${UL()==='en'?'page':'ページ'} ${escapeHTML(it.n)}">p.${escapeHTML(it.n)}</span>`; continue; }
+    if(it.k==="lb"){ cop+=`<span class="lbm" data-n="${escapeHTML(it.n)}" lang="${UL()}" title="${L3('行','line','ligne')} ${escapeHTML(it.n)}">${escapeHTML(it.n)}</span>`; continue; }
+    if(it.k==="pd"){ cop+=`<span class="pdm" data-n="${escapeHTML(it.n)}" lang="${UL()}" title="${L3('ページ','page','page')} ${escapeHTML(it.n)}">p.${escapeHTML(it.n)}</span>`; continue; }
     if(it.k==="gap"){ cop+=gapHTML(it); prevW=false; continue; }  // a gap is a real break
   }
   let tr = pickTrans(s);
@@ -712,9 +723,9 @@ function segHTML(s){
   if(!tr) tr = pendingText();
   return `<div class="prow" id="seg-${s.id}" data-id="${s.id}">
     <div class="pcell ccol"><div class="pcop">
-      <button type="button" class="no" data-cite="${s.id}" aria-haspopup="dialog" title="この箇所を引用 / Cite this passage">${s.n||""}</button>
-      <div class="coptic">${cop}</div>
-      <div class="${trCls}">${escapeHTML(tr)}</div>
+      <button type="button" class="no" data-cite="${s.id}" aria-haspopup="dialog" title="この箇所を引用 / Cite this passage / Citer ce passage">${s.n||""}</button>
+      <div class="coptic" lang="cop">${cop}</div>
+      <div class="${trCls}" lang="${curTL()}">${escapeHTML(tr)}</div>
     </div></div>
     <div class="pcell gcol">${grcCellHTML(s)}</div>
   </div>`;
@@ -725,7 +736,9 @@ function render(){
   $("#corpusHead").hidden=false;
   box.className="parallel";
   box.innerHTML = SEGS_III.map(segHTML).join("")+
-    `<p class="grcsrc-foot">${UL()==="en"
+    `<p class="grcsrc-foot">${UL()==="fr"
+      ? `Grec = Platon, <i>République</i> 588b–589b (OCT/Burnet, domaine public) ; traductions japonaise et anglaise du grec = ce projet. Premier alignement, à vérifier (${grcCount()}/${SEGS_III.length} segments). Le texte grec est tenu à part dans <code>republic_greek.xml</code> et relié au copte par <code>@corresp</code>.`
+      : UL()==="en"
       ? `Greek = Plato, <i>Republic</i> 588b–589b (OCT/Burnet, public domain); Japanese/English of the Greek = this project. First-pass alignment, to verify (${grcCount()}/${SEGS_III.length} segments). The Greek text is maintained separately in <code>republic_greek.xml</code>, linked to the Coptic by <code>@corresp</code>.`
       : `ギリシア語＝Plato, <i>Republic</i> 588b–589b（OCT/Burnet, public domain）。ギリシア語の和訳・英訳は本プロジェクト。いずれも一次整列・要校訂（現在 ${grcCount()}/${SEGS_III.length} セグメント）。ギリシア語本文は <code>republic_greek.xml</code> に分離し、<code>@corresp</code> でコプト語に対応づけています。`}</p>`;
   wireWords(); relabelLoan();
@@ -763,7 +776,7 @@ function lexLinkHTML(w){
   if(!id) return "";
   const sup=/^(lex-\d+)-\d+$/.exec(id);
   if(sup&&(w.how==="pos-miss"||w.how==="lemma")) id=sup[1];
-  return `<div class="lexlink"><a href="lexicon.html#${encodeURIComponent(id)}">${UL()==="en"?"Lexicon entry →":"辞書の項目 →"}</a></div>`;
+  return `<div class="lexlink"><a href="lexicon.html#${encodeURIComponent(id)}">${L3("辞書の項目 →","Lexicon entry →","Entrée du lexique →")}</a></div>`;
 }
 function showPop(el){
   const seg=el.closest(".prow"); if(!seg) return; const segId=seg.dataset.id;
@@ -778,30 +791,30 @@ function showPop(el){
     const rows=w.senses.map((sn,i)=>{
       const p=POS[sn.pos]||POS.X;
       const g=[];
-      if(sn.en) g.push(`<span>${escapeHTML(sn.en)}</span>`);
-      if(sn.ja) g.push(`<span class="ja">${escapeHTML(sn.ja)}</span>`);
-      if(sn.fr) g.push(`<span>${escapeHTML(sn.fr)}</span>`);
-      const u=(sn.uja||sn.uen)?`<span class="usg">${escapeHTML(sn.uja||sn.uen)}</span>`:"";
+      if(sn.en) g.push(`<span lang="en">${escapeHTML(sn.en)}</span>`);
+      if(sn.ja) g.push(`<span class="ja" lang="ja">${escapeHTML(sn.ja)}</span>`);
+      if(sn.fr) g.push(`<span lang="fr">${escapeHTML(sn.fr)}</span>`);
+      const ut=UL()==="fr"?(sn.uen||sn.uja):(sn.uja||sn.uen), u=ut?`<span class="usg" lang="${ut===sn.uja?"ja":"en"}">${escapeHTML(ut)}</span>`:"";   // 用法の注記は日英だけ（フランス語の画面では英語を先に）
       const isDef=sn.id&&sn.id===w.defId;
-      const rl=sn.ref?` <a href="${escapeHTML(sn.ref)}" target="_blank" rel="noopener" style="color:var(--gold-bright);font-size:.72rem">${UL()==="en"?"Dictionary →":"辞書 →"}</a>`:"";
+      const rl=sn.ref?` <a href="${escapeHTML(sn.ref)}" target="_blank" rel="noopener" style="color:var(--gold-bright);font-size:.72rem">${L3("辞書 →","Dictionary →","Dictionnaire →")}</a>`:"";
       return `<div class="sense${isDef?' def':''}">
         <div class="srow"><span class="snum">${i+1}</span>
           <span class="pos${w.grc?' grc':''}">${posLabel(p)}</span>${u}
           ${isDef?'<span class="defmark">'+defLbl()+'</span>':''}</div>
         <div class="sglos">${g.join('<span class="sep">・</span>')}${rl}</div></div>`;
     }).join("");
-    inner=`<div class="form">${escapeHTML(w.form)}</div>
-      ${w.lemma&&w.lemma!==w.form?`<div class="lemma">${lemmaLbl()} ${escapeHTML(w.lemma)}</div>`:""}
+    inner=`<div class="form" lang="cop">${escapeHTML(w.form)}</div>
+      ${w.lemma&&w.lemma!==w.form?`<div class="lemma">${lemmaLbl()} <span lang="cop">${escapeHTML(w.lemma)}</span></div>`:""}
       <div class="hommark">⬥ ${w.how==="pos-miss"?missLbl(w.pos,w.senses.length):homoLbl(w.senses.length)}</div>
       <div class="senses">${rows}</div>${extra}`;
   } else {
     let dl="";
-    if(w.gloss) dl+=`<dt>EN</dt><dd>${escapeHTML(w.gloss)}</dd>`;
-    if(w.glossJa) dl+=`<dt>JA</dt><dd class="ja">${escapeHTML(w.glossJa)}</dd>`;
-    if(w.glossFr) dl+=`<dt>FR</dt><dd>${escapeHTML(w.glossFr)}</dd>`;
-    if(w.ref) dl+=`<dt>${UL()==="en"?"Dict.":"辞書"}</dt><dd><a href="${escapeHTML(w.ref)}" target="_blank" rel="noopener" style="color:var(--gold-bright)">Coptic Dictionary →</a></dd>`;
-    inner=`<div class="form">${escapeHTML(w.form)}</div>
-      ${w.lemma&&w.lemma!==w.form?`<div class="lemma">${lemmaLbl()} ${escapeHTML(w.lemma)}</div>`:""}
+    if(w.gloss) dl+=`<dt>EN</dt><dd lang="en">${escapeHTML(w.gloss)}</dd>`;
+    if(w.glossJa) dl+=`<dt>JA</dt><dd class="ja" lang="ja">${escapeHTML(w.glossJa)}</dd>`;
+    if(w.glossFr) dl+=`<dt>FR</dt><dd lang="fr">${escapeHTML(w.glossFr)}</dd>`;
+    if(w.ref) dl+=`<dt>${L3("辞書","Dict.","Dict.")}</dt><dd><a href="${escapeHTML(w.ref)}" target="_blank" rel="noopener" style="color:var(--gold-bright)">Coptic Dictionary →</a></dd>`;
+    inner=`<div class="form" lang="cop">${escapeHTML(w.form)}</div>
+      ${w.lemma&&w.lemma!==w.form?`<div class="lemma">${lemmaLbl()} <span lang="cop">${escapeHTML(w.lemma)}</span></div>`:""}
       <span class="pos${w.grc?' grc':''}">${posLabel(pos)}</span>
       ${dl?`<dl>${dl}</dl>`:`<div class="none">${noneLbl()}</div>`}
       ${w.grc?`<div class="grcnote">⬥ ${loanLbl()}</div>`:""}${extra}`;
@@ -834,22 +847,22 @@ let qt=null;
 $("#q").addEventListener("input",e=>{ clearTimeout(qt); qt=setTimeout(()=>doSearch(e.target.value.trim()),160); });
 function doSearch(q){
   const res=$("#results");
-  if(!q){ res.innerHTML=`<p class="empty">${UL()==="en"?"Type a query in the search box above.":"上の検索窓に入力してください。"}</p>`; closeSearch(); return; }
+  if(!q){ res.innerHTML=`<p class="empty">${L3("上の検索窓に入力してください。","Type a query in the search box above.","Saisissez une recherche dans le champ ci-dessus.")}</p>`; closeSearch(); return; }
   openSearch();
   const ql=q.toLowerCase();
   const hits=[];
   SEGS_III.forEach(s=>{
     let where=[];
-    if(s.words.some(w=>w.form.includes(q)||w.lemma.includes(q))) where.push(UL()==="en"?"Coptic":"コプト");
-    if(s.words.some(w=>(w.senses||[]).some(x=>(x.en||"").toLowerCase().includes(ql)))) where.push(UL()==="en"?"EN gloss":"EN語釈");
-    if(s.words.some(w=>(w.senses||[]).some(x=>(x.ja||"").includes(q)))) where.push(UL()==="en"?"JA gloss":"JA語釈");
-    if(s.words.some(w=>(w.senses||[]).some(x=>(x.fr||"").toLowerCase().includes(ql)))) where.push(UL()==="en"?"FR gloss":"FR語釈");
-    if((s.transJa||"").includes(q)) where.push(UL()==="en"?"JA trans.":"和訳");
-    if((s.transEn||"").toLowerCase().includes(ql)) where.push(UL()==="en"?"EN trans.":"英訳");
-    if((s.transFr||"").toLowerCase().includes(ql)) where.push(UL()==="en"?"FR trans.":"仏訳");
+    if(s.words.some(w=>w.form.includes(q)||w.lemma.includes(q))) where.push(L3("コプト","Coptic","Copte"));
+    if(s.words.some(w=>(w.senses||[]).some(x=>(x.en||"").toLowerCase().includes(ql)))) where.push(L3("EN語釈","EN gloss","Glose EN"));
+    if(s.words.some(w=>(w.senses||[]).some(x=>(x.ja||"").includes(q)))) where.push(L3("JA語釈","JA gloss","Glose JA"));
+    if(s.words.some(w=>(w.senses||[]).some(x=>(x.fr||"").toLowerCase().includes(ql)))) where.push(L3("FR語釈","FR gloss","Glose FR"));
+    if((s.transJa||"").includes(q)) where.push(L3("和訳","JA trans.","Trad. JA"));
+    if((s.transEn||"").toLowerCase().includes(ql)) where.push(L3("英訳","EN trans.","Trad. EN"));
+    if((s.transFr||"").toLowerCase().includes(ql)) where.push(L3("仏訳","FR trans.","Trad. FR"));
     if(where.length) hits.push({s,where});
   });
-  if(!hits.length){ res.innerHTML=`<p class="empty">${UL()==="en"?`No matches for “${escapeHTML(q)}”.`:`「${escapeHTML(q)}」に一致する箇所はありません。`}</p>`; return; }
+  if(!hits.length){ res.innerHTML=`<p class="empty">${UL()==="fr"?`Aucun résultat pour « ${escapeHTML(q)} ».`:UL()==="en"?`No matches for “${escapeHTML(q)}”.`:`「${escapeHTML(q)}」に一致する箇所はありません。`}</p>`; return; }
   res.innerHTML=hits.map(({s,where})=>{
     const cop=s.words.map(w=>{
       const hit=w.form.includes(q)||w.lemma.includes(q);
@@ -857,7 +870,7 @@ function doSearch(q){
     }).join(" ");
     const tr=pickTrans(s)||s.transJa||s.transEn||s.transFr||"";
     return `<button class="result" data-id="${s.id}"><div class="rno">§${s.n} · ${where.join(" / ")}</div>
-      <div class="rsnip"><span class="cop">${cop}</span>${tr?"<br>"+escapeHTML(tr.slice(0,70))+(tr.length>70?"…":""):""}</div></button>`;
+      <div class="rsnip"><span class="cop" lang="cop">${cop}</span>${tr?"<br>"+escapeHTML(tr.slice(0,70))+(tr.length>70?"…":""):""}</div></button>`;
   }).join("");
   $$("#results .result").forEach(b=>b.onclick=()=>flashSeg(b.dataset.id));
 }
@@ -891,24 +904,25 @@ function relabelLoan(){ const e=$("#loanN"); if(e){ const n=loanCount(); e.textC
 
 /* ---------- related panel (data/catalog.xml) ---------- */
 function catTitle(b, lang){
-  let out={cop:"",ja:"",en:""};
+  let out={cop:"",ja:"",en:"",fr:""};
   // 文書そのものの題名だけ（<relatedItem> の中の <bibl> の題名は含めない）
   Array.from(b.children).filter(t=>t.localName==="title").forEach(t=>{ if(t.getAttribute("type")) return; const l=getLang(t);
     if(l==="cop") out.cop=t.textContent.trim();
     else if(l==="en") out.en=t.textContent.trim();
+    else if(l==="fr") out.fr=t.textContent.trim();
     else if(l==="ja"||!l) out.ja=t.textContent.trim(); });   // フランス語などの題名（xml:lang="fr"）で日本語の題名を上書きしない
-  const main = lang==="en" ? (out.en||out.ja) : (out.ja||out.en);
+  const main = lang==="fr" ? (out.fr||out.en||out.ja) : lang==="en" ? (out.en||out.ja) : (out.ja||out.en);
   return {cop:out.cop, main};
 }
 function catNote(el, type, lang){
-  let ja="", en="", any="";
+  let ja="", en="", fr="", any="";
   T(el,"note").forEach(nd=>{
     if(type && nd.getAttribute("type")!==type) return;
     if(!type && nd.getAttribute("type")) return;
     const l=getLang(nd); const tx=nd.textContent.trim();
-    if(l==="ja") ja=tx; else if(l==="en") en=tx; else any=any||tx;
+    if(l==="ja") ja=tx; else if(l==="en") en=tx; else { if(l==="fr") fr=tx; any=any||tx; }
   });
-  return (lang==="en" ? (en||ja) : (ja||en)) || any;
+  return (lang==="fr" ? (fr||en||ja) : lang==="en" ? (en||ja) : (ja||en)) || any;
 }
 function catRef(el, type){
   const r=T(el,"ref").find(x=>!type||x.getAttribute("type")===type);
@@ -924,24 +938,22 @@ function catDocs(){
   return m;
 }
 function relCardDoc(b, noteTxt){
-  const en=UL()==="en";
-  const t=catTitle(b, en?"en":"ja");
+  const t=catTitle(b, UL());
   const siglum=(T(b,"idno").find(x=>x.getAttribute("type")==="siglum")||{textContent:""}).textContent;
   const planned=b.getAttribute("subtype")==="planned";
   const reader=catRef(b,"reader");
-  const sub=[siglum, noteTxt||catNote(b,"genre",en?"en":"ja")].filter(Boolean).join(" · ");
-  const kind=planned ? (en?"planned":"準備中") : (en?"in this corpus":"コーパス内");
-  const inner=`<div class="rt">${t.cop?`<span class="cop">${escapeHTML(t.cop)}</span> `:""}${escapeHTML(t.main)}</div>`+
+  const sub=[siglum, noteTxt||catNote(b,"genre",UL())].filter(Boolean).join(" · ");
+  const kind=planned ? (L3("準備中","planned","en préparation")) : (L3("コーパス内","in this corpus","dans ce corpus"));
+  const inner=`<div class="rt">${t.cop?`<span class="cop" lang="cop">${escapeHTML(t.cop)}</span> `:""}${escapeHTML(t.main)}</div>`+
     `<div class="rs">${escapeHTML(sub)}</div><span class="rk">${escapeHTML(kind)}</span>`;
   return (planned||!reader)
     ? `<div class="relcard planned">${inner}</div>`
     : `<a class="relcard" href="${escapeHTML(reader)}">${inner}</a>`;
 }
 function relCardExt(b, kindLbl){
-  const en=UL()==="en";
   const title=(T(b,"title")[0]||{textContent:""}).textContent.trim();
   const url=catRef(b,"");
-  const note=catNote(b,null,en?"en":"ja");
+  const note=catNote(b,null,UL());
   const inner=`<div class="rt">${escapeHTML(title)}</div>`+
     (note?`<div class="rs">${escapeHTML(note)}</div>`:"")+
     `<span class="rk">${escapeHTML(kindLbl)}</span>`;
@@ -950,12 +962,13 @@ function relCardExt(b, kindLbl){
     : `<div class="relcard planned">${inner}</div>`;
 }
 function renderRel(){
-  const en=UL()==="en";
+  const fr=UL()==="fr";
   const body=$("#relBody"); if(!body) return;
   if(!DOC_CAT){
-    body.innerHTML=`<p class="stat-note">${en
-      ? 'Load <code>data/catalog.xml</code> to see document metadata and related resources here.'
-      : 'カタログファイル <code>data/catalog.xml</code> を読み込むと、文書メタデータと関連リソースが表示されます。'}</p>`;
+    body.innerHTML=`<p class="stat-note">${L3(
+        'カタログファイル <code>data/catalog.xml</code> を読み込むと、文書メタデータと関連リソースが表示されます。',
+        'Load <code>data/catalog.xml</code> to see document metadata and related resources here.',
+        'Chargez <code>data/catalog.xml</code> pour afficher ici les métadonnées du document et les ressources liées.')}</p>`;
     return;
   }
   const docs=catDocs();
@@ -964,13 +977,13 @@ function renderRel(){
   if(self){
     const siglum=(T(self,"idno").find(x=>x.getAttribute("type")==="siglum")||{textContent:""}).textContent;
     const pages=(T(self,"idno").find(x=>x.getAttribute("type")==="pages")||{textContent:""}).textContent;
-    const genre=catNote(self,"genre",en?"en":"ja");
-    const langN=catNote(self,"lang",en?"en":"ja");
-    const desc=catNote(self,"desc",en?"en":"ja");
+    const genre=catNote(self,"genre",UL());
+    const langN=catNote(self,"lang",UL());
+    const desc=catNote(self,"desc",UL());
     html+=`<div class="relmeta">`+
-      (siglum?`<b>${en?"Siglum":"写本"}</b>: ${escapeHTML(siglum)}${pages?" · "+escapeHTML(pages):""}<br>`:"")+
-      (genre?`<b>${en?"Genre":"ジャンル"}</b>: ${escapeHTML(genre)}<br>`:"")+
-      (langN?`<b>${en?"Language":"言語"}</b>: ${escapeHTML(langN)}<br>`:"")+
+      (siglum?`<b>${L3("写本","Siglum","Sigle")}</b>${fr?" : ":": "}${escapeHTML(siglum)}${pages?" · "+escapeHTML(pages):""}<br>`:"")+
+      (genre?`<b>${L3("ジャンル","Genre","Genre")}</b>${fr?" : ":": "}${escapeHTML(genre)}<br>`:"")+
+      (langN?`<b>${L3("言語","Language","Langue")}</b>${fr?" : ":": "}${escapeHTML(langN)}<br>`:"")+
       (desc?`${escapeHTML(desc)}`:"")+
       `</div>`;
   }
@@ -982,21 +995,21 @@ function renderRel(){
       // <relatedItem><bibl><ref target="#doc-…"/><note>…</note></bibl></relatedItem>（data/catalog.xml 冒頭の説明を参照）
       const tgt=(ri.getAttribute("target")||(ty==="corpus"?catRef(ri,""):"")).replace(/^#/,"");
       if(ty==="corpus" && tgt && docs.has(tgt)){
-        groups.corpus.push(relCardDoc(docs.get(tgt), catNote(ri,null,en?"en":"ja")));
+        groups.corpus.push(relCardDoc(docs.get(tgt), catNote(ri,null,UL())));
       } else if(ty==="edition"){
-        T(ri,"bibl").forEach(b=>groups.edition.push(relCardExt(b, en?"edition":"底本")));
+        T(ri,"bibl").forEach(b=>groups.edition.push(relCardExt(b, L3("底本","edition","édition"))));
       } else {
-        T(ri,"bibl").forEach(b=>groups.external.push(relCardExt(b, en?"external":"外部")));
+        T(ri,"bibl").forEach(b=>groups.external.push(relCardExt(b, L3("外部","external","externe"))));
       }
     });
   }
   if(groups.corpus.length)
-    html+=`<div class="relgrp"><h3>${en?"Documents in this corpus":"コーパス内の関連文書"} <small>catalog</small></h3><div class="relcards">${groups.corpus.join("")}</div></div>`;
+    html+=`<div class="relgrp"><h3>${L3("コーパス内の関連文書","Documents in this corpus","Documents de ce corpus")} <small>${fr?"catalogue":"catalog"}</small></h3><div class="relcards">${groups.corpus.join("")}</div></div>`;
   if(groups.edition.length)
-    html+=`<div class="relgrp"><h3>${en?"Editions":"底本・校訂版"} <small>editions</small></h3><div class="relcards">${groups.edition.join("")}</div></div>`;
+    html+=`<div class="relgrp"><h3>${L3("底本・校訂版","Editions","Éditions")} <small>${fr?"éditions":"editions"}</small></h3><div class="relcards">${groups.edition.join("")}</div></div>`;
   if(groups.external.length)
-    html+=`<div class="relgrp"><h3>${en?"External resources":"外部リソース"} <small>external</small></h3><div class="relcards">${groups.external.join("")}</div></div>`;
-  if(!html) html=`<p class="stat-note">${en?'No related items registered for this document.':'この文書に登録された関連項目はまだありません。'}</p>`;
+    html+=`<div class="relgrp"><h3>${L3("外部リソース","External resources","Ressources externes")} <small>${fr?"externes":"external"}</small></h3><div class="relcards">${groups.external.join("")}</div></div>`;
+  if(!html) html=`<p class="stat-note">${L3('この文書に登録された関連項目はまだありません。','No related items registered for this document.','Aucun élément lié n’est encore enregistré pour ce document.')}</p>`;
   body.innerHTML=html;
 }
 function openRel(){ renderRel(); H.setAttribute("data-rel","open"); }
@@ -1007,32 +1020,34 @@ $("#relBack").onclick=closeRel;
 document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeRel(); });
 const LANG_CYCLE=["ja","en","fr"];
 /* ---- UI i18n helpers ---- */
-function UL(){ return H.getAttribute("data-lang")==="en"?"en":"ja"; }
-function posLabel(p){ return UL()==="en"?(p[1]||p[0]||""):(p[0]||p[1]||""); }
-function lemmaLbl(){ return UL()==="en"?"lemma":"レンマ"; }
-function defLbl(){ return UL()==="en"?"default":"既定"; }
-function homoLbl(n){ return UL()==="en"?("homograph (same part of speech) — "+n+" senses"):("同形異義（同じ品詞）— "+n+" 語義"); }
-function missLbl(p,n){ const L=POS[p]||[p,p]; return UL()==="en"?("part of speech “"+(L[1]||p)+"” not in the lexicon — "+n+" candidates by lemma"):("品詞「"+(L[0]||p)+"」は辞書に未登録 — レンマ一致の候補 "+n+" 件"); }
+/* 画面の言語（html[data-lang]）: ja / en / fr。文言は L3(日, 英, 仏) で選ぶ */
+function UL(){ const l=H.getAttribute("data-lang"); return l==="en"||l==="fr"?l:"ja"; }
+function L3(ja,en,fr){ const l=UL(); return l==="fr"?fr:l==="en"?en:ja; }
+function posLabel(p){ return UL()==="fr"?(p[2]||p[1]||p[0]||""):UL()==="en"?(p[1]||p[0]||""):(p[0]||p[1]||""); }
+function lemmaLbl(){ return L3("レンマ","lemma","lemme"); }
+function defLbl(){ return L3("既定","default","par défaut"); }
+function homoLbl(n){ return UL()==="fr"?("homographe (même catégorie) — "+n+" sens"):UL()==="en"?("homograph (same part of speech) — "+n+" senses"):("同形異義（同じ品詞）— "+n+" 語義"); }
+function missLbl(p,n){ const L=POS[p]||[p,p,p]; return UL()==="fr"?("catégorie « "+(L[2]||p)+" » absente du lexique — "+n+" candidats par lemme"):UL()==="en"?("part of speech “"+(L[1]||p)+"” not in the lexicon — "+n+" candidates by lemma"):("品詞「"+(L[0]||p)+"」は辞書に未登録 — レンマ一致の候補 "+n+" 件"); }
 /* 同じ綴りで品詞の異なる語（参照対象外）を小さく併記 */
 function homNoteHTML(w){
   if(!w.others||!w.others.length) return "";
-  const en=UL()==="en";
-  const items=w.others.map(o=>{ const p=POS[o.pos]||POS.X; const g=en?(o.en||o.ja):(o.ja||o.en); return `${escapeHTML(en?p[1]:p[0])}${g?"「"+escapeHTML(g)+"」":""}`; }).join(" / ");
-  return `<div class="usg" style="margin-top:8px;font-size:.64rem;color:var(--chrome-faint)">${en?"Other homographs":"同形の別品詞"}: ${items}</div>`;
+  const en=UL()==="en", fr=UL()==="fr";
+  const items=w.others.map(o=>{ const p=POS[o.pos]||POS.X; if(fr){ const f=o.fr||o.en||o.ja; return `${escapeHTML(p[2])}${f?" « "+escapeHTML(f)+" »":""}`; } const g=en?(o.en||o.ja):(o.ja||o.en); return `${escapeHTML(en?p[1]:p[0])}${g?"「"+escapeHTML(g)+"」":""}`; }).join(" / ");
+  return `<div class="usg" style="margin-top:8px;font-size:.64rem;color:var(--chrome-faint)">${L3("同形の別品詞","Other homographs","Autres homographes")}${fr?" : ":": "}${items}</div>`;
 }
-function noneLbl(){ return UL()==="en"?"No sense registered yet (extend in the lexicon).":"語義は未登録です（語彙集で拡張可能）。"; }
-function loanLbl(){ return UL()==="en"?"Greek loanword":"ギリシア語からの借用語"; }
-function langLbl(v){ return (UL()==="en"?{ja:"JA",en:"EN",fr:"FR"}:{ja:"日",en:"英",fr:"仏"})[v]; }
+function noneLbl(){ return L3("語義は未登録です（語彙集で拡張可能）。","No sense registered yet (extend in the lexicon).","Aucun sens enregistré pour l’instant (à compléter dans le lexique)."); }
+function loanLbl(){ return L3("ギリシア語からの借用語","Greek loanword","Emprunt grec"); }
+function langLbl(v){ return (UL()!=="ja"?{ja:"JA",en:"EN",fr:"FR"}:{ja:"日",en:"英",fr:"仏"})[v]; }
 function relabelLangBtn(btn,attr,key){
   if(!btn) return;
   const v=H.getAttribute(attr)||"ja";
-  const pre=(UL()==="en"?{gl:"Gloss",tl:"Trans"}:{gl:"語釈",tl:"訳"})[key];
-  btn.textContent=pre+": "+langLbl(v);
+  const pre=(UL()==="fr"?{gl:"Gloses",tl:"Trad."}:UL()==="en"?{gl:"Gloss",tl:"Trans"}:{gl:"語釈",tl:"訳"})[key];
+  btn.textContent=pre+(UL()==="fr"?" : ":": ")+langLbl(v);
 }
 function relabelMode(){
   const b=$("#modeBtn"); if(!b) return;
   const codex=H.getAttribute("data-mode")==="codex";
-  b.textContent = codex ? (UL()==="en"?"◑ Archon":"◑ アルコーン") : (UL()==="en"?"◐ Aeon":"◐ アイオーン");
+  b.textContent = codex ? (L3("◑ アルコーン","◑ Archon","◑ Archonte")) : (L3("◐ アイオーン","◐ Aeon","◐ Éon"));
 }
 function cycleLang(btn,attr,key){
   const cur=H.getAttribute(attr)||"ja";
@@ -1054,13 +1069,24 @@ function cycleTransLang(){
 }
 $("#tlBtn").onclick=cycleTransLang;
 $("#modeBtn").onclick=()=>{ toggle($("#modeBtn"),"data-mode","aeon","codex","◑ アルコーン","◐ アイオーン"); relabelMode(); };
+/* 日英の画面では同じ表記のままの見出し（英語）とページのタイトル（日本語）。フランス語の画面でだけ差し替える */
+const TITLE_BASE=document.title;
+const FIXED_TEXT=[[".brand .s","Plato, Republic 588b–589b · NHC VI,5","Platon, République 588b–589b · NHC VI,5"],
+  [".doc-head .kick","Nag Hammadi Codex VI,5 · pp. 48–51","Codex de Nag Hammadi VI,5 · p. 48–51"],
+  [".corpus-head .gcol .sub","Plato · OCT / Burnet","Platon · OCT / Burnet"],[".fx-title","Facsimile · IIIF","Fac-similé · IIIF"]];
+function fixedLabels(){
+  const fr=UL()==="fr";
+  FIXED_TEXT.forEach(([s,base,f])=>{ const e=$(s); if(e) e.textContent=fr?f:base; });
+  document.title=fr?"Platon, République 588b–589b (NHC VI,5)":TITLE_BASE;
+}
 function applyUILang(){
   const en=UL()==="en";
   const lb=$("#langBtn"); if(lb) lb.textContent=en?"日本語":"English";
-  const qi=$("#q"); if(qi){ qi.placeholder=en?"Search Coptic, glosses, translations":"コプト語・語釈・訳を検索"; qi.setAttribute("aria-label",en?"Search":"検索"); }
+  const qi=$("#q"); if(qi){ qi.placeholder=L3("コプト語・語釈・訳を検索","Search Coptic, glosses, translations","Chercher : copte, gloses, traductions"); qi.setAttribute("aria-label",L3("検索","Search","Rechercher")); }
   relabelLangBtn($("#tlBtn"),"data-tl","tl");
   relabelMode();
-  H.setAttribute("lang", en?"en":"ja");
+  fixedLabels();
+  H.setAttribute("lang", UL());
 }
 { const lgb=$("#langBtn"); if(lgb) lgb.onclick=()=>{
     const en=UL()==="en";
@@ -1071,6 +1097,19 @@ function applyUILang(){
     if(typeof render==="function") render();
     if(H.getAttribute("data-rel")==="open") renderRel();
   }; }
+/* 上部ナビの言語の選択（assets/site.js の syncLegacy）から呼ばれる: 画面・語釈・対訳の言語をまとめて ja / en / fr にする。
+   #langBtn（画面の日英の切替。画面には出していない）と #tlBtn（語釈・対訳の言語の順送り）はそのまま使える */
+window.NHC_viewerLang=v=>{
+  if(!LANG_CYCLE.includes(v)) return;
+  const tb=$("#tlBtn"); if(tb) tb.setAttribute("aria-pressed",String(v!=="ja"));
+  if(UL()===v&&curGL()===v&&curTL()===v) return;   // <head> の 1 行スクリプトが反映済みのとき（開いた直後）は何もしない
+  H.setAttribute("data-lang",v); H.setAttribute("data-gl",v); H.setAttribute("data-tl",v);
+  applyUILang();
+  if(!DOC_MAIN) return;   // 読み込みの前は、読み込んだあとの描画に任せる
+  render();
+  if(H.getAttribute("data-rel")==="open") renderRel();
+  if(H.getAttribute("data-search")==="open") doSearch($("#q").value.trim());
+};
 applyUILang();
 
 /* ---------- 頁・行（<pb>・<lb>）と、頁・行のアンカー ----------
@@ -1150,8 +1189,8 @@ document.addEventListener("click",e=>{
 /* ---------- credit ---------- */
 function buildCredit(){
   $("#credit").innerHTML=`
-   <p><span class="l-ja"><b>本コーパスについて。</b> エウグノストスと同一のビュワー・エンジンで表示しています。データは3ファイルに分離 — <b>本文</b> <code>republic_tei.xml</code>（NHC VI,5 単一証本）、<b>コプト語辞書</b> <code>lexicon.xml</code>（lemma+品詞→語義・辞書リンク）、<b>ギリシア語</b> <code>republic_greek.xml</code>（各 <code>&lt;s&gt;</code> の <code>@corresp</code> でコプト語 <code>&lt;s xml:id&gt;</code> に対応）。各 <code>&lt;w&gt;</code> は @lemma+@type で辞書を参照し、<b>ギリシア語からの借用語</b>は <code>xml:lang="grc"</code> を持つ語のみを〈借用語〉ボタンでマーキングします。文書メタデータと関連リソースは <code>data/catalog.xml</code> に集約し、〈関連〉パネルから参照できます。</span><span class="l-en"><b>About this corpus.</b> Rendered with the same viewer engine as Eugnostos. The data is split across three files — <b>text</b> <code>republic_tei.xml</code> (NHC VI,5, single witness); <b>Coptic dictionary</b> <code>lexicon.xml</code> (lemma + POS → sense and dictionary links); and <b>Greek</b> <code>republic_greek.xml</code> (each <code>&lt;s&gt;</code> linked to the Coptic <code>&lt;s xml:id&gt;</code> by <code>@corresp</code>). Each <code>&lt;w&gt;</code> looks up the dictionary by @lemma + @type, and only words bearing <code>xml:lang="grc"</code> are flagged by the “Loanwords” button as Greek loanwords. Document metadata and related resources are centralised in <code>data/catalog.xml</code>, surfaced through the “Related” panel.</span></p>
-   <p><span class="l-ja">コプト語本文（NHC VI,5）はパブリックドメイン。<b>日本語訳・英語訳</b>は本プロジェクト（CC BY 4.0）。<b>ギリシア語</b>は Plato, <i>Republic</i>（OCT/Burnet, パブリックドメイン）で一次整列・要校訂。ギリシア語の和訳・英訳は本プロジェクト。</span><span class="l-en">The Coptic text (NHC VI,5) is in the public domain. The <b>Japanese and English translations</b> are this project’s own (CC BY 4.0). The <b>Greek</b> is Plato, <i>Republic</i> (OCT/Burnet, public domain), a first-pass alignment to be verified; the Japanese and English of the Greek are this project’s own.</span></p>`;
+   <p><span class="l-ja"><b>本コーパスについて。</b> エウグノストスと同一のビュワー・エンジンで表示しています。データは3ファイルに分離 — <b>本文</b> <code>republic_tei.xml</code>（NHC VI,5 単一証本）、<b>コプト語辞書</b> <code>lexicon.xml</code>（lemma+品詞→語義・辞書リンク）、<b>ギリシア語</b> <code>republic_greek.xml</code>（各 <code>&lt;s&gt;</code> の <code>@corresp</code> でコプト語 <code>&lt;s xml:id&gt;</code> に対応）。各 <code>&lt;w&gt;</code> は @lemma+@type で辞書を参照し、<b>ギリシア語からの借用語</b>は <code>xml:lang="grc"</code> を持つ語のみを〈借用語〉ボタンでマーキングします。文書メタデータと関連リソースは <code>data/catalog.xml</code> に集約し、〈関連〉パネルから参照できます。</span><span class="l-en"><b>About this corpus.</b> Rendered with the same viewer engine as Eugnostos. The data is split across three files — <b>text</b> <code>republic_tei.xml</code> (NHC VI,5, single witness); <b>Coptic dictionary</b> <code>lexicon.xml</code> (lemma + POS → sense and dictionary links); and <b>Greek</b> <code>republic_greek.xml</code> (each <code>&lt;s&gt;</code> linked to the Coptic <code>&lt;s xml:id&gt;</code> by <code>@corresp</code>). Each <code>&lt;w&gt;</code> looks up the dictionary by @lemma + @type, and only words bearing <code>xml:lang="grc"</code> are flagged by the “Loanwords” button as Greek loanwords. Document metadata and related resources are centralised in <code>data/catalog.xml</code>, surfaced through the “Related” panel.</span><span class="l-fr"><b>À propos de ce corpus.</b> Ce texte s’affiche dans la même visionneuse qu’Eugnoste. Les données sont réparties en trois fichiers : le <b>texte</b> <code>republic_tei.xml</code> (NHC VI,5, témoin unique) ; le <b>lexique copte</b> <code>lexicon.xml</code> (lemme + catégorie → sens et liens vers les dictionnaires) ; le <b>grec</b> <code>republic_greek.xml</code> (chaque <code>&lt;s&gt;</code> relié au <code>&lt;s xml:id&gt;</code> copte par <code>@corresp</code>). Chaque <code>&lt;w&gt;</code> renvoie au lexique par @lemma + @type, et seuls les mots portant <code>xml:lang="grc"</code> sont signalés comme emprunts grecs par le bouton « Emprunts ». Les métadonnées du document et les ressources liées sont réunies dans <code>data/catalog.xml</code> et présentées dans le panneau « Liens ».</span></p>
+   <p><span class="l-ja">コプト語本文（NHC VI,5）はパブリックドメイン。<b>日本語訳・英語訳</b>は本プロジェクト（CC BY 4.0）。<b>ギリシア語</b>は Plato, <i>Republic</i>（OCT/Burnet, パブリックドメイン）で一次整列・要校訂。ギリシア語の和訳・英訳は本プロジェクト。</span><span class="l-en">The Coptic text (NHC VI,5) is in the public domain. The <b>Japanese and English translations</b> are this project’s own (CC BY 4.0). The <b>Greek</b> is Plato, <i>Republic</i> (OCT/Burnet, public domain), a first-pass alignment to be verified; the Japanese and English of the Greek are this project’s own.</span><span class="l-fr">Le texte copte (NHC VI,5) est dans le domaine public. Les <b>traductions japonaise et anglaise</b> sont celles du projet (CC BY 4.0). Le <b>grec</b> est celui de Platon, <i>République</i> (OCT/Burnet, domaine public), dans un premier alignement à vérifier ; les traductions japonaise et anglaise du grec sont celles du projet.</span></p>`;
 }
 
 /* ---------- manual file load (text / lexicon / Greek; multiple) ---------- */
@@ -1219,7 +1258,7 @@ load();
   var prev = $("#fxPrev"), next = $("#fxNext"), pageLbl = $("#fxPage");
   if(!sec || !btn) return;
   var pages = [], attribution = "", viewer = null, pageIdx = 0, osdLoading = null;
-  function msg(ja, en){ return '<span class="l-ja">' + ja + '</span><span class="l-en">' + en + '</span>'; }
+  function msg(ja, en, fr){ return '<span class="l-ja">' + ja + '</span><span class="l-en">' + en + '</span><span class="l-fr">' + fr + '</span>'; }
 
   fetch("iiif/" + FX_DOC + ".json", {cache:"no-cache"})
     .then(function(r){ if(!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
@@ -1262,7 +1301,7 @@ load();
         crossOriginPolicy: "Anonymous"
       });
       viewer.addHandler("open-failed", function(){
-        note.innerHTML = msg("画像を読み込めませんでした。", "The image could not be loaded.");
+        note.innerHTML = msg("画像を読み込めませんでした。", "The image could not be loaded.", "L’image n’a pas pu être chargée.");
       });
       if(pages.length > 1){
         prev.hidden = next.hidden = pageLbl.hidden = false;
@@ -1271,7 +1310,7 @@ load();
       }
       openPage(0);
     }, function(){
-      note.innerHTML = msg("画像ビュワーを読み込めませんでした（オフラインの可能性があります）。", "The image viewer could not be loaded (you may be offline).");
+      note.innerHTML = msg("画像ビュワーを読み込めませんでした（オフラインの可能性があります）。", "The image viewer could not be loaded (you may be offline).", "La visionneuse d’images n’a pas pu être chargée (vous êtes peut-être hors ligne).");
     });
   }
   btn.onclick = function(){
@@ -1279,8 +1318,8 @@ load();
     body.hidden = open;
     btn.setAttribute("aria-expanded", String(!open));
     btn.innerHTML = open
-      ? '<span class="l-ja">開く</span><span class="l-en">Open</span>'
-      : '<span class="l-ja">閉じる</span><span class="l-en">Close</span>';
+      ? '<span class="l-ja">開く</span><span class="l-en">Open</span><span class="l-fr">Ouvrir</span>'
+      : '<span class="l-ja">閉じる</span><span class="l-en">Close</span><span class="l-fr">Fermer</span>';
     if(!open) init();
   };
 })();

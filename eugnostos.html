@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>/* 表示モード（ライト／ダーク）の保存値を描画前に反映（保存は assets/site.js） */try{if(localStorage.getItem("nhc-mode")==="light")document.documentElement.setAttribute("data-mode","light")}catch(e){}</script>
-<script>/* 表示言語（?lang= ＞ 保存値 ＞ ブラウザーの言語、ほかは英語）を描画前に反映（正式な処理と保存は assets/site.js） */(function(H){var L=["ja","en","fr"],m=/[?&]lang=([^&#]*)/i.exec(location.search),v=m?m[1].toLowerCase():null;if(L.indexOf(v)<0){v=null;try{v=localStorage.getItem("nhc-lang")}catch(e){}}if(L.indexOf(v)<0){v="en";var n=navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||""];for(var i=0;i<n.length;i++){var p=String(n[i]).toLowerCase().split(/[-_]/)[0];if(L.indexOf(p)>=0){v=p;break}}}if(H.getAttribute("data-i18n")==="full"){H.setAttribute("data-lang",v);H.setAttribute("lang",v)}else if(v!=="ja"){H.setAttribute("data-lang","en");H.setAttribute("lang","en");H.setAttribute("data-gl",v);H.setAttribute("data-tl",v)}})(document.documentElement)</script>
+<script>/* 表示言語（?lang= ＞ 保存値 ＞ ブラウザーの言語、ほかは英語）を描画前に反映（正式な処理と保存は assets/site.js）。このビュワーは画面も三言語なので、日本語以外では data-lang・lang も選んだ言語（en・fr）にする。build_site.py の LANG_BOOT（日英だけのビュワー向け。fr でも data-lang="en"）とはこの点だけわざと違う（eugnostos.html・republic.html の 2 か所） */(function(H){var L=["ja","en","fr"],m=/[?&]lang=([^&#]*)/i.exec(location.search),v=m?m[1].toLowerCase():null;if(L.indexOf(v)<0){v=null;try{v=localStorage.getItem("nhc-lang")}catch(e){}}if(L.indexOf(v)<0){v="en";var n=navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||""];for(var i=0;i<n.length;i++){var p=String(n[i]).toLowerCase().split(/[-_]/)[0];if(L.indexOf(p)>=0){v=p;break}}}if(H.getAttribute("data-i18n")==="full"){H.setAttribute("data-lang",v);H.setAttribute("lang",v)}else if(v!=="ja"){H.setAttribute("data-lang",v);H.setAttribute("lang",v);H.setAttribute("data-gl",v);H.setAttribute("data-tl",v)}})(document.documentElement)</script>
 <title>エウグノストス — Eugnostos (NHC III,3 / V,1)</title>
 <meta name="description" content="エウグノストス（NHC III,3 / V,1）のコプト語本文。語ごとの語義と品詞、日英仏の対訳、V,1 との対照、他の文書の並行箇所 / Eugnostos (NHC III,3 / V,1): the Coptic text with word-by-word glosses, Japanese, English and French translations, a synopsis with V,1 and parallels in other texts.">
 <!-- リンクを共有したときのプレビュー（OGP）。og:title・og:description は <title> と meta description と同じにする -->
@@ -358,10 +358,17 @@ mark.pm{background:var(--hi); color:inherit; border-radius:2px; box-shadow:inset
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important; scroll-behavior:auto!important}}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-/* ---- UI language toggle (JA/EN) ---- */
+/* ---- UI language toggle (JA/EN/FR。assets/site.css の 3) と同じ) ---- */
 .l-en{display:none}
 html[data-lang="en"] .l-ja{display:none}
 html[data-lang="en"] .l-en{display:revert}
+.l-fr{display:none}
+html[data-lang="fr"] .l-ja{display:none}
+html[data-lang="fr"] .l-fr{display:revert}
+/* 左の文書パネルのグループの見出しは assets/site.css の 2) が日英で付ける。フランス語はここで */
+html[data-lang="fr"] body > .app > header > .tabs::before{content:"Témoin"}
+html[data-lang="fr"] body > .app > header .seg-ctl::before{content:"Affichage"}
+html[data-lang="fr"] body > .app > header .nav-ctl::before{content:"Outils"}
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/cosmos.css">
@@ -379,44 +386,44 @@ html[data-lang="en"] .l-en{display:revert}
 <div class="app">
   <nav id="sitebar" class="sitebar"></nav>
   <header>
-    <a class="chip homelink" href="index.html" title="Index / 一覧へ"><span class="l-ja">← 一覧</span><span class="l-en">← Index</span></a>
-    <button class="chip" id="parBtn" type="button" aria-expanded="false" aria-controls="parPanel" hidden title="並行箇所（他の文書にも同じ文言がある箇所） / Parallel passages in other texts"><span class="ic" aria-hidden="true">‖</span><span class="l-ja">並行箇所</span><span class="l-en">Parallels</span><span id="parN" class="loann"></span></button>
+    <a class="chip homelink" href="index.html" title="Index / 一覧へ / Tous les textes"><span class="l-ja">← 一覧</span><span class="l-en">← Index</span><span class="l-fr">← Tous les textes</span></a>
+    <button class="chip" id="parBtn" type="button" aria-expanded="false" aria-controls="parPanel" hidden title="並行箇所（他の文書にも同じ文言がある箇所） / Parallel passages in other texts / Passages parallèles dans d’autres textes"><span class="ic" aria-hidden="true">‖</span><span class="l-ja">並行箇所</span><span class="l-en">Parallels</span><span class="l-fr">Parallèles</span><span id="parN" class="loann"></span></button>
     <div class="brand">
       <img class="brandlogo" src="image/icon.svg" alt="" width="30" height="30" onerror="this.style.display='none'">
       <div class="brandtext">
-        <div class="t"><span class="cop">ⲉⲩⲅⲛⲱⲥⲧⲟⲥ</span> <span class="l-ja">エウグノストス</span><span class="l-en">Eugnostos</span></div>
+        <div class="t"><span class="cop" lang="cop">ⲉⲩⲅⲛⲱⲥⲧⲟⲥ</span> <span class="l-ja">エウグノストス</span><span class="l-en">Eugnostos</span><span class="l-fr">Eugnoste</span></div>
         <div class="s">Eugnostos · NHC III,3 / V,1</div>
       </div>
     </div>
     <div class="tabs" role="tablist" aria-label="写本">
-      <button class="tab" role="tab" data-wit="III" aria-selected="true"><span class="l-ja">III,3 本文</span><span class="l-en">III,3 text</span></button>
+      <button class="tab" role="tab" data-wit="III" aria-selected="true"><span class="l-ja">III,3 本文</span><span class="l-en">III,3 text</span><span class="l-fr">Texte de III,3</span></button>
       <button class="tab" role="tab" data-wit="V" aria-selected="false">V,1</button>
-      <button class="tab" role="tab" data-wit="SYN" aria-selected="false"><span class="l-ja">対照</span><span class="l-en">Synopsis</span></button>
+      <button class="tab" role="tab" data-wit="SYN" aria-selected="false"><span class="l-ja">対照</span><span class="l-en">Synopsis</span><span class="l-fr">Synopse</span></button>
     </div>
     <div class="controls">
       <div class="seg-ctl">
-        <button class="chip" id="ilBtn" aria-pressed="true" title="語釈を本文に重ねて表示 / Show interlinear glosses"><span class="l-ja">語釈</span><span class="l-en">Interlinear</span></button>
-        <button class="chip" id="loanBtn" aria-pressed="false" title="ギリシア語借用語をマーキング / Mark Greek loanwords"><span class="l-ja">借用語</span><span class="l-en">Loanwords</span><span id="loanN" class="loann"></span></button>
-        <button class="chip" id="pageBtn" aria-pressed="false" title="写本のページ番号を表示 / Show codex page numbers" hidden><span class="l-ja">ページ</span><span class="l-en">Pages</span></button>
-        <button class="chip" id="lineBtn" aria-pressed="false" title="写本の行番号を表示 / Show manuscript line numbers" hidden><span class="l-ja">行</span><span class="l-en">Lines</span></button>
-        <button class="chip" id="tlBtn" aria-pressed="false" title="語釈・対訳・注解の言語 / Language of glosses, translation and notes">訳: 日</button>
-        <button class="chip" id="langBtn" title="Language / 言語">English</button>
+        <button class="chip" id="ilBtn" aria-pressed="true" title="語釈を本文に重ねて表示 / Show interlinear glosses / Afficher les gloses interlinéaires"><span class="l-ja">語釈</span><span class="l-en">Interlinear</span><span class="l-fr">Interlinéaire</span></button>
+        <button class="chip" id="loanBtn" aria-pressed="false" title="ギリシア語借用語をマーキング / Mark Greek loanwords / Signaler les emprunts grecs"><span class="l-ja">借用語</span><span class="l-en">Loanwords</span><span class="l-fr">Emprunts</span><span id="loanN" class="loann"></span></button>
+        <button class="chip" id="pageBtn" aria-pressed="false" title="写本のページ番号を表示 / Show codex page numbers / Afficher les numéros de page du codex" hidden><span class="l-ja">ページ</span><span class="l-en">Pages</span><span class="l-fr">Pages</span></button>
+        <button class="chip" id="lineBtn" aria-pressed="false" title="写本の行番号を表示 / Show manuscript line numbers / Afficher les numéros de ligne du manuscrit" hidden><span class="l-ja">行</span><span class="l-en">Lines</span><span class="l-fr">Lignes</span></button>
+        <button class="chip" id="tlBtn" aria-pressed="false" title="語釈・対訳・注解の言語 / Language of glosses, translation and notes / Langue des gloses, de la traduction et des notes">訳: 日</button>
+        <button class="chip" id="langBtn" title="Language / 言語 / Langue">English</button>
       </div>
       <div class="nav-ctl">
-        <a class="chip statslink" href="search.html?doc=eugnostos&amp;view=stats" title="コーパス統計 / Corpus statistics"><span class="ic" aria-hidden="true">∑</span><span class="l-ja">統計</span><span class="l-en">Stats</span></a>
-        <a class="chip searchlink" href="search.html?doc=eugnostos" title="コーパス検索 / Corpus search"><span class="ic" aria-hidden="true">⌕</span><span class="l-ja">コーパス検索</span><span class="l-en">Corpus search</span></a>
+        <a class="chip statslink" href="search.html?doc=eugnostos&amp;view=stats" title="コーパス統計 / Corpus statistics / Statistiques du corpus"><span class="ic" aria-hidden="true">∑</span><span class="l-ja">統計</span><span class="l-en">Stats</span><span class="l-fr">Statistiques</span></a>
+        <a class="chip searchlink" href="search.html?doc=eugnostos" title="コーパス検索 / Corpus search / Recherche du corpus"><span class="ic" aria-hidden="true">⌕</span><span class="l-ja">コーパス検索</span><span class="l-en">Corpus search</span><span class="l-fr">Recherche du corpus</span></a>
         <div class="xmlmenu">
-          <button class="chip xmlmenu-btn" id="xmlBtn" aria-haspopup="true" aria-expanded="false" title="このページが参照している XML をダウンロード / Download the XML used by this page"><span class="ic" aria-hidden="true">⤓</span>XML</button>
+          <button class="chip xmlmenu-btn" id="xmlBtn" aria-haspopup="true" aria-expanded="false" title="このページが参照している XML をダウンロード / Download the XML used by this page / Télécharger le XML utilisé par cette page"><span class="ic" aria-hidden="true">⤓</span>XML</button>
           <div class="xmlmenu-pop" id="xmlMenu" hidden>
-            <div class="xm-h"><span class="l-ja">このページが参照している XML</span><span class="l-en">XML used by this page</span></div>
-            <a href="data/eugnostos_tei.xml" download><code>eugnostos_tei.xml</code><span class="l-ja">本文（III,3 / V,1）</span><span class="l-en">text (III,3 / V,1)</span><small data-size></small></a>
-            <a href="data/lexicon.xml" download><code>lexicon.xml</code><span class="l-ja">コプト語辞書</span><span class="l-en">Coptic lexicon</span><small data-size></small></a>
-            <a href="data/parallels.xml" download><code>parallels.xml</code><span class="l-ja">並行箇所</span><span class="l-en">parallel passages</span><small data-size></small></a>
-            <a href="data/catalog.xml" download><code>catalog.xml</code><span class="l-ja">文書カタログ</span><span class="l-en">catalogue</span><small data-size></small></a>
-            <hr><div class="xm-h"><span class="l-ja">TEI P5 · UTF-8 · 本文はパブリックドメイン、辞書・対訳・並行箇所の一覧は CC BY 4.0</span><span class="l-en">TEI P5 · UTF-8 · text public domain; lexicon, translations, list of parallels CC BY 4.0</span></div>
+            <div class="xm-h"><span class="l-ja">このページが参照している XML</span><span class="l-en">XML used by this page</span><span class="l-fr">XML utilisé par cette page</span></div>
+            <a href="data/eugnostos_tei.xml" download><code>eugnostos_tei.xml</code><span class="l-ja">本文（III,3 / V,1）</span><span class="l-en">text (III,3 / V,1)</span><span class="l-fr">texte (III,3 / V,1)</span><small data-size></small></a>
+            <a href="data/lexicon.xml" download><code>lexicon.xml</code><span class="l-ja">コプト語辞書</span><span class="l-en">Coptic lexicon</span><span class="l-fr">lexique copte</span><small data-size></small></a>
+            <a href="data/parallels.xml" download><code>parallels.xml</code><span class="l-ja">並行箇所</span><span class="l-en">parallel passages</span><span class="l-fr">passages parallèles</span><small data-size></small></a>
+            <a href="data/catalog.xml" download><code>catalog.xml</code><span class="l-ja">文書カタログ</span><span class="l-en">catalogue</span><span class="l-fr">catalogue</span><small data-size></small></a>
+            <hr><div class="xm-h"><span class="l-ja">TEI P5 · UTF-8 · 本文はパブリックドメイン、辞書・対訳・並行箇所の一覧は CC BY 4.0</span><span class="l-en">TEI P5 · UTF-8 · text public domain; lexicon, translations, list of parallels CC BY 4.0</span><span class="l-fr">TEI P5 · UTF-8 · texte : domaine public ; lexique, traductions, liste des parallèles : CC BY 4.0</span></div>
           </div>
         </div>
-        <button class="chip" id="modeBtn" aria-pressed="false" title="表示モード / Display mode">◐ アイオーン</button>
+        <button class="chip" id="modeBtn" aria-pressed="false" title="表示モード / Display mode / Mode d’affichage">◐ アイオーン</button>
       </div>
       <div class="search">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
@@ -428,19 +435,19 @@ html[data-lang="en"] .l-en{display:revert}
   <main id="main" tabindex="-1">
     <div class="doc-head">
       <div class="kick" id="docKick">Nag Hammadi Codex III,3 · pp. 70–90</div>
-      <h1 id="docH1"><span class="cop">ⲉⲩⲅⲛⲱⲥⲧⲟⲥ ⲡⲙⲁⲕⲁⲣⲓⲟⲥ</span><br><span class="l-ja">祝福されたエウグノストス</span><span class="l-en">Eugnostos the Blessed</span></h1>
-      <div class="doc-tools"><button type="button" class="doc-cite" id="docCite" aria-haspopup="dialog"><span class="l-ja">この文書を引用</span><span class="l-en">Cite this text</span></button><a class="doc-guide" href="guide.html#viewer"><span class="l-ja">読み方（はじめての方へ）</span><span class="l-en">How to read (Getting started)</span></a><span class="doc-photos" data-codices="III V" hidden></span></div>
+      <h1 id="docH1"><span class="cop" lang="cop">ⲉⲩⲅⲛⲱⲥⲧⲟⲥ ⲡⲙⲁⲕⲁⲣⲓⲟⲥ</span><br><span class="l-ja">祝福されたエウグノストス</span><span class="l-en">Eugnostos the Blessed</span><span class="l-fr">Eugnoste le Bienheureux</span></h1>
+      <div class="doc-tools"><button type="button" class="doc-cite" id="docCite" aria-haspopup="dialog"><span class="l-ja">この文書を引用</span><span class="l-en">Cite this text</span><span class="l-fr">Citer ce texte</span></button><a class="doc-guide" href="guide.html#viewer"><span class="l-ja">読み方（はじめての方へ）</span><span class="l-en">How to read (Getting started)</span><span class="l-fr">Comment lire (Premiers pas)</span></a><span class="doc-photos" data-codices="III V" hidden></span></div>
       <div class="doc-intro" data-intro="eugnostos" hidden></div>
-      <p class="meta"><span class="l-ja">前1〜2世紀のギリシア語原典に遡るとされる、非キリスト教的な思弁的宇宙生成論。語りえぬ第一原理から、先在の父・自生者・不死の人間・人の子(救済者)・ソフィアと諸アイオーンが流出する次第を、書簡の体裁で説く。各形態素をクリックすると語義が表示されます。他の文書にも同じ文言がある箇所には訳の後ろに <span class="pref" aria-hidden="true">‖ V,1</span> のような印があり、押すと右のパネルに並行箇所が表示されます。</span><span class="l-en">A non-Christian speculative cosmogony, held to go back to a Greek original of the 1st–2nd c. BCE. In epistolary form it expounds how, from the ineffable First Principle, there emanate the pre-existent Father, the Self-Begotten, the Immortal Man, the Son of Man (the Saviour), Sophia and the Aeons. Click any morpheme for its sense. Where the same wording also occurs in another text, a mark such as <span class="pref" aria-hidden="true">‖ V,1</span> follows the translation; select it to see the parallel passage in the side panel.</span></p>
+      <p class="meta"><span class="l-ja">前1〜2世紀のギリシア語原典に遡るとされる、非キリスト教的な思弁的宇宙生成論。語りえぬ第一原理から、先在の父・自生者・不死の人間・人の子(救済者)・ソフィアと諸アイオーンが流出する次第を、書簡の体裁で説く。各形態素をクリックすると語義が表示されます。他の文書にも同じ文言がある箇所には訳の後ろに <span class="pref" aria-hidden="true">‖ V,1</span> のような印があり、押すと右のパネルに並行箇所が表示されます。</span><span class="l-en">A non-Christian speculative cosmogony, held to go back to a Greek original of the 1st–2nd c. BCE. In epistolary form it expounds how, from the ineffable First Principle, there emanate the pre-existent Father, the Self-Begotten, the Immortal Man, the Son of Man (the Saviour), Sophia and the Aeons. Click any morpheme for its sense. Where the same wording also occurs in another text, a mark such as <span class="pref" aria-hidden="true">‖ V,1</span> follows the translation; select it to see the parallel passage in the side panel.</span><span class="l-fr">Cosmogonie spéculative non chrétienne, que l’on fait remonter à un original grec du Ier–IIe siècle avant notre ère. Sous la forme d’une lettre, elle expose comment émanent du Premier Principe ineffable le Père préexistant, l’Autogène, l’Homme immortel, le Fils de l’Homme (le Sauveur), Sophia et les éons. Cliquez sur un morphème pour voir son sens. Lorsque la même formulation se retrouve dans un autre texte, une marque comme <span class="pref" aria-hidden="true">‖ V,1</span> suit la traduction ; sélectionnez-la pour voir le passage parallèle dans le panneau latéral.</span></p>
     </div>
-        <section class="facsimile" id="facsimile" aria-label="写本ファクシミリ / Facsimile" hidden>
+        <section class="facsimile" id="facsimile" aria-label="写本ファクシミリ / Facsimile / Fac-similé" hidden>
       <div class="fx-head">
         <span class="fx-title">Facsimile · IIIF</span>
         <span class="fx-sub" id="fxStatus"></span>
         <button class="chip" id="fxPrev" hidden>‹</button>
         <span class="fx-sub" id="fxPage" hidden style="flex:none"></span>
         <button class="chip" id="fxNext" hidden>›</button>
-        <button class="chip" id="fxToggle" aria-expanded="false"><span class="l-ja">開く</span><span class="l-en">Open</span></button>
+        <button class="chip" id="fxToggle" aria-expanded="false"><span class="l-ja">開く</span><span class="l-en">Open</span><span class="l-fr">Ouvrir</span></button>
       </div>
       <div class="fx-body" id="fxBody" hidden>
         <div id="osdView"></div>
@@ -452,24 +459,24 @@ html[data-lang="en"] .l-en{display:revert}
     <div class="credit" id="credit"></div>
   </main>
 
-  <aside aria-label="検索結果 / Search" id="searchAside">
+  <aside aria-label="検索結果 / Search / Résultats" id="searchAside">
     <div class="aside-tabs">
-      <span class="at-title"><span class="l-ja">検索結果</span><span class="l-en">Search</span></span>
-      <button class="at-close" id="searchClose" aria-label="閉じる / Close" title="閉じる / Close">×</button>
+      <span class="at-title"><span class="l-ja">検索結果</span><span class="l-en">Search</span><span class="l-fr">Résultats</span></span>
+      <button class="at-close" id="searchClose" aria-label="閉じる / Close / Fermer" title="閉じる / Close / Fermer">×</button>
     </div>
     <div class="aside-body">
-      <div id="results"><p class="empty"><span class="l-ja">上の検索窓に入力してください。</span><span class="l-en">Type a query in the search box above.</span></p></div>
+      <div id="results"><p class="empty"><span class="l-ja">上の検索窓に入力してください。</span><span class="l-en">Type a query in the search box above.</span><span class="l-fr">Saisissez une recherche dans le champ ci-dessus.</span></p></div>
     </div>
   </aside>
 
   <!-- 並行箇所のパネル。<aside> にすると上の検索ドロワー用の aside{…} が効いてしまうので <div role="complementary"> -->
-  <div class="par-panel" id="parPanel" role="complementary" aria-label="並行箇所 / Parallel passages">
+  <div class="par-panel" id="parPanel" role="complementary" aria-label="並行箇所 / Parallel passages / Passages parallèles">
     <div class="pp-grip" id="parGrip" role="separator" aria-orientation="vertical" aria-controls="parPanel" tabindex="0"
-      aria-label="並行箇所のパネルの幅 / Width of the parallels panel"
-      title="ドラッグで幅を変更（← → キーでも可。ダブルクリックか Enter で元の幅） / Drag to resize (or ← →); double-click or Enter to reset"></div>
+      aria-label="並行箇所のパネルの幅 / Width of the parallels panel / Largeur du panneau des parallèles"
+      title="ドラッグで幅を変更（← → キーでも可。ダブルクリックか Enter で元の幅） / Drag to resize (or ← →); double-click or Enter to reset / Faites glisser pour redimensionner (ou ← →) ; double-clic ou Entrée pour rétablir la largeur"></div>
     <div class="pp-top">
-      <span class="pp-title"><span class="ic" aria-hidden="true">‖ </span><span class="l-ja">並行箇所</span><span class="l-en">Parallel passages</span></span>
-      <button class="pp-x" id="parClose" type="button" aria-label="閉じる / Close" title="閉じる / Close">×</button>
+      <span class="pp-title"><span class="ic" aria-hidden="true">‖ </span><span class="l-ja">並行箇所</span><span class="l-en">Parallel passages</span><span class="l-fr">Passages parallèles</span></span>
+      <button class="pp-x" id="parClose" type="button" aria-label="閉じる / Close / Fermer" title="閉じる / Close / Fermer">×</button>
     </div>
     <div class="pp-body" id="parBody" tabindex="-1"></div>
   </div>
@@ -484,15 +491,16 @@ const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>Array.from(r.quer
 const H=document.documentElement;
 function escapeHTML(s){ return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
 
-const POS={ART:["冠詞","article"],N:["名詞","noun"],NPROP:["固有名詞","proper noun"],V:["動詞","verb"],
- VSTAT:["状態動詞","stative"],PREP:["前置詞","preposition"],PPER:["人称代名詞","pronoun"],
- PPOS:["所有詞","possessive"],PDEM:["指示詞","demonstrative"],CONJ:["接続詞","conjunction"],
- PTC:["不変化詞","particle"],NEG:["否定辞","negation"],NUM:["数詞","numeral"],ADV:["副詞","adverb"],
- ADJ:["形容詞","adjective"],REL:["関係詞","relative"],CONV:["変換詞","converter"],FUT:["未来辞","future"],
- PRET:["過去辞","past"],COP:["繋辞","copula"],PFX:["接頭辞","prefix"],INTERJ:["間投詞","interjection"],
- AUX:["助動詞","auxiliary"],POSS:["所有冠詞","possessive art."],
- EXIST:["存在詞","existential"],PINT:["疑問詞","interrogative"],FM:["外来語句","foreign material"],
- X:["未注","unglossed"]};
+/* 品詞タグの名前 [日, 英, 仏]。仏は data/pos_labels.json（scripts/build_site.py の POS_NAMES）の fr */
+const POS={ART:["冠詞","article","article"],N:["名詞","noun","nom"],NPROP:["固有名詞","proper noun","nom propre"],V:["動詞","verb","verbe"],
+ VSTAT:["状態動詞","stative","statif"],PREP:["前置詞","preposition","préposition"],PPER:["人称代名詞","pronoun","pronom personnel"],
+ PPOS:["所有詞","possessive","possessif"],PDEM:["指示詞","demonstrative","démonstratif"],CONJ:["接続詞","conjunction","conjonction"],
+ PTC:["不変化詞","particle","particule"],NEG:["否定辞","negation","négation"],NUM:["数詞","numeral","numéral"],ADV:["副詞","adverb","adverbe"],
+ ADJ:["形容詞","adjective","adjectif"],REL:["関係詞","relative","relatif"],CONV:["変換詞","converter","convertisseur"],FUT:["未来辞","future","futur"],
+ PRET:["過去辞","past","prétérit"],COP:["繋辞","copula","copule"],PFX:["接頭辞","prefix","préfixe"],INTERJ:["間投詞","interjection","interjection"],
+ AUX:["助動詞","auxiliary","auxiliaire"],POSS:["所有冠詞","possessive art.","article possessif"],
+ EXIST:["存在詞","existential","existentiel"],PINT:["疑問詞","interrogative","interrogatif"],FM:["外来語句","foreign material","matériel étranger"],
+ X:["未注","unglossed","non résolu"]};
 
 let DOC_MAIN=null, DOC_LEX=null, LEXMAP=new Map();
 let SEGS_III=[], SEGS_V=[], curWit="III";
@@ -681,21 +689,24 @@ function resolveSenses(lemma,type,pin){
 function curTL(){ return H.getAttribute("data-tl")||"ja"; }
 function curGL(){ return H.getAttribute("data-gl")||"ja"; }
 function pickGloss(w){ const l=curGL(); return (l==="fr"?(w.glossFr||w.gloss):l==="en"?w.gloss:w.glossJa)||""; }
+/* 語釈の言語（lang 属性に使う）。フランス語の語釈が無く英語で補ったときは en */
+function glossLang(w){ const l=curGL(); return l==="fr"&&!w.glossFr&&w.gloss?"en":l; }
 function pickTrans(s){ const l=curTL(); return (l==="fr"?s.transFr:l==="en"?s.transEn:s.transJa)||""; }
 function pendingText(){ const l=curTL(); return l==="fr"?"— traduction à venir —":l==="en"?"translation pending":"—訳は準備中—"; }
 function wordHTML(w,i){
   const cls="wseg"+(w.grc?" grc":"")+(w.amb?" amb":"")+(w.pos==="X"||(!w.gloss&&!w.glossJa&&!w.glossFr)?" x":"");
   const g = pickGloss(w)||"·";
-  return `<span class="${cls}" tabindex="0" role="button" data-i="${i}">${escapeHTML(w.form)}<span class="g">${escapeHTML(g)}</span></span>`;
+  return `<span class="${cls}" tabindex="0" role="button" data-i="${i}">${escapeHTML(w.form)}<span class="g" lang="${glossLang(w)}">${escapeHTML(g)}</span></span>`;
 }
 /* lacuna / unclear marker (always visible so the damage is legible) */
 function gapHTML(it){
   const lac = it.reason==="lacuna";
   const txt = lac ? "〔…〕" : "⸢…⸣";
   const tip = lac
-    ? (UL()==="en" ? "lacuna"+(it.unit?` (${it.unit})`:"")+(it.extent?`, extent ${it.extent}`:"") : "欠損"+(it.unit==="line"?"（行単位）":"")+(it.extent==="unknown"?"・範囲不明":""))
-    : (UL()==="en" ? "unclear / illegible" : "判読不能");
-  return `<span class="gapm ${lac?'lac':'unc'}" title="${escapeHTML(tip)}" aria-label="${escapeHTML(tip)}">${txt}</span>`;
+    ? (UL()==="fr" ? "lacune"+(it.unit==="line"?" (en lignes)":it.unit?` (${it.unit})`:"")+(it.extent==="unknown"?", étendue inconnue":it.extent?`, étendue ${it.extent}`:"")
+       : UL()==="en" ? "lacuna"+(it.unit?` (${it.unit})`:"")+(it.extent?`, extent ${it.extent}`:"") : "欠損"+(it.unit==="line"?"（行単位）":"")+(it.extent==="unknown"?"・範囲不明":""))
+    : (L3("判読不能","unclear / illegible","incertain / illisible"));
+  return `<span class="gapm ${lac?'lac':'unc'}" lang="${UL()}" title="${escapeHTML(tip)}" aria-label="${escapeHTML(tip)}">${txt}</span>`;
 }
 function copticFlowHTML(s){
   const flow = (s.flow&&s.flow.length) ? s.flow : s.words.map((_,i)=>({k:"w",i}));
@@ -708,8 +719,8 @@ function copticFlowHTML(s){
       if(inPhy&&prevW&&!(/[-=]$/.test(prevForm)||/^[-=]/.test(w.form))) cop+='<span class="msep">-</span>';
       cop+=wordHTML(w,it.i); prevForm=w.form; prevW=true; continue;
     }
-    if(it.k==="lb"){ cop+=`<span class="lbm" data-n="${escapeHTML(it.n)}" title="${UL()==='en'?'line':'行'} ${escapeHTML(it.n)}">${escapeHTML(it.n)}</span>`; continue; }
-    if(it.k==="pd"){ cop+=`<span class="pdm" data-n="${escapeHTML(it.n)}" title="${UL()==='en'?'page':'ページ'} ${escapeHTML(it.n)}">p.${escapeHTML(it.n)}</span>`; continue; }
+    if(it.k==="lb"){ cop+=`<span class="lbm" data-n="${escapeHTML(it.n)}" lang="${UL()}" title="${L3('行','line','ligne')} ${escapeHTML(it.n)}">${escapeHTML(it.n)}</span>`; continue; }
+    if(it.k==="pd"){ cop+=`<span class="pdm" data-n="${escapeHTML(it.n)}" lang="${UL()}" title="${L3('ページ','page','page')} ${escapeHTML(it.n)}">p.${escapeHTML(it.n)}</span>`; continue; }
     if(it.k==="gap"){ cop+=gapHTML(it); prevW=false; continue; }
   }
   return cop;
@@ -721,9 +732,9 @@ function segHTML(s){
   if(!tr) tr = pendingText();
   const sub=s.sub?(" "+s.sub):"";
   return `<div class="seg${sub}" id="seg-${s.id}" data-id="${s.id}">
-    <button type="button" class="no" data-cite="${s.id}" aria-haspopup="dialog" title="この箇所を引用 / Cite this passage">${s.n||""}</button>
-    <div class="coptic">${words}</div>
-    <div class="${trCls}">${escapeHTML(tr)}${parRefsHTML(s)}</div>
+    <button type="button" class="no" data-cite="${s.id}" aria-haspopup="dialog" title="この箇所を引用 / Cite this passage / Citer ce passage">${s.n||""}</button>
+    <div class="coptic" lang="cop">${words}</div>
+    <div class="${trCls}" lang="${curTL()}">${escapeHTML(tr)}${parRefsHTML(s)}</div>
   </div>`;
 }
 function render(){
@@ -735,9 +746,12 @@ function render(){
   if(curWit==="V"){
     // V,1 には語ごとの注釈がまだ無い（data/eugnostos_tei.xml の wit-V は III,3 と対応づけた枠だけ）。
     // TEI の編集者向けの注（<note type="editorial">）は読者には出さず、本文の読める場所を案内する
-    const en=UL()==="en", vpar=PAR_GROUPS.some(g=>g.subtype==="witness");
-    const rd=`<a href="reader.html?doc=V-1">${en?"the text reader":"本文ビュワー"}</a>`;
-    box.innerHTML = `<div class="notice" style="border-left-color:var(--rose)">⬥ `+(en
+    const en=UL()==="en", fr=UL()==="fr", vpar=PAR_GROUPS.some(g=>g.subtype==="witness");
+    const rd=`<a href="reader.html?doc=V-1">${L3("本文ビュワー","the text reader","la visionneuse de textes")}</a>`;
+    box.innerHTML = `<div class="notice" style="border-left-color:var(--rose)">⬥ `+(fr
+      ? `<b>V,1 n’a pas encore d’annotation mot à mot.</b> Le texte de V,1 (texte de travail non annoté) se lit `+
+        (vpar?`en regard de III,3 dans la Synopse et dans le panneau des parallèles, ainsi que dans ${rd}.`:`dans ${rd}.`)
+      : en
       ? `<b>V,1 has no word-by-word annotation yet.</b> The text of V,1 (an unannotated working text) can be read `+
         (vpar?`beside III,3 in the Synopsis tab and in the parallels panel, and also in ${rd}.`:`in ${rd}.`)
       : `<b>V,1 には語ごとの注釈がまだありません。</b>V,1 の本文（未注釈の作業用テキスト）は`+
@@ -753,23 +767,23 @@ function render(){
    一致する文字に印を付ける（並行箇所のパネルと同じ照合）。 */
 function synLeftHTML(s,html){
   const tr=pickTrans(s);
-  return `<div class="lseg"><button type="button" class="no" data-cite="${s.id}" aria-haspopup="dialog" title="この箇所を引用 / Cite this passage" style="position:static;color:var(--gold)">${escapeHTML(s.n)}</button>`+
-    `<div class="coptic" style="font-size:1.16rem">${html}</div>${tr?`<div class="trans">${escapeHTML(tr)}</div>`:""}</div>`;
+  return `<div class="lseg"><button type="button" class="no" data-cite="${s.id}" aria-haspopup="dialog" title="この箇所を引用 / Cite this passage / Citer ce passage" style="position:static;color:var(--gold)">${escapeHTML(s.n)}</button>`+
+    `<div class="coptic" lang="cop" style="font-size:1.16rem">${html}</div>${tr?`<div class="trans" lang="${curTL()}">${escapeHTML(tr)}</div>`:""}</div>`;
 }
 function renderSyn(box){
   box.className="syn";
-  const en=UL()==="en", g=PAR_GROUPS.find(x=>x.subtype==="witness");
-  let html=`<div class="colhead">III,3</div><div class="colhead">V,1${g?`<small>${en?"unannotated working text · aligned automatically":"未注釈の作業用テキスト・自動照合"}</small>`:""}</div>`;
+  const g=PAR_GROUPS.find(x=>x.subtype==="witness");
+  let html=`<div class="colhead">III,3</div><div class="colhead">V,1${g?`<small>${L3("未注釈の作業用テキスト・自動照合","unannotated working text · aligned automatically","texte de travail non annoté · alignement automatique")}</small>`:""}</div>`;
   if(!g){   // 並行箇所のデータが無いときは、V,1 の枠だけ
     SEGS_III.forEach(s=>{ html+=`<div class="cell" data-id="${s.id}">${synLeftHTML(s,groupForms(s))}</div>`+
-      `<div class="cell v"><div class="vgap">${en?"V,1 — to be supplied from the critical editions (Pasquier / Parrott)":"V,1 — 校訂版(Pasquier / Parrott)より補充予定"}</div></div>`; });
+      `<div class="cell v"><div class="vgap">${L3("V,1 — 校訂版(Pasquier / Parrott)より補充予定","V,1 — to be supplied from the critical editions (Pasquier / Parrott)","V,1 — à compléter d’après les éditions critiques (Pasquier / Parrott)")}</div></div>`; });
     box.innerHTML=html; return;
   }
   const d=PAR_TEXT.get(g.file);
   if(!d){
-    box.innerHTML=html+`<div class="cell"><p class="empty">${en?"Loading the text of V,1…":"V,1 の本文を読み込み中…"}</p></div><div class="cell v"></div>`;
+    box.innerHTML=html+`<div class="cell"><p class="empty">${L3("V,1 の本文を読み込み中…","Loading the text of V,1…","Chargement du texte de V,1…")}</p></div><div class="cell v"></div>`;
     parLoad(g.file).then(()=>{ if(curWit==="SYN") render(); })
-      .catch(()=>{ if(curWit==="SYN") box.innerHTML=html+`<div class="cell"><p class="empty">${en?"Could not load the text of V,1.":"V,1 の本文を読み込めませんでした。"}</p></div><div class="cell v"></div>`; });
+      .catch(()=>{ if(curWit==="SYN") box.innerHTML=html+`<div class="cell"><p class="empty">${L3("V,1 の本文を読み込めませんでした。","Could not load the text of V,1.","Le texte de V,1 n’a pas pu être chargé.")}</p></div><div class="cell v"></div>`; });
     return;
   }
   const rows=[]; let run=[];
@@ -789,8 +803,8 @@ function renderSyn(box){
     const vs=list.map(i=>d.segs[i]), cmp=compare(r.segs.map(segPlain), vs.map(v=>v.text));
     const left=r.segs.map((s,j)=>synLeftHTML(s,cmp.a[j])).join("");
     let right;
-    if(!vs.length) right=r.linked?"":`<div class="vgap">${en?"(no text of V,1 between the neighbouring parallels)":"（前後の対応箇所のあいだに V,1 の本文はありません）"}</div>`;
-    else right=(r.linked?"":`<div class="unc-l">${en?"Text of V,1 between the neighbouring parallels — correspondence not established":"前後の対応箇所のあいだにある V,1 の本文（対応は未確認）"}</div>`)+
+    if(!vs.length) right=r.linked?"":`<div class="vgap" lang="${UL()}">${L3("（前後の対応箇所のあいだに V,1 の本文はありません）","(no text of V,1 between the neighbouring parallels)","(pas de texte de V,1 entre les parallèles voisins)")}</div>`;
+    else right=(r.linked?"":`<div class="unc-l" lang="${UL()}">${L3("前後の対応箇所のあいだにある V,1 の本文（対応は未確認）","Text of V,1 between the neighbouring parallels — correspondence not established","Texte de V,1 entre les parallèles voisins — correspondance non établie")}</div>`)+
       vs.map((v,j)=>`<div class="sv"><span class="pp-n">§${escapeHTML(v.n)}</span>${cmp.b[j]}</div>`).join("");
     html+=`<div class="cell" data-id="${r.segs[0].id}">${left}</div><div class="cell v" lang="cop">${right}</div>`;
   });
@@ -812,7 +826,7 @@ function lexLinkHTML(w){
   if(!id) return "";
   const sup=/^(lex-\d+)-\d+$/.exec(id);
   if(sup&&(w.how==="pos-miss"||w.how==="lemma")) id=sup[1];
-  return `<div class="lexlink"><a href="lexicon.html#${encodeURIComponent(id)}">${UL()==="en"?"Lexicon entry →":"辞書の項目 →"}</a></div>`;
+  return `<div class="lexlink"><a href="lexicon.html#${encodeURIComponent(id)}">${L3("辞書の項目 →","Lexicon entry →","Entrée du lexique →")}</a></div>`;
 }
 function showPop(el){
   const seg=el.closest(".seg"); const segId=seg.dataset.id;
@@ -827,29 +841,29 @@ function showPop(el){
     const rows=w.senses.map((sn,i)=>{
       const p=POS[sn.pos]||POS.X;
       const g=[];
-      if(sn.en) g.push(`<span>${escapeHTML(sn.en)}</span>`);
-      if(sn.ja) g.push(`<span class="ja">${escapeHTML(sn.ja)}</span>`);
-      if(sn.fr) g.push(`<span>${escapeHTML(sn.fr)}</span>`);
-      const u=(sn.uja||sn.uen)?`<span class="usg">${escapeHTML(sn.uja||sn.uen)}</span>`:"";
+      if(sn.en) g.push(`<span lang="en">${escapeHTML(sn.en)}</span>`);
+      if(sn.ja) g.push(`<span class="ja" lang="ja">${escapeHTML(sn.ja)}</span>`);
+      if(sn.fr) g.push(`<span lang="fr">${escapeHTML(sn.fr)}</span>`);
+      const ut=UL()==="fr"?(sn.uen||sn.uja):(sn.uja||sn.uen), u=ut?`<span class="usg" lang="${ut===sn.uja?"ja":"en"}">${escapeHTML(ut)}</span>`:"";   // 用法の注記は日英だけ（フランス語の画面では英語を先に）
       const isDef=sn.id&&sn.id===w.defId;
       return `<div class="sense${isDef?' def':''}">
         <div class="srow"><span class="snum">${i+1}</span>
-          <span class="pos${w.grc?' grc':''}">${p[0]}</span>${u}
+          <span class="pos${w.grc?' grc':''}">${UL()==="fr"?p[2]:p[0]}</span>${u}
           ${isDef?'<span class="defmark">'+defLbl()+'</span>':''}</div>
         <div class="sglos">${g.join('<span class="sep">・</span>')}</div></div>`;
     }).join("");
-    inner=`<div class="form">${escapeHTML(w.form)}</div>
-      ${w.lemma&&w.lemma!==w.form?`<div class="lemma">${lemmaLbl()} ${escapeHTML(w.lemma)}</div>`:""}
+    inner=`<div class="form" lang="cop">${escapeHTML(w.form)}</div>
+      ${w.lemma&&w.lemma!==w.form?`<div class="lemma">${lemmaLbl()} <span lang="cop">${escapeHTML(w.lemma)}</span></div>`:""}
       <div class="hommark">⬥ ${w.how==="pos-miss"?missLbl(w.pos,w.senses.length):homoLbl(w.senses.length)}</div>
       <div class="senses">${rows}</div>${extra}`;
   } else {
     let dl="";
-    if(w.gloss) dl+=`<dt>EN</dt><dd>${escapeHTML(w.gloss)}</dd>`;
-    if(w.glossJa) dl+=`<dt>JA</dt><dd class="ja">${escapeHTML(w.glossJa)}</dd>`;
-    if(w.glossFr) dl+=`<dt>FR</dt><dd>${escapeHTML(w.glossFr)}</dd>`;
-    inner=`<div class="form">${escapeHTML(w.form)}</div>
-      ${w.lemma&&w.lemma!==w.form?`<div class="lemma">${lemmaLbl()} ${escapeHTML(w.lemma)}</div>`:""}
-      <span class="pos${w.grc?' grc':''}">${pos[0]} · ${pos[1]}</span>
+    if(w.gloss) dl+=`<dt>EN</dt><dd lang="en">${escapeHTML(w.gloss)}</dd>`;
+    if(w.glossJa) dl+=`<dt>JA</dt><dd class="ja" lang="ja">${escapeHTML(w.glossJa)}</dd>`;
+    if(w.glossFr) dl+=`<dt>FR</dt><dd lang="fr">${escapeHTML(w.glossFr)}</dd>`;
+    inner=`<div class="form" lang="cop">${escapeHTML(w.form)}</div>
+      ${w.lemma&&w.lemma!==w.form?`<div class="lemma">${lemmaLbl()} <span lang="cop">${escapeHTML(w.lemma)}</span></div>`:""}
+      <span class="pos${w.grc?' grc':''}">${UL()==="fr"?pos[2]:`${pos[0]} · ${pos[1]}`}</span>
       ${dl?`<dl>${dl}</dl>`:`<div class="none">${noneLbl()}</div>`}
       ${w.grc?`<div class="grcnote">⬥ ${loanLbl()}</div>`:""}${extra}`;
   }
@@ -890,13 +904,13 @@ function catDocs(){
   T(DOC_CAT,"bibl").forEach(b=>{ if(b.getAttribute("type")==="document"&&getId(b)) m.set(getId(b),b); });
   return m;
 }
-/* カタログの文書 1 件: 題名（ja/en）・略号・ビュワー・検索ページで選ぶ証本 */
+/* カタログの文書 1 件: 題名（ja/en/fr）・略号・ビュワー・検索ページで選ぶ証本 */
 function catInfo(id){
-  const out={id, ja:"", en:"", siglum:"", reader:"", wit:""};
+  const out={id, ja:"", en:"", fr:"", siglum:"", reader:"", wit:""};
   const b=CAT.get(id); if(!b) return out;
   Array.from(b.children).forEach(c=>{
     const l=getLang(c);
-    if(c.localName==="title"&&!c.getAttribute("type")&&(l==="ja"||l==="en")) out[l]=c.textContent.trim();
+    if(c.localName==="title"&&!c.getAttribute("type")&&(l==="ja"||l==="en"||l==="fr")) out[l]=c.textContent.trim();
     else if(c.localName==="idno"&&c.getAttribute("type")==="siglum") out.siglum=c.textContent.trim();
     else if(c.localName==="ref"&&c.getAttribute("type")==="reader") out.reader=c.getAttribute("target")||"";
   });
@@ -904,11 +918,11 @@ function catInfo(id){
   return out;
 }
 function infoShort(info){ return (info.siglum||info.id).replace(/^NHC\s*/,""); }
-function infoTitle(info){ return (UL()==="en"?(info.en||info.ja):(info.ja||info.en))||info.id; }
-function grpDesc(g){ return UL()==="en"?(g.desc.en||g.desc.ja||""):(g.desc.ja||g.desc.en||""); }
+function infoTitle(info){ return (UL()==="fr"?(info.fr||info.en||info.ja):UL()==="en"?(info.en||info.ja):(info.ja||info.en))||info.id; }
+function grpDesc(g){ return UL()==="fr"?(g.desc.fr||g.desc.en||g.desc.ja||""):UL()==="en"?(g.desc.en||g.desc.ja||""):(g.desc.ja||g.desc.en||""); }
 function searchLink(info){
   if(!info.wit) return "";
-  return `<a href="search.html?w=${encodeURIComponent(info.wit)}">${UL()==="en"?"Open this text in corpus search":"コーパス検索でこの文書を開く"}</a>`;
+  return `<a href="search.html?w=${encodeURIComponent(info.wit)}">${L3("コーパス検索でこの文書を開く","Open this text in corpus search","Ouvrir ce texte dans la recherche du corpus")}</a>`;
 }
 function parsePar(){
   CAT=catDocs(); PAR_GROUPS=[];
@@ -1010,7 +1024,7 @@ function onHTML(str,on,i0,i1){
   let h="", i=i0;
   while(i<i1){ let j=i; while(j<i1&&on[j]===on[i]) j++;
     const t=escapeHTML(str.slice(i,j)); h+=on[i]?`<mark class="pm">${t}</mark>`:t; i=j; }
-  return h.replace(/〔…〕/g,`<span class="pp-gap" title="${UL()==="en"?"lacuna":"欠損"}">〔…〕</span>`);
+  return h.replace(/〔…〕/g,`<span class="pp-gap" lang="${UL()}" title="${L3("欠損","lacuna","lacune")}">〔…〕</span>`);
 }
 /* 本文側（partsA）と対応先（partsB）を照合し、それぞれの印つき HTML と、本文側の文字のうち一致した割合を返す */
 function compare(partsA,partsB){
@@ -1030,10 +1044,10 @@ function segPlain(s){
 function parRefsHTML(s){
   const out=PAR_GROUPS.filter(g=>g.links.has(s.id)).map(g=>{
     const e=g.links.get(s.id);
-    const tip=(UL()==="en"?"Parallel passage: ":"並行箇所: ")+infoTitle(g.info)+(g.info.siglum?" ("+g.info.siglum+")":"");
+    const tip=(L3("並行箇所: ","Parallel passage: ","Passage parallèle : "))+infoTitle(g.info)+(g.info.siglum?" ("+g.info.siglum+")":"");
     return `<button type="button" class="pref c-${escapeHTML(e.cert||"low")}" data-seg="${escapeHTML(s.id)}" data-grp="${escapeHTML(g.id)}" title="${escapeHTML(tip)}" aria-label="${escapeHTML(tip)}">‖ ${escapeHTML(infoShort(g.info))}</button>`;
   }).join("");
-  return out?`<span class="prefs">${out}</span>`:"";
+  return out?`<span class="prefs" lang="${UL()}">${out}</span>`:"";
 }
 
 /* -- パネル -- */
@@ -1083,27 +1097,31 @@ function parGo(id){
   const el=document.getElementById("seg-"+id); if(el) scrollSegIntoView(el);
 }
 /* @cert は「対応の根拠の強さ」（文字の一致の割合とは別）: high = 半分以上が一致か 20 文字以上続けて一致、medium = 4 分の 1 以上か 10 文字以上 */
-function certLbl(c){ const en=UL()==="en";
-  return ({high:en?"evidence: strong":"対応の根拠: 強", medium:en?"evidence: fair":"対応の根拠: 中", low:en?"evidence: weak":"対応の根拠: 弱"})[c]||c; }
-function certTip(){ return UL()==="en"
-  ? "How strongly the shared wording supports the link: strong = half the letters of the segment match, or a run of 20 letters; fair = a quarter, or a run of 10; weak = less"
-  : "共通の文言がこの対応をどれだけ裏づけるか。強 = セグメントの文字の半分以上が一致するか 20 文字以上続けて一致、中 = 4 分の 1 以上か 10 文字以上、弱 = それ未満"; }
+function certLbl(c){
+  return ({high:L3("対応の根拠: 強","evidence: strong","indices : forts"), medium:L3("対応の根拠: 中","evidence: fair","indices : moyens"), low:L3("対応の根拠: 弱","evidence: weak","indices : faibles")})[c]||c; }
+function certTip(){ return L3(
+    "共通の文言がこの対応をどれだけ裏づけるか。強 = セグメントの文字の半分以上が一致するか 20 文字以上続けて一致、中 = 4 分の 1 以上か 10 文字以上、弱 = それ未満",
+    "How strongly the shared wording supports the link: strong = half the letters of the segment match, or a run of 20 letters; fair = a quarter, or a run of 10; weak = less",
+    "Dans quelle mesure la formulation commune étaye le lien : forts = la moitié des lettres du segment concordent, ou une suite de 20 lettres ; moyens = un quart, ou une suite de 10 ; faibles = moins"); }
 function nLabel(d,lo,hi){ return "§"+d.segs[lo].n+(hi>lo?"–"+d.segs[hi].n:""); }
 function parMethodHTML(){
-  return `<p class="pp-method">${UL()==="en"
-    ? 'The links come from an automatic comparison of the wording (runs of four or more letters shared in the same order, ignoring word division and supralinear strokes), not from a critical edition; reworded passages are not linked. Matching letters are highlighted. The other texts are the unannotated working text of the Nag Hammadi Codices, not yet collated with the editions; it has no page and line numbers, so segments are cited by number (§). Data: <a href="data/parallels.xml" download>parallels.xml</a> (made by scripts/build_parallels.py).'
-    : '対応は、文言の自動照合（語の区切りと上線を無視して、順序を保って一致する 4 文字以上の部分）によるもので、校訂版によるものではありません。言い換えられた箇所は結ばれていません。一致する文字に色を付けています。対応先の本文は、校訂本と照合する前の未注釈の作業用テキストで、頁・行番号が無いため、セグメントの番号（§）で示しています。データ: <a href="data/parallels.xml" download>parallels.xml</a>（scripts/build_parallels.py が作成）。'}</p>`;
+  return `<p class="pp-method">${L3(
+      '対応は、文言の自動照合（語の区切りと上線を無視して、順序を保って一致する 4 文字以上の部分）によるもので、校訂版によるものではありません。言い換えられた箇所は結ばれていません。一致する文字に色を付けています。対応先の本文は、校訂本と照合する前の未注釈の作業用テキストで、頁・行番号が無いため、セグメントの番号（§）で示しています。データ: <a href="data/parallels.xml" download>parallels.xml</a>（scripts/build_parallels.py が作成）。',
+      'The links come from an automatic comparison of the wording (runs of four or more letters shared in the same order, ignoring word division and supralinear strokes), not from a critical edition; reworded passages are not linked. Matching letters are highlighted. The other texts are the unannotated working text of the Nag Hammadi Codices, not yet collated with the editions; it has no page and line numbers, so segments are cited by number (§). Data: <a href="data/parallels.xml" download>parallels.xml</a> (made by scripts/build_parallels.py).',
+      'Les liens proviennent d’une comparaison automatique de la formulation (suites d’au moins quatre lettres communes, dans le même ordre, sans tenir compte de la coupure des mots ni des traits suscrits), non d’une édition critique ; les passages reformulés ne sont pas reliés. Les lettres concordantes sont mises en évidence. Les autres textes sont le texte de travail non annoté des codices de Nag Hammadi, pas encore collationné avec les éditions ; faute de numéros de page et de ligne, les segments y sont cités par leur numéro (§). Données : <a href="data/parallels.xml" download>parallels.xml</a> (produit par scripts/build_parallels.py).')}</p>`;
 }
 function parOverviewHTML(){
-  const en=UL()==="en", all=new Set(); PAR_GROUPS.forEach(g=>g.order.forEach(id=>all.add(id)));
+  const en=UL()==="en", fr=UL()==="fr", all=new Set(); PAR_GROUPS.forEach(g=>g.order.forEach(id=>all.add(id)));
   const ex=`<span class="pref" aria-hidden="true">‖ ${escapeHTML(infoShort(PAR_GROUPS[0].info))}</span>`;
-  let h=`<p class="pp-intro">${en
+  let h=`<p class="pp-intro">${fr
+    ? `Lorsque la formulation d’un segment de III,3 se retrouve dans un autre texte, une marque comme ${ex} suit sa traduction (${all.size} segments sur ${SEGS_III.length}). Sélectionnez-la pour voir ce passage ici.`
+    : en
     ? `Where the wording of a segment of III,3 also occurs in another text, a mark such as ${ex} follows its translation (${all.size} of ${SEGS_III.length} segments). Select it to see that passage here.`
     : `III,3 の本文のうち、他の文書にも同じ文言がある箇所には、訳の後ろに ${ex} のような印があります（${SEGS_III.length} セグメントのうち ${all.size}）。印を押すと、その箇所がここに表示されます。`}</p>`;
   h+=PAR_GROUPS.map(g=>`<div class="pp-doc"><div class="pp-dtitle"><b>${escapeHTML(infoShort(g.info))}</b>${escapeHTML(infoTitle(g.info))}</div>`+
     `<p>${escapeHTML(grpDesc(g))}</p>`+
-    `<p class="pp-stat">${en?`Linked to ${g.order.length} of the ${SEGS_III.length} segments of III,3.`:`III,3 の ${SEGS_III.length} セグメントのうち ${g.order.length} に対応。`}</p>`+
-    `<div class="pp-acts"><button type="button" class="pp-btn pp-first" data-grp="${escapeHTML(g.id)}">${en?"Read from the first parallel ›":"最初の並行箇所から読む ›"}</button>${searchLink(g.info)}</div></div>`).join("");
+    `<p class="pp-stat">${fr?`Relié à ${g.order.length} des ${SEGS_III.length} segments de III,3.`:en?`Linked to ${g.order.length} of the ${SEGS_III.length} segments of III,3.`:`III,3 の ${SEGS_III.length} セグメントのうち ${g.order.length} に対応。`}</p>`+
+    `<div class="pp-acts"><button type="button" class="pp-btn pp-first" data-grp="${escapeHTML(g.id)}">${L3("最初の並行箇所から読む ›","Read from the first parallel ›","Lire à partir du premier parallèle ›")}</button>${searchLink(g.info)}</div></div>`).join("");
   // カタログで関連づけてあるが、箇所どうしは結んでいない文書
   const self=CAT.get("doc-eugnostos"), rel=[];
   if(self) Array.from(self.children).forEach(ri=>{
@@ -1111,34 +1129,35 @@ function parOverviewHTML(){
     const r=T(ri,"ref")[0], id=((ri.getAttribute("target")||(r?r.getAttribute("target"):""))||"").replace(/^#/,"");
     if(!id||PAR_GROUPS.some(g=>g.doc===id)||!CAT.has(id)) return;
     const info=catInfo(id); let note="";
-    T(ri,"note").forEach(n=>{ const l=getLang(n); if(!note||l===(en?"en":"ja")) note=n.textContent.replace(/\s+/g," ").trim(); });
-    const link=info.reader?`<a href="${escapeHTML(info.reader)}">${en?"Open":"開く"}</a>`:searchLink(info);
+    T(ri,"note").forEach(n=>{ const l=getLang(n); if(!note||l===(en||fr?"en":"ja")) note=n.textContent.replace(/\s+/g," ").trim(); });
+    if(fr) T(ri,"note").forEach(n=>{ if(getLang(n)==="fr") note=n.textContent.replace(/\s+/g," ").trim(); });   // フランス語の画面: 仏 ＞ 英 ＞ 最初のもの
+    const link=info.reader?`<a href="${escapeHTML(info.reader)}">${L3("開く","Open","Ouvrir")}</a>`:searchLink(info);
     rel.push(`<div class="pp-doc"><div class="pp-dtitle"><b>${escapeHTML(infoShort(info))}</b>${escapeHTML(infoTitle(info))}</div>`+
       (note?`<p>${escapeHTML(note)}</p>`:"")+(link?`<div class="pp-acts">${link}</div>`:"")+`</div>`);
   });
-  if(rel.length) h+=`<div class="pp-h">${en?"Related texts (no passages linked)":"関連する文書（箇所の対応なし）"}</div>`+rel.join("");
+  if(rel.length) h+=`<div class="pp-h">${L3("関連する文書（箇所の対応なし）","Related texts (no passages linked)","Textes apparentés (sans passages reliés)")}</div>`+rel.join("");
   return h+parMethodHTML();
 }
 function parSegHTML(s,g,d){
-  const en=UL()==="en", pos=new Map(SEGS_III.map((x,i)=>[x.id,i])), here=pos.get(s.id);
+  const en=UL()==="en", fr=UL()==="fr", pos=new Map(SEGS_III.map((x,i)=>[x.id,i])), here=pos.get(s.id);
   const prev=[...g.order].reverse().find(id=>pos.get(id)<here), next=g.order.find(id=>pos.get(id)>here);
   const short=escapeHTML(infoShort(g.info)), src=segPlain(s), e=g.links.get(s.id);
   let srcHTML=escapeHTML(src), card;
   if(!d){
-    card=`<p class="pp-none">${en?"Loading…":"読み込み中…"}</p>`;
+    card=`<p class="pp-none">${L3("読み込み中…","Loading…","Chargement…")}</p>`;
   } else if(e){
     const idx=e.ids.map(id=>d.idx.get(id)).filter(i=>i!=null).sort((a,b)=>a-b);
     if(!idx.length){
-      card=`<p class="pp-none">${en?"The linked segments are missing from the text.":"対応先のセグメントが本文に見つかりません。"}</p>`;
+      card=`<p class="pp-none">${L3("対応先のセグメントが本文に見つかりません。","The linked segments are missing from the text.","Les segments liés sont absents du texte.")}</p>`;
     } else {
       const lo=idx[0], hi=idx[idx.length-1];
       const from=parCtx?Math.max(0,lo-2):lo, to=parCtx?Math.min(d.segs.length-1,hi+2):hi;
       const list=d.segs.slice(from,to+1), cmp=compare([src],list.map(x=>x.text));
       srcHTML=cmp.a[0];
       card=`<div class="pp-meta"><b>${short} ${nLabel(d,lo,hi)}</b><span class="pp-cert ${escapeHTML(e.cert)}" title="${escapeHTML(certTip())}">${certLbl(e.cert)}</span>`+
-        `<span>${en?"letters of III,3 matched":"III,3 の文字の一致"} ${Math.round(cmp.ratio*100)}%</span></div>`+
+        `<span>${L3("III,3 の文字の一致","letters of III,3 matched","lettres de III,3 concordantes :")} ${Math.round(cmp.ratio*100)}${fr?" %":"%"}</span></div>`+
         `<div class="pp-tgt" lang="cop">${list.map((x,k)=>`<div class="pp-seg${from+k<lo||from+k>hi?" ctx":""}"><span class="pp-n">§${escapeHTML(x.n)}</span>${cmp.b[k]}</div>`).join("")}</div>`+
-        `<div class="pp-acts"><button type="button" class="pp-btn pp-ctx" aria-pressed="${parCtx}">${parCtx?(en?"Hide context":"前後を隠す"):(en?"Show context":"前後も表示")}</button>${searchLink(g.info)}</div>`;
+        `<div class="pp-acts"><button type="button" class="pp-btn pp-ctx" aria-pressed="${parCtx}">${parCtx?(L3("前後を隠す","Hide context","Masquer le contexte")):(L3("前後も表示","Show context","Afficher le contexte"))}</button>${searchLink(g.info)}</div>`;
     }
   } else {
     // 結ばれていないセグメント: 前後の対応箇所のあいだにある本文を、対応は未確認として示す
@@ -1146,29 +1165,31 @@ function parSegHTML(s,g,d){
     const before=prev?Math.max(-1,...g.links.get(prev).ids.map(ix).filter(i=>i!=null)):-1;
     const after=next?Math.min(d.segs.length,...g.links.get(next).ids.map(ix).filter(i=>i!=null)):d.segs.length;
     const from=before+1, last=after-1, to=Math.min(last,from+11);   // 長いときは 12 セグメントまで
-    card=`<p class="pp-none">${en?`No passage of ${short} shares the wording of this segment.`:`このセグメントと文言の一致する箇所は、${short} には見つかりませんでした。`}</p>`;
+    card=`<p class="pp-none">${fr?`Aucun passage de ${short} ne partage la formulation de ce segment.`:en?`No passage of ${short} shares the wording of this segment.`:`このセグメントと文言の一致する箇所は、${short} には見つかりませんでした。`}</p>`;
     if(to>=from){
       const list=d.segs.slice(from,to+1), cmp=compare([src],list.map(x=>x.text)), part=last>to;
-      const where=!prev?(en?"before the first parallel":"最初の対応箇所より前")
-        :!next?(en?"after the last parallel":"最後の対応箇所より後ろ")
-        :(en?"between the neighbouring parallels":"前後の対応箇所のあいだ");
-      card+=`<details class="pp-between"><summary>${en
+      const where=!prev?(L3("最初の対応箇所より前","before the first parallel","avant le premier parallèle"))
+        :!next?(L3("最後の対応箇所より後ろ","after the last parallel","après le dernier parallèle"))
+        :(L3("前後の対応箇所のあいだ","between the neighbouring parallels","entre les parallèles voisins"));
+      card+=`<details class="pp-between"><summary>${fr
+          ? `Texte de ${short} ${where} (${nLabel(d,from,to)}${part?`, ${list.length} premiers segments`:""}) — correspondance non établie`
+          : en
           ? `Text of ${short} ${where} (${nLabel(d,from,to)}${part?`, first ${list.length} segments`:""}) — correspondence not established`
           : `${short} の、${where}にある本文（${nLabel(d,from,to)}${part?`。最初の ${list.length} セグメント`:""}。対応は未確認）`}</summary>`+
         `<div lang="cop">${list.map((x,k)=>`<div class="pp-seg"><span class="pp-n">§${escapeHTML(x.n)}</span>${cmp.b[k]}</div>`).join("")}</div></details>`;
     } else if(prev&&next){
-      card+=`<p class="pp-none">${en?`In ${short} the neighbouring parallels follow each other directly; there is no text between them.`:`${short} では前後の対応箇所が続いていて、あいだに本文はありません。`}</p>`;
+      card+=`<p class="pp-none">${fr?`Dans ${short}, les parallèles voisins se suivent directement ; il n’y a pas de texte entre eux.`:en?`In ${short} the neighbouring parallels follow each other directly; there is no text between them.`:`${short} では前後の対応箇所が続いていて、あいだに本文はありません。`}</p>`;
     }
     const sl=searchLink(g.info); if(sl) card+=`<div class="pp-acts">${sl}</div>`;
   }
   const tr=pickTrans(s);
-  const step=(id,dir)=>`<button type="button" class="pp-btn pp-go" data-seg="${escapeHTML(id||"")}"${id?"":" disabled"} aria-label="${dir<0?(en?"Previous parallel":"前の並行箇所"):(en?"Next parallel":"次の並行箇所")} (${short})" title="${dir<0?(en?"Previous parallel":"前の並行箇所"):(en?"Next parallel":"次の並行箇所")} (${short})">${dir<0?"‹":"›"}</button>`;
-  const tabs=`<div class="pp-tabs" role="tablist" aria-label="${en?"Texts":"文書"}">`+PAR_GROUPS.map(x=>
+  const step=(id,dir)=>`<button type="button" class="pp-btn pp-go" data-seg="${escapeHTML(id||"")}"${id?"":" disabled"} aria-label="${dir<0?(L3("前の並行箇所","Previous parallel","Parallèle précédent")):(L3("次の並行箇所","Next parallel","Parallèle suivant"))} (${short})" title="${dir<0?(L3("前の並行箇所","Previous parallel","Parallèle précédent")):(L3("次の並行箇所","Next parallel","Parallèle suivant"))} (${short})">${dir<0?"‹":"›"}</button>`;
+  const tabs=`<div class="pp-tabs" role="tablist" aria-label="${L3("文書","Texts","Textes")}">`+PAR_GROUPS.map(x=>
     `<button type="button" class="pp-tab" role="tab" data-grp="${escapeHTML(x.id)}" aria-selected="${x.id===g.id}" aria-controls="parCard" title="${escapeHTML(infoTitle(x.info)+(x.info.siglum?" ("+x.info.siglum+")":""))}">`+
     `<i class="dot${x.links.has(s.id)?" on":""}" aria-hidden="true"></i><b>${escapeHTML(infoShort(x.info))}</b><span class="tt">${escapeHTML(infoTitle(x.info))}</span></button>`).join("")+`</div>`;
   return `<div class="pp-nav">${step(prev,-1)}<span class="pp-here">III,3 §${escapeHTML(s.n)}</span>${step(next,1)}`+
-      `<button type="button" class="pp-btn pp-all">${en?"All texts":"文書の一覧"}</button></div>`+
-    `<div class="pp-cop" lang="cop">${srcHTML}</div><div class="pp-tr${tr?"":" pending"}">${escapeHTML(tr||pendingText())}</div>`+
+      `<button type="button" class="pp-btn pp-all">${L3("文書の一覧","All texts","Tous les textes")}</button></div>`+
+    `<div class="pp-cop" lang="cop">${srcHTML}</div><div class="pp-tr${tr?"":" pending"}" lang="${curTL()}">${escapeHTML(tr||pendingText())}</div>`+
     tabs+`<div class="pp-card" id="parCard" role="tabpanel">${card}<p class="pp-desc">${escapeHTML(grpDesc(g))}</p></div>`+parMethodHTML();
 }
 function renderPar(resetScroll){
@@ -1182,7 +1203,7 @@ function renderPar(resetScroll){
     body.innerHTML=parSegHTML(s,g,d);
     if(!d) parLoad(g.file).then(()=>{ if(parSel===s.id&&parTab===g.id) renderPar(); })
       .catch(()=>{ if(parSel!==s.id||parTab!==g.id) return; const c=$("#parCard");
-        if(c) c.innerHTML=`<p class="pp-none">${UL()==="en"?"Could not load the text of this document":"この文書の本文を読み込めませんでした"} (${escapeHTML(g.file.replace(/^.*\//,""))})</p>`; });
+        if(c) c.innerHTML=`<p class="pp-none">${L3("この文書の本文を読み込めませんでした","Could not load the text of this document","Le texte de ce document n’a pas pu être chargé")} (${escapeHTML(g.file.replace(/^.*\//,""))})</p>`; });
   }
   body.querySelectorAll(".pp-tab").forEach(b=>b.onclick=()=>{ parTab=b.dataset.grp; parCtx=false; markActive(); renderPar(); });
   body.querySelectorAll(".pp-go").forEach(b=>b.onclick=()=>parGo(b.dataset.seg));
@@ -1213,9 +1234,9 @@ function parMaxW(){ return Math.max(PAR_W_MIN, innerWidth-(H.getAttribute("data-
 function parCurW(){ const p=$("#parPanel"); return p&&parIsOpen()?Math.round(p.getBoundingClientRect().width):0; }
 function updateGrip(){
   const g=$("#parGrip"); if(!g) return;
-  const w=parCurW(), en=UL()==="en";
+  const w=parCurW();
   g.setAttribute("aria-valuemin",String(PAR_W_MIN)); g.setAttribute("aria-valuemax",String(parMaxW()));
-  if(w){ g.setAttribute("aria-valuenow",String(w)); g.setAttribute("aria-valuetext",(en?"width ":"幅 ")+w+"px"); }
+  if(w){ g.setAttribute("aria-valuenow",String(w)); g.setAttribute("aria-valuetext",(L3("幅 ","width ","largeur "))+w+"px"); }
 }
 /* w: 幅（px）。null なら既定の幅に戻す。save: このブラウザーに覚えるか（ドラッグ中は覚えない） */
 function setParW(w,save){
@@ -1270,22 +1291,22 @@ let qt=null;
 $("#q").addEventListener("input",e=>{ clearTimeout(qt); qt=setTimeout(()=>doSearch(e.target.value.trim()),160); });
 function doSearch(q){
   const res=$("#results");
-  if(!q){ res.innerHTML=`<p class="empty">${UL()==="en"?"Type a query in the search box above.":"上の検索窓に入力してください。"}</p>`; closeSearch(); return; }
+  if(!q){ res.innerHTML=`<p class="empty">${L3("上の検索窓に入力してください。","Type a query in the search box above.","Saisissez une recherche dans le champ ci-dessus.")}</p>`; closeSearch(); return; }
   openSearch();
   const ql=q.toLowerCase();
   const hits=[];
   SEGS_III.forEach(s=>{
     let where=[];
-    if(s.words.some(w=>w.form.includes(q)||w.lemma.includes(q))) where.push(UL()==="en"?"Coptic":"コプト");
-    if(s.words.some(w=>(w.senses||[]).some(x=>(x.en||"").toLowerCase().includes(ql)))) where.push(UL()==="en"?"EN gloss":"EN語釈");
-    if(s.words.some(w=>(w.senses||[]).some(x=>(x.ja||"").includes(q)))) where.push(UL()==="en"?"JA gloss":"JA語釈");
-    if(s.words.some(w=>(w.senses||[]).some(x=>(x.fr||"").toLowerCase().includes(ql)))) where.push(UL()==="en"?"FR gloss":"FR語釈");
-    if((s.transJa||"").includes(q)) where.push(UL()==="en"?"JA trans.":"和訳");
-    if((s.transEn||"").toLowerCase().includes(ql)) where.push(UL()==="en"?"EN trans.":"英訳");
-    if((s.transFr||"").toLowerCase().includes(ql)) where.push(UL()==="en"?"FR trans.":"仏訳");
+    if(s.words.some(w=>w.form.includes(q)||w.lemma.includes(q))) where.push(L3("コプト","Coptic","Copte"));
+    if(s.words.some(w=>(w.senses||[]).some(x=>(x.en||"").toLowerCase().includes(ql)))) where.push(L3("EN語釈","EN gloss","Glose EN"));
+    if(s.words.some(w=>(w.senses||[]).some(x=>(x.ja||"").includes(q)))) where.push(L3("JA語釈","JA gloss","Glose JA"));
+    if(s.words.some(w=>(w.senses||[]).some(x=>(x.fr||"").toLowerCase().includes(ql)))) where.push(L3("FR語釈","FR gloss","Glose FR"));
+    if((s.transJa||"").includes(q)) where.push(L3("和訳","JA trans.","Trad. JA"));
+    if((s.transEn||"").toLowerCase().includes(ql)) where.push(L3("英訳","EN trans.","Trad. EN"));
+    if((s.transFr||"").toLowerCase().includes(ql)) where.push(L3("仏訳","FR trans.","Trad. FR"));
     if(where.length) hits.push({s,where});
   });
-  if(!hits.length){ res.innerHTML=`<p class="empty">${UL()==="en"?`No matches for “${escapeHTML(q)}”.`:`「${escapeHTML(q)}」に一致する箇所はありません。`}</p>`; return; }
+  if(!hits.length){ res.innerHTML=`<p class="empty">${UL()==="fr"?`Aucun résultat pour « ${escapeHTML(q)} ».`:UL()==="en"?`No matches for “${escapeHTML(q)}”.`:`「${escapeHTML(q)}」に一致する箇所はありません。`}</p>`; return; }
   res.innerHTML=hits.map(({s,where})=>{
     const cop=s.words.map(w=>{
       const hit=w.form.includes(q)||w.lemma.includes(q);
@@ -1293,7 +1314,7 @@ function doSearch(q){
     }).join(" ");
     const tr=pickTrans(s)||s.transJa||s.transEn||s.transFr||"";
     return `<button class="result" data-id="${s.id}"><div class="rno">§${s.n} · ${where.join(" / ")}</div>
-      <div class="rsnip"><span class="cop">${cop}</span>${tr?"<br>"+escapeHTML(tr.slice(0,70))+(tr.length>70?"…":""):""}</div></button>`;
+      <div class="rsnip"><span class="cop" lang="cop">${cop}</span>${tr?"<br>"+escapeHTML(tr.slice(0,70))+(tr.length>70?"…":""):""}</div></button>`;
   }).join("");
   $$("#results .result").forEach(b=>b.onclick=()=>flashSeg(b.dataset.id));
 }
@@ -1311,18 +1332,18 @@ function setWit(w){
   try{ const u=new URL(location.href); u.searchParams.set("wit",w); history.replaceState(null,"",u.pathname+u.search+u.hash); }catch(e){}
   render();
 }
-/* 写本ごとの標題: III,3 は末尾標題「祝福されたエウグノストス」、V,1 は「エウグノストス」 */
+/* 写本ごとの標題: III,3 は末尾標題「祝福されたエウグノストス」、V,1 は「エウグノストス」。kickFr はフランス語の画面の小見出し */
 const WIT_HEAD={
-  III:{kick:"Nag Hammadi Codex III,3 · pp. 70–90", cop:"ⲉⲩⲅⲛⲱⲥⲧⲟⲥ ⲡⲙⲁⲕⲁⲣⲓⲟⲥ", ja:"祝福されたエウグノストス", en:"Eugnostos the Blessed"},
-  V:{kick:"Nag Hammadi Codex V,1 · pp. 1–17", cop:"ⲉⲩⲅⲛⲱⲥⲧⲟⲥ", ja:"エウグノストス", en:"Eugnostos"},
-  SYN:{kick:"Nag Hammadi Codex III,3 ‖ V,1", cop:"ⲉⲩⲅⲛⲱⲥⲧⲟⲥ", ja:"エウグノストス — III,3 と V,1 の対照", en:"Eugnostos — III,3 and V,1 in parallel"}
+  III:{kick:"Nag Hammadi Codex III,3 · pp. 70–90", kickFr:"Codex de Nag Hammadi III,3 · p. 70–90", cop:"ⲉⲩⲅⲛⲱⲥⲧⲟⲥ ⲡⲙⲁⲕⲁⲣⲓⲟⲥ", ja:"祝福されたエウグノストス", en:"Eugnostos the Blessed", fr:"Eugnoste le Bienheureux"},
+  V:{kick:"Nag Hammadi Codex V,1 · pp. 1–17", kickFr:"Codex de Nag Hammadi V,1 · p. 1–17", cop:"ⲉⲩⲅⲛⲱⲥⲧⲟⲥ", ja:"エウグノストス", en:"Eugnostos", fr:"Eugnoste"},
+  SYN:{kick:"Nag Hammadi Codex III,3 ‖ V,1", kickFr:"Codex de Nag Hammadi III,3 ‖ V,1", cop:"ⲉⲩⲅⲛⲱⲥⲧⲟⲥ", ja:"エウグノストス — III,3 と V,1 の対照", en:"Eugnostos — III,3 and V,1 in parallel", fr:"Eugnoste — III,3 et V,1 en regard"}
 };
 function updateDocHead(){
   const h=WIT_HEAD[curWit]||WIT_HEAD.III;
   const k=$("#docKick"), h1=$("#docH1"); if(!k||!h1) return;
-  k.textContent=h.kick;
-  h1.innerHTML=`<span class="cop">${h.cop}</span><br><span class="l-ja">${h.ja}</span><span class="l-en">${h.en}</span>`;
-  document.title=(UL()==="en"?h.en:h.ja)+" — "+(curWit==="SYN"?"NHC III,3 / V,1":h.kick.replace("Nag Hammadi Codex ","NHC ").split(" · ")[0]);
+  k.textContent=UL()==="fr"?h.kickFr:h.kick;
+  h1.innerHTML=`<span class="cop" lang="cop">${h.cop}</span><br><span class="l-ja">${h.ja}</span><span class="l-en">${h.en}</span><span class="l-fr">${h.fr}</span>`;
+  document.title=L3(h.ja,h.en,h.fr)+" — "+(curWit==="SYN"?"NHC III,3 / V,1":h.kick.replace("Nag Hammadi Codex ","NHC ").split(" · ")[0]);
 }
 $$(".tab").forEach(t=>t.onclick=()=>setWit(t.dataset.wit));
 { const w0=new URLSearchParams(location.search).get("wit"); if(w0&&WIT_HEAD[w0]){ curWit=w0;
@@ -1347,31 +1368,33 @@ function relabelLoan(){ const e=$("#loanN"); if(e){ const n=loanCount(); e.textC
    集計ロジックは search.html 側で TEI を直接読み込んで再実装しています。 */
 const LANG_CYCLE=["ja","en","fr"];
 /* ---- UI i18n helpers ---- */
-function UL(){ return H.getAttribute("data-lang")==="en"?"en":"ja"; }
-function lemmaLbl(){ return UL()==="en"?"lemma":"レンマ"; }
-function defLbl(){ return UL()==="en"?"default":"既定"; }
-function homoLbl(n){ return UL()==="en"?("homograph (same part of speech) — "+n+" senses"):("同形異義（同じ品詞）— "+n+" 語義"); }
-function missLbl(p,n){ const L=POS[p]||[p,p]; return UL()==="en"?("part of speech “"+(L[1]||p)+"” not in the lexicon — "+n+" candidates by lemma"):("品詞「"+(L[0]||p)+"」は辞書に未登録 — レンマ一致の候補 "+n+" 件"); }
+/* 画面の言語（html[data-lang]）: ja / en / fr。文言は L3(日, 英, 仏) で選ぶ */
+function UL(){ const l=H.getAttribute("data-lang"); return l==="en"||l==="fr"?l:"ja"; }
+function L3(ja,en,fr){ const l=UL(); return l==="fr"?fr:l==="en"?en:ja; }
+function lemmaLbl(){ return L3("レンマ","lemma","lemme"); }
+function defLbl(){ return L3("既定","default","par défaut"); }
+function homoLbl(n){ return UL()==="fr"?("homographe (même catégorie) — "+n+" sens"):UL()==="en"?("homograph (same part of speech) — "+n+" senses"):("同形異義（同じ品詞）— "+n+" 語義"); }
+function missLbl(p,n){ const L=POS[p]||[p,p,p]; return UL()==="fr"?("catégorie « "+(L[2]||p)+" » absente du lexique — "+n+" candidats par lemme"):UL()==="en"?("part of speech “"+(L[1]||p)+"” not in the lexicon — "+n+" candidates by lemma"):("品詞「"+(L[0]||p)+"」は辞書に未登録 — レンマ一致の候補 "+n+" 件"); }
 /* 同じ綴りで品詞の異なる語（参照対象外）を小さく併記 */
 function homNoteHTML(w){
   if(!w.others||!w.others.length) return "";
-  const en=UL()==="en";
-  const items=w.others.map(o=>{ const p=POS[o.pos]||POS.X; const g=en?(o.en||o.ja):(o.ja||o.en); return `${escapeHTML(en?p[1]:p[0])}${g?"「"+escapeHTML(g)+"」":""}`; }).join(" / ");
-  return `<div class="usg" style="margin-top:8px;font-size:.64rem;color:var(--chrome-faint)">${en?"Other homographs":"同形の別品詞"}: ${items}</div>`;
+  const en=UL()==="en", fr=UL()==="fr";
+  const items=w.others.map(o=>{ const p=POS[o.pos]||POS.X; if(fr){ const f=o.fr||o.en||o.ja; return `${escapeHTML(p[2])}${f?" « "+escapeHTML(f)+" »":""}`; } const g=en?(o.en||o.ja):(o.ja||o.en); return `${escapeHTML(en?p[1]:p[0])}${g?"「"+escapeHTML(g)+"」":""}`; }).join(" / ");
+  return `<div class="usg" style="margin-top:8px;font-size:.64rem;color:var(--chrome-faint)">${L3("同形の別品詞","Other homographs","Autres homographes")}${fr?" : ":": "}${items}</div>`;
 }
-function noneLbl(){ return UL()==="en"?"No sense registered yet (extend in the lexicon).":"語義は未登録です（語彙集で拡張可能）。"; }
-function loanLbl(){ return UL()==="en"?"Greek loanword":"ギリシア語からの借用語"; }
-function langLbl(v){ return (UL()==="en"?{ja:"JA",en:"EN",fr:"FR"}:{ja:"日",en:"英",fr:"仏"})[v]; }
+function noneLbl(){ return L3("語義は未登録です（語彙集で拡張可能）。","No sense registered yet (extend in the lexicon).","Aucun sens enregistré pour l’instant (à compléter dans le lexique)."); }
+function loanLbl(){ return L3("ギリシア語からの借用語","Greek loanword","Emprunt grec"); }
+function langLbl(v){ return (UL()!=="ja"?{ja:"JA",en:"EN",fr:"FR"}:{ja:"日",en:"英",fr:"仏"})[v]; }
 function relabelLangBtn(btn,attr,key){
   if(!btn) return;
   const v=H.getAttribute(attr)||"ja";
-  const pre=(UL()==="en"?{gl:"Gloss",tl:"Trans"}:{gl:"語釈",tl:"訳"})[key];
-  btn.textContent=pre+": "+langLbl(v);
+  const pre=(UL()==="fr"?{gl:"Gloses",tl:"Trad."}:UL()==="en"?{gl:"Gloss",tl:"Trans"}:{gl:"語釈",tl:"訳"})[key];
+  btn.textContent=pre+(UL()==="fr"?" : ":": ")+langLbl(v);
 }
 function relabelMode(){
   const b=$("#modeBtn"); if(!b) return;
   const codex=H.getAttribute("data-mode")==="codex";
-  b.textContent = codex ? (UL()==="en"?"◑ Archon":"◑ アルコーン") : (UL()==="en"?"◐ Aeon":"◐ アイオーン");
+  b.textContent = codex ? (L3("◑ アルコーン","◑ Archon","◑ Archonte")) : (L3("◐ アイオーン","◐ Aeon","◐ Éon"));
 }
 function cycleLang(btn,attr,key){
   const cur=H.getAttribute(attr)||"ja";
@@ -1393,13 +1416,22 @@ function cycleTransLang(){
 }
 $("#tlBtn").onclick=cycleTransLang;
 $("#modeBtn").onclick=()=>{ toggle($("#modeBtn"),"data-mode","aeon","codex","◑ アルコーン","◐ アイオーン"); relabelMode(); };
+/* 日英の画面では同じ表記のままの見出し（英語）と aria-label（日本語）。フランス語の画面でだけ差し替える */
+const FIXED_TEXT=[[".brand .s","Eugnostos · NHC III,3 / V,1","Eugnoste · NHC III,3 / V,1"],[".fx-title","Facsimile · IIIF","Fac-similé · IIIF"]];
+const FIXED_ARIA=[[".tabs","写本","Témoin"],["#pop","形態素の語義","Glose du morphème"]];
+function fixedLabels(){
+  const fr=UL()==="fr";
+  FIXED_TEXT.forEach(([s,base,f])=>{ const e=$(s); if(e) e.textContent=fr?f:base; });
+  FIXED_ARIA.forEach(([s,base,f])=>{ const e=$(s); if(e) e.setAttribute("aria-label",fr?f:base); });
+}
 function applyUILang(){
   const en=UL()==="en";
   const lb=$("#langBtn"); if(lb) lb.textContent=en?"日本語":"English";
-  const qi=$("#q"); if(qi){ qi.placeholder=en?"Search Coptic, glosses, translations":"コプト語・語釈・訳を検索"; qi.setAttribute("aria-label",en?"Search":"検索"); }
+  const qi=$("#q"); if(qi){ qi.placeholder=L3("コプト語・語釈・訳を検索","Search Coptic, glosses, translations","Chercher : copte, gloses, traductions"); qi.setAttribute("aria-label",L3("検索","Search","Rechercher")); }
   relabelLangBtn($("#tlBtn"),"data-tl","tl");
   relabelMode();
-  H.setAttribute("lang", en?"en":"ja");
+  fixedLabels();
+  H.setAttribute("lang", UL());
   if(typeof updateDocHead==="function") updateDocHead();
 }
 { const lgb=$("#langBtn"); if(lgb) lgb.onclick=()=>{
@@ -1410,6 +1442,18 @@ function applyUILang(){
     applyUILang();
     if(typeof render==="function"){ render(); updateParBtn(); }
   }; }
+/* 上部ナビの言語の選択（assets/site.js の syncLegacy）から呼ばれる: 画面・語釈・対訳の言語をまとめて ja / en / fr にする。
+   #langBtn（画面の日英の切替。画面には出していない）と #tlBtn（語釈・対訳の言語の順送り）はそのまま使える */
+window.NHC_viewerLang=v=>{
+  if(!LANG_CYCLE.includes(v)) return;
+  const tb=$("#tlBtn"); if(tb) tb.setAttribute("aria-pressed",String(v!=="ja"));
+  if(UL()===v&&curGL()===v&&curTL()===v) return;   // <head> の 1 行スクリプトが反映済みのとき（開いた直後）は何もしない
+  H.setAttribute("data-lang",v); H.setAttribute("data-gl",v); H.setAttribute("data-tl",v);
+  applyUILang();
+  if(!DOC_MAIN) return;   // 読み込みの前は、読み込んだあとの描画に任せる
+  render(); updateParBtn(); updateGrip();
+  if(H.getAttribute("data-search")==="open") doSearch($("#q").value.trim());
+};
 applyUILang();
 
 /* ---------- 頁・行（<pb>・<lb>）と、頁・行のアンカー（republic.html と同じ形） ----------
@@ -1488,8 +1532,8 @@ document.addEventListener("click",e=>{
 /* ---------- credit ---------- */
 function buildCredit(){
   $("#credit").innerHTML=`
-   <p><span class="l-ja"><b>本コーパスについて。</b> データは別々のファイルに分けています — <b>本文</b> <code>eugnostos_tei.xml</code>(二証本)、<b>コプト語辞書</b> <code>lexicon.xml</code>(レンマ＋品詞→<b>日英仏</b>語義)、<b>並行箇所</b> <code>parallels.xml</code>(他の文書で同じ文言を持つ箇所)、<b>文書カタログ</b> <code>catalog.xml</code>。本文の各 <code>&lt;w&gt;</code> は <b>@lemma と @type(品詞)の組</b>で辞書を参照し(同形異義語は品詞で区別)、並行箇所の <code>&lt;link&gt;</code> は @target で本文の <code>&lt;s&gt;</code> と他の文書の <code>&lt;s&gt;</code> を結びます。対応先の本文は、ナグ・ハマディ写本の未注釈の全文テキスト(<code>source/nhc_fulltext_split/</code>。校訂本と照合する前の作業用テキスト)です。</span><span class="l-en"><b>About this corpus.</b> The data are kept in separate files: the <b>text</b> <code>eugnostos_tei.xml</code> (two witnesses), the <b>Coptic lexicon</b> <code>lexicon.xml</code> (lemma + part of speech → Japanese, English and French senses), the <b>parallel passages</b> <code>parallels.xml</code> (places in other texts with the same wording) and the <b>catalogue</b> <code>catalog.xml</code>. Each <code>&lt;w&gt;</code> looks up the lexicon by <b>@lemma and @type (part of speech)</b>, so homographs are told apart by part of speech; each <code>&lt;link&gt;</code> among the parallels joins an <code>&lt;s&gt;</code> of this text to an <code>&lt;s&gt;</code> of another text with @target. The other texts come from the unannotated full text of the Nag Hammadi Codices (<code>source/nhc_fulltext_split/</code>), a working text not yet collated with the critical editions.</span></p>
-   <p><span class="l-ja">本文(コプト語)はパブリックドメイン。<b>日・英・仏の対訳と辞書は本プロジェクトによる原文オリジナルの初版シード</b>(CC&nbsp;BY&nbsp;4.0)で、<b>Pasquier(BCNH)・Parrott(NHS 27)・小林稔訳</b>等を参照して作成していますが、これらの翻訳を転記したものではありません。権威あるフランス語訳は Pasquier の校訂を参照してください。語義はレンマ単位(文脈非依存)で全トークンの約87%を、フランス語語義は中核語彙をカバー。写本 <b>III,3</b> は全文符号化、<b>V,1</b> は @corresp で対応づけた並行証本の枠です(V,1 の本文は〈対照〉と〈並行箇所〉に未注釈の全文テキストから表示)。並行箇所は文言の自動照合によるもので(<code>scripts/build_parallels.py</code>)、校訂版によるものではありません。</span><span class="l-en">The Coptic text is in the public domain. <b>The Japanese, English and French translations and the lexicon are this project’s own first-pass seed</b> (CC&nbsp;BY&nbsp;4.0), prepared with reference to <b>Pasquier (BCNH), Parrott (NHS 27) and Kobayashi’s Japanese translation</b> among others; they do not reproduce those translations. For an authoritative French translation see Pasquier’s edition. Senses are given per lemma (not per context) for about 87% of tokens, French senses for the core vocabulary. Witness <b>III,3</b> is encoded in full; <b>V,1</b> is a frame aligned by @corresp (its text is shown from the unannotated full text in the Synopsis and in the parallels panel). The parallel passages come from an automatic comparison of the wording (<code>scripts/build_parallels.py</code>), not from a critical edition.</span></p>`;
+   <p><span class="l-ja"><b>本コーパスについて。</b> データは別々のファイルに分けています — <b>本文</b> <code>eugnostos_tei.xml</code>(二証本)、<b>コプト語辞書</b> <code>lexicon.xml</code>(レンマ＋品詞→<b>日英仏</b>語義)、<b>並行箇所</b> <code>parallels.xml</code>(他の文書で同じ文言を持つ箇所)、<b>文書カタログ</b> <code>catalog.xml</code>。本文の各 <code>&lt;w&gt;</code> は <b>@lemma と @type(品詞)の組</b>で辞書を参照し(同形異義語は品詞で区別)、並行箇所の <code>&lt;link&gt;</code> は @target で本文の <code>&lt;s&gt;</code> と他の文書の <code>&lt;s&gt;</code> を結びます。対応先の本文は、ナグ・ハマディ写本の未注釈の全文テキスト(<code>source/nhc_fulltext_split/</code>。校訂本と照合する前の作業用テキスト)です。</span><span class="l-en"><b>About this corpus.</b> The data are kept in separate files: the <b>text</b> <code>eugnostos_tei.xml</code> (two witnesses), the <b>Coptic lexicon</b> <code>lexicon.xml</code> (lemma + part of speech → Japanese, English and French senses), the <b>parallel passages</b> <code>parallels.xml</code> (places in other texts with the same wording) and the <b>catalogue</b> <code>catalog.xml</code>. Each <code>&lt;w&gt;</code> looks up the lexicon by <b>@lemma and @type (part of speech)</b>, so homographs are told apart by part of speech; each <code>&lt;link&gt;</code> among the parallels joins an <code>&lt;s&gt;</code> of this text to an <code>&lt;s&gt;</code> of another text with @target. The other texts come from the unannotated full text of the Nag Hammadi Codices (<code>source/nhc_fulltext_split/</code>), a working text not yet collated with the critical editions.</span><span class="l-fr"><b>À propos de ce corpus.</b> Les données sont réparties en fichiers distincts : le <b>texte</b> <code>eugnostos_tei.xml</code> (deux témoins), le <b>lexique copte</b> <code>lexicon.xml</code> (lemme + catégorie → sens en japonais, en anglais et en français), les <b>passages parallèles</b> <code>parallels.xml</code> (passages d’autres textes à la même formulation) et le <b>catalogue</b> <code>catalog.xml</code>. Chaque <code>&lt;w&gt;</code> renvoie au lexique par <b>@lemma et @type (catégorie)</b>, si bien que les homographes se distinguent par leur catégorie ; chaque <code>&lt;link&gt;</code> des parallèles relie par @target un <code>&lt;s&gt;</code> de ce texte à un <code>&lt;s&gt;</code> d’un autre texte. Les autres textes proviennent du texte intégral non annoté des codices de Nag Hammadi (<code>source/nhc_fulltext_split/</code>), un texte de travail pas encore collationné avec les éditions critiques.</span></p>
+   <p><span class="l-ja">本文(コプト語)はパブリックドメイン。<b>日・英・仏の対訳と辞書は本プロジェクトによる原文オリジナルの初版シード</b>(CC&nbsp;BY&nbsp;4.0)で、<b>Pasquier(BCNH)・Parrott(NHS 27)・小林稔訳</b>等を参照して作成していますが、これらの翻訳を転記したものではありません。権威あるフランス語訳は Pasquier の校訂を参照してください。語義はレンマ単位(文脈非依存)で全トークンの約87%を、フランス語語義は中核語彙をカバー。写本 <b>III,3</b> は全文符号化、<b>V,1</b> は @corresp で対応づけた並行証本の枠です(V,1 の本文は〈対照〉と〈並行箇所〉に未注釈の全文テキストから表示)。並行箇所は文言の自動照合によるもので(<code>scripts/build_parallels.py</code>)、校訂版によるものではありません。</span><span class="l-en">The Coptic text is in the public domain. <b>The Japanese, English and French translations and the lexicon are this project’s own first-pass seed</b> (CC&nbsp;BY&nbsp;4.0), prepared with reference to <b>Pasquier (BCNH), Parrott (NHS 27) and Kobayashi’s Japanese translation</b> among others; they do not reproduce those translations. For an authoritative French translation see Pasquier’s edition. Senses are given per lemma (not per context) for about 87% of tokens, French senses for the core vocabulary. Witness <b>III,3</b> is encoded in full; <b>V,1</b> is a frame aligned by @corresp (its text is shown from the unannotated full text in the Synopsis and in the parallels panel). The parallel passages come from an automatic comparison of the wording (<code>scripts/build_parallels.py</code>), not from a critical edition.</span><span class="l-fr">Le texte copte est dans le domaine public. <b>Les traductions japonaise, anglaise et française et le lexique sont une première version établie par ce projet</b> (CC&nbsp;BY&nbsp;4.0), à l’aide notamment de <b>Pasquier (BCNH), Parrott (NHS 27) et de la traduction japonaise de Kobayashi</b> ; ce travail ne reproduit pas ces traductions. Pour une traduction française de référence, voir l’édition de Pasquier. Les sens sont donnés par lemme (et non selon le contexte) pour environ 87 % des occurrences, les sens français pour le vocabulaire de base. Le témoin <b>III,3</b> est encodé en entier ; <b>V,1</b> est un cadre aligné par @corresp (son texte est affiché, à partir du texte intégral non annoté, dans la Synopse et dans le panneau des parallèles). Les passages parallèles proviennent d’une comparaison automatique de la formulation (<code>scripts/build_parallels.py</code>), non d’une édition critique.</span></p>`;
 }
 
 
@@ -1510,7 +1554,7 @@ load();
   var prev = $("#fxPrev"), next = $("#fxNext"), pageLbl = $("#fxPage");
   if(!sec || !btn) return;
   var pages = [], attribution = "", viewer = null, pageIdx = 0, osdLoading = null;
-  function msg(ja, en){ return '<span class="l-ja">' + ja + '</span><span class="l-en">' + en + '</span>'; }
+  function msg(ja, en, fr){ return '<span class="l-ja">' + ja + '</span><span class="l-en">' + en + '</span><span class="l-fr">' + fr + '</span>'; }
 
   fetch("iiif/" + FX_DOC + ".json", {cache:"no-cache"})
     .then(function(r){ if(!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
@@ -1553,7 +1597,7 @@ load();
         crossOriginPolicy: "Anonymous"
       });
       viewer.addHandler("open-failed", function(){
-        note.innerHTML = msg("画像を読み込めませんでした。", "The image could not be loaded.");
+        note.innerHTML = msg("画像を読み込めませんでした。", "The image could not be loaded.", "L’image n’a pas pu être chargée.");
       });
       if(pages.length > 1){
         prev.hidden = next.hidden = pageLbl.hidden = false;
@@ -1562,7 +1606,7 @@ load();
       }
       openPage(0);
     }, function(){
-      note.innerHTML = msg("画像ビュワーを読み込めませんでした（オフラインの可能性があります）。", "The image viewer could not be loaded (you may be offline).");
+      note.innerHTML = msg("画像ビュワーを読み込めませんでした（オフラインの可能性があります）。", "The image viewer could not be loaded (you may be offline).", "La visionneuse d’images n’a pas pu être chargée (vous êtes peut-être hors ligne).");
     });
   }
   btn.onclick = function(){
@@ -1570,8 +1614,8 @@ load();
     body.hidden = open;
     btn.setAttribute("aria-expanded", String(!open));
     btn.innerHTML = open
-      ? '<span class="l-ja">開く</span><span class="l-en">Open</span>'
-      : '<span class="l-ja">閉じる</span><span class="l-en">Close</span>';
+      ? '<span class="l-ja">開く</span><span class="l-en">Open</span><span class="l-fr">Ouvrir</span>'
+      : '<span class="l-ja">閉じる</span><span class="l-en">Close</span><span class="l-fr">Fermer</span>';
     if(!open) init();
   };
 })();

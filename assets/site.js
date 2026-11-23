@@ -6,7 +6,8 @@
      ページ間で引き継ぎます。最初に開くときの言語は、URL の ?lang=（ja・en・fr）＞ 保存値 ＞ ブラウザーの言語の順で決めます
      （ブラウザーの言語が ja・en・fr のどれでもなければ英語）。各ページの <head> の 1 行スクリプトが、同じ順で描画前に反映します。
        * 三言語対応ページ（<html data-i18n="full">）: html[data-lang] を ja/en/fr に切替
-       * 既存のビュワー（日英のみ）: ページ内の #langBtn / #tlBtn を操作して同期
+       * 既存のビュワー（data-i18n="full" の無いページ）: ページの window.NHC_viewerLang で ja / en / fr に切替
+         （eugnostos.html・republic.html）。それの無い日英だけのページは、ページ内の #langBtn / #tlBtn を操作して同期
          （French を選ぶと UI は英語、語釈・対訳はフランス語になります）
    - 表示モード（ライト／ダーク）に対応したページ（<html data-modes="light dark">）では、
      ナビ右側に切替ボタンを出し、選択を localStorage に保存します（配色は assets/cosmos.css）。
@@ -385,8 +386,12 @@
     });
   }
 
-  /* ---- 既存（日英）ページとの同期 ---- */
+  /* ---- 既存（日英）ページとの同期 ----
+     画面も三言語にしたビュワー（eugnostos.html・republic.html）は window.NHC_viewerLang(ja / en / fr) を用意している。
+     あればそれを呼び、画面・語釈・対訳の言語をまとめて切り替える（ボタンは押さない）。
+     無いページ（日英だけのページ）は従来どおり #langBtn（画面の日英）と #tlBtn（語釈・対訳の言語）を押して合わせる */
   function syncLegacy(target) {
+    if (typeof window.NHC_viewerLang === "function") { window.NHC_viewerLang(target); return; }
     var lb = document.getElementById("langBtn");
     if (!lb) return;
     var wantUI = target === "ja" ? "ja" : "en";
