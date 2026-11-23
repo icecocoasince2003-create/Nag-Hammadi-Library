@@ -141,8 +141,11 @@ html[data-line="on"] .lbm{display:inline-block; font-family:var(--ui); font-size
 /* 頁・行のアンカー（#p70.1）で開いたときの、その行（頁）の印（republic.html と同じ） */
 .lbm.hit, .pdm.hit{outline:2px solid var(--gold); outline-offset:1px; border-radius:3px}
 html[data-page="on"] .pdm{display:inline-block; font-family:var(--ui); font-size:.6rem; letter-spacing:.04em;
-  color:#fff; background:var(--gold); border-radius:4px; padding:1px 6px; margin:0 5px; vertical-align:.15em;
+  color:#1a140a; background:var(--gold); border-radius:4px; padding:1px 6px; margin:0 5px; vertical-align:.15em;
   font-variant-numeric:tabular-nums; box-shadow:0 1px 3px rgba(0,0,0,.18)}
+/* 頁番号の札の文字は 4.5:1 以上に（白地の文字では金色 #cf9b34 の上で 2:1 ほどしかなかった）。ダークでは金色に濃い文字、
+   ライトではこのページの金色（#9a7220）が中間の明るさで、白でも黒でも 4.5:1 に届かないので、本文ビュワー（reader.html）と同じ濃い金色に白 */
+html[data-mode="light"][data-page="on"] .pdm{color:#fffdf6; background:#7f5d16}
 .gapm{font-family:var(--copt); font-style:normal; padding:0 1px; cursor:help; border-radius:3px}
 .gapm.lac{color:var(--rose); background:rgba(157,90,108,.10); box-shadow:inset 0 -1px 0 rgba(157,90,108,.5)}
 .gapm.unc{color:var(--ink-faint); background:rgba(120,120,120,.10); box-shadow:inset 0 -1px 0 rgba(120,120,120,.5)}

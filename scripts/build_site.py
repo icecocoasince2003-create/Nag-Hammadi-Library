@@ -400,7 +400,7 @@ html[data-lang="en"] .trow .tt .main, html[data-lang="fr"] .trow .tt .main{font-
 html[data-lang="en"] .trow .tt .sub{font-family:var(--jp); font-style:normal; font-size:.74rem}
 .trow .loc{font-size:.7rem; color:var(--ink-faint); white-space:nowrap; font-variant-numeric:tabular-nums}
 .pill{font-size:.66rem; letter-spacing:.06em; padding:3px 9px; border-radius:999px;
- background:var(--hi); color:var(--ink-faint); border:1px solid var(--line); white-space:nowrap}
+ background:var(--hi); color:var(--ink-soft); border:1px solid var(--line); white-space:nowrap}
 .pill.on{background:var(--gold); color:#1a140a; border-color:var(--gold); font-weight:600}
 .pill.draft{background:transparent; color:var(--lapis); border-color:var(--lapis); font-weight:600}
 .pill.plain{background:transparent; color:var(--ink-soft); border-color:var(--ink-faint)}
@@ -476,7 +476,7 @@ def build_index():
     body = f"""
 <nav id="sitebar" class="sitebar sticky"></nav>
 
-<div class="wrap">
+<main class="wrap">
  <section class="hero">
   <div>
    <div class="eyebrow">Nag Hammadi Codices I–XIII</div>
@@ -578,7 +578,7 @@ def build_index():
    <p class="empty" id="empty" hidden>{tri("該当する文書がありません。", "No matching tractate.", "Aucun traité ne correspond.")}</p>
   </div>
  </section>
-</div>
+</main>
 
 <footer><div class="wrap">
   {tri(f"<b>{AVAIL}</b>&nbsp;文書を公開・<b>{DRAFT}</b>&nbsp;文書を暫定公開・<b>{PLAIN}</b>&nbsp;文書は未注釈の本文・<b>{SOON}</b>&nbsp;文書は準備中 / 全&nbsp;<b>{TOTAL}</b>&nbsp;文書(13写本)",
@@ -1089,9 +1089,15 @@ function statusHTML(){
     '<a href="search.html?doc='+encodeURIComponent(DOC.key)+'">'+tri('この文書を検索','Search this text','Chercher dans ce texte')+'</a>'+
     '<a href="search.html?doc='+encodeURIComponent(DOC.key)+'&amp;view=stats">'+tri('統計','Statistics','Statistiques')+'</a></p></section>';
 }
-function navHTML(){
+/* 前後の文書へのリンク（本文の上と下に 1 つずつ）。2 つの <nav> を読み上げで区別できるよう、言語ごとの名前（aria-label）を付ける */
+function labelDocNavs(){
+  const L={top:{ja:'前後の文書',en:'Previous and next texts',fr:'Textes précédent et suivant'},
+           bottom:{ja:'前後の文書（本文の後）',en:'Previous and next texts (after the text)',fr:'Textes précédent et suivant (après le texte)'}};
+  document.querySelectorAll('nav.docnav[data-pos]').forEach(n=>{ const o=L[n.dataset.pos]; if(o) n.setAttribute('aria-label',o[UL()]||o.en); });
+}
+function navHTML(pos){
   const a=d=>d?'<a href="reader.html?doc='+encodeURIComponent(d.key)+'">'+esc(d.siglum.replace(/^NHC\\s*/,''))+' '+tri(esc(d.ja),esc(d.en),esc(d.fr))+'</a>':'<span></span>';
-  return '<nav class="docnav">'+(NAV.prev?'<span>← '+a(NAV.prev)+'</span>':'<span></span>')+
+  return '<nav class="docnav" data-pos="'+pos+'">'+(NAV.prev?'<span>← '+a(NAV.prev)+'</span>':'<span></span>')+
     '<a class="mid" href="index.html#corpus">'+tri('文書一覧','All texts','Tous les textes')+'</a>'+
     (NAV.next?'<span>'+a(NAV.next)+' →</span>':'<span></span>')+'</nav>';
 }
@@ -1188,7 +1194,7 @@ function gotoPageLine(pg, ln){
 function render(){
   const s=D.st, ann=s.typed>0;
   const m=/^NHC\\s+([IVX]+),/.exec(DOC.siglum);
-  shell.innerHTML=navHTML()+
+  shell.innerHTML=navHTML('top')+
     '<div class="eyebrow" style="margin-top:18px">'+(m?'Codex '+m[1]+' · ':'')+esc(DOC.siglum)+(D.locus?' · '+esc(D.locus):'')+'</div>'+
     '<h1>'+tri(esc(DOC.ja),esc(DOC.en),esc(DOC.fr))+'</h1><div class="alt">'+tri(esc(DOC.en),esc(DOC.ja),esc(DOC.en))+'</div>'+
     '<div class="meta">'+esc(D.lang)+' · '+tri(fmt(s.segs)+' セグメント · '+fmt(s.m)+' 形態素'+(ann?' · '+fmt(s.g)+' 語群':''), fmt(s.segs)+' segments · '+fmt(s.m)+' morphemes'+(ann?' · '+fmt(s.g)+' bound groups':''), fmt(s.segs)+' segments · '+fmt(s.m)+' morphèmes'+(ann?' · '+fmt(s.g)+' groupes':''))+'</div>'+
@@ -1206,10 +1212,10 @@ function render(){
       (s.lb?'<label><input type="checkbox" id="oLine"'+(OPT.line?' checked':'')+'>'+tri('行','Lines','Lignes')+'</label>':'')+
       (ann?'<span class="lg">'+tri('語をクリックすると注釈を表示','Click a word for its analysis','Cliquez sur un mot pour son analyse')+'</span>':'')+
     '</div>':'<div style="height:14px"></div>')+
-    '<article id="text" class="text"></article>'+navHTML();
+    '<article id="text" class="text"></article>'+navHTML('bottom');
   const bind=(id,k)=>{ const e=document.getElementById(id); if(e) e.addEventListener('change',()=>{ OPT[k]=e.checked; saveOpt(); renderText(); }); };
   bind('oInter','inter'); bind('oCert','cert'); bind('oCuts','cuts'); bind('oPage','page'); bind('oLine','line');
-  renderText(); setTitle(); gotoHash();
+  renderText(); setTitle(); labelDocNavs(); gotoHash();
   withTools(t=>t.fill(shell));
 }
 /* 引用（assets/viewer-tools.js）。§ を押すと、これまでどおりその箇所へ移る（ハッシュの更新）のに加えて、引用のメニューを開く。
@@ -1261,7 +1267,7 @@ document.addEventListener('click',e=>{
   const m=e.target.closest('#text .m'); if(m) showCard(m);
 });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') hideCard(); });
-document.addEventListener('nhc:lang',()=>{ if(!D) return; setTitle(); if(OPT.inter) renderText(); });
+document.addEventListener('nhc:lang',()=>{ if(!D) return; setTitle(); labelDocNavs(); if(OPT.inter) renderText(); });
 window.addEventListener('hashchange',gotoHash);
 </script>
 """

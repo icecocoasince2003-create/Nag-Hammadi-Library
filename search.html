@@ -226,6 +226,8 @@ table.lx tr.row.open td{background:var(--s-bg2); border-bottom-color:transparent
 td.lem{white-space:nowrap}
 td.lem .cop{font-size:1.08rem}
 td.lem .tw{display:inline-block; width:1em; color:var(--s-faint); font-size:.7rem}
+td.lem .rowbtn{appearance:none; border:0; background:none; margin:0; padding:0; font:inherit; color:inherit; cursor:pointer; text-align:left}
+td.lem .rowbtn:focus-visible{outline:2px solid var(--s-gold); outline-offset:2px; border-radius:3px}
 .grc{font-size:.66rem; color:var(--s-link); margin-left:4px; vertical-align:super; letter-spacing:.04em}
 td.pos{white-space:nowrap; color:var(--s-mut); font-size:.8rem}
 td.pos code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.74rem; color:var(--s-ink)}
@@ -243,7 +245,7 @@ mark{background:var(--s-mark); color:inherit; padding:0 1px; border-radius:2px}
 /* 詳細行 */
 tr.detail td{padding:4px 0 22px 1.4em; background:var(--s-bg2); border-bottom:1px solid var(--s-rule)}
 .dgrid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:6px 34px; font-size:.84rem}
-.dgrid h4{margin:12px 0 4px; font-size:.74rem; font-weight:700; color:var(--s-mut)}
+.dgrid h3{margin:12px 0 4px; font-size:.74rem; font-weight:700; color:var(--s-mut)}   /* 見出しの順（h2 → h3）に合わせて h3（以前は h4） */
 .sense{margin:0 0 6px}
 .sense .n{color:var(--s-faint); margin-right:6px; font-variant-numeric:tabular-nums}
 .sense .l{color:var(--s-faint); font-size:.72rem; margin-right:4px}
@@ -2001,8 +2003,10 @@ function renderTable(R){
     if(many) tail = '<td class="num dist">' + r.nWit + '/' + R.wits.length + '</td>';
     else if(R.wits.length > 1) tail = R.wits.map(w => { const n = r.byWit[w.id] || 0;
       return '<td class="num' + (n ? "" : " zero") + '">' + (n ? fmt(n) : "·") + '</td>'; }).join("");
-    return '<tr class="row' + (open ? " open" : "") + '" data-key="' + esc(g.key) + '" tabindex="0" aria-expanded="' + open + '">' +
-      '<td class="lem"><span class="tw" aria-hidden="true">' + (open ? "▾" : "▸") + '</span><span class="cop">' + hl(g.lemma, r, ctxL) + '</span>' +
+    // 開閉は行の中のボタンが持つ（表の行 <tr> には aria-expanded を付けられない）。行のどこを押しても開閉するのはマウス用の近道
+    return '<tr class="row' + (open ? " open" : "") + '" data-key="' + esc(g.key) + '">' +
+      '<td class="lem"><button type="button" class="rowbtn" aria-expanded="' + open + '"><span class="tw" aria-hidden="true">' + (open ? "▾" : "▸") +
+        '</span><span class="cop">' + hl(g.lemma, r, ctxL) + '</span></button>' +
         (g.grc ? '<span class="grc" title="' + esc(t("grcT")) + '">grc</span>' : "") + '</td>' +
       '<td class="pos" title="' + esc(g.pos) + '">' + esc(posName(g.pos)) + '</td>' +
       '<td class="gl">' + (gtxt ? markGloss(gtxt, qG) : '<span class="amb">' + esc(t("noGloss")) + '</span>') +
@@ -2046,7 +2050,7 @@ function detail(r, R){
       (e.ref ? ' · <a href="' + esc(e.ref) + '" target="_blank" rel="noopener">' + esc(t("dCdo")) + '</a>' : "") +
       (e.id ? ' · <a href="lexicon.html#' + encodeURIComponent(e.id) + '">' + esc(t("dLex")) + ' →</a>' : "") + '</p>';
   }).join("") || '<p class="sense"><span class="u">' + esc(t("noGloss")) + '</span></p>';
-  const wgl = g.wgl.size ? '<h4>' + esc(t("dWGloss")) + '</h4><p class="sense">' +
+  const wgl = g.wgl.size ? '<h3>' + esc(t("dWGloss")) + '</h3><p class="sense">' +
     [...g.wgl.entries()].sort((a, b) => b[1] - a[1]).map(([s, n]) => esc(s) + ' <span class="n">' + n + '</span>').join(", ") + '</p>' : "";
   const fs = [...r.forms.entries()].sort((a, b) => b[1] - a[1]);
   const forms = '<p class="sense">' + fs.map(([f, n]) => '<span class="cop">' + esc(f) + '</span> <span class="n">' + n + '</span>').join(", ") + '</p>' +
@@ -2068,9 +2072,9 @@ function detail(r, R){
       '<td class="rc cop">' + esc(right.join(" ")) + '</td></tr>';
   }).join("");
   return '<div class="dgrid">' +
-    '<div><h4>' + esc(t("dSenses")) + '</h4>' + senses + wgl + '</div>' +
-    '<div><h4>' + esc(t("dForms")) + '</h4>' + forms + '<h4>' + esc(t("dIType")) + '</h4><p class="sense">' + itH + '</p></div>' +
-    '<div class="kwic"><h4>' + esc(t("dKwic", fmt(r.hits.length))) + '</h4><table class="kw"><tbody>' + kw + '</tbody></table>' +
+    '<div><h3>' + esc(t("dSenses")) + '</h3>' + senses + wgl + '</div>' +
+    '<div><h3>' + esc(t("dForms")) + '</h3>' + forms + '<h3>' + esc(t("dIType")) + '</h3><p class="sense">' + itH + '</p></div>' +
+    '<div class="kwic"><h3>' + esc(t("dKwic", fmt(r.hits.length))) + '</h3><table class="kw"><tbody>' + kw + '</tbody></table>' +
     (r.hits.length > lim ? '<p class="morebar"><button type="button" class="btn" data-allk="' + esc(g.key) + '">' + esc(t("dAllK", fmt(r.hits.length))) + '</button></p>' : "") +
     '</div></div>';
 }
@@ -2676,12 +2680,11 @@ $("#lx").addEventListener("click", e => {
   if(ak){ ST.allK.add(ak.dataset.allk); render(); return; }
   if(e.target.closest("a")) return;
   const tr = e.target.closest("tr.row"); if(!tr) return;
-  const k = tr.dataset.key;
+  const k = tr.dataset.key, refocus = !!e.target.closest(".rowbtn");
   ST.open.has(k) ? ST.open.delete(k) : ST.open.add(k);
   render();
-});
-$("#lx").addEventListener("keydown", e => {
-  if((e.key === "Enter" || e.key === " ") && e.target.matches("tr.row")){ e.preventDefault(); e.target.click(); }
+  // 表は描き直されるので、ボタンで開閉したときは同じ語のボタンにフォーカスを戻す（キーボードで続けて操作できるように）
+  if(refocus){ const nt = [...document.querySelectorAll("#lx tr.row")].find(x => x.dataset.key === k); if(nt) nt.querySelector(".rowbtn").focus(); }
 });
 document.addEventListener("click", e => {
   if(e.target.closest("#moreBtn")){ ST.limit += 200; render(); }
