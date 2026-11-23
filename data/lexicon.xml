@@ -15,7 +15,7 @@
       <sourceDesc><p xml:lang="ja">コプト語辞書データ(lexicon.csv 由来)。同形異義語は &lt;superEntry&gt; にまとめ、各 &lt;entry&gt;(固有 xml:id)が品詞・用法(usg)・語義を個別に持ちます。</p>
         <p xml:lang="ja">本文ファイル <ref target="eugnostos_tei.xml">eugnostos_tei.xml</ref> の補助ファイルです。</p></sourceDesc>
     </fileDesc>
-    <revisionDesc><change when="2026-07-04" n="0.1">Initial seed build.</change><change when="2026-07-04" n="0.2">IDs renumbered sequentially (lex-0001…); removed placeholder pos='X' and empty translation quotes for manual completion.</change>
+    <revisionDesc><change when="2026-07-04" n="0.1">Initial seed build.</change><change when="2026-07-04" n="0.2">IDs renumbered sequentially (lex-0001…); removed placeholder pos='X' and empty translation quotes for manual completion.</change><change when="2026-11-23">Removed lex-0010 (ϣoⲙⲛⲧ) and lex-3440 (ⲧⲁⲣe): headwords with a Latin letter (o, e) that duplicated lex-0108 ϣⲟⲙⲛⲧ and lex-3445 ⲧⲁⲣⲉ with the same part of speech; both had no sense and were not referenced.</change>
   </revisionDesc>
   </teiHeader>
   <text><body>
@@ -30,7 +30,6 @@
         <entry xml:id="lex-0007"><form type="lemma"><orth>[..]ⲁⲩ</orth></form></entry>
         <entry xml:id="lex-0008"><form type="lemma"><orth>[..]ⲥⲃⲱ</orth></form></entry>
         <entry xml:id="lex-0009"><form type="lemma"><orth>ϣ</orth></form><gramGrp><pos>V</pos></gramGrp><sense><cit type="translation" xml:lang="en"><quote>be able, can</quote></cit><cit type="translation" xml:lang="ja"><quote>できる</quote></cit><cit type="translation" xml:lang="fr"><quote>pouvoir, être capable</quote></cit></sense></entry>
-        <entry xml:id="lex-0010"><form type="lemma"><orth>ϣoⲙⲛⲧ</orth></form><gramGrp><pos>NUM</pos></gramGrp></entry>
         <entry xml:id="lex-0011"><form type="lemma"><orth>ϣϣⲉ</orth></form><gramGrp><pos>V</pos></gramGrp><sense><cit type="translation" xml:lang="en"><quote>be fitting, necessary</quote></cit><cit type="translation" xml:lang="ja"><quote>ふさわしい・べきだ</quote></cit><cit type="translation" xml:lang="fr"><quote>convenir, falloir</quote></cit></sense></entry>
         <entry xml:id="lex-0012"><form type="lemma"><orth>ϣϣⲟⲣⲡ</orth></form><gramGrp><pos>N</pos></gramGrp></entry>
         <entry xml:id="lex-0013"><form type="lemma"><orth>ϣϣⲡⲉ</orth></form><gramGrp><pos>V</pos></gramGrp></entry>
@@ -3514,7 +3513,6 @@
         <entry xml:id="lex-3437"><form type="lemma"><orth>ⲧⲁⲡⲟϩⲣⲟⲓⲁ</orth></form><gramGrp><pos>N</pos></gramGrp></entry>
         <entry xml:id="lex-3438"><form type="lemma"><orth>ⲧⲁⲡⲣⲟ</orth></form><gramGrp><pos>N</pos></gramGrp><sense><cit type="translation" xml:lang="en"><quote>mouth</quote></cit><cit type="translation" xml:lang="ja"><quote>口</quote></cit><cit type="translation" xml:lang="fr"><quote>bouche</quote></cit></sense></entry>
         <entry xml:id="lex-3439"><form type="lemma"><orth>ⲧⲁⲣ</orth></form><gramGrp><pos>N</pos></gramGrp></entry>
-        <entry xml:id="lex-3440"><form type="lemma"><orth>ⲧⲁⲣe</orth></form><gramGrp><pos>AUX</pos></gramGrp></entry>
         <entry xml:id="lex-3441"><form type="lemma"><orth>ⲧⲁⲣϫⲓⲉ</orth></form><gramGrp><pos>PPER</pos></gramGrp></entry>
         <entry xml:id="lex-3442"><form type="lemma"><orth>ⲧⲁⲣϫⲓⲉϫⲙⲡ</orth></form><gramGrp><pos>AUX</pos></gramGrp></entry>
         <entry xml:id="lex-3443"><form type="lemma"><orth>ⲧⲁⲣϫⲓⲉϫⲛⲛⲉⲩ</orth></form><gramGrp><pos>AUX</pos></gramGrp></entry>
