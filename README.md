@@ -22,6 +22,7 @@
 | `index.html` | HOME（日・英・仏、NEWS、関連サイト、文書一覧） | `python3 scripts/build_site.py` で生成。NEWS は `data/news.json`、関連サイトは `data/links.json` を編集し、`build_site.py` を実行し直す（生成のときに HTML に書き込むので、JS を動かさない読み手やリンクのプレビューにも出る。実行する前でも、ページを開いたときに JS が JSON を読み直して最新を出す） |
 | `guide.html` | 「はじめての方へ」（日・英・仏）。コプト文字の読み方（字母・上線・聖なる名の略記・借用語）、本文ビュワーの読み方、品詞タグの一覧（`data/pos_labels.json` から作る）、例文（エウグノストス III,3 の最初のセグメント。語群・形態素・レンマ・品詞・語義・訳はデータから読む）、記号の早見表。HOME の導入文の下・本文ビュワーとエウグノストスのビュワーの冒頭・検索のチュートリアルからリンク | 手作業 |
 | `gnosticism.html` | 解説「グノーシス主義とは」（日・英・仏） | 手作業 |
+| `edition.html` | 編集方針（日・英・仏）。本文の出典、表記の約束、注釈の体系（語釈の付け方を含む）、状態の定義、自動注釈の作り方と限界、生成 AI の利用、引用・ライセンス・版、更新の記録、デジタル校訂版の書評の観点（RIDE）との対応。**下書き**: 【要記入】【要確認】が残っている間は、ナビ・HOME・`sitemap.xml` からリンクせず、`<meta name="robots" content="noindex">` を付けてある。埋まったら noindex を外し、`project.html` の「目的」の節とフッター、`scripts/build_site.py` の `SITEMAP_PAGES` に足す | 手作業 |
 | `project.html` | プロジェクト紹介。メンバー・資金協力は `data/project.json`（`public: true` のみ表示） | 手作業＋JSON |
 | `eugnostos.html` | エウグノストス。`?wit=III`（祝福されたエウグノストス）/ `?wit=V`（エウグノストス）/ `?wit=SYN`（対照） | 手作業 |
 | `republic.html` | 『国家』ビュワー | 手作業 |
