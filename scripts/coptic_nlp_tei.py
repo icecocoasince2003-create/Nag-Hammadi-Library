@@ -34,6 +34,10 @@ CoNLL-U に出します（仕様書 §5）。
                        NOUN → N、ACOND_PPERS のような融合タグ → X。人称代名詞と冠詞のレンマは語形）。
                        cs: Coptic SCRIPTORIUM の品詞とレンマのまま
   --out PATH           書き出す先（既定 build/coptic_nlp/<ファイル名>）。--in-place で元のファイルに書く
+  --sentences nlp|s    構文解析の文の区切り。nlp（既定）: NLP が句読点から決める。句読点の無い本文では、送った 1 回分が
+                       ほぼ 1 文になる。s: TEI の <s> を 1 文として送る。Web の入口は文を区切る要素を受け取らないので、
+                       各 <s> の後ろに句読点「·」（U+00B7。NLP は必ず PUNCT にし、その後ろで文を切る）を足して送り、
+                       結果からは除く。語群も <s> の境目をまたがなくなる
   --keep-resp ID       @resp="#ID" の <w> がある <s> は付け直さずに残す（人の注釈を写した所など）
   --cache-dir DIR      1 回ごとの NLP の出力を DIR に保存する。止まってからもう一度動かすと、送り終えた分は
                        送り直さずに使う（失敗したときのやり直しは --retries、待つ秒数は --timeout）
@@ -70,6 +74,12 @@ XID = "{%s}id" % XML_NS
 SERVICE = "https://tools.copticscriptorium.org/coptic-nlp/"
 RESP_ID = "coptic-nlp"
 USER_AGENT = "Sheneset coptic_nlp_tei.py (https://github.com/icecocoasince2003-create/Nag-Hammadi-Library)"
+
+# --sentences s で各 <s> の最後に足す、文の終わりの印（U+00B7）。NLP の Web の入口は文を区切る要素を受け取らず、
+# 構文解析の文を品詞 PUNCT の語の後ろで切る（coptic-nlp の nlp_form.py は sent_tag を渡さず、lib/tt2conll.py の
+# conllize は tag="PUNCT" で切る）。この字は品詞の後処理で必ず PUNCT になり（data/postprocess_tagger.tab）、語群の
+# 推定（laytonize）でも前後の語群とつながれない（lib/stacked_tokenizer.py の no_merge）。結果からは除く
+EOS_MARK = "\u00b7"   # MIDDLE DOT
 
 MILESTONES = ("lb", "pb", "cb")
 # <w> の中で文字を包む要素（このまま引き継ぐ。<w> の区切りで分かれることがある）。<choice> などはまだ扱わない
@@ -257,23 +267,35 @@ def request_units(seg, a, b, groups):
 
 # ---------------------------------------------------------------- NLP に送る・受け取る
 
-def build_request(segs, groups):
-    """[(chunk の ID, 送る文字列)]。chunk の ID は「<s> の xml:id~番号」。"""
+def build_request(segs, groups, sentences="nlp"):
+    """[(chunk の ID, 送る文字列)]。chunk の ID は「<s> の xml:id~番号」。sentences='s' なら、各 <s> の最後の
+    chunk の末尾に、空白で区切って文の終わりの印（EOS_MARK）を足す。"""
     out = []
     for seg in segs:
-        for k, (a, b) in enumerate(chunks_of(seg)):
+        chunks = chunks_of(seg)
+        for k, (a, b) in enumerate(chunks):
             text = " ".join(seg.text(x, y) for x, y in request_units(seg, a, b, groups))
             if re.search(r"[<>&]", text):
                 raise SystemExit("%s: 本文に < > & がある" % seg.sid)
+            if sentences == "s" and k == len(chunks) - 1:
+                text += " " + EOS_MARK
             out.append(("%s~%d" % (seg.sid, k), text))
     return out
 
 
-def batches(request, limit):
-    """chunk を 1 回に送る分（limit 字まで）にまとめ、SGML 風の文字列にする。"""
-    out, cur, size = [], [], 0
+def batches(request, limit, sentences="nlp"):
+    """chunk を 1 回に送る分（limit 字まで）にまとめ、SGML 風の文字列にする。sentences='s' なら、1 つの <s> の
+    chunk を同じ回に入れる（回の境目でも文が切れるため。xml:id には「~」が使えないので、「~」の前が <s> の xml:id）。"""
+    units = []
     for cid, text in request:
         piece = '<seg n="%s"> %s </seg>\n' % (esc_attr(cid), text)
+        sid = cid.rsplit("~", 1)[0]
+        if sentences == "s" and units and units[-1][0] == sid:
+            units[-1][1] += piece
+        else:
+            units.append([sid, piece])
+    out, cur, size = [], [], 0
+    for _sid, piece in units:
         if cur and size + len(piece) > limit:
             out.append("".join(cur))
             cur, size = [], 0
@@ -403,7 +425,7 @@ def parse_sgml(sgml):
             u.split = len(chunks) > 1
             out.append(u)
             if k:
-                warn["2 つの <s> にまたがる形態素を分けた"] += 1
+                warn["<s> か <gap> の境目をまたいだので分けた形態素"] += 1
     return out, warn
 
 
@@ -623,13 +645,19 @@ def add_header(src, n_segs, opts, today):
 
 # ---------------------------------------------------------------- CoNLL-U
 
-def write_conllu(path, docname, toks_in_order, seg_of_chunk):
-    """構文解析の結果（norm の func・head）を CoNLL-U に書く。文の区切りは NLP の new_sent に従う。"""
+def write_conllu(path, docname, toks_in_order, seg_of_chunk, split_at_segments=False, notes=None):
+    """構文解析の結果（norm の func・head）を CoNLL-U に書く。文の区切りは NLP の new_sent に従う。
+    split_at_segments なら <s> の境目でも必ず文を切る（--sentences s。NLP もそこで切っているはず）。
+    NLP の 1 つの形態素を <gap> の位置で分けた片（同じ attrs を持つ続きの Token）は、2 つ目以降で文を切らず、
+    最初の片に goeswith で係らせる（LEMMA・XPOS は _、UPOS は X。解析は最初の片に書く）。
+    notes（Counter）には、係り先が書き出す語の中に無かった語の数を数える。"""
     if not any(t.attrs.get("func") for t in toks_in_order):
         return False
     sents, cur = [], []
     for t in toks_in_order:
-        if cur and t.attrs.get("new_sent") == "true":
+        piece = bool(cur) and t.attrs is cur[-1].attrs
+        new_seg = split_at_segments and cur and seg_of_chunk.get(t.chunk) != seg_of_chunk.get(cur[-1].chunk)
+        if cur and ((t.attrs.get("new_sent") == "true" and not piece) or new_seg):
             sents.append(cur)
             cur = []
         cur.append(t)
@@ -656,16 +684,24 @@ def write_conllu(path, docname, toks_in_order, seg_of_chunk):
         text = " ".join("".join(sent[i - 1].text for i in range(g[1], g[2] + 1)) for g in groups)
         out += ["", "# sent_id = %s-%d" % (docname, n), "# tei_s = %s" % " ".join(s_ids), "# text = %s" % text]
         starts = {g[1]: g for g in groups}
+        first = 0
         for k, t in enumerate(sent, 1):
             g = starts.get(k)
             if g and g[2] > g[1]:
                 form = "".join(sent[i - 1].text for i in range(g[1], g[2] + 1))
                 out.append("%d-%d\t%s\t_\t_\t_\t_\t_\t_\t_\t_" % (g[1], g[2], form))
+            if k > 1 and t.attrs is sent[k - 2].attrs:     # <gap> の位置で分けた形態素の 2 つ目以降の片
+                out.append("\t".join([str(k), t.text, "_", "X", "_", "_", str(first), "goeswith", "_",
+                                      "TEI=%s" % seg_of_chunk.get(t.chunk, "")]))
+                continue
+            first = k
             xpos = t.attrs.get("pos") or "UNKNOWN"
             head_ref = (t.attrs.get("head") or "").lstrip("#")
             func = t.attrs.get("func") or "dep"
             head = 0 if func == "root" else index.get(head_ref, 0)
             if func != "root" and head == 0:
+                if notes is not None and head_ref:
+                    notes["CoNLL-U: 係り先が同じ文に無いので 0 にした語"] += 1
                 func = "dep"
             misc = ["TEI=%s" % seg_of_chunk.get(t.chunk, "")]
             if t.attrs.get("xml:lang") == "Greek":
@@ -677,7 +713,7 @@ def write_conllu(path, docname, toks_in_order, seg_of_chunk):
     os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
     with open(path, "w", encoding="utf-8", newline="\n") as f:
         f.write("\n".join(out) + "\n\n")
-    return True
+    return len(sents)
 
 
 # ---------------------------------------------------------------- 確かめる
@@ -728,6 +764,9 @@ def main():
     ap.add_argument("--detok", choices=("none", "conservative", "smart", "aggressive"),
                     help="語群の推定（laytonize）。既定は --groups auto なら smart、keep なら none")
     ap.add_argument("--conllu", help="構文解析もして、この場所に CoNLL-U で書き出す")
+    ap.add_argument("--sentences", choices=("nlp", "s"), default="nlp",
+                    help="構文解析の文の区切り。nlp: NLP が句読点から決める（既定。句読点の無い本文では、送った 1 回分が"
+                         "ほぼ 1 文になる）。s: TEI の <s> を 1 文として送る（各 <s> の後ろに「·」を足して送り、結果からは除く）")
     ap.add_argument("--sgml", action="append", help="NLP に送らず、保存した出力（SGML）を読む（複数可。送った順に）")
     ap.add_argument("--save-sgml", help="NLP の出力（SGML）をこの場所に保存する")
     ap.add_argument("--export-request", help="NLP に送る文字列をこの場所に書き出して終わる")
@@ -774,12 +813,12 @@ def main():
             continue
         segs.append(seg)
     work = [s for s in segs if s is not None and s.chars]
-    request = build_request(work, a.groups)
+    request = build_request(work, a.groups, a.sentences)
     docname = os.path.splitext(os.path.basename(src_path))[0]
 
     if a.export_request:
         with open(a.export_request, "w", encoding="utf-8", newline="\n") as f:
-            f.write("".join(batches(request, 10 ** 9)))
+            f.write("".join(batches(request, 10 ** 9, a.sentences)))
         print("%s に NLP へ送る文字列を書き出しました（%d chunk、%d 字）" % (
             a.export_request, len(request), sum(len(t) for _, t in request)))
         return 0
@@ -788,7 +827,7 @@ def main():
     if a.sgml:
         sgml = "\n".join(open(p, encoding="utf-8").read() for p in a.sgml)
     else:
-        parts = batches(request, a.max_chars)
+        parts = batches(request, a.max_chars, a.sentences)
         outs, sent = [], 0
         for k, data in enumerate(parts, 1):
             cpath = None
@@ -823,6 +862,33 @@ def main():
     unknown = set(by_chunk) - {cid for cid, _ in request}
     if unknown:
         warn["送っていない chunk の ID"] += len(unknown)
+    merged_into = set()
+    if a.sentences == "s":   # 足した「·」を除く（それだけで 1 語の PUNCT になったかも確かめる）
+        for i, seg in enumerate(work):
+            got = by_chunk.get("%s~%d" % (seg.sid, len(chunks_of(seg)) - 1))
+            if not got or got[-1].text != EOS_MARK:
+                warn["文の終わりの印（·）が 1 語にならなかった <s>"] += 1
+                continue
+            eos = got.pop()
+            if not eos.split:
+                if eos.attrs.get("pos") != "PUNCT":
+                    warn["文の終わりの印（·）が PUNCT にならなかった <s>"] += 1
+                continue
+            # 語群の推定（laytonize）が「·」を後ろにつく語とみて、次の <s> の最初の語と 1 つの形態素にした
+            # （no_merge は「·」の前の語群をつなぐのを防ぐだけ）。その形態素の品詞・レンマは使えないので
+            # UNKNOWN（サイトでは X）にし、NLP がその後ろに置いた文の切れ目（1 語ずれた所）は消す
+            warn["文の終わりの印（·）が次の <s> の最初の語とつながった <s>"] += 1
+            nxt = work[i + 1] if i + 1 < len(work) else None
+            rest = [t for k in range(len(chunks_of(nxt))) for t in by_chunk.get("%s~%d" % (nxt.sid, k), [])] \
+                if nxt else []
+            if rest and rest[0].attrs is eos.attrs:
+                merged_into.add(nxt.sid)
+                for key in ("lemma", "norm", "xml:lang", "new_sent"):
+                    eos.attrs.pop(key, None)
+                eos.attrs["pos"] = "UNKNOWN"
+                if len(rest) > 1:
+                    rest[1].attrs.pop("new_sent", None)
+    parsed = any(t.attrs.get("func") for t in toks)
 
     stats = Counter()
     pieces, cursor, done = [], 0, 0
@@ -844,6 +910,9 @@ def main():
         if missing:
             skipped["NLP の結果に無いセグメント"] += 1
             continue
+        if (parsed and a.sentences == "s" and seg.sid not in merged_into
+                and by_chunk["%s~0" % seg.sid][0].attrs.get("new_sent") != "true"):
+            warn["NLP がその前で文を切らなかった <s>"] += 1
         line_start = src.rfind("\n", 0, m.start()) + 1
         indent = re.match(r"[ \t]*", src[line_start:m.start()]).group(0)
         try:
@@ -859,6 +928,8 @@ def main():
     pieces.append(src[cursor:])
     out = "".join(pieces)
     opts = "groups=%s, laytonize=%s, style=%s" % (a.groups, detok, a.style)
+    if a.sentences != "nlp":
+        opts += ", sentences=%s" % a.sentences
     out, notes = add_header(out, done, opts, a.today)
 
     # 確かめる
@@ -915,8 +986,12 @@ def main():
         f.write(out)
     print("書き出しました: %s" % os.path.relpath(dest, os.getcwd()))
     if a.conllu:
-        if write_conllu(a.conllu, docname, ordered, seg_of_chunk):
-            print("CoNLL-U: %s" % a.conllu)
+        cnotes = Counter()
+        n_sents = write_conllu(a.conllu, docname, ordered, seg_of_chunk, a.sentences == "s", cnotes)
+        if n_sents:
+            print("CoNLL-U: %s（%d 文）" % (a.conllu, n_sents))
+            for k, v in sorted(cnotes.items()):
+                print("  注意 %s: %d" % (k, v))
         else:
             print("注意: NLP の出力に構文解析の結果（func・head）が無いので、CoNLL-U は書きませんでした。")
     return 0

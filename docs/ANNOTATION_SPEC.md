@@ -198,10 +198,10 @@ Gemini が作った「ナグ・ハマディ写本コプト語テキスト TEI XM
 
 **構文（Universal Dependencies）。** 依存構造は TEI に入れず、文書ごとの CoNLL-U ファイルに出す。
 
-- 文の区切りは NLP の推定に従うので、セグメントと一致しないことがある。`# sent_id =` は文書名と通し番号、`# tei_s =` はその文が含むセグメントの `xml:id`、各語の MISC の `TEI=` はその語のセグメントである。
+- 文の区切りは NLP の推定（句読点）に従うので、セグメントと一致しないことがある。句読点の無い本文では、`scripts/coptic_nlp_tei.py --sentences s` で `<s>` 1 つを 1 文にする（付録B.2）。`# sent_id =` は文書名と通し番号、`# tei_s =` はその文が含むセグメントの `xml:id`、各語の MISC の `TEI=` はその語のセグメントである。
 - 語は形態素（TEI の `<w>`）、語群は CoNLL-U の複数語トークン（`3-5 ⲁⲛϣⲱⲡⲉ`）で示す。UD の Coptic 木構造コーパスと同じ書き方である。
 - UPOS は上の対応による。XPOS と LEMMA は、TEI の側をサイトの約束に合わせたときも Coptic SCRIPTORIUM の値のままにし、UD のコーパスとそろえる。借用語は MISC の `Lang=grc`、正規化した形が書かれた形と違うときは `Norm=`。
-- HEAD・DEPREL は Coptic SCRIPTORIUM の NLP の出力を使い、人が確かめるまで暫定とする。
+- HEAD・DEPREL は Coptic SCRIPTORIUM の NLP の出力を使い、人が確かめるまで暫定とする。ただし、NLP の 1 つの形態素を TEI で 2 つの `<w>` に分けたとき（`<gap>` をまたぐとき）は、2 つ目以降の片を最初の片に `goeswith` で係らせる（UD で、離れて書かれた 1 語の部分をつなぐ関係）。
 
 出典: UD Coptic の品詞の対応表（<https://universaldependencies.org/cop/morphology.html>）、UD Coptic のトークン化
 
@@ -375,6 +375,7 @@ python3 scripts/coptic_nlp_tei.py data/republic_tei.xml --conllu build/coptic_nl
 - 書き出す前に、`<s>` の中の文字の並び・校訂の要素・欠損と改行の位置と、`<s>` の外の行が元と同じかを確かめ、違えば書かずに止まる。`<s>` の `xml:id` は変えない。`@ana` は語の範囲とレンマが同じときだけ引き継ぐ。
 - 付けた語には `resp="#coptic-nlp"` と `cert="medium"` を付ける（セグメントをまたいで分けた語、照合が崩れた所、X などは `low`）。ヘッダーに `<respStmt>` と `<change>` を足す。
 - `--groups keep` は、いまの `<phr>` を変えずにその中だけを解析する。`--style cs` は品詞コードとレンマを Coptic SCRIPTORIUM のまま残す（既定の `site` はサイトのコードにそろえる。§5）。
+- 構文解析の文は、NLP が句読点（品詞 `PUNCT` の語）から決める。NLP の Web の入口は文を区切る要素を受け取らないので、句読点の無い本文では `--sentences s` を付ける。各 `<s>` の最後に「·」（U+00B7。NLP は必ず `PUNCT` にする）を足して送り、NLP にそこで文を切らせ、結果からは除く。CoNLL-U の 1 文が 1 つの `<s>` になり、語群も `<s>` の境目をまたがなくなる。
 - `<w>` の中に `<gap>` があるセグメントは扱えないので、飛ばしてそのまま残す。
 - 公開の NLP サービスに、1 回 15,000 字まで、3 秒ずつ空けて送る（`--max-chars`・`--delay`）。`--save-sgml` で保存した出力は `--sgml` で読み直せるので、同じ結果を作り直せる。コーパス全体のような大量の処理は、`--export-request` で送る文字列を書き出して手元の coptic-nlp で処理し、その出力を `--sgml` で読ませる（この経路はまだ試していない）。
 
