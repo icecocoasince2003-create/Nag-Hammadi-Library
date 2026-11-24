@@ -131,11 +131,22 @@
                   <valItem ident="CPRET"><gloss xml:lang="ja">過去変換詞</gloss><gloss xml:lang="en">preterite converter</gloss><gloss xml:lang="fr">convertisseur prétérit</gloss></valItem>
                   <valItem ident="VBD"><gloss xml:lang="ja">接尾活用の動詞（ⲡⲉϫⲉ- など）</gloss><gloss xml:lang="en">suffixally conjugated verb (ⲡⲉϫⲉ- etc.)</gloss><gloss xml:lang="fr">verbe à conjugaison suffixale (ⲡⲉϫⲉ-, etc.)</gloss></valItem>
                   <valItem ident="NEGPST"><gloss xml:lang="ja">否定完了</gloss><gloss xml:lang="en">negative perfect</gloss><gloss xml:lang="fr">parfait négatif</gloss></valItem>
+                  <valItem ident="ACOND"><gloss xml:lang="ja">条件法助動詞（ⲉⲣϣⲁⲛ-）</gloss><gloss xml:lang="en">conditional auxiliary</gloss><gloss xml:lang="fr">auxiliaire du conditionnel</gloss></valItem>
+                  <valItem ident="AFUTCONJ"><gloss xml:lang="ja">未来接続法助動詞（ⲧⲁⲣⲉ-）</gloss><gloss xml:lang="en">future conjunctive auxiliary</gloss><gloss xml:lang="fr">auxiliaire du futur conjonctif</gloss></valItem>
+                  <valItem ident="AJUS"><gloss xml:lang="ja">勧奨法助動詞（ⲙⲁⲣⲉ-）</gloss><gloss xml:lang="en">jussive auxiliary</gloss><gloss xml:lang="fr">auxiliaire du jussif</gloss></valItem>
+                  <valItem ident="ALIM"><gloss xml:lang="ja">限界の助動詞（ϣⲁⲛⲧⲉ-）</gloss><gloss xml:lang="en">limitative auxiliary</gloss><gloss xml:lang="fr">auxiliaire du limitatif</gloss></valItem>
+                  <valItem ident="ANEGJUS"><gloss xml:lang="ja">否定勧奨法助動詞（ⲙⲡⲣⲧⲣⲉ-）</gloss><gloss xml:lang="en">negative jussive aux.</gloss><gloss xml:lang="fr">aux. du jussif négatif</gloss></valItem>
+                  <valItem ident="ANEGOPT"><gloss xml:lang="ja">否定希求法助動詞（ⲛⲛⲉ-）</gloss><gloss xml:lang="en">negative optative aux.</gloss><gloss xml:lang="fr">aux. de l’optatif négatif</gloss></valItem>
+                  <valItem ident="ANY"><gloss xml:lang="ja">「まだ〜ない」の助動詞（ⲙⲡⲁⲧⲉ-）</gloss><gloss xml:lang="en">“not yet” auxiliary</gloss><gloss xml:lang="fr">aux. du « pas encore »</gloss></valItem>
+                  <valItem ident="APREC"><gloss xml:lang="ja">時の助動詞（ⲛⲧⲉⲣⲉ-）</gloss><gloss xml:lang="en">temporal (precursive) auxiliary</gloss><gloss xml:lang="fr">auxiliaire du temporel</gloss></valItem>
+                  <valItem ident="IMOD"><gloss xml:lang="ja">強めの修飾語（ⲧⲏⲣ=・ϩⲱⲱ= など）</gloss><gloss xml:lang="en">intensifying modifier (ⲧⲏⲣ=, ϩⲱⲱ= etc.)</gloss><gloss xml:lang="fr">modificateur intensif (ⲧⲏⲣ=, ϩⲱⲱ=, etc.)</gloss></valItem>
+                  <valItem ident="VIMP"><gloss xml:lang="ja">命令形の動詞（ⲙⲁ・ⲁⲣⲓ- など）</gloss><gloss xml:lang="en">imperative verb (ⲙⲁ, ⲁⲣⲓ- etc.)</gloss><gloss xml:lang="fr">verbe à l’impératif (ⲙⲁ, ⲁⲣⲓ-, etc.)</gloss></valItem>
+                  <valItem ident="PUNCT"><gloss xml:lang="ja">句読点</gloss><gloss xml:lang="en">punctuation</gloss><gloss xml:lang="fr">ponctuation</gloss></valItem>
                   <valItem ident="X"><gloss xml:lang="ja">未判定</gloss><gloss xml:lang="en">unresolved</gloss><gloss xml:lang="fr">non résolu</gloss></valItem>
                 </valList>
               </attDef>
               <attDef ident="cert" mode="change"><desc xml:lang="ja">自動注釈の確度（スクリプトの目安。正解率ではない）。</desc><desc xml:lang="en">Certainty of the automatic annotation (the script's own rating, not an accuracy).</desc><valList type="closed" mode="add"><valItem ident="high"/><valItem ident="medium"/><valItem ident="low"/></valList></attDef>
-              <attDef ident="resp" mode="change"><desc xml:lang="ja">注釈の出どころ。#morph-auto は自動、#morph-reference は人の手の版から写したもの、#zp は ⲍ・ⲯ を補った語（未注釈の文書）。</desc><desc xml:lang="en">Source of the analysis: #morph-auto automatic, #morph-reference copied from the hand-annotated edition, #zp a word with restored ⲍ/ⲯ (unannotated texts).</desc><valList type="closed" mode="add"><valItem ident="#morph-auto"/><valItem ident="#morph-reference"/><valItem ident="#zp"/></valList></attDef>
+              <attDef ident="resp" mode="change"><desc xml:lang="ja">注釈の出どころ。#coptic-nlp は Coptic SCRIPTORIUM の NLP による自動（2026-11-24 から）、#morph-auto は前の自動注釈、#morph-reference は人の手の版から写したもの、#zp は ⲍ・ⲯ を補った語（未注釈の文書）。</desc><desc xml:lang="en">Source of the analysis: #coptic-nlp automatic, by the Coptic SCRIPTORIUM NLP (since 2026-11-24); #morph-auto the earlier automatic annotation; #morph-reference copied from the hand-annotated edition; #zp a word with restored ⲍ/ⲯ (unannotated texts).</desc><valList type="closed" mode="add"><valItem ident="#coptic-nlp"/><valItem ident="#morph-auto"/><valItem ident="#morph-reference"/><valItem ident="#zp"/></valList></attDef>
             </attList>
           </elementSpec>
           <elementSpec ident="s" mode="change">
@@ -153,7 +164,7 @@
           </elementSpec>
           <elementSpec ident="gap" mode="change">
             <attList>
-              <attDef ident="reason" mode="change"><valList type="closed" mode="add"><valItem ident="lacuna"/><valItem ident="unclear"/></valList></attDef>
+              <attDef ident="reason" mode="change"><valList type="closed" mode="add"><valItem ident="lost"/><valItem ident="lacuna"/><valItem ident="unclear"/></valList></attDef>
               <attDef ident="unit" mode="change"><valList type="closed" mode="add"><valItem ident="line"/><valItem ident="page"/></valList></attDef>
               <attDef ident="extent" mode="change"><valList type="closed" mode="add"><valItem ident="unknown"/></valList></attDef>
             </attList>
