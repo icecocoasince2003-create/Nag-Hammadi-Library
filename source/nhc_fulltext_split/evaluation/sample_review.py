@@ -11,21 +11,22 @@ Standard library only. Writes, next to this script:
 The same seed and the same TEI files give the same two files.
 
 Population: every <w> with @cert in the automatically annotated TEI files of ../tei/
-(the files whose <w> carry resp="#morph-auto" or "#morph-reference"; 39 files when this
-was written). Other files of ../tei/ also have @cert on a few <w> (restored ⲍ/ⲯ, resp="#zp"),
-but they are not annotated and are not read.
+(the files whose <w> carry resp="#coptic-nlp", "#morph-auto" or "#morph-reference"; 39 files
+when this was written; since 2026-11-24 they are annotated by the Coptic SCRIPTORIUM NLP,
+resp="#coptic-nlp"). Other files of ../tei/ also have @cert on a few <w> (restored ⲍ/ⲯ,
+resp="#zp"), but they are not annotated and are not read.
 
-Strata: dialect from <textLang> (Sahidic → サヒド, Lycopolitan → リコポリス) × @cert
-(high, medium, low) = 6 strata.
+Strata: dialect from <textLang> (Sahidic → サヒド, Lycopolitan → リコポリス) = 2 strata.
+Until 2026-11-23 the strata were dialect × @cert (6). The NLP annotation of 2026-11-24 gives
+almost every morpheme cert="medium" (high: 353 Sahidic and 0 Lycopolitan morphemes, low: about
+1,600 each), so strata by @cert no longer tell anything apart; the cert of every row is still
+in the table (column cert).
 
-Allocation: equal, total // 6 per stratum and one more for the (total % 6) largest strata
-(400 → 67 or 66 each). Equal rather than proportional or square-root allocation, because
-the point is to see whether the accuracy differs between the strata (does @cert mean
-anything, how bad is Lycopolitan?): proportional allocation would give the smallest
-stratum (Lycopolitan × high, 0.8% of the morphemes) 3 rows and square-root allocation 17.
-The overall estimate is still unbiased, because score_review.py weights every stratum by
-its population size; its 95% interval is about ±7 percentage points at worst (p = 0.5)
-instead of about ±5 with proportional allocation.
+Allocation: equal, total // 2 per stratum (400 → 200 each). Equal rather than proportional,
+because the point is also to see how the Lycopolitan texts fare (about a quarter of the
+morphemes; proportional allocation would give them about 106 rows). The overall estimate
+is still unbiased, because score_review.py weights every stratum by its population size; its
+95% interval is about ±5 percentage points at worst (p = 0.5), each dialect about ±7.
 
 Selection: random.Random(seed); for each stratum in the order of STRATA, sample(range(N), n)
 over the stratum's morphemes in file-name and document order; then the chosen rows are
@@ -53,19 +54,19 @@ import evalcommon as ec  # noqa: E402  (same folder)
 
 HERE = Path(__file__).resolve().parent
 TEI_DIR = HERE.parent / 'tei'
-SEED = 20261123
+SEED = 20261124
 TOTAL = 400
 CONTEXT = 4
 DIALECTS = (('Sahidic', 'サヒド'), ('Lycopolitan', 'リコポリス'))
 CERTS = ('high', 'medium', 'low')
-STRATA = [(d, c) for _, d in DIALECTS for c in CERTS]
-AUTO_RESP = ('#morph-auto', '#morph-reference')
+STRATA = [d for _, d in DIALECTS]
+AUTO_RESP = ('#coptic-nlp', '#morph-auto', '#morph-reference')
 COLUMNS = ['番号', '層', '方言', '文書', 'seg_id', '語の位置', '語群の位置', '前後の文脈', '語形',
            '自動の品詞', '自動のレンマ', '自動の語義', 'cert', 'resp', '正しい品詞', '正しいレンマ', 'メモ']
 
 
-def label(dialect, cert):
-    return '%s・%s' % (dialect, cert)
+def label(dialect):
+    return dialect
 
 
 def dialect_of(root, path):
@@ -159,7 +160,7 @@ def allocate(sizes, total):
         alloc[STRATA[i]] += 1
     for st in STRATA:
         if alloc[st] > sizes[st]:
-            print('warning: stratum %s has only %d morphemes' % (label(*st), sizes[st]), file=sys.stderr)
+            print('warning: stratum %s has only %d morphemes' % (label(st), sizes[st]), file=sys.stderr)
             alloc[st] = sizes[st]
     return alloc
 
@@ -185,7 +186,7 @@ def main():
                 continue
             if m.cert not in CERTS:
                 raise SystemExit('%s %s: unexpected cert=%r' % (d.path.name, m.seg, m.cert))
-            population[(d.dialect, m.cert)].append((di, idx))
+            population[d.dialect].append((di, idx))
     sizes = {st: len(v) for st, v in population.items()}
     alloc = allocate(sizes, args.total)
 
@@ -200,7 +201,7 @@ def main():
     for no, (st, (di, idx)) in enumerate(chosen, 1):
         d = docs[di]
         m = d.morphs[idx]
-        rows.append([no, label(*st), st[0], d.siglum, m.seg, m.pos, m.phr, d.context(idx, args.context),
+        rows.append([no, label(st), st, d.siglum, m.seg, m.pos, m.phr, d.context(idx, args.context),
                      m.form, m.type, m.lemma, m.gloss, m.cert, m.resp, '', '', ''])
     with open(str(args.out), 'w', encoding='utf-8', newline='\n') as f:
         f.write('\t'.join(COLUMNS) + '\n')
@@ -208,7 +209,7 @@ def main():
             f.write('\t'.join(clean(x) for x in r) + '\n')
 
     meta = {
-        'description': '項目 13 の抜き取り表（自動注釈の 39 文書から、方言 × cert の 6 層に分けて無作為に抜き出した形態素）。'
+        'description': '項目 13 の抜き取り表（自動注釈の 39 文書から、方言の 2 層に分けて無作為に抜き出した形態素。2026-11-24 に作り直した）。'
                        'sample_review.py が作り、score_review.py が読む。',
         'script': 'source/nhc_fulltext_split/evaluation/sample_review.py',
         'seed': args.seed,
@@ -217,10 +218,11 @@ def main():
         'python': platform.python_version(),
         'total': len(rows),
         'context_groups_each_side': args.context,
-        'allocation': 'equal: total // 6 per stratum, one more for the (total % 6) largest strata',
-        'population': 'every <w> with @cert in the files of tei/ whose <w> carry resp="#morph-auto" or "#morph-reference"',
-        'strata': [{'label': label(*st), 'dialect': st[0], 'cert': st[1],
-                    'population': sizes[st], 'sample': alloc[st]} for st in STRATA],
+        'allocation': 'equal: total // 2 per stratum, one more for the (total % 2) largest strata',
+        'population': 'every <w> with @cert in the files of tei/ whose <w> carry resp="#coptic-nlp", "#morph-auto" or "#morph-reference"',
+        'strata': [{'label': label(st), 'dialect': st, 'population': sizes[st], 'sample': alloc[st],
+                    'cert_population': {c: sum(1 for di, idx in population[st] if docs[di].morphs[idx].cert == c) for c in CERTS}}
+                   for st in STRATA],
         'population_total': sum(sizes.values()),
         'documents': [{'file': d.path.name, 'siglum': d.siglum, 'dialect': d.dialect,
                        'w_with_cert': sum(1 for m in d.morphs if m.cert is not None),
@@ -234,7 +236,7 @@ def main():
     print('%d documents, %d morphemes; wrote %s (%d rows) and %s' % (
         len(docs), sum(sizes.values()), args.out, len(rows), meta_path))
     for st in STRATA:
-        print('  %-14s population %7d  sample %d' % (label(*st), sizes[st], alloc[st]))
+        print('  %-14s population %7d  sample %d' % (label(st), sizes[st], alloc[st]))
 
 
 if __name__ == '__main__':
