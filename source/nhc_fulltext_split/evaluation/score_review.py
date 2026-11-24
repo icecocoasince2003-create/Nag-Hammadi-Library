@@ -19,8 +19,9 @@ How to fill in the two columns (each is scored on its own):
 The column メモ is not read. Do not change the columns 層, 自動の品詞, 自動のレンマ.
 
 Estimates
-  stratum h (dialect × cert):  p_h = k_h / n_h (k_h right of n_h checked), 95% Wilson interval.
-  combined (all, each dialect, each cert level), weighting the strata by their population
+  stratum h (the dialect; dialect × cert in the samples drawn before 2026-11-24):
+      p_h = k_h / n_h (k_h right of n_h checked), 95% Wilson interval.
+  combined (all; each dialect and each cert level when the strata are dialect × cert), weighting the strata by their population
   sizes N_h from the JSON, W_h = N_h / Σ N_h over the strata combined:
       p    = Σ W_h p_h
       Var  = Σ W_h² (1 − n_h/N_h) p_h (1 − p_h) / (n_h − 1)
@@ -148,8 +149,9 @@ def main():
     groups = [('全体', [lab for lab, _ in strata])]
     for dialect in sorted({s['dialect'] for s in meta['strata']}, key=lambda d: [s['dialect'] for s in meta['strata']].index(d)):
         groups.append(('方言 ' + dialect, [s['label'] for s in meta['strata'] if s['dialect'] == dialect]))
-    for cert in sorted({s['cert'] for s in meta['strata']}, key=lambda c: [s['cert'] for s in meta['strata']].index(c)):
-        groups.append(('cert ' + cert, [s['label'] for s in meta['strata'] if s['cert'] == cert]))
+    if all('cert' in s for s in meta['strata']):       # 2026-11-23 までの、方言 × cert の層の表
+        for cert in sorted({s['cert'] for s in meta['strata']}, key=lambda c: [s['cert'] for s in meta['strata']].index(c)):
+            groups.append(('cert ' + cert, [s['label'] for s in meta['strata'] if s['cert'] == cert]))
     for key, name, _, _ in measures:
         variants = (('', 0),) if key == 'pos' else (('（完全一致）', 0), ('（結合記号を除いて一致）', 1))
         for suffix, which in variants:
