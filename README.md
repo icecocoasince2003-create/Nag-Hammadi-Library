@@ -144,6 +144,7 @@ nag_hammadi_library/
     ├─ build_fulltext_stats.py  data/fulltext_stats.json(全文テキストの文書ごとの数)を生成。build_site.py からも呼ばれる
     ├─ insert_breaks.py    写本の頁(<pb>)・行(<lb>)の区切りを TSV から TEI に入れる(既定は表示だけ、--write で書き込む)
     ├─ split_segments.py   セグメント(<s>)を TSV で指定した位置で分ける(提案の表は承認した行だけ。まだ実データには使わない)
+    ├─ transfer_annotation.py  エウグノストス III,3 の注釈を III,4 の同じ文言の語群に写す案の表を作り、承認した行を当てはめる
     ├─ reanchor_proposals.py  位置を指す提案の表の w・phr を、語の区切りを付け直したあとの TEI に、文字の位置で合わせ直す
     ├─ merge_review.py     確認作業の画面(review.html)で何人かが書き出したファイルを 1 つにまとめる
     ├─ apply_pos_decisions.py  品詞をそろえる判断表(proposals/pos_harmonization.tsv)のうち、承認した行だけを TEI に当てはめる
@@ -207,6 +208,7 @@ nag_hammadi_library/
 | `build_fulltext_stats.py` | `data/fulltext_stats.json` を生成（`build_site.py` を実行すると一緒に作り直す。`--check` で最新かを調べるだけ）。`data/catalog.xml` の全文テキスト（暫定版・未注釈）の文書ごとに、本文の証本の中の `<w>`・`<phr>`（と、その中の `<w>`）・`<s>`・`<gap>`、`xml:lang="grc"` の `<w>`、品詞ごとの `<w>`、`@cert="low"`・品詞 `X` の `<w>` を数え、方言（`<textLang>`）と状態を添える。参考に、人の手で注釈した版（エウグノストス III,3・『国家』）も同じ方法で数える。割合は検索ページが計算する。 |
 | `insert_breaks.py` | 写本の頁（`<pb>`）・行（`<lb>`）の区切りを TSV から TEI に入れる。区切りの空要素を足すだけで、本文・語・`xml:id` は変えない。何も付けなければ入る位置の表示だけで、`--write` で書き込む。手順は下の「写本の頁・行の区切りを入れる」。 |
 | `split_segments.py` | セグメント（`<s>`）を TSV で指定した位置で分ける。最初の部分が元の `xml:id` と § を保ち、続きは `元の id_a`・`_b` …（§ は 15a・15b …）。**案**（`source/nhc_fulltext_split/proposals/README_ja.md`）。まだ実データには使わない。 |
+| `transfer_annotation.py` | 人の手で注釈したエウグノストス III,3 の注釈（形態素の区切り・品詞・レンマ・借用語の印・文脈上の語釈）を、並行箇所で文言の同じ『イエス・キリストの知恵』III,4 の語群に写す案を `source/nhc_fulltext_split/proposals/transfer_III-4.tsv` に書く。`apply` で、承認した行のうち III,4 の語群とちょうど同じ範囲のものだけを当てはめる（`resp="#transfer"`。表示だけ、`--write` で書き込む）。`proposals/README_ja.md` の §7。 |
 | `reanchor_proposals.py` | 位置を指す提案の表（`proposals/` の分け目の表）の `w`・`phr` を、TEI の語の区切りを付け直したあとの `<w>`・`<phr>` に合わせ直す。前の版（`--from` の git のコミット）で分け目の前にあった文字の数を数え、今の版でその文字から始まる `<w>` を探す。語群や語の途中になった行は、メモの列に印を付ける。何も付けなければ表示だけで、`--write` で書き込む。 |
 | `make_og_image.py` | リンクを共有したときのプレビュー画像 `image/og-image.png`(1200×630)を、アイコンとゲンゲンの SVG から作る。 |
 | `coptic_nlp_tei.py` | `<s>` の中身を Coptic SCRIPTORIUM の NLP（公開のサービス）にかけ、語群（`<phr>`）・形態素（`<w>`）・品詞・レンマ・借用語の印を付け直す。構文（依存関係）は CoNLL-U に出す。文字・欠損・補い・`xml:id` が変わらないことを確かめてから書く。既定では `build/coptic_nlp/` に書き、`--in-place` で元のファイルに書く。使い方は [docs/ANNOTATION_TOOLS.md](docs/ANNOTATION_TOOLS.md)。 |
@@ -457,6 +459,7 @@ python3 scripts/insert_breaks.py tests/fixtures/reader_breaks_draft.tsv --file t
 | ⑤ 品詞をそろえる | `source/nhc_fulltext_split/proposals/pos_harmonization.tsv` | 人の手の 2 版の品詞の付け方をそろえる案と、一覧に無いタグの直し方の案を、承認・却下 | `状態`・`当てはめる変更`・`暫定版にも当てはめるか`、`確認者`（末尾に足す） |
 | ⑥ 辞書と CDO：候補が複数 | `source/lexicon_cdo_matches.tsv`（決まり方が「候補が複数」の行） | 候補の TLA 番号（押すと CDO の項目が開く）から合うものを選んで承認。どれも合わなければ却下 | `選んだTLA番号`（承認には必須）・`状態`・`確認者` |
 | ⑦ 辞書と CDO：1 つに決まった候補 | 同じファイル（品詞で絞った・変化形・品詞が合わないか分からない行） | 合っていれば承認、違えば却下。正しい番号が分かれば書いて承認 | `選んだTLA番号`（書いたときだけ使う）・`状態`・`確認者` |
+| ⑧ III,4 への注釈の写し | `source/nhc_fulltext_split/proposals/transfer_III-4.tsv` | 文言の同じエウグノストスの注釈を III,4 の語群に写すか（承認・却下）。「不可」の行は承認しても自動では当てはめない | `状態`・`確認者` |
 
 **使い方。** 確認者の名前かイニシャルを入れ、キューを選んで 1 件ずつ判断します（名前を入れないと書き込めません。判断のたびに
 その行に記録します）。TSV のキューでは、その文書の TEI から該当のセグメントを出し、対象の語（②）や分け目の位置（③④）に印を
@@ -490,6 +493,7 @@ BOM の有無を、JSON はキーの順と字下げ 2 を元のまま。足す�
 6. ⑤ は、`python3 scripts/apply_pos_decisions.py`（表示だけ）→ `--write` で、承認した行の品詞だけを変えます（`source/nhc_fulltext_split/proposals/README_ja.md` の §6）。
 7. ⑥⑦ は同じファイルの違う行を扱います。1 人で両方を進めるときは、⑥ で書き出したファイルを ⑦ で読み込んでから続ける（書き出しに両方が入る）か、
    2 つの書き出しを `merge_review.py cdo ⑥の書き出し ⑦の書き出し` でまとめます。反映は `python3 scripts/match_cdo.py apply`（上の「Coptic Dictionary Online（CDO）へのリンク」）。
+8. ⑧ は、`python3 scripts/transfer_annotation.py apply`（表示だけ）→ `--write` で、承認した行のうち当てはめが「可」のものだけを III,4 に写します（`source/nhc_fulltext_split/proposals/README_ja.md` の §7）。
 
 **キューを足す。** `data/review_queues.json` の `queues` に 1 項目足します（書き方はファイルの `_comment`）。表の形に合わせて
 `kind`（`judge` = 列に答えを書く、`status` = 承認・却下などを決める、`intros` = 解題）、行を見分ける `key`、文脈のための `doc`・`seg`・`w`・
