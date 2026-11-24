@@ -777,6 +777,17 @@ POS_NAMES = {
  "CPRET": ["過去変換詞", "preterite converter", "convertisseur prétérit"],
  "VBD": ["接尾活用の動詞（ⲡⲉϫⲉ- など）", "suffixally conjugated verb (ⲡⲉϫⲉ- etc.)", "verbe à conjugaison suffixale (ⲡⲉϫⲉ-, etc.)"],
  "NEGPST": ["否定完了", "negative perfect", "parfait négatif"],
+ "ACOND": ["条件法助動詞（ⲉⲣϣⲁⲛ-）", "conditional auxiliary", "auxiliaire du conditionnel"],
+ "AFUTCONJ": ["未来接続法助動詞（ⲧⲁⲣⲉ-）", "future conjunctive auxiliary", "auxiliaire du futur conjonctif"],
+ "AJUS": ["勧奨法助動詞（ⲙⲁⲣⲉ-）", "jussive auxiliary", "auxiliaire du jussif"],
+ "ALIM": ["限界の助動詞（ϣⲁⲛⲧⲉ-）", "limitative auxiliary", "auxiliaire du limitatif"],
+ "ANEGJUS": ["否定勧奨法助動詞（ⲙⲡⲣⲧⲣⲉ-）", "negative jussive aux.", "aux. du jussif négatif"],
+ "ANEGOPT": ["否定希求法助動詞（ⲛⲛⲉ-）", "negative optative aux.", "aux. de l’optatif négatif"],
+ "ANY": ["「まだ〜ない」の助動詞（ⲙⲡⲁⲧⲉ-）", "“not yet” auxiliary", "aux. du « pas encore »"],
+ "APREC": ["時の助動詞（ⲛⲧⲉⲣⲉ-）", "temporal (precursive) auxiliary", "auxiliaire du temporel"],
+ "IMOD": ["強めの修飾語（ⲧⲏⲣ=・ϩⲱⲱ= など）", "intensifying modifier (ⲧⲏⲣ=, ϩⲱⲱ= etc.)", "modificateur intensif (ⲧⲏⲣ=, ϩⲱⲱ=, etc.)"],
+ "VIMP": ["命令形の動詞（ⲙⲁ・ⲁⲣⲓ- など）", "imperative verb (ⲙⲁ, ⲁⲣⲓ- etc.)", "verbe à l’impératif (ⲙⲁ, ⲁⲣⲓ-, etc.)"],
+ "PUNCT": ["句読点", "punctuation", "ponctuation"],
  "X": ["未判定", "unresolved", "non résolu"],
 }
 REPO_URL = "https://github.com/icecocoasince2003-create/Nag-Hammadi-Library/"
@@ -933,6 +944,7 @@ function morph(w, gl, st){
   else if(resp){ m.cert=cert; m.src=resp.replace(/^#/,''); }
   (w.getAttribute('ana')||'').split(/\\s+/).forEach(p=>{ const g=gl[p.replace(/^#/,'')]; if(g && !m[g.l]) m[g.l]=g.t; });
   st.m++; if(m.type) st.typed++; if(m.type==='X') st.X++; if(m.cert==='low') st.low++; if(m.src==='morph-reference') st.ref++;
+  if(m.src==='coptic-nlp') st.nlp++; if(m.en||m.ja) st.gl++;
   if(m.sup){ st.rw++; if(m.sup==='medium') st.rwB++; }
   return m;
 }
@@ -942,7 +954,7 @@ function readTEI(x){
     const l=xlang(g); all(g,'interp').forEach(i=>{ gl[xid(i)]={l, t:i.textContent.trim()}; }); });
   const wit=all(x,'text').find(t=>t.getAttribute('type')==='witness');
   if(!wit) throw new Error('TEI: <text type="witness"> がありません');
-  const st={m:0, g:0, typed:0, X:0, low:0, ref:0, rw:0, rwB:0, segs:0, gaps:0, pb:0, lb:0}, abs=[];
+  const st={m:0, g:0, typed:0, X:0, low:0, ref:0, nlp:0, gl:0, rw:0, rwB:0, segs:0, gaps:0, pb:0, lb:0}, abs=[];
   /* 頁・行の区切りは、<s> の中（語群のあいだ・語群の中・語の中）にも、<ab> の中の <s> のあいだにも置ける。
      <s> の外のものは、次のセグメントの頭に置く（pend） */
   let pend=[];
@@ -1052,7 +1064,21 @@ function statusHTML(){
   else li.push(tri('<b>本文</b>：提供された全文テキストを下処理した作業用の本文です。本文の文字は校訂本や写本と照合していません。上線と、復元された文字の区別は入っていません。写本の頁と行の区切りは、校訂本に合わせて入れたものです（〈ページ〉〈行〉で表示）。§ は元ファイルの行（セグメント）の番号です。〔…〕は元ファイルに欠損の注記があった位置です。',
     '<b>Text</b>: a working text prepared from a supplied full-text file; its letters have not been collated with the critical editions or the manuscript. It has no supralinear strokes and no marking of restored text. The page and line breaks of the codex follow an edition (show them with Pages and Lines). § numbers are the rows (segments) of the source file, and 〔…〕 marks where the source noted a lacuna.',
     '<b>Texte</b> : texte de travail tiré d’un fichier fourni ; ses lettres n’ont pas été collationnées avec les éditions critiques ni avec le manuscrit. Sans traits suscrits ni distinction des restitutions. Les coupures de page et de ligne du codex suivent une édition (à afficher avec Pages et Lignes). Les § sont les lignes (segments) du fichier source et 〔…〕 signale une lacune notée dans la source.'));
-  if(ann){
+  if(ann && s.nlp){
+    /* Coptic SCRIPTORIUM の NLP で付け直した版（source/nhc_fulltext_split/README_ja.md の §13） */
+    li.push(tri('<b>語のまとまり（語群）と形態素</b>：Coptic SCRIPTORIUM の NLP で自動で付けたものです（2026-11-24）。人の目では確かめていません。',
+      '<b>Bound groups and morphemes</b>: assigned automatically with the Coptic SCRIPTORIUM NLP tools (2026-11-24); not checked by hand.',
+      '<b>Groupes et morphèmes</b> : attribués automatiquement avec les outils de TAL de Coptic SCRIPTORIUM (2026-11-24) ; non vérifiés.'));
+    li.push(tri('<b>品詞・レンマ</b>：同じく NLP によるものです。この文書では、確度 low が '+pct(s.low,s.m)+'%、品詞を決められなかった語（X）が '+pct(s.X,s.m)+'% あります。確度はスクリプトの目安で、medium でも正しいとは限りません。',
+      '<b>Part of speech and lemma</b>: also from the NLP tools. In this text '+pct(s.low,s.m)+'% of the morphemes have low certainty and '+pct(s.X,s.m)+'% could not be classified (X). Certainty is the script’s own rating; medium does not mean an analysis is correct.',
+      '<b>Partie du discours et lemme</b> : également issus des outils de TAL. Dans ce texte, '+pct(s.low,s.m)+' % des morphèmes ont une certitude faible et '+pct(s.X,s.m)+' % n’ont pas pu être classés (X). La certitude est l’appréciation du script ; « medium » ne garantit pas l’analyse.'));
+    li.push(tri('<b>語義</b>：前の暫定版（2026-11-18）で自動で付けた短い辞書的な意味を、語の範囲とレンマが変わらなかった形態素（この文書では '+pct(s.gl,s.m)+'%）にだけ残しています。文脈で確かめた訳語ではありません。',
+      '<b>Glosses</b>: the short dictionary meanings assigned automatically for the previous draft (2026-11-18) are kept only on morphemes whose extent and lemma did not change ('+pct(s.gl,s.m)+'% in this text); they are not translations checked against the context.',
+      '<b>Gloses</b> : les brèves équivalences attribuées automatiquement pour le brouillon précédent (2026-11-18) ne subsistent que sur les morphèmes dont l’étendue et le lemme n’ont pas changé ('+pct(s.gl,s.m)+' % dans ce texte) ; ce ne sont pas des traductions vérifiées en contexte.'));
+    li.push(tri('<b>構文</b>：NLP による依存構造の解析（暫定）は TEI には入れず、CoNLL-U のファイルにあります（下のリンク）。元のテキストに句読点がほとんど無く、NLP が文を区切れなかった（送ったまとまりがそのまま 1 文になった）ので、とくに当てになりません。',
+      '<b>Syntax</b>: the provisional dependency analysis from the NLP tools is not in the TEI but in a CoNLL-U file (link below). The source text has almost no punctuation, so the tools could not divide it into sentences (each batch sent became one “sentence”); this analysis is especially unreliable.',
+      '<b>Syntaxe</b> : l’analyse en dépendances provisoire des outils de TAL n’est pas dans le TEI mais dans un fichier CoNLL-U (lien ci-dessous). Le texte source n’a presque pas de ponctuation : les outils n’ont pas pu le découper en phrases (chaque lot envoyé forme une seule « phrase ») ; cette analyse est particulièrement peu fiable.'));
+  } else if(ann){
     li.push(tri('<b>語のまとまり（語群）</b>：自動で推定したものです。全文テキスト全体で、境目のおよそ 4 分の 1 が要確認の一覧に入っています。',
       '<b>Bound groups</b> (orthographic words): inferred automatically; across the full texts about a quarter of the boundaries are on the review list.',
       '<b>Groupes</b> (mots graphiques) : déduits automatiquement ; sur l’ensemble, environ un quart des limites figurent sur la liste à vérifier.'));
@@ -1084,8 +1110,9 @@ function statusHTML(){
   return '<section class="status"><h2>'+head+'</h2><ul>'+li.map(x=>'<li>'+x+'</li>').join('')+'</ul><p class="links">'+
     '<a href="'+esc(DOC.xml)+'" download>'+tri('TEI（XML）をダウンロード','Download the TEI (XML)','Télécharger le TEI (XML)')+'</a>'+
     '<a href="guide.html#viewer">'+tri('本文ビュワーの読み方（はじめての方へ）','How to read this page (Getting started)','Lire cette page (Premiers pas)')+'</a>'+
-    '<a href="'+esc(rel)+'" target="_blank" rel="noopener">'+tri('作り方と確かめたこと（README §10・§11）','How it was made and checked (README §10–11)','Méthode et vérifications (README §10–11)')+'</a>'+
-    (ann?'<a href="'+esc(REPO+'tree/main/source/nhc_fulltext_split/annotation')+'" target="_blank" rel="noopener">'+tri('要確認の一覧','Review lists','Listes à vérifier')+'</a>':'')+
+    '<a href="'+esc(rel)+'" target="_blank" rel="noopener">'+tri('作り方と確かめたこと（README §10〜§13）','How it was made and checked (README §10–13)','Méthode et vérifications (README §10–13)')+'</a>'+
+    (ann&&s.nlp?'<a href="'+esc(REPO+'blob/main/'+DOC.xml.replace('/tei/','/conllu/').replace(/\\.xml$/,'.conllu'))+'" target="_blank" rel="noopener">'+tri('構文（CoNLL-U）','Syntax (CoNLL-U)','Syntaxe (CoNLL-U)')+'</a>'
+      :ann?'<a href="'+esc(REPO+'tree/main/source/nhc_fulltext_split/annotation')+'" target="_blank" rel="noopener">'+tri('要確認の一覧','Review lists','Listes à vérifier')+'</a>':'')+
     '<a href="search.html?doc='+encodeURIComponent(DOC.key)+'">'+tri('この文書を検索','Search this text','Chercher dans ce texte')+'</a>'+
     '<a href="search.html?doc='+encodeURIComponent(DOC.key)+'&amp;view=stats">'+tri('統計','Statistics','Statistiques')+'</a></p></section>';
 }
@@ -1131,8 +1158,10 @@ function lexTarget(ix,m){
 function showCard(el){
   const m=MS[+el.dataset.i]; if(!m) return;
   const g=el.closest('.g'), grp=g?Array.from(g.querySelectorAll('.m')).map(x=>MS[+x.dataset.i]):[m];
+  const nlp=m.src==='coptic-nlp';
   const certT={high:tri('high — 参考本文との一致などによる','high — e.g. agrees with the annotated reference text','high — p. ex. accord avec le texte de référence'),
-    medium:tri('medium — 語彙表・規則による仮の判定','medium — from the core word list or rules','medium — liste de base ou règles'),
+    medium:nlp?tri('medium — NLP の出力そのまま。スクリプトの目安で、正しいとは限らない','medium — NLP output as is; the script’s own rating, not a check','medium — sortie du NLP telle quelle ; estimation du script, non vérifiée')
+      :tri('medium — 語彙表・規則による仮の判定','medium — from the core word list or rules','medium — liste de base ou règles'),
     low:tri('low — 推定。要確認','low — a guess; needs checking','low — conjecture, à vérifier')}[m.cert]||esc(m.cert);
   const rows=[[tri('形態素','Morpheme','Morphème'),'<span class="cop" lang="cop">'+m.html+'</span>']];
   if(D.st.typed){
@@ -1140,7 +1169,8 @@ function showCard(el){
     rows.push([tri('品詞','Part of speech','Catégorie'), m.type?posName(m.type)+' <code>'+esc(m.type)+'</code>':'<span class="na">—</span>']);
     if(m.ja||m.en) rows.push([tri('語義（自動）','Gloss (automatic)','Glose (automatique)'), [m.ja,m.en].filter(Boolean).map(esc).join(' ／ ')]);
     if(m.cert) rows.push([tri('確度','Certainty','Certitude'), certT]);
-    if(m.src) rows.push([tri('出どころ','Source','Source'), m.src==='morph-reference'?tri('人の手で注釈した版から写したもの','copied from the hand-annotated edition','copié de l’édition annotée à la main'):tri('自動注釈','automatic annotation','annotation automatique')]);
+    if(m.src) rows.push([tri('出どころ','Source','Source'), m.src==='morph-reference'?tri('人の手で注釈した版から写したもの','copied from the hand-annotated edition','copié de l’édition annotée à la main')
+      :nlp?tri('Coptic SCRIPTORIUM の NLP による自動注釈','automatic annotation by the Coptic SCRIPTORIUM NLP','annotation automatique par le NLP de Coptic SCRIPTORIUM'):tri('自動注釈','automatic annotation','annotation automatique')]);
     if(m.grc) rows.push([tri('借用語','Loanword','Emprunt'), tri('ギリシア語','Greek','grec')]);
   }
   if(m.sup) rows.push([tri('補った字','Restored letters','Lettres restituées'), m.sup==='medium'
