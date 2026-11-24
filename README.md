@@ -142,6 +142,7 @@ nag_hammadi_library/
     ├─ build_fulltext_stats.py  data/fulltext_stats.json(全文テキストの文書ごとの数)を生成。build_site.py からも呼ばれる
     ├─ insert_breaks.py    写本の頁(<pb>)・行(<lb>)の区切りを TSV から TEI に入れる(既定は表示だけ、--write で書き込む)
     ├─ split_segments.py   セグメント(<s>)を TSV で指定した位置で分ける(案。まだ実データには使わない)
+    ├─ reanchor_proposals.py  位置を指す提案の表の w・phr を、語の区切りを付け直したあとの TEI に、文字の位置で合わせ直す
     ├─ make_og_image.py    共有用の画像 image/og-image.png を作る(rsvg-convert が要る)
     ├─ check_tei.py        TEI の点検(ポインタの切れ・以前の書き方・見出しとレンマへのコプト文字以外の文字の混入・語釈に使わない語など)。--schema でスキーマ検証も
     ├─ gloss_rules.json    語釈と辞書の語義に使わない語の一覧(check_tei.py が読む。CONTRIBUTING.md の 10.)
@@ -200,6 +201,7 @@ nag_hammadi_library/
 | `build_fulltext_stats.py` | `data/fulltext_stats.json` を生成（`build_site.py` を実行すると一緒に作り直す。`--check` で最新かを調べるだけ）。`data/catalog.xml` の全文テキスト（暫定版・未注釈）の文書ごとに、本文の証本の中の `<w>`・`<phr>`（と、その中の `<w>`）・`<s>`・`<gap>`、`xml:lang="grc"` の `<w>`、品詞ごとの `<w>`、`@cert="low"`・品詞 `X` の `<w>` を数え、方言（`<textLang>`）と状態を添える。参考に、人の手で注釈した版（エウグノストス III,3・『国家』）も同じ方法で数える。割合は検索ページが計算する。 |
 | `insert_breaks.py` | 写本の頁（`<pb>`）・行（`<lb>`）の区切りを TSV から TEI に入れる。区切りの空要素を足すだけで、本文・語・`xml:id` は変えない。何も付けなければ入る位置の表示だけで、`--write` で書き込む。手順は下の「写本の頁・行の区切りを入れる」。 |
 | `split_segments.py` | セグメント（`<s>`）を TSV で指定した位置で分ける。最初の部分が元の `xml:id` と § を保ち、続きは `元の id_a`・`_b` …（§ は 15a・15b …）。**案**（`source/nhc_fulltext_split/proposals/README_ja.md`）。まだ実データには使わない。 |
+| `reanchor_proposals.py` | 位置を指す提案の表（`proposals/` の分け目の表）の `w`・`phr` を、TEI の語の区切りを付け直したあとの `<w>`・`<phr>` に合わせ直す。前の版（`--from` の git のコミット）で分け目の前にあった文字の数を数え、今の版でその文字から始まる `<w>` を探す。語群や語の途中になった行は、メモの列に印を付ける。何も付けなければ表示だけで、`--write` で書き込む。 |
 | `make_og_image.py` | リンクを共有したときのプレビュー画像 `image/og-image.png`(1200×630)を、アイコンとゲンゲンの SVG から作る。 |
 | `coptic_nlp_tei.py` | `<s>` の中身を Coptic SCRIPTORIUM の NLP（公開のサービス）にかけ、語群（`<phr>`）・形態素（`<w>`）・品詞・レンマ・借用語の印を付け直す。構文（依存関係）は CoNLL-U に出す。文字・欠損・補い・`xml:id` が変わらないことを確かめてから書く。既定では `build/coptic_nlp/` に書き、`--in-place` で元のファイルに書く。使い方は [docs/ANNOTATION_TOOLS.md](docs/ANNOTATION_TOOLS.md)。 |
 | `leiden_to_tei.py` | ライデン記法で書いた翻刻（頁・行つき）を、TEI の `<pb>`・`<lb>`・`<s>`・`<w>` と EpiDoc の校訂の要素（`<supplied>`・`<gap>` など）にする。 |
