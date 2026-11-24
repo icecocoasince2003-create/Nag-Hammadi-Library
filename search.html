@@ -914,7 +914,7 @@ html[data-mode="light"] .tour .tour-acts .tour-next, html[data-mode="light"] .to
           <p><span class="l-ja">『魂の解明』（NHC II,6。自動注釈の暫定版）を読み込んで検索に加え、ⲯⲩⲭⲏ「魂」を含む語形を探します。</span><span class="l-en">Loads The Exegesis on the Soul (NHC II,6, an automatic draft) into the search and finds forms containing ⲯⲩⲭⲏ “soul”.</span><span class="l-fr">Charge l’Exégèse de l’âme (NHC II,6, brouillon automatique) dans la recherche et trouve les formes contenant ⲯⲩⲭⲏ « âme ».</span></p>
           <button type="button" class="btn tut-try"></button></div>
         <div class="tut-ex" data-raw="II-6"><code>lemma="ⲯⲩⲭⲏ"</code>
-          <p><span class="l-ja">暫定版ではレンマでも探せますが、ⲧⲯⲩⲭⲏ のように冠詞とつながったまま残った語は一致しないので、前の例より少なくなります。</span><span class="l-en">Drafts can be searched by lemma too, but words left joined to their article, such as ⲧⲯⲩⲭⲏ, do not match, so this finds fewer than the previous example.</span><span class="l-fr">Les brouillons se cherchent aussi par lemme, mais les mots restés joints à leur article, comme ⲧⲯⲩⲭⲏ, ne correspondent pas : on en trouve moins qu’avec l’exemple précédent.</span></p>
+          <p><span class="l-ja">暫定版ではレンマでも探せます。冠詞などは別の形態素に分けてあるので（ⲧ＋ⲯⲩⲭⲏ）、前の例とほぼ同じ数が見つかります。分けきれずに次の語とつながったまま残った語は一致しません。</span><span class="l-en">Drafts can be searched by lemma too. Articles and the like are split off as separate morphemes (ⲧ + ⲯⲩⲭⲏ), so this finds nearly as many as the previous example; a word that was not split and stays joined to the next one does not match.</span><span class="l-fr">Les brouillons se cherchent aussi par lemme. Les articles, entre autres, sont séparés en morphèmes distincts (ⲧ + ⲯⲩⲭⲏ) : on en trouve presque autant qu’avec l’exemple précédent ; un mot resté joint au suivant, faute d’avoir été divisé, ne correspond pas.</span></p>
           <button type="button" class="btn tut-try"></button></div>
         <div class="tut-ex" data-raw="II-6"><code>tok="ⲁ" . tok="ϥ"</code>
           <p><span class="l-ja">形態素に分けた ⲁϥ（完了の助動詞＋「彼」）を探します。<code>tok="ⲁϥ"</code> では見つかりません。</span><span class="l-en">Finds ⲁϥ (perfect auxiliary + “he”) split into morphemes; <code>tok="ⲁϥ"</code> finds nothing.</span><span class="l-fr">Trouve ⲁϥ (auxiliaire du parfait + « il ») divisé en morphèmes ; <code>tok="ⲁϥ"</code> ne trouve rien.</span></p>
@@ -1219,6 +1219,17 @@ const POS = {ART:["冠詞","article","article"],N:["名詞","noun","nom"],NPROP:
   CPRET:["過去変換詞","preterite converter","convertisseur prétérit"],
   VBD:["接尾活用の動詞（ⲡⲉϫⲉ- など）","suffixally conjugated verb (ⲡⲉϫⲉ- etc.)","verbe à conjugaison suffixale (ⲡⲉϫⲉ-, etc.)"],
   NEGPST:["否定完了","negative perfect","parfait négatif"],
+  ACOND:["条件法助動詞（ⲉⲣϣⲁⲛ-）","conditional auxiliary","auxiliaire du conditionnel"],
+  AFUTCONJ:["未来接続法助動詞（ⲧⲁⲣⲉ-）","future conjunctive auxiliary","auxiliaire du futur conjonctif"],
+  AJUS:["勧奨法助動詞（ⲙⲁⲣⲉ-）","jussive auxiliary","auxiliaire du jussif"],
+  ALIM:["限界の助動詞（ϣⲁⲛⲧⲉ-）","limitative auxiliary","auxiliaire du limitatif"],
+  ANEGJUS:["否定勧奨法助動詞（ⲙⲡⲣⲧⲣⲉ-）","negative jussive aux.","aux. du jussif négatif"],
+  ANEGOPT:["否定希求法助動詞（ⲛⲛⲉ-）","negative optative aux.","aux. de l’optatif négatif"],
+  ANY:["「まだ〜ない」の助動詞（ⲙⲡⲁⲧⲉ-）","“not yet” auxiliary","aux. du « pas encore »"],
+  APREC:["時の助動詞（ⲛⲧⲉⲣⲉ-）","temporal (precursive) auxiliary","auxiliaire du temporel"],
+  IMOD:["強めの修飾語（ⲧⲏⲣ=・ϩⲱⲱ= など）","intensifying modifier (ⲧⲏⲣ=, ϩⲱⲱ= etc.)","modificateur intensif (ⲧⲏⲣ=, ϩⲱⲱ=, etc.)"],
+  VIMP:["命令形の動詞（ⲙⲁ・ⲁⲣⲓ- など）","imperative verb (ⲙⲁ, ⲁⲣⲓ- etc.)","verbe à l’impératif (ⲙⲁ, ⲁⲣⲓ-, etc.)"],
+  PUNCT:["句読点","punctuation","ponctuation"],
   X:["未注","unannotated","non annoté"]};
 const posName = p => { const e = POS[p]; return e ? e[{ja:0,en:1,fr:2}[UL()]] : p; };
 
