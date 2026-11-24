@@ -36,7 +36,7 @@
         {"column": "メモ", "type": "text"}
       ],
       "reviewer": "確認者",
-      "note": {"ja": "対象の形態素（【】の中）の正しい品詞とレンマを入れる。決められないときは ?、レンマが無い形態素は -。自動の答えは、両方を入れるまで隠してある（先に見ると判断が引きずられるため）。集計は score_review.py。【2026-11-24 に暫定版の注釈が付け直されたので、この表（2026-11-18 の注釈から抜いたもの）の位置と自動の答えは今の本文と合っていない。作り直すまで使わない】", "en": "Enter the correct part of speech and lemma of the target morpheme (in 【】). Use ? when undecidable and - for a morpheme without a lemma. The automatic answer stays hidden until both are entered, so that it cannot bias the judgment. Scored by score_review.py. [The drafts were re-annotated on 2026-11-24, so the positions and automatic answers of this table (drawn from the 2026-11-18 annotation) no longer match the text. Do not use it until it is redrawn.]"}
+      "note": {"ja": "対象の形態素（【】の中）の正しい品詞とレンマを入れる。決められないときは ?、レンマが無い形態素は -。自動の答えは、両方を入れるまで隠してある（先に見ると判断が引きずられるため）。集計は score_review.py。", "en": "Enter the correct part of speech and lemma of the target morpheme (in 【】). Use ? when undecidable and - for a morpheme without a lemma. The automatic answer stays hidden until both are entered, so that it cannot bias the judgment. Scored by score_review.py."}
     },
     {
       "id": "thomas",
