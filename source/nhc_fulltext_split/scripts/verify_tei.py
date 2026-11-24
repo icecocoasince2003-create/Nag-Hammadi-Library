@@ -15,6 +15,9 @@ make_tei.py が作った tei/*.xml を、同じフォルダの nhc_all.tsv / cat
      形態素注釈を付けた版（README_ja.md の §11）では、<w> の resp（#morph-auto / #morph-reference）と cert（high /
      medium / low）は注釈のもので、ⲍ・ⲯ を戻した印は、戻した字を包む <supplied reason="lost-in-source-file"
      resp="#zp" cert="…"> になる。語の中のどの ⲍ・ⲯ もこれに包まれていること。@ana の指す先は scripts/check_tei.py が確かめる。
+     Coptic SCRIPTORIUM の NLP で付け直した版（README_ja.md の §13。resp="#coptic-nlp"）では、戻した語が 2 つ以上の
+     <w> に分かれることがあるので、語ごとではなく、戻した字（<supplied>）の並びと確度を restored_letters.tsv と比べる。
+     <gap> の reason は lacuna（make_tei.py の出力）か lost（§13 で EpiDoc に合わせた版）。
   4. xml:id が XML の名前として正しく、<s> と証本（<text>）の ID が全ファイルを通じて重複しないこと。
   5. ヘッダーの件数（<extent>）、本文の実数、catalog.tsv の件数が一致すること
      （語群を付けた版の語数は catalog.tsv と比べない。区切りを変えたため）。
@@ -30,6 +33,8 @@ XML = '{http://www.w3.org/XML/1998/namespace}'
 GAP = '[...]'
 KINDS = ('title', 'text', 'subscript', 'colophon', 'fragment')
 CERT = {'A': 'high', 'B': 'medium'}
+# 形態素注釈の @resp: 2026-11-18 の暫定版（§11）と、Coptic SCRIPTORIUM の NLP で付け直した版（§13）
+ANNOTATION_RESP = ('#morph-auto', '#morph-reference', '#coptic-nlp')
 
 def read_tsv(path):
     with open(path, encoding='utf-8', newline='') as f:
@@ -108,6 +113,7 @@ def main(out, rng=None):
         kids = list(div)
         check(kids and kids[0].tag == NS + 'head' and all(k.tag == NS + 'ab' for k in kids[1:]), f'{unit}: div の子が head + ab でない')
         grouped = tx.find(f'.//{NS}phr') is not None          # 語群（<phr>）を付けた版（README_ja.md の §10）
+        annotated_nlp = any(w.get('resp') == '#coptic-nlp' for w in tx.iter(NS + 'w'))   # NLP で付け直した版（§13）
 
         # ---- 本文を組み立て直す
         got, prev = [], None
@@ -120,7 +126,7 @@ def main(out, rng=None):
             for s in ab:
                 check(s.tag == NS + 's' and not (s.text or '').strip() and not (s.tail or '').strip(),
                       f'{unit}: ab の中に <s> 以外のものがある')
-                toks, marks = [], []
+                toks, marks, letter_marks = [], [], []
                 here = f'{unit} n={s.get("n")}'
 
                 def word(w):
@@ -138,13 +144,14 @@ def main(out, rng=None):
                     check(not extra or (grouped and extra <= {'type', 'lemma', 'ana', XML + 'lang'}),
                           f'{here}: <w> に想定外の属性 {sorted(w.attrib)}')
                     resp = w.get('resp')
-                    if resp in ('#morph-auto', '#morph-reference'):  # 形態素注釈の責任と確度
+                    if resp in ANNOTATION_RESP:                     # 形態素注釈の責任と確度
                         check(grouped and w.get('cert') in ('high', 'medium', 'low'), f'{here}: 注釈の確度が不正 {w.attrib}')
                     elif 'cert' in w.attrib or resp is not None:
                         check(resp == '#zp' and w.get('cert') in ('high', 'medium') and not sup,
                               f'{here}: 復元の印が不完全 {w.attrib}')
                     if sup:
                         marks.append((t, sup[0].get('cert')))
+                        letter_marks.extend((x.text, x.get('cert')) for x in sup)
                     elif resp == '#zp':
                         marks.append((t, w.get('cert')))
                     elif restored_run:
@@ -163,13 +170,14 @@ def main(out, rng=None):
                             if w.tag == NS + 'w':
                                 word(w)
                     elif ch.tag == NS + 'gap':
-                        check(ch.get('reason') == 'lacuna' and ch.get('extent') == 'unknown' and ch.get('unit') in (None, 'line', 'page')
+                        # reason は lacuna（make_tei.py の出力）か lost（仕様書 §4 に合わせた版。README_ja.md の §13）
+                        check(ch.get('reason') in ('lacuna', 'lost') and ch.get('extent') == 'unknown' and ch.get('unit') in (None, 'line', 'page')
                               and set(ch.attrib) <= {'reason', 'extent', 'unit'} and len(ch) == 0 and not ch.text,
                               f'{unit} n={s.get("n")}: <gap> の属性が不正 {ch.attrib}')
                         toks.append(GAP)
                     else:
                         check(False, f'{unit} n={s.get("n")}: 想定外の要素 {ch.tag}')
-                got.append((s.get('n'), kind, s.get(XML + 'id') or '', toks, marks))
+                got.append((s.get('n'), kind, s.get(XML + 'id') or '', toks, marks, letter_marks))
         exp = recs[unit]
         check(len(got) == len(exp), f'{unit}: レコード数 {len(got)} != {len(exp)}')
         split = joined = 0
@@ -187,13 +195,22 @@ def main(out, rng=None):
             check(bool(m) and m.group(1) == codex and m.group(2) == e['src_id']
                   and (e['src_tok'] == 'all' if m.group(3) is None else e['src_tok'].split('-')[0] == m.group(3)),
                   f'{unit} n={g[0]}: xml:id {g[2]} が行 ID {e["src_id"]} / {e["src_tok"]} と対応しない')
-            check(g[4] == rest.get((unit, e['seq']), []), f'{unit} n={g[0]}: 復元の印が restored_letters.tsv と違う')
+            if annotated_nlp:
+                # 形態素に切り直した版（§13）では、戻した語が 2 つ以上の <w> に分かれることがあるので、
+                # 戻した字（<supplied>）の並びと確度を、restored_letters.tsv の語の ⲍ・ⲯ の並びと比べる
+                want = [(ch, cert) for word, cert in rest.get((unit, e['seq']), []) for ch in word if ch in 'ⲍⲯ']
+                check(g[5] == want, f'{unit} n={g[0]}: 戻した字（<supplied>）が restored_letters.tsv と違う')
+            else:
+                check(g[4] == rest.get((unit, e['seq']), []), f'{unit} n={g[0]}: 復元の印が restored_letters.tsv と違う')
 
         # ---- 件数
         nseg = len(got)
         ntok = sum(1 for g in got for t in g[3] if t != GAP)
         ngap = sum(g[3].count(GAP) for g in got)
-        nrest = collections.Counter(cert for g in got for _, cert in g[4])
+        if annotated_nlp:   # 戻した語の数は restored_letters.tsv の行の数（字の並びは上で確かめた）
+            nrest = collections.Counter(cert for g in got for _, cert in rest.get((unit, g[0]), []))
+        else:
+            nrest = collections.Counter(cert for g in got for _, cert in g[4])
         meas = {m.get('unit'): int(m.get('quantity')) for m in root.iter(NS + 'measure')}
         check(meas == {'segment': nseg, 'token': ntok, 'gap': ngap}, f'{unit}: <extent> の件数が本文と違う {meas}')
         check(nseg == int(c['rows']) and (grouped or ntok == int(c['tokens'])) and ngap == int(c['gap_markers'])
@@ -211,7 +228,8 @@ def main(out, rng=None):
         if grouped:
             tot.update(grouped=1, phr=sum(1 for _ in tx.iter(NS + 'phr')), split=split, joined=joined,
                        annotated=sum(1 for w in tx.iter(NS + 'w') if w.get('type') or w.get('lemma')),
-                       morph=sum(1 for w in tx.iter(NS + 'w') if w.get('resp') in ('#morph-auto', '#morph-reference')),
+                       morph=sum(1 for w in tx.iter(NS + 'w') if w.get('resp') in ANNOTATION_RESP),
+                       nlp=sum(1 for w in tx.iter(NS + 'w') if w.get('resp') == '#coptic-nlp'),
                        supplied=sum(1 for _ in tx.iter(NS + 'supplied')))
 
     allrecs = sum(len(v) for v in recs.values())
@@ -223,7 +241,8 @@ def main(out, rng=None):
     if tot['grouped']:
         print(f'files with bound groups (<phr>) {tot["grouped"]}: {tot["phr"]} bound groups; '
               f'word division against nhc_all.tsv: {tot["split"]} new divisions, {tot["joined"]} removed; '
-              f'{tot["annotated"]} <w> with type/lemma ({tot["morph"]} carry the automatic annotation\'s resp/cert); '
+              f'{tot["annotated"]} <w> with type/lemma ({tot["morph"]} carry the automatic annotation\'s resp/cert, '
+              f'{tot["nlp"]} of them from the Coptic SCRIPTORIUM NLP); '
               f'{tot["supplied"]} restored letters in <supplied>')
 
     # ---- RELAX NG（任意）

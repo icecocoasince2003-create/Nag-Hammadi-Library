@@ -106,7 +106,7 @@ def build_block(docs):
     grouped_only = [d for d in plain if d["grouped"]]
     if drafts:
         out.append(f"{INDENT}     subtype=\"draft\" の {len(drafts)} 文書は、語群・品詞・レンマ・語釈を自動で付けた暫定版で、人の目で確かめていない"
-                   f"（同 README_ja.md の §11）。")
+                   f"（同 README_ja.md の §11・§13）。")
     out.append(f"{INDENT}     subtype=\"unannotated\" の {len(plain)} 文書は、品詞・レンマ・訳が付いていない"
                + (f"（うち {len(grouped_only)} 文書は語群だけ付けた暫定版。§10）。" if grouped_only else "。"))
     out += [

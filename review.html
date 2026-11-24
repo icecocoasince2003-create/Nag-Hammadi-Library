@@ -403,11 +403,16 @@ async function renderContext(s, it, box){
     if(!el) throw new Error(L2("セグメントが見つかりません: ", "segment not found: ") + seg);
     if(!CUR || CUR.items[VIEW[VI]] !== it) return;     // 読み込みのあいだにほかの項目へ移った
     const us = units(el), c = ctxHTML(us, q.context, w, corr);
+    // 表の語形（form の列）と、今の本文のその位置の語を比べる（TEI の語の区切りを付け直すと、位置が別の語を指すようになる）
+    const want = q.form ? String(val(s, it, q.form) || "").replace(/\s+/g, "") : "";
+    const here = (us.filter(u => u.t === "g").flatMap(u => u.ws).find(x => x.i === w) || {}).form || "";
     const href = d.reader ? d.reader + "#seg-" + encodeURIComponent(seg) : "";
     box.innerHTML = '<div class="ctx" lang="cop">' + c.html + "</div>" +
       '<p class="ctxnote">' + esc(d.siglum) + " · §" + esc(el.getAttribute("n") || "") + " · " + esc(seg) + " · w=" + esc(w) +
       (href ? ' · <a href="' + esc(href) + '" target="_blank" rel="noopener">' + esc(L2("本文ビュワーで開く ↗", "open in the reader ↗")) + "</a>" : "") +
       (c.found ? "" : ' · <b>' + esc(L2("この位置の語が見つかりません", "no word at this position")) + "</b>") +
+      (want && c.found && here !== want ? '<br><b>' + esc(L2("表の語形「" + want + "」と、今の本文のこの位置の語「" + here + "」が違います。本文の語の区切りが付け直され、表の位置がずれています。",
+        "The table’s form “" + want + "” differs from the word now at this position, “" + here + "”: the text was re-tokenized and the table’s position is out of date.")) + "</b>" : "") +
       (q.context === "break" ? "<br>" + esc(L2("語群を押すと、そこから始まる位置に直せます（修正して承認）。点線の印は案の位置。", "Click a bound group to move the break there (approved with a correction). The dashed mark is the proposed place.")) : "") + "</p>";
   } catch(e){
     box.innerHTML = '<div class="notice warn">' + esc(e.message || String(e)) + "</div>";
