@@ -1,5 +1,5 @@
 {
-  "_comment": "確認作業の画面（review.html）のキューの定義。画面と、書き出したファイルをまとめる scripts/merge_review.py の両方がこのファイルを読む。キューを足すときは queues に 1 項目足す（README の「確認作業の画面」）。kind: intros = data/intros.json の解題、judge = 決まった列に答えを書き込む表（tsv）、status = 1 行ずつ承認・却下などを決める表（tsv）。key は行を見分ける列（組み合わせて一意）。doc は TEI を読むための文書（column = 列の値、siglum = その値が「III,1」のような写本の番号、fixed = 決まった文書）。seg・w は文脈を出すためのセグメントの id と語の位置（その <s> の中で何番目の <w> か。1 から）。context: word = その語に印、break = その語の前に分け目の印（語群の最初の語だけ選べる）。show は表示する列、blind は答えを入れるまで隠す列。fields は書き込む列（type: pos = 品詞の一覧から、lemma = 辞書の見出しを候補に、text = 自由な文字（pattern = その形の値だけ受け付ける正規表現、hint = 添える説明）、choice = options に挙げた値から選ぶ。from があれば、その列に「 | 」で並べた値から選び、labels の列の同じ位置の値を添える。required: judge では答えが入れば済、status では承認に必須）。filter は、キューに入れる行の条件（[{列: [値…]}, …]。どれか 1 つの組で、すべての列の値が挙げた値のどれかなら入れる。同じファイルを行で分けて 2 つのキューにできる）。links は、その列の TLA 番号（C123）を、書いた URL の後ろに付けたリンクにする。status は状態の列、pending はまだ判断していない行の値、values は選べる値、corrected は位置を直したときに書く列（末尾に足す）。reviewer は確認者の列（末尾に足す。intros では解題の項目のキー）。",
+  "_comment": "確認作業の画面（review.html）のキューの定義。画面と、書き出したファイルをまとめる scripts/merge_review.py の両方がこのファイルを読む。キューを足すときは queues に 1 項目足す（README の「確認作業の画面」）。kind: intros = data/intros.json の解題、judge = 決まった列に答えを書き込む表（tsv）、status = 1 行ずつ承認・却下などを決める表（tsv）。key は行を見分ける列（組み合わせて一意）。doc は TEI を読むための文書（column = 列の値、siglum = その値が「III,1」のような写本の番号、fixed = 決まった文書）。seg・w は文脈を出すためのセグメントの id と語の位置（その <s> の中で何番目の <w> か。1 から）。form は、表の語形の列（あれば、今の本文のその位置の語と比べ、違えば知らせる）。context: word = その語に印、break = その語の前に分け目の印（語群の最初の語だけ選べる）。show は表示する列、blind は答えを入れるまで隠す列。fields は書き込む列（type: pos = 品詞の一覧から、lemma = 辞書の見出しを候補に、text = 自由な文字（pattern = その形の値だけ受け付ける正規表現、hint = 添える説明）、choice = options に挙げた値から選ぶ。from があれば、その列に「 | 」で並べた値から選び、labels の列の同じ位置の値を添える。required: judge では答えが入れば済、status では承認に必須）。filter は、キューに入れる行の条件（[{列: [値…]}, …]。どれか 1 つの組で、すべての列の値が挙げた値のどれかなら入れる。同じファイルを行で分けて 2 つのキューにできる）。links は、その列の TLA 番号（C123）を、書いた URL の後ろに付けたリンクにする。status は状態の列、pending はまだ判断していない行の値、values は選べる値、corrected は位置を直したときに書く列（末尾に足す）。reviewer は確認者の列（末尾に足す。intros では解題の項目のキー）。",
   "status_values": {
     "approve": "承認",
     "approve_corrected": "修正して承認",
@@ -27,6 +27,7 @@
       "seg": "seg_id",
       "w": "語の位置",
       "context": "word",
+      "form": "語形",
       "show": ["番号", "文書", "seg_id", "語の位置", "前後の文脈", "語形"],
       "blind": ["層", "自動の品詞", "自動のレンマ", "自動の語義", "cert", "resp"],
       "fields": [
@@ -35,7 +36,7 @@
         {"column": "メモ", "type": "text"}
       ],
       "reviewer": "確認者",
-      "note": {"ja": "対象の形態素（【】の中）の正しい品詞とレンマを入れる。決められないときは ?、レンマが無い形態素は -。自動の答えは、両方を入れるまで隠してある（先に見ると判断が引きずられるため）。集計は score_review.py。", "en": "Enter the correct part of speech and lemma of the target morpheme (in 【】). Use ? when undecidable and - for a morpheme without a lemma. The automatic answer stays hidden until both are entered, so that it cannot bias the judgment. Scored by score_review.py."}
+      "note": {"ja": "対象の形態素（【】の中）の正しい品詞とレンマを入れる。決められないときは ?、レンマが無い形態素は -。自動の答えは、両方を入れるまで隠してある（先に見ると判断が引きずられるため）。集計は score_review.py。【2026-11-24 に暫定版の注釈が付け直されたので、この表（2026-11-18 の注釈から抜いたもの）の位置と自動の答えは今の本文と合っていない。作り直すまで使わない】", "en": "Enter the correct part of speech and lemma of the target morpheme (in 【】). Use ? when undecidable and - for a morpheme without a lemma. The automatic answer stays hidden until both are entered, so that it cannot bias the judgment. Scored by score_review.py. [The drafts were re-annotated on 2026-11-24, so the positions and automatic answers of this table (drawn from the 2026-11-18 annotation) no longer match the text. Do not use it until it is redrawn.]"}
     },
     {
       "id": "thomas",

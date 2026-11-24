@@ -64,7 +64,7 @@ cd Nag-Hammadi-Library
 | コプト語辞書（語義・品詞・Coptic Dictionary Online へのリンク） | `source/lexicon.csv` | `python3 scripts/sync_lexicon.py` で変更点を確かめ、`--write` で `data/lexicon.xml` に書き込む |
 | 並行箇所 | （自動で作る） | `python3 scripts/build_parallels.py` で要約を確かめ、`--write` で `data/parallels.xml` に書き込む |
 | 全文テキスト（`source/nhc_fulltext_split/`）の文書一覧 | （自動で作る） | `python3 scripts/sync_nhc_catalog.py --write`（`data/catalog.xml` の `BEGIN`〜`END nhc_fulltext_split` の範囲） |
-| 全文テキストのうち、自動注釈の暫定版の 39 文書 | `source/nhc_fulltext_split/tei/` の XML を直接 | `python3 scripts/check_tei.py`（[source/nhc_fulltext_split/README_ja.md](source/nhc_fulltext_split/README_ja.md) の §10・§11） |
+| 全文テキストのうち、自動注釈の暫定版の 39 文書 | `source/nhc_fulltext_split/tei/` の XML を直接 | `python3 scripts/check_tei.py`（[source/nhc_fulltext_split/README_ja.md](source/nhc_fulltext_split/README_ja.md) の §10・§11・§13） |
 | ビュワー・検索ページなどの画面（`eugnostos.html`・`republic.html`・`search.html`・`lexicon.html`・`guide.html`・`gnosticism.html`・`project.html` など） | その HTML を直接（手作業で管理しているページ） | ブラウザーで確かめる（6.） |
 | 写本の写真へのリンク | `data/facsimile_links.json`（アーカイブで実際に開いて確かめた URL だけを書く） | — |
 | 文書ごとの解題（ビュワーの「この文書について」） | `data/intros.json`（確かめた項目の `reviewed` を `true` にすると表示される。確かでない点は `todo` に書く） | `python3 -m json.tool data/intros.json > /dev/null`、ブラウザーで確かめる |
@@ -92,7 +92,8 @@ cd Nag-Hammadi-Library
 
 ## 4. 符号化の約束
 
-TEI の書き方の全体は README の「TEI設計の要点」と「TEI スキーマとの適合」にあります。とくに次を守ってください。
+TEI の書き方の全体は README の「TEI設計の要点」と「TEI スキーマとの適合」に、EpiDoc（欠損・補訂など）・Coptic SCRIPTORIUM（語群・品詞）との対応と
+自動注釈の手順は [符号化の仕様書](docs/ANNOTATION_SPEC.md) にあります。とくに次を守ってください。
 
 - **借用語は `xml:lang="grc"` だけで示す。** ギリシア語からの借用語は `<w xml:lang="grc">`（辞書では `lexicon.csv` の `grc` 列が `Y`）。
   語形やほかの情報から借用語かどうかを判定することはしません。
@@ -143,6 +144,10 @@ python3 scripts/check_release.py                # 版の情報が data/release.j
   確かめます（GitHub の自動チェックはヘッドレスの Chrome で同じページを開きます）。
 - TEI のスキーマでも確かめるときは、スキーマを取得して `python3 scripts/check_tei.py --schema <tei_all.rng の場所>`
   （README の「TEI スキーマとの適合」）。
+- 符号化の仕様（[docs/ANNOTATION_SPEC.md](docs/ANNOTATION_SPEC.md)）に合っているかは `python3 scripts/check_spec.py` で調べます
+  （いまは `data/republic_tei.xml` に直すべき品詞コードが 5 件あるので、終了コードは 1 になります）。自動注釈の道具
+  （`scripts/coptic_nlp_tei.py`・`leiden_to_tei.py`・`check_spec.py`）を直したら `python3 -m unittest tests.test_annotation_tools`
+  （[docs/ANNOTATION_TOOLS.md](docs/ANNOTATION_TOOLS.md)）。
 - 画面を変えたときは、ローカルのサーバー（2.）で変えたページを開き、表示とブラウザーのコンソールにエラーが無いことを確かめます。
   ページの件数（文書数・セグメント数など）が、元のデータの件数と合っているかも見てください。
 
