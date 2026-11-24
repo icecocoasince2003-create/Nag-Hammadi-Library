@@ -192,7 +192,7 @@
           <elementSpec ident="linkGrp" mode="change">
             <attList>
               <attDef ident="type" mode="change"><valList type="closed" mode="add"><valItem ident="parallel"/></valList></attDef>
-              <attDef ident="subtype" mode="change"><valList type="closed" mode="add"><valItem ident="witness"/><valItem ident="rewriting"/></valList></attDef>
+              <attDef ident="subtype" mode="change"><desc xml:lang="ja">witness = 同じ文書の別の写本、rewriting = 書き直された文書、external = コーパスの外のテキスト（data/parallels/ の TEI）。</desc><desc xml:lang="en">witness: another manuscript of the same text; rewriting: a rewritten text; external: a text outside the corpus (TEI in data/parallels/).</desc><valList type="closed" mode="add"><valItem ident="witness"/><valItem ident="rewriting"/><valItem ident="external"/></valList></attDef>
             </attList>
           </elementSpec>
           <elementSpec ident="link" mode="change">

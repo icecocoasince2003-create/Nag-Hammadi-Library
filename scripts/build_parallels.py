@@ -26,7 +26,9 @@
 結ばれていないセグメントについて、前後の対応箇所のあいだにある本文を「対応は未確認」として示す。
 
 手で確かめて足した <link>（resp="#align" の無いもの）がファイルにあるときは、書き込まずに止まる
-（自動の結果で上書きして失わないため）。
+（自動の結果で上書きして失わないため）。ただし、コーパスの外のテキストと結ぶ <linkGrp subtype="external">
+（data/parallels/README.md）は手で書くもので、このスクリプトは作らない。書き直すときも、いまのファイルにある
+その <linkGrp> を、そのまま（字下げも含めて）新しいファイルの末尾に残す。
 
 使い方:  python3 scripts/build_parallels.py           # 要約と、いまの data/parallels.xml との違いを表示するだけ
          python3 scripts/build_parallels.py --write   # data/parallels.xml に書き込む
@@ -63,6 +65,7 @@ MIN_PAIR = 8         # セグメントの組で、これだけ一致すれば対
 MIN_PAIR_SHORT = 5   # 短いセグメント: これ以上で、どちらかの半分以上なら対応あり
 GAP = 4              # 対応先のあいだがこれより離れていたら、別のまとまり
 KEEP_SECOND = 20     # 2 つ目以降のまとまりを残す一致文字数
+EXTERNAL = re.compile(r'\n[ \t]*<linkGrp\b[^>]*\bsubtype="external"[^>]*>.*?</linkGrp>', re.S)   # 手で書く外のテキストとの組
 
 
 def norm(s):
@@ -260,7 +263,13 @@ def main():
         except ET.ParseError as e:
             print(f"!! 中止: いまの data/parallels.xml を XML として読めません（{e}）。書き込みません")
             return 1
-        hand = [l for l in links if l.get("resp") != "#align"]
+        external = EXTERNAL.findall(old)
+        if external:                                        # 手で書いた外のテキストとの組は、そのまま残す
+            new = new.replace("\n  </standOff>", "".join(external) + "\n  </standOff>", 1)
+            print("コーパスの外のテキストとの組 %d（<linkGrp subtype=\"external\">）はそのまま残します" % len(external))
+        auto = [l for g in ET.fromstring(old.encode("utf-8")).iter(TEI + "linkGrp") if g.get("subtype") != "external"
+                for l in g.iter(TEI + "link")]
+        hand = [l for l in auto if l.get("resp") != "#align"]
         if hand:
             print(f"!! 中止: data/parallels.xml に手で足した <link> が {len(hand)} 本あります（resp=\"#align\" が無い）。"
                   "自動の結果で上書きすると失われるので、書き込みません")

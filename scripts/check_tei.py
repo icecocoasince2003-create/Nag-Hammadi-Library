@@ -48,6 +48,8 @@ TEI のスキーマ（tei_all.rng）は「要素や属性の並びが正しい�
   python3 scripts/check_tei.py data/republic_tei.xml             指定したファイルだけ
 
 問題が無ければ終了コード 0、あれば 1。ファイルは書き換えません。
+ 13. コーパスの外の並行テキスト（data/parallels/ の TEI）が、言語（<language ident>）・底本（<sourceDesc><bibl>）・ライセンス
+       （<licence>）をヘッダーに持ち、本文を xml:id のある <s> に分けているか（data/parallels/README.md）
 """
 import argparse
 import csv
@@ -370,15 +372,28 @@ def check(path):
             entry = el if tag == "interp" else next((a for a in ancestors(el) if name(a.tag) in ("entry", "superEntry")), el)
             out.append("語釈に使わない語「%s」が入っています（scripts/gloss_rules.json）: <%s> %s「%s」"
                        % (term, tag, entry.get(XID) or "", " | ".join(pieces)[:100]))
+    # 13. コーパスの外の並行テキスト（data/parallels/ の TEI）: 言語・底本・ライセンスがヘッダーにあるか
+    if os.path.basename(os.path.dirname(os.path.abspath(path))) == "parallels" and os.path.basename(path) != "parallels.xml":
+        lang = root.find(".//%sprofileDesc/%slangUsage/%slanguage" % (T, T, T))
+        if lang is None or not lang.get("ident"):
+            out.append("コーパスの外の並行テキストには、<profileDesc><langUsage><language ident=\"…\"> で本文の言語を書きます")
+        if root.find(".//%ssourceDesc/%sbibl" % (T, T)) is None:
+            out.append("コーパスの外の並行テキストには、<sourceDesc><bibl> で底本（使った版）を書きます")
+        lic = root.find(".//%spublicationStmt/%savailability/%slicence" % (T, T, T))
+        if lic is None or not ("".join(lic.itertext()).strip() or lic.get("target")):
+            out.append("コーパスの外の並行テキストには、<publicationStmt><availability><licence> でライセンスを書きます")
+        if not any(s.get(XID) for s in root.iter(T + "s")):
+            out.append("コーパスの外の並行テキストの本文は、xml:id を持つ <s> に分けます（並行箇所の <link> が指す）")
     return out
 
 
 def main():
     ap = argparse.ArgumentParser(description="TEI データの点検")
-    ap.add_argument("files", nargs="*", help="対象ファイル（省略時: data/*.xml と source/nhc_fulltext_split/tei/*.xml）")
+    ap.add_argument("files", nargs="*", help="対象ファイル（省略時: data/*.xml・data/parallels/*.xml・source/nhc_fulltext_split/tei/*.xml）")
     ap.add_argument("--schema", help="tei_all.rng の場所（指定すると xmllint でスキーマ検証も行う）")
     args = ap.parse_args()
-    files = args.files or sorted(glob.glob(os.path.join(ROOT, "data", "*.xml"))) + sorted(glob.glob(os.path.join(ROOT, "source", "nhc_fulltext_split", "tei", "*.xml")))
+    files = args.files or (sorted(glob.glob(os.path.join(ROOT, "data", "*.xml"))) + sorted(glob.glob(os.path.join(ROOT, "data", "parallels", "*.xml")))
+                          + sorted(glob.glob(os.path.join(ROOT, "source", "nhc_fulltext_split", "tei", "*.xml"))))
     bad = 0
     for path in files:
         problems = check(path)

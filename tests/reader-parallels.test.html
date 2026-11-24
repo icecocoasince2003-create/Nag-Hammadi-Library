@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<!-- 本文ビュワー（reader.html）の、コーパスの外の並行テキストの表示の試験。ブラウザーで開くと、reader.html を iframe で開いて確かめ、
+     結果を下に出す。GitHub の自動チェックではヘッドレスの Chrome で開いて <p id="result" data-status="pass"> を確かめる（.github/workflows/check.yml）。
+     試験用の並行箇所（tests/fixtures/parallels/parallels.xml）と外のテキスト（同 sample-external.xml）を ?par= で読ませる。
+     手元では: python3 -m http.server 8000 → http://localhost:8000/tests/reader-parallels.test.html -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex">
+<title>reader.html external parallels tests</title>
+<style>body{font:14px/1.5 system-ui,sans-serif;margin:16px} pre{white-space:pre-wrap} .f{color:#b00} .p{color:#060} iframe{width:1100px;height:700px;border:1px solid #ccc}</style>
+</head>
+<body>
+<p id="result" data-status="running">running</p>
+<pre id="log"></pre>
+<iframe id="app" title="reader.html"></iframe>
+<script>
+(async function(){
+"use strict";
+const logEl = document.getElementById("log"), out = document.getElementById("result");
+const results = [];
+const log = (cls, msg) => { const s = document.createElement("span"); s.className = cls; s.textContent = msg + "\n"; logEl.appendChild(s); };
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+async function waitFor(fn, what, ms){
+  const t0 = Date.now();
+  for(;;){ let v; try { v = fn(); } catch(e){ v = false; } if(v) return v; if(Date.now() - t0 > (ms || 15000)) throw new Error("timed out: " + what); await sleep(60); }
+}
+function ok(cond, msg){ if(!cond) throw new Error(msg); }
+function eq(a, b, msg){ if(a !== b) throw new Error(msg + ": expected " + JSON.stringify(b) + ", got " + JSON.stringify(a)); }
+const frame = document.getElementById("app");
+let D;
+async function open(url){
+  frame.src = url + "&_=" + Date.now();   // 前に読んだ reader.html を使わない
+  await new Promise(r => { frame.onload = r; });
+  D = frame.contentDocument;
+  await waitFor(() => D.querySelector("#text .seg"), "the text is shown", 30000);
+}
+const T = [];
+const test = (name, fn) => T.push([name, fn]);
+// ビュワーの表示の設定（localStorage の nhc-reader）を、試験のあいだだけ空にする（前の状態に左右されないように）
+let savedOpt = null;
+try { savedOpt = localStorage.getItem("nhc-reader"); localStorage.removeItem("nhc-reader"); } catch(e){}
+
+test("the segments linked to an external text get a language mark", async () => {
+  await open("../reader.html?doc=II-2&lang=en&par=tests/fixtures/parallels/parallels.xml");
+  const marks = await waitFor(() => { const m = D.querySelectorAll("#text .xpar"); return m.length === 2 && m; }, "two marks");
+  eq(marks[0].closest(".seg").id, "seg-II-7503903_2206", "first mark");
+  eq(marks[1].closest(".seg").id, "seg-II-7503904", "second mark");
+  eq(marks[0].textContent, "‖ grc", "language code");
+  eq(marks[0].previousElementSibling.className, "sn", "right after the § number");
+});
+
+test("a mark opens the external text with its language, source and licence", async () => {
+  D.querySelector("#text .xpar").click();
+  const p = await waitFor(() => { const e = D.getElementById("xpanel"); return e && !e.hidden && e; }, "the panel opens");
+  eq(p.querySelector(".xtx").textContent, "αβγ δεζ ηθι", "the text of the linked unit");
+  eq(p.querySelector(".xtx").getAttribute("lang"), "grc", "language of the text");
+  ok(p.textContent.indexOf("Ancient Greek") >= 0, "language name");
+  ok(p.textContent.indexOf("Test fixture, not an edition") >= 0, "source edition");
+  eq(p.querySelector('a[href^="https://creativecommons.org/publicdomain/zero/"]').textContent.indexOf("CC0 1.0") >= 0, true, "licence link");
+  ok(p.querySelector("#xpanelT").textContent.indexOf("Test fixture") === 0, "title");
+  eq(p.querySelector(".x").getAttribute("aria-label"), "Close", "the close button has a plain label");
+  eq(p.querySelector(".x").textContent, "×", "the close button shows ×");
+  D.dispatchEvent(new frame.contentWindow.KeyboardEvent("keydown", {key: "Escape", bubbles: true}));
+  await waitFor(() => D.getElementById("xpanel").hidden, "Escape closes the panel");
+});
+
+test("the marks come back after the text is drawn again (an option is switched)", async () => {
+  const box = D.getElementById("oInter");
+  box.click();
+  await waitFor(() => D.querySelector("#text.inter"), "interlinear view");
+  await waitFor(() => D.querySelectorAll("#text .xpar").length === 2, "two marks again");
+  box.click();
+});
+
+test("without external links (the real data/parallels.xml) there are no marks", async () => {
+  await open("../reader.html?doc=II-2&lang=en");
+  await sleep(1500);
+  eq(D.querySelectorAll("#text .xpar").length, 0, "no marks");
+});
+
+try {
+  for(const [name, fn] of T){
+    try { await fn(); results.push(true); log("p", "ok   " + name); }
+    catch(e){ results.push(false); log("f", "FAIL " + name + " — " + (e && e.message)); }
+  }
+} catch(e){ results.push(false); log("f", "FAIL setup — " + (e && e.message)); }
+try { if(savedOpt == null) localStorage.removeItem("nhc-reader"); else localStorage.setItem("nhc-reader", savedOpt); } catch(e){}
+const fail = results.filter(x => !x).length;
+out.dataset.status = fail ? "fail" : "pass";
+out.textContent = (fail ? "FAIL " : "PASS ") + (results.length - fail) + "/" + results.length;
+})();
+</script>
+</body>
+</html>

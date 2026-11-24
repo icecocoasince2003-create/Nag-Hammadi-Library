@@ -48,6 +48,19 @@ h1{font-family:var(--disp); font-weight:600; line-height:1.12; font-size:clamp(1
 .seg.hit{background:var(--hi)}
 .sn{font-family:var(--ui); font-size:.68rem; color:var(--ink-faint); text-decoration:none; margin-right:.45em; vertical-align:.18em}
 .sn:hover{color:var(--gold)}
+/* コーパスの外の並行テキスト（data/parallels.xml の <linkGrp subtype="external">）の印とパネル */
+.xpar{font-family:var(--ui); font-size:.66rem; line-height:1.4; color:var(--ink-soft); background:transparent; border:1px solid var(--line); border-radius:999px; padding:0 .55em; margin-right:.45em; vertical-align:.2em; cursor:pointer}
+.xpar:hover,.xpar:focus-visible{border-color:var(--gold); color:var(--gold); outline:none}
+.xpanel{position:fixed; right:16px; bottom:16px; width:min(460px, calc(100vw - 32px)); max-height:70vh; overflow:auto; z-index:40; background:#14112b; border:1px solid var(--line); border-radius:14px; padding:16px 18px 14px; box-shadow:0 10px 30px rgba(0,0,0,.35); font-family:var(--ui); color:var(--ink)}
+html[data-mode="light"] .xpanel{background:#fbf7ec}
+.xpanel h2{font-size:1rem; margin:0 30px 2px 0; font-family:var(--ui)}
+.xpanel .xl{font-size:.78rem; color:var(--ink-soft); margin:0}
+.xpanel .xtx{font-family:'Noto Serif','Times New Roman',serif; font-size:1.08rem; line-height:1.8; margin:10px 0; color:var(--ink)}
+.xpanel dl{font-size:.8rem; color:var(--ink-soft); margin:8px 0 0}
+.xpanel dt{color:var(--ink-faint); margin-top:4px}
+.xpanel dd{margin:0}
+.xpanel a{color:var(--gold)}
+.xpanel .x{position:absolute; top:8px; right:10px; font:inherit; font-size:1.1rem; color:var(--ink-soft); background:transparent; border:0; cursor:pointer}
 .g{white-space:nowrap}
 .m{cursor:pointer; border-radius:3px}
 .m:hover .f{background:var(--sel)}
@@ -92,6 +105,7 @@ h1{font-family:var(--disp); font-weight:600; line-height:1.12; font-size:clamp(1
 <nav id="sitebar" class="sitebar sticky"></nav>
 <main class="shell" id="shell"><p class="loading">…</p></main>
 <div class="mcard" id="card" role="dialog" aria-live="polite" hidden></div>
+<div class="xpanel" id="xpanel" role="dialog" aria-labelledby="xpanelT" hidden></div>
 <script>
 const POS={"ART": ["冠詞", "article", "article"], "N": ["名詞", "noun", "nom"], "NPROP": ["固有名詞", "proper noun", "nom propre"], "V": ["動詞", "verb", "verbe"], "VSTAT": ["状態動詞", "stative", "statif"], "PREP": ["前置詞", "preposition", "préposition"], "PPER": ["人称代名詞", "personal pronoun", "pronom personnel"], "PPOS": ["所有詞", "possessive", "possessif"], "PDEM": ["指示詞", "demonstrative", "démonstratif"], "CONJ": ["接続詞", "conjunction", "conjonction"], "PTC": ["不変化詞", "particle", "particule"], "NEG": ["否定辞", "negation", "négation"], "NUM": ["数詞", "numeral", "numéral"], "ADV": ["副詞", "adverb", "adverbe"], "ADJ": ["形容詞", "adjective", "adjectif"], "REL": ["関係詞", "relative", "relatif"], "CONV": ["変換詞", "converter", "convertisseur"], "FUT": ["未来辞", "future", "futur"], "PRET": ["過去辞", "preterite", "prétérit"], "COP": ["繋辞", "copula", "copule"], "PFX": ["接頭辞", "prefix", "préfixe"], "INTERJ": ["間投詞", "interjection", "interjection"], "AUX": ["助動詞", "auxiliary", "auxiliaire"], "POSS": ["所有冠詞", "possessive article", "article possessif"], "EXIST": ["存在詞", "existential", "existentiel"], "PINT": ["疑問詞", "interrogative", "interrogatif"], "FM": ["外来語句", "foreign material", "matériel étranger"], "APST": ["完了（過去）助動詞", "perfect auxiliary", "auxiliaire du parfait"], "AAOR": ["アオリスト助動詞", "aorist auxiliary", "auxiliaire de l’aoriste"], "ACONJ": ["接続法助動詞", "conjunctive auxiliary", "auxiliaire du conjonctif"], "ACAUS": ["使役不定詞", "causative infinitive", "infinitif causatif"], "AOPT": ["希求法助動詞", "optative auxiliary", "auxiliaire de l’optatif"], "ANEGAOR": ["否定アオリスト助動詞", "negative aorist aux.", "aux. de l’aoriste négatif"], "ANEGPST": ["否定完了助動詞", "negative perfect aux.", "aux. du parfait négatif"], "CREL": ["関係変換詞", "relative converter", "convertisseur relatif"], "CCIRC": ["状況変換詞", "circumstantial converter", "convertisseur circonstanciel"], "CFOC": ["焦点化変換詞", "focalising converter", "convertisseur focalisant"], "CPRET": ["過去変換詞", "preterite converter", "convertisseur prétérit"], "VBD": ["接尾活用の動詞（ⲡⲉϫⲉ- など）", "suffixally conjugated verb (ⲡⲉϫⲉ- etc.)", "verbe à conjugaison suffixale (ⲡⲉϫⲉ-, etc.)"], "NEGPST": ["否定完了", "negative perfect", "parfait négatif"], "ACOND": ["条件法助動詞（ⲉⲣϣⲁⲛ-）", "conditional auxiliary", "auxiliaire du conditionnel"], "AFUTCONJ": ["未来接続法助動詞（ⲧⲁⲣⲉ-）", "future conjunctive auxiliary", "auxiliaire du futur conjonctif"], "AJUS": ["勧奨法助動詞（ⲙⲁⲣⲉ-）", "jussive auxiliary", "auxiliaire du jussif"], "ALIM": ["限界の助動詞（ϣⲁⲛⲧⲉ-）", "limitative auxiliary", "auxiliaire du limitatif"], "ANEGJUS": ["否定勧奨法助動詞（ⲙⲡⲣⲧⲣⲉ-）", "negative jussive aux.", "aux. du jussif négatif"], "ANEGOPT": ["否定希求法助動詞（ⲛⲛⲉ-）", "negative optative aux.", "aux. de l’optatif négatif"], "ANY": ["「まだ〜ない」の助動詞（ⲙⲡⲁⲧⲉ-）", "“not yet” auxiliary", "aux. du « pas encore »"], "APREC": ["時の助動詞（ⲛⲧⲉⲣⲉ-）", "temporal (precursive) auxiliary", "auxiliaire du temporel"], "IMOD": ["強めの修飾語（ⲧⲏⲣ=・ϩⲱⲱ= など）", "intensifying modifier (ⲧⲏⲣ=, ϩⲱⲱ= etc.)", "modificateur intensif (ⲧⲏⲣ=, ϩⲱⲱ=, etc.)"], "VIMP": ["命令形の動詞（ⲙⲁ・ⲁⲣⲓ- など）", "imperative verb (ⲙⲁ, ⲁⲣⲓ- etc.)", "verbe à l’impératif (ⲙⲁ, ⲁⲣⲓ-, etc.)"], "PUNCT": ["句読点", "punctuation", "ponctuation"], "X": ["未判定", "unresolved", "non résolu"]}, REPO="https://github.com/icecocoasince2003-create/Nag-Hammadi-Library/", EDITIONS={"III-3": "eugnostos.html?wit=III", "VI-5": "republic.html"}, SYNOPSES={"V-1": "eugnostos.html?wit=SYN"};
 const H=document.documentElement, T='http://www.tei-c.org/ns/1.0', XNS='http://www.w3.org/XML/1998/namespace';
@@ -274,7 +288,83 @@ function renderText(){
     (OPT.page&&D.st.pb?' pages':'')+(OPT.line&&D.st.lb?' lines':'');
   box.innerHTML=html;
   hideCard();
+  xparMark();
 }
+/* ---------- コーパスの外の並行テキスト ----------
+   data/parallels.xml の <linkGrp type="parallel" subtype="external"> の <link> が、この文書の <s> と data/parallels/ の TEI の <s> を結ぶ。
+   外のテキストの TEI は、ヘッダーに言語（<language ident>）・底本（<sourceDesc> の <bibl>）・ライセンス（<licence>）を持つ
+   （data/parallels/README.md）。結ばれたセグメントの § の後ろに言語の印を出し、押すとその本文と出典をパネルに出す。
+   ?par=ファイル で、parallels.xml の代わりに同じサイトの別のファイルを読む（試験用） */
+const XLANGS={grc:['古代ギリシア語','Ancient Greek','grec ancien'], la:['ラテン語','Latin','latin'], cop:['コプト語','Coptic','copte']};
+let XPAR=null; const XDOCS=new Map();
+function xparLinks(){
+  if(XPAR) return XPAR;
+  const q=new URLSearchParams(location.search).get('par')||'';
+  const parUrl=new URL(/^[\w\/.-]+\.xml$/.test(q)&&q.indexOf('..')<0?q:'data/parallels.xml', location.href).href;
+  const here=new URL(DOC.xml, location.href).href;
+  XPAR=fetch(parUrl,{cache:'no-cache'}).then(r=>r.ok?r.text():'').then(t=>{
+    const m=new Map(); if(!t) return m;
+    const x=new DOMParser().parseFromString(t,'application/xml');
+    all(x,'linkGrp').filter(g=>g.getAttribute('type')==='parallel'&&g.getAttribute('subtype')==='external').forEach(g=>all(g,'link').forEach(l=>{
+      const us=(l.getAttribute('target')||'').split(/\s+/).filter(Boolean).map(p=>{ try{ return new URL(p,parUrl); }catch(e){ return null; } }).filter(Boolean);
+      const a=us.find(u=>u.href.replace(/#.*$/,'')===here), b=us.find(u=>u.href.replace(/#.*$/,'')!==here);
+      if(!a||!b||!a.hash||!b.hash) return;
+      const sid=decodeURIComponent(a.hash.slice(1));
+      if(!m.has(sid)) m.set(sid,[]);
+      m.get(sid).push({url:b.href.replace(/#.*$/,''), id:decodeURIComponent(b.hash.slice(1))});
+    }));
+    return m;
+  }).catch(()=>new Map());
+  return XPAR;
+}
+function xparDoc(url){
+  if(!XDOCS.has(url)) XDOCS.set(url, fetch(url,{cache:'no-cache'}).then(r=>r.ok?r.text():Promise.reject(new Error(url+' — HTTP '+r.status))).then(t=>{
+    const x=new DOMParser().parseFromString(t,'application/xml');
+    if(x.getElementsByTagName('parsererror').length) throw new Error(url+' — XML');
+    const one=(el,n)=>all(el,n)[0], txt=e=>e?e.textContent.replace(/\s+/g,' ').trim():'';
+    const lang=one(x,'language'), lic=one(x,'licence'), sd=one(x,'sourceDesc'), ts=one(x,'titleStmt');
+    const segs=new Map(); all(x,'s').forEach(s=>{ if(xid(s)) segs.set(xid(s), s); });
+    return {title:txt(ts&&one(ts,'title')), lang:lang?lang.getAttribute('ident')||'':'', langName:txt(lang),
+      bibl:txt(sd&&one(sd,'bibl')), licence:txt(lic), licenceUrl:lic?lic.getAttribute('target')||'':'', segs};
+  }));
+  return XDOCS.get(url);
+}
+const xLangName=d=>XLANGS[d.lang]?tri(...XLANGS[d.lang]):esc(d.langName||d.lang);
+async function xparMark(){
+  if(!DOC) return;
+  const m=await xparLinks();
+  for(const [sid, list] of m){
+    const row=document.getElementById('seg-'+sid); if(!row||row.querySelector('.xpar')) continue;
+    const sn=row.querySelector('.sn'); let after=sn;
+    for(const t of list){
+      let d; try{ d=await xparDoc(t.url); }catch(e){ console.warn(e); continue; }
+      if(!d.segs.has(t.id)||row.querySelector('.xpar[data-url="'+CSS.escape(t.url)+'"][data-id="'+CSS.escape(t.id)+'"]')) continue;
+      const b=document.createElement('button');
+      b.type='button'; b.className='xpar'; b.dataset.url=t.url; b.dataset.id=t.id; b.setAttribute('aria-haspopup','dialog');
+      b.textContent='‖ '+(d.lang||'?');
+      b.title=(UL()==='ja'?'コーパスの外の並行テキスト（':UL()==='fr'?'Texte parallèle hors du corpus (':'Parallel text outside the corpus (')+(d.title||d.lang)+(UL()==='ja'?'）':')');
+      after.insertAdjacentElement('afterend', b); after=b;
+    }
+  }
+}
+async function openXpar(b){
+  const p=$('#xpanel');
+  let d; try{ d=await xparDoc(b.dataset.url); }catch(e){ return; }
+  const s=d.segs.get(b.dataset.id); if(!s) return;
+  const t3=(ja,en,fr)=>UL()==='ja'?ja:UL()==='fr'?fr:en;   // 属性に入れる文字（tri は言語ごとの <span> を返すので、属性には使えない）
+  p.innerHTML='<button type="button" class="x" aria-label="'+esc(t3('閉じる','Close','Fermer'))+'">×</button>'+
+    '<h2 id="xpanelT">'+esc(d.title||b.dataset.url)+'</h2>'+
+    '<p class="xl">'+tri('コーパスの外の並行テキスト','Parallel text outside the corpus','Texte parallèle hors du corpus')+' · '+xLangName(d)+
+      (s.getAttribute('n')?' · '+esc(s.getAttribute('n')):'')+'</p>'+
+    '<div class="xtx" lang="'+esc(d.lang||'und')+'">'+esc(s.textContent.replace(/\s+/g,' ').trim())+'</div>'+
+    '<dl><dt>'+tri('底本','Source edition','Édition de base')+'</dt><dd>'+esc(d.bibl||'—')+'</dd>'+
+    '<dt>'+tri('ライセンス','Licence','Licence')+'</dt><dd>'+(d.licenceUrl?'<a href="'+esc(d.licenceUrl)+'" target="_blank" rel="noopener">'+esc(d.licence||d.licenceUrl)+' ↗</a>':esc(d.licence||'—'))+'</dd>'+
+    '<dt>'+tri('データ','Data','Données')+'</dt><dd><a href="'+esc(b.dataset.url)+'" download>'+esc(b.dataset.url.replace(/^.*\//,''))+'</a> · '+
+      tri('Sheneset の注釈はありません','no Sheneset annotation','sans annotation Sheneset')+'</dd></dl>';
+  p.hidden=false;
+  p.querySelector('.x').focus();
+}
+function hideXpar(){ const p=$('#xpanel'); if(p&&!p.hidden){ p.hidden=true; } }
 function statusHTML(){
   const s=D.st, ann=s.typed>0, rel=REPO+'blob/main/source/nhc_fulltext_split/README_ja.md';
   const li=[];
@@ -522,11 +612,13 @@ function fail(msg, detail){
 })();
 document.addEventListener('click',e=>{
   if(e.target.closest('#card .x')){ hideCard(); return; }
+  if(e.target.closest('#xpanel .x')){ hideXpar(); return; }
+  const xp=e.target.closest('#text .xpar'); if(xp){ openXpar(xp); return; }
   const sn=e.target.closest('#text .sn'); if(sn){ citeSeg(sn); return; }
   const dc=e.target.closest('#docCite'); if(dc){ citeDoc(dc); return; }
   const m=e.target.closest('#text .m'); if(m) showCard(m);
 });
-document.addEventListener('keydown',e=>{ if(e.key==='Escape') hideCard(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ hideCard(); hideXpar(); } });
 document.addEventListener('nhc:lang',()=>{ if(!D) return; setTitle(); labelDocNavs(); if(OPT.inter) renderText(); });
 window.addEventListener('hashchange',gotoHash);
 </script>
