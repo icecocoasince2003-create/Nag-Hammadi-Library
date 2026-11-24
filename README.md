@@ -59,9 +59,14 @@
 
 - **作業用のファイルです。** 訳はまだ付いておらず、校訂本との照合も済んでいません
   （元ファイルで落ちていた ⲍ・ⲯ を戻した 744 語のうち 42 語は確度 B。同 README の §4・§7）。
-- **39 文書（写本 I–IV の I,2〜IV,1、写本 VII–XIII の VII,4〜XIII,2）は、語群・品詞・レンマ・語義を自動で付けた暫定版です（2026-11-18）。**
-  人の目では確かめていません（形態素の 30% は確度 low、14% は品詞を決められず `X`）。作り方・件数・確かめていないこと・
-  リポジトリに置くときに直したことは同 README の §10・§11、要確認の一覧は `source/nhc_fulltext_split/annotation/` にあります。
+- **39 文書（写本 I–IV の I,2〜IV,1、写本 VII–XIII の VII,4〜XIII,2）は、語群・品詞・レンマ・語義を自動で付けた暫定版です。**
+  2026-11-24 に、[符号化の仕様書](docs/ANNOTATION_SPEC.md)に沿って Coptic SCRIPTORIUM の NLP で付け直しました。
+  語群・形態素・品詞・レンマは NLP の出力で、語義は前の暫定版（2026-11-18）のものを、語の範囲とレンマが変わらなかった語にだけ残しています。
+  人の目では確かめていません（形態素の 1.8% は確度 low、0.6% は品詞を決められず `X`。確度はスクリプトの目安で、正解率ではありません。
+  人手の注釈がある III,3 で比べると、区切りも品詞も合った形態素は 55% で、食い違いの一部は品詞の約束の違いによります）。
+  構文（依存関係）は文書ごとの CoNLL-U（`source/nhc_fulltext_split/conllu/`）にありますが、文をほとんど区切れていないので参考程度です。
+  作り方・件数・確かめていないことは同 README の §10・§11・§13 にあります（`source/nhc_fulltext_split/annotation/` の要確認の一覧は
+  2026-11-18 の版についてのものです）。
   残りの 17 文書（IV,2、写本 V・VI、VII,1–3）は未注釈です（本文だけを本文ビュワーで読めます）。
   TEI のヘッダー（`<publicationStmt>`）には、公開元・公開日と、下の「ライセンス」と同じ利用条件
   （コプト語本文はパブリックドメイン、TEI 符号化と下処理は CC BY 4.0）を入れてあります。
@@ -139,6 +144,9 @@ nag_hammadi_library/
     ├─ split_segments.py   セグメント(<s>)を TSV で指定した位置で分ける(案。まだ実データには使わない)
     ├─ make_og_image.py    共有用の画像 image/og-image.png を作る(rsvg-convert が要る)
     ├─ check_tei.py        TEI の点検(ポインタの切れ・以前の書き方・見出しとレンマへのコプト文字以外の文字の混入など)。--schema でスキーマ検証も
+    ├─ check_spec.py       符号化の仕様(docs/ANNOTATION_SPEC.md)への適合の点検
+    ├─ coptic_nlp_tei.py   Coptic SCRIPTORIUM の NLP で語群・形態素・品詞・レンマを付け直し、構文を CoNLL-U に出す
+    ├─ leiden_to_tei.py    ライデン記法の翻刻を TEI(EpiDoc の要素)にする
     ├─ check_style.py      表記ゆれの点検(規則は style_rules.json)
     ├─ build_parallels.py  並行箇所(data/parallels.xml)を、文言の自動照合で作る
     └─ sync_nhc_catalog.py  NHC 全文テキスト(未注釈)の文書一覧を data/catalog.xml に書き出す
@@ -193,6 +201,9 @@ nag_hammadi_library/
 | `insert_breaks.py` | 写本の頁（`<pb>`）・行（`<lb>`）の区切りを TSV から TEI に入れる。区切りの空要素を足すだけで、本文・語・`xml:id` は変えない。何も付けなければ入る位置の表示だけで、`--write` で書き込む。手順は下の「写本の頁・行の区切りを入れる」。 |
 | `split_segments.py` | セグメント（`<s>`）を TSV で指定した位置で分ける。最初の部分が元の `xml:id` と § を保ち、続きは `元の id_a`・`_b` …（§ は 15a・15b …）。**案**（`source/nhc_fulltext_split/proposals/README_ja.md`）。まだ実データには使わない。 |
 | `make_og_image.py` | リンクを共有したときのプレビュー画像 `image/og-image.png`(1200×630)を、アイコンとゲンゲンの SVG から作る。 |
+| `coptic_nlp_tei.py` | `<s>` の中身を Coptic SCRIPTORIUM の NLP（公開のサービス）にかけ、語群（`<phr>`）・形態素（`<w>`）・品詞・レンマ・借用語の印を付け直す。構文（依存関係）は CoNLL-U に出す。文字・欠損・補い・`xml:id` が変わらないことを確かめてから書く。既定では `build/coptic_nlp/` に書き、`--in-place` で元のファイルに書く。使い方は [docs/ANNOTATION_TOOLS.md](docs/ANNOTATION_TOOLS.md)。 |
+| `leiden_to_tei.py` | ライデン記法で書いた翻刻（頁・行つき）を、TEI の `<pb>`・`<lb>`・`<s>`・`<w>` と EpiDoc の校訂の要素（`<supplied>`・`<gap>` など）にする。 |
+| `check_spec.py` | TEI が [符号化の仕様書](docs/ANNOTATION_SPEC.md) に合っているかを、要修正・要確認・参考の 3 段階で示す（`--tsv` で 1 件 1 行の一覧も）。 |
 
 ## データの編集
 
@@ -476,6 +487,8 @@ HOME のフッターの版番号は、このファイルを読みます。`CITAT
 ## TEI設計の要点（ファイルの分離）
 
 データは役割ごとに別々の TEI 文書(本文・辞書・並行箇所・カタログ)へ分離し、ID参照で連携させています。
+EpiDoc（欠損・補訂・略記など）と Coptic SCRIPTORIUM（語群・形態素・品詞・構文）との対応、自動注釈の手順と点検は
+[符号化の仕様書](docs/ANNOTATION_SPEC.md)（2026-11-23）に、その道具の使い方は [docs/ANNOTATION_TOOLS.md](docs/ANNOTATION_TOOLS.md) にあります。
 
 **① 本文 `eugnostos_tei.xml`** — ルート `<TEI xml:lang="cop">` 直下の `<group>` が
 二つの `<text type="witness">` を並置:
@@ -563,10 +576,10 @@ HOME のフッターの版番号は、このファイルを読みます。`CITAT
 本文の `<s>` の主題(`@ana="#th-…"`)と `eugnostos_tei.xml` のヘッダーの `<taxonomy>`、補助の `scripts/sync_theology_ana.py` が
 対象です。削除前の内容はコミット `1950340` に残っています。
 
-### TEI スキーマとの適合（2026-11-18 時点）
+### TEI スキーマとの適合（2026-11-24 時点）
 
 `data/` の 6 ファイルと `source/nhc_fulltext_split/tei/` の 56 ファイルは、すべて TEI P5 の汎用スキーマ
-`tei_all.rng`（P5 4.3.0）で妥当です（語群の暫定版を入れたあと、2026-11-18 に検証し直しました）。
+`tei_all.rng`（P5 4.3.0）で妥当です（39 文書を NLP で付け直したあと、2026-11-24 に検証し直しました）。
 TEI に無い独自の要素・属性は使っていません。
 
 2026-11-18 に、それまでの独自の書き方を TEI 標準の書き方に移しました。本文・訳・語釈の中身は変えていません。
