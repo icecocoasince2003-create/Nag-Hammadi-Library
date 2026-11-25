@@ -198,7 +198,7 @@
 148	ⲛⲧ	ⲉⲣⲉ	PART	CFOC	_	151	mark	_	TEI=XI-7512572_489
 149	ⲁ	ⲁ	AUX	APST	_	151	aux	_	TEI=XI-7512572_489
 150	ϥ	ⲛⲧⲟϥ	PRON	PPERS	_	151	nsubj	_	TEI=XI-7512572_489
-151	ⲉⲓⲛⲉ	ⲉⲓⲛⲉ	VERB	V	_	56	conj	_	TEI=XI-7512572_489
+151	ⲉⲓⲛⲉ	ⲉⲓⲛⲉ	VERB	V	_	194	conj	_	TEI=XI-7512572_489
 152-153	ⲙⲙⲁ	_	_	_	_	_	_	_	_
 152	ⲙ	ⲛ	ADP	PREP	_	153	case	_	TEI=XI-7512572_489
 153	ⲙⲁ	ⲙⲁ	NOUN	N	_	151	obj	_	TEI=XI-7512572_489
@@ -228,9 +228,9 @@
 171	ⲧⲉⲉⲓⲧⲟⲩ	ⲧⲉⲉⲓⲧⲟⲩ	PRON	COP	_	93	advcl	_	TEI=XI-7512572_489
 172	ϭⲉ	ϭⲉ	PART	PTC	_	171	advmod	_	TEI=XI-7512572_489
 173-177	ⲛⲉⲛϩⲛⲡϣⲁⲣⲡ	_	_	_	_	_	_	_	_
-173	ⲛⲉ	ⲡⲉ	PRON	COP	_	177	cop	_	TEI=XI-7512572_489
+173	ⲛⲉ	ⲡⲉ	PRON	COP	_	171	cop	_	TEI=XI-7512572_489
 174	ⲛ	ⲡ	DET	ART	_	177	det	_	TEI=XI-7512572_489
-175	ϩⲛ	ϩⲛ	ADP	PREP	_	174	fixed	_	TEI=XI-7512572_489
+175	ϩⲛ	ϩⲛ	ADP	PREP	_	177	case	_	TEI=XI-7512572_489
 176	ⲡ	ⲡ	DET	ART	_	177	det	_	TEI=XI-7512572_489
 177	ϣⲁⲣⲡ	ϣⲟⲣⲡ	NOUN	N	_	171	obl	_	TEI=XI-7512572_489|Norm=ϣⲟⲣⲡ
 178-179	ⲛⲃⲁⲡⲧⲓⲥⲙⲁ	_	_	_	_	_	_	_	_
@@ -239,13 +239,13 @@
 180-181	ⲉⲩ	_	_	_	_	_	_	_	_
 180	ⲉ	ⲉⲣⲉ	SCONJ	CCIRC	_	182	case	_	TEI=XI-7512572_489
 181	ⲩ	ⲟⲩ	DET	ART	_	182	det	_	TEI=XI-7512572_489
-182	ⲁϩⲟⲣⲁⲧⲟⲛ	ⲁϩⲟⲣⲁⲧⲟⲛ	NOUN	N	_	183	acl:relcl	_	TEI=XI-7512572_489|Lang=grc
+182	ⲁϩⲟⲣⲁⲧⲟⲛ	ⲁϩⲟⲣⲁⲧⲟⲛ	NOUN	N	_	171	obl	_	TEI=XI-7512572_489|Lang=grc
 183-185	ⲛⲉⲧⲉⲡⲱϥ	_	_	_	_	_	_	_	_
 183	ⲛ	ⲡ	DET	ART	_	127	dislocated	_	TEI=XI-7512572_489
 184	ⲉⲧⲉ	ⲉⲧⲉⲣⲉ	SCONJ	CREL	_	185	mark	_	TEI=XI-7512572_489
 185	ⲡⲱϥ	ⲡⲱϥ	DET	PPOS	_	183	acl:relcl	_	TEI=XI-7512572_489
 186	ⲡⲉ	ⲡⲉ	PRON	COP	_	185	cop	_	TEI=XI-7512572_489
-187	ⲉⲡⲉⲓⲇⲏ	ⲉⲡⲉⲓⲇⲏ	CCONJ	CONJ	_	189	mark	_	TEI=XI-7512572_489|Lang=grc
+187	ⲉⲡⲉⲓⲇⲏ	ⲉⲡⲉⲓⲇⲏ	CCONJ	CONJ	_	194	mark	_	TEI=XI-7512572_489|Lang=grc
 188	ⲡⲉ	ⲡⲉ	PART	PTC	_	189	det	_	TEI=XI-7512572_489
 189-191	ⲛⲁⲛϣⲉ	_	_	_	_	_	_	_	_
 189	ⲛ	ⲡ	DET	ART	_	191	det	_	TEI=XI-7512572_489
@@ -254,6 +254,6 @@
 192-194	ϫⲉⲁϩⲛⲟ	_	_	_	_	_	_	_	_
 192	ϫⲉ	ϫⲉ	CCONJ	CONJ	_	194	mark	_	TEI=XI-7512572_489
 193	ⲁ	ⲁ	AUX	APST	_	194	nsubj	_	TEI=XI-7512572_489
-194	ϩⲛⲟ	ϩⲛⲁⲩ	NOUN	N	_	191	ccomp	_	TEI=XI-7512572_489
+194	ϩⲛⲟ	ϩⲛⲁⲩ	NOUN	N	_	183	ccomp	_	TEI=XI-7512572_489
 195	ⲥ	ⲛⲧⲟⲥ	PRON	PPERO	_	194	obj	_	TEI=XI-7512572_489
 
