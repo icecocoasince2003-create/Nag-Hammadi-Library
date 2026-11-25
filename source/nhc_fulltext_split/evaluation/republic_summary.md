@@ -7,7 +7,7 @@
 ## 条件
 
 - 自動注釈は公開中の 39 文書と同じスクリプト（`annotation/bound_group_converter.py` → `annotation/annotate_tei.py`）で付けた。違いは、参考を `data/eugnostos_tei.xml`（III,3）だけにしたこと（`--ref`）。`data/republic_tei.xml` はスクリプトに読ませていない。
-- 入力は未注釈の `tei/06-5_plato-republic.xml`（`<w>` 699）。比べる相手は人手の注釈 `data/republic_tei.xml`（`<w>` 737）。
+- 入力は未注釈の VI,5 `evaluation/input/06-5_plato-republic.xml`（2026-11-17 の `tei/06-5_plato-republic.xml` と同じもの。`<w>` 699）。比べる相手は人手の注釈 `data/republic_tei.xml`（`<w>` 737）。
 - 公開中の 39 文書は、参考 2 件（III,3 と『国家』）で作られている。『国家』を外すと、語群の学習例は III,3 の冒頭 9 セグメント（語群のある `<w>` 395。公開版では『国家』の 737 が加わる）だけになり、品詞・レンマの用例も III,3 の `<w>` 3,164 だけになる（公開版では『国家』の 737 が加わる）。つまりここの数値は、公開版より少ない参考で、見ていない本文に付けたときの精度である。
 - 注釈スクリプトの語彙表（約 165 語形）と文脈の規則、変換スクリプトの特徴に使う語のリスト（`STOP`・`SHORT`）は手で書かれたもので、『国家』を見ずに書かれたかどうかは分からない。これは `--ref` では外せないので、その分だけ数値が高めに出ている可能性がある（語の切り直しの一覧 `SAFE_SPLITS` は、参考に現れる形だけが使われるので、ここでは III,3 に現れる形だけが効く）。
 
@@ -200,7 +200,7 @@ python3 source/nhc_fulltext_split/evaluation/evaluate_republic.py
 
 lxml と scikit-learn が要る（注釈のスクリプトと同じ）。同じ入力なら、何度実行しても同じファイルになる。入力（SHA-256）:
 
-- `source/nhc_fulltext_split/tei/06-5_plato-republic.xml` 141b0df3fd2fea0fe83d642658ff4aac1c071456df9b8ff302c7bceebd115596
+- `source/nhc_fulltext_split/evaluation/input/06-5_plato-republic.xml` 141b0df3fd2fea0fe83d642658ff4aac1c071456df9b8ff302c7bceebd115596
 - `data/republic_tei.xml` ea453844e77ea8f3d02d7f7bd9b532b28ff2d5025d1b52b10daeed2002810b6d
 - `data/eugnostos_tei.xml` 01f855a5bfb356039bc122a5cc4845a285352a4fb7ec11f310f059a5d80995bc
 - `source/nhc_fulltext_split/annotation/bound_group_converter.py` 37fb09d39a9fa1c96cd2a50b742a36a547eae3db9c6a2e2cd59467ab0285ddb7
