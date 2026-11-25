@@ -8,7 +8,9 @@ One command, deterministic (the same files on every run with the same inputs):
 It needs lxml and scikit-learn, because it runs the two annotation scripts (with the
 same Python interpreter, as subprocesses, PYTHONHASHSEED=0):
 
- 1. Held-out run: tei/06-5_plato-republic.xml (unannotated) is copied into an empty
+ 1. Held-out run: the unannotated VI,5 (input/06-5_plato-republic.xml, a byte-for-byte copy of
+    tei/06-5_plato-republic.xml as it was before 2026-11-24, when the file in tei/ was annotated
+    with the Coptic SCRIPTORIUM NLP, README_ja.md §14) is copied into an empty
     temporary folder and annotated with
       annotation/bound_group_converter.py --ref data/eugnostos_tei.xml
       annotation/annotate_tei.py ... --ref data/eugnostos_tei.xml
@@ -54,7 +56,8 @@ import evalcommon as ec  # noqa: E402  (same folder)
 HERE = Path(__file__).resolve().parent
 NHC = HERE.parent                      # source/nhc_fulltext_split
 REPO = NHC.parent.parent
-SRC = NHC / 'tei' / '06-5_plato-republic.xml'
+# 未注釈の VI,5（2026-11-17 の tei/06-5_plato-republic.xml と同じもの。tei/ のものは 2026-11-24 に注釈を付けた）
+SRC = HERE / 'input' / '06-5_plato-republic.xml'
 GOLD = REPO / 'data' / 'republic_tei.xml'
 EUG = REPO / 'data' / 'eugnostos_tei.xml'
 CONV = NHC / 'annotation' / 'bound_group_converter.py'
@@ -77,7 +80,7 @@ def run(cmd, cwd):
 
 
 def annotate(work, refs):
-    """Annotate a copy of tei/06-5 in an empty folder with only the given references."""
+    """Annotate a copy of the unannotated VI,5 (input/) in an empty folder with only the given references."""
     work.mkdir(parents=True)
     inp = work / 'input'
     inp.mkdir()
@@ -519,7 +522,8 @@ def write_results(out, gold, auto, cmp, res, cmp_s, res_s):
     n_eug_phr_w = sum(1 for m in eug.morphs if m.phr)
     w('- 自動注釈は公開中の 39 文書と同じスクリプト（`annotation/bound_group_converter.py` → `annotation/annotate_tei.py`）で付けた。'
       '違いは、参考を `data/eugnostos_tei.xml`（III,3）だけにしたこと（`--ref`）。`data/republic_tei.xml` はスクリプトに読ませていない。')
-    w('- 入力は未注釈の `tei/06-5_plato-republic.xml`（`<w>` %s）。比べる相手は人手の注釈 `data/republic_tei.xml`（`<w>` %s）。'
+    w('- 入力は未注釈の VI,5 `evaluation/input/06-5_plato-republic.xml`（2026-11-17 の `tei/06-5_plato-republic.xml` と同じもの。'
+      '`<w>` %s）。比べる相手は人手の注釈 `data/republic_tei.xml`（`<w>` %s）。'
       % (num(sum(1 for _ in Doc(SRC).morphs)), num(len(gold.morphs))))
     n_gold_phr_w = sum(1 for m in gold.morphs if m.phr)
     w('- 公開中の 39 文書は、参考 2 件（III,3 と『国家』）で作られている。『国家』を外すと、語群の学習例は III,3 の冒頭 9 セグメント'

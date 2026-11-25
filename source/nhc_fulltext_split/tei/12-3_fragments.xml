@@ -34,7 +34,7 @@
       </titleStmt>
       <extent>
         <measure unit="segment" quantity="4">4 segments</measure>
-        <measure unit="token" quantity="187">187 morpheme tokens (provisional)</measure>
+        <measure unit="token" quantity="186">186 morpheme tokens (provisional)</measure>
         <measure unit="gap" quantity="0">0 gap markers</measure>
       </extent>
       <publicationStmt>
@@ -89,8 +89,8 @@
         <segmentation>
           <p xml:lang="ja"><gi>s</gi> は元ファイルの 1 行（1 セグメント）。行が文書の境目や表題の境目をまたぐときだけ分けた。<att>xml:id</att> は「写本番号-行 ID」で、分けた行には「_開始トークン位置」（元ファイルの行の中での位置、0 始まり）を付けた。<att>n</att> は文書内の通し番号。<gi>w</gi> は、TEI にしたときは元ファイルの空白区切り（形態素解析器の出力とみられる）のままとし、ⲍ・ⲯ を戻した語が途中で切れていたときだけ 1 つにつないだ。いまの <gi>phr</gi> と <gi>w</gi> の区切りは次の段落のとおり。<gi>ab</gi> の <att>type</att> は <val>title</val>（冒頭表題）、<val>text</val>（本文）、<val>subscript</val>（奥書表題）、<val>colophon</val>（写字生の奥書・覚え書き）、<val>fragment</val>（未配置断片）。</p>
           <p xml:lang="en">Each <gi>s</gi> is one row (segment) of the source file; a row is split only where it straddles the boundary of a tractate or of a title. <att>xml:id</att> is the codex number followed by the row id; for split rows the position of the first token within the source row (counted from 0) is added after an underscore. <att>n</att> numbers the segments within the tractate. When the file was first encoded, each <gi>w</gi> was a token of the source file (apparently the output of a morphological segmenter), except that tokens were joined where a restored ⲍ or ⲯ fell inside a word that the segmenter had split; the present division into <gi>phr</gi> and <gi>w</gi> is described in the next paragraphs. The <att>type</att> of <gi>ab</gi> is <val>title</val> (opening title), <val>text</val>, <val>subscript</val> (subscript title), <val>colophon</val> (scribal colophon or note) or <val>fragment</val> (unplaced fragments).</p>
-          <p xml:lang="ja">2026-11-24 の注釈：<gi>phr</gi> は語群（正書法上の 1 語）、<gi>w</gi> は形態素。どちらも Coptic SCRIPTORIUM の NLP（https://tools.copticscriptorium.org/coptic-nlp/）が推定したもので、scripts/coptic_nlp_tei.py（groups=auto、laytonize=smart）で TEI に戻した。NLP には 2026-11-18 の暫定版の <gi>w</gi> を空白で区切って送り、語群と形態素の区切りは NLP に任せた。2 つのセグメントにまたがって推定された語は、セグメントの境目で分けた。本文の文字、<gi>gap</gi> と <gi>supplied</gi> の位置、<gi>s</gi> の <att>xml:id</att> と <att>n</att> は変えていない（書き出す前にスクリプトが確かめた）。人の目では確かめていない。</p>
-          <p xml:lang="en">Annotation of 2026-11-24: <gi>phr</gi> is the bound group (orthographic word) and <gi>w</gi> the morpheme, both as inferred by the Coptic SCRIPTORIUM NLP tools (https://tools.copticscriptorium.org/coptic-nlp/) and written back into the TEI by scripts/coptic_nlp_tei.py (groups=auto, laytonize=smart). The tools were given the <gi>w</gi> of the draft of 2026-11-18 separated by spaces and decided the group and morpheme boundaries themselves; a word inferred across two segments was divided at the segment boundary. The letters of the text, the positions of <gi>gap</gi> and <gi>supplied</gi>, and the <att>xml:id</att> and <att>n</att> of each <gi>s</gi> are unchanged (checked by the script before writing). Not checked by hand.</p>
+          <p xml:lang="ja">2026-11-24 の注釈：<gi>phr</gi> は語群（正書法上の 1 語）、<gi>w</gi> は形態素。どちらも Coptic SCRIPTORIUM の NLP（https://tools.copticscriptorium.org/coptic-nlp/）が推定したもので、scripts/coptic_nlp_tei.py（groups=auto、laytonize=smart、sentences=s）で TEI に戻した。NLP には 2026-11-18 の暫定版の <gi>w</gi> を空白で区切って送り、語群と形態素の区切りは NLP に任せた。各 <gi>s</gi> の最後には句読点「·」を足して送り、NLP がセグメントを 1 文として扱い、語群がセグメントの境目をまたがないようにした（足した「·」は結果から除いた）。<gi>gap</gi> をまたいで推定された語は、<gi>gap</gi> の位置で分けた。本文の文字、<gi>gap</gi> と <gi>supplied</gi> の位置、<gi>s</gi> の <att>xml:id</att> と <att>n</att> は変えていない（書き出す前にスクリプトが確かめた）。人の目では確かめていない。</p>
+          <p xml:lang="en">Annotation of 2026-11-24: <gi>phr</gi> is the bound group (orthographic word) and <gi>w</gi> the morpheme, both as inferred by the Coptic SCRIPTORIUM NLP tools (https://tools.copticscriptorium.org/coptic-nlp/) and written back into the TEI by scripts/coptic_nlp_tei.py (groups=auto, laytonize=smart, sentences=s). The tools were given the <gi>w</gi> of the draft of 2026-11-18 separated by spaces and decided the group and morpheme boundaries themselves. A punctuation mark (·) was added at the end of each <gi>s</gi>, so that the tools treated the segment as a sentence and no bound group crossed a segment boundary; the mark was removed from the result. A word inferred across a <gi>gap</gi> was divided at the gap. The letters of the text, the positions of <gi>gap</gi> and <gi>supplied</gi>, and the <att>xml:id</att> and <att>n</att> of each <gi>s</gi> are unchanged (checked by the script before writing). Not checked by hand.</p>
         </segmentation>
         <correction method="markup">
           <p xml:lang="ja">元ファイルでは ⲝ がすべて ⲯ になっていたので、ⲝ に戻した（この文書では 0 字）。元ファイルで落ちていた ⲍ と ⲯ は、語形と文脈から語が決まる箇所で戻したが、この文書には該当する語がなかった。英語の編集注記が文字化けして残っていた箇所は、欠損の注記なので <gi>gap</gi> に置き換えた。変更は 1 か所ずつ、同梱の changes.tsv と restored_letters.tsv に記録してある。</p>
@@ -99,8 +99,8 @@
         <interpretation>
           <p xml:lang="ja">訳はまだ付けていない。品詞（<att>type</att>）、レンマ（<att>lemma</att>）、語釈、ギリシア語借用語の印（<att>xml:lang</att>="grc"）は、下の段落の自動注釈による暫定のもの。<gi>gap</gi>（<att>reason</att>="lost"。2026-11-24 に EpiDoc に合わせて "lacuna" から改めた）は、元ファイルに行・頁単位の欠損の注記があった位置を示す（この文書では 0 箇所）。それ以外の欠損と校訂者による復元の区別、下点、上線、句読点、頁と行の区切りは元ファイルになく、符号化していない。</p>
           <p xml:lang="en">No translation has been added yet. Part of speech (<att>type</att>), lemma (<att>lemma</att>), glosses and loanword marking (<att>xml:lang</att>="grc") come from the provisional automatic annotation described below. <gi>gap</gi> with <att>reason</att>="lost" (changed from "lacuna" on 2026-11-24, following EpiDoc) marks the places where the source file had an editorial note reporting lost lines or pages (0 in this file). The source file does not distinguish other lacunae from editorial restorations and has no sublinear dots, supralinear strokes, punctuation, or page and line breaks; none of these is encoded.</p>
-        <p xml:lang="ja">2026-11-24 の注釈：w/@type（品詞）、w/@lemma（レンマ）、借用語の印（xml:lang="grc"）は、Coptic SCRIPTORIUM の NLP の出力をサイトの約束に合わせて書いたもの（style=site。PPERS・PPERO・PPERI は PPER、UNKNOWN と ACOND_PPERS のような融合したタグは X、人称代名詞と冠詞のレンマは NLP の正規化した語形）。w/@resp は "#coptic-nlp"。w/@cert は medium で、X の語、セグメントの境目で分けた語、文字の対応がずれた語は low。確度はスクリプトの目安で、正解率ではない。w/@ana は standOff の英日の語釈を指す。語釈は 2026-11-18 の暫定版で自動で付けた短い辞書的な意味で、語の範囲とレンマがその版と同じ語にだけ残した。構文（依存関係）は TEI に入れず、../conllu/ の同じ名前のファイル（CoNLL-U）に出した。どれも人の目では確かめておらず、校訂版・辞書との照合を要する。</p>
-        <p xml:lang="en">Annotation of 2026-11-24: w/@type (part of speech), w/@lemma and the loanword marking (xml:lang="grc") are the output of the Coptic SCRIPTORIUM NLP tools, written to the site's conventions (style=site: PPERS, PPERO and PPERI become PPER; UNKNOWN and fused tags such as ACOND_PPERS become X; personal pronouns and articles take the normalized form given by the tools as their lemma). w/@resp is "#coptic-nlp"; w/@cert is medium, or low for X, for words divided at a segment boundary and for words whose letters did not align; this is the script's own rating, not an accuracy. w/@ana points to the English and Japanese glosses in standOff, short dictionary meanings assigned automatically for the draft of 2026-11-18 and kept only on words whose extent and lemma are the same as in that draft. The syntax (dependencies) is not encoded in the TEI; it is in the CoNLL-U file of the same name in ../conllu/. None of this has been checked by hand; all of it still has to be checked against the critical editions and dictionaries.</p></interpretation>
+        <p xml:lang="ja">2026-11-24 の注釈：w/@type（品詞）、w/@lemma（レンマ）、借用語の印（xml:lang="grc"）は、Coptic SCRIPTORIUM の NLP の出力をサイトの約束に合わせて書いたもの（style=site。PPERS・PPERO・PPERI は PPER、UNKNOWN と ACOND_PPERS のような融合したタグは X、人称代名詞と冠詞のレンマは NLP の正規化した語形）。w/@resp は "#coptic-nlp"。w/@cert は medium で、X の語、<gi>gap</gi> の位置で分けた語、文字の対応がずれた語は low。確度はスクリプトの目安で、正解率ではない。w/@ana は standOff の英日の語釈を指す。語釈は 2026-11-18 の暫定版で自動で付けた短い辞書的な意味で、語の範囲とレンマがその版と同じ語にだけ残した。構文（依存関係）は TEI に入れず、../conllu/ の同じ名前のファイル（CoNLL-U）に出した。CoNLL-U の文はセグメント（<gi>s</gi>）ごとに区切ってある（セグメントの中に NLP が句読点とみなす語があれば、そこでも切れる）。どれも人の目では確かめておらず、校訂版・辞書との照合を要する。</p>
+        <p xml:lang="en">Annotation of 2026-11-24: w/@type (part of speech), w/@lemma and the loanword marking (xml:lang="grc") are the output of the Coptic SCRIPTORIUM NLP tools, written to the site's conventions (style=site: PPERS, PPERO and PPERI become PPER; UNKNOWN and fused tags such as ACOND_PPERS become X; personal pronouns and articles take the normalized form given by the tools as their lemma). w/@resp is "#coptic-nlp"; w/@cert is medium, or low for X, for words divided at a <gi>gap</gi> and for words whose letters did not align; this is the script's own rating, not an accuracy. w/@ana points to the English and Japanese glosses in standOff, short dictionary meanings assigned automatically for the draft of 2026-11-18 and kept only on words whose extent and lemma are the same as in that draft. The syntax (dependencies) is not encoded in the TEI; it is in the CoNLL-U file of the same name in ../conllu/, divided into one sentence per segment (<gi>s</gi>), or more where the tools took a word inside a segment for punctuation. None of this has been checked by hand; all of it still has to be checked against the critical editions and dictionaries.</p></interpretation>
       </editorialDecl>
     </encodingDesc>
     <profileDesc>
@@ -119,6 +119,7 @@
       <change when="2026-11-18">Added to the Sheneset repository and published as a draft: the restoration marks for ⲍ and ⲯ, which the annotation had overwritten, put back as &lt;supplied&gt; around the restored letters; glosses that no word points to removed; header statements about the annotation brought up to date.</change>
       <change when="2026-11-24">Bound groups (<gi>phr</gi>), morphemes (<gi>w</gi>), part of speech (<att>type</att>) and lemmas of 4 segments re-annotated automatically with the Coptic SCRIPTORIUM NLP service by scripts/coptic_nlp_tei.py (groups=auto, laytonize=smart, style=site); <att>resp</att>="#coptic-nlp", not checked by hand. The letters of the text, the gaps, the supplied letters and the page and line breaks are unchanged.</change>
       <change when="2026-11-24">Brought into line with the annotation specification (docs/ANNOTATION_SPEC.md): glosses that no word points to any more removed (26); the token count in <gi>extent</gi> and the statements about the annotation in <gi>projectDesc</gi> and <gi>editorialDecl</gi> brought up to date; the dependency analysis of the same NLP run written to ../conllu/12-3_fragments.conllu. Carried out with a generative AI model (Claude).</change>
+      <change when="2026-11-25">Re-annotated with the same tools and settings as above, but with each segment sent as one sentence (scripts/coptic_nlp_tei.py --sentences s: a punctuation mark added at the end of each <gi>s</gi> and removed from the result), so that the dependency analysis in ../conllu/12-3_fragments.conllu is divided into sentences and no bound group crosses a segment boundary; the input was again the draft of 2026-11-18. Bound groups, morphemes, part of speech and lemmas of 4 segments replaced (<att>resp</att>="#coptic-nlp", not checked by hand); glosses that no word points to any more removed (0), glosses pointed to again restored from that draft (0); the token count in <gi>extent</gi> and the statements about the annotation in <gi>editorialDecl</gi> brought up to date. The letters of the text, the gaps, the supplied letters and the page and line breaks are unchanged. Carried out with a generative AI model (Claude).</change>
     </revisionDesc>
   </teiHeader>
   <text type="witness" xml:id="wit-XII-3" n="NHC XII,3" xml:lang="cop">
@@ -212,7 +213,7 @@
             <phr>
               <w type="ACONJ" lemma="ⲛⲧⲉ" resp="#coptic-nlp" cert="medium">ⲛ</w>
               <w type="PPER" lemma="ⲥⲉ" resp="#coptic-nlp" cert="medium">ⲥⲉ</w>
-              <w type="VSTAT" lemma="ⲁⲣϩⲱⲃ" resp="#coptic-nlp" cert="medium">ⲁⲣϩⲱⲃ</w>
+              <w type="X" resp="#coptic-nlp" cert="low">ⲁⲣϩⲱⲃ</w>
             </phr>
             <phr>
               <w type="CONJ" lemma="ⲉⲛⲉ" resp="#coptic-nlp" cert="medium">ⲉⲛⲉ</w>
@@ -328,8 +329,8 @@
               <w type="N" lemma="ⲥⲟⲟⲩⲛ" ana="#g-en-97accafb5337 #g-ja-1e4792083f53" resp="#coptic-nlp" cert="medium">ⲥⲟⲟⲩⲛ</w>
             </phr>
             <phr>
-              <w type="PREP" lemma="ⲉ" resp="#coptic-nlp" cert="medium">ⲉ</w>
-              <w type="ART" lemma="ⲙ" resp="#coptic-nlp" cert="medium">ⲙ</w>
+              <w type="CCIRC" lemma="ⲉⲣⲉ" resp="#coptic-nlp" cert="medium">ⲉ</w>
+              <w type="PREP" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423" resp="#coptic-nlp" cert="medium">ⲙ</w>
               <w type="ART" lemma="ⲡ" ana="#g-en-f9921a1852ea #g-ja-084b374171cd" resp="#coptic-nlp" cert="medium">ⲡ</w>
               <w type="N" lemma="ⲛⲟⲩⲧⲉ" ana="#g-en-21298df8a327 #g-ja-87a94db45b3b" resp="#coptic-nlp" cert="medium">ⲛⲟⲩⲧⲉ</w>
             </phr>
@@ -435,7 +436,7 @@
             </phr>
             <phr>
               <w type="PREP" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423" resp="#coptic-nlp" cert="medium">ⲛ</w>
-              <w type="PDEM" lemma="ⲡⲓ" resp="#coptic-nlp" cert="medium">ϯ</w>
+              <w type="PPER" lemma="ϯ" ana="#g-en-fa9f22e62229 #g-ja-65a52adbd87c" resp="#coptic-nlp" cert="medium">ϯ</w>
               <w type="V" lemma="ϯ" ana="#g-en-fa9f22e62229 #g-ja-65a52adbd87c" resp="#coptic-nlp" cert="medium">ϯ</w>
             </phr>
             <phr>
@@ -471,12 +472,9 @@
               <w type="PTC" lemma="ⲁⲓ" resp="#coptic-nlp" cert="medium">ⲁⲓ</w>
             </phr>
             <phr>
-              <w type="PPER" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423" resp="#coptic-nlp" cert="medium">ⲛ</w>
-              <w type="PREP" lemma="ⲛ" resp="#coptic-nlp" cert="medium">ⲙⲙⲟ</w>
-              <w type="PPER" lemma="ⲥ" ana="#g-en-ab46a445d43a #g-ja-5e02cfaa801c" resp="#coptic-nlp" cert="medium">ⲥ</w>
-            </phr>
-            <phr>
-              <w type="V" lemma="ϫⲡⲟϥⲛⲙⲉⲉⲩⲉ" resp="#coptic-nlp" cert="medium">ϫⲡⲟϥⲛⲙⲉⲉⲩⲉ</w>
+              <w type="PREP" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423" resp="#coptic-nlp" cert="medium">ⲛ</w>
+              <w type="ART" lemma="ⲙ" resp="#coptic-nlp" cert="medium">ⲙ</w>
+              <w type="N" lemma="ⲙⲟⲥϫⲡⲟϥⲛⲙⲉⲉⲩⲉ" resp="#coptic-nlp" cert="medium">ⲙⲟⲥϫⲡⲟϥⲛⲙⲉⲉⲩⲉ</w>
             </phr>
             <phr>
               <w type="CONJ" lemma="ϫⲉ" ana="#g-en-a09e936e20a5 #g-ja-7f5c3fda28dc" resp="#coptic-nlp" cert="medium">ϫⲉ</w>

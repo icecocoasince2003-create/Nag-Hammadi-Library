@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""項目 13: 人手で確かめるための抜き取り表を作る（自動注釈の 39 文書から約 400 形態素）。
+"""項目 13: 人手で確かめるための抜き取り表を作る（自動注釈の 56 文書から約 400 形態素）。
 
   python3 source/nhc_fulltext_split/evaluation/sample_review.py
 
@@ -12,19 +12,20 @@ The same seed and the same TEI files give the same two files.
 
 Population: every <w> with @cert in the automatically annotated TEI files of ../tei/
 (the files whose <w> carry resp="#coptic-nlp", "#morph-auto" or "#morph-reference"; 39 files
-when this was written; since 2026-11-24 they are annotated by the Coptic SCRIPTORIUM NLP,
-resp="#coptic-nlp"). Other files of ../tei/ also have @cert on a few <w> (restored ⲍ/ⲯ,
+when this was written, 56 since 2026-11-25; since 2026-11-24 they are annotated by the Coptic
+SCRIPTORIUM NLP, resp="#coptic-nlp"). Other files of ../tei/ also have @cert on a few <w> (restored ⲍ/ⲯ,
 resp="#zp"), but they are not annotated and are not read.
 
 Strata: dialect from <textLang> (Sahidic → サヒド, Lycopolitan → リコポリス) = 2 strata.
-Until 2026-11-23 the strata were dialect × @cert (6). The NLP annotation of 2026-11-24 gives
-almost every morpheme cert="medium" (high: 353 Sahidic and 0 Lycopolitan morphemes, low: about
-1,600 each), so strata by @cert no longer tell anything apart; the cert of every row is still
-in the table (column cert).
+Until 2026-11-23 the strata were dialect × @cert (6). The NLP annotation (2026-11-24, sent
+again one sentence per segment on 2026-11-25) gives almost every morpheme cert="medium" (high:
+353 Sahidic and 0 Lycopolitan morphemes; low: 1,132 and 387 when the table of 2026-11-25 was
+drawn), so strata by @cert no longer tell anything apart; the cert of every row is still in
+the table (column cert).
 
 Allocation: equal, total // 2 per stratum (400 → 200 each). Equal rather than proportional,
-because the point is also to see how the Lycopolitan texts fare (about a quarter of the
-morphemes; proportional allocation would give them about 106 rows). The overall estimate
+because the point is also to see how the Lycopolitan texts fare (about a fifth of the
+morphemes; proportional allocation would give them about 83 rows). The overall estimate
 is still unbiased, because score_review.py weights every stratum by its population size; its
 95% interval is about ±5 percentage points at worst (p = 0.5), each dialect about ±7.
 
@@ -209,7 +210,7 @@ def main():
             f.write('\t'.join(clean(x) for x in r) + '\n')
 
     meta = {
-        'description': '項目 13 の抜き取り表（自動注釈の 39 文書から、方言の 2 層に分けて無作為に抜き出した形態素。2026-11-24 に作り直した）。'
+        'description': '項目 13 の抜き取り表（自動注釈の 56 文書から、方言の 2 層に分けて無作為に抜き出した形態素。2026-11-25 に作り直した）。'
                        'sample_review.py が作り、score_review.py が読む。',
         'script': 'source/nhc_fulltext_split/evaluation/sample_review.py',
         'seed': args.seed,
