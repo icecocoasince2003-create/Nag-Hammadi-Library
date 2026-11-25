@@ -18,7 +18,7 @@
       <ref type="reader" target="reader.html?doc=II-6"/>   本文ビュワー
     </bibl>
 
-  * subtype は、品詞などを自動で付けた暫定版（<w> に @type がある。README_ja.md の §11）なら "draft"、
+  * subtype は、品詞などを自動で付けた暫定版（<w> に @type がある。README_ja.md の §11・§13・§14）なら "draft"、
     それ以外は "unannotated"。どちらにも本文ビュワー reader.html へのリンク（<ref type="reader">）を付ける。
   * どちらの文書も、検索ページでは既定で選択されず、選んだときだけ読み込まれる。
   * xml:id は「doc-」＋証本 ID から「wit-」を除いたもの（証本 wit-II-6 → doc-II-6）。
@@ -76,7 +76,8 @@ def read_documents():
         n = {"segment": sum(1 for _ in wit.iter(TEI + "s")), "token": sum(1 for _ in wit.iter(TEI + "w")),
              "gap": sum(1 for _ in wit.iter(TEI + "gap"))}
         grouped = wit.find(f".//{TEI}phr") is not None      # 語群を付けた版（語の区切りを一部変えてある）
-        annotated = wit.find(f".//{TEI}w[@type]") is not None   # 品詞などを自動で付けた暫定版（README_ja.md の §11）
+        annotated = wit.find(f".//{TEI}w[@type]") is not None   # 品詞などを自動で付けた暫定版（README_ja.md の §11・§13・§14）
+        glossed = wit.find(f".//{TEI}w[@ana]") is not None      # 語釈もある版（2026-11-18 の暫定版の語釈が残っているもの）
         for unit_name, col in (("segment", "rows"), ("token", "tokens"), ("gap", "gap_markers")):
             if unit_name == "token" and grouped:
                 continue
@@ -86,7 +87,7 @@ def read_documents():
             if not titles.get(lang):
                 problems.append(f"{unit}: 題名（{lang}）がありません")
         docs.append({"key": wid[len("wit-"):], "siglum": siglum, "titles": titles, "n": n, "grouped": grouped,
-                     "annotated": annotated, "target": f"{PKG_URL}/tei/{name}.xml"})
+                     "annotated": annotated, "glossed": glossed, "target": f"{PKG_URL}/tei/{name}.xml"})
     keys = [d["key"] for d in docs]
     if len(set(keys)) != len(keys):
         problems.append("文書のキーが重複しています")
@@ -104,13 +105,19 @@ def build_block(docs):
     drafts = [d for d in docs if d["annotated"]]
     plain = [d for d in docs if not d["annotated"]]
     grouped_only = [d for d in plain if d["grouped"]]
-    if drafts:
+    glossed = [d for d in drafts if d["glossed"]]
+    if drafts and len(glossed) == len(drafts):
         out.append(f"{INDENT}     subtype=\"draft\" の {len(drafts)} 文書は、語群・品詞・レンマ・語釈を自動で付けた暫定版で、人の目で確かめていない"
                    f"（同 README_ja.md の §11・§13）。")
-    out.append(f"{INDENT}     subtype=\"unannotated\" の {len(plain)} 文書は、品詞・レンマ・訳が付いていない"
-               + (f"（うち {len(grouped_only)} 文書は語群だけ付けた暫定版。§10）。" if grouped_only else "。"))
+    elif drafts:
+        out.append(f"{INDENT}     subtype=\"draft\" の {len(drafts)} 文書は、語群・品詞・レンマを自動で付けた暫定版（うち {len(glossed)} 文書は語釈も）で、"
+                   f"人の目で確かめていない（同 README_ja.md の §11・§13・§14）。")
+    if plain:
+        out.append(f"{INDENT}     subtype=\"unannotated\" の {len(plain)} 文書は、品詞・レンマ・訳が付いていない"
+                   + (f"（うち {len(grouped_only)} 文書は語群だけ付けた暫定版。§10）。" if grouped_only else "。"))
     out += [
-        f"{INDENT}     どちらも、本文は <ref type=\"reader\"> の reader.html で読め、検索ページでは既定で選択されず、選んだときだけ読み込まれる。 -->",
+        f"{INDENT}     {'どちらも' if plain else 'どの文書も'}、本文は <ref type=\"reader\"> の reader.html で読め、検索ページでは既定で選択されず、"
+        f"選んだときだけ読み込まれる。 -->",
     ]
     for d in docs:
         sub = "draft" if d["annotated"] else "unannotated"
