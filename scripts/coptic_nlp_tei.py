@@ -73,7 +73,8 @@ XID = "{%s}id" % XML_NS
 
 SERVICE = "https://tools.copticscriptorium.org/coptic-nlp/"
 RESP_ID = "coptic-nlp"
-USER_AGENT = "Sheneset coptic_nlp_tei.py (https://github.com/icecocoasince2003-create/Nag-Hammadi-Library)"
+# 送信のときに名乗る名前。外部のサービスに送るので、プロジェクト名・リポジトリの URL・アカウント名は入れない
+USER_AGENT = "coptic_nlp_tei.py"
 
 # --sentences s で各 <s> の最後に足す、文の終わりの印（U+00B7）。NLP の Web の入口は文を区切る要素を受け取らず、
 # 構文解析の文を品詞 PUNCT の語の後ろで切る（coptic-nlp の nlp_form.py は sent_tag を渡さず、lib/tt2conll.py の
