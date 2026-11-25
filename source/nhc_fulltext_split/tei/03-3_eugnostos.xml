@@ -34,7 +34,7 @@
       </titleStmt>
       <extent>
         <measure unit="segment" quantity="142">142 segments</measure>
-        <measure unit="token" quantity="3074">3074 morpheme tokens (provisional)</measure>
+        <measure unit="token" quantity="3078">3078 morpheme tokens (provisional)</measure>
         <measure unit="gap" quantity="0">0 gap markers</measure>
       </extent>
       <publicationStmt>
@@ -88,8 +88,8 @@
         <segmentation>
           <p xml:lang="ja"><gi>s</gi> は元ファイルの 1 行（1 セグメント）。行が文書の境目や表題の境目をまたぐときだけ分けた。<att>xml:id</att> は「写本番号-行 ID」で、分けた行には「_開始トークン位置」（元ファイルの行の中での位置、0 始まり）を付けた。<att>n</att> は文書内の通し番号。<gi>w</gi> は、TEI にしたときは元ファイルの空白区切り（形態素解析器の出力とみられる）のままとし、ⲍ・ⲯ を戻した語が途中で切れていたときだけ 1 つにつないだ。いまの <gi>phr</gi> と <gi>w</gi> の区切りは次の段落のとおり。<gi>ab</gi> の <att>type</att> は <val>title</val>（冒頭表題）、<val>text</val>（本文）、<val>subscript</val>（奥書表題）、<val>colophon</val>（写字生の奥書・覚え書き）、<val>fragment</val>（未配置断片）。</p>
           <p xml:lang="en">Each <gi>s</gi> is one row (segment) of the source file; a row is split only where it straddles the boundary of a tractate or of a title. <att>xml:id</att> is the codex number followed by the row id; for split rows the position of the first token within the source row (counted from 0) is added after an underscore. <att>n</att> numbers the segments within the tractate. When the file was first encoded, each <gi>w</gi> was a token of the source file (apparently the output of a morphological segmenter), except that tokens were joined where a restored ⲍ or ⲯ fell inside a word that the segmenter had split; the present division into <gi>phr</gi> and <gi>w</gi> is described in the next paragraphs. The <att>type</att> of <gi>ab</gi> is <val>title</val> (opening title), <val>text</val>, <val>subscript</val> (subscript title), <val>colophon</val> (scribal colophon or note) or <val>fragment</val> (unplaced fragments).</p>
-          <p xml:lang="ja">2026-11-24 の注釈：<gi>phr</gi> は語群（正書法上の 1 語）、<gi>w</gi> は形態素。どちらも Coptic SCRIPTORIUM の NLP（https://tools.copticscriptorium.org/coptic-nlp/）が推定したもので、scripts/coptic_nlp_tei.py（groups=auto、laytonize=smart）で TEI に戻した。NLP には 2026-11-18 の暫定版の <gi>w</gi> を空白で区切って送り、語群と形態素の区切りは NLP に任せた。2 つのセグメントにまたがって推定された語は、セグメントの境目で分けた。本文の文字、<gi>gap</gi> と <gi>supplied</gi> の位置、<gi>s</gi> の <att>xml:id</att> と <att>n</att> は変えていない（書き出す前にスクリプトが確かめた）。人の目では確かめていない。ただし n=1–7、9 の 8 セグメントは、人の手で注釈した版から写した語群と形態素のまま残した（<att>resp</att>="#morph-reference"）。</p>
-          <p xml:lang="en">Annotation of 2026-11-24: <gi>phr</gi> is the bound group (orthographic word) and <gi>w</gi> the morpheme, both as inferred by the Coptic SCRIPTORIUM NLP tools (https://tools.copticscriptorium.org/coptic-nlp/) and written back into the TEI by scripts/coptic_nlp_tei.py (groups=auto, laytonize=smart). The tools were given the <gi>w</gi> of the draft of 2026-11-18 separated by spaces and decided the group and morpheme boundaries themselves; a word inferred across two segments was divided at the segment boundary. The letters of the text, the positions of <gi>gap</gi> and <gi>supplied</gi>, and the <att>xml:id</att> and <att>n</att> of each <gi>s</gi> are unchanged (checked by the script before writing). Not checked by hand. The 8 segments n=1–7 and 9 keep the bound groups and morphemes copied from the hand-annotated edition (<att>resp</att>="#morph-reference").</p>
+          <p xml:lang="ja">2026-11-24 の注釈：<gi>phr</gi> は語群（正書法上の 1 語）、<gi>w</gi> は形態素。どちらも Coptic SCRIPTORIUM の NLP（https://tools.copticscriptorium.org/coptic-nlp/）が推定したもので、scripts/coptic_nlp_tei.py（groups=auto、laytonize=smart、sentences=s）で TEI に戻した。NLP には 2026-11-18 の暫定版の <gi>w</gi> を空白で区切って送り、語群と形態素の区切りは NLP に任せた。各 <gi>s</gi> の最後には句読点「·」を足して送り、NLP がセグメントを 1 文として扱い、語群がセグメントの境目をまたがないようにした（足した「·」は結果から除いた）。<gi>gap</gi> をまたいで推定された語は、<gi>gap</gi> の位置で分けた。本文の文字、<gi>gap</gi> と <gi>supplied</gi> の位置、<gi>s</gi> の <att>xml:id</att> と <att>n</att> は変えていない（書き出す前にスクリプトが確かめた）。人の目では確かめていない。ただし n=1–7、9 の 8 セグメントは、人の手で注釈した版から写した語群と形態素のまま残した（<att>resp</att>="#morph-reference"）。</p>
+          <p xml:lang="en">Annotation of 2026-11-24: <gi>phr</gi> is the bound group (orthographic word) and <gi>w</gi> the morpheme, both as inferred by the Coptic SCRIPTORIUM NLP tools (https://tools.copticscriptorium.org/coptic-nlp/) and written back into the TEI by scripts/coptic_nlp_tei.py (groups=auto, laytonize=smart, sentences=s). The tools were given the <gi>w</gi> of the draft of 2026-11-18 separated by spaces and decided the group and morpheme boundaries themselves. A punctuation mark (·) was added at the end of each <gi>s</gi>, so that the tools treated the segment as a sentence and no bound group crossed a segment boundary; the mark was removed from the result. A word inferred across a <gi>gap</gi> was divided at the gap. The letters of the text, the positions of <gi>gap</gi> and <gi>supplied</gi>, and the <att>xml:id</att> and <att>n</att> of each <gi>s</gi> are unchanged (checked by the script before writing). Not checked by hand. The 8 segments n=1–7 and 9 keep the bound groups and morphemes copied from the hand-annotated edition (<att>resp</att>="#morph-reference").</p>
         </segmentation>
         <correction method="markup">
           <p xml:lang="ja">元ファイルでは ⲝ がすべて ⲯ になっていたので、ⲝ に戻した（この文書では 6 字）。元ファイルで落ちていた ⲍ と ⲯ は、語形と文脈から語が決まる箇所で戻した（この文書では 8 語）。戻した字は <gi>supplied</gi> で包み、<att>resp</att>="#zp" と <att>cert</att> を付けた（<gi>w</gi> の <att>resp</att> と <att>cert</att> は形態素注釈のもの）。<val>high</val>（8 語）は語形と文脈から決まるもの、<val>medium</val>（0 語）は固有名など、校訂本や翻訳で知られている読みを当てたもの。どちらも校訂本とは照合していない。英語の編集注記が文字化けして残っていた箇所は、欠損の注記なので <gi>gap</gi> に置き換えた。変更は 1 か所ずつ、同梱の changes.tsv と restored_letters.tsv に記録してある。</p>
@@ -98,8 +98,8 @@
         <interpretation>
           <p xml:lang="ja">訳はまだ付けていない。品詞（<att>type</att>）、レンマ（<att>lemma</att>）、語釈、ギリシア語借用語の印（<att>xml:lang</att>="grc"）は、下の段落の自動注釈による暫定のもの。<gi>gap</gi>（<att>reason</att>="lost"。2026-11-24 に EpiDoc に合わせて "lacuna" から改めた）は、元ファイルに行・頁単位の欠損の注記があった位置を示す（この文書では 0 箇所）。それ以外の欠損と校訂者による復元の区別、下点、上線、句読点、頁と行の区切りは元ファイルになく、符号化していない。</p>
           <p xml:lang="en">No translation has been added yet. Part of speech (<att>type</att>), lemma (<att>lemma</att>), glosses and loanword marking (<att>xml:lang</att>="grc") come from the provisional automatic annotation described below. <gi>gap</gi> with <att>reason</att>="lost" (changed from "lacuna" on 2026-11-24, following EpiDoc) marks the places where the source file had an editorial note reporting lost lines or pages (0 in this file). The source file does not distinguish other lacunae from editorial restorations and has no sublinear dots, supralinear strokes, punctuation, or page and line breaks; none of these is encoded.</p>
-        <p xml:lang="ja">2026-11-24 の注釈：w/@type（品詞）、w/@lemma（レンマ）、借用語の印（xml:lang="grc"）は、Coptic SCRIPTORIUM の NLP の出力をサイトの約束に合わせて書いたもの（style=site。PPERS・PPERO・PPERI は PPER、UNKNOWN と ACOND_PPERS のような融合したタグは X、人称代名詞と冠詞のレンマは NLP の正規化した語形）。w/@resp は "#coptic-nlp"。w/@cert は medium で、X の語、セグメントの境目で分けた語、文字の対応がずれた語は low。確度はスクリプトの目安で、正解率ではない。w/@ana は standOff の英日の語釈を指す。語釈は 2026-11-18 の暫定版で自動で付けた短い辞書的な意味で、語の範囲とレンマがその版と同じ語にだけ残した。構文（依存関係）は TEI に入れず、../conllu/ の同じ名前のファイル（CoNLL-U）に出した。どれも人の目では確かめておらず、校訂版・辞書との照合を要する。n=1–7、9 の 8 セグメントは、本文が 1 字も違わない注釈つきの版（data/eugnostos_tei.xml）の語群・品詞・レンマを写したもので、resp="#morph-reference"・cert="high" を付けてある（2026-11-24 の付け直しでもそのまま残した）。</p>
-        <p xml:lang="en">Annotation of 2026-11-24: w/@type (part of speech), w/@lemma and the loanword marking (xml:lang="grc") are the output of the Coptic SCRIPTORIUM NLP tools, written to the site's conventions (style=site: PPERS, PPERO and PPERI become PPER; UNKNOWN and fused tags such as ACOND_PPERS become X; personal pronouns and articles take the normalized form given by the tools as their lemma). w/@resp is "#coptic-nlp"; w/@cert is medium, or low for X, for words divided at a segment boundary and for words whose letters did not align; this is the script's own rating, not an accuracy. w/@ana points to the English and Japanese glosses in standOff, short dictionary meanings assigned automatically for the draft of 2026-11-18 and kept only on words whose extent and lemma are the same as in that draft. The syntax (dependencies) is not encoded in the TEI; it is in the CoNLL-U file of the same name in ../conllu/. None of this has been checked by hand; all of it still has to be checked against the critical editions and dictionaries. The 8 segments n=1–7 and 9, whose text is identical to the annotated edition (data/eugnostos_tei.xml), carry that edition's bound groups, parts of speech and lemmata, marked resp="#morph-reference" and cert="high"; they were left unchanged in the re-annotation of 2026-11-24.</p></interpretation>
+        <p xml:lang="ja">2026-11-24 の注釈：w/@type（品詞）、w/@lemma（レンマ）、借用語の印（xml:lang="grc"）は、Coptic SCRIPTORIUM の NLP の出力をサイトの約束に合わせて書いたもの（style=site。PPERS・PPERO・PPERI は PPER、UNKNOWN と ACOND_PPERS のような融合したタグは X、人称代名詞と冠詞のレンマは NLP の正規化した語形）。w/@resp は "#coptic-nlp"。w/@cert は medium で、X の語、<gi>gap</gi> の位置で分けた語、文字の対応がずれた語は low。確度はスクリプトの目安で、正解率ではない。w/@ana は standOff の英日の語釈を指す。語釈は 2026-11-18 の暫定版で自動で付けた短い辞書的な意味で、語の範囲とレンマがその版と同じ語にだけ残した。構文（依存関係）は TEI に入れず、../conllu/ の同じ名前のファイル（CoNLL-U）に出した。CoNLL-U の文はセグメント（<gi>s</gi>）ごとに区切ってある（セグメントの中に NLP が句読点とみなす語があれば、そこでも切れる）。どれも人の目では確かめておらず、校訂版・辞書との照合を要する。n=1–7、9 の 8 セグメントは、本文が 1 字も違わない注釈つきの版（data/eugnostos_tei.xml）の語群・品詞・レンマを写したもので、resp="#morph-reference"・cert="high" を付けてある（2026-11-24 の付け直しでもそのまま残した）。</p>
+        <p xml:lang="en">Annotation of 2026-11-24: w/@type (part of speech), w/@lemma and the loanword marking (xml:lang="grc") are the output of the Coptic SCRIPTORIUM NLP tools, written to the site's conventions (style=site: PPERS, PPERO and PPERI become PPER; UNKNOWN and fused tags such as ACOND_PPERS become X; personal pronouns and articles take the normalized form given by the tools as their lemma). w/@resp is "#coptic-nlp"; w/@cert is medium, or low for X, for words divided at a <gi>gap</gi> and for words whose letters did not align; this is the script's own rating, not an accuracy. w/@ana points to the English and Japanese glosses in standOff, short dictionary meanings assigned automatically for the draft of 2026-11-18 and kept only on words whose extent and lemma are the same as in that draft. The syntax (dependencies) is not encoded in the TEI; it is in the CoNLL-U file of the same name in ../conllu/, divided into one sentence per segment (<gi>s</gi>), or more where the tools took a word inside a segment for punctuation. None of this has been checked by hand; all of it still has to be checked against the critical editions and dictionaries. The 8 segments n=1–7 and 9, whose text is identical to the annotated edition (data/eugnostos_tei.xml), carry that edition's bound groups, parts of speech and lemmata, marked resp="#morph-reference" and cert="high"; they were left unchanged in the re-annotation of 2026-11-24.</p></interpretation>
       </editorialDecl>
     </encodingDesc>
     <profileDesc>
@@ -118,6 +118,7 @@
       <change when="2026-11-18">Added to the Sheneset repository and published as a draft: the restoration marks for ⲍ and ⲯ, which the annotation had overwritten, put back as &lt;supplied&gt; around the restored letters; glosses that no word points to removed; header statements about the annotation brought up to date.</change>
       <change when="2026-11-24">Bound groups (<gi>phr</gi>), morphemes (<gi>w</gi>), part of speech (<att>type</att>) and lemmas of 134 segments re-annotated automatically with the Coptic SCRIPTORIUM NLP service by scripts/coptic_nlp_tei.py (groups=auto, laytonize=smart, style=site); <att>resp</att>="#coptic-nlp", not checked by hand. The letters of the text, the gaps, the supplied letters and the page and line breaks are unchanged.</change>
       <change when="2026-11-24">Brought into line with the annotation specification (docs/ANNOTATION_SPEC.md): glosses that no word points to any more removed (31); the token count in <gi>extent</gi> and the statements about the annotation in <gi>projectDesc</gi> and <gi>editorialDecl</gi> brought up to date; the dependency analysis of the same NLP run written to ../conllu/03-3_eugnostos.conllu. Carried out with a generative AI model (Claude).</change>
+      <change when="2026-11-25">Re-annotated with the same tools and settings as above, but with each segment sent as one sentence (scripts/coptic_nlp_tei.py --sentences s: a punctuation mark added at the end of each <gi>s</gi> and removed from the result), so that the dependency analysis in ../conllu/03-3_eugnostos.conllu is divided into sentences and no bound group crosses a segment boundary; the input was again the draft of 2026-11-18. Bound groups, morphemes, part of speech and lemmas of 134 segments replaced (<att>resp</att>="#coptic-nlp", not checked by hand); glosses that no word points to any more removed (0), glosses pointed to again restored from that draft (0); the token count in <gi>extent</gi> and the statements about the annotation in <gi>editorialDecl</gi> brought up to date. The letters of the text, the gaps, the supplied letters and the page and line breaks are unchanged. Carried out with a generative AI model (Claude).</change>
     </revisionDesc>
   </teiHeader>
   <text type="witness" xml:id="wit-III-3" n="NHC III,3" xml:lang="cop">
@@ -809,10 +810,10 @@
               <w type="V" lemma="ⲧⲁⲕⲟ" resp="#coptic-nlp" cert="medium">ⲧⲁⲕⲟ</w>
             </phr>
             <phr>
-              <w type="PPER" lemma="ⲟⲩ" ana="#g-en-16864bf8d9b3 #g-ja-ed327882f988" resp="#coptic-nlp" cert="medium">ⲟⲩ</w>
+              <w type="ART" lemma="ⲟⲩ" ana="#g-en-16864bf8d9b3 #g-ja-ed327882f988" resp="#coptic-nlp" cert="medium">ⲟⲩ</w>
             </phr>
             <phr>
-              <w type="FM" lemma="ⲁⲅⲉⲛⲛⲏⲧⲟⲥ" xml:lang="grc" resp="#coptic-nlp" cert="medium">ⲁⲅⲉⲛⲛⲏⲧⲟⲥ</w>
+              <w type="N" lemma="ⲁⲅⲉⲛⲛⲏⲧⲟⲥ" xml:lang="grc" resp="#coptic-nlp" cert="medium">ⲁⲅⲉⲛⲛⲏⲧⲟⲥ</w>
             </phr>
             <phr>
               <w type="COP" lemma="ⲡⲉ" resp="#coptic-nlp" cert="medium">ⲡⲉ</w>
@@ -954,14 +955,14 @@
             </s>
           <s xml:id="III-7505199" n="10">
             <phr>
-              <w type="PREP" lemma="ⲛ" resp="#coptic-nlp" cert="medium">ⲛ</w>
+              <w type="ART" lemma="ⲛ" resp="#coptic-nlp" cert="medium">ⲛ</w>
               <w type="N" lemma="ⲛⲟⲩϩⲓ" resp="#coptic-nlp" cert="medium">ⲛⲟⲩϩⲓ</w>
             </phr>
             <phr>
               <w type="PTC" lemma="ⲇⲉ" xml:lang="grc" ana="#g-en-60c1954afdb5 #g-ja-87ec55ec9515" resp="#coptic-nlp" cert="medium">ⲇⲉ</w>
             </phr>
             <phr>
-              <w type="ART" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0" resp="#coptic-nlp" cert="medium">ⲁ</w>
+              <w type="N" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0" resp="#coptic-nlp" cert="medium">ⲁ</w>
               <w type="IMOD" lemma="ⲙⲙⲓⲛⲙⲙⲟ" resp="#coptic-nlp" cert="medium">ⲙⲙⲓⲛⲙⲙⲟ</w>
               <w type="PPER" lemma="ϥ" ana="#g-en-b96f087daab1 #g-ja-fb66c561bbec" resp="#coptic-nlp" cert="medium">ϥ</w>
             </phr>
@@ -1021,7 +1022,7 @@
             </phr>
             <phr>
               <w type="CCIRC" lemma="ⲉⲣⲉ" resp="#coptic-nlp" cert="medium">ⲉ</w>
-              <w type="PPER" lemma="ⲥⲥⲁⲧⲡ" resp="#coptic-nlp" cert="medium">ⲥⲥⲁⲧⲡ</w>
+              <w type="V" lemma="ⲥⲥⲁⲧⲡ" resp="#coptic-nlp" cert="medium">ⲥⲥⲁⲧⲡ</w>
             </phr>
             <phr>
               <w type="PREP" lemma="ⲉ" resp="#coptic-nlp" cert="medium">ⲉ</w>
@@ -1173,8 +1174,10 @@
           </s>
           <s xml:id="III-7505202" n="13">
             <phr>
-              <w type="ART" lemma="ⲟⲩ" resp="#coptic-nlp" cert="medium">ⲟⲩ</w>
-              <w type="N" lemma="ⲁⲧϣⲓ" resp="#coptic-nlp" cert="medium">ⲁⲧϣⲓ</w>
+              <w type="PDEM" lemma="ⲟⲩⲁⲧ" resp="#coptic-nlp" cert="medium">ⲟⲩⲁⲧ</w>
+            </phr>
+            <phr>
+              <w type="N" lemma="ϣⲓ" resp="#coptic-nlp" cert="medium">ϣⲓ</w>
             </phr>
             <phr>
               <w type="PPOS" lemma="ⲡⲉϥ" resp="#coptic-nlp" cert="medium">ⲧϥ</w>
@@ -1240,7 +1243,9 @@
           </s>
           <s xml:id="III-7505203" n="14">
             <phr>
-              <w type="V" lemma="ϩⲁⲧϩⲏ" resp="#coptic-nlp" cert="medium">ϩⲁⲑⲏ</w>
+              <w type="PREP" lemma="ϩⲁ" resp="#coptic-nlp" cert="medium">ϩⲁ</w>
+              <w type="ART" lemma="ⲧ" resp="#coptic-nlp" cert="medium">ⲑ</w>
+              <w type="N" lemma="ϩⲏ" resp="#coptic-nlp" cert="medium">ⲏ</w>
             </phr>
             <phr>
               <w type="CCIRC" lemma="ⲉⲣⲉ" resp="#coptic-nlp" cert="medium">ⲉ</w>
@@ -1265,6 +1270,8 @@
           <s xml:id="III-7505204" n="15">
             <phr>
               <w type="PDEM" lemma="ⲡⲓ" resp="#coptic-nlp" cert="medium">ϯ</w>
+            </phr>
+            <phr>
               <w type="N" lemma="ⲙⲛⲧⲛⲟϭ" resp="#coptic-nlp" cert="medium">ⲙⲛⲧⲛⲟϭ</w>
             </phr>
             <phr>
@@ -1296,7 +1303,7 @@
           </s>
           <s xml:id="III-7505205" n="16">
             <phr>
-              <w type="PREP" lemma="ⲛⲧⲉ" ana="#g-en-de04fa0e29f9 #g-ja-f5edc59c9423" resp="#coptic-nlp" cert="medium">ⲛⲧⲉ</w>
+              <w type="ACONJ" lemma="ⲛⲧⲉ" ana="#g-en-de04fa0e29f9 #g-ja-f5edc59c9423" resp="#coptic-nlp" cert="medium">ⲛⲧⲉ</w>
               <w type="ACONJ" lemma="ⲛⲧⲉ" resp="#coptic-nlp" cert="medium">ⲛ</w>
               <w type="PPER" lemma="ⲓ" resp="#coptic-nlp" cert="medium">ⲓ</w>
               <w type="ART" lemma="ⲡ" resp="#coptic-nlp" cert="medium">ⲡ</w>
@@ -1315,15 +1322,15 @@
               <w type="V" lemma="ⲁⲙⲁϩⲧⲉ" resp="#coptic-nlp" cert="medium">ⲁⲙⲁϩⲧⲉ</w>
             </phr>
             <phr>
-              <w type="X" resp="#coptic-nlp" cert="low">ⲙⲙⲟϥ</w>
+              <w type="PREP" lemma="ⲛ" resp="#coptic-nlp" cert="medium">ⲙⲙⲟ</w>
+              <w type="PPER" lemma="ϥ" ana="#g-en-b96f087daab1 #g-ja-fb66c561bbec" resp="#coptic-nlp" cert="medium">ϥ</w>
             </phr>
           </s>
           <s xml:id="III-7505207" n="18">
             <phr>
-              <w type="V" lemma="ⲡⲉⲧⲙ" resp="#coptic-nlp" cert="medium">ⲡⲉⲧⲙ</w>
-            </phr>
-            <phr>
-              <w type="N" lemma="ⲙⲁⲩ" resp="#coptic-nlp" cert="medium">ⲙⲁⲩ</w>
+              <w type="ART" lemma="ⲡ" resp="#coptic-nlp" cert="medium">ⲡ</w>
+              <w type="CREL" lemma="ⲉⲧⲉⲣⲉ" resp="#coptic-nlp" cert="medium">ⲉⲧ</w>
+              <w type="ADV" lemma="ⲙⲙⲁⲩ" resp="#coptic-nlp" cert="medium">ⲙⲙⲁⲩ</w>
             </phr>
             <phr>
               <w type="PTC" lemma="ⲅⲁⲣ" xml:lang="grc" ana="#g-en-bf900f592c1f #g-ja-85364ae56306" resp="#coptic-nlp" cert="medium">ⲅⲁⲣ</w>
@@ -1340,7 +1347,7 @@
           </s>
           <s xml:id="III-7505209" n="20">
             <phr>
-              <w type="PPER" lemma="ⲟⲩ" ana="#g-en-16864bf8d9b3 #g-ja-ed327882f988" resp="#coptic-nlp" cert="medium">ⲟⲩ</w>
+              <w type="ART" lemma="ⲟⲩ" ana="#g-en-16864bf8d9b3 #g-ja-ed327882f988" resp="#coptic-nlp" cert="medium">ⲟⲩ</w>
             </phr>
             <phr>
               <w type="CCIRC" lemma="ⲉⲣⲉ" resp="#coptic-nlp" cert="medium">ⲉ</w>
@@ -1351,7 +1358,7 @@
             <phr>
               <w type="PREP" lemma="ⲙⲛ" ana="#g-en-2e45bf760c3e #g-ja-f512e4e94307" resp="#coptic-nlp" cert="medium">ⲙⲛ</w>
               <w type="ART" lemma="ⲟⲩ" ana="#g-en-16864bf8d9b3 #g-ja-ed327882f988" resp="#coptic-nlp" cert="medium">ⲟⲩ</w>
-              <w type="N" lemma="ⲉⲛⲑⲩⲙⲏⲥⲓⲥ" xml:lang="grc" resp="#coptic-nlp" cert="medium">ⲉⲛⲑⲩⲙⲏⲥⲓⲥ</w>
+              <w type="CREL" lemma="ⲉⲛⲑⲩⲙⲏⲥⲓⲥ" xml:lang="grc" resp="#coptic-nlp" cert="medium">ⲉⲛⲑⲩⲙⲏⲥⲓⲥ</w>
             </phr>
             <phr>
               <w type="ART" lemma="ⲟⲩ" ana="#g-en-16864bf8d9b3 #g-ja-ed327882f988" resp="#coptic-nlp" cert="medium">ⲟⲩ</w>
@@ -1439,10 +1446,8 @@
           </s>
           <s xml:id="III-7505210" n="21">
             <phr>
-              <w type="ART" lemma="ⲛⲉ" resp="#coptic-nlp" cert="medium">ⲛⲉ</w>
-            </phr>
-            <phr>
-              <w type="NUM" lemma="ⲙⲡⲁⲧ" resp="#coptic-nlp" cert="medium">ⲙⲡⲁⲧ</w>
+              <w type="CPRET" lemma="ⲛⲉⲣⲉ" resp="#coptic-nlp" cert="medium">ⲛⲉ</w>
+              <w type="ANY" lemma="ⲙⲡⲁⲧⲉ" resp="#coptic-nlp" cert="medium">ⲙⲡⲁⲧ</w>
               <w type="PPER" lemma="ⲟⲩ" resp="#coptic-nlp" cert="medium">ⲟⲩ</w>
               <w type="V" lemma="ⲉⲓ" resp="#coptic-nlp" cert="medium">ⲉⲓ</w>
             </phr>
@@ -1475,7 +1480,7 @@
           </s>
           <s xml:id="III-7505211" n="22">
             <phr>
-              <w type="PREP" lemma="ⲟⲩⲧⲉ" resp="#coptic-nlp" cert="medium">ⲟⲩⲧⲉ</w>
+              <w type="CONJ" lemma="ⲟⲩⲧⲉ" xml:lang="grc" resp="#coptic-nlp" cert="medium">ⲟⲩⲧⲉ</w>
             </phr>
             <phr>
               <w type="PDEM" lemma="ⲡⲓ" resp="#coptic-nlp" cert="medium">ⲛⲓ</w>
@@ -1657,7 +1662,7 @@
               <w type="PPER" lemma="ⲓ" resp="#coptic-nlp" cert="medium">ⲓ</w>
             </phr>
             <phr>
-              <w type="PREP" lemma="ⲙⲛ" ana="#g-en-2e45bf760c3e #g-ja-f512e4e94307" resp="#coptic-nlp" cert="medium">ⲙⲛ</w>
+              <w type="EXIST" lemma="ⲙⲛ" ana="#g-en-2e45bf760c3e #g-ja-f512e4e94307" resp="#coptic-nlp" cert="medium">ⲙⲛ</w>
               <w type="N" lemma="ϭⲟⲙ" resp="#coptic-nlp" cert="medium">ϣϭⲟⲙ</w>
             </phr>
             <phr>
@@ -1677,7 +1682,7 @@
               <w type="N" lemma="ϣⲁϫⲉ" ana="#g-en-a65265946e25 #g-ja-26df93526766" resp="#coptic-nlp" cert="medium">ϣⲁϫⲉ</w>
             </phr>
             <phr>
-              <w type="CREL" lemma="ⲉⲧⲉⲣⲉ" resp="#coptic-nlp" cert="medium">ⲛⲧ</w>
+              <w type="CFOC" lemma="ⲉⲣⲉ" resp="#coptic-nlp" cert="medium">ⲛⲧ</w>
               <w type="PPER" lemma="ⲁ" resp="#coptic-nlp" cert="medium">ⲁ</w>
               <w type="V" lemma="ⲉⲓⲣϣⲣⲡⲛϫⲟⲟⲩⲉ" resp="#coptic-nlp" cert="medium">ⲉⲓⲣϣⲣⲡⲛϫⲟⲟⲩⲉ</w>
             </phr>
@@ -1703,10 +1708,10 @@
               <w type="CONJ" lemma="ⲉϣⲱⲡⲉ" resp="#coptic-nlp" cert="medium">ⲉϣⲱⲡⲉ</w>
             </phr>
             <phr>
-              <w type="ART" lemma="ϭⲉ" ana="#g-en-83f3dd6b17dd #g-ja-8963231aa1d5" resp="#coptic-nlp" cert="medium">ϭⲉ</w>
+              <w type="PTC" lemma="ϭⲉ" ana="#g-en-83f3dd6b17dd #g-ja-8963231aa1d5" resp="#coptic-nlp" cert="medium">ϭⲉ</w>
             </phr>
             <phr>
-              <w type="CREL" lemma="ⲉⲧⲉⲣⲉ" resp="#coptic-nlp" cert="medium">ⲉ</w>
+              <w type="CCIRC" lemma="ⲉⲣⲉ" resp="#coptic-nlp" cert="medium">ⲉ</w>
               <w type="EXIST" lemma="ⲟⲩⲛ" resp="#coptic-nlp" cert="medium">ⲩⲛ</w>
               <w type="NUM" lemma="ⲟⲩⲁ" ana="#g-en-fe05bcdcdc49 #g-ja-d28d96c108f3" resp="#coptic-nlp" cert="medium">ⲟⲩⲁ</w>
             </phr>
@@ -1761,7 +1766,7 @@
               <w type="ART" lemma="ⲧⲉⲉⲓⲉⲛⲛⲟⲓ" resp="#coptic-nlp" cert="medium">ⲧⲉⲉⲓⲉⲛⲛⲟⲓ</w>
             </phr>
             <phr>
-              <w type="APST" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0" resp="#coptic-nlp" cert="medium">ⲁ</w>
+              <w type="N" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0" resp="#coptic-nlp" cert="medium">ⲁ</w>
             </phr>
           </s>
           <s xml:id="III-7505217" n="28">
@@ -1770,7 +1775,8 @@
               <w type="N" lemma="ⲁⲧⲥⲁⲃⲟ" resp="#coptic-nlp" cert="medium">ⲁⲧⲥⲁⲃⲟ</w>
             </phr>
             <phr>
-              <w type="PPER" lemma="ϥϫⲉⲡⲱⲥ" resp="#coptic-nlp" cert="medium">ϥϫⲉⲡⲱⲥ</w>
+              <w type="PPER" lemma="ϥ" ana="#g-en-b96f087daab1 #g-ja-fb66c561bbec" resp="#coptic-nlp" cert="medium">ϥ</w>
+              <w type="CONJ" lemma="ϫⲉⲡⲱⲥ" resp="#coptic-nlp" cert="medium">ϫⲉⲡⲱⲥ</w>
             </phr>
             <phr>
               <w type="ART" lemma="ⲧ" ana="#g-en-0bd8ea9fc267 #g-ja-3c594eb70f8d" resp="#coptic-nlp" cert="medium">ⲧ</w>
@@ -1788,14 +1794,13 @@
               <w type="ADV" lemma="ⲉⲃⲟⲗ" ana="#g-en-3fb52781050b #g-ja-55a6de6dbf2b" resp="#coptic-nlp" cert="medium">ⲉⲃⲟⲗ</w>
             </phr>
             <phr>
-              <w type="VIMP" lemma="ⲛⲁⲩ" resp="#coptic-nlp" cert="low">ⲁⲛ</w>
+              <w type="NEG" lemma="ⲁⲛ" ana="#g-en-557f25551671 #g-ja-62fe8481b66c" resp="#coptic-nlp" cert="medium">ⲁⲛ</w>
             </phr>
           </s>
           <s xml:id="III-7505218" n="29">
             <phr>
-              <w type="VIMP" lemma="ⲛⲁⲩ" resp="#coptic-nlp" cert="low">ⲁⲩ</w>
-            </phr>
-            <phr>
+              <w type="APST" lemma="ⲁ" resp="#coptic-nlp" cert="medium">ⲁ</w>
+              <w type="PPER" lemma="ⲩ" resp="#coptic-nlp" cert="medium">ⲩ</w>
               <w type="V" lemma="ϭⲓⲛⲉ" resp="#coptic-nlp" cert="medium">ϭⲛⲧ</w>
               <w type="N" lemma="ⲥϩⲙ" resp="#coptic-nlp" cert="medium">ⲥϩⲙ</w>
               <w type="N" lemma="ⲡⲉⲧⲟⲩⲁⲛϩ" resp="#coptic-nlp" cert="medium">ⲡⲉⲧⲟⲩⲁⲛϩ</w>
@@ -1858,7 +1863,7 @@
               <w type="CONJ" lemma="ⲁⲗⲗⲁ" xml:lang="grc" ana="#g-en-dc9e89939282 #g-ja-79c023f09488" resp="#coptic-nlp" cert="medium">ⲁⲗⲗⲁ</w>
             </phr>
             <phr>
-              <w type="V" lemma="ⲡⲣⲟⲡⲁⲧⲱⲣ" xml:lang="grc" resp="#coptic-nlp" cert="medium">ⲡⲣⲟⲡⲁⲧⲱⲣ</w>
+              <w type="PREP" lemma="ⲡⲣⲟⲡⲁⲧⲱⲣ" xml:lang="grc" resp="#coptic-nlp" cert="medium">ⲡⲣⲟⲡⲁⲧⲱⲣ</w>
               <w type="PDEM" lemma="ⲡⲉⲓⲱⲧ" resp="#coptic-nlp" cert="medium">ⲡⲉⲓⲱⲧ</w>
             </phr>
             <phr>
@@ -1883,7 +1888,7 @@
           </s>
           <s xml:id="III-7505221" n="32">
             <phr>
-              <w type="ART" lemma="ⲡⲉ" resp="#coptic-nlp" cert="medium">ⲡⲉ</w>
+              <w type="COP" lemma="ⲡⲉ" resp="#coptic-nlp" cert="medium">ⲡⲉ</w>
               <w type="NEG" lemma="ⲧⲙ" resp="#coptic-nlp" cert="medium">ⲧⲙ</w>
             </phr>
             <phr>
@@ -2063,7 +2068,7 @@
             <phr>
               <w type="CCIRC" lemma="ⲉⲣⲉ" resp="#coptic-nlp" cert="medium">ⲉ</w>
               <w type="PPER" lemma="ⲩ" ana="#g-en-1e0d43bff60b #g-ja-298c47d14363" resp="#coptic-nlp" cert="medium">ⲩ</w>
-              <w type="V" lemma="ϩⲁⲉⲟⲟⲩ" resp="#coptic-nlp" cert="medium">ϩⲁⲉⲟⲟⲩ</w>
+              <w type="N" lemma="ϩⲁⲉⲟⲟⲩ" resp="#coptic-nlp" cert="medium">ϩⲁⲉⲟⲟⲩ</w>
             </phr>
             <phr>
               <w type="CCIRC" lemma="ⲉⲣⲉ" resp="#coptic-nlp" cert="medium">ⲉ</w>
@@ -2181,7 +2186,7 @@
             <phr>
               <w type="CCIRC" lemma="ⲉⲣⲉ" resp="#coptic-nlp" cert="medium">ⲉ</w>
               <w type="PPER" lemma="ϥ" ana="#g-en-b96f087daab1 #g-ja-fb66c561bbec" resp="#coptic-nlp" cert="medium">ϥ</w>
-              <w type="VSTAT" lemma="ⲙⲟⲩϩ" resp="#coptic-nlp" cert="medium">ⲙⲏϩ</w>
+              <w type="V" lemma="ⲙⲏϩ" resp="#coptic-nlp" cert="medium">ⲙⲏϩ</w>
             </phr>
             <phr>
               <w type="ADV" lemma="ⲉⲃⲟⲗ" ana="#g-en-3fb52781050b #g-ja-55a6de6dbf2b" resp="#coptic-nlp" cert="medium">ⲉⲃⲟⲗ</w>
@@ -2215,8 +2220,8 @@
               <w type="PPER" lemma="ⲟⲩ" resp="#coptic-nlp" cert="medium">ⲟⲩ</w>
             </phr>
             <phr>
-              <w type="PREP" lemma="ⲉ" resp="#coptic-nlp" cert="medium">ⲉ</w>
-              <w type="ART" lemma="ⲩ" ana="#g-en-1e0d43bff60b #g-ja-298c47d14363" resp="#coptic-nlp" cert="medium">ⲩ</w>
+              <w type="CCIRC" lemma="ⲉⲣⲉ" resp="#coptic-nlp" cert="medium">ⲉ</w>
+              <w type="PPER" lemma="ⲩ" ana="#g-en-1e0d43bff60b #g-ja-298c47d14363" resp="#coptic-nlp" cert="medium">ⲩ</w>
               <w type="V" lemma="ⲙⲧⲟⲛ" resp="#coptic-nlp" cert="medium">ⲙⲧⲟⲛ</w>
             </phr>
             <phr>
@@ -2477,7 +2482,7 @@
               <w type="PREP" lemma="ⲉ" resp="#coptic-nlp" cert="medium">ⲉ</w>
               <w type="ACAUS" lemma="ⲧⲣⲉ" ana="#g-en-710dbed86a7d #g-ja-e0742de158f3" resp="#coptic-nlp" cert="medium">ⲧⲣⲉ</w>
               <w type="PPOS" lemma="ⲡⲉϥ" ana="#g-en-b187a9ed471e #g-ja-e1b7d5621057" resp="#coptic-nlp" cert="medium">ⲡⲉϥ</w>
-              <w type="N" lemma="ⲉⲓⲛⲉ" ana="#g-en-aee2f4bb3213 #g-ja-fea418fabc5a" resp="#coptic-nlp" cert="medium">ⲉⲓⲛⲉ</w>
+              <w type="V" lemma="ⲉⲓⲛⲉ" ana="#g-en-aee2f4bb3213 #g-ja-fea418fabc5a" resp="#coptic-nlp" cert="medium">ⲉⲓⲛⲉ</w>
             </phr>
             <phr>
               <w type="V" lemma="ϣⲱⲡⲉ" resp="#coptic-nlp" cert="medium">ϣⲱⲡⲉ</w>
@@ -2592,14 +2597,12 @@
             </phr>
             <phr>
               <w type="PREP" lemma="ⲛ" resp="#coptic-nlp" cert="medium">ⲛ</w>
-              <w type="N" lemma="ⲅⲉⲛ" resp="#coptic-nlp" cert="medium">ⲅⲉⲛ</w>
-              <w type="ADV" lemma="ⲉⲧⲓ" xml:lang="grc" resp="#coptic-nlp" cert="medium">ⲉⲧⲉⲓ</w>
-              <w type="N" lemma="ⲣⲁⲥⲉ" resp="#coptic-nlp" cert="low">ⲣⲁ</w>
+              <w type="NPROP" lemma="ⲅⲉⲛⲉⲧⲉⲓⲣⲁ" resp="#coptic-nlp" cert="medium">ⲅⲉⲛⲉⲧⲉⲓⲣⲁ</w>
             </phr>
           </s>
           <s xml:id="III-7505238" n="49">
             <phr>
-              <w type="N" lemma="ⲣⲁⲥⲉ" resp="#coptic-nlp" cert="low">ⲥⲉ</w>
+              <w type="PPER" lemma="ⲥⲉ" ana="#g-en-f1fdd46d8d22 #g-ja-8494e35efa88" resp="#coptic-nlp" cert="medium">ⲥⲉ</w>
               <w type="V" lemma="ϫⲱ" ana="#g-en-da7e051387b0 #g-ja-907beffcbe37" resp="#coptic-nlp" cert="medium">ϫⲱ</w>
             </phr>
             <phr>
@@ -2631,7 +2634,7 @@
           </s>
           <s xml:id="III-7505239" n="50">
             <phr>
-              <w type="PPER" lemma="ⲟⲩ" ana="#g-en-16864bf8d9b3 #g-ja-ed327882f988" resp="#coptic-nlp" cert="medium">ⲟⲩ</w>
+              <w type="PINT" lemma="ⲟⲩ" ana="#g-en-16864bf8d9b3 #g-ja-ed327882f988" resp="#coptic-nlp" cert="medium">ⲟⲩ</w>
             </phr>
             <phr>
               <w type="CONJ" lemma="ⲙⲏ" xml:lang="grc" ana="#g-en-557f25551671" resp="#coptic-nlp" cert="medium">ⲙⲏ</w>
@@ -2869,9 +2872,9 @@
               <w type="ADV" lemma="ⲉϩⲟⲩⲛ" ana="#g-en-1a5b8e2ff7ec #g-ja-d285c30d5ae1" resp="#coptic-nlp" cert="medium">ⲉϩⲟⲩⲛ</w>
             </phr>
             <phr>
-              <w type="CCIRC" lemma="ⲉⲣⲉ" resp="#coptic-nlp" cert="medium">ⲉ</w>
-              <w type="PPER" lemma="ⲩ" resp="#coptic-nlp" cert="medium">ⲩ</w>
-              <w type="V" lemma="ϩⲩⲡⲏⲣⲉⲥⲓⲁ" xml:lang="grc" resp="#coptic-nlp" cert="medium">ϩⲩⲡⲏⲣⲉⲥⲓⲁ</w>
+              <w type="PREP" lemma="ⲉ" resp="#coptic-nlp" cert="medium">ⲉ</w>
+              <w type="ART" lemma="ⲩ" resp="#coptic-nlp" cert="medium">ⲩ</w>
+              <w type="N" lemma="ϩⲩⲡⲏⲣⲉⲥⲓⲁ" xml:lang="grc" resp="#coptic-nlp" cert="medium">ϩⲩⲡⲏⲣⲉⲥⲓⲁ</w>
             </phr>
             <phr>
               <w type="ADV" lemma="ⲉⲃⲟⲗ" ana="#g-en-3fb52781050b #g-ja-55a6de6dbf2b" resp="#coptic-nlp" cert="medium">ⲉⲃⲟⲗ</w>
@@ -3087,9 +3090,9 @@
               <w type="N" lemma="ϣⲏⲣⲉ" ana="#g-en-5cb9ffd9afc2 #g-ja-30ed6d76aa0a" resp="#coptic-nlp" cert="medium">ϣⲏⲣⲉ</w>
             </phr>
             <phr>
-              <w type="CCIRC" lemma="ⲉⲣⲉ" resp="#coptic-nlp" cert="medium">ⲉ</w>
-              <w type="PPER" lemma="ⲩ" ana="#g-en-1e0d43bff60b #g-ja-298c47d14363" resp="#coptic-nlp" cert="medium">ⲩ</w>
-              <w type="V" lemma="ⲉⲛⲛⲟⲓⲁ" xml:lang="grc" resp="#coptic-nlp" cert="medium">ⲉⲛⲛⲟⲓⲁ</w>
+              <w type="PREP" lemma="ⲉ" resp="#coptic-nlp" cert="medium">ⲉ</w>
+              <w type="ART" lemma="ⲩ" ana="#g-en-1e0d43bff60b #g-ja-298c47d14363" resp="#coptic-nlp" cert="medium">ⲩ</w>
+              <w type="N" lemma="ⲉⲛⲛⲟⲓⲁ" xml:lang="grc" resp="#coptic-nlp" cert="medium">ⲉⲛⲛⲟⲓⲁ</w>
             </phr>
             <phr>
               <w type="CONJ" lemma="ⲁⲩⲱ" ana="#g-en-cffa50a32cb1 #g-ja-cbad2e959d4b" resp="#coptic-nlp" cert="medium">ⲁⲩⲱ</w>
@@ -3122,12 +3125,13 @@
               <w type="V" lemma="ϫⲡⲟ" ana="#g-en-4c2eeecf636c #g-ja-9a4393aa70a2" resp="#coptic-nlp" cert="medium">ϫⲡⲟ</w>
             </phr>
             <phr>
-              <w type="N" lemma="ⲟⲩⲧⲙⲟⲛⲁⲥ" resp="#coptic-nlp" cert="low">ⲟⲩ</w>
+              <w type="PPER" lemma="ⲟⲩ" ana="#g-en-16864bf8d9b3 #g-ja-ed327882f988" resp="#coptic-nlp" cert="medium">ⲟⲩ</w>
             </phr>
           </s>
           <s xml:id="III-7505253" n="64">
             <phr>
-              <w type="N" lemma="ⲟⲩⲧⲙⲟⲛⲁⲥ" resp="#coptic-nlp" cert="low">ⲧⲙⲟⲛⲁⲥ</w>
+              <w type="ART" lemma="ⲧ" resp="#coptic-nlp" cert="medium">ⲧ</w>
+              <w type="N" lemma="ⲙⲟⲛⲁⲥ" xml:lang="grc" resp="#coptic-nlp" cert="medium">ⲙⲟⲛⲁⲥ</w>
             </phr>
             <phr>
               <w type="VSTAT" lemma="ⲉⲓⲣⲉ" resp="#coptic-nlp" cert="medium">ⲟ</w>
@@ -3184,7 +3188,7 @@
           <s xml:id="III-7505254" n="65">
             <phr>
               <w type="CCIRC" lemma="ⲉⲣⲉ" resp="#coptic-nlp" cert="medium">ⲉⲣⲉ</w>
-              <w type="ART" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423" resp="#coptic-nlp" cert="medium">ⲛ</w>
+              <w type="PPER" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423" resp="#coptic-nlp" cert="medium">ⲛ</w>
               <w type="N" lemma="ⲣⲁϣⲉ" ana="#g-en-349b2288a857 #g-ja-b4e8a82dc14e" resp="#coptic-nlp" cert="medium">ⲣⲁϣⲉ</w>
             </phr>
             <phr>
@@ -3192,8 +3196,7 @@
             </phr>
             <phr>
               <w type="PREP" lemma="ⲉϫⲛ" ana="#g-en-76205fd07764 #g-ja-2afad5ff497c" resp="#coptic-nlp" cert="medium">ⲉϫⲛ</w>
-              <w type="ART" lemma="ⲛ" resp="#coptic-nlp" cert="medium">ⲛ</w>
-              <w type="N" lemma="ⲣⲁϣⲟ" resp="#coptic-nlp" cert="medium">ⲣⲁϣⲟ</w>
+              <w type="ART" lemma="ⲛⲣⲁϣⲟ" resp="#coptic-nlp" cert="medium">ⲛⲣⲁϣⲟ</w>
             </phr>
           </s>
           <s xml:id="III-7505255" n="66">
@@ -3209,9 +3212,8 @@
             </phr>
             <phr>
               <w type="PREP" lemma="ⲉϫⲛ" ana="#g-en-76205fd07764 #g-ja-2afad5ff497c" resp="#coptic-nlp" cert="medium">ⲉϫⲛ</w>
-              <w type="ART" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423" resp="#coptic-nlp" cert="medium">ⲛ</w>
-              <w type="CREL" lemma="ⲉⲧⲉⲣⲉ" resp="#coptic-nlp" cert="medium">ⲉⲧ</w>
-              <w type="N" lemma="ⲃⲁ" resp="#coptic-nlp" cert="medium">ⲃⲁ</w>
+              <w type="ART" lemma="ⲛⲉ" resp="#coptic-nlp" cert="medium">ⲛⲉ</w>
+              <w type="NUM" lemma="ⲧⲃⲁ" resp="#coptic-nlp" cert="medium">ⲧⲃⲁ</w>
             </phr>
           </s>
           <s xml:id="III-7505257" n="68">
@@ -3281,7 +3283,7 @@
               <w type="ADV" lemma="ⲉϩⲟⲩⲛ" ana="#g-en-1a5b8e2ff7ec #g-ja-d285c30d5ae1" resp="#coptic-nlp" cert="medium">ⲉϩⲟⲩⲛ</w>
             </phr>
             <phr>
-              <w type="PREP" lemma="ⲉ" resp="#coptic-nlp" cert="medium">ⲉ</w>
+              <w type="CCIRC" lemma="ⲉⲣⲉ" resp="#coptic-nlp" cert="medium">ⲉ</w>
               <w type="ART" lemma="ⲩ" resp="#coptic-nlp" cert="medium">ⲩ</w>
               <w type="N" lemma="ϩⲩⲡⲏⲣⲉⲥⲓⲁ" xml:lang="grc" resp="#coptic-nlp" cert="medium">ϩⲩⲡⲏⲣⲉⲥⲓⲁ</w>
             </phr>
@@ -3310,7 +3312,7 @@
               <w type="V" lemma="ϫⲟ" resp="#coptic-nlp" cert="medium">ϫⲟ</w>
             </phr>
             <phr>
-              <w type="ACONJ" lemma="ⲟ" resp="#coptic-nlp" cert="medium">ⲟ</w>
+              <w type="CCIRC" lemma="ⲟ" resp="#coptic-nlp" cert="medium">ⲟ</w>
             </phr>
             <phr>
               <w type="PPER" lemma="ⲥⲉ" resp="#coptic-nlp" cert="medium">ⲥⲉ</w>
@@ -3380,10 +3382,10 @@
             </phr>
             <phr>
               <w type="PREP" lemma="ⲛ" resp="#coptic-nlp" cert="medium">ⲙⲙⲟ</w>
-              <w type="PPER" lemma="ⲟⲩ" ana="#g-en-16864bf8d9b3 #g-ja-ed327882f988" resp="#coptic-nlp" cert="medium">ⲟⲩ</w>
+              <w type="ART" lemma="ⲟⲩ" ana="#g-en-16864bf8d9b3 #g-ja-ed327882f988" resp="#coptic-nlp" cert="medium">ⲟⲩ</w>
             </phr>
             <phr>
-              <w type="V" lemma="ⲡⲉⲡⲣⲱⲧⲟⲅⲉⲛⲉⲧⲱⲣ" resp="#coptic-nlp" cert="medium">ⲡⲉⲡⲣⲱⲧⲟⲅⲉⲛⲉⲧⲱⲣ</w>
+              <w type="N" lemma="ⲡⲉⲡⲣⲱⲧⲟⲅⲉⲛⲉⲧⲱⲣ" resp="#coptic-nlp" cert="medium">ⲡⲉⲡⲣⲱⲧⲟⲅⲉⲛⲉⲧⲱⲣ</w>
             </phr>
           </s>
           <s xml:id="III-7505261" n="72">
@@ -3463,7 +3465,7 @@
               <w type="V" lemma="ⲧⲉⲣ" resp="#coptic-nlp" cert="medium">ⲧⲉⲣ</w>
             </phr>
             <phr>
-              <w type="ART" lemma="ⲡⲉ" resp="#coptic-nlp" cert="medium">ⲡⲉ</w>
+              <w type="COP" lemma="ⲡⲉ" resp="#coptic-nlp" cert="medium">ⲡⲉ</w>
             </phr>
             <phr>
               <w type="CCIRC" lemma="ⲉⲣⲉ" resp="#coptic-nlp" cert="medium">ⲉ</w>
@@ -3733,7 +3735,7 @@
           </s>
           <s xml:id="III-7505266" n="77">
             <phr>
-              <w type="PREP" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423" resp="#coptic-nlp" cert="medium">ⲛ</w>
+              <w type="ART" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423" resp="#coptic-nlp" cert="medium">ⲛ</w>
               <w type="N" lemma="ϩⲟⲟⲩⲧ" resp="#coptic-nlp" cert="medium">ϩⲟⲟⲩⲧ</w>
             </phr>
             <phr>
@@ -3762,10 +3764,10 @@
               <w type="NUM" lemma="ⲙⲉϩⲥⲛⲁⲩ" resp="#coptic-nlp" cert="medium">ⲙⲉϩⲥⲛⲁⲩ</w>
             </phr>
             <phr>
-              <w type="COP" lemma="ⲡⲉ" resp="#coptic-nlp" cert="medium">ⲡⲉ</w>
+              <w type="ART" lemma="ⲡⲉ" resp="#coptic-nlp" cert="medium">ⲡⲉ</w>
             </phr>
             <phr>
-              <w type="NPROP" lemma="ⲡⲁⲩ" resp="#coptic-nlp" cert="medium">ⲡⲁⲩ</w>
+              <w type="N" lemma="ⲡⲁⲩ" resp="#coptic-nlp" cert="medium">ⲡⲁⲩ</w>
               <w type="VSTAT" lemma="ⲧⲟⲅⲉⲛⲛⲏⲧⲟⲥ" resp="#coptic-nlp" cert="medium">ⲧⲟⲅⲉⲛⲛⲏⲧⲟⲥ</w>
             </phr>
             <phr>
@@ -3773,29 +3775,29 @@
               <w type="NUM" lemma="ⲙⲉϩϣⲟⲙⲛⲧ" resp="#coptic-nlp" cert="medium">ⲙⲉϩϣⲟⲙⲛⲧ</w>
             </phr>
             <phr>
-              <w type="ART" lemma="ⲡⲉ" resp="#coptic-nlp" cert="medium">ⲡⲉ</w>
+              <w type="COP" lemma="ⲡⲉ" resp="#coptic-nlp" cert="medium">ⲡⲉ</w>
             </phr>
             <phr>
-              <w type="N" lemma="ⲡⲅⲉⲛ" resp="#coptic-nlp" cert="medium">ⲡⲅⲉⲛ</w>
-              <w type="PTC" lemma="ⲉⲧⲱⲣⲡ" resp="#coptic-nlp" cert="low">ⲉⲧⲱⲣ</w>
+              <w type="ART" lemma="ⲡ" resp="#coptic-nlp" cert="medium">ⲡ</w>
+              <w type="NPROP" lemma="ⲅⲉⲛⲉⲧⲱⲣ" resp="#coptic-nlp" cert="medium">ⲅⲉⲛⲉⲧⲱⲣ</w>
             </phr>
           </s>
           <s xml:id="III-7505267" n="78">
             <phr>
-              <w type="PTC" lemma="ⲉⲧⲱⲣⲡ" resp="#coptic-nlp" cert="low">ⲡ</w>
+              <w type="ART" lemma="ⲡ" ana="#g-en-f9921a1852ea #g-ja-084b374171cd" resp="#coptic-nlp" cert="medium">ⲡ</w>
               <w type="NUM" lemma="ⲙⲉϩϥⲧⲟⲟⲩ" resp="#coptic-nlp" cert="medium">ⲙⲉϩϥⲧⲟⲟⲩ</w>
             </phr>
             <phr>
               <w type="ART" lemma="ⲡⲉ" resp="#coptic-nlp" cert="medium">ⲡⲉ</w>
             </phr>
             <phr>
-              <w type="N" lemma="ⲡⲉⲡⲣⲱⲧⲟⲅⲉⲛⲉⲧⲱⲣⲡ" resp="#coptic-nlp" cert="low">ⲡⲉⲡⲣⲱⲧⲟⲅⲉⲛⲉⲧⲱⲣ</w>
+              <w type="N" lemma="ⲡⲉⲡⲣⲱⲧⲟⲅⲉⲛⲉⲧⲱⲣ" resp="#coptic-nlp" cert="medium">ⲡⲉⲡⲣⲱⲧⲟⲅⲉⲛⲉⲧⲱⲣ</w>
             </phr>
           </s>
           <s xml:id="III-7505268" n="79">
             <phr>
-              <w type="N" lemma="ⲡⲉⲡⲣⲱⲧⲟⲅⲉⲛⲉⲧⲱⲣⲡ" resp="#coptic-nlp" cert="low">ⲡ</w>
-              <w type="VSTAT" lemma="ⲙⲟⲩϩ" resp="#coptic-nlp" cert="medium">ⲙⲉϩ</w>
+              <w type="ART" lemma="ⲡ" resp="#coptic-nlp" cert="medium">ⲡ</w>
+              <w type="N" lemma="ⲙⲉϩ" resp="#coptic-nlp" cert="medium">ⲙⲉϩ</w>
             </phr>
             <phr>
               <w type="V" lemma="ϯ" ana="#g-en-fa9f22e62229 #g-ja-65a52adbd87c" resp="#coptic-nlp" cert="medium">ϯ</w>
@@ -3804,20 +3806,21 @@
               <w type="PINT" lemma="ⲟⲩ" ana="#g-en-16864bf8d9b3 #g-ja-ed327882f988" resp="#coptic-nlp" cert="medium">ⲟⲩ</w>
             </phr>
             <phr>
-              <w type="ART" lemma="ⲡⲉ" resp="#coptic-nlp" cert="medium">ⲡⲉ</w>
+              <w type="COP" lemma="ⲡⲉ" resp="#coptic-nlp" cert="medium">ⲡⲉ</w>
             </phr>
             <phr>
-              <w type="N" lemma="ⲡⲁⲛⲅⲉⲛ" resp="#coptic-nlp" cert="medium">ⲡⲁⲛⲅⲉⲛ</w>
-              <w type="PTC" lemma="ⲉⲧⲱⲣⲡ" resp="#coptic-nlp" cert="low">ⲉⲧⲱⲣ</w>
+              <w type="PPOS" lemma="ⲡⲁ" resp="#coptic-nlp" cert="medium">ⲡⲁ</w>
+              <w type="ART" lemma="ⲛ" resp="#coptic-nlp" cert="medium">ⲛ</w>
+              <w type="NPROP" lemma="ⲅⲉⲛⲉⲧⲱⲣ" resp="#coptic-nlp" cert="medium">ⲅⲉⲛⲉⲧⲱⲣ</w>
             </phr>
           </s>
           <s xml:id="III-7505269" n="80">
             <phr>
-              <w type="PTC" lemma="ⲉⲧⲱⲣⲡ" resp="#coptic-nlp" cert="low">ⲡ</w>
-              <w type="NUM" lemma="ⲙⲉϩⲥⲟⲟⲩ" resp="#coptic-nlp" cert="medium">ⲙⲉϩⲥⲟⲟⲩ</w>
+              <w type="ART" lemma="ⲡ" resp="#coptic-nlp" cert="medium">ⲡ</w>
+              <w type="N" lemma="ⲙⲉϩⲥⲟⲟⲩ" resp="#coptic-nlp" cert="medium">ⲙⲉϩⲥⲟⲟⲩ</w>
             </phr>
             <phr>
-              <w type="ART" lemma="ⲡⲉ" resp="#coptic-nlp" cert="medium">ⲡⲉ</w>
+              <w type="COP" lemma="ⲡⲉ" resp="#coptic-nlp" cert="medium">ⲡⲉ</w>
             </phr>
             <phr>
               <w type="ART" lemma="ⲡ" resp="#coptic-nlp" cert="medium">ⲡ</w>
@@ -3826,7 +3829,7 @@
           </s>
           <s xml:id="III-7505270" n="81">
             <phr>
-              <w type="PREP" lemma="ⲛ" ana="#g-en-88716c55bb63 #g-ja-eb6a935590f1" resp="#coptic-nlp" cert="medium">ⲛ</w>
+              <w type="ART" lemma="ⲛ" ana="#g-en-88716c55bb63 #g-ja-eb6a935590f1" resp="#coptic-nlp" cert="medium">ⲛ</w>
               <w type="N" lemma="ⲣⲁⲛ" ana="#g-en-6ae999552a0d #g-ja-81d4aecdad11" resp="#coptic-nlp" cert="medium">ⲣⲁⲛ</w>
             </phr>
             <phr>
@@ -3958,7 +3961,7 @@
           </s>
           <s xml:id="III-7505279" n="90">
             <phr>
-              <w type="PREP" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423" resp="#coptic-nlp" cert="medium">ⲛ</w>
+              <w type="ART" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423" resp="#coptic-nlp" cert="medium">ⲛ</w>
               <w type="N" lemma="ϫⲟⲟⲩ" resp="#coptic-nlp" cert="medium">ϫⲟⲟⲩ</w>
             </phr>
             <phr>
@@ -4122,7 +4125,7 @@
               <w type="ART" lemma="ⲟⲩ" ana="#g-en-16864bf8d9b3 #g-ja-ed327882f988" resp="#coptic-nlp" cert="medium">ⲟⲩ</w>
             </phr>
             <phr>
-              <w type="N" lemma="ⲥⲁ" resp="#coptic-nlp" cert="medium">ⲥⲁ</w>
+              <w type="ANEGAOR" lemma="ⲥⲁ" resp="#coptic-nlp" cert="medium">ⲥⲁ</w>
               <w type="PPER" lemma="ⲩ" ana="#g-en-1e0d43bff60b #g-ja-298c47d14363" resp="#coptic-nlp" cert="medium">ⲩ</w>
               <w type="V" lemma="ⲟⲩⲱⲛϩ" ana="#g-en-91e64550f376 #g-ja-5daac5c9eeb9" resp="#coptic-nlp" cert="medium">ⲟⲩⲱⲛϩ</w>
             </phr>
@@ -4236,8 +4239,7 @@
             </phr>
             <phr>
               <w type="PREP" lemma="ⲛ" resp="#coptic-nlp" cert="medium">ⲙ</w>
-              <w type="ART" lemma="ⲡⲉ" resp="#coptic-nlp" cert="medium">ⲡⲉ</w>
-              <w type="N" lemma="ⲡⲣⲱⲧⲟⲅⲉⲛ" resp="#coptic-nlp" cert="medium">ⲡⲣⲱⲧⲟⲅⲉⲛ</w>
+              <w type="N" lemma="ⲡⲉⲡⲣⲱⲧⲟⲅⲉⲛ" resp="#coptic-nlp" cert="medium">ⲡⲉⲡⲣⲱⲧⲟⲅⲉⲛ</w>
               <w type="PTC" lemma="ⲉⲧⲱⲣ" resp="#coptic-nlp" cert="medium">ⲉⲧⲱⲣ</w>
               <w type="PPOS" lemma="ⲡⲉϥ" ana="#g-en-b187a9ed471e #g-ja-e1b7d5621057" resp="#coptic-nlp" cert="medium">ⲡⲉϥ</w>
               <w type="N" lemma="ϣⲏⲣⲉ" ana="#g-en-5cb9ffd9afc2 #g-ja-30ed6d76aa0a" resp="#coptic-nlp" cert="medium">ϣⲏⲣⲉ</w>
@@ -4249,7 +4251,7 @@
               <w type="N" lemma="ⲣⲟⲙⲡⲉ" resp="#coptic-nlp" cert="medium">ⲣⲟⲙⲡⲉ</w>
             </phr>
             <phr>
-              <w type="N" lemma="ⲁⲥ" resp="#coptic-nlp" cert="medium">ⲁⲥ</w>
+              <w type="NPROP" lemma="ⲁⲥ" resp="#coptic-nlp" cert="medium">ⲁⲥ</w>
             </phr>
             <phr>
               <w type="V" lemma="ϣⲱⲡⲉ" ana="#g-en-f1506717880f #g-ja-1453fce36ba6" resp="#coptic-nlp" cert="medium">ϣⲱⲡⲉ</w>
@@ -4485,12 +4487,12 @@
               <w type="CPRET" lemma="ⲛⲉⲣⲉ" resp="#coptic-nlp" cert="medium">ⲛⲉ</w>
             </phr>
             <phr>
-              <w type="EXIST" lemma="ⲩⲛⲥⲟⲉⲥⲟⲉ" resp="#coptic-nlp" cert="low">ⲩⲛⲥⲟⲉ</w>
+              <w type="EXIST" lemma="ⲩⲛⲥⲟⲉ" resp="#coptic-nlp" cert="medium">ⲩⲛⲥⲟⲉ</w>
             </phr>
           </s>
           <s xml:id="III-7505293" n="104">
             <phr>
-              <w type="EXIST" lemma="ⲩⲛⲥⲟⲉⲥⲟⲉ" resp="#coptic-nlp" cert="low">ⲥⲟⲉ</w>
+              <w type="NUM" lemma="ⲥⲟⲉ" resp="#coptic-nlp" cert="medium">ⲥⲟⲉ</w>
             </phr>
           </s>
           <s xml:id="III-7505294" n="105">
@@ -4856,7 +4858,7 @@
               <w type="N" lemma="ⲁⲓⲱⲛ" xml:lang="grc" ana="#g-en-4bb2020125bd #g-ja-60c0a6a896c2" resp="#coptic-nlp" cert="medium">ⲁⲓⲱⲛ</w>
             </phr>
             <phr>
-              <w type="PREP" lemma="ⲛ" resp="#coptic-nlp" cert="medium">ⲛ</w>
+              <w type="ACONJ" lemma="ⲛⲧⲉ" resp="#coptic-nlp" cert="medium">ⲛ</w>
               <w type="PPER" lemma="ⲧⲛ" resp="#coptic-nlp" cert="medium">ⲧⲛ</w>
               <w type="ART" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423" resp="#coptic-nlp" cert="medium">ⲛ</w>
               <w type="N" lemma="ⲁⲑⲁⲛⲁⲧⲟⲥ" xml:lang="grc" resp="#coptic-nlp" cert="medium">ⲁⲑⲁⲛⲁⲧⲟⲥ</w>
@@ -4869,10 +4871,11 @@
           </s>
           <s xml:id="III-7505299" n="110">
             <phr>
-              <w type="NPROP" lemma="ⲡⲥⲁⲛϩⲣⲉⲛⲧⲙⲉϩϣ" resp="#coptic-nlp" cert="medium">ⲡⲥⲁⲛϩⲣⲉⲛⲧⲙⲉϩϣ</w>
+              <w type="NPROP" lemma="ⲡⲥⲁⲛ" resp="#coptic-nlp" cert="medium">ⲡⲥⲁⲛ</w>
+              <w type="N" lemma="ϩⲣⲉⲛⲧⲙⲉϩϣ" resp="#coptic-nlp" cert="medium">ϩⲣⲉⲛⲧⲙⲉϩϣ</w>
             </phr>
             <phr>
-              <w type="N" lemma="ⲙⲟⲩ" ana="#g-en-4f14c08f988e #g-ja-2c2a46075fa0" resp="#coptic-nlp" cert="medium">ⲙⲟⲩ</w>
+              <w type="V" lemma="ⲙⲟⲩ" ana="#g-en-4f14c08f988e #g-ja-2c2a46075fa0" resp="#coptic-nlp" cert="medium">ⲙⲟⲩ</w>
             </phr>
             <phr>
               <w type="COP" lemma="ⲡⲉ" resp="#coptic-nlp" cert="medium">ⲛⲉ</w>
@@ -5196,7 +5199,7 @@
               <w type="N" lemma="ⲡⲓⲁⲧⲟ" resp="#coptic-nlp" cert="medium">ⲡⲓⲁⲧⲟ</w>
             </phr>
             <phr>
-              <w type="PREP" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423" resp="#coptic-nlp" cert="medium">ⲛ</w>
+              <w type="ART" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423" resp="#coptic-nlp" cert="medium">ⲛ</w>
               <w type="N" lemma="ⲙⲏⲏϣⲉ" resp="#coptic-nlp" cert="medium">ⲙⲏⲏϣⲉ</w>
             </phr>
             <phr>
@@ -5244,10 +5247,7 @@
           </s>
           <s xml:id="III-7505303" n="114">
             <phr>
-              <w type="V" lemma="ϣ" resp="#coptic-nlp" cert="medium">ϣ</w>
-            </phr>
-            <phr>
-              <w type="APST" lemma="ⲁ" ana="#g-en-50d334013e90 #g-ja-1f4ed58b32e0" resp="#coptic-nlp" cert="medium">ⲁ</w>
+              <w type="AAOR" lemma="ϣⲁⲣⲉ" resp="#coptic-nlp" cert="medium">ϣⲁ</w>
               <w type="PPER" lemma="ⲩ" ana="#g-en-1e0d43bff60b #g-ja-298c47d14363" resp="#coptic-nlp" cert="medium">ⲩ</w>
               <w type="V" lemma="ⲙⲟⲩⲧⲉ" ana="#g-en-8f3926c4181b #g-ja-b44b917ef940" resp="#coptic-nlp" cert="medium">ⲙⲟⲩⲧⲉ</w>
             </phr>
@@ -5335,7 +5335,7 @@
             </phr>
             <phr>
               <w type="PREP" lemma="ⲉ" resp="#coptic-nlp" cert="medium">ⲉ</w>
-              <w type="PPER" lemma="ⲕ" resp="#coptic-nlp" cert="medium">ⲕ</w>
+              <w type="PPOS" lemma="ⲕ" resp="#coptic-nlp" cert="medium">ⲕ</w>
               <w type="N" lemma="ⲙⲉⲣⲟⲥ" xml:lang="grc" resp="#coptic-nlp" cert="medium">ⲙⲉⲣⲟⲥ</w>
             </phr>
             <phr>
@@ -5403,7 +5403,7 @@
             </phr>
             <phr>
               <w type="IMOD" lemma="ⲧⲏⲣ" ana="#g-en-21f06570c083 #g-ja-ec18d17e690b" resp="#coptic-nlp" cert="medium">ⲧⲏⲣ</w>
-              <w type="ART" lemma="ⲟⲩ" resp="#coptic-nlp" cert="medium">ⲟⲩ</w>
+              <w type="PPER" lemma="ⲟⲩ" resp="#coptic-nlp" cert="medium">ⲟⲩ</w>
             </phr>
           </s>
           <s xml:id="III-7505309" n="120">
@@ -5434,7 +5434,7 @@
               <w type="PPOS" lemma="ⲡⲉϥ" ana="#g-en-b187a9ed471e #g-ja-e1b7d5621057" resp="#coptic-nlp" cert="medium">ⲡⲉϥ</w>
             </phr>
             <phr>
-              <w type="V" lemma="ⲙⲁⲧⲉ" resp="#coptic-nlp" cert="medium">ⲙⲉⲧⲉ</w>
+              <w type="N" lemma="ⲙⲉⲧⲉ" resp="#coptic-nlp" cert="medium">ⲙⲉⲧⲉ</w>
               <w type="N" lemma="ⲙⲛⲧⲉϥ" resp="#coptic-nlp" cert="medium">ⲙⲛⲧⲉϥ</w>
               <w type="X" xml:lang="grc" resp="#coptic-nlp" cert="low">ⲉⲛⲛⲟⲓⲁ</w>
             </phr>
@@ -5470,7 +5470,7 @@
           </s>
           <s xml:id="III-7505310" n="121">
             <phr>
-              <w type="PREP" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423" resp="#coptic-nlp" cert="medium">ⲛ</w>
+              <w type="ART" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423" resp="#coptic-nlp" cert="medium">ⲛ</w>
               <w type="N" lemma="ⲛⲟⲩⲧⲉ" ana="#g-en-21298df8a327 #g-ja-87a94db45b3b" resp="#coptic-nlp" cert="medium">ⲛⲟⲩⲧⲉ</w>
             </phr>
             <phr>
@@ -5507,7 +5507,7 @@
           </s>
           <s xml:id="III-7505311" n="122">
             <phr>
-              <w type="PREP" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423" resp="#coptic-nlp" cert="medium">ⲛ</w>
+              <w type="ART" lemma="ⲛ" ana="#g-en-d2263e6a77aa #g-ja-f5edc59c9423" resp="#coptic-nlp" cert="medium">ⲛ</w>
               <w type="N" lemma="ⲛⲟⲩⲧⲉ" ana="#g-en-21298df8a327 #g-ja-87a94db45b3b" resp="#coptic-nlp" cert="medium">ⲛⲟⲩⲧⲉ</w>
             </phr>
             <phr>
@@ -5655,7 +5655,7 @@
             </phr>
             <phr>
               <w type="PREP" lemma="ⲉ" resp="#coptic-nlp" cert="medium">ⲉ</w>
-              <w type="NPROP" lemma="ⲛⲓⲁⲓⲱⲛⲧⲏⲣ" resp="#coptic-nlp" cert="medium">ⲛⲓⲁⲓⲱⲛⲧⲏⲣ</w>
+              <w type="N" lemma="ⲛⲓⲁⲓⲱⲛⲧⲏⲣ" resp="#coptic-nlp" cert="medium">ⲛⲓⲁⲓⲱⲛⲧⲏⲣ</w>
               <w type="PPER" lemma="ⲟⲩ" resp="#coptic-nlp" cert="medium">ⲟⲩ</w>
             </phr>
             <phr>
@@ -5666,7 +5666,7 @@
           </s>
           <s xml:id="III-7505317" n="128">
             <phr>
-              <w type="PREP" lemma="ⲛ" resp="#coptic-nlp" cert="medium">ⲛ</w>
+              <w type="ART" lemma="ⲛ" resp="#coptic-nlp" cert="medium">ⲛ</w>
               <w type="N" lemma="ⲁⲑⲁⲛⲁⲧⲟⲥ" xml:lang="grc" resp="#coptic-nlp" cert="medium">ⲁⲑⲁⲛⲁⲧⲟⲥ</w>
             </phr>
             <phr>
@@ -5741,7 +5741,8 @@
               <w type="CREL" lemma="ⲉⲧⲉⲣⲉ" resp="#coptic-nlp" cert="medium">ⲛⲧ</w>
               <w type="APST" lemma="ⲁ" resp="#coptic-nlp" cert="medium">ⲁ</w>
               <w type="PPER" lemma="ⲩ" resp="#coptic-nlp" cert="medium">ⲩ</w>
-              <w type="V" lemma="ϯⲣⲛⲥϫⲉⲥⲓⲅⲏ" resp="#coptic-nlp" cert="medium">ϯⲣⲛⲥϫⲉⲥⲓⲅⲏ</w>
+              <w type="PPER" lemma="ϯ" ana="#g-en-fa9f22e62229 #g-ja-65a52adbd87c" resp="#coptic-nlp" cert="medium">ϯ</w>
+              <w type="V" lemma="ⲣⲛⲥϫⲉⲥⲓⲅⲏ" resp="#coptic-nlp" cert="medium">ⲣⲛⲥϫⲉⲥⲓⲅⲏ</w>
             </phr>
             <phr>
               <w type="CONJ" lemma="ϫⲉ" ana="#g-en-a09e936e20a5 #g-ja-7f5c3fda28dc" resp="#coptic-nlp" cert="medium">ϫⲉ</w>
@@ -5929,9 +5930,9 @@
               <w type="ADV" lemma="ⲉϩⲟⲩⲛ" ana="#g-en-1a5b8e2ff7ec #g-ja-d285c30d5ae1" resp="#coptic-nlp" cert="medium">ⲉϩⲟⲩⲛ</w>
             </phr>
             <phr>
-              <w type="PREP" lemma="ⲉ" resp="#coptic-nlp" cert="medium">ⲉ</w>
-              <w type="ART" lemma="ⲩ" resp="#coptic-nlp" cert="medium">ⲩ</w>
-              <w type="N" lemma="ϩⲩⲡⲏⲣⲉⲥⲓⲁ" xml:lang="grc" resp="#coptic-nlp" cert="medium">ϩⲩⲡⲏⲣⲉⲥⲓⲁ</w>
+              <w type="CCIRC" lemma="ⲉⲣⲉ" resp="#coptic-nlp" cert="medium">ⲉ</w>
+              <w type="PPER" lemma="ⲩ" resp="#coptic-nlp" cert="medium">ⲩ</w>
+              <w type="V" lemma="ϩⲩⲡⲏⲣⲉⲥⲓⲁ" xml:lang="grc" resp="#coptic-nlp" cert="medium">ϩⲩⲡⲏⲣⲉⲥⲓⲁ</w>
             </phr>
             <phr>
               <w type="PREP" lemma="ⲙⲛ" ana="#g-en-2e45bf760c3e #g-ja-f512e4e94307" resp="#coptic-nlp" cert="medium">ⲙⲛ</w>
@@ -5987,11 +5988,11 @@
               <w type="V" lemma="ⲟⲩⲱϣ" ana="#g-en-95dfdc24ee58 #g-ja-b93b8d7eaa12" resp="#coptic-nlp" cert="medium">ⲟⲩⲱϣ</w>
             </phr>
             <phr>
-              <w type="PPER" lemma="ⲉ" resp="#coptic-nlp" cert="medium">ⲉ</w>
+              <w type="PREP" lemma="ⲉ" resp="#coptic-nlp" cert="medium">ⲉ</w>
               <w type="ADV" lemma="ⲙⲙⲁⲧⲉ" ana="#g-en-f8969a18a0da" resp="#coptic-nlp" cert="medium">ⲙⲙⲁⲧⲉ</w>
             </phr>
             <phr>
-              <w type="ART" lemma="ⲡⲉ" resp="#coptic-nlp" cert="medium">ⲡⲉ</w>
+              <w type="COP" lemma="ⲡⲉ" resp="#coptic-nlp" cert="medium">ⲡⲉ</w>
             </phr>
           </s>
           <s xml:id="III-7505322" n="133">
@@ -6301,7 +6302,7 @@
               <w type="N" lemma="ⲁⲓⲱⲛ" xml:lang="grc" ana="#g-en-4bb2020125bd #g-ja-60c0a6a896c2" resp="#coptic-nlp" cert="medium">ⲁⲓⲱⲛ</w>
             </phr>
             <phr>
-              <w type="X" resp="#coptic-nlp" cert="low">ⲧⲏ</w>
+              <w type="VIMP" lemma="ⲧⲏ" resp="#coptic-nlp" cert="medium">ⲧⲏ</w>
             </phr>
             <phr>
               <w type="V" lemma="ⲣⲟⲩⲛⲧⲁ" resp="#coptic-nlp" cert="medium">ⲣⲟⲩⲛⲧⲁ</w>

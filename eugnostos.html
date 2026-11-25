@@ -730,14 +730,15 @@ function render(){
   box.className="col";
   const segs = curWit==="III" ? SEGS_III : SEGS_V;
   if(curWit==="V"){
-    // V,1 には語ごとの注釈がまだ無い（data/eugnostos_tei.xml の wit-V は III,3 と対応づけた枠だけ）。
+    // V,1 には人の手による語ごとの注釈がまだ無い（data/eugnostos_tei.xml の wit-V は III,3 と対応づけた枠だけ）。
+    // 本文は全文テキストの自動注釈の暫定版（reader.html?doc=V-1）にある。
     // TEI の編集者向けの注（<note type="editorial">）は読者には出さず、本文の読める場所を案内する
     const en=UL()==="en", vpar=PAR_GROUPS.some(g=>g.subtype==="witness");
     const rd=`<a href="reader.html?doc=V-1">${en?"the text reader":"本文ビュワー"}</a>`;
     box.innerHTML = `<div class="notice" style="border-left-color:var(--rose)">⬥ `+(en
-      ? `<b>V,1 has no word-by-word annotation yet.</b> The text of V,1 (an unannotated working text) can be read `+
+      ? `<b>V,1 has no word-by-word annotation by hand yet.</b> The text of V,1 (a working text with automatic annotation, not checked by hand) can be read `+
         (vpar?`beside III,3 in the Synopsis tab and in the parallels panel, and also in ${rd}.`:`in ${rd}.`)
-      : `<b>V,1 には語ごとの注釈がまだありません。</b>V,1 の本文（未注釈の作業用テキスト）は`+
+      : `<b>V,1 には人の手による語ごとの注釈がまだありません。</b>V,1 の本文（自動注釈を付けた作業用テキスト。人の目では確かめていません）は`+
         (vpar?`〈対照〉と〈並行箇所〉で III,3 と並べて読めるほか、${rd}でも読めます。`:`${rd}で読めます。`))+`</div>`+
       segs.map(segHTML).join("");
   } else {
@@ -745,7 +746,7 @@ function render(){
   }
   wireWords(); relabelLoan(); markActive(); renderPar();
 }
-/* 〈対照〉: 左に III,3、右に V,1。V,1 の本文は未注釈の全文テキストから、並行箇所（parallels.xml）の対応で並べる。
+/* 〈対照〉: 左に III,3、右に V,1。V,1 の本文は全文テキスト（自動注釈の暫定版）から、並行箇所（parallels.xml）の対応で並べる。
    対応の無いセグメントが続くところは 1 行にまとめ、前後の対応のあいだにある V,1 の本文を「対応は未確認」として並べる。
    一致する文字に印を付ける（並行箇所のパネルと同じ照合）。 */
 function synLeftHTML(s,html){
@@ -756,7 +757,7 @@ function synLeftHTML(s,html){
 function renderSyn(box){
   box.className="syn";
   const en=UL()==="en", g=PAR_GROUPS.find(x=>x.subtype==="witness");
-  let html=`<div class="colhead">III,3</div><div class="colhead">V,1${g?`<small>${en?"unannotated working text · aligned automatically":"未注釈の作業用テキスト・自動照合"}</small>`:""}</div>`;
+  let html=`<div class="colhead">III,3</div><div class="colhead">V,1${g?`<small>${en?"working text (automatic draft) · aligned automatically":"作業用テキスト（自動注釈の暫定版）・自動照合"}</small>`:""}</div>`;
   if(!g){   // 並行箇所のデータが無いときは、V,1 の枠だけ
     SEGS_III.forEach(s=>{ html+=`<div class="cell" data-id="${s.id}">${synLeftHTML(s,groupForms(s))}</div>`+
       `<div class="cell v"><div class="vgap">${en?"V,1 — to be supplied from the critical editions (Pasquier / Parrott)":"V,1 — 校訂版(Pasquier / Parrott)より補充予定"}</div></div>`; });
@@ -877,7 +878,7 @@ function flashSeg(id){
    parallels.xml の <linkGrp type="parallel"> 1 つが、対応先の文書 1 つ。各 <link> の @target は
    「本文のセグメント 対応先のセグメント」（eugnostos_tei.xml#III-… ../source/nhc_fulltext_split/tei/….xml#V-…）。
    本文の訳の後ろに「‖ V,1」のような印を出し、押すと右のパネルに対応先の本文を出す。
-   対応先の本文（未注釈の全文テキスト）は、パネルか〈対照〉で要るときに読み込む。
+   対応先の本文（全文テキスト）は、パネルか〈対照〉で要るときに読み込む。
    一致する文字の印（mark.pm）は、表示のたびにその場で数える。build_parallels.py と同じ考え方で、
    語の区切り・上線などの合成記号・記号を除き、順序を保って一致する 4 文字以上の部分に付ける。 */
 const PAR_FILES=new Map(), PAR_TEXT=new Map();   // 対応先のファイルの URL → 読み込み中の Promise / 読み込んだ本文 {segs, idx}
@@ -897,7 +898,8 @@ function catInfo(id){
     else if(c.localName==="idno"&&c.getAttribute("type")==="siglum") out.siglum=c.textContent.trim();
     else if(c.localName==="ref"&&c.getAttribute("type")==="reader") out.reader=c.getAttribute("target")||"";
   });
-  if(b.getAttribute("subtype")==="unannotated") out.wit="wit-"+id.replace(/^doc-/,"");   // sync_nhc_catalog.py の決まり（doc-II-6 ↔ 証本 wit-II-6）
+  const sub=b.getAttribute("subtype");   // 全文テキスト（暫定版 "draft"・未注釈 "unannotated"）は検索ページで開ける
+  if(sub==="draft"||sub==="unannotated") out.wit="wit-"+id.replace(/^doc-/,"");   // sync_nhc_catalog.py の決まり（doc-II-6 ↔ 証本 wit-II-6）
   return out;
 }
 function infoShort(info){ return (info.siglum||info.id).replace(/^NHC\s*/,""); }
@@ -938,11 +940,14 @@ function parsePar(){
   if(parTab&&!PAR_GROUPS.some(g=>g.id===parTab)) parTab=null;
   updateParBtn();
 }
-/* 対応先の本文を読み込む（1 ファイル 1 回）。<w> を空白でつなぎ、欠損（<gap>）は〔…〕にする */
+/* 対応先の本文を読み込む（1 ファイル 1 回）。語群（<phr>）は 1 語にし（中の <w> をつなぐ）、語群の外の <w> と語群は空白で
+   つなぎ、欠損（<gap>）は〔…〕にする */
 function fullText(s){
   const out=[];
   (function walk(n){ n.childNodes.forEach(c=>{ if(c.nodeType!==1) return;
-    if(c.localName==="w") out.push(c.textContent); else if(c.localName==="gap") out.push("〔…〕"); else walk(c); }); })(s);
+    if(c.localName==="w") out.push(c.textContent);
+    else if(c.localName==="phr") out.push(T(c,"w").map(w=>w.textContent).join(""));
+    else if(c.localName==="gap") out.push("〔…〕"); else walk(c); }); })(s);
   return out.join(" ");
 }
 function parLoad(url){
@@ -1088,8 +1093,8 @@ function certTip(){ return UL()==="en"
 function nLabel(d,lo,hi){ return "§"+d.segs[lo].n+(hi>lo?"–"+d.segs[hi].n:""); }
 function parMethodHTML(){
   return `<p class="pp-method">${UL()==="en"
-    ? 'The links come from an automatic comparison of the wording (runs of four or more letters shared in the same order, ignoring word division and supralinear strokes), not from a critical edition; reworded passages are not linked. Matching letters are highlighted. The other texts are the unannotated working text of the Nag Hammadi Codices, not yet collated with the editions; it has no page and line numbers, so segments are cited by number (§). Data: <a href="data/parallels.xml" download>parallels.xml</a> (made by scripts/build_parallels.py).'
-    : '対応は、文言の自動照合（語の区切りと上線を無視して、順序を保って一致する 4 文字以上の部分）によるもので、校訂版によるものではありません。言い換えられた箇所は結ばれていません。一致する文字に色を付けています。対応先の本文は、校訂本と照合する前の未注釈の作業用テキストで、頁・行番号が無いため、セグメントの番号（§）で示しています。データ: <a href="data/parallels.xml" download>parallels.xml</a>（scripts/build_parallels.py が作成）。'}</p>`;
+    ? 'The links come from an automatic comparison of the wording (runs of four or more letters shared in the same order, ignoring word division and supralinear strokes), not from a critical edition; reworded passages are not linked. Matching letters are highlighted. The other texts are the working text of the Nag Hammadi Codices (automatic drafts), not yet collated with the editions; it has no page and line numbers, so segments are cited by number (§). Data: <a href="data/parallels.xml" download>parallels.xml</a> (made by scripts/build_parallels.py).'
+    : '対応は、文言の自動照合（語の区切りと上線を無視して、順序を保って一致する 4 文字以上の部分）によるもので、校訂版によるものではありません。言い換えられた箇所は結ばれていません。一致する文字に色を付けています。対応先の本文は、校訂本と照合する前の作業用テキスト（自動注釈の暫定版）で、頁・行番号が無いため、セグメントの番号（§）で示しています。データ: <a href="data/parallels.xml" download>parallels.xml</a>（scripts/build_parallels.py が作成）。'}</p>`;
 }
 function parOverviewHTML(){
   const en=UL()==="en", all=new Set(); PAR_GROUPS.forEach(g=>g.order.forEach(id=>all.add(id)));
@@ -1485,8 +1490,8 @@ document.addEventListener("click",e=>{
 /* ---------- credit ---------- */
 function buildCredit(){
   $("#credit").innerHTML=`
-   <p><span class="l-ja"><b>本コーパスについて。</b> データは別々のファイルに分けています — <b>本文</b> <code>eugnostos_tei.xml</code>(二証本)、<b>コプト語辞書</b> <code>lexicon.xml</code>(レンマ＋品詞→<b>日英仏</b>語義)、<b>並行箇所</b> <code>parallels.xml</code>(他の文書で同じ文言を持つ箇所)、<b>文書カタログ</b> <code>catalog.xml</code>。本文の各 <code>&lt;w&gt;</code> は <b>@lemma と @type(品詞)の組</b>で辞書を参照し(同形異義語は品詞で区別)、並行箇所の <code>&lt;link&gt;</code> は @target で本文の <code>&lt;s&gt;</code> と他の文書の <code>&lt;s&gt;</code> を結びます。対応先の本文は、ナグ・ハマディ写本の未注釈の全文テキスト(<code>source/nhc_fulltext_split/</code>。校訂本と照合する前の作業用テキスト)です。</span><span class="l-en"><b>About this corpus.</b> The data are kept in separate files: the <b>text</b> <code>eugnostos_tei.xml</code> (two witnesses), the <b>Coptic lexicon</b> <code>lexicon.xml</code> (lemma + part of speech → Japanese, English and French senses), the <b>parallel passages</b> <code>parallels.xml</code> (places in other texts with the same wording) and the <b>catalogue</b> <code>catalog.xml</code>. Each <code>&lt;w&gt;</code> looks up the lexicon by <b>@lemma and @type (part of speech)</b>, so homographs are told apart by part of speech; each <code>&lt;link&gt;</code> among the parallels joins an <code>&lt;s&gt;</code> of this text to an <code>&lt;s&gt;</code> of another text with @target. The other texts come from the unannotated full text of the Nag Hammadi Codices (<code>source/nhc_fulltext_split/</code>), a working text not yet collated with the critical editions.</span></p>
-   <p><span class="l-ja">本文(コプト語)はパブリックドメイン。<b>日・英・仏の対訳と辞書は本プロジェクトによる原文オリジナルの初版シード</b>(CC&nbsp;BY&nbsp;4.0)で、<b>Pasquier(BCNH)・Parrott(NHS 27)・小林稔訳</b>等を参照して作成していますが、これらの翻訳を転記したものではありません。権威あるフランス語訳は Pasquier の校訂を参照してください。語義はレンマ単位(文脈非依存)で全トークンの約87%を、フランス語語義は中核語彙をカバー。写本 <b>III,3</b> は全文符号化、<b>V,1</b> は @corresp で対応づけた並行証本の枠です(V,1 の本文は〈対照〉と〈並行箇所〉に未注釈の全文テキストから表示)。並行箇所は文言の自動照合によるもので(<code>scripts/build_parallels.py</code>)、校訂版によるものではありません。</span><span class="l-en">The Coptic text is in the public domain. <b>The Japanese, English and French translations and the lexicon are this project’s own first-pass seed</b> (CC&nbsp;BY&nbsp;4.0), prepared with reference to <b>Pasquier (BCNH), Parrott (NHS 27) and Kobayashi’s Japanese translation</b> among others; they do not reproduce those translations. For an authoritative French translation see Pasquier’s edition. Senses are given per lemma (not per context) for about 87% of tokens, French senses for the core vocabulary. Witness <b>III,3</b> is encoded in full; <b>V,1</b> is a frame aligned by @corresp (its text is shown from the unannotated full text in the Synopsis and in the parallels panel). The parallel passages come from an automatic comparison of the wording (<code>scripts/build_parallels.py</code>), not from a critical edition.</span></p>`;
+   <p><span class="l-ja"><b>本コーパスについて。</b> データは別々のファイルに分けています — <b>本文</b> <code>eugnostos_tei.xml</code>(二証本)、<b>コプト語辞書</b> <code>lexicon.xml</code>(レンマ＋品詞→<b>日英仏</b>語義)、<b>並行箇所</b> <code>parallels.xml</code>(他の文書で同じ文言を持つ箇所)、<b>文書カタログ</b> <code>catalog.xml</code>。本文の各 <code>&lt;w&gt;</code> は <b>@lemma と @type(品詞)の組</b>で辞書を参照し(同形異義語は品詞で区別)、並行箇所の <code>&lt;link&gt;</code> は @target で本文の <code>&lt;s&gt;</code> と他の文書の <code>&lt;s&gt;</code> を結びます。対応先の本文は、ナグ・ハマディ写本の全文テキスト(<code>source/nhc_fulltext_split/</code>。校訂本と照合する前の作業用テキストで、自動注釈の暫定版)です。</span><span class="l-en"><b>About this corpus.</b> The data are kept in separate files: the <b>text</b> <code>eugnostos_tei.xml</code> (two witnesses), the <b>Coptic lexicon</b> <code>lexicon.xml</code> (lemma + part of speech → Japanese, English and French senses), the <b>parallel passages</b> <code>parallels.xml</code> (places in other texts with the same wording) and the <b>catalogue</b> <code>catalog.xml</code>. Each <code>&lt;w&gt;</code> looks up the lexicon by <b>@lemma and @type (part of speech)</b>, so homographs are told apart by part of speech; each <code>&lt;link&gt;</code> among the parallels joins an <code>&lt;s&gt;</code> of this text to an <code>&lt;s&gt;</code> of another text with @target. The other texts come from the full text of the Nag Hammadi Codices (<code>source/nhc_fulltext_split/</code>), a working text with automatic annotation, not yet collated with the critical editions.</span></p>
+   <p><span class="l-ja">本文(コプト語)はパブリックドメイン。<b>日・英・仏の対訳と辞書は本プロジェクトによる原文オリジナルの初版シード</b>(CC&nbsp;BY&nbsp;4.0)で、<b>Pasquier(BCNH)・Parrott(NHS 27)・小林稔訳</b>等を参照して作成していますが、これらの翻訳を転記したものではありません。権威あるフランス語訳は Pasquier の校訂を参照してください。語義はレンマ単位(文脈非依存)で全トークンの約87%を、フランス語語義は中核語彙をカバー。写本 <b>III,3</b> は全文符号化、<b>V,1</b> は @corresp で対応づけた並行証本の枠です(V,1 の本文は〈対照〉と〈並行箇所〉に全文テキストの暫定版から表示)。並行箇所は文言の自動照合によるもので(<code>scripts/build_parallels.py</code>)、校訂版によるものではありません。</span><span class="l-en">The Coptic text is in the public domain. <b>The Japanese, English and French translations and the lexicon are this project’s own first-pass seed</b> (CC&nbsp;BY&nbsp;4.0), prepared with reference to <b>Pasquier (BCNH), Parrott (NHS 27) and Kobayashi’s Japanese translation</b> among others; they do not reproduce those translations. For an authoritative French translation see Pasquier’s edition. Senses are given per lemma (not per context) for about 87% of tokens, French senses for the core vocabulary. Witness <b>III,3</b> is encoded in full; <b>V,1</b> is a frame aligned by @corresp (its text is shown from the draft full text in the Synopsis and in the parallels panel). The parallel passages come from an automatic comparison of the wording (<code>scripts/build_parallels.py</code>), not from a critical edition.</span></p>`;
 }
 
 

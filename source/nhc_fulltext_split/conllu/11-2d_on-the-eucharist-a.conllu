@@ -13,7 +13,7 @@
 6	ⲛ	ⲛⲧⲉ	AUX	ACONJ	_	8	case	_	TEI=XI-7512572_717
 7	ⲧⲛ	ⲁⲛⲟⲛ	PRON	PPERS	_	8	nmod:poss	_	TEI=XI-7512572_717
 8	ⲣⲉⲩ	ⲉⲣⲏⲩ	NOUN	N	_	2	obl	_	TEI=XI-7512572_717|Norm=ⲉⲣⲏⲩ
-9	ⲭⲁⲣⲓⲥ	ⲭⲁⲣⲓⲥ	NOUN	N	_	2	advmod	_	TEI=XI-7512572_717|Lang=grc
+9	ⲭⲁⲣⲓⲥ	ⲭⲁⲣⲓⲥ	NOUN	N	_	2	parataxis	_	TEI=XI-7512572_717|Lang=grc
 10-12	ⲧⲉⲓⲡⲓⲱⲧ	_	_	_	_	_	_	_	_
 10	ⲧⲉⲓ	ⲡⲉⲓ	DET	PDEM	_	12	case	_	TEI=XI-7512572_717
 11	ⲡ	ⲡ	DET	ART	_	12	det	_	TEI=XI-7512572_717
@@ -30,7 +30,7 @@
 20	ϣⲏⲣⲉ	ϣⲏⲣⲉ	NOUN	N	_	15	obl	_	TEI=XI-7512572_717
 21	ⲓⲏⲥ	ⲓⲏⲥⲟⲩⲥ	PROPN	NPROP	_	20	appos	_	TEI=XI-7512572_717|Norm=ⲓⲏⲥⲟⲩⲥ
 22	ⲡⲉⲭⲣⲏⲥⲧⲟ	ⲡⲉⲭⲣⲏⲥⲧⲟ	VERB	V	_	15	advmod	_	TEI=XI-7512572_717
-23	ⲥϫⲉⲥⲉⲉⲓ	ⲥϫⲉⲥⲉⲉⲓ	PRON	PPERO	_	25	parataxis	_	TEI=XI-7512572_717
+23	ⲥϫⲉⲥⲉⲉⲓ	ⲥϫⲉⲥⲉⲉⲓ	PRON	PPERO	_	25	nsubj	_	TEI=XI-7512572_717
 24	ⲁⲃⲁⲗ	ⲁⲃⲁⲗ	ADV	ADV	_	25	nsubj	_	TEI=XI-7512572_717
 25	ⲁϩⲟⲣⲁⲧⲟⲛ	ⲁϩⲟⲣⲁⲧⲟⲛ	NOUN	N	_	2	parataxis	_	TEI=XI-7512572_717|Lang=grc
 26	ⲁⲛ	ⲁⲛ	ADV	NEG	_	25	advmod	_	TEI=XI-7512572_717
@@ -70,7 +70,7 @@
 51	ⲛⲁ	ⲛⲁ	AUX	FUT	_	52	aux	_	TEI=XI-7512572_717
 52	ⲉⲓⲣⲉ	ⲉⲓⲣⲉ	VERB	V	_	25	conj	_	TEI=XI-7512572_717
 53-55	ⲙⲡⲉⲕⲟⲩⲱϣⲉ	_	_	_	_	_	_	_	_
-53	ⲙⲡⲉ	ⲙⲡⲉ	AUX	ANEGPST	_	56	aux	_	TEI=XI-7512572_717
+53	ⲙⲡⲉ	ⲙⲡⲉ	AUX	ANEGPST	_	42	aux	_	TEI=XI-7512572_717
 54	ⲕ	ⲛⲧⲟⲕ	PRON	PPERS	_	55	nsubj	_	TEI=XI-7512572_717
 55	ⲟⲩⲱϣⲉ	ⲟⲩⲱⲱϣⲉ	VERB	V	_	56	nsubj	_	TEI=XI-7512572_717
 56	ϯ	ϯ	VERB	V	_	25	parataxis	_	TEI=XI-7512572_717
@@ -116,5 +116,5 @@
 87	ϣⲁⲁ	ϣⲁⲁ	NOUN	N	_	84	obj	_	TEI=XI-7512572_717
 88	ⲛⲏ	ⲡⲏ	DET	PDEM	_	89	case	_	TEI=XI-7512572_717
 89	ϩⲉ	ϩⲉ	NOUN	N	_	84	obl	_	TEI=XI-7512572_717
-90	ϩⲁⲙⲏⲛ	ϩⲁⲙⲏⲛ	PART	PTC	_	82	advmod	_	TEI=XI-7512572_717
+90	ϩⲁⲙⲏⲛ	ϩⲁⲙⲏⲛ	PART	PTC	_	84	advmod	_	TEI=XI-7512572_717
 
