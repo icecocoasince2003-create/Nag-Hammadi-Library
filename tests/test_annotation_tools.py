@@ -87,6 +87,71 @@ MINI_SGML = """<norm_group><norm pos="APST" lemma="ⲁ" norm="ⲁ"><seg n="t-1~0
 """
 
 
+# --sentences s 用: MINI_TEI に 2 つ目の <s> を足したもの
+TWO_TEI = MINI_TEI.replace("      </ab>", """        <s xml:id="t-2" n="2">
+          <w>ⲁⲩⲱ</w>
+        </s>
+      </ab>""")
+
+# TWO_TEI を --sentences s で送ったときの NLP の答え（構文解析つき）。各 <s> の最後に足した「·」は PUNCT の 1 語に
+# なり、次の <s> の最初の語に new_sent が付く。broken=True なら、1 つ目の「·」が PUNCT にならず、NLP が文を切らなかった場合
+def two_sgml(broken=False):
+    eos1 = '<norm xml:id="u7" pos="N" lemma="·" func="conj" head="#u3" norm="·">' if broken else \
+        '<norm xml:id="u7" pos="PUNCT" lemma="·" func="punct" norm="·">'
+    second = '<norm xml:id="u8" pos="CONJ" lemma="ⲁⲩⲱ" func="cc" head="#u3" norm="ⲁⲩⲱ">' if broken else \
+        '<norm xml:id="u8" pos="CONJ" lemma="ⲁⲩⲱ" func="root" new_sent="true" norm="ⲁⲩⲱ">'
+    return """<norm_group><norm xml:id="u1" pos="APST" lemma="ⲁ" func="aux" head="#u3" new_sent="true" norm="ⲁ"><seg n="t-1~0">ⲁ</norm>
+<norm xml:id="u2" pos="PPERS" lemma="ⲛⲧⲟϥ" func="nsubj" head="#u3" norm="ϥ">ϥ</norm><norm xml:id="u3" pos="V" lemma="ⲥⲱⲧⲙ" func="root" norm="ⲥⲱⲧⲙ">ⲥⲱⲧⲙ</seg></norm></norm_group>
+<norm_group><norm xml:id="u4" pos="PTC" lemma="ⲛϭⲓ" func="mark" head="#u6" norm="ⲛϭⲓ"><seg n="t-1~1">ⲛϭⲓ</norm></norm_group>
+<norm_group><norm xml:id="u5" pos="ART" lemma="ⲡ" func="det" head="#u6" norm="ⲡ">ⲡ</norm><norm xml:id="u6" pos="N" lemma="ⲣⲱⲙⲉ" func="nsubj" head="#u3" norm="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</norm></norm_group>
+<norm_group>%s·</seg></norm></norm_group>
+<norm_group>%s<seg n="t-2~0">ⲁⲩⲱ</norm></norm_group>
+<norm_group><norm xml:id="u9" pos="PUNCT" lemma="·" func="punct" norm="·">·</seg></norm></norm_group>
+""" % (eos1, second)
+
+
+# 1 つ目の「·」を、NLP の語群の推定が次の <s> の最初の語 ⲁⲩⲱ とつないで 1 つの形態素（PUNCT）にした場合
+# （2026-11-24 に I,3 で 1 度起きた形）。NLP はその後ろ（ⲡⲉ の前）で文を切っている
+TWO_TEI_PE = TWO_TEI.replace("<w>ⲁⲩⲱ</w>", "<w>ⲁⲩⲱ</w>\n          <w>ⲡⲉ</w>")
+TWO_SGML_MERGED = """<norm_group><norm xml:id="u1" pos="APST" lemma="ⲁ" func="aux" head="#u3" new_sent="true" norm="ⲁ"><seg n="t-1~0">ⲁ</norm>
+<norm xml:id="u2" pos="PPERS" lemma="ⲛⲧⲟϥ" func="nsubj" head="#u3" norm="ϥ">ϥ</norm><norm xml:id="u3" pos="V" lemma="ⲥⲱⲧⲙ" func="root" norm="ⲥⲱⲧⲙ">ⲥⲱⲧⲙ</seg></norm></norm_group>
+<norm_group><norm xml:id="u4" pos="PTC" lemma="ⲛϭⲓ" func="mark" head="#u6" norm="ⲛϭⲓ"><seg n="t-1~1">ⲛϭⲓ</norm></norm_group>
+<norm_group><norm xml:id="u5" pos="ART" lemma="ⲡ" func="det" head="#u6" norm="ⲡ">ⲡ</norm><norm xml:id="u6" pos="N" lemma="ⲣⲱⲙⲉ" func="nsubj" head="#u3" norm="ⲣⲱⲙⲉ">ⲣⲱⲙⲉ</norm></norm_group>
+<norm_group><norm xml:id="u7" pos="PUNCT" lemma="·ⲁⲩⲱ" func="punct" norm="·ⲁⲩⲱ">·</seg><seg n="t-2~0">ⲁⲩⲱ</norm></norm_group>
+<norm_group><norm xml:id="u8" pos="COP" lemma="ⲡⲉ" func="root" new_sent="true" norm="ⲡⲉ">ⲡⲉ</norm></norm_group>
+<norm_group><norm xml:id="u9" pos="PUNCT" lemma="·" func="punct" norm="·">·</seg></norm></norm_group>
+"""
+
+
+# NLP が <gap> をまたいで 1 つの形態素（ⲥⲱⲧⲙ）と推定した場合。TEI では <gap> の両側の「ⲥⲱ」「ⲧⲙ」に分かれる。
+# その形態素が文の最初の語で、構文の根（root）でもある形（2026-11-25 に VIII,1・IX,1・XI,4 などで起きた）
+TWO_TEI_GAP = TWO_TEI.replace("<w>ⲁⲩⲱ</w>", """<w>ⲥⲱ</w>
+          <gap reason="lost" quantity="2" unit="character"/>
+          <w>ⲧⲙ</w>
+          <w>ⲡⲉ</w>""")
+TWO_SGML_GAP = two_sgml().split('<norm_group><norm xml:id="u8"')[0] + \
+    """<norm_group><norm xml:id="u8" pos="V" lemma="ⲥⲱⲧⲙ" func="root" new_sent="true" norm="ⲥⲱⲧⲙ"><seg n="t-2~0">ⲥⲱ</seg><seg n="t-2~1">ⲧⲙ</norm></norm_group>
+<norm_group><norm xml:id="u9" pos="COP" lemma="ⲡⲉ" func="cop" head="#u8" norm="ⲡⲉ">ⲡⲉ</norm></norm_group>
+<norm_group><norm xml:id="u10" pos="PUNCT" lemma="·" func="punct" head="#u8" norm="·">·</seg></norm></norm_group>
+"""
+
+
+def conllu_sentences(text):
+    """CoNLL-U の文ごとの (注記の dict, 語の行の列のリスト)。"""
+    out = []
+    for block in text.strip().split("\n\n"):
+        meta, rows = {}, []
+        for line in block.split("\n"):
+            if line.startswith("# ") and " = " in line:
+                k, v = line[2:].split(" = ", 1)
+                meta[k] = v
+            elif line and not line.startswith("#"):
+                rows.append(line.split("\t"))
+        if rows:
+            out.append((meta, rows))
+    return out
+
+
 class LeidenTest(unittest.TestCase):
     def convert(self):
         with open(os.path.join(FIX, "leiden_sample.txt"), encoding="utf-8") as f:
@@ -200,6 +265,112 @@ class NlpRoundTripTest(unittest.TestCase):
                     "--retries", "0", "--timeout", "2")
             self.assertNotEqual(r.returncode, 0)
             self.assertFalse(os.path.exists(os.path.join(d, "out2.xml")))
+
+    def test_sentences_request(self):
+        """--sentences s: 各 <s> の最後の chunk に「·」を足し、1 つの <s> の chunk は同じ回に送る。"""
+        segs = [nlp.read_segment(s) for s in ET.fromstring(TWO_TEI.encode("utf-8")).iter(T + "s")]
+        req = nlp.build_request(segs, "auto", "s")
+        self.assertEqual(req, [("t-1~0", "ⲁ ϥ ⲥⲱⲧⲙ"), ("t-1~1", "ⲛϭⲓ ⲡ ⲣⲱⲙⲉ ·"), ("t-2~0", "ⲁⲩⲱ ·")])
+        parts = nlp.batches(req, 10, "s")       # 上限を小さくしても <s> の途中では分けない
+        self.assertEqual(parts, ['<seg n="t-1~0"> ⲁ ϥ ⲥⲱⲧⲙ </seg>\n<seg n="t-1~1"> ⲛϭⲓ ⲡ ⲣⲱⲙⲉ · </seg>\n',
+                                 '<seg n="t-2~0"> ⲁⲩⲱ · </seg>\n'])
+        # 既定（nlp）は chunk ごとに分け、文の終わりの印を足さない（前と同じ）
+        default = nlp.batches(nlp.build_request(segs, "auto"), 10)
+        self.assertEqual(default, ['<seg n="t-1~0"> ⲁ ϥ ⲥⲱⲧⲙ </seg>\n', '<seg n="t-1~1"> ⲛϭⲓ ⲡ ⲣⲱⲙⲉ </seg>\n',
+                                   '<seg n="t-2~0"> ⲁⲩⲱ </seg>\n'])
+
+    def test_sentences_roundtrip(self):
+        """--sentences s: 足した「·」は TEI にも CoNLL-U にも残らず、CoNLL-U の文は <s> と 1 対 1 になる。"""
+        with tempfile.TemporaryDirectory() as d:
+            src, tt, out, cu = (os.path.join(d, n) for n in ("in.xml", "in.tt", "out.xml", "out.conllu"))
+            write(src, TWO_TEI)
+            write(tt, two_sgml())
+            r = run("coptic_nlp_tei.py", src, "--sgml", tt, "--out", out, "--conllu", cu, "--sentences", "s",
+                    "--today", "2026-11-24")
+            self.assertEqual(r.returncode, 0, r.stdout)
+            self.assertNotIn("注意", r.stdout)
+            self.assertIn("（2 文）", r.stdout)
+            new = read(out)
+            self.assertNotIn("·", new)
+            self.assertIn("sentences=s", new)        # <change> に送り方を書く
+            s1, s2 = ET.parse(out).getroot().iter(T + "s")
+            self.assertEqual([w.get("type") for w in s1.iter(T + "w")], ["APST", "PPER", "V", "PTC", "ART", "N"])
+            self.assertEqual([w.get("type") for w in s2.iter(T + "w")], ["CONJ"])
+            text = read(cu)
+            self.assertNotIn("·", text)
+            sents = conllu_sentences(text)
+            self.assertEqual([m["tei_s"] for m, _ in sents], ["t-1", "t-2"])
+            self.assertEqual(sents[0][0]["text"], "ⲁϥⲥⲱⲧⲙ ⲛϭⲓ ⲡⲣⲱⲙⲉ")
+            words = [row for row in sents[0][1] if "-" not in row[0]]
+            self.assertEqual([(row[1], row[6], row[7]) for row in words],
+                             [("ⲁ", "3", "aux"), ("ϥ", "3", "nsubj"), ("ⲥⲱⲧⲙ", "0", "root"),
+                              ("ⲛϭⲓ", "6", "mark"), ("ⲡ", "6", "det"), ("ⲣⲱⲙⲉ", "3", "nsubj")])
+            self.assertEqual([(row[1], row[6], row[7], row[9]) for row in sents[1][1]],
+                             [("ⲁⲩⲱ", "0", "root", "TEI=t-2")])
+
+    def test_sentences_not_split(self):
+        """NLP が <s> の境目で文を切らなかったら知らせる。CoNLL-U はそれでも <s> の境目で切り、
+        境目をまたぐ係り先は 0 にする。"""
+        with tempfile.TemporaryDirectory() as d:
+            src, tt, out, cu = (os.path.join(d, n) for n in ("in.xml", "in.tt", "out.xml", "out.conllu"))
+            write(src, TWO_TEI)
+            write(tt, two_sgml(broken=True))
+            r = run("coptic_nlp_tei.py", src, "--sgml", tt, "--out", out, "--conllu", cu, "--sentences", "s")
+            self.assertEqual(r.returncode, 0, r.stdout)
+            for kind in ("文の終わりの印（·）が PUNCT にならなかった <s>: 1", "NLP がその前で文を切らなかった <s>: 1",
+                         "係り先が同じ文に無いので 0 にした語: 1"):
+                self.assertIn(kind, r.stdout)
+            sents = conllu_sentences(read(cu))
+            self.assertEqual([m["tei_s"] for m, _ in sents], ["t-1", "t-2"])
+            self.assertEqual([(row[1], row[6], row[7]) for row in sents[1][1]], [("ⲁⲩⲱ", "0", "dep")])
+
+    def test_sentences_mark_merged(self):
+        """「·」が次の <s> の最初の語とつながったら、その語の解析は使わず（X）、「·」は残さず、文は <s> で切る。"""
+        with tempfile.TemporaryDirectory() as d:
+            src, tt, out, cu = (os.path.join(d, n) for n in ("in.xml", "in.tt", "out.xml", "out.conllu"))
+            write(src, TWO_TEI_PE)
+            write(tt, TWO_SGML_MERGED)
+            r = run("coptic_nlp_tei.py", src, "--sgml", tt, "--out", out, "--conllu", cu, "--sentences", "s")
+            self.assertEqual(r.returncode, 0, r.stdout)
+            self.assertIn("文の終わりの印（·）が次の <s> の最初の語とつながった <s>: 1", r.stdout)
+            self.assertNotIn("文を切らなかった", r.stdout)
+            self.assertNotIn("文字が対応しない", r.stdout)
+            new = read(out)
+            self.assertNotIn("·", new)
+            s1, s2 = ET.parse(out).getroot().iter(T + "s")
+            self.assertEqual([w.get("type") for w in s1.iter(T + "w")], ["APST", "PPER", "V", "PTC", "ART", "N"])
+            w = list(s2.iter(T + "w"))
+            self.assertEqual([(x.get("type"), x.get("lemma"), x.get("cert")) for x in w],
+                             [("X", None, "low"), ("COP", "ⲡⲉ", "medium")])
+            text = read(cu)
+            self.assertNotIn("·", text)
+            sents = conllu_sentences(text)
+            self.assertEqual([m["tei_s"] for m, _ in sents], ["t-1", "t-2"])    # ⲡⲉ の前では切らない
+            self.assertEqual([row[1:8] + [row[9]] for row in sents[1][1]],
+                             [["ⲁⲩⲱ", "_", "X", "UNKNOWN", "_", "0", "dep", "TEI=t-2"],
+                              ["ⲡⲉ", "ⲡⲉ", "PRON", "COP", "_", "0", "root", "TEI=t-2"]])
+
+    def test_conllu_gap_split(self):
+        """<gap> の位置で分けた形態素の 2 つ目の片では文を切らず、最初の片に goeswith で係らせる（root を 2 つにしない）。"""
+        with tempfile.TemporaryDirectory() as d:
+            src, tt, out, cu = (os.path.join(d, n) for n in ("in.xml", "in.tt", "out.xml", "out.conllu"))
+            write(src, TWO_TEI_GAP)
+            write(tt, TWO_SGML_GAP)
+            r = run("coptic_nlp_tei.py", src, "--sgml", tt, "--out", out, "--conllu", cu, "--sentences", "s")
+            self.assertEqual(r.returncode, 0, r.stdout)
+            self.assertIn("<s> か <gap> の境目をまたいだので分けた形態素: 1", r.stdout)
+            self.assertNotIn("文を切らなかった", r.stdout)
+            self.assertIn("（2 文）", r.stdout)
+            s2 = list(ET.parse(out).getroot().iter(T + "s"))[1]
+            self.assertEqual([(w.text, w.get("type"), w.get("cert")) for w in s2.iter(T + "w")],
+                             [("ⲥⲱ", "V", "low"), ("ⲧⲙ", "V", "low"), ("ⲡⲉ", "COP", "medium")])
+            sents = conllu_sentences(read(cu))
+            self.assertEqual([m["tei_s"] for m, _ in sents], ["t-1", "t-2"])
+            self.assertEqual(sents[1][0]["text"], "ⲥⲱ ⲧⲙ ⲡⲉ")
+            self.assertEqual([row[1:8] + [row[9]] for row in sents[1][1]],
+                             [["ⲥⲱ", "ⲥⲱⲧⲙ", "VERB", "V", "_", "0", "root", "TEI=t-2|Norm=ⲥⲱⲧⲙ"],
+                              ["ⲧⲙ", "_", "X", "_", "_", "1", "goeswith", "TEI=t-2"],
+                              ["ⲡⲉ", "ⲡⲉ", "PRON", "COP", "_", "1", "cop", "TEI=t-2"]])
 
     def test_refuses_to_overwrite(self):
         with tempfile.TemporaryDirectory() as d:

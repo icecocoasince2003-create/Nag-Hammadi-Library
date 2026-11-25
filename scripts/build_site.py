@@ -114,32 +114,33 @@ CODICES = [
  ]),
  ("IV", 4, [
    (1, "ヨハネのアポクリュフォン", "The Apocryphon of John", "Livre des secrets de Jean", D),
-   (2, "エジプト人の福音書", "The Gospel of the Egyptians", "Évangile des Égyptiens", U),
+   (2, "エジプト人の福音書", "The Gospel of the Egyptians", "Évangile des Égyptiens", D),
  ]),
  ("V", 5, [
    # III,3 は末尾標題「祝福されたエウグノストス」、V,1 は標題「エウグノストス」のみが残る。
-   # V,1 は語ごとの注釈がまだ無い（eugnostos.html の V,1 は III,3 と対応づけた枠だけ）ので「未注釈」とし、本文ビュワーへリンクする
-   (1, "エウグノストス", "Eugnostos", "Eugnoste", U),
-   (2, "パウロの黙示録", "The Apocalypse of Paul", "Apocalypse de Paul", U),
-   (3, "ヤコブの黙示録(第一)", "The (First) Apocalypse of James", "Première apocalypse de Jacques", U),
-   (4, "ヤコブの黙示録(第二)", "The (Second) Apocalypse of James", "Seconde apocalypse de Jacques", U),
-   (5, "アダムの黙示録", "The Apocalypse of Adam", "Apocalypse d'Adam", U),
+   # V,1 は、人の手の注釈がまだ無い（eugnostos.html の V,1 は III,3 と対応づけた枠だけ）ので、全文テキストの
+   # 自動注釈の暫定版（2026-11-24 に Coptic SCRIPTORIUM の NLP で付けたもの）として、本文ビュワーへリンクする
+   (1, "エウグノストス", "Eugnostos", "Eugnoste", D),
+   (2, "パウロの黙示録", "The Apocalypse of Paul", "Apocalypse de Paul", D),
+   (3, "ヤコブの黙示録(第一)", "The (First) Apocalypse of James", "Première apocalypse de Jacques", D),
+   (4, "ヤコブの黙示録(第二)", "The (Second) Apocalypse of James", "Seconde apocalypse de Jacques", D),
+   (5, "アダムの黙示録", "The Apocalypse of Adam", "Apocalypse d'Adam", D),
  ]),
  ("VI", 6, [
-   (1, "ペテロと十二使徒の行伝", "The Acts of Peter and the Twelve Apostles", "Actes de Pierre et des douze apôtres", U),
-   (2, "雷・全きヌース(完全なる心)", "The Thunder, Perfect Mind", "Le Tonnerre, intellect parfait", U),
-   (3, "権威ある教え", "Authoritative Teaching", "Authentikos Logos", U),
-   (4, "われらの大いなる力の概念", "The Concept of Our Great Power", "Le Concept de notre grande puissance", U),
+   (1, "ペテロと十二使徒の行伝", "The Acts of Peter and the Twelve Apostles", "Actes de Pierre et des douze apôtres", D),
+   (2, "雷・全きヌース(完全なる心)", "The Thunder, Perfect Mind", "Le Tonnerre, intellect parfait", D),
+   (3, "権威ある教え", "Authoritative Teaching", "Authentikos Logos", D),
+   (4, "われらの大いなる力の概念", "The Concept of Our Great Power", "Le Concept de notre grande puissance", D),
    (5, "プラトン『国家』588b–589b", "Plato, Republic 588b–589b", "Platon, République 588b–589b", A),
-   (6, "第八と第九についての講話", "The Discourse on the Eighth and Ninth", "L'Ogdoade et l'Ennéade", U),
-   (7, "感謝の祈り", "The Prayer of Thanksgiving", "Prière d'action de grâces", U),
-   ("7a", "書記による覚書", "Scribal Note", "Note du scribe", U),   # VI,7 の末尾の覚え書き。文書数には数えない（UNCOUNTED）
-   (8, "アスクレピオス 21–29", "Asclepius 21–29", "Asclépius 21–29", U),
+   (6, "第八と第九についての講話", "The Discourse on the Eighth and Ninth", "L'Ogdoade et l'Ennéade", D),
+   (7, "感謝の祈り", "The Prayer of Thanksgiving", "Prière d'action de grâces", D),
+   ("7a", "書記による覚書", "Scribal Note", "Note du scribe", D),   # VI,7 の末尾の覚え書き。文書数には数えない（UNCOUNTED）
+   (8, "アスクレピオス 21–29", "Asclepius 21–29", "Asclépius 21–29", D),
  ]),
  ("VII", 7, [
-   (1, "セームの釈義(パラフレイズ)", "The Paraphrase of Shem", "Paraphrase de Sem", U),
-   (2, "大セツの第二の教え", "The Second Treatise of the Great Seth", "Deuxième traité du Grand Seth", U),
-   (3, "ペテロの黙示録", "The Apocalypse of Peter", "Apocalypse de Pierre", U),
+   (1, "セームの釈義(パラフレイズ)", "The Paraphrase of Shem", "Paraphrase de Sem", D),
+   (2, "大セツの第二の教え", "The Second Treatise of the Great Seth", "Deuxième traité du Grand Seth", D),
+   (3, "ペテロの黙示録", "The Apocalypse of Peter", "Apocalypse de Pierre", D),
    (4, "シルワノスの教え", "The Teachings of Silvanus", "Les Leçons de Silvanos", D),
    (5, "セツの三つの碑", "The Three Steles of Seth", "Les Trois Stèles de Seth", D),
  ]),
@@ -472,6 +473,12 @@ def links_html():
 
 def build_index():
     blocks = "\n".join(codex_block(r,n,t) for r,n,t in CODICES)
+    # 未注釈（status U）の文書が無いときは、件数・凡例・フッターに「未注釈」を出さない（2026-11-24 から 0 件）
+    pl_ja, pl_en, pl_fr = (f" · 未注釈 {PLAIN}", f" · {PLAIN} text only", f" · {PLAIN} texte seul") if PLAIN else ("", "", "")
+    pl_legend = (f'   <span><span class="pill plain">{tri("未注釈","Text only","Texte seul")}</span>'
+                 f'{tri("本文だけの作業用テキスト。品詞・語義なし・校訂本と未照合", "working text only, no annotation, not collated", "texte de travail seul, sans annotation ni collation")}</span>\n') if PLAIN else ""
+    pl_foot_ja, pl_foot_en, pl_foot_fr = ((f"<b>{PLAIN}</b>&nbsp;文書は未注釈の本文・", f", <b>{PLAIN}</b>&nbsp;as text only and ",
+                                            f", <b>{PLAIN}</b>&nbsp;en texte seul et ") if PLAIN else ("", " and ", " et "))
     news, rel = news_html(), links_html()
     body = f"""
 <nav id="sitebar" class="sitebar sticky"></nav>
@@ -502,9 +509,9 @@ def build_index():
     <button type="submit">{tri("検索", "Search", "Chercher")}</button>
    </form>
    <p class="qbox-note">{tri(
-     "人の手で注釈した版と、全文テキスト（暫定版・未注釈）のすべてを対象に、<a href='search.html'>コーパス検索</a>で探します。全文テキストは初めに読み込むので、少し時間がかかります。語の意味から引くときは<a href='lexicon.html'>辞書</a>へ。",
-     "Searches the hand-annotated editions and all the full texts (draft and unannotated) with the <a href='search.html'>corpus search</a>; the full texts are loaded first, which takes a moment. To look a word up by meaning, use the <a href='lexicon.html'>lexicon</a>.",
-     "Recherche dans les éditions annotées à la main et dans tous les textes intégraux (provisoires et non annotés) avec la <a href='search.html'>recherche du corpus</a> ; les textes intégraux sont d’abord chargés, ce qui prend un peu de temps. Pour chercher un mot par son sens, voir le <a href='lexicon.html'>lexique</a>.")}</p>
+     "人の手で注釈した版と、全文テキスト（自動注釈の暫定版）のすべてを対象に、<a href='search.html'>コーパス検索</a>で探します。全文テキストは初めに読み込むので、少し時間がかかります。語の意味から引くときは<a href='lexicon.html'>辞書</a>へ。",
+     "Searches the hand-annotated editions and all the full texts (automatic drafts) with the <a href='search.html'>corpus search</a>; the full texts are loaded first, which takes a moment. To look a word up by meaning, use the <a href='lexicon.html'>lexicon</a>.",
+     "Recherche dans les éditions annotées à la main et dans tous les textes intégraux (brouillons automatiques) avec la <a href='search.html'>recherche du corpus</a> ; les textes intégraux sont d’abord chargés, ce qui prend un peu de temps. Pour chercher un mot par son sens, voir le <a href='lexicon.html'>lexique</a>.")}</p>
   </div>
   <img class="hero-fig" src="image/web/gengen_guide.svg" alt="" loading="lazy">
  </section>
@@ -520,7 +527,7 @@ def build_index():
          "III,3 <i>Eugnostos the Blessed</i> / V,1 <i>Eugnostos</i> · two witnesses, three translations",
          "III,3 <i>Eugnoste le Bienheureux</i> / V,1 <i>Eugnoste</i> · deux témoins, trois traductions")}</div>
        <div class="acts"><a class="go" href="eugnostos.html?wit=III">{tri("III,3 を読む →", "Read III,3 →", "Lire III,3 →")}</a>
-        <a href="reader.html?doc=V-1">{tri("V,1 を読む（未注釈）", "Read V,1 (text only)", "Lire V,1 (texte seul)")}</a>
+        <a href="reader.html?doc=V-1">{tri("V,1 を読む（暫定版）", "Read V,1 (draft)", "Lire V,1 (provisoire)")}</a>
         <a href="eugnostos.html?wit=SYN">{tri("対照表示", "Synopsis", "Synopse")}</a>
         <a href="search.html?doc=eugnostos">{tri("検索", "Search", "Recherche")}</a>
         <a href="search.html?doc=eugnostos&amp;view=stats">{tri("統計", "Statistics", "Statistiques")}</a></div>
@@ -566,12 +573,11 @@ def build_index():
   <div class="sec-h"><h2>{tri("文書一覧", "The codices", "Les codices")}</h2><small>NHC I–XIII</small><span class="rule"></span></div>
   <div class="ctool"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
    <input id="q" type="search" autocomplete="off">
-   <span class="cnt">{tri(f"公開 {AVAIL} · 暫定 {DRAFT} · 未注釈 {PLAIN} · 準備中 {SOON} / 全 {TOTAL} 文書", f"{AVAIL} online · {DRAFT} draft · {PLAIN} text only · {SOON} soon · {TOTAL} in all", f"{AVAIL} en ligne · {DRAFT} provisoires · {PLAIN} texte seul · {SOON} à venir · {TOTAL} au total")}</span></div>
+   <span class="cnt">{tri(f"公開 {AVAIL} · 暫定 {DRAFT}{pl_ja} · 準備中 {SOON} / 全 {TOTAL} 文書", f"{AVAIL} online · {DRAFT} draft{pl_en} · {SOON} soon · {TOTAL} in all", f"{AVAIL} en ligne · {DRAFT} provisoires{pl_fr} · {SOON} à venir · {TOTAL} au total")}</span></div>
   <p class="legend">
    <span><span class="pill on">{tri("公開","Online","En ligne")}</span>{tri("人の手で注釈・訳を付けた版", "annotated and translated by hand", "annoté et traduit à la main")}</span>
    <span><span class="pill draft">{tri("暫定","Draft","Provisoire")}</span>{tri("自動注釈の全文。人の目で未確認・校訂本と未照合", "full text with automatic annotation, not checked or collated", "texte intégral annoté automatiquement, non vérifié ni collationné")}</span>
-   <span><span class="pill plain">{tri("未注釈","Text only","Texte seul")}</span>{tri("本文だけの作業用テキスト。品詞・語義なし・校訂本と未照合", "working text only, no annotation, not collated", "texte de travail seul, sans annotation ni collation")}</span>
-   <span><span class="pill">{tri("準備中","Soon","À venir")}</span>{tri("本文はまだ表示できません", "text not yet available", "texte pas encore disponible")}</span>
+{pl_legend}   <span><span class="pill">{tri("準備中","Soon","À venir")}</span>{tri("本文はまだ表示できません", "text not yet available", "texte pas encore disponible")}</span>
   </p>
   <div class="grid" id="grid">
 {blocks}
@@ -581,9 +587,9 @@ def build_index():
 </main>
 
 <footer><div class="wrap">
-  {tri(f"<b>{AVAIL}</b>&nbsp;文書を公開・<b>{DRAFT}</b>&nbsp;文書を暫定公開・<b>{PLAIN}</b>&nbsp;文書は未注釈の本文・<b>{SOON}</b>&nbsp;文書は準備中 / 全&nbsp;<b>{TOTAL}</b>&nbsp;文書(13写本)",
-       f"<b>{AVAIL}</b>&nbsp;online, <b>{DRAFT}</b>&nbsp;as drafts, <b>{PLAIN}</b>&nbsp;as text only and <b>{SOON}</b>&nbsp;in preparation, of&nbsp;<b>{TOTAL}</b>&nbsp;tractates (13 codices)",
-       f"<b>{AVAIL}</b>&nbsp;en ligne, <b>{DRAFT}</b>&nbsp;provisoires, <b>{PLAIN}</b>&nbsp;en texte seul et <b>{SOON}</b>&nbsp;à venir sur&nbsp;<b>{TOTAL}</b> traités (13 codices)")}　·
+  {tri(f"<b>{AVAIL}</b>&nbsp;文書を公開・<b>{DRAFT}</b>&nbsp;文書を暫定公開・{pl_foot_ja}<b>{SOON}</b>&nbsp;文書は準備中 / 全&nbsp;<b>{TOTAL}</b>&nbsp;文書(13写本)",
+       f"<b>{AVAIL}</b>&nbsp;online, <b>{DRAFT}</b>&nbsp;as drafts{pl_foot_en}<b>{SOON}</b>&nbsp;in preparation, of&nbsp;<b>{TOTAL}</b>&nbsp;tractates (13 codices)",
+       f"<b>{AVAIL}</b>&nbsp;en ligne, <b>{DRAFT}</b>&nbsp;provisoires{pl_foot_fr}<b>{SOON}</b>&nbsp;à venir sur&nbsp;<b>{TOTAL}</b> traités (13 codices)")}　·
   {tri("本文はパブリックドメイン、辞書・対訳は CC&nbsp;BY&nbsp;4.0",
        "Source texts: public domain · lexicon and translations: CC&nbsp;BY&nbsp;4.0",
        "Textes sources : domaine public · lexique et traductions : CC&nbsp;BY&nbsp;4.0")}　·
@@ -1072,12 +1078,16 @@ function statusHTML(){
     li.push(tri('<b>品詞・レンマ</b>：同じく NLP によるものです。この文書では、確度 low が '+pct(s.low,s.m)+'%、品詞を決められなかった語（X）が '+pct(s.X,s.m)+'% あります。確度はスクリプトの目安で、medium でも正しいとは限りません。',
       '<b>Part of speech and lemma</b>: also from the NLP tools. In this text '+pct(s.low,s.m)+'% of the morphemes have low certainty and '+pct(s.X,s.m)+'% could not be classified (X). Certainty is the script’s own rating; medium does not mean an analysis is correct.',
       '<b>Partie du discours et lemme</b> : également issus des outils de TAL. Dans ce texte, '+pct(s.low,s.m)+' % des morphèmes ont une certitude faible et '+pct(s.X,s.m)+' % n’ont pas pu être classés (X). La certitude est l’appréciation du script ; « medium » ne garantit pas l’analyse.'));
-    li.push(tri('<b>語義</b>：前の暫定版（2026-11-18）で自動で付けた短い辞書的な意味を、語の範囲とレンマが変わらなかった形態素（この文書では '+pct(s.gl,s.m)+'%）にだけ残しています。文脈で確かめた訳語ではありません。',
+    /* 語義は 2026-11-18 の暫定版の残り。その版の無かった文書（IV,2、写本 V・VI、VII,1–3。README_ja.md の §14）には無い */
+    if(!s.gl) li.push(tri('<b>語義</b>：まだ付いていません。辞書に項目のある語は、語のカードの〈辞書の項目〉から意味を見られます。',
+      '<b>Glosses</b>: none yet. For words that are in the lexicon, the word card links to the lexicon entry.',
+      '<b>Gloses</b> : pas encore. Pour les mots présents dans le lexique, la fiche du mot renvoie à l’entrée du lexique.'));
+    else li.push(tri('<b>語義</b>：前の暫定版（2026-11-18）で自動で付けた短い辞書的な意味を、語の範囲とレンマが変わらなかった形態素（この文書では '+pct(s.gl,s.m)+'%）にだけ残しています。文脈で確かめた訳語ではありません。',
       '<b>Glosses</b>: the short dictionary meanings assigned automatically for the previous draft (2026-11-18) are kept only on morphemes whose extent and lemma did not change ('+pct(s.gl,s.m)+'% in this text); they are not translations checked against the context.',
       '<b>Gloses</b> : les brèves équivalences attribuées automatiquement pour le brouillon précédent (2026-11-18) ne subsistent que sur les morphèmes dont l’étendue et le lemme n’ont pas changé ('+pct(s.gl,s.m)+' % dans ce texte) ; ce ne sont pas des traductions vérifiées en contexte.'));
-    li.push(tri('<b>構文</b>：NLP による依存構造の解析（暫定）は TEI には入れず、CoNLL-U のファイルにあります（下のリンク）。元のテキストに句読点がほとんど無く、NLP が文を区切れなかった（送ったまとまりがそのまま 1 文になった）ので、とくに当てになりません。',
-      '<b>Syntax</b>: the provisional dependency analysis from the NLP tools is not in the TEI but in a CoNLL-U file (link below). The source text has almost no punctuation, so the tools could not divide it into sentences (each batch sent became one “sentence”); this analysis is especially unreliable.',
-      '<b>Syntaxe</b> : l’analyse en dépendances provisoire des outils de TAL n’est pas dans le TEI mais dans un fichier CoNLL-U (lien ci-dessous). Le texte source n’a presque pas de ponctuation : les outils n’ont pas pu le découper en phrases (chaque lot envoyé forme une seule « phrase ») ; cette analyse est particulièrement peu fiable.'));
+    li.push(tri('<b>構文</b>：NLP による依存構造の解析（暫定）は TEI には入れず、CoNLL-U のファイルにあります（下のリンク）。元のテキストには句読点がほとんど無いので、セグメントの最後に句読点を足して送り、セグメントごとに 1 文として解析させました（長いセグメントは長い文のまま）。人の目では確かめていません。',
+      '<b>Syntax</b>: the provisional dependency analysis from the NLP tools is not in the TEI but in a CoNLL-U file (link below). As the source text has almost no punctuation, a punctuation mark was added at the end of each segment before sending, so that each segment was analysed as one sentence (long segments remain long sentences). Not checked by hand.',
+      '<b>Syntaxe</b> : l’analyse en dépendances provisoire des outils de TAL n’est pas dans le TEI mais dans un fichier CoNLL-U (lien ci-dessous). Le texte source n’ayant presque pas de ponctuation, un signe de ponctuation a été ajouté à la fin de chaque segment avant l’envoi, afin que chaque segment soit analysé comme une phrase (les segments longs restent des phrases longues). Non vérifiée à la main.'));
   } else if(ann){
     li.push(tri('<b>語のまとまり（語群）</b>：自動で推定したものです。全文テキスト全体で、境目のおよそ 4 分の 1 が要確認の一覧に入っています。',
       '<b>Bound groups</b> (orthographic words): inferred automatically; across the full texts about a quarter of the boundaries are on the review list.',
@@ -1110,7 +1120,7 @@ function statusHTML(){
   return '<section class="status"><h2>'+head+'</h2><ul>'+li.map(x=>'<li>'+x+'</li>').join('')+'</ul><p class="links">'+
     '<a href="'+esc(DOC.xml)+'" download>'+tri('TEI（XML）をダウンロード','Download the TEI (XML)','Télécharger le TEI (XML)')+'</a>'+
     '<a href="guide.html#viewer">'+tri('本文ビュワーの読み方（はじめての方へ）','How to read this page (Getting started)','Lire cette page (Premiers pas)')+'</a>'+
-    '<a href="'+esc(rel)+'" target="_blank" rel="noopener">'+tri('作り方と確かめたこと（README §10〜§13）','How it was made and checked (README §10–13)','Méthode et vérifications (README §10–13)')+'</a>'+
+    '<a href="'+esc(rel)+'" target="_blank" rel="noopener">'+tri('作り方と確かめたこと（README §10〜§14）','How it was made and checked (README §10–14)','Méthode et vérifications (README §10–14)')+'</a>'+
     (ann&&s.nlp?'<a href="'+esc(REPO+'blob/main/'+DOC.xml.replace('/tei/','/conllu/').replace(/\\.xml$/,'.conllu'))+'" target="_blank" rel="noopener">'+tri('構文（CoNLL-U）','Syntax (CoNLL-U)','Syntaxe (CoNLL-U)')+'</a>'
       :ann?'<a href="'+esc(REPO+'tree/main/source/nhc_fulltext_split/annotation')+'" target="_blank" rel="noopener">'+tri('要確認の一覧','Review lists','Listes à vérifier')+'</a>':'')+
     '<a href="search.html?doc='+encodeURIComponent(DOC.key)+'">'+tri('この文書を検索','Search this text','Chercher dans ce texte')+'</a>'+
