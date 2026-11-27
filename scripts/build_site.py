@@ -232,7 +232,9 @@ FONTS = (_icon_links() +
  '<link rel="preconnect" href="https://fonts.googleapis.com">'
  '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
  '<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&'
- 'family=Spectral:ital,wght@0,400;0,500;0,600;1,400&'
+ 'family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400;1,8..60,500&'
+ 'family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&'
+ 'family=IBM+Plex+Mono:wght@400;500&'
  'family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&'
  'family=Noto+Serif+JP:wght@500;600&family=Noto+Sans+Coptic&display=swap" rel="stylesheet">'
  # 宇宙テーマ(cosmos) → サイト共通レイヤー(site: 上部ナビ・三言語) → コミュニティ機能
@@ -267,12 +269,12 @@ LANG_BOOT = ('<script>/* 表示言語（?lang= ＞ 保存値 ＞ ブラウザー
 
 THEME = """
 :root{
- --bg:#f3eede; --panel:#fbf8f1; --panel-2:#f6f1e6;
- --ink:#2a2620; --ink-soft:#4c4338; --ink-faint:#8c7f6c;
- --chrome:#1c1a38; --chrome-ink:#e9e6f5; --chrome-faint:#a7a2c6;
- --gold:#9a7220; --gold-soft:#b89042; --lapis:#33529a; --rose:#9c4a63;
- --line:#e4dac6; --line-2:rgba(255,255,255,.14); --hi:#efe7d4;
- --disp:'Spectral',Georgia,serif; --ui:'Inter','Noto Sans JP',system-ui,sans-serif;
+ --bg:#f0ece3; --panel:#f8f6f0; --panel-2:#efebe1;
+ --ink:#1a2030; --ink-soft:#3d4658; --ink-faint:#5c6578;
+ --chrome:#1c2644; --chrome-ink:#ece6da; --chrome-faint:#8f9bb0;
+ --gold:#8a6a2e; --gold-soft:#8a6a2e; --lapis:#2f4a7a; --rose:#9b4a3d;
+ --line:#ddd6c8; --line-2:rgba(255,255,255,.14); --hi:#ebe5d8;
+ --disp:'Source Serif 4','Noto Serif JP',Georgia,serif; --ui:'DM Sans','Inter','Noto Sans JP',system-ui,sans-serif;
  --jp:'Noto Sans JP',sans-serif; --jpser:'Noto Serif JP',serif; --cop:'Noto Sans Coptic',serif;
 }
 *{box-sizing:border-box}
@@ -316,14 +318,16 @@ def codex_block(roman, no, tracts):
 INDEX_CSS = """
 .hero{padding:clamp(34px,7vw,76px) 0 18px; display:grid;
  grid-template-columns:minmax(0,1fr) auto; gap:30px; align-items:center}
-.hero-fig{width:clamp(150px,20vw,240px); aspect-ratio:1; border-radius:50%;
- object-fit:cover; object-position:center 24%; border:1px solid rgba(212,175,106,.45);
- box-shadow:0 0 60px rgba(157,139,224,.25)}
+.hero-fig{width:clamp(150px,20vw,240px); aspect-ratio:1; border-radius:0;
+ object-fit:cover; object-position:center 24%; border:1px solid rgba(200,168,112,.55);
+ box-shadow:10px 10px 0 -1px rgba(200,168,112,.16)}
 @media(max-width:680px){ .hero{grid-template-columns:1fr} .hero-fig{display:none} }
-.eyebrow{font-family:var(--ui); font-size:.74rem; letter-spacing:.22em; text-transform:uppercase; color:var(--gold)}
+/* キッカー: 等幅の大文字＋左に金の短い罫 */
+.eyebrow{font-family:var(--mono); font-weight:500; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-faint)}
+.eyebrow::before{content:""; display:inline-block; width:28px; height:1px; margin-right:10px; vertical-align:.3em; background:var(--gold)}
 .hero h1{font-family:var(--disp); font-weight:600; line-height:1.1; margin:.32em 0 .16em;
- font-size:clamp(2.1rem,5.4vw,3.4rem)}
-.hero h1 .cop{display:block; font-size:.5em; color:var(--gold-soft); letter-spacing:.04em; margin-bottom:.18em}
+ font-size:clamp(2.5rem,6vw,4rem); letter-spacing:-.01em}
+.hero h1 .cop{display:block; font-size:.5em; color:var(--gold); letter-spacing:.04em; margin-bottom:.18em}
 .hero h1 .tag{display:block; font-size:.4em; font-weight:500; color:var(--ink-soft); letter-spacing:.02em; margin-top:.45em}
 html[data-lang="ja"] .hero h1 .l-ja{font-family:'Noto Serif JP',serif; letter-spacing:.02em}
 .hero .lead{max-width:64ch; color:var(--ink-soft); font-size:1.02rem; line-height:1.8}
@@ -332,17 +336,23 @@ html[data-lang="ja"] .hero h1 .l-ja{font-family:'Noto Serif JP',serif; letter-sp
 .hero .more a{color:var(--gold-bright,var(--gold)); text-decoration:none; text-underline-offset:5px}
 .hero .more a:hover{text-decoration:underline}
 
-.sec-h{display:flex; align-items:baseline; gap:12px; margin:46px 0 14px}
-.sec-h h2{font-family:'Cinzel','Spectral',serif; font-weight:500; letter-spacing:.12em; font-size:1.02rem;
- color:var(--gold); margin:0; text-transform:uppercase}
-.sec-h small{color:var(--ink-faint); font-size:.78rem}
-.sec-h .rule{flex:1; height:1px; background:linear-gradient(90deg,var(--line),transparent)}
+/* 節の見出し: 上に細い罫、頭に等幅の通し番号（01, 02 …）を金で */
+body{counter-reset:sec}
+.sec-h{display:flex; align-items:baseline; gap:12px; margin:46px 0 14px; padding-top:14px;
+ border-top:1px solid var(--line-2); counter-increment:sec}
+.sec-h h2{font-family:var(--disp); font-weight:600; letter-spacing:0; font-size:1.4rem; color:var(--ink); margin:0}
+.sec-h h2::before{content:counter(sec,decimal-leading-zero); font-family:var(--mono); font-size:.62em; font-weight:400;
+ color:var(--gold); letter-spacing:.08em; margin-right:.9em; vertical-align:.18em}
+.sec-h small{font-family:var(--mono); color:var(--ink-faint); font-size:.74rem; letter-spacing:.06em}
+.sec-h .rule{display:none}
 
 .features{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr)); gap:14px}
+/* カード: 角丸の箱にせず、細い枠と上辺の金の罫だけで区切る */
 .feat{display:grid; grid-template-columns:minmax(0,1fr); gap:18px; align-items:center;
- background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:16px 20px}
-.feat .k{font-size:.66rem; letter-spacing:.16em; text-transform:uppercase; color:var(--gold)}
-.feat .ttl{font-family:var(--disp); font-size:1.1rem; margin:2px 0 3px}
+ background:var(--panel); border:1px solid var(--line); border-top-color:var(--gold); border-radius:0; padding:16px 20px}
+.feat .k{font-family:var(--mono); font-weight:500; font-size:.7rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint)}
+.feat .k::before{content:""; display:inline-block; width:28px; height:1px; margin-right:10px; vertical-align:.3em; background:var(--gold)}
+.feat .ttl{font-family:var(--disp); font-weight:600; font-size:1.16rem; margin:2px 0 3px}
 .feat .ttl .cop{color:var(--gold-soft); margin-right:.35em}
 .feat .loc{font-size:.76rem; color:var(--ink-faint); line-height:1.6}
 .feat .acts{display:flex; gap:6px 18px; margin-top:10px; flex-wrap:wrap; font-size:.8rem}
@@ -356,18 +366,18 @@ html[data-lang="ja"] .hero h1 .l-ja{font-family:'Noto Serif JP',serif; letter-sp
 .news li{display:grid; grid-template-columns:7.2em minmax(0,1fr); gap:14px; padding:12px 0;
  border-bottom:1px solid var(--line)}
 .news li[hidden]{display:none}
-.news time{font-family:var(--disp); color:var(--gold); font-variant-numeric:tabular-nums; font-size:.86rem}
+.news time{font-family:var(--mono); color:var(--gold); font-variant-numeric:tabular-nums; font-size:.78rem; letter-spacing:.02em}
 .news .tx{color:var(--ink-soft); font-size:.88rem; line-height:1.7}
 .news .tx b{color:var(--ink)}
 .news .tx a{color:var(--lapis)}
 .news .more-news{background:none; border:0; color:var(--ink-faint); cursor:pointer; padding:10px 0; font:inherit; font-size:.8rem;
  text-underline-offset:5px}
 .news .more-news:hover{text-decoration:underline}
-.relsite{display:block; text-decoration:none; background:var(--panel); border:1px solid var(--line);
- border-radius:16px; padding:18px 20px; margin-bottom:12px; transition:border-color .15s}
+.relsite{display:block; text-decoration:none; background:var(--panel); border:1px solid var(--line); border-top-color:var(--gold);
+ border-radius:0; padding:18px 20px; margin-bottom:12px; transition:border-color .15s}
 .relsite:hover{border-color:var(--gold)}
-.relsite .k{font-size:.64rem; letter-spacing:.16em; text-transform:uppercase; color:var(--gold)}
-.relsite .t{font-family:var(--disp); font-size:1.08rem; margin:4px 0 2px; color:var(--ink)}
+.relsite .k{font-family:var(--mono); font-weight:500; font-size:.68rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint)}
+.relsite .t{font-family:var(--disp); font-weight:600; font-size:1.12rem; margin:4px 0 2px; color:var(--ink)}
 .relsite .t .cop{color:var(--gold-soft); margin-right:.3em}
 .relsite .u{font-size:.72rem; color:var(--ink-faint)}
 .relsite p{font-size:.84rem; color:var(--ink-soft); line-height:1.7; margin:8px 0 0}
@@ -381,16 +391,17 @@ html[data-lang="ja"] .hero h1 .l-ja{font-family:'Noto Serif JP',serif; letter-sp
 .ctool input::placeholder{color:var(--ink-faint)}
 .ctool .cnt{font-size:.74rem; color:var(--ink-faint); white-space:nowrap}
 .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(min(370px,100%),1fr)); gap:18px; padding-bottom:30px}
-.codex{background:var(--panel); border:1px solid var(--line); border-radius:16px; overflow:hidden;
+.codex{background:var(--panel); border:1px solid var(--line); border-top-color:var(--gold); border-radius:0; overflow:hidden;
  display:flex; flex-direction:column}
 .chead{display:flex; align-items:center; gap:12px; padding:14px 16px 10px}
-.chead .rn{font-family:var(--disp); font-size:2.2rem; font-weight:600; color:var(--gold-soft);
- opacity:.55; min-width:1.6em; text-align:center; line-height:1}
-.chead .ct b{font-family:var(--disp); font-size:1.04rem}
-.chead .ct small{display:block; color:var(--ink-faint); font-size:.73rem; letter-spacing:.04em}
+.chead .rn{font-family:var(--disp); font-style:italic; font-size:2.2rem; font-weight:400; color:var(--gold);
+ min-width:1.6em; text-align:center; line-height:1}
+.chead .ct b{font-family:var(--disp); font-weight:600; font-size:1.04rem}
+.chead .ct small{display:block; font-family:var(--mono); color:var(--ink-faint); font-size:.7rem; letter-spacing:.04em}
 .tlist{display:flex; flex-direction:column; padding:4px 8px 10px}
 .trow{display:grid; grid-template-columns:auto 1fr auto auto auto; align-items:center; gap:10px;
- padding:9px 10px; border-radius:10px; text-decoration:none; color:inherit; transition:background .12s}
+ padding:9px 10px; border-radius:0; border-bottom:1px solid var(--line); text-decoration:none; color:inherit; transition:background .12s}
+.trow:last-child{border-bottom:0}
 .trow:hover{background:var(--panel-2)}
 .trow .tn{font-family:var(--disp); color:var(--ink-faint); font-size:.92rem; min-width:1.4em; text-align:center}
 .trow .tt{min-width:0}
@@ -399,17 +410,18 @@ html[data-lang="ja"] .trow .tt .main{font-family:var(--jp)}
 html[data-lang="en"] .trow .tt .main, html[data-lang="fr"] .trow .tt .main{font-family:var(--disp); font-size:.98rem}
 .trow .tt .sub{display:block; font-family:var(--disp); font-style:italic; font-size:.78rem; color:var(--ink-faint)}
 html[data-lang="en"] .trow .tt .sub{font-family:var(--jp); font-style:normal; font-size:.74rem}
-.trow .loc{font-size:.7rem; color:var(--ink-faint); white-space:nowrap; font-variant-numeric:tabular-nums}
-.pill{font-size:.66rem; letter-spacing:.06em; padding:3px 9px; border-radius:999px;
- background:var(--hi); color:var(--ink-faint); border:1px solid var(--line); white-space:nowrap}
-.pill.on{background:var(--gold); color:#1a140a; border-color:var(--gold); font-weight:600}
-.pill.draft{background:transparent; color:var(--lapis); border-color:var(--lapis); font-weight:600}
+.trow .loc{font-family:var(--mono); font-size:.68rem; color:var(--ink-faint); white-space:nowrap; font-variant-numeric:tabular-nums}
+/* 状態の札: 角のない四角、等幅の大文字 */
+.pill{font-family:var(--mono); font-size:.64rem; letter-spacing:.06em; text-transform:uppercase; padding:3px 8px; border-radius:0;
+ background:transparent; color:var(--ink-faint); border:1px solid var(--line-2); white-space:nowrap}
+.pill.on{background:var(--gold); color:var(--on-gold); border-color:var(--gold); font-weight:500}
+.pill.draft{background:transparent; color:var(--lapis); border-color:var(--lapis); font-weight:500}
 .pill.plain{background:transparent; color:var(--ink-soft); border-color:var(--ink-faint)}
 .legend{display:flex; flex-wrap:wrap; gap:6px 18px; margin:-6px 0 14px; font-size:.76rem; color:var(--ink-faint); line-height:1.7}
 .legend .pill{margin-right:6px}
 .trow .arr{color:var(--ink-faint); opacity:0; transition:opacity .12s, transform .12s; transform:translateX(-3px)}
 .trow:hover .arr{opacity:1; transform:none}
-.trow.on{outline:1px solid rgba(154,114,32,.28)}
+.trow.on{outline:1px solid rgba(138,106,46,.28)}
 .trow.on:hover{background:var(--hi)}
 .empty{grid-column:1/-1; text-align:center; color:var(--ink-faint); padding:40px}
 footer{position:relative; z-index:1; border-top:1px solid var(--line); color:var(--ink-faint); font-size:.78rem; padding:22px 0 50px; margin-top:30px}
@@ -421,12 +433,10 @@ footer a:hover{text-decoration:underline}
 section[id]{scroll-margin-top:70px}
 
 /* ---- ライトモード（html[data-mode="light"]）での調整。配色そのものは assets/cosmos.css ---- */
-html[data-mode="light"] .hero-fig{background:radial-gradient(circle at 50% 38%,#2b2856,#17152f 72%);
- border-color:rgba(127,93,22,.5); box-shadow:0 10px 34px rgba(60,45,20,.18)}
-html[data-mode="light"] .pill.on{color:#fffdf6}
-html[data-mode="light"] .chead .rn{opacity:.75}
+html[data-mode="light"] .hero-fig{background:radial-gradient(circle at 50% 38%,#2a3870,#1c2644 72%);
+ border-color:rgba(122,92,30,.55); box-shadow:10px 10px 0 -1px rgba(122,92,30,.18)}
 html[data-mode="light"] .feat, html[data-mode="light"] .codex, html[data-mode="light"] .relsite{
- box-shadow:0 1px 2px rgba(60,45,20,.05)}
+ box-shadow:0 1px 2px rgba(20,28,50,.05)}
 """
 
 # --- NEWS と関連サイト（data/news.json・data/links.json）を、index.html の JS と同じ形の HTML にする ----------
@@ -678,17 +688,18 @@ def build_tractate():
                                    "href": href_for(roman, num, status) if status in (A, D, U) else ""}
     css = THEME + """
 .shell{position:relative; z-index:1; max-width:780px; margin:0 auto; padding:clamp(28px,6vw,64px) clamp(16px,4vw,40px) 80px}
-.eyebrow{font-family:var(--ui); font-size:.74rem; letter-spacing:.2em; text-transform:uppercase; color:var(--gold)}
+.eyebrow{font-family:var(--mono); font-weight:500; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-faint)}
+.eyebrow::before{content:""; display:inline-block; width:28px; height:1px; margin-right:10px; vertical-align:.3em; background:var(--gold)}
 h1{font-family:var(--disp); font-weight:600; line-height:1.12; font-size:clamp(2rem,5.2vw,3rem); margin:.3em 0 .12em}
 .alt{font-family:var(--disp); font-style:italic; color:var(--ink-faint); font-size:1.12rem}
 .soon{display:inline-flex; align-items:center; gap:8px; margin-top:20px; background:var(--hi);
- border:1px solid var(--line); color:var(--ink-soft); border-radius:999px; padding:7px 15px; font-size:.82rem}
+ border:1px solid var(--line); color:var(--ink-soft); border-radius:0; padding:7px 15px; font-size:.82rem}
 .soon .dot{width:8px; height:8px; border-radius:50%; background:var(--gold)}
-.card{margin-top:26px; background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:22px 24px}
+.card{margin-top:26px; background:var(--panel); border:1px solid var(--line); border-radius:2px; padding:22px 24px}
 .card h2{font-family:var(--disp); font-weight:600; font-size:1.12rem; margin:0 0 12px}
 .card p{color:var(--ink-soft); margin:0 0 14px; max-width:62ch}
 .layers{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin-top:6px}
-.layer{background:var(--panel-2); border:1px solid var(--line); border-radius:11px; padding:12px 14px}
+.layer{background:var(--panel-2); border:1px solid var(--line); border-radius:2px; padding:12px 14px}
 .layer b{display:block; font-size:.9rem}
 .layer small{color:var(--ink-faint); font-size:.74rem}
 .actions{display:flex; flex-wrap:wrap; gap:8px 24px; margin-top:26px; font-size:.9rem}
@@ -729,7 +740,7 @@ if(!t){
    <div class="rail"><i></i><i></i><i></i><i></i><i></i></div>
    <div class="card">
      <img src="image/web/gengen_roost.svg" alt="" loading="lazy"
-       style="float:right; width:110px; aspect-ratio:1; border-radius:50%; object-fit:cover; object-position:center 22%; border:1px solid rgba(212,175,106,.45); margin:0 0 10px 14px">
+       style="float:right; width:110px; aspect-ratio:1; border-radius:0; object-fit:cover; object-position:center 22%; border:1px solid rgba(200,168,112,.45); box-shadow:6px 6px 0 -1px rgba(200,168,112,.16); margin:0 0 10px 14px">
      <h2>${tri('完成時に備わる構成','What the finished edition will offer','Ce que l’édition offrira')}</h2>
      <p>${tri('本文書は本コーパスの拡張対象です。完成時には<b>エウグノストスと同一の構成</b>で公開され、同じビュワーで形態素クリック・三言語切替・並行箇所の参照ができるようになります。',
               'This tractate is part of the planned expansion. It will be published <b>in the same format as Eugnostos</b>: click any morpheme, switch between three languages and follow parallel passages into other texts.',
@@ -808,7 +819,8 @@ def build_reader():
     人の目で確かめていないことを、文書ごとの件数とともに冒頭に示す。"""
     css = THEME + """
 .shell{position:relative; z-index:1; max-width:980px; margin:0 auto; padding:clamp(22px,5vw,48px) clamp(16px,4vw,40px) 120px}
-.eyebrow{font-family:var(--ui); font-size:.74rem; letter-spacing:.2em; text-transform:uppercase; color:var(--gold)}
+.eyebrow{font-family:var(--mono); font-weight:500; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-faint)}
+.eyebrow::before{content:""; display:inline-block; width:28px; height:1px; margin-right:10px; vertical-align:.3em; background:var(--gold)}
 h1{font-family:var(--disp); font-weight:600; line-height:1.12; font-size:clamp(1.8rem,4.6vw,2.7rem); margin:.3em 0 .12em}
 .alt{font-family:var(--disp); font-style:italic; color:var(--ink-faint); font-size:1.08rem}
 .meta{margin-top:8px; font-size:.8rem; color:var(--ink-faint)}
@@ -817,23 +829,23 @@ h1{font-family:var(--disp); font-weight:600; line-height:1.12; font-size:clamp(1
 .docnav a:hover{text-decoration:underline; text-decoration-color:var(--gold)}
 .docnav .mid{color:var(--gold-bright,var(--gold)); font-weight:600}
 .status{margin:22px 0 0; background:var(--panel); border:1px solid var(--line); border-left:4px solid var(--lapis);
- border-radius:14px; padding:16px 20px}
+ border-radius:2px; padding:16px 20px}
 .status h2{font-family:var(--disp); font-weight:600; font-size:1.06rem; margin:0 0 8px; color:var(--lapis)}
 .status ul{margin:0; padding-left:1.2em; color:var(--ink-soft); font-size:.86rem; line-height:1.75}
 .status li{margin:.15em 0}
 .status .links{display:flex; flex-wrap:wrap; gap:6px 18px; margin:10px 0 0; font-size:.82rem}
 .status .links a{color:var(--gold-bright,var(--gold)); text-underline-offset:4px}
 .tools{position:sticky; top:52px; z-index:5; display:flex; flex-wrap:wrap; align-items:center; gap:6px 18px; margin:20px 0 12px;
- padding:8px 12px; background:var(--panel-2); border:1px solid var(--line); border-radius:12px; font-size:.82rem; color:var(--ink-soft);
+ padding:8px 12px; background:var(--panel-2); border:1px solid var(--line); border-radius:2px; font-size:.82rem; color:var(--ink-soft);
  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px)}
 .tools label{display:inline-flex; align-items:center; gap:6px; cursor:pointer}
 .tools .lg{margin-left:auto; color:var(--ink-faint); font-size:.74rem}
 .tools .lg i{font-style:normal; padding:0 .3em; border-radius:3px}
 .text{font-family:var(--cop); color:var(--ink)}
-.ab h3{font-family:var(--ui); font-weight:600; font-size:.7rem; letter-spacing:.16em; text-transform:uppercase; color:var(--gold); margin:1.6em 0 .5em}
+.ab h3{font-family:var(--mono); font-weight:500; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin:1.6em 0 .5em}
 .seg{margin:0 0 .5em; font-size:1.2rem; line-height:2.05; padding:2px 6px; border-radius:8px; overflow-wrap:anywhere}
 .seg.hit{background:var(--hi)}
-.sn{font-family:var(--ui); font-size:.68rem; color:var(--ink-faint); text-decoration:none; margin-right:.45em; vertical-align:.18em}
+.sn{font-family:var(--mono); font-size:.66rem; color:var(--ink-faint); text-decoration:none; margin-right:.45em; vertical-align:.18em}
 .sn:hover{color:var(--gold)}
 .g{white-space:nowrap}
 .m{cursor:pointer; border-radius:3px}
@@ -843,13 +855,13 @@ h1{font-family:var(--disp); font-weight:600; line-height:1.12; font-size:clamp(1
 .sup{text-decoration:underline dotted var(--gold); text-underline-offset:.22em}
 .sup.b{text-decoration:underline dashed var(--rose)}
 .text.cuts:not(.inter) .g .m + .m::before{content:"·"; color:var(--ink-faint); margin:0 .04em}
-.text.cert .m.c-low .f{box-shadow:inset 0 -.38em 0 rgba(207,147,166,.32)}
+.text.cert .m.c-low .f{box-shadow:inset 0 -.38em 0 rgba(208,154,138,.32)}
 .text.cert .m.x .f{text-decoration:underline wavy var(--rose); text-underline-offset:.25em}
 /* 頁・行の印（<pb>・<lb>）。〈ページ〉〈行〉で出す。見た目はエウグノストス・『国家』のビュワーの .pdm・.lbm と同じ */
 .lbm,.pbm{display:none; user-select:none}
 .text.lines .lbm{display:inline-block; font-family:var(--ui); font-size:.56rem; line-height:1; color:var(--lapis); vertical-align:.5em;
  margin:0 2px; padding:0 2px; border-left:1px solid var(--lapis); opacity:.85; font-variant-numeric:tabular-nums; white-space:nowrap}
-.text.pages .pbm{display:inline-block; font-family:var(--ui); font-size:.62rem; letter-spacing:.04em; color:var(--on-gold,#1a140a); background:var(--gold);
+.text.pages .pbm{display:inline-block; font-family:var(--ui); font-size:.62rem; letter-spacing:.04em; color:var(--on-gold,#1a2030); background:var(--gold);
  border-radius:4px; padding:1px 6px; margin:0 5px; vertical-align:.15em; font-variant-numeric:tabular-nums; white-space:nowrap}
 .lbm.hit,.pbm.hit{outline:2px solid var(--gold); outline-offset:1px; border-radius:3px}
 .text.inter .seg{line-height:1.25; margin-bottom:1em}
@@ -859,7 +871,7 @@ h1{font-family:var(--disp); font-weight:600; line-height:1.12; font-size:clamp(1
 .il .p{font-size:.56rem; letter-spacing:.04em; color:var(--ink-faint)}
 .il .gl{font-size:.66rem; color:var(--lapis); max-width:8.5em; white-space:normal}
 .mcard{position:fixed; left:50%; bottom:14px; transform:translateX(-50%); z-index:40; width:min(560px,calc(100vw - 24px));
- background:var(--panel-2); color:var(--ink); border:1px solid var(--line-2); border-radius:14px; box-shadow:var(--shadow);
+ background:var(--panel-2); color:var(--ink); border:1px solid var(--line-2); border-radius:2px; box-shadow:var(--shadow);
  padding:12px 16px 10px; font-size:.86rem; -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px)}
 .mcard .x{position:absolute; top:6px; right:8px; background:none; border:0; color:var(--ink-faint); font-size:1.3rem; cursor:pointer; line-height:1}
 .mcard .grp{font-size:1.3rem; margin:0 26px 6px 0}

@@ -29,15 +29,15 @@
 <link rel="apple-touch-icon" href="image/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600&family=Noto+Sans+Coptic&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400;1,8..60,500&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600&family=Noto+Sans+Coptic&display=swap" rel="stylesheet">
 <style>
-:root{ --ui:'Inter','Noto Sans JP',system-ui,sans-serif; }
+:root{ --ui:'DM Sans','Inter','Noto Sans JP',system-ui,sans-serif; }
 *{box-sizing:border-box}
 html,body{margin:0}
 body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
 .hero-g{display:grid; grid-template-columns:minmax(0,1fr) 220px; gap:30px; align-items:center}
-.hero-g img{width:220px; aspect-ratio:1; border-radius:50%; object-fit:cover; object-position:center 24%;
-  border:1px solid rgba(212,175,106,.45); box-shadow:0 0 60px rgba(157,139,224,.25)}
+.hero-g img{width:220px; aspect-ratio:1; border-radius:0; object-fit:cover; object-position:center 24%;
+  border:1px solid rgba(200,168,112,.55); box-shadow:10px 10px 0 -1px rgba(200,168,112,.16)}
 @media(max-width:720px){ .hero-g{grid-template-columns:1fr} .hero-g img{display:none} }
 .myth{display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:12px; margin:16px 0}
 .myth .card .cop{font-family:"Noto Sans Coptic",serif; color:var(--gold-bright); font-size:.86rem}
@@ -54,7 +54,7 @@ body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
 .timeline{list-style:none; padding:0; margin:14px 0; border-left:1px solid var(--line-2)}
 .timeline li{position:relative; padding:0 0 14px 22px; font-size:.9rem; line-height:1.75; color:var(--ink-soft)}
 .timeline li::before{content:""; position:absolute; left:-5px; top:.55em; width:9px; height:9px; border-radius:50%; background:var(--gold)}
-.timeline b{color:var(--gold-bright); font-family:'Spectral',serif; margin-right:.5em}
+.timeline b{color:var(--gold-bright); font-family:'Source Serif 4','Noto Serif JP',serif; margin-right:.5em}
 /* 推薦参考文献: 書誌の下に一言の紹介（.an）を添える */
 .reflist .an{display:block; font-family:var(--ui); font-size:.8rem; line-height:1.7; color:var(--ink-faint)}
 .reflist li{margin-bottom:.55em}

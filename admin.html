@@ -13,9 +13,9 @@
 <link rel="icon" type="image/svg+xml" href="image/icon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+Coptic&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400;1,8..60,500&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600&family=Noto+Sans+Coptic&display=swap" rel="stylesheet">
 <style>
-:root{ --ui:'Inter','Noto Sans JP',system-ui,sans-serif; }
+:root{ --ui:'DM Sans','Inter','Noto Sans JP',system-ui,sans-serif; }
 *{box-sizing:border-box}
 html,body{margin:0}
 body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
@@ -25,7 +25,7 @@ body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
 .filters button[aria-pressed="true"]{color:var(--gold-bright); font-weight:600}
 .filters .n{font-size:.72rem; color:var(--ink-faint); margin-left:4px}
 .queue{display:flex; flex-direction:column; gap:12px}
-.q{border:1px solid var(--line); border-left:3px solid var(--lapis); border-radius:10px; padding:14px 16px; background:var(--panel)}
+.q{border:1px solid var(--line); border-left:3px solid var(--lapis); border-radius:2px; padding:14px 16px; background:var(--panel)}
 .q.k-annotation{border-left-color:var(--gold)} .q.k-correction{border-left-color:var(--rose)}
 .q .meta{display:flex; flex-wrap:wrap; gap:4px 14px; font-size:.74rem; color:var(--ink-faint); margin-bottom:6px}
 .q .meta b{color:var(--gold); letter-spacing:.08em; text-transform:uppercase; font-size:.68rem}
@@ -35,7 +35,7 @@ body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
 .q .acts{display:flex; flex-wrap:wrap; align-items:center; gap:10px 16px; margin-top:12px}
 .q textarea{flex:1 1 260px; min-height:38px; background:rgba(0,0,0,.25); color:var(--ink); border:1px solid var(--line-2); border-radius:8px; padding:7px 10px; font:inherit; font-size:.82rem}
 .q .ok,.q .ng{appearance:none; border:0; border-radius:8px; padding:8px 14px; cursor:pointer; font:inherit; font-size:.82rem; font-weight:600}
-.q .ok{background:var(--gold); color:var(--on-gold,#1a140a)} .q .ng{background:rgba(207,147,166,.18); color:var(--rose)}
+.q .ok{background:var(--gold); color:var(--on-gold,#1a2030)} .q .ng{background:rgba(208,154,138,.18); color:var(--rose)}
 .q .open{font-size:.8rem; color:var(--lapis); text-underline-offset:4px}
 .q .st{font-size:.72rem; border:1px solid currentColor; border-radius:999px; padding:0 8px}
 .msg{color:var(--ink-faint); font-size:.9rem; padding:20px 0}
@@ -49,15 +49,15 @@ body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
 .cmp{display:grid; grid-template-columns:1fr 1fr; gap:14px}
 @media(max-width:700px){ .cmp{grid-template-columns:1fr} }
 .cmp > div{border:1px solid var(--line); border-radius:8px; padding:10px 12px; background:rgba(0,0,0,.18); min-width:0}
-.cmp > div.new{border-color:rgba(212,175,106,.5)}
+.cmp > div.new{border-color:rgba(200,168,112,.5)}
 .cmp-h{font-size:.68rem; letter-spacing:.08em; color:var(--ink-faint); margin-bottom:4px}
 .cmp > div.new .cmp-h{color:var(--gold-bright)}
 .cmp-h b{margin-left:.8em; color:var(--gold); font-weight:600}
-.banner{border-left:3px solid var(--rose); background:rgba(207,147,166,.08); border-radius:0 10px 10px 0; padding:10px 14px; margin:0 0 14px; font-size:.86rem; line-height:1.8; color:var(--ink-soft)}
+.banner{border-left:3px solid var(--rose); background:rgba(208,154,138,.08); border-radius:0 10px 10px 0; padding:10px 14px; margin:0 0 14px; font-size:.86rem; line-height:1.8; color:var(--ink-soft)}
 .banner code{color:var(--gold-bright)}
 /* ライトモード（配色は assets/cosmos.css）: 暗い地を前提にした入力欄・比較欄の地 */
-html[data-mode="light"] .q textarea{background:#fffdf8}
-html[data-mode="light"] .cmp > div{background:rgba(74,58,30,.05)}
+html[data-mode="light"] .q textarea{background:#fdfcf8}
+html[data-mode="light"] .cmp > div{background:rgba(26,32,48,.05)}
 </style>
 <link rel="stylesheet" href="assets/cosmos.css">
 <link rel="stylesheet" href="assets/site.css">
