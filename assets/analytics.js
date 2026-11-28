@@ -95,19 +95,19 @@
   var CSS =
     ".nhc-consent{position:fixed;left:0;right:0;bottom:0;z-index:100;box-sizing:border-box;display:flex;flex-wrap:wrap;" +
       "align-items:center;justify-content:center;gap:10px 22px;padding:12px clamp(14px,4vw,40px);" +
-      "padding-bottom:calc(12px + env(safe-area-inset-bottom,0px));background:#0a0918;color:#ede8dc;" +
-      "border-top:1px solid rgba(231,200,133,.38);box-shadow:0 -10px 30px rgba(0,0,0,.45);" +
-      "font-family:'Inter','Noto Sans JP',system-ui,-apple-system,'Hiragino Sans',sans-serif;font-size:.82rem;line-height:1.6;" +
+      "padding-bottom:calc(12px + env(safe-area-inset-bottom,0px));background:#121a32;color:#ece6da;" +
+      "border-top:1px solid rgba(220,192,138,.38);box-shadow:0 -10px 30px rgba(0,0,0,.45);" +
+      "font-family:'DM Sans','Inter','Noto Sans JP',system-ui,-apple-system,'Hiragino Sans',sans-serif;font-size:.82rem;line-height:1.6;" +
       "text-align:left;outline:none}" +
-    ".nhc-consent p{margin:0;flex:1 1 300px;max-width:780px;color:#ede8dc;font-size:inherit;line-height:inherit}" +
-    ".nhc-consent a{color:#e7c885;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}" +
+    ".nhc-consent p{margin:0;flex:1 1 300px;max-width:780px;color:#ece6da;font-size:inherit;line-height:inherit}" +
+    ".nhc-consent a{color:#dcc08a;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}" +
     ".nhc-consent-btns{display:flex;flex:none;gap:10px}" +
     ".nhc-consent button{appearance:none;-webkit-appearance:none;margin:0;font:inherit;font-weight:600;line-height:1.2;" +
-      "padding:8px 16px;border:1px solid #e7c885;border-radius:8px;cursor:pointer;white-space:nowrap}" +
-    ".nhc-consent .nhc-consent-yes{background:#e7c885;color:#0a0918}" +
-    ".nhc-consent .nhc-consent-no{background:transparent;color:#e7c885}" +
+      "padding:8px 16px;border:1px solid #dcc08a;border-radius:2px;cursor:pointer;white-space:nowrap}" +
+    ".nhc-consent .nhc-consent-yes{background:#dcc08a;color:#1a2030}" +
+    ".nhc-consent .nhc-consent-no{background:transparent;color:#dcc08a}" +
     ".nhc-consent button:hover{filter:brightness(1.12)}" +
-    ".nhc-consent button:focus-visible,.nhc-consent a:focus-visible{outline:2px solid #ede8dc;outline-offset:2px}" +
+    ".nhc-consent button:focus-visible,.nhc-consent a:focus-visible{outline:2px solid #ece6da;outline-offset:2px}" +
     "@media (max-width:600px){" +
       ".nhc-consent{gap:8px;padding:10px 14px;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px));font-size:.76rem;line-height:1.5}" +
       ".nhc-consent p{flex-basis:100%}" +

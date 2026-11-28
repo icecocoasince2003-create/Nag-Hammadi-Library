@@ -7,7 +7,7 @@ make_og_image.py — リンクを共有したときのプレビュー画像 imag
   python3 scripts/make_og_image.py --svg      もとの SVG も image/og-image.svg に書き出す（確認用。サイトでは使わない）
 
 各ページの <head> の og:image（Facebook・X などのプレビュー）が指す画像です。og:image に SVG は使えないので PNG にします。
-ダークテーマの背景（assets/cosmos.css の宇宙の配色）に、サイトのアイコン image/icon.svg と、マスコットのゲンゲン
+ダークテーマの背景（assets/cosmos.css の配色。2026-11-27 からデザイン B の紺の夜に 80px の淡い方眼）に、サイトのアイコン image/icon.svg と、マスコットのゲンゲン
 image/web/gengen_guide.svg（左向き。アイコンのほうを向く）を置きます。題名は og:title で出るので、文字は入れません
 （文字を入れると、作る環境にあるフォントで仕上がりが変わるため）。星の位置は乱数の種を固定しているので、毎回同じ画像になります。
 
@@ -37,7 +37,7 @@ def stars(n=150, seed=1945):
         x, y = rnd.uniform(0, W), rnd.uniform(0, H)
         r = rnd.choice((0.6, 0.8, 0.9, 1.1, 1.3, 1.7))
         o = rnd.uniform(0.25, 0.85)
-        c = rnd.choice(("#ffffff", "#ffffff", "#ede8dc", "#e7c885", "#c9bdf2"))
+        c = rnd.choice(("#ffffff", "#ffffff", "#ece6da", "#dcc08a", "#cbd7ec"))
         out.append('<circle cx="%.1f" cy="%.1f" r="%.1f" fill="%s" fill-opacity="%.2f"/>' % (x, y, r, c, o))
     return "".join(out)
 
@@ -51,12 +51,16 @@ def svg():
     return f"""<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="{W}" height="{H}" viewBox="0 0 {W} {H}">
 <defs>
  <radialGradient id="og-sky" cx="42%" cy="46%" r="75%">
-  <stop offset="0" stop-color="#2b2856"/><stop offset=".5" stop-color="#17142e"/><stop offset="1" stop-color="#0a0918"/>
+  <stop offset="0" stop-color="#2a3768"/><stop offset=".5" stop-color="#18213f"/><stop offset="1" stop-color="#0f1730"/>
  </radialGradient>
- <radialGradient id="og-glow-l"><stop offset="0" stop-color="#9d8be0" stop-opacity=".30"/><stop offset="1" stop-color="#9d8be0" stop-opacity="0"/></radialGradient>
- <radialGradient id="og-glow-r"><stop offset="0" stop-color="#d4af6a" stop-opacity=".16"/><stop offset="1" stop-color="#d4af6a" stop-opacity="0"/></radialGradient>
+ <radialGradient id="og-glow-l"><stop offset="0" stop-color="#a9bbdb" stop-opacity=".22"/><stop offset="1" stop-color="#a9bbdb" stop-opacity="0"/></radialGradient>
+ <radialGradient id="og-glow-r"><stop offset="0" stop-color="#c8a870" stop-opacity=".16"/><stop offset="1" stop-color="#c8a870" stop-opacity="0"/></radialGradient>
+ <pattern id="og-grid" width="80" height="80" patternUnits="userSpaceOnUse">
+  <path d="M 80 0 H 0 V 80" fill="none" stroke="#e2dcd0" stroke-opacity=".05" stroke-width="1"/>
+ </pattern>
 </defs>
 <rect width="{W}" height="{H}" fill="url(#og-sky)"/>
+<rect width="{W}" height="{H}" fill="url(#og-grid)"/>
 {stars()}
 <circle cx="{icon_cx}" cy="{icon_cy}" r="290" fill="url(#og-glow-l)"/>
 <circle cx="{gg_x + gg // 2}" cy="{gg_y + gg // 2 + 20}" r="250" fill="url(#og-glow-r)"/>
