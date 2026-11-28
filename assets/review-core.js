@@ -49,6 +49,14 @@
     return m;
   }
   const cleanCell = v => String(v == null ? "" : v).replace(/[\t\r\n]+/g, " ");
+  /* 「 | 」で並べた候補のセルを分ける（空の候補は除く） */
+  const splitCell = v => String(v == null ? "" : v).split("|").map(x => x.trim()).filter(Boolean);
+  /* キューの filter（[{列: [値…], …}, …]）に行が合うか。どれか 1 つの組で、そのすべての列の値が挙げた値のどれかなら合う。
+     filter が無いか空なら、すべての行が合う */
+  function matchesFilter(t, row, filter){
+    if(!filter || !filter.length) return true;
+    return filter.some(cond => Object.keys(cond).every(c => cond[c].indexOf(cell(t, row, c)) >= 0));
+  }
 
   /* 書き換え（edits）を当てた新しい表。足す列は appendOrder の順、ほかは名前の順で末尾に */
   function applyEdits(t, edits, keyCols, appendOrder){
@@ -154,6 +162,6 @@
     return out.concat(["todo", "reviewed", reviewerKey]);
   }
 
-  return Object.freeze({SEP, parseTSV, serializeTSV, cell, rowKey, indexRows, cleanCell, applyEdits, diffTables,
+  return Object.freeze({SEP, parseTSV, serializeTSV, cell, rowKey, indexRows, cleanCell, splitCell, matchesFilter, applyEdits, diffTables,
     serializeJSON, jsonRoundTrips, getPath, setPath, canon, applyJSONEdits, diffJSON, introPaths});
 });

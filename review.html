@@ -79,11 +79,13 @@ table.kv{border-collapse:collapse; width:100%; font-size:.86rem; margin-top:12px
 table.kv th{text-align:left; font-weight:500; color:var(--ink-faint); padding:5px 12px 5px 0; vertical-align:top; white-space:nowrap; width:1%}
 table.kv td{padding:5px 0; color:var(--ink-soft); vertical-align:top; overflow-wrap:anywhere}
 table.kv td.cop{font-family:var(--cop); font-size:1rem; color:var(--ink)}
+table.kv td a{color:var(--gold-bright)}
 .form{display:flex; flex-direction:column; gap:12px}
 .form label.f{display:flex; flex-direction:column; gap:4px; font-size:.84rem; color:var(--ink-soft)}
 .form select,.form input[type=text],.form textarea{font:inherit; font-size:.92rem; color:var(--ink); background:var(--hi); border:1px solid var(--line); border-radius:8px; padding:6px 9px}
 .form textarea{min-height:5.2em; resize:vertical; line-height:1.55}
 .form input.cop{font-family:var(--cop),var(--ui); font-size:1.04rem}
+.form select.mix{font-family:var(--ui),var(--cop)}
 .form .row{display:flex; flex-wrap:wrap; gap:6px}
 .form .sp{font-size:.78rem}
 .stbtns{display:flex; flex-wrap:wrap; gap:8px}
@@ -256,11 +258,14 @@ async function loadQueue(q){
     s.table = R.parseTSV(text);
     s.index = R.indexRows(s.table, q.key);
     s.editable = (q.fields || []).map(f => f.column).concat(q.status ? [q.status] : [], q.corrected ? [q.corrected] : [], [q.reviewer]);
-    s.items = [...s.index.entries()].map(([k, i], n) => ({key: k, row: i, n: n + 1}));
+    // filter があれば、合う行だけをこのキューの項目にする（同じファイルを、行を分けて 2 つのキューで扱える）
+    s.items = [...s.index.entries()].filter(([k, i]) => R.matchesFilter(s.table, s.table.rows[i], q.filter)).map(([k, i], n) => ({key: k, row: i, n: n + 1}));
   }
   const saved = store.get(stateKey(q, hash));
   if(saved){ try { s.edits = JSON.parse(saved).edits || {}; } catch(e){} }
-  s.older = store.keys(KEY_PREFIX + q.id + ":").filter(k => k !== stateKey(q, hash));
+  // 同じキューの前の版のファイルの記録（名前の後ろがハッシュのものだけ。キュー「pos」の名前は、開いていた位置の記録 pos:… と重なるため）
+  const pre = KEY_PREFIX + q.id + ":";
+  s.older = store.keys(pre).filter(k => k !== stateKey(q, hash) && /^(?:[0-9a-f]{16}|nohash-\d+)$/.test(k.slice(pre.length)));
   return s;
 }
 function save(s){
@@ -455,10 +460,16 @@ function renderPos(){
   $("#fileMeta").textContent = L2("書き換え ", "changed ") + Object.keys(s.edits).length + " · SHA-256 " + s.hash.slice(0, 12) + "…";
   $("#prevBtn").disabled = VI <= 0; $("#nextBtn").disabled = VI >= VIEW.length - 1;
 }
-function kvRows(s, it, cols, cop){
-  return cols.map(c => '<tr><th scope="row">' + esc(c) + "</th><td" + (cop && cop.indexOf(c) >= 0 ? ' class="cop" lang="cop"' : "") + ">" + esc(val(s, it, c)) + "</td></tr>").join("");
+/* セルの中身。links に挙げた列は、「 | 」で並べた TLA 番号（C123 など）のそれぞれを、その URL へのリンクにする */
+function cellHTML(s, it, c){
+  const v = val(s, it, c), base = (s.q.links || {})[c];
+  if(!base || !v) return esc(v);
+  return R.splitCell(v).map(x => /^CF?\d+$/.test(x) ? '<a href="' + esc(base + x) + '" target="_blank" rel="noopener noreferrer">' + esc(x) + " ↗</a>" : esc(x)).join(" | ");
 }
-const COPCOLS = ["前後の文脈", "語形", "レンマ", "自動のレンマ", "直前の数語", "始まりの数語", "前の数語", "後の数語"];
+function kvRows(s, it, cols, cop){
+  return cols.map(c => '<tr><th scope="row">' + esc(c) + "</th><td" + (cop && cop.indexOf(c) >= 0 ? ' class="cop" lang="cop"' : "") + ">" + cellHTML(s, it, c) + "</td></tr>").join("");
+}
+const COPCOLS = ["前後の文脈", "語形", "レンマ", "自動のレンマ", "直前の数語", "始まりの数語", "前の数語", "後の数語", "見出し", "CCLの見出し"];
 
 async function renderItem(){
   const s = CUR, box = $("#item");
@@ -480,10 +491,19 @@ async function renderItem(){
 }
 
 /* ② のような「列に答えを書く」キュー */
-/* 書き込む欄（fields）。type: pos = 品詞の一覧、lemma = 辞書の見出しを候補に、choice = options から選ぶ、text = 自由な文字 */
+/* 書き込む欄（fields）。type: pos = 品詞の一覧、lemma = 辞書の見出しを候補に、choice = options から選ぶ（from があれば、その列に
+   「 | 」で並べた値から。labels の列の同じ位置の値を添える）、text = 自由な文字（pattern があれば、その形の値だけ） */
 function fieldsHTML(s, it, pos){
   return (s.q.fields || []).map((fd, k) => {
     const v = val(s, it, fd.column) || "", id = "fd" + k;
+    if(fd.type === "choice" && fd.from){
+      const opts = R.splitCell(orig(s, it, fd.from)), labs = (fd.labels || []).map(c => R.splitCell(orig(s, it, c)));
+      const label = (x, i) => [x].concat(labs.map(a => a[i] || "").filter(Boolean)).join(" — ");
+      return '<label class="f" for="' + id + '">' + esc(fd.column) + (fd.required ? esc(L2("（承認には必須）", " (needed to approve)")) : "") +
+        '<select class="mix" id="' + id + '" data-col="' + esc(fd.column) + '"><option value="">—</option>' +
+        opts.map((x, i) => '<option value="' + esc(x) + '"' + (v === x ? " selected" : "") + ">" + esc(label(x, i)) + "</option>").join("") +
+        (v && opts.indexOf(v) < 0 ? '<option value="' + esc(v) + '" selected>' + esc(v) + "</option>" : "") + "</select></label>";
+    }
     if(fd.type === "pos") return '<label class="f" for="' + id + '">' + esc(fd.column) + '<select id="' + id + '" data-col="' + esc(fd.column) + '"><option value="">—</option>' +
       (fd.special || []).map(x => '<option value="' + esc(x) + '"' + (v === x ? " selected" : "") + ">" + esc(x === "?" ? L2("? 判定不能", "? undecidable") : x) + "</option>").join("") +
       pos.map(p => '<option value="' + esc(p.tag) + '"' + (v === p.tag ? " selected" : "") + ">" + esc(p.tag + " — " + (UL() === "ja" ? p.ja : p.en)) + "</option>").join("") +
@@ -493,9 +513,12 @@ function fieldsHTML(s, it, pos){
     if(fd.type === "choice") return '<label class="f" for="' + id + '">' + esc(fd.column) + '<select id="' + id + '" data-col="' + esc(fd.column) + '"><option value="">—</option>' +
       (fd.options || []).map(x => '<option value="' + esc(x) + '"' + (v === x ? " selected" : "") + ">" + esc(x) + "</option>").join("") +
       (v && (fd.options || []).indexOf(v) < 0 ? '<option value="' + esc(v) + '" selected>' + esc(v) + "</option>" : "") + "</select></label>";
-    return '<label class="f" for="' + id + '">' + esc(fd.column) + '<input type="text" id="' + id + '" data-col="' + esc(fd.column) + '" value="' + esc(v) + '" autocomplete="off" spellcheck="false"></label>';
+    return '<label class="f" for="' + id + '">' + esc(fd.column) + (fd.hint ? '<span class="ctxnote">' + esc(fd.hint[UL()] || "") + "</span>" : "") +
+      '<input type="text" id="' + id + '" data-col="' + esc(fd.column) + '"' + (fd.pattern ? ' data-pattern="' + esc(fd.pattern) + '"' : "") + ' value="' + esc(v) + '" autocomplete="off" spellcheck="false"></label>';
   }).join("");
 }
+/* 承認するときに空ではいけない欄（status のキューで required を付けた欄）のうち、まだ空のもの */
+const missingForApproval = (s, it) => (s.q.fields || []).filter(fd => fd.required && !String(val(s, it, fd.column) || "").trim());
 async function renderJudge(s, it){
   const q = s.q, f = $("#form"), pos = await posList(), filled = isDone(s, it), show = filled || PEEK;
   if(!CUR || CUR.items[VIEW[VI]] !== it) return;
@@ -530,6 +553,13 @@ async function renderStatus(s, it){
 function setStatus(v){
   const s = CUR, q = s.q, it = s.items[VIEW[VI]];
   if(!it || q.kind !== "status") return;
+  const miss = v === CONF.status_values.approve ? missingForApproval(s, it) : [];
+  if(miss.length){
+    say(L2("承認する前に「" + miss.map(fd => fd.column).join("」「") + "」を入れてください。", "Fill in “" + miss.map(fd => fd.column).join("”, “") + "” before approving."));
+    const el = [...document.querySelectorAll("#item [data-col]")].find(x => x.dataset.col === miss[0].column);
+    if(el) el.focus();
+    return;
+  }
   const vals = {[q.status]: v};
   if(q.corrected) vals[q.corrected] = "";
   if(setVals(s, it, vals)){ say(L2("状態: ", "Status: ") + v); afterChange(it); }
@@ -671,7 +701,18 @@ function wire(){
     if(el.id === "reviewed"){ if(setVals(s, it, {reviewed: el.checked})) renderItem(); else el.checked = !el.checked; return; }
     if(el.id === "todo"){ const v = el.value.split("\n").map(x => x.trim()).filter(Boolean); if(!setVals(s, it, {todo: v})) el.value = (val(s, it, "todo") || []).join("\n"); return; }
     if(el.dataset.path){ if(!setVals(s, it, {[el.dataset.path]: el.value})) el.value = val(s, it, el.dataset.path) || ""; return; }
-    if(el.dataset.col){ const ok = setVals(s, it, {[el.dataset.col]: R.cleanCell(el.value).trim()}); if(!ok){ el.value = val(s, it, el.dataset.col) || ""; return; } renderItemKeepFocus(el.dataset.col); }
+    if(el.dataset.col){
+      const v = R.cleanCell(el.value).trim(), col = el.dataset.col, q = s.q;
+      if(el.dataset.pattern && v && !new RegExp("^(?:" + el.dataset.pattern + ")$").test(v)){
+        say(L2("「" + v + "」はこの欄の形に合わないので、入れませんでした。", "“" + v + "” does not fit this field and was not taken."));
+        el.value = val(s, it, col) || ""; return;
+      }
+      const vals = {[col]: v};
+      // 承認に必須の欄を空に戻したら、承認も取り消す（未処理に戻す）
+      if(!v && q.kind === "status" && (q.fields || []).some(fd => fd.column === col && fd.required) && val(s, it, q.status) === CONF.status_values.approve) vals[q.status] = q.pending;
+      if(!setVals(s, it, vals)){ el.value = val(s, it, col) || ""; return; }
+      renderItemKeepFocus(col);
+    }
   });
   item.addEventListener("keydown", e => {
     if(e.key !== "Enter" || !CUR || CUR.q.kind !== "judge" || !e.target.dataset.col) return;
