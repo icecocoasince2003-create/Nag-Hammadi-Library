@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 試験用の並行箇所の一覧（tests/reader-parallels.test.html が reader.html?doc=II-2&par=… で読む）。
+     コーパスの外のテキストと結ぶ <linkGrp subtype="external"> の書き方の例（data/parallels/README.md）。 -->
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Test fixture: parallels with an external text</title>
+      </titleStmt>
+      <publicationStmt>
+        <authority>Sheneset — test fixture</authority>
+      </publicationStmt>
+      <sourceDesc>
+        <p>Test fixture.</p>
+      </sourceDesc>
+    </fileDesc>
+  </teiHeader>
+  <standOff>
+    <linkGrp type="parallel" subtype="external" xml:id="par-II2-test" corresp="../../../data/catalog.xml#doc-II-2 sample-external.xml">
+      <link target="../../../source/nhc_fulltext_split/tei/02-2_gospel-of-thomas.xml#II-7503903_2206 sample-external.xml#ext-1"/>
+      <link target="../../../source/nhc_fulltext_split/tei/02-2_gospel-of-thomas.xml#II-7503904 sample-external.xml#ext-2"/>
+    </linkGrp>
+  </standOff>
+</TEI>

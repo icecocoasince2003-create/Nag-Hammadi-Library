@@ -184,7 +184,7 @@ nag_hammadi_library/
 |---|---|---|
 | `eugnostos_tei.xml` | 本文(TEI) | 二証本(III,3 全文＋V,1 並行枠)。語ごとにレンマと品詞、節ごとに対訳を持つ。生成したあと手作業で直している。 |
 | `lexicon.xml` | コプト語辞書 | `lexicon.csv` の内容を `sync_lexicon.py` で反映。同形異義語は `<superEntry>`。 |
-| `parallels.xml` | 並行箇所 | エウグノストス III,3 のセグメントと、同じ文言を持つ他の文書(V,1・『イエス・キリストの知恵』III,4)のセグメントを `<link>` で結ぶ。`scripts/build_parallels.py` が作る(下の「並行箇所」)。 |
+| `parallels.xml` | 並行箇所 | エウグノストス III,3 のセグメントと、同じ文言を持つ他の文書(V,1・『イエス・キリストの知恵』III,4)のセグメントを `<link>` で結ぶ。`scripts/build_parallels.py` が作る(下の「並行箇所」)。コーパスの外のテキスト（ギリシア語・ラテン語など。`data/parallels/` の TEI）とは、手で書く `<linkGrp subtype="external">` で結び、本文ビュワーに印とパネルが出る（`data/parallels/README.md`。2026-11-24 の時点ではまだ無い）。 |
 | `catalog.xml` | 文書カタログ | 文書の題名・略号・関連する文書(`<relatedItem>`)。並行箇所のパネルが題名と関連文書をここから読む。 |
 
 **生成物(自動出力。直接編集しない)**:

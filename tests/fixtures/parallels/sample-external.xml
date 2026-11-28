@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 試験用の「コーパスの外の並行テキスト」（tests/reader-parallels.test.html が読む）。本文は意味の無い試験用の文字で、
+     どの本のテキストでもない。data/parallels/ に置く TEI の書き方の例でもある（data/parallels/README.md）。 -->
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Test fixture: external parallel text</title>
+      </titleStmt>
+      <publicationStmt>
+        <authority>Sheneset — test fixture</authority>
+        <availability status="free">
+          <licence target="https://creativecommons.org/publicdomain/zero/1.0/">CC0 1.0 (test fixture)</licence>
+        </availability>
+      </publicationStmt>
+      <sourceDesc>
+        <bibl>Test fixture, not an edition: placeholder letters only.</bibl>
+      </sourceDesc>
+    </fileDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="grc">Ancient Greek</language>
+      </langUsage>
+    </profileDesc>
+  </teiHeader>
+  <text xml:lang="grc">
+    <body>
+      <ab>
+        <s xml:id="ext-1" n="1">αβγ δεζ ηθι</s>
+        <s xml:id="ext-2" n="2">κλμ νξο πρσ</s>
+      </ab>
+    </body>
+  </text>
+</TEI>

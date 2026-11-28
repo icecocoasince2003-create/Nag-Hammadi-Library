@@ -847,6 +847,20 @@ h1{font-family:var(--disp); font-weight:600; line-height:1.12; font-size:clamp(1
 .seg.hit{background:var(--hi)}
 .sn{font-family:var(--mono); font-size:.66rem; color:var(--ink-faint); text-decoration:none; margin-right:.45em; vertical-align:.18em}
 .sn:hover{color:var(--gold)}
+/* コーパスの外の並行テキスト（data/parallels.xml の <linkGrp subtype="external">）の印とパネル */
+.xpar{font-family:var(--ui); font-size:.66rem; line-height:1.4; color:var(--ink-soft); background:transparent; border:1px solid var(--line); border-radius:999px; padding:0 .55em; margin-right:.45em; vertical-align:.2em; cursor:pointer}
+.xpar:hover,.xpar:focus-visible{border-color:var(--gold); color:var(--gold); outline:none}
+/* パネルは本文に重なるので、透けない色（--raise。ダークは紺、ライトは生成り）。引用のポップアップ（site.css の .cite-pop）・
+   eugnostos.html の並行箇所パネルと同じ */
+.xpanel{position:fixed; right:16px; bottom:16px; width:min(460px, calc(100vw - 32px)); max-height:70vh; overflow:auto; z-index:40; background:var(--raise); border:1px solid var(--line); border-radius:2px; padding:16px 18px 14px; box-shadow:0 10px 30px rgba(0,0,0,.35); font-family:var(--ui); color:var(--ink)}
+.xpanel h2{font-size:1rem; margin:0 30px 2px 0; font-family:var(--ui)}
+.xpanel .xl{font-size:.78rem; color:var(--ink-soft); margin:0}
+.xpanel .xtx{font-family:'Noto Serif','Times New Roman',serif; font-size:1.08rem; line-height:1.8; margin:10px 0; color:var(--ink)}
+.xpanel dl{font-size:.8rem; color:var(--ink-soft); margin:8px 0 0}
+.xpanel dt{color:var(--ink-faint); margin-top:4px}
+.xpanel dd{margin:0}
+.xpanel a{color:var(--gold)}
+.xpanel .x{position:absolute; top:8px; right:10px; font:inherit; font-size:1.1rem; color:var(--ink-soft); background:transparent; border:0; cursor:pointer}
 .g{white-space:nowrap}
 .m{cursor:pointer; border-radius:3px}
 .m:hover .f{background:var(--sel)}
@@ -892,6 +906,7 @@ h1{font-family:var(--disp); font-weight:600; line-height:1.12; font-size:clamp(1
 <nav id="sitebar" class="sitebar sticky"></nav>
 <main class="shell" id="shell"><p class="loading">…</p></main>
 <div class="mcard" id="card" role="dialog" aria-live="polite" hidden></div>
+<div class="xpanel" id="xpanel" role="dialog" aria-labelledby="xpanelT" hidden></div>
 <script>
 const POS=__POS__, REPO=__REPO__, EDITIONS=__EDITIONS__, SYNOPSES=__SYNOPSES__;
 const H=document.documentElement, T='http://www.tei-c.org/ns/1.0', XNS='http://www.w3.org/XML/1998/namespace';
@@ -1074,7 +1089,83 @@ function renderText(){
     (OPT.page&&D.st.pb?' pages':'')+(OPT.line&&D.st.lb?' lines':'');
   box.innerHTML=html;
   hideCard();
+  xparMark();
 }
+/* ---------- コーパスの外の並行テキスト ----------
+   data/parallels.xml の <linkGrp type="parallel" subtype="external"> の <link> が、この文書の <s> と data/parallels/ の TEI の <s> を結ぶ。
+   外のテキストの TEI は、ヘッダーに言語（<language ident>）・底本（<sourceDesc> の <bibl>）・ライセンス（<licence>）を持つ
+   （data/parallels/README.md）。結ばれたセグメントの § の後ろに言語の印を出し、押すとその本文と出典をパネルに出す。
+   ?par=ファイル で、parallels.xml の代わりに同じサイトの別のファイルを読む（試験用） */
+const XLANGS={grc:['古代ギリシア語','Ancient Greek','grec ancien'], la:['ラテン語','Latin','latin'], cop:['コプト語','Coptic','copte']};
+let XPAR=null; const XDOCS=new Map();
+function xparLinks(){
+  if(XPAR) return XPAR;
+  const q=new URLSearchParams(location.search).get('par')||'';
+  const parUrl=new URL(/^[\w\/.-]+\.xml$/.test(q)&&q.indexOf('..')<0?q:'data/parallels.xml', location.href).href;
+  const here=new URL(DOC.xml, location.href).href;
+  XPAR=fetch(parUrl,{cache:'no-cache'}).then(r=>r.ok?r.text():'').then(t=>{
+    const m=new Map(); if(!t) return m;
+    const x=new DOMParser().parseFromString(t,'application/xml');
+    all(x,'linkGrp').filter(g=>g.getAttribute('type')==='parallel'&&g.getAttribute('subtype')==='external').forEach(g=>all(g,'link').forEach(l=>{
+      const us=(l.getAttribute('target')||'').split(/\s+/).filter(Boolean).map(p=>{ try{ return new URL(p,parUrl); }catch(e){ return null; } }).filter(Boolean);
+      const a=us.find(u=>u.href.replace(/#.*$/,'')===here), b=us.find(u=>u.href.replace(/#.*$/,'')!==here);
+      if(!a||!b||!a.hash||!b.hash) return;
+      const sid=decodeURIComponent(a.hash.slice(1));
+      if(!m.has(sid)) m.set(sid,[]);
+      m.get(sid).push({url:b.href.replace(/#.*$/,''), id:decodeURIComponent(b.hash.slice(1))});
+    }));
+    return m;
+  }).catch(()=>new Map());
+  return XPAR;
+}
+function xparDoc(url){
+  if(!XDOCS.has(url)) XDOCS.set(url, fetch(url,{cache:'no-cache'}).then(r=>r.ok?r.text():Promise.reject(new Error(url+' — HTTP '+r.status))).then(t=>{
+    const x=new DOMParser().parseFromString(t,'application/xml');
+    if(x.getElementsByTagName('parsererror').length) throw new Error(url+' — XML');
+    const one=(el,n)=>all(el,n)[0], txt=e=>e?e.textContent.replace(/\s+/g,' ').trim():'';
+    const lang=one(x,'language'), lic=one(x,'licence'), sd=one(x,'sourceDesc'), ts=one(x,'titleStmt');
+    const segs=new Map(); all(x,'s').forEach(s=>{ if(xid(s)) segs.set(xid(s), s); });
+    return {title:txt(ts&&one(ts,'title')), lang:lang?lang.getAttribute('ident')||'':'', langName:txt(lang),
+      bibl:txt(sd&&one(sd,'bibl')), licence:txt(lic), licenceUrl:lic?lic.getAttribute('target')||'':'', segs};
+  }));
+  return XDOCS.get(url);
+}
+const xLangName=d=>XLANGS[d.lang]?tri(...XLANGS[d.lang]):esc(d.langName||d.lang);
+async function xparMark(){
+  if(!DOC) return;
+  const m=await xparLinks();
+  for(const [sid, list] of m){
+    const row=document.getElementById('seg-'+sid); if(!row||row.querySelector('.xpar')) continue;
+    const sn=row.querySelector('.sn'); let after=sn;
+    for(const t of list){
+      let d; try{ d=await xparDoc(t.url); }catch(e){ console.warn(e); continue; }
+      if(!d.segs.has(t.id)||row.querySelector('.xpar[data-url="'+CSS.escape(t.url)+'"][data-id="'+CSS.escape(t.id)+'"]')) continue;
+      const b=document.createElement('button');
+      b.type='button'; b.className='xpar'; b.dataset.url=t.url; b.dataset.id=t.id; b.setAttribute('aria-haspopup','dialog');
+      b.textContent='‖ '+(d.lang||'?');
+      b.title=(UL()==='ja'?'コーパスの外の並行テキスト（':UL()==='fr'?'Texte parallèle hors du corpus (':'Parallel text outside the corpus (')+(d.title||d.lang)+(UL()==='ja'?'）':')');
+      after.insertAdjacentElement('afterend', b); after=b;
+    }
+  }
+}
+async function openXpar(b){
+  const p=$('#xpanel');
+  let d; try{ d=await xparDoc(b.dataset.url); }catch(e){ return; }
+  const s=d.segs.get(b.dataset.id); if(!s) return;
+  const t3=(ja,en,fr)=>UL()==='ja'?ja:UL()==='fr'?fr:en;   // 属性に入れる文字（tri は言語ごとの <span> を返すので、属性には使えない）
+  p.innerHTML='<button type="button" class="x" aria-label="'+esc(t3('閉じる','Close','Fermer'))+'">×</button>'+
+    '<h2 id="xpanelT">'+esc(d.title||b.dataset.url)+'</h2>'+
+    '<p class="xl">'+tri('コーパスの外の並行テキスト','Parallel text outside the corpus','Texte parallèle hors du corpus')+' · '+xLangName(d)+
+      (s.getAttribute('n')?' · '+esc(s.getAttribute('n')):'')+'</p>'+
+    '<div class="xtx" lang="'+esc(d.lang||'und')+'">'+esc(s.textContent.replace(/\s+/g,' ').trim())+'</div>'+
+    '<dl><dt>'+tri('底本','Source edition','Édition de base')+'</dt><dd>'+esc(d.bibl||'—')+'</dd>'+
+    '<dt>'+tri('ライセンス','Licence','Licence')+'</dt><dd>'+(d.licenceUrl?'<a href="'+esc(d.licenceUrl)+'" target="_blank" rel="noopener">'+esc(d.licence||d.licenceUrl)+' ↗</a>':esc(d.licence||'—'))+'</dd>'+
+    '<dt>'+tri('データ','Data','Données')+'</dt><dd><a href="'+esc(b.dataset.url)+'" download>'+esc(b.dataset.url.replace(/^.*\//,''))+'</a> · '+
+      tri('Sheneset の注釈はありません','no Sheneset annotation','sans annotation Sheneset')+'</dd></dl>';
+  p.hidden=false;
+  p.querySelector('.x').focus();
+}
+function hideXpar(){ const p=$('#xpanel'); if(p&&!p.hidden){ p.hidden=true; } }
 function statusHTML(){
   const s=D.st, ann=s.typed>0, rel=REPO+'blob/main/source/nhc_fulltext_split/README_ja.md';
   const li=[];
@@ -1326,11 +1417,13 @@ function fail(msg, detail){
 })();
 document.addEventListener('click',e=>{
   if(e.target.closest('#card .x')){ hideCard(); return; }
+  if(e.target.closest('#xpanel .x')){ hideXpar(); return; }
+  const xp=e.target.closest('#text .xpar'); if(xp){ openXpar(xp); return; }
   const sn=e.target.closest('#text .sn'); if(sn){ citeSeg(sn); return; }
   const dc=e.target.closest('#docCite'); if(dc){ citeDoc(dc); return; }
   const m=e.target.closest('#text .m'); if(m) showCard(m);
 });
-document.addEventListener('keydown',e=>{ if(e.key==='Escape') hideCard(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ hideCard(); hideXpar(); } });
 document.addEventListener('nhc:lang',()=>{ if(!D) return; setTitle(); labelDocNavs(); if(OPT.inter) renderText(); });
 window.addEventListener('hashchange',gotoHash);
 </script>

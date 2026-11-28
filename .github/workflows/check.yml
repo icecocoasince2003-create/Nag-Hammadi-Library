@@ -50,6 +50,13 @@ jobs:
           echo "$out" | grep -o '<span class="[pf]">[^<]*' | sed 's/<span class="[pf]">//'
           echo "$out" | grep -q 'id="result" data-status="pass"' || { echo "::error file=tests/review.test.html::確認作業の画面のテストが通りません"; exit 1; }
 
+      - name: 本文ビュワーの、コーパスの外の並行テキストのテスト（tests/reader-parallels.test.html を、ヘッドレスの Chrome で開く）
+        run: |
+          curl -sf http://127.0.0.1:8765/tests/reader-parallels.test.html > /dev/null || { python3 -m http.server 8765 --bind 127.0.0.1 > /dev/null 2>&1 & sleep 1; }
+          out=$(google-chrome --headless=new --disable-gpu --no-sandbox --no-first-run --virtual-time-budget=60000 --dump-dom "http://127.0.0.1:8765/tests/reader-parallels.test.html")
+          echo "$out" | grep -o '<span class="[pf]">[^<]*' | sed 's/<span class="[pf]">//'
+          echo "$out" | grep -q 'id="result" data-status="pass"' || { echo "::error file=tests/reader-parallels.test.html::本文ビュワーの並行テキストのテストが通りません"; exit 1; }
+
       - name: JSON の構文（data/*.json・iiif/*.json）
         run: |
           bad=0

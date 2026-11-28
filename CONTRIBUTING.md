@@ -8,7 +8,7 @@
 > changes go through `source/lexicon.csv` and `scripts/sync_lexicon.py`. Never change an existing `xml:id`.
 > Before opening a pull request, run `python3 scripts/check_tei.py`, `node --test tests/corpus-query.test.cjs tests/review-core.test.cjs`,
 > `python3 -m unittest discover -s tests -p "test_*.py"`, `python3 scripts/check_style.py` and `python3 scripts/build_site.py --check`;
-> GitHub runs the same checks (and opens `tests/review.test.html` in headless Chrome). Pending decisions (introductions, the accuracy
+> GitHub runs the same checks (and opens `tests/review.test.html` and `tests/reader-parallels.test.html` in headless Chrome). Pending decisions (introductions, the accuracy
 > sample, proposed breaks) are made in `review.html`, which downloads the decided file; `scripts/merge_review.py` combines several.
 > Lexicon links to Coptic Dictionary Online are TLA numbers only (`cdo` column); nothing else is copied from the CDO data.
 > Translations, glosses and notes are the project's own work (CC BY 4.0): do not copy published translations or
@@ -142,6 +142,7 @@ python3 scripts/check_release.py                # 版の情報が data/release.j
 - JSON（`data/*.json`・`iiif/*.json`）を直したら、構文が正しいことも確かめます（`python3 -m json.tool data/news.json` など）。
 - `review.html`・`assets/review-core.js` を直したら、ローカルのサーバーで `tests/review.test.html` を開き、結果が PASS になることを
   確かめます（GitHub の自動チェックはヘッドレスの Chrome で同じページを開きます）。
+- 本文ビュワー（`scripts/build_site.py` の reader.html の部分）の、コーパスの外の並行テキストの表示を直したら、`tests/reader-parallels.test.html` を開き、結果が PASS になることを確かめる（GitHub の自動チェックでも走る）。外のテキストの書き方は `data/parallels/README.md`。
 - TEI のスキーマでも確かめるときは、スキーマを取得して `python3 scripts/check_tei.py --schema <tei_all.rng の場所>`
   （README の「TEI スキーマとの適合」）。
 - 符号化の仕様（[docs/ANNOTATION_SPEC.md](docs/ANNOTATION_SPEC.md)）に合っているかは `python3 scripts/check_spec.py` で調べます
