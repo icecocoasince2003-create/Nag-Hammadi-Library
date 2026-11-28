@@ -62,7 +62,7 @@
         var st = stars[i];
         var a = reduced ? 0.5 : 0.32 + 0.34 * Math.sin(st.p + t * 0.001 * st.s);
         ctx.globalAlpha = Math.max(0.06, a);
-        ctx.fillStyle = st.gold ? "#d4af6a" : "#cfd2ec";
+        ctx.fillStyle = st.gold ? "#c8a870" : "#cfd2ec";
         ctx.beginPath();
         ctx.arc(st.x, st.y, st.r, 0, Math.PI * 2);
         ctx.fill();
