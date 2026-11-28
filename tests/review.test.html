@@ -32,7 +32,7 @@ function clearNs(){ try { Object.keys(localStorage).filter(k => k.indexOf(PREFIX
 const text = url => fetch(url, {cache: "no-store"}).then(r => r.text());
 
 const frame = document.getElementById("app");
-const QIDS = ["intros", "sample", "thomas", "breaks", "pos", "cdo", "cdo-one"];
+const QIDS = ["intros", "sample", "thomas", "breaks", "pos", "cdo", "cdo-one", "transfer"];
 let W, D, A;
 async function load(){
   frame.src = "../review.html?ns=test&lang=ja";
