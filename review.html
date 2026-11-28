@@ -17,9 +17,9 @@
 <link rel="alternate icon" type="image/png" sizes="32x32" href="image/favicon-32.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+Coptic&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400;1,8..60,500&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600&family=Noto+Sans+Coptic&display=swap" rel="stylesheet">
 <style>
-:root{ --ui:'Inter','Noto Sans JP',system-ui,sans-serif; --cop:'Noto Sans Coptic',serif; }
+:root{ --ui:'DM Sans','Inter','Noto Sans JP',system-ui,sans-serif; --cop:'Noto Sans Coptic',serif; }
 *{box-sizing:border-box} html,body{margin:0}
 body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
 /* 画面の文言は日・英だけ。フランス語を選んだときは英語を出す（site.css は fr で .l-en を隠すので、ここで戻す） */
@@ -30,11 +30,11 @@ html[data-lang="fr"] body .l-en{display:revert}
 .rv-who{display:flex; flex-wrap:wrap; align-items:center; gap:8px 14px; margin:14px 0 6px; font-size:.9rem}
 .rv-who input{font:inherit; padding:6px 10px; border-radius:8px; border:1px solid var(--line); background:var(--hi); color:var(--ink); width:12em}
 .rv-who .hint{font-size:.78rem; color:var(--ink-faint)}
-.rv-who.need input{border-color:var(--rose); box-shadow:0 0 0 2px rgba(207,147,166,.25)}
+.rv-who.need input{border-color:var(--rose); box-shadow:0 0 0 2px rgba(208,154,138,.25)}
 .rv-local{font-size:.8rem; color:var(--ink-faint); margin:4px 0 18px}
 .qcards{display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:12px; margin:8px 0 24px}
-.qcard{appearance:none; text-align:left; font:inherit; color:var(--ink); background:var(--panel,rgba(23,20,46,.78));
-  border:1px solid var(--line); border-radius:14px; padding:14px 16px; cursor:pointer}
+.qcard{appearance:none; text-align:left; font:inherit; color:var(--ink); background:var(--panel,rgba(28,38,68,.78));
+  border:1px solid var(--line); border-radius:2px; padding:14px 16px; cursor:pointer}
 .qcard:hover,.qcard:focus-visible{border-color:var(--gold); outline:none}
 .qcard[aria-current="true"]{border-color:var(--gold); box-shadow:0 0 0 1px var(--gold) inset}
 .qcard b{display:block; font-size:.98rem}
@@ -45,8 +45,8 @@ html[data-lang="fr"] body .l-en{display:revert}
 .qcard .err{color:var(--rose); font-size:.8rem}
 #work[hidden]{display:none}
 .rv-bar{display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; padding:10px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line);
-  position:sticky; top:var(--sbh,47px); z-index:5; background:var(--bg-solid,#0d0b1e)}
-html[data-mode="light"] .rv-bar{background:#f3eede}
+  position:sticky; top:var(--sbh,47px); z-index:5; background:var(--bg-solid,#141c38)}
+html[data-mode="light"] .rv-bar{background:#f0ece3}
 .page .rv-bar h2{margin:0 8px 0 0; padding:0; border:0; font-size:1.02rem; font-family:var(--ui)}
 .rv-bar .pos{font-variant-numeric:tabular-nums; color:var(--ink-soft); font-size:.88rem}
 .btn{appearance:none; font:inherit; font-size:.84rem; color:var(--ink); background:var(--hi); border:1px solid var(--line); border-radius:8px;
@@ -59,17 +59,17 @@ html[data-mode="light"] .rv-bar{background:#f3eede}
 .rv-item{display:grid; grid-template-columns:minmax(0,1.35fr) minmax(0,1fr); gap:18px 26px; margin:16px 0}
 @media (max-width:900px){ .rv-item{grid-template-columns:1fr} }
 .rv-item h3{font-size:.8rem; letter-spacing:.06em; color:var(--ink-faint); font-weight:600; margin:0 0 6px}
-.ctx{font-family:var(--cop); font-size:1.14rem; line-height:2.1; color:var(--ink); background:var(--hi); border-radius:10px; padding:12px 14px; overflow-wrap:anywhere}
+.ctx{font-family:var(--cop); font-size:1.14rem; line-height:2.1; color:var(--ink); background:var(--hi); border-radius:2px; padding:12px 14px; overflow-wrap:anywhere}
 .ctx .g{white-space:nowrap}
 .ctx .g.pick{cursor:pointer; border-radius:4px}
-.ctx .g.pick:hover,.ctx .g.pick:focus-visible{background:rgba(212,175,106,.18); outline:none}
-.ctx mark{background:rgba(212,175,106,.35); color:inherit; border-radius:3px; padding:0 1px}
+.ctx .g.pick:hover,.ctx .g.pick:focus-visible{background:rgba(200,168,112,.18); outline:none}
+.ctx mark{background:rgba(200,168,112,.35); color:inherit; border-radius:3px; padding:0 1px}
 .ctx .tg{box-shadow:inset 0 -2px 0 var(--gold)}
 .ctx .ms{color:var(--ink-faint); padding:0 1px}
-.ctx .brk{display:inline-block; font-family:var(--ui); font-size:.72rem; font-weight:700; color:#1a140a; background:var(--gold); border-radius:4px; padding:0 5px; margin:0 4px; vertical-align:.12em}
+.ctx .brk{display:inline-block; font-family:var(--ui); font-size:.72rem; font-weight:700; color:#1a2030; background:var(--gold); border-radius:4px; padding:0 5px; margin:0 4px; vertical-align:.12em}
 .ctx .brk.prop{background:transparent; color:var(--gold-bright); border:1px dashed var(--gold)}
-html[data-mode="light"] .ctx .brk{color:#fffdf6; background:#7f5d16}
-html[data-mode="light"] .ctx .brk.prop{color:#73500a; background:transparent; border-color:#7f5d16}
+html[data-mode="light"] .ctx .brk{color:#fdfcf8; background:#7a5c1e}
+html[data-mode="light"] .ctx .brk.prop{color:#6e5016; background:transparent; border-color:#7a5c1e}
 .ctx .gap{color:var(--rose); font-family:var(--ui); font-size:.9rem}
 .ctx .pb,.ctx .lb{font-family:var(--ui); font-size:.62rem; color:var(--ink-faint); vertical-align:.4em; margin:0 2px}
 .ctx .more{font-family:var(--ui); font-size:.78rem}
@@ -90,11 +90,11 @@ table.kv td.cop{font-family:var(--cop); font-size:1rem; color:var(--ink)}
 .stbtns .btn{font-size:.9rem; padding:7px 14px}
 .stnow{font-size:.9rem}
 .stnow b{color:var(--gold-bright)}
-.autobox{border:1px dashed var(--line-2,var(--line)); border-radius:10px; padding:10px 12px; font-size:.86rem}
+.autobox{border:1px dashed var(--line-2,var(--line)); border-radius:2px; padding:10px 12px; font-size:.86rem}
 .autobox.hidden{color:var(--ink-faint)}
 .autobox .ok{color:#7fc79a} .autobox .ng{color:var(--rose)}
 html[data-mode="light"] .autobox .ok{color:#2f7a4a}
-fieldset.lng{border:1px solid var(--line); border-radius:10px; padding:8px 12px 12px; margin:0}
+fieldset.lng{border:1px solid var(--line); border-radius:2px; padding:8px 12px 12px; margin:0}
 fieldset.lng legend{font-size:.84rem; color:var(--gold-bright); padding:0 4px}
 fieldset.lng label{display:block; font-size:.74rem; color:var(--ink-faint); margin-top:6px}
 fieldset.lng textarea{width:100%}
