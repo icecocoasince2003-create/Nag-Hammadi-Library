@@ -118,6 +118,7 @@
       <change when="2026-11-18">Added to the Sheneset repository and published as a draft: the restoration marks for ⲍ and ⲯ, which the annotation had overwritten, put back as &lt;supplied&gt; around the restored letters; glosses that no word points to removed; header statements about the annotation brought up to date.</change>
       <change when="2026-11-24">Bound groups (<gi>phr</gi>), morphemes (<gi>w</gi>), part of speech (<att>type</att>) and lemmas of 134 segments re-annotated automatically with the Coptic SCRIPTORIUM NLP service by scripts/coptic_nlp_tei.py (groups=auto, laytonize=smart, style=site); <att>resp</att>="#coptic-nlp", not checked by hand. The letters of the text, the gaps, the supplied letters and the page and line breaks are unchanged.</change>
       <change when="2026-11-24">Brought into line with the annotation specification (docs/ANNOTATION_SPEC.md): glosses that no word points to any more removed (31); the token count in <gi>extent</gi> and the statements about the annotation in <gi>projectDesc</gi> and <gi>editorialDecl</gi> brought up to date; the dependency analysis of the same NLP run written to ../conllu/03-3_eugnostos.conllu. Carried out with a generative AI model (Claude).</change>
+      <change when="2026-11-24">Gloss of ⲙⲙⲟ (PREP) in the stand-off glossary reworded to describe the form only ("preposition n- (before suffixes)" / "前置詞 ⲛ- の代名詞形"); the ids g-en-6e102730a440 and g-ja-de9db66af0eb are kept, so no @ana changed.</change>
       <change when="2026-11-25">Re-annotated with the same tools and settings as above, but with each segment sent as one sentence (scripts/coptic_nlp_tei.py --sentences s: a punctuation mark added at the end of each <gi>s</gi> and removed from the result), so that the dependency analysis in ../conllu/03-3_eugnostos.conllu is divided into sentences and no bound group crosses a segment boundary; the input was again the draft of 2026-11-18. Bound groups, morphemes, part of speech and lemmas of 134 segments replaced (<att>resp</att>="#coptic-nlp", not checked by hand); glosses that no word points to any more removed (0), glosses pointed to again restored from that draft (0); the token count in <gi>extent</gi> and the statements about the annotation in <gi>editorialDecl</gi> brought up to date. The letters of the text, the gaps, the supplied letters and the page and line breaks are unchanged. Carried out with a generative AI model (Claude).</change>
     </revisionDesc>
   </teiHeader>
@@ -6519,7 +6520,7 @@
       <interp xml:id="g-en-6b6996256d05">know / understand</interp>
       <interp xml:id="g-en-6d65162b9880">be like</interp>
       <interp xml:id="g-en-6da8bc23c81b">every / all</interp>
-      <interp xml:id="g-en-6e102730a440">of / object marker</interp>
+      <interp xml:id="g-en-6e102730a440">preposition n- (before suffixes)</interp>
       <interp xml:id="g-en-710dbed86a7d">causative infinitive marker</interp>
       <interp xml:id="g-en-7226de2cb7c5">take / receive</interp>
       <interp xml:id="g-en-76205fd07764">upon</interp>
@@ -6667,7 +6668,7 @@
       <interp xml:id="g-ja-d32e6696ecdc">言葉／ロゴス</interp>
       <interp xml:id="g-ja-d4db32292afe">上方へ／外へ</interp>
       <interp xml:id="g-ja-d5f9f24ba5e7">これら</interp>
-      <interp xml:id="g-ja-de9db66af0eb">〜を（目的語標識）</interp>
+      <interp xml:id="g-ja-de9db66af0eb">前置詞 ⲛ- の代名詞形</interp>
       <interp xml:id="g-ja-e0742de158f3">使役不定詞標識</interp>
       <interp xml:id="g-ja-e1b7d5621057">彼の</interp>
       <interp xml:id="g-ja-e55beffe6f67">他の</interp>

@@ -140,12 +140,39 @@ html[data-mode="light"] .sb-mode .sb-moon { display: block; }
 /* ログイン中は表示名（プロフィールへのリンク）。長い名前は省略して1行に収める */
 .sb-auth { display: inline-block; max-width: 14em; overflow: hidden; text-overflow: ellipsis; vertical-align: middle; }
 .sb-auth[hidden] { display: none; }
+/* 幅 760px 以下: リンクは 2 段目の〈メニュー ▾〉にまとめ、押すとナビのすぐ下に縦に並べて開く（開閉は site.js の setMenu）。
+   以前は 2 段目を横にスクロールさせていたが、幅 390px では 8 項目のうち 3 つが画面の外にあり、気づきにくかった。
+   一覧は本文に重ねて開く（本文はずれない。下の本文が透けないよう不透明にする）。ナビはどちらの表示モードでも紺
+   （上の .sitebar と cosmos.css の rgba(18, 26, 50, .97)）なので、一覧もその不透明の色にする */
+.sb-menu { display: none; }
+.sb-menubtn {
+  appearance: none; display: inline-flex; align-items: center; gap: 6px; margin: 0; padding: 4px 0;
+  background: none; border: 0; cursor: pointer;
+  font: inherit; font-size: .8rem; letter-spacing: .02em; white-space: nowrap; color: var(--chrome-ink, #ece6da);
+  text-underline-offset: 6px; text-decoration-thickness: 1px;
+}
+.sb-menubtn .sb-caret { display: block; flex: none; width: 8px; height: 5px; opacity: .75; }
+.sb-menubtn[aria-expanded="true"] .sb-caret { transform: rotate(180deg); }
+.sb-menubtn:hover span, .sb-menubtn:focus-visible span { text-decoration: underline; text-decoration-color: var(--gold, #c8a870); }
+.sb-menubtn:focus-visible { outline: none; }
+.sb-menubtn[aria-expanded="true"] { color: var(--gold-bright, #dcc08a); }
 @media (max-width: 760px) {
-  .sb-links { order: 3; flex-basis: 100%; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 2px;
-    scrollbar-width: none; }
-  .sb-links::-webkit-scrollbar { display: none; }
+  .sb-menu { display: flex; order: 3; flex-basis: 100%; }
+  .sb-links { display: none; }
+  .sitebar.menu-open .sb-links {
+    display: flex; flex-direction: column; align-items: stretch; gap: 0;
+    position: absolute; z-index: 2; top: 100%; left: 0; right: 0;
+    max-height: calc(100vh - 100px); overflow-y: auto;
+    padding: 4px 14px 10px; background: #121a32;
+    border-bottom: 1px solid rgba(200, 168, 112, .32); box-shadow: 0 14px 30px rgba(4, 8, 20, .5);
+  }
+  .sitebar.menu-open .sb-link { display: block; padding: 10px 2px; font-size: .86rem; white-space: normal; }
+  .sitebar.menu-open .sb-link + .sb-link { border-top: 1px solid rgba(200, 168, 112, .12); }
   .sb-brand .sb-name small { display: none; }
   .sb-tools { margin-left: auto; }
+}
+@media (max-width: 760px) and (prefers-reduced-motion: no-preference) {
+  .sb-menubtn .sb-caret { transition: transform .15s ease; }
 }
 
 /* ---------- 2) ビュワーの文書パネル（.app > header） ----------
@@ -391,7 +418,7 @@ html[data-lang="en"] .prose li, html[data-lang="fr"] .prose li { line-height: 1.
 .toc a:hover { text-decoration: underline; text-decoration-color: var(--gold); color: var(--ink); }
 .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; margin: 16px 0; }
 .card { background: var(--panel, rgba(28,38,68,.78)); border: 1px solid var(--line); border-radius: 2px; padding: 16px 18px; }
-.card h4 { margin: 0 0 6px; font-size: .98rem; color: var(--ink); }
+.card h4, .card h3 { margin: 0 0 6px; font-size: .98rem; font-weight: 700; color: var(--ink); }   /* gnosticism.html は見出しの順（h2 → h3）に合わせて h3（.page h3 の金色・600 は使わない） */
 .card p { margin: 0; font-size: .86rem; line-height: 1.75; color: var(--ink-soft); }
 .card .k { font-family: var(--mono); font-size: .66rem; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
 .figure { display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 18px; align-items: center;

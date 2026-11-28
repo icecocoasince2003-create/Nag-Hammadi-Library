@@ -475,7 +475,7 @@ def links_html():
         host = urlsplit(it.get("url") or "").netloc
         out.append('<a class="relsite" href="' + _esc(it.get("url")) + '" target="_blank" rel="noopener">' +
                    '<div class="k">' + _tri(it.get("kind") or {}) + '</div>' +
-                   '<div class="t">' + ('<span class="cop">' + _esc(it["cop"]) + '</span>' if it.get("cop") else '') + _tri(it.get("title") or {}) + '</div>' +
+                   '<div class="t">' + ('<span class="cop" lang="cop">' + _esc(it["cop"]) + '</span>' if it.get("cop") else '') + _tri(it.get("title") or {}) + '</div>' +
                    '<div class="u">' + _esc(host) + '</div>' +
                    '<p>' + _tri(it.get("desc") or {}) + '</p>' +
                    '<span class="go">' + _tri({"ja": "サイトを開く ↗", "en": "Visit site ↗", "fr": "Visiter le site ↗"}) + '</span></a>')
@@ -493,11 +493,11 @@ def build_index():
     body = f"""
 <nav id="sitebar" class="sitebar sticky"></nav>
 
-<div class="wrap">
+<main class="wrap">
  <section class="hero">
   <div>
    <div class="eyebrow">Nag Hammadi Codices I–XIII</div>
-   <h1><span class="cop">ϣⲉⲛⲉⲥⲏⲧ</span>Sheneset<span class="tag">{tri("ナグ・ハマディ写本コーパス", "A digital TEI edition of the Nag Hammadi Codices", "Édition numérique TEI des codices de Nag Hammadi")}</span></h1>
+   <h1><span class="cop" lang="cop">ϣⲉⲛⲉⲥⲏⲧ</span>Sheneset<span class="tag">{tri("ナグ・ハマディ写本コーパス", "A digital TEI edition of the Nag Hammadi Codices", "Édition numérique TEI des codices de Nag Hammadi")}</span></h1>
    <p class="lead">{tri(
      f"ナグ・ハマディ写本(全13冊・{TOTAL}文書)を、<b>形態素グロス・コプト語辞書・日英仏訳</b>を備えた TEI&nbsp;P5 デジタル版として整備するプロジェクトです。各語をクリックすると語義が表示され、写本どうしの対照や、他の文書の並行箇所の参照ができます。",
      f"A digital TEI&nbsp;P5 edition of the Nag Hammadi Codices (13 codices, {TOTAL} tractates), with <b>morpheme-level glosses, a Coptic lexicon and Japanese, English and French translations</b>. Click any word for its sense, compare the manuscript witnesses side by side and follow parallel passages into other texts.",
@@ -531,7 +531,7 @@ def build_index():
    <div class="feat">
      <div>
        <div class="k">NHC III,3 / V,1</div>
-       <div class="ttl"><span class="cop">ⲉⲩⲅⲛⲱⲥⲧⲟⲥ</span>{tri("エウグノストス", "Eugnostos", "Eugnoste")}</div>
+       <div class="ttl"><span class="cop" lang="cop">ⲉⲩⲅⲛⲱⲥⲧⲟⲥ</span>{tri("エウグノストス", "Eugnostos", "Eugnoste")}</div>
        <div class="loc">{tri(
          "III,3『祝福されたエウグノストス』／ V,1『エウグノストス』· 二証本対照・三言語対訳",
          "III,3 <i>Eugnostos the Blessed</i> / V,1 <i>Eugnostos</i> · two witnesses, three translations",
@@ -546,7 +546,7 @@ def build_index():
    <div class="feat">
      <div>
        <div class="k">NHC VI,5</div>
-       <div class="ttl"><span class="cop">ⲡⲟⲗⲓⲧⲉⲓⲁ</span>{tri("プラトン『国家』588b–589b", "Plato, <i>Republic</i> 588b–589b", "Platon, <i>République</i> 588b–589b")}</div>
+       <div class="ttl"><span class="cop" lang="cop">ⲡⲟⲗⲓⲧⲉⲓⲁ</span>{tri("プラトン『国家』588b–589b", "Plato, <i>Republic</i> 588b–589b", "Platon, <i>République</i> 588b–589b")}</div>
        <div class="loc">{tri("ギリシア語原文対照", "Greek parallel text", "Texte grec en regard")}</div>
        <div class="acts"><a class="go" href="republic.html">{tri("全文を読む →", "Read the text →", "Lire le texte →")}</a>
         <a href="search.html?doc=republic">{tri("検索", "Search", "Recherche")}</a>
@@ -556,7 +556,7 @@ def build_index():
    <div class="feat">
      <div>
        <div class="k">NHC I–IV · VII–XIII · {tri("暫定版", "draft", "provisoire")}</div>
-       <div class="ttl"><span class="cop">ⲛϫⲱⲱⲙⲉ</span>{tri(f"全文テキスト {DRAFT} 文書", f"Full text of {DRAFT} tractates", f"Texte intégral de {DRAFT} traités")}</div>
+       <div class="ttl"><span class="cop" lang="cop">ⲛϫⲱⲱⲙⲉ</span>{tri(f"全文テキスト {DRAFT} 文書", f"Full text of {DRAFT} tractates", f"Texte intégral de {DRAFT} traités")}</div>
        <div class="loc">{tri(
          "語群・品詞・レンマ・語義を自動で付けた暫定版です。人の目では確かめておらず、本文も校訂本と照合していません。確かめていないことは各文書の冒頭に記しています。",
          "A draft with bound groups, parts of speech, lemmata and glosses assigned automatically. Nothing has been checked by hand and the text has not been collated with the editions; each text lists what is unchecked at the top.",
@@ -594,7 +594,7 @@ def build_index():
    <p class="empty" id="empty" hidden>{tri("該当する文書がありません。", "No matching tractate.", "Aucun traité ne correspond.")}</p>
   </div>
  </section>
-</div>
+</main>
 
 <footer><div class="wrap">
   {tri(f"<b>{AVAIL}</b>&nbsp;文書を公開・<b>{DRAFT}</b>&nbsp;文書を暫定公開・{pl_foot_ja}<b>{SOON}</b>&nbsp;文書は準備中 / 全&nbsp;<b>{TOTAL}</b>&nbsp;文書(13写本)",
@@ -660,7 +660,7 @@ fetch('data/links.json',{{cache:'no-store'}}).then(r=>r.ok?r.json():Promise.reje
     let host=''; try{{ host=new URL(it.url).host; }}catch(e){{}}
     return '<a class="relsite" href="'+esc(it.url)+'" target="_blank" rel="noopener">'+
       '<div class="k">'+tri(it.kind||{{}})+'</div>'+
-      '<div class="t">'+(it.cop?'<span class="cop">'+esc(it.cop)+'</span>':'')+tri(it.title||{{}})+'</div>'+
+      '<div class="t">'+(it.cop?'<span class="cop" lang="cop">'+esc(it.cop)+'</span>':'')+tri(it.title||{{}})+'</div>'+
       '<div class="u">'+esc(host)+'</div>'+
       '<p>'+tri(it.desc||{{}})+'</p>'+
       '<span class="go">'+tri({{ja:'サイトを開く ↗',en:'Visit site ↗',fr:'Visiter le site ↗'}})+'</span></a>';
@@ -1059,11 +1059,11 @@ function renderText(){
           const i=MS.push(m)-1, pre=m.pre.map(brHTML).join('');
           let inner='<span class="f">'+m.html+'</span>';
           if(O.inter){ const g=(gk==='ja'?(m.ja||m.en):(m.en||m.ja))||'';
-            inner+='<span class="il"><span class="p">'+esc(m.type)+'</span><span class="gl">'+esc(g)+'</span></span>'; }
+            inner+='<span class="il" lang="'+gk+'"><span class="p">'+esc(m.type)+'</span><span class="gl">'+esc(g)+'</span></span>'; }
           return pre+'<span class="m'+(m.type==='X'?' x':'')+(m.cert?' c-'+m.cert:'')+'" data-i="'+i+'">'+inner+'</span>';
         }).join('')+'</span>';
       }).join(' ');
-      return '<p class="seg" id="seg-'+esc(s.id)+'"><a class="sn" href="#seg-'+esc(s.id)+'" aria-haspopup="dialog" title="この箇所を引用 / Cite this passage">§'+esc(s.n)+'</a> <span class="tx">'+body+'</span></p>';
+      return '<p class="seg" id="seg-'+esc(s.id)+'"><a class="sn" href="#seg-'+esc(s.id)+'" aria-haspopup="dialog" title="この箇所を引用 / Cite this passage">§'+esc(s.n)+'</a> <span class="tx" lang="cop">'+body+'</span></p>';
     }).join('');
     return '<section class="ab ab-'+esc(ab.type)+'">'+(AB[ab.type]?'<h3>'+AB[ab.type]+'</h3>':'')+segs+'</section>';
   }).join('');
@@ -1138,9 +1138,15 @@ function statusHTML(){
     '<a href="search.html?doc='+encodeURIComponent(DOC.key)+'">'+tri('この文書を検索','Search this text','Chercher dans ce texte')+'</a>'+
     '<a href="search.html?doc='+encodeURIComponent(DOC.key)+'&amp;view=stats">'+tri('統計','Statistics','Statistiques')+'</a></p></section>';
 }
-function navHTML(){
+/* 前後の文書へのリンク（本文の上と下に 1 つずつ）。2 つの <nav> を読み上げで区別できるよう、言語ごとの名前（aria-label）を付ける */
+function labelDocNavs(){
+  const L={top:{ja:'前後の文書',en:'Previous and next texts',fr:'Textes précédent et suivant'},
+           bottom:{ja:'前後の文書（本文の後）',en:'Previous and next texts (after the text)',fr:'Textes précédent et suivant (après le texte)'}};
+  document.querySelectorAll('nav.docnav[data-pos]').forEach(n=>{ const o=L[n.dataset.pos]; if(o) n.setAttribute('aria-label',o[UL()]||o.en); });
+}
+function navHTML(pos){
   const a=d=>d?'<a href="reader.html?doc='+encodeURIComponent(d.key)+'">'+esc(d.siglum.replace(/^NHC\\s*/,''))+' '+tri(esc(d.ja),esc(d.en),esc(d.fr))+'</a>':'<span></span>';
-  return '<nav class="docnav">'+(NAV.prev?'<span>← '+a(NAV.prev)+'</span>':'<span></span>')+
+  return '<nav class="docnav" data-pos="'+pos+'">'+(NAV.prev?'<span>← '+a(NAV.prev)+'</span>':'<span></span>')+
     '<a class="mid" href="index.html#corpus">'+tri('文書一覧','All texts','Tous les textes')+'</a>'+
     (NAV.next?'<span>'+a(NAV.next)+' →</span>':'<span></span>')+'</nav>';
 }
@@ -1179,9 +1185,9 @@ function showCard(el){
     medium:nlp?tri('medium — NLP の出力そのまま。スクリプトの目安で、正しいとは限らない','medium — NLP output as is; the script’s own rating, not a check','medium — sortie du NLP telle quelle ; estimation du script, non vérifiée')
       :tri('medium — 語彙表・規則による仮の判定','medium — from the core word list or rules','medium — liste de base ou règles'),
     low:tri('low — 推定。要確認','low — a guess; needs checking','low — conjecture, à vérifier')}[m.cert]||esc(m.cert);
-  const rows=[[tri('形態素','Morpheme','Morphème'),'<span class="cop">'+m.html+'</span>']];
+  const rows=[[tri('形態素','Morpheme','Morphème'),'<span class="cop" lang="cop">'+m.html+'</span>']];
   if(D.st.typed){
-    rows.push([tri('レンマ','Lemma','Lemme'), m.lemma?'<span class="cop">'+esc(m.lemma)+'</span>':'<span class="na">'+tri('なし（未判定）','none (unresolved)','aucun (non résolu)')+'</span>']);
+    rows.push([tri('レンマ','Lemma','Lemme'), m.lemma?'<span class="cop" lang="cop">'+esc(m.lemma)+'</span>':'<span class="na">'+tri('なし（未判定）','none (unresolved)','aucun (non résolu)')+'</span>']);
     rows.push([tri('品詞','Part of speech','Catégorie'), m.type?posName(m.type)+' <code>'+esc(m.type)+'</code>':'<span class="na">—</span>']);
     if(m.ja||m.en) rows.push([tri('語義（自動）','Gloss (automatic)','Glose (automatique)'), [m.ja,m.en].filter(Boolean).map(esc).join(' ／ ')]);
     if(m.cert) rows.push([tri('確度','Certainty','Certitude'), certT]);
@@ -1194,7 +1200,7 @@ function showCard(el){
     :tri('ⲍ・ⲯ を補った語。確度 A（語形と文脈から決まるもの）','ⲍ/ⲯ restored; certainty A (determined by word form and context)','ⲍ/ⲯ restitué ; certitude A (forme et contexte)')]);
   const q=m.lemma?'lemma="'+m.lemma+'"':'tok="'+m.form+'"';
   card.innerHTML='<button type="button" class="x" aria-label="close">×</button>'+
-    '<div class="grp cop">'+grp.map(x=>x===m?'<b>'+x.html+'</b>':x.html).join('<span class="dot">·</span>')+'</div>'+
+    '<div class="grp cop" lang="cop">'+grp.map(x=>x===m?'<b>'+x.html+'</b>':x.html).join('<span class="dot">·</span>')+'</div>'+
     '<dl>'+rows.map(r=>'<dt>'+r[0]+'</dt><dd>'+r[1]+'</dd>').join('')+'</dl>'+
     '<p class="lk"><a href="search.html?doc='+encodeURIComponent(DOC.key)+'&amp;kind=aql&amp;q='+encodeURIComponent(q)+'">'+tri('この文書で検索','Search this text','Chercher dans ce texte')+' ('+esc(q)+') →</a></p>';
   card.hidden=false; card.dataset.i=el.dataset.i;
@@ -1240,7 +1246,7 @@ function gotoPageLine(pg, ln){
 function render(){
   const s=D.st, ann=s.typed>0;
   const m=/^NHC\\s+([IVX]+),/.exec(DOC.siglum);
-  shell.innerHTML=navHTML()+
+  shell.innerHTML=navHTML('top')+
     '<div class="eyebrow" style="margin-top:18px">'+(m?'Codex '+m[1]+' · ':'')+esc(DOC.siglum)+(D.locus?' · '+esc(D.locus):'')+'</div>'+
     '<h1>'+tri(esc(DOC.ja),esc(DOC.en),esc(DOC.fr))+'</h1><div class="alt">'+tri(esc(DOC.en),esc(DOC.ja),esc(DOC.en))+'</div>'+
     '<div class="meta">'+esc(D.lang)+' · '+tri(fmt(s.segs)+' セグメント · '+fmt(s.m)+' 形態素'+(ann?' · '+fmt(s.g)+' 語群':''), fmt(s.segs)+' segments · '+fmt(s.m)+' morphemes'+(ann?' · '+fmt(s.g)+' bound groups':''), fmt(s.segs)+' segments · '+fmt(s.m)+' morphèmes'+(ann?' · '+fmt(s.g)+' groupes':''))+'</div>'+
@@ -1258,10 +1264,10 @@ function render(){
       (s.lb?'<label><input type="checkbox" id="oLine"'+(OPT.line?' checked':'')+'>'+tri('行','Lines','Lignes')+'</label>':'')+
       (ann?'<span class="lg">'+tri('語をクリックすると注釈を表示','Click a word for its analysis','Cliquez sur un mot pour son analyse')+'</span>':'')+
     '</div>':'<div style="height:14px"></div>')+
-    '<article id="text" class="text"></article>'+navHTML();
+    '<article id="text" class="text"></article>'+navHTML('bottom');
   const bind=(id,k)=>{ const e=document.getElementById(id); if(e) e.addEventListener('change',()=>{ OPT[k]=e.checked; saveOpt(); renderText(); }); };
   bind('oInter','inter'); bind('oCert','cert'); bind('oCuts','cuts'); bind('oPage','page'); bind('oLine','line');
-  renderText(); setTitle(); gotoHash();
+  renderText(); setTitle(); labelDocNavs(); gotoHash();
   withTools(t=>t.fill(shell));
 }
 /* 引用（assets/viewer-tools.js）。§ を押すと、これまでどおりその箇所へ移る（ハッシュの更新）のに加えて、引用のメニューを開く。
@@ -1313,7 +1319,7 @@ document.addEventListener('click',e=>{
   const m=e.target.closest('#text .m'); if(m) showCard(m);
 });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') hideCard(); });
-document.addEventListener('nhc:lang',()=>{ if(!D) return; setTitle(); if(OPT.inter) renderText(); });
+document.addEventListener('nhc:lang',()=>{ if(!D) return; setTitle(); labelDocNavs(); if(OPT.inter) renderText(); });
 window.addEventListener('hashchange',gotoHash);
 </script>
 """

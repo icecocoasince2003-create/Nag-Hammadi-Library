@@ -1,0 +1,9 @@
+{
+  "_comment": "語釈の点検（scripts/check_tei.py の 11.）で、語釈と辞書の語義に使わない語。rules の 1 項目が 1 つの規則で、terms が使わない語の一覧、note がその理由。比べるときは大文字と小文字・全角と半角・’ と ' の違いを無視し、語釈の文字列の中にその語が含まれていれば失敗にする（正規表現ではない）。調べるのは語釈の文字列だけで、編集方針などの説明の文章は調べない。規則の足し方は CONTRIBUTING.md の「10.」。",
+  "rules": [
+    {
+      "terms": ["目的語標識", "目的語標示", "目的格", "対格", "object marker", "direct object", "accusative", "marqueur d'objet", "objet direct", "accusatif"],
+      "note": "この版は文法関係や目的語の標示を注釈しない。ⲛ-／ⲙⲙⲟ= は使い方にかかわらず形のとおり前置詞（PREP）とし、語釈は形の説明にとどめる（edition.html「この版で扱わないこと」）"
+    }
+  ]
+}

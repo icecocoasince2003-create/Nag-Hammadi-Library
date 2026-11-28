@@ -142,7 +142,8 @@ nag_hammadi_library/
     ├─ insert_breaks.py    写本の頁(<pb>)・行(<lb>)の区切りを TSV から TEI に入れる(既定は表示だけ、--write で書き込む)
     ├─ split_segments.py   セグメント(<s>)を TSV で指定した位置で分ける(案。まだ実データには使わない)
     ├─ make_og_image.py    共有用の画像 image/og-image.png を作る(rsvg-convert が要る)
-    ├─ check_tei.py        TEI の点検(ポインタの切れ・以前の書き方・見出しとレンマへのコプト文字以外の文字の混入など)。--schema でスキーマ検証も
+    ├─ check_tei.py        TEI の点検(ポインタの切れ・以前の書き方・見出しとレンマへのコプト文字以外の文字の混入・語釈に使わない語など)。--schema でスキーマ検証も
+    ├─ gloss_rules.json    語釈と辞書の語義に使わない語の一覧(check_tei.py が読む。CONTRIBUTING.md の 10.)
     ├─ check_spec.py       符号化の仕様(docs/ANNOTATION_SPEC.md)への適合の点検
     ├─ coptic_nlp_tei.py   Coptic SCRIPTORIUM の NLP で語群・形態素・品詞・レンマを付け直し、構文を CoNLL-U に出す
     ├─ leiden_to_tei.py    ライデン記法の翻刻を TEI(EpiDoc の要素)にする
@@ -423,6 +424,22 @@ Cinzel はロゴだけ、Inter は DM Sans にないギリシア文字の予備�
 `COSMOS_REDESIGN.md`)。オフライン公開する場合はこれらをローカルにセルフホストしてください
 (Coptic字形が無い環境では汎用セリフにフォールバックします)。
 
+### 外部のスクリプトの版とハッシュ
+
+CDN から読み込むスクリプトは、正確な版に固定し、ファイルのハッシュ（SRI、`integrity`）と `crossorigin="anonymous"` を付けて読み込みます。
+CDN のファイルが差し替えられても、ハッシュが合わなければブラウザーは実行しません（2026-11-23 に固定）。
+
+| スクリプト | 版・URL | 読み込む場所 | ハッシュを書く場所 |
+|---|---|---|---|
+| supabase-js（ログイン・投稿） | 2.119.2（`https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2/dist/umd/supabase.js`。それまでの `@2` がこの日に指していた版） | `assets/community.js`（ログインの機能を使うページ） | `assets/community-config.js` の `supabaseJsIntegrity`（`community.js` の既定値も同じ） |
+| OpenSeadragon（写本の写真のパネル） | 4.1.1（cdnjs） | `eugnostos.html`・`republic.html`（パネルを初めて開いたとき） | 各ページの `loadOSD()` |
+
+版を上げるときは、URL とハッシュを一緒に変えます。ハッシュは、その版のファイルを取得して
+`openssl dgst -sha384 -binary ファイル | openssl base64 -A` で求め、先頭に `sha384-` を付けます（jsDelivr の
+`https://data.jsdelivr.com/v1/packages/npm/<パッケージ>@<版>?structure=flat` や cdnjs の API が示すハッシュと照らし合わせると確かです）。
+jsDelivr は、版だけの URL（`…@2.119.2`）では自動で縮小したファイルを返すので、パッケージに入っているファイルの名前まで書きます。
+Google アナリティクス（`gtag.js`）と Google Fonts の CSS は、配信元が中身を随時変えるため、ハッシュを付けられません。
+
 ## 版とリリースの作り方
 
 版の情報は `data/release.json` にまとめています（版番号 `version`、リリースの日 `date`、その版の DOI `doi`、すべての版をまとめる DOI
@@ -594,7 +611,8 @@ TEI に無い独自の要素・属性は使っていません。
 以前の書き方のファイルは `python3 scripts/migrate_tei_markup.py ファイル名 --write` で直せます（`--write` を付けなければ、何が変わるかを表示するだけです）。
 
 **点検のしかた。** データを直したら、次を実行してください。スキーマでは分からない誤り
-（訳や語釈の指す先が無い、同じ `<s>` に訳が 2 つある、以前の書き方が残っている、など）を報告します。
+（訳や語釈の指す先が無い、同じ `<s>` に訳が 2 つある、以前の書き方が残っている、語釈に使わない語
+（`scripts/gloss_rules.json`。この版は文法関係や目的語の標示を注釈しないので、それを表す語を語釈と辞書に入れない）が入っている、など）を報告します。
 
 ```
 python3 scripts/check_tei.py

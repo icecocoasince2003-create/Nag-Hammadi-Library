@@ -336,9 +336,11 @@
     };
   }
 
-  function loadScript(src) {
+  /* integrity（SRI）を渡すと、ファイルのハッシュが合わないときに読み込まない（CDN のファイルが差し替えられても実行しない） */
+  function loadScript(src, integrity) {
     return new Promise(function (res, rej) {
       var s = document.createElement("script"); s.src = src; s.async = true;
+      if (integrity) { s.integrity = integrity; s.crossOrigin = "anonymous"; }
       s.onload = res; s.onerror = function () { rej(new Error("cannot load " + src)); };
       document.head.appendChild(s);
     });
@@ -352,7 +354,10 @@
     return {
       kind: "live",
       init: function () {
-        return loadScript(CFG.supabaseJs || "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2").then(function () {
+        // 既定は community-config.js と同じ版・ハッシュ（設定に supabaseJs があればそちらと、その supabaseJsIntegrity を使う）
+        var js = CFG.supabaseJs ? [CFG.supabaseJs, CFG.supabaseJsIntegrity] :
+          ["https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2/dist/umd/supabase.js", "sha384-A97u3Qnt9GZHURO9YJZRe7VQgGUeFzcv6I1oIGnUTxQrCxnpQMwR0/G8F2zt9abZ"];
+        return loadScript(js[0], js[1]).then(function () {
           sb = window.supabase.createClient(CFG.supabaseUrl, CFG.supabaseAnonKey,
             { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } });
           sb.auth.onAuthStateChange(function () { emit(); });

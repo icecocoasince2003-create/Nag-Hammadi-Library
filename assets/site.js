@@ -6,7 +6,8 @@
      ページ間で引き継ぎます。最初に開くときの言語は、URL の ?lang=（ja・en・fr）＞ 保存値 ＞ ブラウザーの言語の順で決めます
      （ブラウザーの言語が ja・en・fr のどれでもなければ英語）。各ページの <head> の 1 行スクリプトが、同じ順で描画前に反映します。
        * 三言語対応ページ（<html data-i18n="full">）: html[data-lang] を ja/en/fr に切替
-       * 既存のビュワー（日英のみ）: ページ内の #langBtn / #tlBtn を操作して同期
+       * 既存のビュワー（data-i18n="full" の無いページ）: ページの window.NHC_viewerLang で ja / en / fr に切替
+         （eugnostos.html・republic.html）。それの無い日英だけのページは、ページ内の #langBtn / #tlBtn を操作して同期
          （French を選ぶと UI は英語、語釈・対訳はフランス語になります）
    - 表示モード（ライト／ダーク）に対応したページ（<html data-modes="light dark">）では、
      ナビ右側に切替ボタンを出し、選択を localStorage に保存します（配色は assets/cosmos.css）。
@@ -32,9 +33,9 @@
     { id: "news",   href: "index.html#news",     ja: "NEWS",            en: "News",            fr: "Actualités" }
   ];
   var SITE = {
-    ja: { name: "Sheneset", sub: "ナグ・ハマディ写本コーパス", nav: "サイト内ナビゲーション", panel: "文書メニュー（表示・ツール）" },
-    en: { name: "Sheneset", sub: "Digital TEI edition of the Nag Hammadi Codices", nav: "Site navigation", panel: "Document menu (display and tools)" },
-    fr: { name: "Sheneset", sub: "Édition numérique TEI des codices de Nag Hammadi", nav: "Navigation du site", panel: "Menu du document (affichage et outils)" }
+    ja: { name: "Sheneset", sub: "ナグ・ハマディ写本コーパス", nav: "サイト内ナビゲーション", panel: "文書メニュー（表示・ツール）", menu: "メニュー" },
+    en: { name: "Sheneset", sub: "Digital TEI edition of the Nag Hammadi Codices", nav: "Site navigation", panel: "Document menu (display and tools)", menu: "Menu" },
+    fr: { name: "Sheneset", sub: "Édition numérique TEI des codices de Nag Hammadi", nav: "Navigation du site", panel: "Menu du document (affichage et outils)", menu: "Menu" }
   };
 
   function stored() {
@@ -240,6 +241,44 @@
     });
   }
 
+  /* ---- 狭い画面（幅 760px 以下）のサイトメニュー ----
+     ナビのリンク（NAV の 8 項目）は、広い画面では横に並べ、幅 760px 以下では 2 段目の〈メニュー ▾〉ボタンにまとめる
+     （以前は 2 段目を横にスクロールさせていたが、幅 390px では「グノーシス主義とは」から先が画面の外にあり、気づきにくかった）。
+     WAI-ARIA の disclosure の作法: ボタンは aria-expanded と aria-controls を持ち、押すとリンクの一覧がナビのすぐ下に縦に並んで開く。
+     リンクへは普通に Tab で進む。Esc（フォーカスはボタンに戻る）・一覧の外を押す・フォーカスがナビの外に出る・リンクを選ぶ、で閉じる。
+     幅 761px 以上ではボタンを出さず、一覧は常に見える。境界の 760px は assets/site.css の 1) の @media とそろえること。 */
+  var MENU_NARROW = "(max-width: 760px)";
+  var menuOpen = false;
+  function setMenu(open, refocus) {
+    var nav = document.getElementById("sitebar"), b = document.getElementById("sbMenu");
+    menuOpen = !!open;
+    if (nav) nav.classList.toggle("menu-open", menuOpen);
+    if (b) {
+      b.setAttribute("aria-expanded", String(menuOpen));
+      if (refocus) b.focus();
+    }
+  }
+  function wireMenuGlobal() {
+    var nav = document.getElementById("sitebar");
+    function outside(t) { return !nav || !nav.contains(t); }
+    document.addEventListener(window.PointerEvent ? "pointerdown" : "mousedown", function (e) {
+      if (menuOpen && outside(e.target)) setMenu(false);
+    });
+    document.addEventListener("focusin", function (e) {
+      if (menuOpen && outside(e.target)) setMenu(false);
+    });
+    // Esc は捕捉の段階で受ける（ビュワーのドロワーなど、Esc で閉じるほかのものには渡さない）
+    document.addEventListener("keydown", function (e) {
+      if (e.key !== "Escape" || !menuOpen) return;
+      e.preventDefault(); e.stopPropagation();
+      setMenu(false, !outside(document.activeElement));
+    }, true);
+    if (window.matchMedia) {
+      var mq = window.matchMedia(MENU_NARROW), off = function () { if (!mq.matches) setMenu(false); };
+      if (mq.addEventListener) mq.addEventListener("change", off); else if (mq.addListener) mq.addListener(off);
+    }
+  }
+
   function pageId() {
     var p = (location.pathname.split("/").pop() || "index.html").toLowerCase();
     if (p === "" || p === "index.html") return "home";
@@ -263,8 +302,10 @@
         '" aria-label="' + esc(S.panel) + '" title="' + esc(S.panel) + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" ' +
         'stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>' : "") +
       '<a class="sb-brand" href="index.html"><img src="image/icon.svg" alt="" width="26" height="26" onerror="this.style.display=\'none\'">' +
-      '<span class="sb-name"><b><span class="cop">ϣⲉⲛⲉⲥⲏⲧ</span>' + esc(S.name) + '</b><small>' + esc(S.sub) + '</small></span></a>' +
-      '<div class="sb-links">' + NAV.map(function (n) {
+      '<span class="sb-name"><b><span class="cop" lang="cop">ϣⲉⲛⲉⲥⲏⲧ</span>' + esc(S.name) + '</b><small>' + esc(S.sub) + '</small></span></a>' +
+      '<div class="sb-menu"><button type="button" class="sb-menubtn" id="sbMenu" aria-expanded="' + menuOpen + '" aria-controls="sbLinks">' +
+        '<span>' + esc(S.menu) + '</span>' + CARET_ICON + '</button></div>' +
+      '<div class="sb-links" id="sbLinks">' + NAV.map(function (n) {
         return '<a class="sb-link" data-nav="' + n.id + '" href="' + n.href + '"' + (n.id === cur ? ' aria-current="page"' : "") + '>' + esc(n[L] || n.ja) + '</a>';
       }).join("") + '</div>' +
       '<div class="sb-tools">' +
@@ -276,6 +317,10 @@
         '<a class="sb-auth" id="sbAuth" href="#" hidden></a>' +
       '</div>';
     wireLangMenu(nav);
+    nav.classList.toggle("menu-open", menuOpen);
+    nav.querySelector("#sbMenu").addEventListener("click", function () { setMenu(!menuOpen); });
+    // 一覧のリンクを選んだら閉じる（HOME の「NEWS」のように同じページの中へ移るときのため）
+    nav.querySelector("#sbLinks").addEventListener("click", function (e) { if (e.target.closest("a")) setMenu(false); });
     var mb = nav.querySelector(".sb-mode");
     if (mb) mb.addEventListener("click", function () { setMode(curMode === "light" ? "dark" : "light"); });
     if (panel) {
@@ -341,8 +386,12 @@
     });
   }
 
-  /* ---- 既存（日英）ページとの同期 ---- */
+  /* ---- 既存（日英）ページとの同期 ----
+     画面も三言語にしたビュワー（eugnostos.html・republic.html）は window.NHC_viewerLang(ja / en / fr) を用意している。
+     あればそれを呼び、画面・語釈・対訳の言語をまとめて切り替える（ボタンは押さない）。
+     無いページ（日英だけのページ）は従来どおり #langBtn（画面の日英）と #tlBtn（語釈・対訳の言語）を押して合わせる */
   function syncLegacy(target) {
+    if (typeof window.NHC_viewerLang === "function") { window.NHC_viewerLang(target); return; }
     var lb = document.getElementById("langBtn");
     if (!lb) return;
     var wantUI = target === "ja" ? "ja" : "en";
@@ -419,6 +468,7 @@
     }
     render(nav);
     wireLangMenuGlobal();
+    wireMenuGlobal();
     wireXmlMenus();
     followSegHash();
   }
