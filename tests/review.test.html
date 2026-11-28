@@ -37,7 +37,7 @@ async function load(){
   frame.src = "../review.html?ns=test&lang=ja";
   await new Promise(r => { frame.onload = r; });
   W = frame.contentWindow; D = frame.contentDocument;
-  A = await waitFor(() => W.ReviewApp && W.ReviewApp.ST.sample && W.ReviewApp.ST.intros && W.ReviewApp.ST.thomas && W.ReviewApp.ST.breaks && W.ReviewApp, "app ready", 20000);
+  A = await waitFor(() => W.ReviewApp && ["sample", "intros", "thomas", "breaks", "pos"].every(k => W.ReviewApp.ST[k]) && W.ReviewApp, "app ready", 20000);
 }
 function setWho(v){ const el = D.getElementById("reviewer"); el.value = v; el.dispatchEvent(new W.Event("input", {bubbles: true})); }
 const curItem = () => { const st = A.state(); return st.CUR.items[st.VIEW[st.VI]]; };
@@ -48,7 +48,7 @@ const T = [];
 const test = (name, fn) => T.push([name, fn]);
 
 test("an unchanged queue is written back byte for byte (all four files)", async () => {
-  for(const id of ["intros", "sample", "thomas", "breaks"]){
+  for(const id of ["intros", "sample", "thomas", "breaks", "pos"]){
     const s = A.ST[id], raw = await text("../" + s.q.file);
     eq(A.exportText(s), raw, id);
     // 書き換えがあるときに通る道（読んで書き戻す）でも同じになること
@@ -149,6 +149,23 @@ test("① editing an introduction keeps the JSON layout; reviewed_by goes to the
   eq(obj.texts[it.key].reviewed, true, "reviewed"); eq(obj.texts[it.key].summary.fr, "Résumé de test.", "summary.fr"); eq(obj.texts[it.key].reviewed_by, "T1", "reviewer");
   Object.keys(orig.texts).filter(k => k !== it.key).forEach(k => eq(JSON.stringify(obj.texts[k]), JSON.stringify(orig.texts[k]), k + " unchanged"));
   ["_comment", "currents", "references"].forEach(k => eq(JSON.stringify(obj[k]), JSON.stringify(orig[k]), k + " unchanged"));
+});
+
+test("⑤ a decision queue with fields: the choice and the status are written; a row without a segment has no context", async () => {
+  await openAt("pos", 1);
+  ok(!D.querySelector("#ctxBox .ctx"), "no context for a form row");
+  const s = A.ST.pos, it = curItem();
+  setField('#item select[data-col="暫定版にも当てはめるか"]', "はい");
+  await sleep(150);
+  A.setStatus("承認");
+  eq((s.edits[it.key] || {})["暫定版にも当てはめるか"], "はい", "choice stored");
+  eq(s.edits[it.key]["状態"], "承認", "status stored");
+  const t = W.ReviewCore.parseTSV(A.exportText(s)), row = t.rows[it.row];
+  eq(row[t.header.indexOf("暫定版にも当てはめるか")], "はい", "exported choice");
+  eq(t.header[t.header.length - 1], "確認者", "reviewer column");
+  const place = s.items.find(x => W.ReviewCore.cell(s.table, s.table.rows[x.row], "種類") === "箇所");
+  await openAt("pos", place.n);
+  await waitFor(() => D.querySelector("#ctxBox .ctx mark"), "the word is marked in its segment");
 });
 
 test("the input survives a reload (localStorage, per queue and file hash)", async () => {

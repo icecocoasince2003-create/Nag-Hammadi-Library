@@ -69,6 +69,7 @@ cd Nag-Hammadi-Library
 | 文書ごとの解題（ビュワーの「この文書について」） | `data/intros.json`（確かめた項目の `reviewed` を `true` にすると表示される。確かでない点は `todo` に書く） | `python3 -m json.tool data/intros.json > /dev/null`、ブラウザーで確かめる |
 | 写本ファクシミリ（IIIF）の画像 | `iiif/<文書名>.json` の `pages[].source`（[iiif/README.md](iiif/README.md)） | — |
 | 版番号・DOI | `data/release.json`・`CITATION.cff`・`.zenodo.json`（README の「版とリリースの作り方」） | `python3 scripts/check_release.py`・`python3 scripts/build_site.py` |
+| 本文ビュワーと編集方針のページに出す、自動注釈の精度 | `data/accuracy.json`（数値を選んで `approved` を `true` にしたときだけ出る。`false` が既定） | `python3 -m json.tool data/accuracy.json > /dev/null`、ブラウザーで確かめる |
 | 確認待ちの作業（解題の確認、精度の抜き取り、語録の区切り、長いセグメントの切れ目など） | `review.html` で判断して書き出したファイル（キューの定義は `data/review_queues.json`） | 分担したら `python3 scripts/merge_review.py`、そのあとはキューごとの手順（README の「確認作業の画面」） |
 
 守ってほしいこと:

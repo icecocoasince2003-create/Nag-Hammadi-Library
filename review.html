@@ -458,7 +458,7 @@ function renderPos(){
 function kvRows(s, it, cols, cop){
   return cols.map(c => '<tr><th scope="row">' + esc(c) + "</th><td" + (cop && cop.indexOf(c) >= 0 ? ' class="cop" lang="cop"' : "") + ">" + esc(val(s, it, c)) + "</td></tr>").join("");
 }
-const COPCOLS = ["前後の文脈", "語形", "自動のレンマ", "直前の数語", "始まりの数語", "前の数語", "後の数語"];
+const COPCOLS = ["前後の文脈", "語形", "レンマ", "自動のレンマ", "直前の数語", "始まりの数語", "前の数語", "後の数語"];
 
 async function renderItem(){
   const s = CUR, box = $("#item");
@@ -474,16 +474,15 @@ async function renderItem(){
   box.innerHTML = '<div><h3>' + esc(L2("文脈", "Context")) + ' — <span class="l-ja">' + esc("項目 " + it.n) + '</span><span class="l-en">' + esc("item " + it.n) + "</span>" + (done ? " ✓" : "") + '</h3><div id="ctxBox"></div>' +
     '<table class="kv">' + kvRows(s, it, q.show, COPCOLS) + "</table></div>" +
     '<div><h3>' + esc(L2("判断", "Decision")) + '</h3><div class="form" id="form"></div></div>';
-  if(q.seg && q.w) renderContext(s, it, $("#ctxBox"));
+  if(q.seg && q.w && val(s, it, q.seg)) renderContext(s, it, $("#ctxBox"));   // セグメントを指さない行（語形の行など）は文脈なし
   if(q.kind === "judge") await renderJudge(s, it);
-  else renderStatus(s, it);
+  else await renderStatus(s, it);
 }
 
 /* ② のような「列に答えを書く」キュー */
-async function renderJudge(s, it){
-  const q = s.q, f = $("#form"), pos = await posList(), filled = isDone(s, it), show = filled || PEEK;
-  if(!CUR || CUR.items[VIEW[VI]] !== it) return;
-  f.innerHTML = q.fields.map((fd, k) => {
+/* 書き込む欄（fields）。type: pos = 品詞の一覧、lemma = 辞書の見出しを候補に、choice = options から選ぶ、text = 自由な文字 */
+function fieldsHTML(s, it, pos){
+  return (s.q.fields || []).map((fd, k) => {
     const v = val(s, it, fd.column) || "", id = "fd" + k;
     if(fd.type === "pos") return '<label class="f" for="' + id + '">' + esc(fd.column) + '<select id="' + id + '" data-col="' + esc(fd.column) + '"><option value="">—</option>' +
       (fd.special || []).map(x => '<option value="' + esc(x) + '"' + (v === x ? " selected" : "") + ">" + esc(x === "?" ? L2("? 判定不能", "? undecidable") : x) + "</option>").join("") +
@@ -491,8 +490,16 @@ async function renderJudge(s, it){
       (v && v !== "?" && !pos.some(p => p.tag === v) ? '<option value="' + esc(v) + '" selected>' + esc(v) + "</option>" : "") + "</select></label>";
     if(fd.type === "lemma") return '<label class="f" for="' + id + '">' + esc(fd.column) + '<input type="text" class="cop" lang="cop" id="' + id + '" data-col="' + esc(fd.column) + '" list="lemmaList" value="' + esc(v) + '" autocomplete="off" spellcheck="false"></label>' +
       '<div class="row">' + (fd.special || []).map(x => '<button type="button" class="btn sp" data-set="' + esc(fd.column) + '" data-v="' + esc(x) + '">' + esc(x === "-" ? L2("- レンマなし", "- no lemma") : L2("? 判定不能", "? undecidable")) + "</button>").join("") + "</div>";
-    return '<label class="f" for="' + id + '">' + esc(fd.column) + '<input type="text" id="' + id + '" data-col="' + esc(fd.column) + '" value="' + esc(v) + '" autocomplete="off"></label>';
-  }).join("") +
+    if(fd.type === "choice") return '<label class="f" for="' + id + '">' + esc(fd.column) + '<select id="' + id + '" data-col="' + esc(fd.column) + '"><option value="">—</option>' +
+      (fd.options || []).map(x => '<option value="' + esc(x) + '"' + (v === x ? " selected" : "") + ">" + esc(x) + "</option>").join("") +
+      (v && (fd.options || []).indexOf(v) < 0 ? '<option value="' + esc(v) + '" selected>' + esc(v) + "</option>" : "") + "</select></label>";
+    return '<label class="f" for="' + id + '">' + esc(fd.column) + '<input type="text" id="' + id + '" data-col="' + esc(fd.column) + '" value="' + esc(v) + '" autocomplete="off" spellcheck="false"></label>';
+  }).join("");
+}
+async function renderJudge(s, it){
+  const q = s.q, f = $("#form"), pos = await posList(), filled = isDone(s, it), show = filled || PEEK;
+  if(!CUR || CUR.items[VIEW[VI]] !== it) return;
+  f.innerHTML = fieldsHTML(s, it, pos) +
     '<div class="autobox' + (show ? "" : " hidden") + '" id="auto">' + (show ? autoHTML(s, it) :
       esc(L2("自動の答え（" + q.blind.join("・") + "）は、上の必須の欄を入れるまで隠してあります。", "The automatic answer (" + q.blind.join(", ") + ") stays hidden until the required fields above are filled.")) +
       ' <button type="button" class="btn sp" id="peekBtn">' + esc(L2("先に見る", "Show it anyway")) + "</button>") + "</div>" +
@@ -508,13 +515,16 @@ function autoHTML(s, it){
 }
 
 /* ③④ のような「承認・却下・保留」のキュー */
-function renderStatus(s, it){
+async function renderStatus(s, it){
   const q = s.q, f = $("#form"), V = CONF.status_values, cur = val(s, it, q.status), corr = q.corrected ? val(s, it, q.corrected) : "";
+  const pos = (q.fields || []).some(fd => fd.type === "pos") ? await posList() : null;
+  if(!CUR || CUR.items[VIEW[VI]] !== it) return;
   const btn = (v, k, ja, en) => '<button type="button" class="btn' + (cur === v ? " on" : "") + '" data-status="' + esc(v) + '" title="' + k + '" aria-pressed="' + (cur === v) + '">' + esc(L2(ja, en)) + "</button>";
   f.innerHTML = '<p class="stnow">' + esc(L2("いまの状態: ", "Status: ")) + "<b>" + esc(cur || "—") + "</b>" + (corr ? esc(L2("（直した位置 w=" + corr + "）", " (corrected to w=" + corr + ")")) : "") + "</p>" +
     '<div class="stbtns">' + btn(V.approve, "a", "承認", "Approve") + btn(V.reject, "r", "却下", "Reject") + btn(V.hold, "h", "保留", "Hold") +
     '<button type="button" class="btn" data-status="' + esc(q.pending) + '" title="u">' + esc(L2("未処理に戻す", "Back to open")) + "</button></div>" +
     (corr ? '<p class="ctxnote">' + esc(L2("位置を直して承認しています。", "Approved with a corrected place.")) + ' <button type="button" class="btn sp" id="uncorr">' + esc(L2("直した位置を取り消す", "Undo the correction")) + "</button></p>" : "") +
+    (q.fields ? '<div class="form">' + fieldsHTML(s, it, pos) + "</div>" : "") +
     (val(s, it, q.reviewer) ? '<p class="ctxnote">' + esc(L2("確認者: ", "Reviewer: ") + val(s, it, q.reviewer)) + "</p>" : "");
 }
 function setStatus(v){
