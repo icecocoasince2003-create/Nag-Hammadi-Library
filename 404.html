@@ -17,21 +17,24 @@
 <link rel="apple-touch-icon" href="image/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400;1,8..60,500&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600&display=swap" rel="stylesheet">
 <style>
-:root{ --ui:'Inter','Noto Sans JP',system-ui,sans-serif; }
+:root{ --ui:'DM Sans','Inter','Noto Sans JP',system-ui,sans-serif; }
 *{box-sizing:border-box} html,body{margin:0}
 body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
 .page{max-width:760px}
 .nf{display:flex; flex-direction:column; align-items:center; text-align:center; padding:28px 0 8px}
-.nf img{width:168px; height:168px; border-radius:50%; object-fit:cover; object-position:center 22%;
-  background:radial-gradient(circle at 50% 38%,#2b2856,#17152f 72%); border:1px solid rgba(212,175,106,.35)}
+/* ゲンゲンは HOME と同じ四角い額縁（ずらした影付き）。地は HOME のライトモードと同じ紺の光 */
+.nf img{width:168px; height:168px; border-radius:0; object-fit:cover; object-position:center 22%;
+  background:radial-gradient(circle at 50% 38%,#2a3870,#1c2644 72%); border:1px solid rgba(200,168,112,.55);
+  box-shadow:8px 8px 0 -1px rgba(200,168,112,.16)}
+html[data-mode="light"] .nf img{border-color:rgba(122,92,30,.55); box-shadow:8px 8px 0 -1px rgba(122,92,30,.18)}
 .nf h1{margin:22px 0 6px}
 .nf .lede{margin:0 auto}
-.nf .path{font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.84rem; color:var(--ink-faint); word-break:break-all; margin:10px 0 0}
+.nf .path{font-family:var(--mono); font-size:.8rem; color:var(--ink-faint); word-break:break-all; margin:10px 0 0}
 .nf .path:empty{display:none}
 .go{display:flex; flex-wrap:wrap; justify-content:center; gap:10px 14px; list-style:none; padding:0; margin:26px 0 0}
-.go a{display:inline-block; padding:9px 18px; border:1px solid var(--line); border-radius:999px; color:var(--ink);
+.go a{display:inline-block; padding:9px 18px; border:1px solid var(--line); border-radius:2px; color:var(--ink);
   text-decoration:none; font-size:.92rem; background:var(--hi)}
 .go a:hover, .go a:focus-visible{border-color:var(--gold); color:var(--gold-bright); outline:none}
 </style>

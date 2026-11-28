@@ -30,16 +30,16 @@
 <link rel="apple-touch-icon" href="image/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600&family=Noto+Sans+Coptic&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400;1,8..60,500&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600&family=Noto+Sans+Coptic&display=swap" rel="stylesheet">
 <style>
-:root{ --ui:'Inter','Noto Sans JP',system-ui,sans-serif; --cop:'Noto Sans Coptic',serif; }
+:root{ --ui:'DM Sans','Inter','Noto Sans JP',system-ui,sans-serif; --cop:'Noto Sans Coptic',serif; }
 *{box-sizing:border-box}
 html,body{margin:0}
 body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
 .cop{font-family:var(--cop)}
 /* 案内役のゲンゲン（節の頭に小さく。ページのアイコンには使わない） */
-img.gg{float:right; width:72px; height:72px; border-radius:50%; object-fit:cover; object-position:center 22%;
-  border:1px solid rgba(212,175,106,.45); margin:4px 0 10px 16px}
+img.gg{float:right; width:72px; height:72px; border-radius:0; object-fit:cover; object-position:center 22%;
+  border:1px solid rgba(200,168,112,.45); box-shadow:4px 4px 0 -1px rgba(200,168,112,.16); margin:4px 0 10px 16px}
 .gwrap{overflow-x:auto; margin:12px 0 0; -webkit-overflow-scrolling:touch}
 table.gt{border-collapse:collapse; font-size:.86rem; min-width:min(100%,520px)}
 table.gt th, table.gt td{text-align:left; padding:6px 12px 6px 0; border-bottom:1px solid var(--line); vertical-align:top; color:var(--ink-soft); line-height:1.6}
@@ -51,10 +51,11 @@ table.gt code{font-size:.8rem; color:var(--gold-bright)}
 table.gt tr.grp td{border-top:1px solid var(--line-2)}
 .prose .gnote{font-size:.84rem; color:var(--ink-faint); line-height:1.8; max-width:74ch}
 .prose ul.tight li{line-height:1.8; margin-bottom:.15em}
-.pill{display:inline-block; font-size:.66rem; letter-spacing:.06em; padding:2px 9px; border-radius:999px; margin-right:6px;
-  background:var(--hi); color:var(--ink-faint); border:1px solid var(--line); white-space:nowrap; vertical-align:.1em}
-.pill.on{background:var(--gold); color:var(--on-gold); border-color:var(--gold); font-weight:600}
-.pill.draft{background:transparent; color:var(--lapis); border-color:var(--lapis); font-weight:600}
+/* 状態の札（HOME の文書一覧と同じ見た目: 角のない四角、等幅の大文字） */
+.pill{display:inline-block; font-family:var(--mono); font-size:.64rem; letter-spacing:.06em; text-transform:uppercase; padding:2px 8px; border-radius:0; margin-right:6px;
+  background:transparent; color:var(--ink-faint); border:1px solid var(--line-2); white-space:nowrap; vertical-align:.1em}
+.pill.on{background:var(--gold); color:var(--on-gold); border-color:var(--gold); font-weight:500}
+.pill.draft{background:transparent; color:var(--lapis); border-color:var(--lapis); font-weight:500}
 .pill.plain{background:transparent; color:var(--ink-soft); border-color:var(--ink-faint)}
 /* 例文 */
 .prose p.ex-line{font-family:var(--cop); font-size:1.5rem; line-height:1.9; color:var(--ink); margin:14px 0 4px; overflow-wrap:anywhere; max-width:none}
@@ -66,7 +67,7 @@ table.gt tr.grp td{border-top:1px solid var(--line-2)}
 .load, .prose p.load{color:var(--ink-faint); font-size:.86rem}
 .mark-sample{font-family:var(--cop); font-size:1.08rem; color:var(--ink)}
 .mark-sample .amb{text-decoration:underline dotted var(--gold-soft); text-decoration-thickness:1.5px; text-underline-offset:3px}
-.mark-sample .low{box-shadow:inset 0 -.38em 0 rgba(207,147,166,.32)}
+.mark-sample .low{box-shadow:inset 0 -.38em 0 rgba(208,154,138,.32)}
 .mark-sample .x{text-decoration:underline wavy var(--rose); text-underline-offset:.25em}
 .mark-sample .supA{text-decoration:underline dotted var(--gold); text-underline-offset:.22em}
 .mark-sample .supB{text-decoration:underline dashed var(--rose)}

@@ -478,8 +478,10 @@ index.html(目次:全52文書)
 > Webサーバ経由で開いてください(『国家』のビュワーは、画面の「XMLを開く」/ドラッグ＆ドロップで本文・辞書・ギリシア語・
 > カタログを読み込むこともできます。ファイルの種類は中身から自動判別します)。
 
-フォントは Google Fonts(Spectral / Inter / Noto Sans JP / Noto Serif JP / **Noto Sans Coptic**)を
-読み込みます。オフライン公開する場合はこれらをローカルにセルフホストしてください
+フォントは Google Fonts(Source Serif 4 / DM Sans / IBM Plex Mono / Cinzel / Inter / Noto Sans JP / Noto Serif JP /
+**Noto Sans Coptic**)を読み込みます。見出しは Source Serif 4、本文と UI は DM Sans、ラベル・日付・番号は IBM Plex Mono、
+Cinzel はロゴだけ、Inter は DM Sans にないギリシア文字の予備です(配色と書体の決まりは `assets/cosmos.css` の冒頭と
+`COSMOS_REDESIGN.md`)。オフライン公開する場合はこれらをローカルにセルフホストしてください
 (Coptic字形が無い環境では汎用セリフにフォールバックします)。
 
 ### 外部のスクリプトの版とハッシュ
