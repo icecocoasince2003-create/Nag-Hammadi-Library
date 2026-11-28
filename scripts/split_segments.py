@@ -23,6 +23,14 @@ source/nhc_fulltext_split/proposals/README_ja.md）。このスクリプトは�
 
   1 つのセグメントを何か所でも分けられる（同じ seg_id の行を並べる）。
 
+提案の表をそのまま渡すとき（列「状態」のある TSV。source/nhc_fulltext_split/proposals/ の long_segment_breaks.tsv・
+thomas_sayings.tsv と、確認作業の画面 review.html で書き出したもの）:
+  * 状態が「承認」か「修正して承認」の行だけを当てはめる。ほかの状態（案・却下・保留など）の行は当てはめない（件数を表示する）
+  * 列「修正した位置」に値があれば、w の代わりにそれを使う（このとき phr・form の照合はしない。元の位置のための値なので）
+  * 列「種別」があれば（thomas_sayings.tsv）、「語録の始まり」の行だけを分け目にする（序文・語録の途中の行は分け目ではない）
+  * 列 doc の無い表（thomas_sayings.tsv）は、--doc で文書を渡す（例 --doc II-2）
+  * ほかの列（§・前の数語・根拠・確認者など）は読み飛ばす
+
 分けたあとの ID と番号:
   * 最初の部分は、元の xml:id と @n のまま（リンク #seg-<元の id>、投稿・ブックマークの seg_id、引用の「§12」は、
     これまでどおり同じ位置（元のセグメントの始まり）を指す）。
@@ -50,6 +58,8 @@ source/nhc_fulltext_split/proposals/README_ja.md）。このスクリプトは�
   python3 scripts/split_segments.py 分け目.tsv                     分け方と報告を表示するだけ（書き込まない）
   python3 scripts/split_segments.py 分け目.tsv --write             書き込む
   python3 scripts/split_segments.py 分け目.tsv --file II-2=複製.xml  doc の代わりに別のファイルで（試すとき）
+  python3 scripts/split_segments.py source/nhc_fulltext_split/proposals/long_segment_breaks.tsv   承認した行だけ（表示だけ）
+  python3 scripts/split_segments.py source/nhc_fulltext_split/proposals/thomas_sayings.tsv --doc II-2
 終了コード: 0 = 問題なし、1 = 問題あり（何も書き込んでいない）。
 
 読み込みと検証の関数は scripts/insert_breaks.py のものを使う。
@@ -71,6 +81,9 @@ TEI = ib.TEI
 XID = ib.XID
 COLUMNS = ("doc", "seg_id", "w", "place", "phr", "form", "note")
 REQUIRED = ("doc", "seg_id", "w")
+STATUS_COL, CORRECTED_COL, KIND_COL = "状態", "修正した位置", "種別"
+APPROVED = ("承認", "修正して承認")                             # data/review_queues.json の status_values と同じ
+SPLIT_KINDS = ("語録の始まり",)
 TEXT_EXT = (".xml", ".html", ".js", ".cjs", ".json", ".py", ".md", ".tsv", ".txt", ".sql", ".csv", ".cff", ".yml", ".yaml")
 
 
@@ -335,19 +348,73 @@ def extent_note(data):
 
 # ---------------------------------------------------------------------------------------------------------
 
+def read_proposal(path, default_doc):
+    """提案の表（列「状態」のある TSV）から、当てはめる行だけを split の行の形にして返す。(行, 問題, 注意)。"""
+    rows, problems, notes = [], [], []
+    with open(path, "rb") as f:
+        raw = f.read()
+    if raw.startswith(b"\xef\xbb\xbf"):
+        raw = raw[3:]
+    try:
+        text = raw.decode("utf-8")
+    except UnicodeDecodeError as e:
+        return [], ["%s: UTF-8 として読めません（%s）" % (path, e)], []
+    lines = [l.rstrip("\r") for l in text.split("\n")]
+    header = [c.strip() for c in lines[0].split("\t")]
+    need = [c for c in ("seg_id", "w", STATUS_COL) if c not in header]
+    if "doc" not in header and not default_doc:
+        need.append("doc（列が無ければ --doc で渡す）")
+    if need:
+        return [], ["%s: 必須の列がありません: %s" % (path, ", ".join(need))], []
+    skipped = defaultdict(int)
+    for lineno, line in enumerate(lines[1:], 2):
+        if not line.strip():
+            continue
+        cells = [c.strip() for c in line.split("\t")]
+        cells += [""] * (len(header) - len(cells))
+        r = dict(zip(header, cells))
+        where = "%s:%d" % (os.path.basename(path), lineno)
+        st = r.get(STATUS_COL, "")
+        if st not in APPROVED:
+            skipped["状態が「%s」" % (st or "（空）")] += 1
+            continue
+        if KIND_COL in r and r[KIND_COL] not in SPLIT_KINDS:
+            skipped["種別が「%s」（分け目ではない）" % r[KIND_COL]] += 1
+            continue
+        corrected = r.get(CORRECTED_COL, "")
+        out = {"doc": r.get("doc") or default_doc, "seg_id": r["seg_id"], "w": corrected or r["w"], "_where": where,
+               "place": r.get("place", ""), "note": r.get("note", "")}
+        if not corrected:
+            out["phr"], out["form"] = r.get("phr", ""), r.get("form", "")
+        rows.append(out)
+    notes.append("%s: 提案の表として読みました（承認した %d 行を当てはめる）" % (os.path.basename(path), len(rows)))
+    notes += ["%s: 当てはめない行 %d（%s）" % (os.path.basename(path), n, why) for why, n in sorted(skipped.items())]
+    return rows, problems, notes
+
+
+def is_proposal(path):
+    """列「状態」のある TSV か（提案の表・確認作業の画面で書き出した表）。"""
+    try:
+        with open(path, encoding="utf-8-sig") as f:
+            return STATUS_COL in [c.strip() for c in f.readline().rstrip("\r\n").split("\t")]
+    except (OSError, UnicodeDecodeError):
+        return False
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description="TSV で指定した位置でセグメント（<s>）を分ける")
     ap.add_argument("tsv", nargs="+", help="分け目の TSV（列: doc, seg_id, w［, place, phr, form, note］）")
     ap.add_argument("--write", action="store_true", help="書き込む（付けなければ表示するだけ）")
     ap.add_argument("--file", action="append", metavar="文書=ファイル", help="doc の代わりに使うファイル（試すとき）")
     ap.add_argument("--catalog", default=ib.CATALOG, help="カタログ（既定 data/catalog.xml）")
+    ap.add_argument("--doc", help="列 doc の無い提案の表（thomas_sayings.tsv）の文書（例 II-2）")
     args = ap.parse_args(argv)
 
     problems, notes, rows = [], [], []
     overrides, p = ib.parse_overrides(args.file)
     problems += p
     for t in args.tsv:
-        r, p, n = ib.read_tsv(t, COLUMNS, REQUIRED)
+        r, p, n = read_proposal(t, args.doc) if is_proposal(t) else ib.read_tsv(t, COLUMNS, REQUIRED)
         rows += r
         problems += p
         notes += n

@@ -1,0 +1,714 @@
+<!-- 確認作業の画面（手作業管理）。生田目と共同編集者が、確認待ちの作業（キュー）を 1 件ずつ文脈と並べて判断し、結果をファイルとして
+     書き出す。キューの定義は data/review_queues.json（足すときはそこに 1 項目足す）。ファイルの読み書きは assets/review-core.js。
+     ★サーバーにもほかのサイトにも何も送らない。入力の途中の状態は、キューとファイルのハッシュごとにこのブラウザーの localStorage に
+     保存するだけ（Google アナリティクスとログインのスクリプトも読み込まない）。書き出したファイルは、GitHub の画面からアップロードするか
+     Claude Code に渡してコミットする（README「確認作業の画面」）。noindex、ナビ・sitemap に載せず、robots.txt で Disallow。
+     画面の文言は日・英（フランス語を選ぶと英語）。試験: tests/review.test.html（ブラウザー）と tests/review-core.test.cjs。 -->
+<!DOCTYPE html>
+<html lang="ja" data-lang="ja" data-i18n="full" data-mode="dark" data-modes="light dark" data-title-en="Review queues — Sheneset" data-title-fr="Review queues — Sheneset">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>/* 表示モード（ライト／ダーク）の保存値を描画前に反映（保存は assets/site.js） */try{if(localStorage.getItem("nhc-mode")==="light")document.documentElement.setAttribute("data-mode","light")}catch(e){}</script>
+<script>/* 表示言語（?lang= ＞ 保存値 ＞ ブラウザーの言語、ほかは英語）を描画前に反映（正式な処理と保存は assets/site.js） */(function(H){var L=["ja","en","fr"],m=/[?&]lang=([^&#]*)/i.exec(location.search),v=m?m[1].toLowerCase():null;if(L.indexOf(v)<0){v=null;try{v=localStorage.getItem("nhc-lang")}catch(e){}}if(L.indexOf(v)<0){v="en";var n=navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||""];for(var i=0;i<n.length;i++){var p=String(n[i]).toLowerCase().split(/[-_]/)[0];if(L.indexOf(p)>=0){v=p;break}}}if(H.getAttribute("data-i18n")==="full"){H.setAttribute("data-lang",v);H.setAttribute("lang",v)}else if(v!=="ja"){H.setAttribute("data-lang","en");H.setAttribute("lang","en");H.setAttribute("data-gl",v);H.setAttribute("data-tl",v)}})(document.documentElement)</script>
+<meta name="robots" content="noindex, nofollow">
+<title>確認作業 — Sheneset</title>
+<link rel="icon" type="image/svg+xml" href="image/icon.svg">
+<link rel="alternate icon" type="image/png" sizes="32x32" href="image/favicon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400;1,8..60,500&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600&family=Noto+Sans+Coptic&display=swap" rel="stylesheet">
+<style>
+:root{ --ui:'DM Sans','Inter','Noto Sans JP',system-ui,sans-serif; --cop:'Noto Sans Coptic',serif; }
+*{box-sizing:border-box} html,body{margin:0}
+body{font-family:var(--ui); -webkit-font-smoothing:antialiased; line-height:1.6}
+/* 画面の文言は日・英だけ。フランス語を選んだときは英語を出す（site.css は fr で .l-en を隠すので、ここで戻す） */
+html[data-lang="fr"] body .l-en{display:revert}
+.page.rv{max-width:1240px}
+.cop{font-family:var(--cop)}
+.vh{position:absolute!important; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+.rv-who{display:flex; flex-wrap:wrap; align-items:center; gap:8px 14px; margin:14px 0 6px; font-size:.9rem}
+.rv-who input{font:inherit; padding:6px 10px; border-radius:8px; border:1px solid var(--line); background:var(--hi); color:var(--ink); width:12em}
+.rv-who .hint{font-size:.78rem; color:var(--ink-faint)}
+.rv-who.need input{border-color:var(--rose); box-shadow:0 0 0 2px rgba(208,154,138,.25)}
+.rv-local{font-size:.8rem; color:var(--ink-faint); margin:4px 0 18px}
+.qcards{display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:12px; margin:8px 0 24px}
+.qcard{appearance:none; text-align:left; font:inherit; color:var(--ink); background:var(--panel,rgba(28,38,68,.78));
+  border:1px solid var(--line); border-radius:2px; padding:14px 16px; cursor:pointer}
+.qcard:hover,.qcard:focus-visible{border-color:var(--gold); outline:none}
+.qcard[aria-current="true"]{border-color:var(--gold); box-shadow:0 0 0 1px var(--gold) inset}
+.qcard b{display:block; font-size:.98rem}
+.qcard .file{display:block; font-size:.72rem; color:var(--ink-faint); font-family:ui-monospace,SFMono-Regular,Menlo,monospace; word-break:break-all; margin:2px 0 8px}
+.qcard .nums{font-size:.84rem; color:var(--ink-soft)}
+.qcard .bar{height:6px; border-radius:3px; background:var(--line); margin-top:8px; overflow:hidden}
+.qcard .bar i{display:block; height:100%; background:var(--gold)}
+.qcard .err{color:var(--rose); font-size:.8rem}
+#work[hidden]{display:none}
+.rv-bar{display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; padding:10px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+  position:sticky; top:var(--sbh,47px); z-index:5; background:var(--bg-solid,#141c38)}
+html[data-mode="light"] .rv-bar{background:#f0ece3}
+.page .rv-bar h2{margin:0 8px 0 0; padding:0; border:0; font-size:1.02rem; font-family:var(--ui)}
+.rv-bar .pos{font-variant-numeric:tabular-nums; color:var(--ink-soft); font-size:.88rem}
+.btn{appearance:none; font:inherit; font-size:.84rem; color:var(--ink); background:var(--hi); border:1px solid var(--line); border-radius:8px;
+  padding:5px 11px; cursor:pointer; white-space:nowrap}
+.btn:hover,.btn:focus-visible{border-color:var(--gold); outline:none}
+.btn[disabled]{opacity:.45; cursor:default}
+.btn.on{border-color:var(--gold); color:var(--gold-bright)}
+.rv-bar label{font-size:.84rem; display:inline-flex; align-items:center; gap:5px}
+.rv-bar input[type=number]{width:5.5em; font:inherit; font-size:.84rem; padding:4px 6px; border-radius:6px; border:1px solid var(--line); background:var(--hi); color:var(--ink)}
+.rv-item{display:grid; grid-template-columns:minmax(0,1.35fr) minmax(0,1fr); gap:18px 26px; margin:16px 0}
+@media (max-width:900px){ .rv-item{grid-template-columns:1fr} }
+.rv-item h3{font-size:.8rem; letter-spacing:.06em; color:var(--ink-faint); font-weight:600; margin:0 0 6px}
+.ctx{font-family:var(--cop); font-size:1.14rem; line-height:2.1; color:var(--ink); background:var(--hi); border-radius:2px; padding:12px 14px; overflow-wrap:anywhere}
+.ctx .g{white-space:nowrap}
+.ctx .g.pick{cursor:pointer; border-radius:4px}
+.ctx .g.pick:hover,.ctx .g.pick:focus-visible{background:rgba(200,168,112,.18); outline:none}
+.ctx mark{background:rgba(200,168,112,.35); color:inherit; border-radius:3px; padding:0 1px}
+.ctx .tg{box-shadow:inset 0 -2px 0 var(--gold)}
+.ctx .ms{color:var(--ink-faint); padding:0 1px}
+.ctx .brk{display:inline-block; font-family:var(--ui); font-size:.72rem; font-weight:700; color:#1a2030; background:var(--gold); border-radius:4px; padding:0 5px; margin:0 4px; vertical-align:.12em}
+.ctx .brk.prop{background:transparent; color:var(--gold-bright); border:1px dashed var(--gold)}
+html[data-mode="light"] .ctx .brk{color:#fdfcf8; background:#7a5c1e}
+html[data-mode="light"] .ctx .brk.prop{color:#6e5016; background:transparent; border-color:#7a5c1e}
+.ctx .gap{color:var(--rose); font-family:var(--ui); font-size:.9rem}
+.ctx .pb,.ctx .lb{font-family:var(--ui); font-size:.62rem; color:var(--ink-faint); vertical-align:.4em; margin:0 2px}
+.ctx .more{font-family:var(--ui); font-size:.78rem}
+.ctxnote{font-size:.78rem; color:var(--ink-faint); margin:6px 0 0}
+.ctxnote a{color:var(--gold-bright)}
+table.kv{border-collapse:collapse; width:100%; font-size:.86rem; margin-top:12px}
+table.kv th{text-align:left; font-weight:500; color:var(--ink-faint); padding:5px 12px 5px 0; vertical-align:top; white-space:nowrap; width:1%}
+table.kv td{padding:5px 0; color:var(--ink-soft); vertical-align:top; overflow-wrap:anywhere}
+table.kv td.cop{font-family:var(--cop); font-size:1rem; color:var(--ink)}
+.form{display:flex; flex-direction:column; gap:12px}
+.form label.f{display:flex; flex-direction:column; gap:4px; font-size:.84rem; color:var(--ink-soft)}
+.form select,.form input[type=text],.form textarea{font:inherit; font-size:.92rem; color:var(--ink); background:var(--hi); border:1px solid var(--line); border-radius:8px; padding:6px 9px}
+.form textarea{min-height:5.2em; resize:vertical; line-height:1.55}
+.form input.cop{font-family:var(--cop),var(--ui); font-size:1.04rem}
+.form .row{display:flex; flex-wrap:wrap; gap:6px}
+.form .sp{font-size:.78rem}
+.stbtns{display:flex; flex-wrap:wrap; gap:8px}
+.stbtns .btn{font-size:.9rem; padding:7px 14px}
+.stnow{font-size:.9rem}
+.stnow b{color:var(--gold-bright)}
+.autobox{border:1px dashed var(--line-2,var(--line)); border-radius:2px; padding:10px 12px; font-size:.86rem}
+.autobox.hidden{color:var(--ink-faint)}
+.autobox .ok{color:#7fc79a} .autobox .ng{color:var(--rose)}
+html[data-mode="light"] .autobox .ok{color:#2f7a4a}
+fieldset.lng{border:1px solid var(--line); border-radius:2px; padding:8px 12px 12px; margin:0}
+fieldset.lng legend{font-size:.84rem; color:var(--gold-bright); padding:0 4px}
+fieldset.lng label{display:block; font-size:.74rem; color:var(--ink-faint); margin-top:6px}
+fieldset.lng textarea{width:100%}
+textarea.todo{width:100%; font:inherit; font-size:.88rem; line-height:1.55; color:var(--ink); background:var(--hi); border:1px solid var(--line); border-radius:8px; padding:6px 9px; resize:vertical}
+.rv-files{display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; margin:20px 0 6px; padding:12px 0; border-top:1px solid var(--line)}
+.rv-files .meta{font-size:.78rem; color:var(--ink-faint); font-variant-numeric:tabular-nums}
+.notice{border-left:3px solid var(--gold); background:var(--hi); padding:8px 12px; border-radius:0 8px 8px 0; font-size:.86rem; margin:12px 0}
+.notice.warn{border-left-color:var(--rose)}
+.notice ul{margin:6px 0 0; padding-left:1.2em}
+#live{font-size:.84rem; color:var(--gold-bright); min-height:1.4em}
+details.keys{font-size:.82rem; color:var(--ink-soft); margin:16px 0}
+details.keys kbd{font-family:ui-monospace,Menlo,monospace; font-size:.78rem; border:1px solid var(--line); border-radius:4px; padding:0 5px}
+.qnote{font-size:.84rem; color:var(--ink-soft); margin:10px 0 0}
+</style>
+<link rel="stylesheet" href="assets/cosmos.css">
+<link rel="stylesheet" href="assets/site.css">
+<script defer src="assets/cosmos.js"></script>
+<script defer src="assets/site.js"></script>
+<script defer src="assets/review-core.js"></script>
+</head>
+<body>
+<nav id="sitebar" class="sitebar sticky"></nav>
+<main class="page rv">
+  <div class="eyebrow">Review queues</div>
+  <h1><span class="l-ja jp">確認作業</span><span class="l-en">Review queues</span></h1>
+  <p class="lede"><span class="l-ja">確認を待っている作業を 1 件ずつ文脈と並べて判断し、結果をファイルとして書き出す画面です。書き出したファイルは GitHub にアップロードするか、Claude Code に渡してコミットします（README の「確認作業の画面」）。</span><span class="l-en">Work through the items that are waiting for a decision, one at a time and next to their context, then download the result as a file. Upload that file on GitHub or hand it to Claude Code to commit it (README, “Review queues”).</span></p>
+  <div class="rv-who" id="who">
+    <label for="reviewer"><span class="l-ja">確認者（名前かイニシャル）</span><span class="l-en">Reviewer (name or initials)</span></label>
+    <input id="reviewer" type="text" autocomplete="off" maxlength="40" spellcheck="false">
+    <span class="hint"><span class="l-ja">判断のたびに、この名前を記録します。</span><span class="l-en">Recorded with every decision.</span></span>
+  </div>
+  <p class="rv-local"><span class="l-ja">入力は、このブラウザーの中（localStorage）にだけ保存します。サーバーにもほかのサイトにも送りません。</span><span class="l-en">Your input is kept only in this browser (localStorage). Nothing is sent to a server or to any other site.</span></p>
+  <section aria-labelledby="qhead">
+    <h2 id="qhead" class="vh"><span class="l-ja">キュー</span><span class="l-en">Queues</span></h2>
+    <div class="qcards" id="qcards"><p class="load"><span class="l-ja">読み込み中…</span><span class="l-en">Loading…</span></p></div>
+  </section>
+  <section id="work" hidden aria-labelledby="qtitle">
+    <div class="rv-bar">
+      <h2 id="qtitle"></h2>
+      <button type="button" class="btn" id="prevBtn" title="← / k"><span class="l-ja">← 前</span><span class="l-en">← Previous</span></button>
+      <button type="button" class="btn" id="nextBtn" title="→ / j"><span class="l-ja">次 →</span><span class="l-en">Next →</span></button>
+      <button type="button" class="btn" id="nextOpenBtn" title="n"><span class="l-ja">次の未処理</span><span class="l-en">Next open</span></button>
+      <span class="pos" id="posText"></span>
+      <label><input type="checkbox" id="onlyOpen"><span class="l-ja">未処理だけ</span><span class="l-en">Open items only</span></label>
+      <label><span class="l-ja">番号へ</span><span class="l-en">Go to</span><input type="number" id="jump" min="1" title="g"></label>
+    </div>
+    <p class="qnote" id="qnote"></p>
+    <div id="carry"></div>
+    <div class="rv-item" id="item"></div>
+    <div class="rv-files">
+      <button type="button" class="btn" id="exportBtn"><span class="l-ja">ファイルを書き出す</span><span class="l-en">Download the file</span></button>
+      <button type="button" class="btn" id="importBtn"><span class="l-ja">書き出したファイルを読み込む</span><span class="l-en">Load a downloaded file</span></button>
+      <input type="file" id="importFile" accept=".tsv,.json,.txt,text/tab-separated-values,application/json" hidden>
+      <button type="button" class="btn" id="clearBtn"><span class="l-ja">この画面の記録を消す</span><span class="l-en">Clear my input here</span></button>
+      <span class="meta" id="fileMeta"></span>
+    </div>
+    <div id="importReport"></div>
+    <details class="keys">
+      <summary><span class="l-ja">キーボード</span><span class="l-en">Keyboard</span></summary>
+      <p><kbd>←</kbd>/<kbd>k</kbd> <span class="l-ja">前</span><span class="l-en">previous</span> · <kbd>→</kbd>/<kbd>j</kbd> <span class="l-ja">次</span><span class="l-en">next</span> · <kbd>n</kbd> <span class="l-ja">次の未処理</span><span class="l-en">next open item</span> · <kbd>g</kbd> <span class="l-ja">番号へ</span><span class="l-en">go to a number</span> ·
+        <kbd>a</kbd> <span class="l-ja">承認</span><span class="l-en">approve</span> · <kbd>r</kbd> <span class="l-ja">却下</span><span class="l-en">reject</span> · <kbd>h</kbd> <span class="l-ja">保留</span><span class="l-en">hold</span> · <kbd>u</kbd> <span class="l-ja">未処理に戻す</span><span class="l-en">back to open</span>
+        <span class="l-ja">（入力欄の外で）。② では入力欄で <kbd>Enter</kbd> を押すと次の未処理へ。</span><span class="l-en">(outside text fields). In ②, <kbd>Enter</kbd> in a field moves to the next open item.</span></p>
+    </details>
+  </section>
+  <div id="live" role="status" aria-live="polite"></div>
+</main>
+<footer class="site-foot">
+  <a href="index.html"><span class="l-ja">HOME</span><span class="l-en">Home</span></a>
+  · <a href="https://github.com/icecocoasince2003-create/Nag-Hammadi-Library" target="_blank" rel="noopener">GitHub</a>
+</footer>
+<datalist id="lemmaList"></datalist>
+<script>
+(function(){
+"use strict";
+const H = document.documentElement;
+const $ = s => document.querySelector(s);
+const UL = () => H.getAttribute("data-lang") === "ja" ? "ja" : "en";            // 画面は日・英（fr は英語）
+const L2 = (ja, en) => UL() === "ja" ? ja : en;
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const TEI = "http://www.tei-c.org/ns/1.0", XMLNS = "http://www.w3.org/XML/1998/namespace";
+/* localStorage の名前。?ns=名前 を付けると別の名前の下に保存する（試験 tests/review.test.html が、ふだんの入力を消さないように使う） */
+const NS = (/[?&]ns=([a-z0-9_-]{1,20})/i.exec(location.search) || [])[1] || "";
+const KEY_PREFIX = "nhc-review" + (NS ? "-" + NS : "") + ":v1:", WHO_KEY = KEY_PREFIX + "reviewer";
+let R = null, CONF = null, ST = {};          // ST[キューの id] = 読み込んだキューの状態
+let CUR = null, VIEW = [], VI = 0, PEEK = false;   // 開いているキュー、表示する項目の並び、その中の位置、② で答えを先に見るか
+let CAT = null, POSL = null, LEXP = null;
+const TEIS = new Map(), HEADS = new Map();
+
+const store = {
+  get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } },
+  set(k, v){ try { localStorage.setItem(k, v); return true; } catch(e){ return false; } },
+  del(k){ try { localStorage.removeItem(k); } catch(e){} },
+  keys(prefix){ const out = []; try { for(let i = 0; i < localStorage.length; i++){ const k = localStorage.key(i); if(k && k.indexOf(prefix) === 0) out.push(k); } } catch(e){} return out; }
+};
+function say(msg){ const l = $("#live"); l.textContent = ""; setTimeout(() => { l.textContent = msg; }, 30); }
+const fetchText = url => fetch(url, {cache: "no-store"}).then(r => r.ok ? r.text() : Promise.reject(new Error(url + " — HTTP " + r.status)));
+async function sha256(text){
+  if(!(window.crypto && crypto.subtle)) return "nohash-" + text.length;
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
+}
+
+/* ---------- 確認者 ---------- */
+const who = () => ($("#reviewer").value || "").trim();
+function needWho(){
+  if(who()) return false;
+  $("#who").classList.add("need"); $("#reviewer").focus();
+  say(L2("先に確認者の名前かイニシャルを入れてください。", "Enter your name or initials first."));
+  return true;
+}
+
+/* ---------- カタログ・品詞・辞書 ---------- */
+async function catalog(){
+  if(CAT) return CAT;
+  const x = new DOMParser().parseFromString(await fetchText("data/catalog.xml"), "application/xml");
+  CAT = {byKey: new Map(), bySiglum: new Map()};
+  [...x.getElementsByTagNameNS(TEI, "bibl")].forEach(b => {
+    const id = b.getAttributeNS(XMLNS, "id") || "";
+    if(b.getAttribute("type") !== "document" || id.indexOf("doc-") !== 0) return;
+    const key = id.slice(4), refs = {}, titles = {};
+    [...b.children].forEach(c => {
+      if(c.localName === "ref" && c.getAttribute("type")) refs[c.getAttribute("type")] = c.getAttribute("target") || "";
+      if(c.localName === "title" && !c.getAttribute("type")) titles[c.getAttributeNS(XMLNS, "lang")] = c.textContent.trim();
+    });
+    const sig = (([...b.children].find(c => c.localName === "idno" && c.getAttribute("type") === "siglum") || {}).textContent || "").trim();
+    const d = {key, siglum: sig, titles, xml: refs.xml || "", reader: refs.reader || ""};
+    CAT.byKey.set(key, d);
+    sig.replace(/^NHC\s*/, "").split(/\s*\/\s*/).forEach(s => { if(s) CAT.bySiglum.set(s, d); });
+  });
+  return CAT;
+}
+async function posList(){
+  if(!POSL) POSL = JSON.parse(await fetchText("data/pos_labels.json")).tags;
+  return POSL;
+}
+async function lemmaList(){
+  if(LEXP) return LEXP;
+  LEXP = (async () => {
+    const x = new DOMParser().parseFromString(await fetchText("data/lexicon.xml"), "application/xml");
+    const set = new Set([...x.getElementsByTagNameNS(TEI, "orth")].map(o => o.textContent.trim()).filter(Boolean));
+    $("#lemmaList").innerHTML = [...set].sort().map(l => '<option value="' + esc(l) + '">').join("");
+    return set;
+  })();
+  return LEXP;
+}
+
+/* ---------- キューの読み込み ---------- */
+const stateKey = (q, hash) => KEY_PREFIX + q.id + ":" + hash.slice(0, 16);
+async function loadQueue(q){
+  const text = await fetchText(q.file), hash = await sha256(text);
+  const s = {q, text, hash, edits: {}, items: [], problems: []};
+  if(q.kind === "intros"){
+    s.obj = JSON.parse(text);
+    s.roundTrips = R.jsonRoundTrips(text);
+    if(!s.roundTrips) s.problems.push(L2("このファイルは決まった形（字下げ 2）で書かれていないので、書き出しは使えません。", "This file is not in the expected layout (indent 2), so it cannot be downloaded from here."));
+    s.paths = R.introPaths(q.fields, q.langs, q.reviewer);
+    s.items = Object.keys(s.obj.texts).map((k, i) => ({key: k, n: i + 1}));
+  } else {
+    s.table = R.parseTSV(text);
+    s.index = R.indexRows(s.table, q.key);
+    s.editable = (q.fields || []).map(f => f.column).concat(q.status ? [q.status] : [], q.corrected ? [q.corrected] : [], [q.reviewer]);
+    s.items = [...s.index.entries()].map(([k, i], n) => ({key: k, row: i, n: n + 1}));
+  }
+  const saved = store.get(stateKey(q, hash));
+  if(saved){ try { s.edits = JSON.parse(saved).edits || {}; } catch(e){} }
+  s.older = store.keys(KEY_PREFIX + q.id + ":").filter(k => k !== stateKey(q, hash));
+  return s;
+}
+function save(s){
+  if(Object.keys(s.edits).length) store.set(stateKey(s.q, s.hash), JSON.stringify({edits: s.edits, at: new Date().toISOString(), file: s.q.file}));
+  else store.del(stateKey(s.q, s.hash));
+}
+
+/* ---------- 値の読み書き ---------- */
+function orig(s, it, col){ return s.q.kind === "intros" ? R.getPath(s.obj.texts[it.key], col) : R.cell(s.table, s.table.rows[it.row], col); }
+function val(s, it, col){ const e = s.edits[it.key]; return e && Object.prototype.hasOwnProperty.call(e, col) ? e[col] : orig(s, it, col); }
+const same = (a, b) => JSON.stringify(a == null ? "" : a) === JSON.stringify(b == null ? "" : b);
+/* values: {列（か解題の場所）: 値}。元と同じ値は書き換えから外す。ほかに書き換えが残れば確認者を記録する */
+function setVals(s, it, values){
+  if(needWho()) return false;
+  const e = Object.assign({}, s.edits[it.key] || {}), rk = s.q.reviewer;
+  Object.keys(values).forEach(c => { if(same(values[c], orig(s, it, c))) delete e[c]; else e[c] = values[c]; });
+  delete e[rk];
+  if(Object.keys(e).length && !same(who(), orig(s, it, rk))) e[rk] = who();
+  if(Object.keys(e).length) s.edits[it.key] = e; else delete s.edits[it.key];
+  save(s); renderCards(); renderPos();
+  return true;
+}
+function isDone(s, it){
+  const q = s.q;
+  if(q.kind === "intros") return val(s, it, "reviewed") === true;
+  if(q.kind === "judge") return q.fields.filter(f => f.required).every(f => String(val(s, it, f.column) || "").trim() !== "");
+  const v = String(val(s, it, q.status) || "").trim();
+  return v !== "" && v !== q.pending;
+}
+const doneCount = s => s.items.filter(it => isDone(s, it)).length;
+
+/* ---------- 書き出し・読み込み ---------- */
+function exportText(s){
+  if(!Object.keys(s.edits).length) return s.text;                     // 何も変えていなければ元のまま
+  if(s.q.kind === "intros"){
+    if(!s.roundTrips) throw new Error("layout");
+    return R.serializeJSON(R.applyJSONEdits(s.obj, s.edits, "texts"));
+  }
+  return R.serializeTSV(R.applyEdits(s.table, s.edits, s.q.key, [s.q.corrected, s.q.reviewer].filter(Boolean)));
+}
+function download(s){
+  let text;
+  try { text = exportText(s); } catch(e){ say(L2("書き出せませんでした。", "Could not create the file.")); return; }
+  const name = s.q.file.split("/").pop();
+  const blob = new Blob([text], {type: s.q.kind === "intros" ? "application/json" : "text/tab-separated-values"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  say(L2(name + " を書き出しました（書き換え " + Object.keys(s.edits).length + " 件）。", "Downloaded " + name + " (" + Object.keys(s.edits).length + " changed items)."));
+}
+function importText(s, text){
+  let d;
+  try {
+    if(s.q.kind === "intros") d = R.diffJSON(s.obj, JSON.parse(text), "texts", s.paths);
+    else d = R.diffTables(s.table, R.parseTSV(text), s.q.key, s.editable);
+  } catch(e){ return {ok: false, problems: [L2("読めませんでした: ", "Could not read it: ") + e.message]}; }
+  const n = Object.keys(d.edits).length;
+  if(Object.keys(s.edits).length && !confirm(L2("今の入力（" + Object.keys(s.edits).length + " 件）を、読み込んだファイルの内容（" + n + " 件）で置き換えます。",
+      "Replace your current input (" + Object.keys(s.edits).length + " items) with the file’s (" + n + " items)?"))) return {ok: false, problems: [], cancelled: true};
+  s.edits = d.edits; save(s);
+  return {ok: true, n, problems: d.problems};
+}
+function carryOver(s, key){
+  let old = {};
+  try { old = JSON.parse(store.get(key)).edits || {}; } catch(e){}
+  let n = 0;
+  Object.keys(old).forEach(k => {
+    const ok = s.q.kind === "intros" ? (k in s.obj.texts) : s.index.has(k);
+    if(!ok || s.edits[k]) return;
+    s.edits[k] = old[k]; n++;
+  });
+  save(s);
+  return n;
+}
+
+/* ---------- 文脈（TEI のセグメント） ---------- */
+async function teiDoc(path){
+  if(!TEIS.has(path)) TEIS.set(path, fetchText(path).then(t => {
+    const x = new DOMParser().parseFromString(t, "application/xml");
+    if(x.getElementsByTagName("parsererror").length) throw new Error(path + " — XML");
+    const segs = new Map();
+    [...x.getElementsByTagNameNS(TEI, "s")].forEach(e => { const id = e.getAttributeNS(XMLNS, "id"); if(id) segs.set(id, e); });
+    return {x, segs};
+  }));
+  return TEIS.get(path);
+}
+/* <s> を、語群（<phr>。無ければ <w> 1 つ）・欠損・頁・行の並びにする。w は <s> の中の何番目の <w> か（1 から） */
+function units(s){
+  const out = []; let wi = 0;
+  const wordOf = w => ({i: ++wi, form: w.textContent.replace(/\s+/g, "")});
+  (function walk(el){
+    [...el.children].forEach(c => {
+      const n = c.localName;
+      if(n === "phr"){ out.push({t: "g", ws: [...c.getElementsByTagNameNS(TEI, "w")].map(wordOf)}); }
+      else if(n === "w"){ out.push({t: "g", ws: [wordOf(c)]}); }
+      else if(n === "gap"){ out.push({t: "gap"}); }
+      else if(n === "pb" || n === "lb"){ out.push({t: n, n: c.getAttribute("n") || ""}); }
+      else walk(c);
+    });
+  })(s);
+  return out;
+}
+let CTXW = 14;   // 対象の前後に出す語群の数（〈前後をもっと〉で増やす）
+function ctxHTML(us, mode, w, corr){
+  const gi = us.findIndex(u => u.t === "g" && u.ws.some(x => x.i === w));
+  const lo = Math.max(0, gi - CTXW), hi = Math.min(us.length, gi + CTXW + 1);
+  let h = lo > 0 ? '<button type="button" class="btn more" data-more>' + esc(L2("… 前後をもっと", "… more context")) + "</button> " : "";
+  us.slice(lo, hi).forEach(u => {
+    if(u.t === "gap"){ h += '<span class="gap">〔…〕</span> '; return; }
+    if(u.t === "pb"){ h += '<span class="pb">p.' + esc(u.n) + "</span>"; return; }
+    if(u.t === "lb"){ h += '<span class="lb">' + esc(u.n) + "</span>"; return; }
+    const first = u.ws[0].i, hit = u.ws.some(x => x.i === w);
+    if(mode === "break"){
+      if(corr && first === corr) h += '<span class="brk" title="' + esc(L2("直した位置", "corrected place")) + '">‖</span>';
+      if(first === w) h += '<span class="brk' + (corr && corr !== w ? " prop" : "") + '" title="' + esc(L2("案の位置", "proposed place")) + '">‖</span>';
+      h += '<span class="g pick" role="button" tabindex="0" data-w="' + first + '" title="' + esc(L2("ここから新しく始める（位置を直す）", "start here (correct the place)")) + '">' +
+        u.ws.map(x => esc(x.form)).join("") + "</span> ";
+    } else {
+      h += '<span class="g' + (hit ? " tg" : "") + '">' + (hit ? u.ws.map(x => x.i === w ? "<mark>" + esc(x.form) + "</mark>" : esc(x.form)).join('<span class="ms">·</span>') : u.ws.map(x => esc(x.form)).join("")) + "</span> ";
+    }
+  });
+  if(hi < us.length) h += ' <button type="button" class="btn more" data-more>' + esc(L2("前後をもっと …", "more context …")) + "</button>";
+  return {html: h, found: gi >= 0};
+}
+async function docOf(s, it){
+  const d = s.q.doc || {}, cat = await catalog();
+  if(d.fixed) return cat.byKey.get(d.fixed);
+  const v = val(s, it, d.column);
+  return d.siglum ? cat.bySiglum.get(v) : cat.byKey.get(v);
+}
+async function renderContext(s, it, box){
+  const q = s.q, seg = val(s, it, q.seg), w = parseInt(val(s, it, q.w), 10);
+  const corr = q.corrected ? parseInt(val(s, it, q.corrected), 10) || null : null;
+  box.innerHTML = '<div class="ctx" lang="cop"><span class="l-ja">読み込み中…</span><span class="l-en">Loading…</span></div>';
+  try {
+    const d = await docOf(s, it);
+    if(!d || !d.xml) throw new Error(L2("文書が data/catalog.xml に見つかりません", "document not found in data/catalog.xml"));
+    const t = await teiDoc(d.xml), el = t.segs.get(seg);
+    if(!el) throw new Error(L2("セグメントが見つかりません: ", "segment not found: ") + seg);
+    if(!CUR || CUR.items[VIEW[VI]] !== it) return;     // 読み込みのあいだにほかの項目へ移った
+    const us = units(el), c = ctxHTML(us, q.context, w, corr);
+    // 表の語形（form の列）と、今の本文のその位置の語を比べる（TEI の語の区切りを付け直すと、位置が別の語を指すようになる）
+    const want = q.form ? String(val(s, it, q.form) || "").replace(/\s+/g, "") : "";
+    const here = (us.filter(u => u.t === "g").flatMap(u => u.ws).find(x => x.i === w) || {}).form || "";
+    const href = d.reader ? d.reader + "#seg-" + encodeURIComponent(seg) : "";
+    box.innerHTML = '<div class="ctx" lang="cop">' + c.html + "</div>" +
+      '<p class="ctxnote">' + esc(d.siglum) + " · §" + esc(el.getAttribute("n") || "") + " · " + esc(seg) + " · w=" + esc(w) +
+      (href ? ' · <a href="' + esc(href) + '" target="_blank" rel="noopener">' + esc(L2("本文ビュワーで開く ↗", "open in the reader ↗")) + "</a>" : "") +
+      (c.found ? "" : ' · <b>' + esc(L2("この位置の語が見つかりません", "no word at this position")) + "</b>") +
+      (want && c.found && here !== want ? '<br><b>' + esc(L2("表の語形「" + want + "」と、今の本文のこの位置の語「" + here + "」が違います。本文の語の区切りが付け直され、表の位置がずれています。",
+        "The table’s form “" + want + "” differs from the word now at this position, “" + here + "”: the text was re-tokenized and the table’s position is out of date.")) + "</b>" : "") +
+      (q.context === "break" ? "<br>" + esc(L2("語群を押すと、そこから始まる位置に直せます（修正して承認）。点線の印は案の位置。", "Click a bound group to move the break there (approved with a correction). The dashed mark is the proposed place.")) : "") + "</p>";
+  } catch(e){
+    box.innerHTML = '<div class="notice warn">' + esc(e.message || String(e)) + "</div>";
+  }
+}
+/* 解題の項目の文書の頁の範囲（TEI のヘッダーの <locus>）。ヘッダーだけを読む（Range が使えればファイルの頭だけ） */
+async function headerInfo(path){
+  if(!HEADS.has(path)) HEADS.set(path, fetch(path, {headers: {Range: "bytes=0-40000"}, cache: "no-store"}).then(r => r.text()).then(t => {
+    const head = t.split("</teiHeader>")[0];
+    const loci = [...head.matchAll(/<locus\b[^>]*>([^<]*)<\/locus>/g)].map(m => m[1].trim()).filter(Boolean);
+    return {loci};
+  }).catch(() => ({loci: []})));
+  return HEADS.get(path);
+}
+
+/* ---------- 画面 ---------- */
+function renderCards(){
+  $("#qcards").innerHTML = CONF.queues.map(q => {
+    const s = ST[q.id];
+    if(!s) return '<button type="button" class="qcard" disabled><b>' + esc(q.title[UL()]) + '</b><span class="file">' + esc(q.file) + '</span><span class="nums">…</span></button>';
+    if(s.error) return '<div class="qcard"><b>' + esc(q.title[UL()]) + '</b><span class="file">' + esc(q.file) + '</span><span class="err">' + esc(s.error) + "</span></div>";
+    const done = doneCount(s), all = s.items.length, ch = Object.keys(s.edits).length;
+    return '<button type="button" class="qcard" data-q="' + esc(q.id) + '"' + (CUR === s ? ' aria-current="true"' : "") + "><b>" + esc(q.title[UL()]) + "</b>" +
+      '<span class="file">' + esc(q.file) + "</span>" +
+      '<span class="nums">' + esc(L2("済 " + done + " · 残り " + (all - done) + " / " + all + " 件", done + " done · " + (all - done) + " open / " + all)) +
+      (ch ? " · " + esc(L2("書き換え " + ch, ch + " changed")) : "") + "</span>" +
+      '<span class="bar" aria-hidden="true"><i style="width:' + (all ? (100 * done / all).toFixed(1) : 0) + '%"></i></span></button>';
+  }).join("");
+}
+function buildView(keepKey){
+  const s = CUR, only = $("#onlyOpen").checked;
+  VIEW = s.items.map((it, i) => i).filter(i => !only || !isDone(s, s.items[i]));
+  if(keepKey != null){ const j = VIEW.findIndex(i => s.items[i].key === keepKey); VI = j >= 0 ? j : Math.min(VI, Math.max(0, VIEW.length - 1)); }
+  VI = Math.max(0, Math.min(VI, VIEW.length - 1));
+}
+function renderPos(){
+  if(!CUR) return;
+  const s = CUR, it = s.items[VIEW[VI]];
+  $("#posText").textContent = VIEW.length ? (it.n + " / " + s.items.length + (VIEW.length !== s.items.length ? L2("（表示 " + (VI + 1) + "/" + VIEW.length + "）", " (showing " + (VI + 1) + "/" + VIEW.length + ")") : "")) : "—";
+  $("#fileMeta").textContent = L2("書き換え ", "changed ") + Object.keys(s.edits).length + " · SHA-256 " + s.hash.slice(0, 12) + "…";
+  $("#prevBtn").disabled = VI <= 0; $("#nextBtn").disabled = VI >= VIEW.length - 1;
+}
+function kvRows(s, it, cols, cop){
+  return cols.map(c => '<tr><th scope="row">' + esc(c) + "</th><td" + (cop && cop.indexOf(c) >= 0 ? ' class="cop" lang="cop"' : "") + ">" + esc(val(s, it, c)) + "</td></tr>").join("");
+}
+const COPCOLS = ["前後の文脈", "語形", "自動のレンマ", "直前の数語", "始まりの数語", "前の数語", "後の数語"];
+
+async function renderItem(){
+  const s = CUR, box = $("#item");
+  renderPos();
+  if(!VIEW.length){ box.innerHTML = '<p class="notice">' + esc(L2("表示する項目はありません（未処理の項目はありません）。", "Nothing to show (no open items).")) + "</p>"; return; }
+  const it = s.items[VIEW[VI]], q = s.q;
+  // 開いている項目を URL の # に書く（再読み込みで戻れる）。履歴は増やさない。location.replace("#…") は、ほかの窓のスクリプトから
+  // 呼ばれると相対 URL をその窓のページで解決してしまうので、自分の文書を基準にする history.replaceState を使う
+  try { history.replaceState(null, "", "#q=" + encodeURIComponent(q.id) + "&n=" + it.n); } catch(e){}
+  store.set(KEY_PREFIX + "pos:" + q.id, String(it.n));
+  if(q.kind === "intros") return renderIntro(s, it, box);
+  const done = isDone(s, it);
+  box.innerHTML = '<div><h3>' + esc(L2("文脈", "Context")) + ' — <span class="l-ja">' + esc("項目 " + it.n) + '</span><span class="l-en">' + esc("item " + it.n) + "</span>" + (done ? " ✓" : "") + '</h3><div id="ctxBox"></div>' +
+    '<table class="kv">' + kvRows(s, it, q.show, COPCOLS) + "</table></div>" +
+    '<div><h3>' + esc(L2("判断", "Decision")) + '</h3><div class="form" id="form"></div></div>';
+  if(q.seg && q.w) renderContext(s, it, $("#ctxBox"));
+  if(q.kind === "judge") await renderJudge(s, it);
+  else renderStatus(s, it);
+}
+
+/* ② のような「列に答えを書く」キュー */
+async function renderJudge(s, it){
+  const q = s.q, f = $("#form"), pos = await posList(), filled = isDone(s, it), show = filled || PEEK;
+  if(!CUR || CUR.items[VIEW[VI]] !== it) return;
+  f.innerHTML = q.fields.map((fd, k) => {
+    const v = val(s, it, fd.column) || "", id = "fd" + k;
+    if(fd.type === "pos") return '<label class="f" for="' + id + '">' + esc(fd.column) + '<select id="' + id + '" data-col="' + esc(fd.column) + '"><option value="">—</option>' +
+      (fd.special || []).map(x => '<option value="' + esc(x) + '"' + (v === x ? " selected" : "") + ">" + esc(x === "?" ? L2("? 判定不能", "? undecidable") : x) + "</option>").join("") +
+      pos.map(p => '<option value="' + esc(p.tag) + '"' + (v === p.tag ? " selected" : "") + ">" + esc(p.tag + " — " + (UL() === "ja" ? p.ja : p.en)) + "</option>").join("") +
+      (v && v !== "?" && !pos.some(p => p.tag === v) ? '<option value="' + esc(v) + '" selected>' + esc(v) + "</option>" : "") + "</select></label>";
+    if(fd.type === "lemma") return '<label class="f" for="' + id + '">' + esc(fd.column) + '<input type="text" class="cop" lang="cop" id="' + id + '" data-col="' + esc(fd.column) + '" list="lemmaList" value="' + esc(v) + '" autocomplete="off" spellcheck="false"></label>' +
+      '<div class="row">' + (fd.special || []).map(x => '<button type="button" class="btn sp" data-set="' + esc(fd.column) + '" data-v="' + esc(x) + '">' + esc(x === "-" ? L2("- レンマなし", "- no lemma") : L2("? 判定不能", "? undecidable")) + "</button>").join("") + "</div>";
+    return '<label class="f" for="' + id + '">' + esc(fd.column) + '<input type="text" id="' + id + '" data-col="' + esc(fd.column) + '" value="' + esc(v) + '" autocomplete="off"></label>';
+  }).join("") +
+    '<div class="autobox' + (show ? "" : " hidden") + '" id="auto">' + (show ? autoHTML(s, it) :
+      esc(L2("自動の答え（" + q.blind.join("・") + "）は、上の必須の欄を入れるまで隠してあります。", "The automatic answer (" + q.blind.join(", ") + ") stays hidden until the required fields above are filled.")) +
+      ' <button type="button" class="btn sp" id="peekBtn">' + esc(L2("先に見る", "Show it anyway")) + "</button>") + "</div>" +
+    (val(s, it, q.reviewer) ? '<p class="ctxnote">' + esc(L2("確認者: ", "Reviewer: ") + val(s, it, q.reviewer)) + "</p>" : "");
+  lemmaList();
+}
+function autoHTML(s, it){
+  const q = s.q, rows = q.blind.map(c => '<tr><th scope="row">' + esc(c) + "</th><td" + (COPCOLS.indexOf(c) >= 0 ? ' class="cop" lang="cop"' : "") + ">" + esc(val(s, it, c)) + "</td></tr>").join("");
+  const cmp = (mine, auto) => !mine || mine === "?" ? "" : (mine === auto || mine === "=" || (mine === "-" && !auto)) ? ' <span class="ok">' + esc(L2("一致", "same")) + "</span>" : ' <span class="ng">' + esc(L2("違う", "differs")) + "</span>";
+  return "<b>" + esc(L2("自動の答え", "Automatic answer")) + "</b>" +
+    '<table class="kv">' + rows + "</table>" +
+    '<p class="ctxnote">' + esc(L2("品詞", "POS")) + cmp(val(s, it, "正しい品詞"), val(s, it, "自動の品詞")) + " · " + esc(L2("レンマ", "lemma")) + cmp(val(s, it, "正しいレンマ"), val(s, it, "自動のレンマ")) + "</p>";
+}
+
+/* ③④ のような「承認・却下・保留」のキュー */
+function renderStatus(s, it){
+  const q = s.q, f = $("#form"), V = CONF.status_values, cur = val(s, it, q.status), corr = q.corrected ? val(s, it, q.corrected) : "";
+  const btn = (v, k, ja, en) => '<button type="button" class="btn' + (cur === v ? " on" : "") + '" data-status="' + esc(v) + '" title="' + k + '" aria-pressed="' + (cur === v) + '">' + esc(L2(ja, en)) + "</button>";
+  f.innerHTML = '<p class="stnow">' + esc(L2("いまの状態: ", "Status: ")) + "<b>" + esc(cur || "—") + "</b>" + (corr ? esc(L2("（直した位置 w=" + corr + "）", " (corrected to w=" + corr + ")")) : "") + "</p>" +
+    '<div class="stbtns">' + btn(V.approve, "a", "承認", "Approve") + btn(V.reject, "r", "却下", "Reject") + btn(V.hold, "h", "保留", "Hold") +
+    '<button type="button" class="btn" data-status="' + esc(q.pending) + '" title="u">' + esc(L2("未処理に戻す", "Back to open")) + "</button></div>" +
+    (corr ? '<p class="ctxnote">' + esc(L2("位置を直して承認しています。", "Approved with a corrected place.")) + ' <button type="button" class="btn sp" id="uncorr">' + esc(L2("直した位置を取り消す", "Undo the correction")) + "</button></p>" : "") +
+    (val(s, it, q.reviewer) ? '<p class="ctxnote">' + esc(L2("確認者: ", "Reviewer: ") + val(s, it, q.reviewer)) + "</p>" : "");
+}
+function setStatus(v){
+  const s = CUR, q = s.q, it = s.items[VIEW[VI]];
+  if(!it || q.kind !== "status") return;
+  const vals = {[q.status]: v};
+  if(q.corrected) vals[q.corrected] = "";
+  if(setVals(s, it, vals)){ say(L2("状態: ", "Status: ") + v); afterChange(it); }
+}
+function correctTo(w){
+  const s = CUR, q = s.q, it = s.items[VIEW[VI]];
+  if(!it || !q.corrected) return;
+  const orig = parseInt(val(s, it, q.w), 10);
+  const vals = w === orig ? {[q.status]: CONF.status_values.approve, [q.corrected]: ""} : {[q.status]: CONF.status_values.approve_corrected, [q.corrected]: String(w)};
+  if(setVals(s, it, vals)){ say(L2("位置を w=" + w + " にしました", "Place set to w=" + w)); renderItem(); }
+}
+function afterChange(it){
+  const s = CUR;
+  if($("#onlyOpen").checked && isDone(s, it)){ buildView(); }
+  renderItem();
+}
+
+/* ① 解題 */
+async function renderIntro(s, it, box){
+  const q = s.q, item = s.obj.texts[it.key], cat = await catalog(), d = cat.byKey.get(it.key);
+  if(!CUR || CUR.items[VIEW[VI]] !== it) return;
+  const LBL = {summary: ["要約", "Summary"], pages: ["頁", "Pages"], copies: ["写し", "Copies"], language: ["言語", "Language"]};
+  const cur = item.current ? (s.obj.currents[item.current] || {})[UL()] || item.current : "";
+  const refs = (item.refs || []).map(r => esc((s.obj.references || {})[r.key] || r.key) + (r.vol ? " (" + esc(r.vol) + ")" : "")).join("<br>");
+  box.innerHTML = '<div><h3>' + esc(it.key) + (isDone(s, it) ? " ✓" : "") + '</h3><table class="kv">' +
+    (d ? '<tr><th scope="row">' + esc(L2("写本", "Siglum")) + "</th><td>" + esc(d.siglum) + "</td></tr>" +
+      '<tr><th scope="row">' + esc(L2("文書", "Text")) + "</th><td>" + esc([d.titles.ja, d.titles.en].filter(Boolean).join(" / ")) + "</td></tr>" +
+      '<tr><th scope="row">' + esc(L2("頁（TEI）", "Pages (TEI)")) + '</th><td id="loci">…</td></tr>' +
+      (d.reader ? '<tr><th scope="row">' + esc(L2("本文", "Text")) + '</th><td><a href="' + esc(d.reader) + '" target="_blank" rel="noopener">' + esc(d.reader) + " ↗</a></td></tr>" : "") : "") +
+    (item.see ? '<tr><th scope="row">see</th><td>' + esc(item.see) + "</td></tr>" : "") +
+    (cur ? '<tr><th scope="row">' + esc(L2("潮流", "Current")) + "</th><td>" + esc(cur) + "</td></tr>" : "") +
+    (refs ? '<tr><th scope="row">' + esc(L2("文献", "References")) + "</th><td>" + refs + "</td></tr>" : "") +
+    "</table>" +
+    '<label class="f" style="display:block;margin-top:14px"><span>todo（' + esc(L2("1 行に 1 つ", "one per line")) + ')</span><textarea class="todo" id="todo" rows="7">' + esc((val(s, it, "todo") || []).join("\n")) + "</textarea></label></div>" +
+    '<div class="form" id="form">' +
+    '<label class="stnow"><input type="checkbox" id="reviewed"' + (val(s, it, "reviewed") === true ? " checked" : "") + "> <b>" + esc(L2("確認済み（本文ビュワーに表示する）", "Reviewed (show it in the reader)")) + "</b></label>" +
+    q.fields.filter(fd => item[fd]).map(fd => '<fieldset class="lng"><legend>' + esc(L2(LBL[fd][0], LBL[fd][1]) + " (" + fd + ")") + "</legend>" +
+      q.langs.map(l => '<label for="f-' + fd + "-" + l + '">' + l + '</label><textarea id="f-' + fd + "-" + l + '" data-path="' + fd + "." + l + '" lang="' + l + '" rows="' + (fd === "summary" ? 5 : 2) + '">' + esc(val(s, it, fd + "." + l) || "") + "</textarea>").join("") +
+      "</fieldset>").join("") +
+    (val(s, it, q.reviewer) ? '<p class="ctxnote">' + esc(L2("確認者: ", "Reviewer: ") + val(s, it, q.reviewer)) + "</p>" : "") + "</div>";
+  if(d && d.xml) headerInfo(d.xml).then(h => { const el = document.getElementById("loci"); if(el) el.textContent = h.loci.join(" · ") || "—"; });
+  else { const el = document.getElementById("loci"); if(el) el.textContent = "—"; }
+}
+
+/* ---------- 開く・移る ---------- */
+async function openQueue(id, n){
+  const s = ST[id];
+  if(!s || s.error) return;
+  CUR = s; PEEK = false; CTXW = 14;
+  $("#work").hidden = false;
+  $("#qtitle").textContent = s.q.title[UL()];
+  $("#qnote").textContent = (s.q.note || {})[UL()] || "";
+  $("#exportBtn").disabled = s.q.kind === "intros" && !s.roundTrips;
+  $("#carry").innerHTML = (s.problems.length ? '<div class="notice warn">' + s.problems.map(esc).join("<br>") + "</div>" : "") +
+    s.older.map(k => { let o = {}; try { o = JSON.parse(store.get(k)); } catch(e){} const m = Object.keys(o.edits || {}).length; if(!m) return "";
+      return '<div class="notice">' + esc(L2("この画面には、前の版のファイルで入力した記録があります（" + m + " 件、" + (o.at || "") + "）。", "This browser holds input made on an earlier version of the file (" + m + " items, " + (o.at || "") + ").")) +
+        ' <button type="button" class="btn" data-carry="' + esc(k) + '">' + esc(L2("この版に引き継ぐ", "Carry it over")) + '</button> <button type="button" class="btn" data-drop="' + esc(k) + '">' + esc(L2("消す", "Delete")) + "</button></div>"; }).join("");
+  buildView();
+  const want = n || parseInt(store.get(KEY_PREFIX + "pos:" + id) || "0", 10);
+  if(want){ const j = VIEW.findIndex(i => s.items[i].n === want); if(j >= 0) VI = j; }
+  renderCards();
+  if(s.q.kind === "judge") lemmaList();
+  await renderItem();
+}
+function go(d){ if(!CUR || !VIEW.length) return; VI = Math.max(0, Math.min(VIEW.length - 1, VI + d)); PEEK = false; CTXW = 14; renderItem(); }
+function nextOpen(){
+  if(!CUR) return;
+  const s = CUR, from = VIEW[VI];
+  const all = s.items.map((it, i) => i), order = all.slice(from + 1).concat(all.slice(0, from + 1));
+  const i = order.find(k => !isDone(s, s.items[k]));
+  if(i == null){ say(L2("未処理の項目はもうありません。", "No open items left.")); return; }
+  if($("#onlyOpen").checked) buildView();
+  let j = VIEW.indexOf(i);
+  if(j < 0){ $("#onlyOpen").checked = false; buildView(); j = VIEW.indexOf(i); }
+  VI = j; PEEK = false; CTXW = 14; renderItem();
+}
+function jumpTo(n){
+  if(!CUR) return;
+  let j = VIEW.findIndex(i => CUR.items[i].n === n);
+  if(j < 0 && $("#onlyOpen").checked){ $("#onlyOpen").checked = false; buildView(); j = VIEW.findIndex(i => CUR.items[i].n === n); }
+  if(j < 0){ say(L2(n + " 番はありません。", "There is no item " + n + ".")); return; }
+  VI = j; PEEK = false; CTXW = 14; renderItem();
+}
+
+/* ---------- 操作 ---------- */
+function wire(){
+  const w = $("#reviewer");
+  w.value = store.get(WHO_KEY) || "";
+  w.addEventListener("input", () => { store.set(WHO_KEY, who()); if(who()) $("#who").classList.remove("need"); });
+  $("#qcards").addEventListener("click", e => { const b = e.target.closest("[data-q]"); if(b) openQueue(b.dataset.q); });
+  $("#prevBtn").addEventListener("click", () => go(-1));
+  $("#nextBtn").addEventListener("click", () => go(1));
+  $("#nextOpenBtn").addEventListener("click", nextOpen);
+  $("#onlyOpen").addEventListener("change", () => { const it = CUR && CUR.items[VIEW[VI]]; buildView(it ? it.key : null); renderItem(); });
+  $("#jump").addEventListener("change", () => { const n = parseInt($("#jump").value, 10); if(n) jumpTo(n); });
+  $("#jump").addEventListener("keydown", e => { if(e.key === "Enter"){ const n = parseInt($("#jump").value, 10); if(n) jumpTo(n); } });
+  $("#exportBtn").addEventListener("click", () => CUR && download(CUR));
+  $("#importBtn").addEventListener("click", () => $("#importFile").click());
+  $("#importFile").addEventListener("change", e => {
+    const file = e.target.files && e.target.files[0]; if(!file || !CUR) return;
+    file.text().then(t => {
+      const r = importText(CUR, t);
+      e.target.value = "";
+      if(r.cancelled) return;
+      $("#importReport").innerHTML = '<div class="notice' + (r.ok ? "" : " warn") + '">' + esc(r.ok ? L2(file.name + " から " + r.n + " 件を読み込みました。", "Loaded " + r.n + " items from " + file.name + ".") : L2("読み込めませんでした。", "Not loaded.")) +
+        (r.problems.length ? "<ul>" + r.problems.map(p => "<li>" + esc(p) + "</li>").join("") + "</ul>" : "") + "</div>";
+      renderCards(); buildView(); renderItem();
+    });
+  });
+  $("#clearBtn").addEventListener("click", () => {
+    if(!CUR || !Object.keys(CUR.edits).length) return;
+    if(!confirm(L2("このキューの入力（" + Object.keys(CUR.edits).length + " 件）を、このブラウザーから消します。書き出していなければ元に戻せません。", "Delete your input for this queue (" + Object.keys(CUR.edits).length + " items) from this browser? It cannot be undone unless you downloaded it."))) return;
+    CUR.edits = {}; save(CUR); renderCards(); buildView(); renderItem();
+  });
+  $("#carry").addEventListener("click", e => {
+    const c = e.target.closest("[data-carry]"), d = e.target.closest("[data-drop]");
+    if(c){ const n = carryOver(CUR, c.dataset.carry); say(L2(n + " 件を引き継ぎました。", n + " items carried over.")); store.del(c.dataset.carry); CUR.older = CUR.older.filter(k => k !== c.dataset.carry); openQueue(CUR.q.id); }
+    if(d && confirm(L2("前の版の記録を消します。", "Delete the input for the earlier version?"))){ store.del(d.dataset.drop); CUR.older = CUR.older.filter(k => k !== d.dataset.drop); openQueue(CUR.q.id); }
+  });
+  const item = $("#item");
+  item.addEventListener("click", e => {
+    const s = CUR; if(!s) return;
+    const it = s.items[VIEW[VI]];
+    const st = e.target.closest("[data-status]"); if(st){ setStatus(st.dataset.status); return; }
+    const pk = e.target.closest(".g.pick"); if(pk){ correctTo(parseInt(pk.dataset.w, 10)); return; }
+    if(e.target.closest("#uncorr")){ if(setVals(s, it, {[s.q.status]: CONF.status_values.approve, [s.q.corrected]: ""})) renderItem(); return; }
+    if(e.target.closest("[data-more]")){ CTXW += 30; renderContext(s, it, $("#ctxBox")); return; }
+    if(e.target.closest("#peekBtn")){ PEEK = true; renderJudge(s, it); return; }
+    const sp = e.target.closest("[data-set]");
+    if(sp){ if(setVals(s, it, {[sp.dataset.set]: sp.dataset.v})){ renderItemKeepFocus(sp.dataset.set); } return; }
+  });
+  item.addEventListener("keydown", e => {
+    const pk = e.target.closest && e.target.closest(".g.pick");
+    if(pk && (e.key === "Enter" || e.key === " ")){ e.preventDefault(); correctTo(parseInt(pk.dataset.w, 10)); }
+  });
+  item.addEventListener("change", e => {
+    const s = CUR; if(!s) return;
+    const it = s.items[VIEW[VI]], el = e.target;
+    if(el.id === "reviewed"){ if(setVals(s, it, {reviewed: el.checked})) renderItem(); else el.checked = !el.checked; return; }
+    if(el.id === "todo"){ const v = el.value.split("\n").map(x => x.trim()).filter(Boolean); if(!setVals(s, it, {todo: v})) el.value = (val(s, it, "todo") || []).join("\n"); return; }
+    if(el.dataset.path){ if(!setVals(s, it, {[el.dataset.path]: el.value})) el.value = val(s, it, el.dataset.path) || ""; return; }
+    if(el.dataset.col){ const ok = setVals(s, it, {[el.dataset.col]: R.cleanCell(el.value).trim()}); if(!ok){ el.value = val(s, it, el.dataset.col) || ""; return; } renderItemKeepFocus(el.dataset.col); }
+  });
+  item.addEventListener("keydown", e => {
+    if(e.key !== "Enter" || !CUR || CUR.q.kind !== "judge" || !e.target.dataset.col) return;
+    e.preventDefault();
+    e.target.dispatchEvent(new Event("change", {bubbles: true}));
+    nextOpen();
+  });
+  document.addEventListener("keydown", e => {
+    if(!CUR || e.altKey || e.ctrlKey || e.metaKey) return;
+    const t = e.target, typing = t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName));
+    if(typing) return;
+    const V = CONF.status_values, k = e.key;
+    if(k === "ArrowLeft" || k === "k"){ e.preventDefault(); go(-1); }
+    else if(k === "ArrowRight" || k === "j"){ e.preventDefault(); go(1); }
+    else if(k === "n"){ e.preventDefault(); nextOpen(); }
+    else if(k === "g"){ e.preventDefault(); $("#jump").focus(); }
+    else if(CUR.q.kind === "status" && {a: 1, r: 1, h: 1, u: 1}[k]){ e.preventDefault(); setStatus(k === "a" ? V.approve : k === "r" ? V.reject : k === "h" ? V.hold : CUR.q.pending); }
+  });
+  document.addEventListener("nhc:lang", () => { renderCards(); if(CUR){ $("#qtitle").textContent = CUR.q.title[UL()]; $("#qnote").textContent = (CUR.q.note || {})[UL()] || ""; renderItem(); } });
+}
+/* 上部ナビの高さ（狭い画面では 2 段）に合わせて、操作の帯を止める位置を決める */
+function measureBar(){ const sb = $("#sitebar"); if(sb) H.style.setProperty("--sbh", sb.offsetHeight + "px"); }
+document.addEventListener("nhc:sitebar", measureBar);
+window.addEventListener("resize", measureBar);
+function renderItemKeepFocus(col){
+  renderItem().then(() => { const el = [...document.querySelectorAll("#item [data-col]")].find(x => x.dataset.col === col); if(el) el.focus(); });
+}
+
+/* ---------- 始める ---------- */
+async function start(){
+  R = window.ReviewCore;
+  CONF = JSON.parse(await fetchText("data/review_queues.json"));
+  wire();
+  renderCards();
+  await Promise.all(CONF.queues.map(q => loadQueue(q).then(s => { ST[q.id] = s; }, e => { ST[q.id] = {q, error: e.message || String(e)}; }).then(renderCards)));
+  const fromHash = () => {
+    const m = /#q=([^&]+)(?:&n=(\d+))?/.exec(location.hash);
+    if(m && ST[decodeURIComponent(m[1])]) openQueue(decodeURIComponent(m[1]), m[2] ? parseInt(m[2], 10) : 0);
+  };
+  fromHash();
+  window.addEventListener("hashchange", fromHash);   // URL の #q=…&n=… を書き換えて開いたとき（replaceState では起きない）
+  window.ReviewApp = {ST, open: openQueue, exportText, importText, setVals, isDone, go, nextOpen, setStatus, correctTo, state: () => ({CUR, VIEW, VI})};
+  document.dispatchEvent(new CustomEvent("review:ready"));
+}
+const boot = () => start().catch(e => { $("#qcards").innerHTML = '<div class="notice warn">' + esc(e.message || String(e)) + "</div>"; });
+if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<!-- 確認作業の画面（review.html）の試験。ブラウザーで開くと、review.html を iframe で開いて操作し、結果を下に出す。
+     GitHub の自動チェックでは、ヘッドレスの Chrome で開いて <p id="result" data-status="pass"> を確かめる（.github/workflows/check.yml）。
+     手元では: python3 -m http.server 8000 → http://localhost:8000/tests/review.test.html
+     ふだんの入力を消さないよう、review.html を ?ns=test で開く（localStorage の名前が nhc-review-test:… になる）。 -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex">
+<title>review.html tests</title>
+<style>body{font:14px/1.5 system-ui,sans-serif;margin:16px} pre{white-space:pre-wrap} .f{color:#b00} .p{color:#060} iframe{width:1100px;height:700px;border:1px solid #ccc}</style>
+</head>
+<body>
+<p id="result" data-status="running">running</p>
+<pre id="log"></pre>
+<iframe id="app" title="review.html"></iframe>
+<script>
+(async function(){
+"use strict";
+const PREFIX = "nhc-review-test:v1:";
+const logEl = document.getElementById("log"), out = document.getElementById("result");
+const results = [];
+const log = (cls, msg) => { const s = document.createElement("span"); s.className = cls; s.textContent = msg + "\n"; logEl.appendChild(s); };
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+async function waitFor(fn, what, ms){
+  const t0 = Date.now();
+  for(;;){ let v; try { v = fn(); } catch(e){ v = false; } if(v) return v; if(Date.now() - t0 > (ms || 8000)) throw new Error("timed out: " + what); await sleep(50); }
+}
+function ok(cond, msg){ if(!cond) throw new Error(msg); }
+function eq(a, b, msg){ if(a !== b) throw new Error(msg + ": expected " + JSON.stringify(b).slice(0, 200) + ", got " + JSON.stringify(a).slice(0, 200)); }
+function clearNs(){ try { Object.keys(localStorage).filter(k => k.indexOf(PREFIX) === 0).forEach(k => localStorage.removeItem(k)); } catch(e){} }
+const text = url => fetch(url, {cache: "no-store"}).then(r => r.text());
+
+const frame = document.getElementById("app");
+let W, D, A;
+async function load(){
+  frame.src = "../review.html?ns=test&lang=ja";
+  await new Promise(r => { frame.onload = r; });
+  W = frame.contentWindow; D = frame.contentDocument;
+  A = await waitFor(() => W.ReviewApp && W.ReviewApp.ST.sample && W.ReviewApp.ST.intros && W.ReviewApp.ST.thomas && W.ReviewApp.ST.breaks && W.ReviewApp, "app ready", 20000);
+}
+function setWho(v){ const el = D.getElementById("reviewer"); el.value = v; el.dispatchEvent(new W.Event("input", {bubbles: true})); }
+const curItem = () => { const st = A.state(); return st.CUR.items[st.VIEW[st.VI]]; };
+async function openAt(id, n){ await A.open(id, n); await waitFor(() => curItem().n === n && D.querySelector("#form"), "open " + id + " " + n); }
+function setField(sel, value){ const el = D.querySelector(sel); ok(el, "field " + sel); el.value = value; el.dispatchEvent(new W.Event("change", {bubbles: true})); }
+
+const T = [];
+const test = (name, fn) => T.push([name, fn]);
+
+test("an unchanged queue is written back byte for byte (all four files)", async () => {
+  for(const id of ["intros", "sample", "thomas", "breaks"]){
+    const s = A.ST[id], raw = await text("../" + s.q.file);
+    eq(A.exportText(s), raw, id);
+    // 書き換えがあるときに通る道（読んで書き戻す）でも同じになること
+    if(s.q.kind === "intros") eq(W.ReviewCore.serializeJSON(JSON.parse(raw)), raw, id + " (JSON round trip)");
+    else eq(W.ReviewCore.serializeTSV(W.ReviewCore.parseTSV(raw)), raw, id + " (TSV round trip)");
+  }
+});
+
+test("② hides the automatic answer by default", async () => {
+  await openAt("sample", 1);
+  const auto = D.getElementById("auto"), s = A.ST.sample, it = curItem();
+  ok(auto.classList.contains("hidden") && !auto.querySelector("table"), "the automatic answer box is closed");
+  const shown = [...D.querySelectorAll("#item table.kv th")].map(th => th.textContent);
+  s.q.blind.forEach(c => ok(shown.indexOf(c) < 0, c + " is not shown"));
+  const gloss = W.ReviewCore.cell(s.table, s.table.rows[it.row], "自動の語義");
+  ok(gloss && D.getElementById("item").textContent.indexOf(gloss) < 0, "the automatic gloss is not on the screen");
+});
+
+test("nothing is recorded without a reviewer name", async () => {
+  setWho("");
+  const s = A.ST.sample, it = curItem();
+  eq(A.setVals(s, it, {"正しい品詞": "PREP"}), false, "setVals refused");
+  ok(!s.edits[it.key], "no edit stored");
+});
+
+test("② a filled item is done, shows the automatic answer and is written with the reviewer at the end", async () => {
+  setWho("T1");
+  setField('#item select[data-col="正しい品詞"]', "PREP");
+  await sleep(100);
+  setField('#item input[data-col="正しいレンマ"]', "ⲛ");
+  await waitFor(() => D.querySelector("#auto table"), "automatic answer shown");
+  const s = A.ST.sample, it = curItem();
+  ok(A.isDone(s, it), "item is done");
+  const t = W.ReviewCore.parseTSV(A.exportText(s)), orig = W.ReviewCore.parseTSV(await text("../" + s.q.file));
+  eq(t.header[t.header.length - 1], "確認者", "last column");
+  eq(t.header.slice(0, -1).join("\t"), orig.header.join("\t"), "other columns unchanged");
+  const row = t.rows[it.row], col = c => row[t.header.indexOf(c)];
+  eq(col("正しい品詞"), "PREP", "POS"); eq(col("正しいレンマ"), "ⲛ", "lemma"); eq(col("確認者"), "T1", "reviewer");
+  t.rows.forEach((r, i) => { if(i !== it.row) eq(r.join("\t"), orig.rows[i].join("\t") + "\t", "row " + (i + 1) + " unchanged"); });
+  // ファイル全体: 見出しと各行の末尾に「確認者」の列、その行だけ値が入る。改行・最後の改行も元のまま
+  const raw = await text("../" + s.q.file), lines = raw.split("\n");
+  const want = lines.map((l, i) => i === 0 ? l + "\t確認者" : l === "" ? l : i - 1 === it.row ? null : l + "\t");
+  const ed = orig.rows[it.row].slice(); ed[orig.header.indexOf("正しい品詞")] = "PREP"; ed[orig.header.indexOf("正しいレンマ")] = "ⲛ";
+  want[it.row + 1] = ed.join("\t") + "\tT1";
+  eq(A.exportText(s), want.join("\n"), "the whole file");
+});
+
+test("loading a downloaded file gives back the same input", async () => {
+  const s = A.ST.sample, before = JSON.stringify(s.edits), file = A.exportText(s);
+  s.edits = {};
+  const r = A.importText(s, file);
+  ok(r.ok, "imported"); eq(r.n, 1, "one item"); eq(JSON.stringify(s.edits), before, "same edits");
+});
+
+test("“open items only” leaves out the done item", async () => {
+  const box = D.getElementById("onlyOpen");
+  box.checked = true; box.dispatchEvent(new W.Event("change", {bubbles: true}));
+  await sleep(200);
+  const st = A.state();
+  ok(st.VIEW.every(i => st.CUR.items[i].n !== 1), "item 1 is not in the view");
+  box.checked = false; box.dispatchEvent(new W.Event("change", {bubbles: true}));
+});
+
+test("③ clicking another bound group corrects the place; approving clears it", async () => {
+  await openAt("thomas", 2);
+  const s = A.ST.thomas, it = curItem(), w = String(W.ReviewCore.cell(s.table, s.table.rows[it.row], "w"));
+  const g = await waitFor(() => [...D.querySelectorAll("#ctxBox .g.pick")].find(x => x.dataset.w !== w), "a clickable bound group");
+  g.click();
+  await waitFor(() => (s.edits[it.key] || {})["修正した位置"] === g.dataset.w, "corrected place stored");
+  eq(s.edits[it.key]["状態"], "修正して承認", "status");
+  const t = W.ReviewCore.parseTSV(A.exportText(s));
+  eq(t.header.slice(-2).join(","), "修正した位置,確認者", "appended columns");
+  A.setStatus("承認");
+  eq(s.edits[it.key]["状態"], "承認", "approved");
+  ok(!s.edits[it.key]["修正した位置"], "correction cleared");
+});
+
+test("④ keyboard: r rejects, u puts the item back to open (and drops the edit)", async () => {
+  await openAt("breaks", 1);
+  const s = A.ST.breaks, it = curItem();
+  D.body.focus();
+  D.dispatchEvent(new W.KeyboardEvent("keydown", {key: "r", bubbles: true}));
+  eq((s.edits[it.key] || {})["状態"], "却下", "rejected");
+  D.dispatchEvent(new W.KeyboardEvent("keydown", {key: "u", bubbles: true}));
+  ok(!s.edits[it.key], "no edit left");
+});
+
+test("① editing an introduction keeps the JSON layout; reviewed_by goes to the end of the item", async () => {
+  await openAt("intros", 1);
+  const s = A.ST.intros, it = curItem();
+  setField('#item textarea[data-path="summary.fr"]', "Résumé de test.");
+  const box = D.getElementById("reviewed"); box.click();
+  await waitFor(() => A.isDone(s, it), "marked reviewed");
+  const txt = A.exportText(s), obj = JSON.parse(txt), orig = JSON.parse(await text("../" + s.q.file));
+  eq(txt, JSON.stringify(obj, null, 2) + "\n", "indent 2 and a final newline");
+  const keys = Object.keys(obj.texts[it.key]);
+  eq(keys.join(","), Object.keys(orig.texts[it.key]).concat(["reviewed_by"]).join(","), "key order");
+  eq(obj.texts[it.key].reviewed, true, "reviewed"); eq(obj.texts[it.key].summary.fr, "Résumé de test.", "summary.fr"); eq(obj.texts[it.key].reviewed_by, "T1", "reviewer");
+  Object.keys(orig.texts).filter(k => k !== it.key).forEach(k => eq(JSON.stringify(obj.texts[k]), JSON.stringify(orig.texts[k]), k + " unchanged"));
+  ["_comment", "currents", "references"].forEach(k => eq(JSON.stringify(obj[k]), JSON.stringify(orig[k]), k + " unchanged"));
+});
+
+test("the input survives a reload (localStorage, per queue and file hash)", async () => {
+  const before = JSON.stringify(A.ST.sample.edits);
+  await load();
+  eq(JSON.stringify(A.ST.sample.edits), before, "edits of ②");
+  ok(A.ST.intros.edits[Object.keys(A.ST.intros.obj.texts)[0]], "edits of ①");
+});
+
+clearNs();
+try {
+  await load();
+  for(const [name, fn] of T){
+    try { await fn(); results.push(true); log("p", "ok   " + name); }
+    catch(e){ results.push(false); log("f", "FAIL " + name + " — " + (e && e.message)); }
+  }
+} catch(e){ results.push(false); log("f", "FAIL setup — " + (e && e.message)); }
+clearNs();
+const fail = results.filter(x => !x).length;
+out.dataset.status = fail ? "fail" : "pass";
+out.textContent = (fail ? "FAIL " : "PASS ") + (results.length - fail) + "/" + results.length;
+})();
+</script>
+</body>
+</html>
