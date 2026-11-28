@@ -139,6 +139,7 @@ nag_hammadi_library/
     ├─ sync_lexicon.py     source/lexicon.csv の変更を data/lexicon.xml に反映する(xml:id は変えない)
     ├─ build_site.py       index.html / tractate.html / reader.html / sitemap.xml / robots.txt / data/doc_dates.json / data/pos_labels.json を生成
     ├─ build_fulltext_stats.py  data/fulltext_stats.json(全文テキストの文書ごとの数)を生成。build_site.py からも呼ばれる
+    ├─ export_conllu.py    注釈(語形・レンマ・品詞)を CoNLL-U で build/conllu/ に書き出す(リリースに添える。リポジトリには入れない)
     ├─ insert_breaks.py    写本の頁(<pb>)・行(<lb>)の区切りを TSV から TEI に入れる(既定は表示だけ、--write で書き込む)
     ├─ split_segments.py   セグメント(<s>)を TSV で指定した位置で分ける(案。まだ実データには使わない)
     ├─ make_og_image.py    共有用の画像 image/og-image.png を作る(rsvg-convert が要る)
@@ -196,6 +197,7 @@ nag_hammadi_library/
 | `sync_lexicon.py` | `lexicon.csv` の変更を `data/lexicon.xml` に反映する。`xml:id` は変えない。何も付けなければ変更点の表示だけで、`--write` で書き込む。 |
 | `build_site.py` | `index.html`(目次)・`tractate.html`(準備中)・`reader.html`(本文ビュワー・暫定版)・`sitemap.xml`・`robots.txt`・`data/doc_dates.json`・`data/pos_labels.json`(品詞タグの三言語の名前と出現数。名前は `POS_NAMES` が正) を生成。`<head>` の OGP(リンクのプレビュー)のタグもここで書く(`og_tags`)。 |
 | `build_fulltext_stats.py` | `data/fulltext_stats.json` を生成（`build_site.py` を実行すると一緒に作り直す。`--check` で最新かを調べるだけ）。`data/catalog.xml` の全文テキスト（暫定版。未注釈の文書があればそれも）の文書ごとに、本文の証本の中の `<w>`・`<phr>`（と、その中の `<w>`）・`<s>`・`<gap>`、`xml:lang="grc"` の `<w>`、品詞ごとの `<w>`、`@cert="low"`・品詞 `X` の `<w>` を数え、方言（`<textLang>`）と状態を添える。参考に、人の手で注釈した版（エウグノストス III,3・『国家』）も同じ方法で数える。割合は検索ページが計算する。 |
+| `export_conllu.py` | Sheneset の注釈を CoNLL-U で書き出す（人の手で注釈した 2 版と暫定版の 56 文書。文書ごとに 1 ファイル、`build/conllu/`。`--zip` で `build/sheneset-v<版>-conllu.zip` にまとめる）。書くのは Sheneset 自身の層だけ: FORM（`<w>` の文字）・LEMMA（`@lemma`）・XPOS（`@type`、Sheneset の品詞）と、MISC の `seg_id`。UPOS・FEATS・HEAD・DEPREL・DEPS は `_`（文法関係・依存関係の層は作らない）。語群（`<phr>`）は CoNLL-U の multiword token、1 文 = 1 セグメント。暫定版には `# sheneset_status = draft`（自動注釈・未確認）。GitHub のリリースに添え、リポジトリには入れない（下の「版とリリースの作り方」）。 |
 | `insert_breaks.py` | 写本の頁（`<pb>`）・行（`<lb>`）の区切りを TSV から TEI に入れる。区切りの空要素を足すだけで、本文・語・`xml:id` は変えない。何も付けなければ入る位置の表示だけで、`--write` で書き込む。手順は下の「写本の頁・行の区切りを入れる」。 |
 | `split_segments.py` | セグメント（`<s>`）を TSV で指定した位置で分ける。最初の部分が元の `xml:id` と § を保ち、続きは `元の id_a`・`_b` …（§ は 15a・15b …）。**案**（`source/nhc_fulltext_split/proposals/README_ja.md`）。まだ実データには使わない。 |
 | `make_og_image.py` | リンクを共有したときのプレビュー画像 `image/og-image.png`(1200×630)を、アイコンとゲンゲンの SVG から作る。 |
@@ -433,7 +435,10 @@ HOME のフッターの版番号は、このファイルを読みます。`CITAT
 
 1. `data/release.json` の `version`（と、決まっていれば `date`）を新しい版にし、`CITATION.cff` の `version`（と `date-released`）、
    `.zenodo.json` の `version` も同じにする。`python3 scripts/check_release.py` と `python3 scripts/build_site.py` を実行してコミットし、`main` に入れる。
-2. GitHub でリリースを作る（タグは `v0.1.0` の形）。
+2. GitHub でリリースを作る（タグは `v0.1.0` の形）。注釈の CoNLL-U を添える: `python3 scripts/export_conllu.py --zip` で
+   `build/sheneset-v<版>-conllu.zip` を作り（1. で版番号を上げたあとに。中の注記には版番号と、すべての版をまとめる DOI が入る）、
+   リリースの画面の〈Attach binaries〉に置くか、`gh release upload v<版> build/sheneset-v<版>-conllu.zip` で添える。
+   `build/` は `.gitignore` に入っているので、書き出したものはコミットされない。
 3. Zenodo の GitHub 連携でこのリポジトリを有効にしてあれば、Zenodo がリリースから記録を作り、DOI を発行する（`.zenodo.json` の情報を使う）。
 4. 発行された DOI を `data/release.json` の `doi` に（最初のリリースでは、すべての版をまとめる DOI も `doi_all_versions` に）書き、
    `CITATION.cff` に `doi:` を足す。`check_release.py` で確かめてコミットする。DOI が入ると、引用表記の URL の前に DOI が入り、
