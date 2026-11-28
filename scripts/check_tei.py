@@ -34,6 +34,11 @@ TEI のスキーマ（tei_all.rng）は「要素や属性の並びが正しい�
            自動注釈のスクリプト（source/nhc_fulltext_split/annotation/annotate_tei.py）の語釈表と、その出力の
            annotation/core_glosses.tsv、抜き取り表（evaluation/review_sample.tsv）の「自動の語義」
        比べるときは、大文字と小文字、全角と半角、’ と ' の違いを無視する。規則の足し方は CONTRIBUTING.md の「10.」。
+ 12. 許可リスト（scripts/tei_allowlist.json）の外の属性や値が無いか
+       <w>・<phr>・<s>・<supplied>・<gap>・<pb>・<lb>・<ab>・<seg>・<interpGrp>・<interp>・<linkGrp>・<link> は、許可リストに挙げた
+       属性しか持てず、値を決めた属性はその値しか取れない（<w> の @type は品詞の一覧 data/pos_labels.json、@cert は high・medium・low、
+       @resp は今の 3 つ）。文法関係を表す属性などが入ると失敗する。いま残っている一覧の外の品詞（直す予定のもの）は、許可リストの
+       exceptions に場所ごとに書いてあり、直して無くなると「もう要らない」と知らせる。要素と属性の説明は docs/sheneset_odd.xml。
 
 --schema に tei_all.rng の場所を渡すと、xmllint によるスキーマ検証も続けて行います。
 
@@ -57,6 +62,8 @@ from collections import Counter
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 GLOSS_RULES = os.path.join(ROOT, "scripts", "gloss_rules.json")
+ALLOWLIST = os.path.join(ROOT, "scripts", "tei_allowlist.json")
+POS_LABELS = os.path.join(ROOT, "data", "pos_labels.json")
 NHC = os.path.join(ROOT, "source", "nhc_fulltext_split")
 T = "{http://www.tei-c.org/ns/1.0}"
 XID = "{http://www.w3.org/XML/1998/namespace}id"
@@ -135,6 +142,26 @@ def check_gloss_sources():
                 if len(cols) == 5:
                     add(script, no, "語釈表", cols[3] + " | " + cols[4])
     return out
+
+
+def allowlist(cache={}):
+    """12. の許可リスト。{"rules": {要素: {属性: 値の集合 か None（値を決めない）}}, "exc": {例外}, "used": 使った例外}"""
+    if not cache:
+        with open(ALLOWLIST, encoding="utf-8") as f:
+            a = json.load(f)
+        with open(POS_LABELS, encoding="utf-8") as f:
+            pos = {t["tag"] for t in json.load(f)["tags"]}
+        rules = {}
+        for el, spec in a.get("elements", {}).items():
+            rules[el] = {att: (pos if v.get("from") == "data/pos_labels.json" else set(v["values"]) if "values" in v else None)
+                         for att, v in spec.get("attributes", {}).items()}
+        exc = {(e["file"], e.get("seg"), e.get("w"), e["attribute"], e["value"]) for e in a.get("exceptions", [])}
+        cache.update(rules=rules, exc=exc, used=set())
+    return cache
+
+
+def att_name(a):
+    return a.replace("{http://www.w3.org/XML/1998/namespace}", "xml:")
 
 
 def ids_of(path, cache={}):
@@ -307,6 +334,32 @@ def check(path):
         out += ["<w> の @lemma にコプト文字以外の文字が混じっています: %s（%s）%d 語" % (l, describe(non_coptic(l)), n)
                 for l, n in sorted(lemmas.items())]
 
+    # 12. 許可リストの外の属性・値（<w> の例外は、ファイル・<s> の id・<s> の中の番号で当てる）
+    al = allowlist()
+    rel = os.path.relpath(os.path.abspath(path), ROOT).replace(os.sep, "/")
+    wpos = {}
+    for s_el in root.iter(T + "s"):
+        for i, w in enumerate(s_el.iter(T + "w"), 1):
+            wpos[w] = (s_el.get(XID), i)
+    bad_atts, bad_vals = Counter(), Counter()
+    for el in root.iter():
+        rules = al["rules"].get(name(el.tag))
+        if rules is None:
+            continue
+        for a, v in el.attrib.items():
+            a = att_name(a)
+            if a not in rules:
+                bad_atts[(name(el.tag), a)] += 1
+            elif rules[a] is not None and v not in rules[a]:
+                seg, i = wpos.get(el, (None, None))
+                key = (rel, seg, i, a, v)
+                if key in al["exc"]:
+                    al["used"].add(key)
+                else:
+                    bad_vals[(name(el.tag), a, v)] += 1
+    out += ["許可リストに無い属性 @%s が <%s> にあります（%d 個。scripts/tei_allowlist.json）" % (a, e, n) for (e, a), n in sorted(bad_atts.items())]
+    out += ["<%s> の @%s に許可リストに無い値「%s」があります（%d 個。scripts/tei_allowlist.json）" % (e, a, v, n) for (e, a, v), n in sorted(bad_vals.items())]
+
     # 11. 語釈に使わない語（語釈 <interp>、辞書の <sense>・<usg>。入れ子の <sense> は外側でまとめて調べる）
     for el in root.iter():
         tag = name(el.tag)
@@ -352,6 +405,13 @@ def main():
                 print("   - " + p)
             if len(problems) > 40:
                 print("   …ほか %d 件" % (len(problems) - 40))
+    if not args.files:                                  # 12. の例外のうち、もう当たらないもの（直したあと。許可リストから消す）
+        al = allowlist()
+        stale = sorted(al["exc"] - al["used"], key=lambda k: (k[0], k[1] or "", k[2] or 0))
+        if stale:
+            print("注意: 許可リストの例外のうち %d 件はもう要りません（scripts/tei_allowlist.json の exceptions から消す）:" % len(stale))
+            for k in stale[:20]:
+                print("   - %s %s w=%s @%s=%s" % k)
     what = "点検" + ("とスキーマ検証" if args.schema else "")
     if bad:
         print("\n%d / %d ファイルに問題があります（%s）" % (bad, n, what))
